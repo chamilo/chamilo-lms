@@ -1969,3 +1969,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_i
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked) VALUES ('use_course_logo_in_course_page', NULL, 'radio', 'Course', 'true', 'UseCourseLogoInCoursePageTitle', 'UseCourseLogoInCoursePageComment', NULL, NULL, 1, 1, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_course_logo_in_course_page', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_course_logo_in_course_page', 'false', 'No');

@@ -738,7 +738,17 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo('', [], true, true);
+            $organization = null;
+
+            // try getting the course logo
+            if (api_get_setting('use_course_logo_in_course_page') === 'true') {
+                $organization = CourseManager::getCourseLogo($courseInfo, []);
+            }
+
+            if (empty($organization)) {
+                $organization = ChamiloApi::getPlatformLogo('', [], false, true);
+            }
+
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');
             if ($pdfLogo === 'true') {

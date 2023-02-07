@@ -7046,10 +7046,16 @@ EOT;
                                         $exercise_stat_info,
                                         $studentId
                                     );
+                                    $extraParameters = [];
+                                    if (api_get_setting('use_course_logo_in_course_page') === 'true') {
+                                        $extraParameters = ['logo' => CourseManager::getCourseLogo($courseInfo)];
+                                    }
                                     foreach ($emailList as $email) {
                                         if (empty($email)) {
                                             continue;
                                         }
+                                        
+
                                         api_mail_html(
                                             null,
                                             $email,
@@ -7058,7 +7064,10 @@ EOT;
                                             null,
                                             null,
                                             [],
-                                            $attachments
+                                            $attachments,
+                                            false,
+                                            $extraParameters,
+                                            ''
                                         );
                                     }
                                 }

@@ -2253,6 +2253,12 @@ class Wiki
         }
         ///make and send email
         if ($allow_send_mail) {
+
+            $extraParameters = [];
+            if (api_get_setting('use_course_logo_in_course_page') === 'true') {
+                $extraParameters = ['logo' => CourseManager::getCourseLogo($_course)];
+            }
+
             while ($row = Database::fetch_array($result)) {
                 $userinfo = api_get_user_info(
                     $row['user_id']
@@ -2289,7 +2295,12 @@ class Wiki
                     $email_subject,
                     $email_body,
                     $sender_name,
-                    $sender_email
+                    $sender_email,
+                    [],
+                    [],
+                    false,
+                    $extraParameters,
+                    ''
                 );
             }
         }
@@ -2782,7 +2793,7 @@ class Wiki
                 $sql .= ") AND ".$groupfilter.$sessionCondition.$categoriesCondition;
             } else {
                 // warning don't use group by reflink because don't return the last version
-                $sql = "SELECT * FROM $tbl_wiki AS wp 
+                $sql = "SELECT * FROM $tbl_wiki AS wp
                     WHERE wp.c_id = ".$this->course_id."
                         AND wp.visibility = 1
                         AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";

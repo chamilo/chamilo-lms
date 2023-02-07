@@ -2074,11 +2074,27 @@ class Template
                 $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
-            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
-            if (!empty($logo)) {
-                $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+
+            if (api_get_setting('use_course_logo_in_course_page') === 'true') {
+                // check if current page is a course page
+                $courseCode = api_get_course_id();
+
+                if (!empty($courseCode)) {
+                    $course = api_get_course_info($courseCode);
+                    if (!empty($course) && !empty($course['course_email_image_large'])) {
+                        $portalImageMeta = '<meta property="og:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                    }
+                }
+            }
+            if (empty($portalImageMeta)) {
+                $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+                if (!empty($logo)) {
+                    $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                }
             }
         }
 

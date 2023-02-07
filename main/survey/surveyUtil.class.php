@@ -2993,6 +2993,11 @@ class SurveyUtil
                 true
             );
         } else {
+            $extraParameters = [];
+            if (api_get_setting('use_course_logo_in_course_page') === 'true') {
+                $extraParameters = ['logo' => CourseManager::getCourseLogo($_course)];
+            }
+
             @api_mail_html(
                 '',
                 $invitedUser,
@@ -3000,7 +3005,11 @@ class SurveyUtil
                 $full_invitation_text,
                 $sender_name,
                 $sender_email,
-                $replyto
+                $replyto,
+                [],
+                false,
+                $extraParameters,
+                ''
             );
         }
     }

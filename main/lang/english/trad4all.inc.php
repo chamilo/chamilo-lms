@@ -8988,4 +8988,9 @@ $MatchingCombination = "Matching with exact selection";
 $HotSpotCombination = "Image zones with exact selection";
 $MatchingDraggableCombination = "Match by dragging with exact selection";
 $MultipleAnswerDropdownCombination = "Multiple answer dropdown with exact selection";
+$EmailImage = "Site & mail banner";
+$AddEmailPicture = "Add site & mail banner";
+$DeleteEmailPicture = "Delete site & mail banner";
+$UseCourseLogoInCoursePageTitle = "Use the course logo in the header";
+$UseCourseLogoInCoursePageComment = "Instead of the platform logo, use the course logo in the header";
 ?>

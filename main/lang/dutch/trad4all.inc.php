@@ -6882,4 +6882,9 @@ $FirstLesson = "Eerste lesmoment";
 $UserGuides = "Gidsen voor gebruikers";
 $OngoingTraining = "Lopende opleiding(en)";
 $ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "Er zijn gebruikers of cursussen die deze taal gebruiken. Wilt u deze taal uitschakelen en alle gebruikers en cursussen de standaard portal taal laten gebruiken?";
+$EmailImage = "Site & e-mail banner";
+$AddEmailPicture = "Voeg site & e-mail banner toe";
+$DeleteEmailPicture = "Verwijder site & e-mail banner";
+$UseCourseLogoInCoursePageTitle = "Gebruik het cursus logo in de header";
+$UseCourseLogoInCoursePageComment = "In plaats van het platform logo gebruik het cursus logo in de header";
 ?>

@@ -2532,6 +2532,26 @@ function api_format_course_array($course_data)
 
     $_course['course_image_large'] = $url_image;
 
+    // email pictures
+    // Course image
+    $url_image = null;
+    $_course['course_email_image_source'] = '';
+    if (file_exists($courseSys.'/course-email-pic85x85.png')) {
+        $url_image = $webCourseHome.'/course-email-pic85x85.png';
+        $_course['course_email_image_source'] = $courseSys.'/course-email-pic85x85.png';
+    }
+    $_course['course_email_image'] = $url_image;
+
+    // Course large image
+    $url_image = null;
+    $_course['course_email_image_large_source'] = '';
+    if (file_exists($courseSys.'/course-email-pic.png')) {
+        $url_image = $webCourseHome.'/course-email-pic.png';
+        $_course['course_email_image_large_source'] = $courseSys.'/course-email-pic.png';
+    }
+
+    $_course['course_email_image_large'] = $url_image;
+
     return $_course;
 }
 
@@ -9526,6 +9546,9 @@ function api_mail_html(
 
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
+    }
+    if (isset($additionalParameters['logo'])) {
+        $mailView->assign('logo', $additionalParameters['logo']);
     }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));

@@ -327,8 +327,7 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-                if ($objExercise->edit_exercise_in_lp) {
-                    $delete = true;
+                if (!$limitTeacherAccess && api_is_platform_admin() && $objExercise->edit_exercise_in_lp) {
                     $questionInOtherQuizs = true;
                     $results = Question::countQuizzesUsingQuestion($id);
 
@@ -358,10 +357,6 @@ if (!$inATest) {
                             'data-otherquizs' => $questionInOtherQuizs,
                         ]
                     );
-                }
-
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
-                    $delete_link = '';
                 }
 
                 $btnActions = implode(

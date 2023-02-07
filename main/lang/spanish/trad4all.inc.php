@@ -9013,4 +9013,11 @@ $MatchingCombination = "Relacionar con combinación exacta";
 $HotSpotCombination = "Zonas de imagen con combinación exacta";
 $MatchingDraggableCombination = "Coincidencia arrastrable con combinación exacta";
 $MultipleAnswerDropdownCombination = "Respuesta múltiple desplegable con combinación exacta";
+$LpAiGenerator = "Generador de lección por IA";
+$LpAiTopic = "Tema";
+$LpAiTopicHelp = "Indique el tema sobre el cual el asistente IA desarrollará una lección. Al dar más detalle en el tema, el resultado será más preciso.";
+$LpAiNumberOfItems = "Número de páginas";
+$LpAiNumberOfItemsHelper = "El número de páginas/capítulos/secciones que desea que el asistente IA genere dentro de la lección. Separar la lección en páginas ayudará estructurar el curso y permitirá posiblemente redistribuir su contenido para una mejor presentación.";
+$LpAiWordsCount = "Número de palabras";
+$LpAiWordsCountHelper = "Número máximo aproximado de palabras (en realidad el número de tokens) deseado por página. A más tokens, probablemente se genere una mejor calidad de contenido, pero también tomará más tiempo y terminará costando más a su organización. Usar con parsimonia.";
 ?>

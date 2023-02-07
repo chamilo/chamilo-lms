@@ -8922,4 +8922,11 @@ $MatchingCombination = "Apparier avec combinaison exacte";
 $HotSpotCombination = "Zones sur image avec combinaison exacte";
 $MatchingDraggableCombination = "Correspondances glisser-déplacer avec combinaison exacte";
 $MultipleAnswerDropdownCombination = "Liste déroulante de réponses multiples avec combinaison exacte";
+$LpAiGenerator = "Générateur de parcours par IA";
+$LpAiTopic = "Sujet";
+$LpAiTopicHelp = "Tapez le sujet à propos duquel vous souhaitez que l'assistant IA développe un parcours pour vous. Le niveau de détail du sujet aura un impact direct sur la précision du résultat.";
+$LpAiNumberOfItems = "Nombre d'éléments du parcours";
+$LpAiNumberOfItemsHelper = "Nombre de pages que vous souhaitez que l'assistant IA génère dans votre parcours. Diviser le parcours en plusieurs pages, chapitres, sections (quel que soit le nom que vous leur donnez) vous aidera à structurer le cours et aussi à redistribuer le contenu pour une meilleure présentation.";
+$LpAiWordsCount = "Nombre de mots";
+$LpAiWordsCountHelper = "Nombre maximum approximatif de mots (plus précisément de tokens) que vous souhaitez obtenir par page. Plus de tokens vous permettra probablement de générer du meilleur contenu, mais cela prendra plus de temps et coûtera plus à votre organisation. À utiliser avec parcimonie.";
 ?>

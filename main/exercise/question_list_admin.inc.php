@@ -327,43 +327,37 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-                if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete = false;
+                if ($objExercise->edit_exercise_in_lp) {
+                    $delete = true;
                     $questionInOtherQuizs = true;
                     $results = Question::countQuizzesUsingQuestion($id);
+
                     if ($results > 1) {
                         $masterExerciseId = Question::getMasterQuizForQuestion($id);
-                        if ($masterExerciseId == $exerciseId) {
-                            $delete = true;
-                            $questionInOtherQuizs = true;
-                        } else {
+                        if ($masterExerciseId !== $exerciseId) {
                             $questionInOtherQuizs = false;
                         }
-                    } else {
-                        $delete = true;
                     }
 
-                    if ($delete) {
-                        $delete_link = Display::url(
-                            Display::return_icon(
-                                'delete.png',
-                                get_lang('RemoveFromTest'),
-                                [],
-                                ICON_SIZE_TINY
-                            ),
-                            api_get_self().'?'.api_get_cidreq().'&'
-                                .http_build_query([
-                                    'exerciseId' => $exerciseId,
-                                    'deleteQuestion' => $id,
-                                    'page' => $page,
-                                ]),
-                            [
-                                'id' => "delete_$id",
-                                'class' => 'opener btn btn-default btn-sm',
-                                'data-otherquizs' => $questionInOtherQuizs,
-                            ]
-                        );
-                    }
+                    $delete_link = Display::url(
+                        Display::return_icon(
+                            'delete.png',
+                            get_lang('RemoveFromTest'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        api_get_self().'?'.api_get_cidreq().'&'
+                            .http_build_query([
+                                'exerciseId' => $exerciseId,
+                                'deleteQuestion' => $id,
+                                'page' => $page,
+                            ]),
+                        [
+                            'id' => "delete_$id",
+                            'class' => 'opener btn btn-default btn-sm',
+                            'data-otherquizs' => $questionInOtherQuizs,
+                        ]
+                    );
                 }
 
                 if ($limitTeacherAccess && !api_is_platform_admin()) {

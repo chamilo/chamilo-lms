@@ -94,7 +94,7 @@ $addImageUrl = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/filemanager.php?add
             var targetUrl = $(this).attr("href");
             var otherQuizs = $(this).data("otherquizs");
 
-            if (otherQuizs) {
+            if (otherQuizs == 1) {
                 $("#dialog-confirm p").text("<?php echo get_lang('QuestionInOtherExercises'); ?>")
             }
 
@@ -328,13 +328,13 @@ if (!$inATest) {
                     );
                 $delete_link = null;
                 if (!$limitTeacherAccess && api_is_allowed_to_edit() && $objExercise->edit_exercise_in_lp) {
-                    $questionInOtherQuizs = true;
+                    $questionInOtherQuizs = 0;
                     $results = Question::countQuizzesUsingQuestion($id);
 
                     if ($results > 1) {
                         $masterExerciseId = Question::getMasterQuizForQuestion($id);
                         if ($masterExerciseId !== $exerciseId) {
-                            $questionInOtherQuizs = false;
+                            $questionInOtherQuizs = 1;
                         }
                     }
 

@@ -482,6 +482,8 @@ class Category implements GradebookItem
                 $courseInfo = api_get_course_info($course_code);
                 if ($courseInfo) {
                     $sql .= " c_id = '".intval($courseInfo['real_id'])."'";
+                } else {
+                    $sql .= ' c_id is null ';
                 }
             }
 

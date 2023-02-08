@@ -63,8 +63,8 @@ class Notification extends Model
         $this->adminName = api_get_setting('siteName');
         $this->titlePrefix = '['.api_get_setting('siteName').'] ';
 
-        // If no-reply email doesn't exist use the admin name/email
-        if (empty($this->adminEmail)) {
+        // If no-reply email doesn't exist or is something '@example.com', use the admin name/email
+        if (empty($this->adminEmail) || substr($this->adminEmail, -12) === '@example.com') {
             $this->adminEmail = api_get_setting('emailAdministrator');
             $this->adminName = api_get_person_name(
                 api_get_setting('administratorName'),

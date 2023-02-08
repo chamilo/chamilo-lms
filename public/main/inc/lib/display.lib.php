@@ -2158,11 +2158,17 @@ class Display
         return self::url("$icon $text", $url, $attributes);
     }
 
+    /**
+     * Generate an HTML "p-toolbar" div element with the given id attribute.
+     * @param string $id The HTML div's "id" attribute to set
+     * @param array  $contentList Array of left-center-right elements for the toolbar. If only 2 elements are defined, this becomes left-right (no center)
+     * @return string HTML div for the toolbar
+     */
     public static function toolbarAction(string $id, array $contentList): string
     {
-        $contentList = array_filter($contentList);
+        $contentListPurged = array_filter($contentList);
 
-        if (empty($contentList)) {
+        if (empty($contentListPurged)) {
             return '';
         }
 

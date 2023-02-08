@@ -96,6 +96,7 @@ class learnpathItem
     {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         $id = (int) $id;
+        $this->courseId = api_get_course_int_id();
 
         if (!empty($id)) {
             $sql = "SELECT * FROM $items_table

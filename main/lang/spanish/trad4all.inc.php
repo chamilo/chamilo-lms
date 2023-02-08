@@ -9020,4 +9020,6 @@ $LpAiNumberOfItems = "Número de páginas";
 $LpAiNumberOfItemsHelper = "El número de páginas/capítulos/secciones que desea que el asistente IA genere dentro de la lección. Separar la lección en páginas ayudará estructurar el curso y permitirá posiblemente redistribuir su contenido para una mejor presentación.";
 $LpAiWordsCount = "Número de palabras";
 $LpAiWordsCountHelper = "Número máximo aproximado de palabras (en realidad el número de tokens) deseado por página. A más tokens, probablemente se genere una mejor calidad de contenido, pero también tomará más tiempo y terminará costando más a su organización. Usar con parsimonia.";
+$OnlySelectedUsersWillSeeTheContent = "Solo los usuarios seleccionados tendras acceso al contenido.";
+$LeaveEmptyToEnableTheContentForEveryone = "Dejar vacio para que todos tengan acceso al contenido.";
 ?>

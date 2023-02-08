@@ -8929,4 +8929,6 @@ $LpAiNumberOfItems = "Nombre d'éléments du parcours";
 $LpAiNumberOfItemsHelper = "Nombre de pages que vous souhaitez que l'assistant IA génère dans votre parcours. Diviser le parcours en plusieurs pages, chapitres, sections (quel que soit le nom que vous leur donnez) vous aidera à structurer le cours et aussi à redistribuer le contenu pour une meilleure présentation.";
 $LpAiWordsCount = "Nombre de mots";
 $LpAiWordsCountHelper = "Nombre maximum approximatif de mots (plus précisément de tokens) que vous souhaitez obtenir par page. Plus de tokens vous permettra probablement de générer du meilleur contenu, mais cela prendra plus de temps et coûtera plus à votre organisation. À utiliser avec parcimonie.";
+$OnlySelectedUsersWillSeeTheContent = "Seul les utilisateurs sélectionnés pourront voir le contenu";
+$LeaveEmptyToEnableTheContentForEveryone = "Laisser vide pour que tout le monde ait accès au contenu.";
 ?>

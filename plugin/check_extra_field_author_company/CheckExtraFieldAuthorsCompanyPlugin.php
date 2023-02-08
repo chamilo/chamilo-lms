@@ -286,8 +286,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
     /**
      * Verify that the "company" field exists in the database.
-     *
-     * @return bool
      */
     public function companyFieldExists(): bool
     {
@@ -317,8 +315,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
     /**
      * Verify that the "authors" field exists in the database.
-     *
-     * @return bool
      */
     public function authorsFieldExists(): bool
     {
@@ -349,8 +345,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
     /**
      * Verify that the "price" field exists in the database.
-     *
-     * @return bool
      */
     public function priceFieldExists(): bool
     {
@@ -381,8 +375,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
     /**
      * Verify that the "authorlpitem" field exists in the database.
-     *
-     * @return bool
      */
     public function authorLpItemFieldExists(): bool
     {
@@ -413,8 +405,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
     /**
      * Verify that the "authorlp" field exists in the database.
-     *
-     * @return bool
      */
     public function authorLpFieldExists(): bool
     {

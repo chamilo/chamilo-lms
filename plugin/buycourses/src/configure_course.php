@@ -341,7 +341,7 @@ $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
 ];
-switch($type) {
+switch ($type) {
     case 2:
         $interbreadcrumb[] = [
             'url' => 'list_session.php',

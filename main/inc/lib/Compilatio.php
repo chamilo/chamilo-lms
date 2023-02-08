@@ -461,7 +461,7 @@ class Compilatio
      */
     public static function isMd5($hash)
     {
-        return (preg_match('`^[a-f0-9]{32}$`', $hash) || preg_match('`^[a-f0-9]{40}$`', $hash));
+        return preg_match('`^[a-f0-9]{32}$`', $hash) || preg_match('`^[a-f0-9]{40}$`', $hash);
     }
 
     /**

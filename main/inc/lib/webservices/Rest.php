@@ -3060,6 +3060,7 @@ class Rest extends WebService
 
         $sessionId = $this->session ? $this->session->getId() : 0;
         $courseInfo = api_get_course_info_by_id($this->course->getId());
+
         return ExerciseLib::get_all_exercises($courseInfo, $sessionId);
     }
 

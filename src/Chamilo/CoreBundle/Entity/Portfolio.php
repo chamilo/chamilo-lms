@@ -376,12 +376,18 @@ class Portfolio
         return $this->comments;
     }
 
-    public function getLastComments(int $number = 3): Collection
+    public function getLastComments(int $number = 3, bool $avoidPerUserVisibility = false): Collection
     {
         $criteria = Criteria::create();
         $criteria
             ->orderBy(['date' => 'DESC'])
             ->setMaxResults($number);
+
+        if ($avoidPerUserVisibility) {
+            $criteria->where(
+                Criteria::expr()->neq('visibility', PortfolioComment::VISIBILITY_PER_USER)
+            );
+        }
 
         return $this->comments->matching($criteria);
     }

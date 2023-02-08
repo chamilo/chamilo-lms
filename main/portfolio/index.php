@@ -156,6 +156,17 @@ switch ($action) {
 
         $controller->itemVisibilityChooser($item);
         break;
+    case 'comment_visiblity_choose':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
+            break;
+        }
+
+        $controller->commentVisibilityChooser($comment);
+        break;
     case 'delete_item':
         $id = $httpRequest->query->getInt('id');
 

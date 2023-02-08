@@ -1172,16 +1172,48 @@ class PortfolioController
 
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
-        $query = $commentsRepo->createQueryBuilder('comment')
-            ->where('comment.item = :item')
+        $commentsQueryBuilder = $commentsRepo->createQueryBuilder('comment');
+        $commentsQueryBuilder->where('comment.item = :item');
+
+        if ($this->advancedSharingEnabled) {
+            $commentsQueryBuilder
+                ->leftJoin(
+                    CItemProperty::class,
+                    'cip',
+                    Join::WITH,
+                    "cip.ref = comment.id
+                        AND cip.tool = :cip_tool
+                        AND cip.course = :course
+                        AND cip.lasteditType = 'visible'
+                        AND cip.toUser = :current_user"
+                )
+                ->andWhere(
+                    sprintf(
+                        'comment.visibility = %d
+                            OR (
+                                comment.visibility = %d AND cip IS NOT NULL OR comment.author = :current_user
+                            )',
+                        PortfolioComment::VISIBILITY_VISIBLE,
+                        PortfolioComment::VISIBILITY_PER_USER
+                    )
+                )
+                ->setParameter('cip_tool', TOOL_PORTFOLIO_COMMENT)
+                ->setParameter('current_user', $this->owner->getId())
+                ->setParameter('course', $item->getCourse())
+            ;
+        }
+
+        $comments = $commentsQueryBuilder
             ->orderBy('comment.root, comment.lft', 'ASC')
             ->setParameter('item', $item)
-            ->getQuery();
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
 
         $commentsHtml = $commentsRepo->buildTree(
-            $query->getArrayResult(),
+            $comments,
             [
                 'decorate' => true,
                 'rootOpen' => '<div class="media-list">',
@@ -1296,6 +1328,13 @@ class PortfolioController
                     }
 
                     if ($this->commentBelongsToOwner($comment)) {
+                        if ($this->advancedSharingEnabled) {
+                            $commentActions[] = Display::url(
+                                Display::return_icon('visible.png', get_lang('ChooseRecipients')),
+                                $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
+                            );
+                        }
+
                         $commentActions[] = Display::url(
                             Display::return_icon('edit.png', get_lang('Edit')),
                             $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
@@ -1335,6 +1374,7 @@ class PortfolioController
         $template->assign('baseurl', $this->baseUrl);
         $template->assign('item', $item);
         $template->assign('item_content', $this->generateItemContent($item));
+        $template->assign('count_comments', count($comments));
         $template->assign('comments', $commentsHtml);
         $template->assign('form', $form);
         $template->assign('attachment_list', $this->generateAttachmentList($item));
@@ -3182,6 +3222,131 @@ class PortfolioController
         );
     }
 
+    public function commentVisibilityChooser(PortfolioComment $comment)
+    {
+        global $interbreadcrumb;
+
+        if (!$this->commentBelongsToOwner($comment)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $item = $comment->getItem();
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()]);
+
+        $form = new FormValidator('visibility', 'post', $formAction);
+        CourseManager::addUserGroupMultiSelect($form, ['USER:'.$this->owner->getId()]);
+        $form->addLabel(
+            '',
+            Display::return_message(
+                get_lang('OnlySelectedUsersWillSeeTheContent')
+                    .'<br>'.get_lang('LeaveEmptyToEnableTheContentForEveryone'),
+                'info',
+                false
+            )
+        );
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $recipients = CourseManager::separateUsersGroups($values['users'])['users'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+
+            Database::delete(
+                $tblItemProperty,
+                [
+                    'c_id = ? ' => [$courseId],
+                    'AND tool = ? AND ref = ? ' => [TOOL_PORTFOLIO_COMMENT, $comment->getId()],
+                    'AND lastedit_type = ? ' => ['visible'],
+                ]
+            );
+
+            foreach ($recipients as $userId) {
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_PORTFOLIO_COMMENT,
+                    $comment->getId(),
+                    'visible',
+                    api_get_user_id(),
+                    [],
+                    $userId,
+                    '',
+                    '',
+                    $sessionId
+                );
+            }
+
+            if (empty($recipients)) {
+                $comment->setVisibility(PortfolioComment::VISIBILITY_VISIBLE);
+            } else {
+                $comment->setVisibility(PortfolioComment::VISIBILITY_PER_USER);
+            }
+
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('VisibilityChanged'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
+        }
+
+        $result = Database::select(
+            'to_user_id',
+            $tblItemProperty,
+            [
+                'where' => [
+                    'c_id = ? ' => [$courseId],
+                    'AND tool = ? AND ref = ? ' => [TOOL_PORTFOLIO_COMMENT, $comment->getId()],
+                    'AND to_user_id IS NOT NULL ' => [],
+                ],
+            ]
+        );
+
+        $recipients = array_map(
+            function (array $itemProperty): string {
+                return 'USER:'.$itemProperty['to_user_id'];
+            },
+            $result
+        );
+
+        $form->setDefaults(['users' => $recipients]);
+        $form->protect();
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => $item->getExcerpt(40),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+        $interbreadcrumb[] = [
+            'name' => $comment->getExcerpt(40),
+            'url' => $this->baseUrl
+                .http_build_query(['action' => 'view', 'id' => $item->getId()])
+                .'#comment-'.$comment->getId(),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        $this->renderView(
+            $form->returnForm(),
+            get_lang('ChooseRecipients'),
+            $actions
+        );
+    }
+
     private function isAllowed(): bool
     {
         $isSubscribedInCourse = false;
@@ -4176,6 +4341,34 @@ class PortfolioController
             $queryBuilder
                 ->andWhere('c.content LIKE :text')
                 ->setParameter('text', '%'.$values['text'].'%')
+            ;
+        }
+
+        if ($this->advancedSharingEnabled) {
+            $queryBuilder
+                ->leftJoin(
+                    CItemProperty::class,
+                    'cip',
+                    Join::WITH,
+                    "cip.ref = c.id
+                        AND cip.tool = :cip_tool
+                        AND cip.course = :course
+                        AND cip.lasteditType = 'visible'
+                        AND cip.toUser = :current_user"
+                )
+                ->andWhere(
+                    sprintf(
+                        'c.visibility = %d
+                            OR (
+                                c.visibility = %d AND cip IS NOT NULL OR c.author = :current_user
+                            )',
+                        PortfolioComment::VISIBILITY_VISIBLE,
+                        PortfolioComment::VISIBILITY_PER_USER
+                    )
+                )
+                ->setParameter('cip_tool', TOOL_PORTFOLIO_COMMENT)
+                ->setParameter('current_user', $this->owner->getId())
+                ->setParameter('course', $this->course)
             ;
         }
 

@@ -1087,7 +1087,9 @@ ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (se
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
-// Allow advanced selection of who can view the posts.
+// Allow advanced selection of who can view the posts and comments. It requires DB changes:
+// ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;
+// Then add the "@" symbol to the CPortfolioComment::$visibility property in the ORM\Column() line.
 //$_configuration['portfolio_advanced_sharing'] = false;
 
 // Enable best score column in gradebook. Previously called disable_gradebook_stats

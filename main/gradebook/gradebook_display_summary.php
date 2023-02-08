@@ -27,15 +27,6 @@ $userList = CourseManager::get_user_list_from_course_code(
     $statusToFilter
 );
 
-$loadStats = [];
-if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-    $loadStats = [1, 2, 3];
-} else {
-    if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
-        $loadStats = [2];
-    }
-}
-
 /*Session::write('use_gradebook_cache', false);
 $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
 $cacheAvailable = api_get_configuration_value('apc') && $useCache;
@@ -69,6 +60,8 @@ switch ($action) {
             api_get_course_id(),
             api_get_session_id()
         );
+
+        $loadStats = GradebookTable::getExtraStatsColumnsToDisplay();
 
         $gradebooktable = new GradebookTable(
             $cat,

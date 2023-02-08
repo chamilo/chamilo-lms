@@ -28,9 +28,9 @@ class GradebookTable extends SortableTable
     /**
      * @var array Indicates which columns should be shown in gradebook
      *
-     * @example [1] For add Ranking column
-     *          [2] For add Best Score column
-     *          [3] For add Average column
+     * @example [1] To add Ranking column
+     *          [2] To add Best Score column
+     *          [3] To add Average column
      */
     private $loadStats = [];
 
@@ -98,6 +98,9 @@ class GradebookTable extends SortableTable
             }
         }
 
+        $styleTextRight = ['style' => 'text-align: right;'];
+        $styleCenterRight = ['style' => 'text-align: center;'];
+
         $this->set_header($column++, get_lang('Type'), '', 'width="20px"');
         $this->set_header($column++, get_lang('Name'), false);
         if (false == $this->exportToPdf) {
@@ -111,27 +114,22 @@ class GradebookTable extends SortableTable
             $showWeight = false;
         }
         if ($showWeight) {
-            $this->set_header(
-                $column++,
-                get_lang('Weight'),
-                '',
-                'width="100px"'
-            );
+            $this->set_header($column++, get_lang('Weight'), false, $styleTextRight, $styleTextRight);
         }
 
         if (!$this->teacherView) {
-            $this->set_header($column++, get_lang('Result'), false);
+            $this->set_header($column++, get_lang('Result'), false, $styleTextRight, $styleTextRight);
         }
 
         if (empty($model)) {
             if (in_array(1, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Ranking'), false, 'width="80px"');
+                $this->set_header($column++, get_lang('Ranking'), false, $styleTextRight, $styleTextRight);
             }
             if (in_array(2, $this->loadStats)) {
-                $this->set_header($column++, get_lang('BestScore'), false, 'width="120px"');
+                $this->set_header($column++, get_lang('BestScore'), false, $styleTextRight, $styleTextRight);
             }
             if (in_array(3, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Average'), false, 'width="120px"');
+                $this->set_header($column++, get_lang('Average'), false, $styleTextRight, $styleTextRight);
             }
         }
 
@@ -139,7 +137,7 @@ class GradebookTable extends SortableTable
         } else {
             if (!empty($cats)) {
                 if ($this->exportToPdf == false) {
-                    $this->set_header($column++, get_lang('Actions'), false);
+                    $this->set_header($column++, get_lang('Actions'), false, $styleCenterRight, $styleCenterRight);
                 }
             }
         }
@@ -1152,6 +1150,18 @@ class GradebookTable extends SortableTable
         }
 
         return '';
+    }
+
+    public static function getExtraStatsColumnsToDisplay(): array
+    {
+        if (api_get_configuration_value('gradebook_enable_best_score') === true) {
+            return [2];
+        }
+
+        $gradebookDisplayExtraStats = api_get_configuration_value('gradebook_display_extra_stats');
+
+        /** @see GradebookTable::$loadStats */
+        return $gradebookDisplayExtraStats['columns'] ?? [1, 2, 3];
     }
 
     /**

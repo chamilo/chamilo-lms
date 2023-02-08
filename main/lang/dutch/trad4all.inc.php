@@ -6887,4 +6887,6 @@ $AddEmailPicture = "Voeg site & e-mail banner toe";
 $DeleteEmailPicture = "Verwijder site & e-mail banner";
 $UseCourseLogoInCoursePageTitle = "Gebruik het cursus logo in de header";
 $UseCourseLogoInCoursePageComment = "In plaats van het platform logo gebruik het cursus logo in de header";
+$AddPictureComment = 'De afbeelding moet een verhouding van 16/9 hebben, u kunt de afbeelding die u uploadt bijsnijden.';
+$AddEmailPictureComment = 'De foto moet een minimale verhouding hebben van 25/7, u kunt de foto die u uploadt bijsnijden.';
 ?>

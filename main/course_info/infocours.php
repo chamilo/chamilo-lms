@@ -161,7 +161,7 @@ $(function() {
 // Picture
 $form->addFile(
     'picture',
-    get_lang('AddPicture'),
+    [get_lang('AddPicture'), get_lang('AddPictureComment')],
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
 );
 
@@ -178,8 +178,8 @@ $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'))
 // Email Picture
 $form->addFile(
     'email_picture',
-    get_lang('AddEmailPicture'),
-    ['id' => 'email_picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '250 / 70']
+    [get_lang('AddEmailPicture'), get_lang('AddEmailPictureComment')],
+    ['id' => 'email_picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_min_ratio' => '250 / 70', 'crop_max_ratio' => '10']
 );
 
 $allowed_picture_types = api_get_supported_image_extensions(false);

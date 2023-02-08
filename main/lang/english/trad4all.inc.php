@@ -8993,4 +8993,6 @@ $AddEmailPicture = "Add site & mail banner";
 $DeleteEmailPicture = "Delete site & mail banner";
 $UseCourseLogoInCoursePageTitle = "Use the course logo in the header";
 $UseCourseLogoInCoursePageComment = "Instead of the platform logo, use the course logo in the header";
+$AddPictureComment = 'The picture must be in a 16 / 9 ratio, you can crop the picture you upload.';
+$AddEmailPictureComment = 'The picture must have a minimum ratio of 25 / 7, you can crop the picture you upload.';
 ?>

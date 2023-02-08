@@ -109,6 +109,80 @@ switch ($action) {
         }
         header('Location: '.$url);
         exit;
+    case 'export_csv':
+        $selectedSessions = explode(',', $idMultiple);
+
+        $csvHeaders = [];
+        $csvHeaders[] = get_lang('SessionName');
+        $csvHeaders[] = get_lang('SessionStartDate');
+        $csvHeaders[] = get_lang('SessionEndDate');
+        $csvHeaders[] = get_lang('CourseName');
+        $csvHeaders[] = get_lang('OfficialCode');
+        if (api_sort_by_first_name()) {
+            $csvHeaders[] = get_lang('FirstName');
+            $csvHeaders[] = get_lang('LastName');
+        } else {
+            $csvHeaders[] = get_lang('LastName');
+            $csvHeaders[] = get_lang('FirstName');
+        }
+        $csvHeaders[] = get_lang('Login');
+        $csvHeaders[] = get_lang('TrainingTime');
+        $csvHeaders[] = get_lang('CourseProgress');
+        $csvHeaders[] = get_lang('ExerciseProgress');
+        $csvHeaders[] = get_lang('ExerciseAverage');
+        $csvHeaders[] = get_lang('Score');
+        $csvHeaders[] = get_lang('Score').' - '.get_lang('BestAttempt');
+        $csvHeaders[] = get_lang('Student_publication');
+        $csvHeaders[] = get_lang('Messages');
+        $csvHeaders[] = get_lang('Classes');
+        $csvHeaders[] = get_lang('RegistrationDate');
+        $csvHeaders[] = get_lang('FirstLoginInCourse');
+        $csvHeaders[] = get_lang('LatestLoginInCourse');
+        $csvHeaders[] = get_lang('LpFinalizationDate');
+        $csvHeaders[] = get_lang('QuizFinalizationDate');
+        $csvData = [];
+        $i = 0;
+        foreach ($selectedSessions as $sessionId) {
+            $courses = SessionManager::get_course_list_by_session_id($sessionId);
+            if (!empty($courses)) {
+                foreach ($courses as $course) {
+                    $courseCode = $course['course_code'];
+                    $studentList = CourseManager::get_student_list_from_course_code(
+                        $courseCode,
+                        true,
+                        $sessionId
+                    );
+
+                    $nbStudents = count($studentList);
+                    // Set global variables used by get_user_data()
+                    $GLOBALS['user_ids'] = array_keys($studentList);
+                    $GLOBALS['session_id'] = $sessionId;
+                    $GLOBALS['course_code'] = $courseCode;
+                    $GLOBALS['export_csv'] = true;
+                    $csvContentInSession = TrackingCourseLog::getUserData(
+                        null,
+                        $nbStudents,
+                        null,
+                        null,
+                        [],
+                        false,
+                        true
+                    );
+
+                    if (!empty($csvContentInSession)) {
+                        $csvData = array_merge($csvData, $csvContentInSession);
+                    }
+                }
+            }
+        }
+
+        if (!empty($csvData)) {
+            array_unshift($csvData, $csvHeaders);
+            $filename = 'export_session_courses_reports_complete_'.api_get_local_time();
+            Export::arrayToCsv($csvData, $filename);
+            exit;
+        }
+
         break;
     case 'export_multiple':
         $sessionList = explode(',', $idMultiple);
@@ -373,6 +447,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 $deleteUrl = api_get_self().'?list_type='.$listType.'&action=delete_multiple';
 $copyUrl = api_get_self().'?list_type='.$listType.'&action=copy_multiple';
 $exportUrl = api_get_self().'?list_type='.$listType.'&action=export_multiple';
+$exportCsvUrl = api_get_self().'?list_type='.$listType.'&action=export_csv';
 $extra_params['multiselect'] = true;
 
 ?>
@@ -522,7 +597,7 @@ $extra_params['multiselect'] = true;
                 {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
                 prmSearch
             ).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(get_lang('Copy')); ?>",
+                caption:"<?php echo addslashes(Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL)); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
@@ -533,12 +608,24 @@ $extra_params['multiselect'] = true;
                     }
                 }
             }).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(get_lang('ExportCoursesReports')); ?>",
+                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('ExportCoursesReports'), '', ICON_SIZE_SMALL)); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
                     if (list.length) {
                         window.location.replace('<?php echo $exportUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
+                    }
+                },
+                position:"last"
+            }).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(Display::return_icon('export_csv.png', get_lang('ExportCoursesReportsComplete'), '', ICON_SIZE_SMALL)); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $exportCsvUrl; ?>&id='+list.join(','));
                     } else {
                         alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
                     }

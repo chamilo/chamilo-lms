@@ -519,9 +519,11 @@ class TrackingCourseLog
         $numberOfItems,
         $column,
         $direction,
-        array $conditions = []
+        array $conditions = [],
+        bool $exerciseToCheckConfig = true,
+        bool $displaySessionInfo = false
     ) {
-        $includeInvitedUsers = $conditions['include_invited_users']; // include the invited users
+        $includeInvitedUsers = $conditions['include_invited_users'] ?? false; // include the invited users
         $getCount = $conditions['get_count'] ?? false;
 
         $csvContent = [];
@@ -673,16 +675,18 @@ class TrackingCourseLog
         Session::write('user_id_list', []);
         $userIdList = [];
 
-        $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
-        $exerciseResultsToCheck = [];
-        if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
-            isset($addExerciseOption['courses'][$courseCode])
-        ) {
-            foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
-                $exercise = new Exercise();
-                $exercise->read($exerciseId);
-                if ($exercise->iid) {
-                    $exerciseResultsToCheck[] = $exercise;
+        if ($exerciseToCheckConfig) {
+            $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+            $exerciseResultsToCheck = [];
+            if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
+                isset($addExerciseOption['courses'][$courseCode])
+            ) {
+                foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
+                    $exercise = new Exercise();
+                    $exercise->read($exerciseId);
+                    if ($exercise->iid) {
+                        $exerciseResultsToCheck[] = $exercise;
+                    }
                 }
             }
         }
@@ -863,6 +867,13 @@ class TrackingCourseLog
 
             // store columns in array $users
             $userRow = [];
+            if ($displaySessionInfo && !empty($GLOBALS['session_id'])) {
+                $sessionInfo = api_get_session_info($GLOBALS['session_id']);
+                $userRow['session_name'] = $sessionInfo['name'];
+                $userRow['session_startdate'] = $sessionInfo['access_start_date'];
+                $userRow['session_enddate'] = $sessionInfo['access_end_date'];
+                $userRow['course_name'] = $courseInfo['name'];
+            }
             $userRow['official_code'] = $user['official_code']; //0
             if ($sortByFirstName) {
                 $userRow['firstname'] = $user['col2'];

@@ -955,7 +955,10 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $result = http_build_query($this->additional_parameters);
+        $result = '';
+        if (is_array($this->additional_parameters)) {
+            $result = http_build_query($this->additional_parameters);
+        }
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
@@ -976,7 +979,7 @@ class SortableTable extends HTML_Table
                 $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
             }
             if (count($param) > 0) {
-                $result .= '&'.http_build_query($param);
+                $result .= (strlen($result) > 0 ? '&' : '') . http_build_query($param);
             }
         }
 

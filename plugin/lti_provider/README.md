@@ -20,6 +20,14 @@ temporarily writeable by the web server.*
 4. Add the LTI connection details to try out the little demo app (Configuration page)
 5. Configure the LMS platforms for registration and deployment
 
+To be able to acces LTI content from a different domain in an iframe, the hosting provider will have to enable it by activating this configuration in the app/config/configuration.php file :
+```
+// Enable samesite:None parameter for session cookie.
+// More info: https://www.chromium.org/updates/same-site
+// Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+$_configuration['security_session_cookie_samesite_none'] = true;
+```
+
 # DB tables
 
 These tables are normally created during the activation of the plugin. They are mentioned here for practical purposes. 

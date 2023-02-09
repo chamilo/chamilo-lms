@@ -8997,4 +8997,5 @@ $LpAiWordsCount = "Number of words";
 $LpAiWordsCountHelper = "Rough maximum number of words (actually number of tokens) you want to get per page. More tokens will probably generate better content, but will also take more time to generate and cost more to your organisation, so use this carefully.";
 $OnlySelectedUsersWillSeeTheContent = "Only selected users will see the content";
 $LeaveEmptyToEnableTheContentForEveryone = "Leave empty to enable the content for everyone";
+$ExportCoursesReportsComplete = "Export courses reports complete";
 ?>

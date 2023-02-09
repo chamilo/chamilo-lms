@@ -9022,4 +9022,5 @@ $LpAiWordsCount = "Número de palabras";
 $LpAiWordsCountHelper = "Número máximo aproximado de palabras (en realidad el número de tokens) deseado por página. A más tokens, probablemente se genere una mejor calidad de contenido, pero también tomará más tiempo y terminará costando más a su organización. Usar con parsimonia.";
 $OnlySelectedUsersWillSeeTheContent = "Solo los usuarios seleccionados tendrán acceso al contenido.";
 $LeaveEmptyToEnableTheContentForEveryone = "Dejar vacío para que todos tengan acceso al contenido.";
+$ExportCoursesReportsComplete = "Exporte de los reportes de cursos completos";
 ?>

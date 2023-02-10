@@ -123,7 +123,9 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    if ('true' === api_get_plugin_setting('ai_helper', 'tool_enable')) {
+    if ('true' === api_get_plugin_setting('ai_helper', 'tool_enable') &&
+        'true' === api_get_plugin_setting('ai_helper', 'tool_lp_enable')
+    ) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'help.png',

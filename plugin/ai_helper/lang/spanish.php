@@ -11,3 +11,6 @@ $strings['api_key_help'] = 'Clave secreta generada para su API de IA';
 $strings['organization_id'] = 'Identificación de la organización';
 $strings['organization_id_help'] = 'En caso de que su cuenta API sea de una organización.';
 $strings['OpenAI'] = 'OpenAI';
+$strings['tool_lp_enable'] = "Activarlo para lecciones";
+$strings['tool_quiz_enable'] = "Activarlo para ejercicios";
+$strings['tokens_limit'] = "Limite de AI tokens";

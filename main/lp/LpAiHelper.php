@@ -9,7 +9,7 @@ class LpAiHelper
      */
     public function __construct()
     {
-        if ('true' !== api_get_plugin_setting('ai_helper', 'tool_enable')) {
+        if (!('true' === api_get_plugin_setting('ai_helper', 'tool_enable') && 'true' === api_get_plugin_setting('ai_helper', 'tool_lp_enable'))) {
             return false;
         }
     }

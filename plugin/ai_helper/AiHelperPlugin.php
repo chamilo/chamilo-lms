@@ -1,6 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\AiHelper\Requests;
+use Doctrine\ORM\Tools\SchemaTool;
+
 /**
  * Description of AiHelperPlugin.
  *
@@ -8,6 +11,7 @@
  */
 class AiHelperPlugin extends Plugin
 {
+    public const TABLE_REQUESTS = 'plugin_ai_helper_requests';
     public const OPENAI_API = 'openai';
 
     protected function __construct()
@@ -26,6 +30,9 @@ class AiHelperPlugin extends Plugin
             ],
             'api_key' => 'text',
             'organization_id' => 'text',
+            'tool_lp_enable' => 'boolean',
+            'tool_quiz_enable' => 'boolean',
+            'tokens_limit' => 'text',
         ];
 
         parent::__construct($version, $author, $settings);
@@ -50,8 +57,10 @@ class AiHelperPlugin extends Plugin
      *
      * @return string
      */
-    public function openAiGetCompletionText(string $prompt)
-    {
+    public function openAiGetCompletionText(
+        string $prompt,
+        string $toolName
+    ) {
         require_once __DIR__.'/src/openai/OpenAi.php';
 
         $apiKey = $this->get('api_key');
@@ -80,6 +89,16 @@ class AiHelperPlugin extends Plugin
         $resultText = '';
         if (!empty($result['choices'])) {
             $resultText = trim($result['choices'][0]['text']);
+            // saves information of user results.
+            $values = [
+                'user_id' => api_get_user_id(),
+                'tool_name' => $toolName,
+                'prompt' => $prompt,
+                'prompt_tokens' => (int) $result['usage']['prompt_tokens'],
+                'completion_tokens' => (int) $result['usage']['completion_tokens'],
+                'total_tokens' => (int) $result['usage']['total_tokens'],
+            ];
+            $this->saveRequest($values);
         }
 
         return $resultText;
@@ -106,10 +125,47 @@ class AiHelperPlugin extends Plugin
     }
 
     /**
+     * Save user information of openai request.
+     *
+     * @return int
+     */
+    public function saveRequest(array $values)
+    {
+        $em = Database::getManager();
+
+        $objRequest = new Requests();
+        $objRequest
+            ->setUserId($values['user_id'])
+            ->setToolName($values['tool_name'])
+            ->setRequestedAt(new DateTime())
+            ->setRequestText($values['prompt'])
+            ->setPromptTokens($values['prompt_tokens'])
+            ->setCompletionTokens($values['completion_tokens'])
+            ->setTotalTokens($values['total_tokens'])
+        ;
+        $em->persist($objRequest);
+        $em->flush();
+
+        return $objRequest->getId();
+    }
+
+    /**
      * Install the plugin. Set the database up.
      */
     public function install()
     {
+        $em = Database::getManager();
+
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(Requests::class),
+            ]
+        );
     }
 
     /**
@@ -117,5 +173,17 @@ class AiHelperPlugin extends Plugin
      */
     public function uninstall()
     {
+        $em = Database::getManager();
+
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(Requests::class),
+            ]
+        );
     }
 }

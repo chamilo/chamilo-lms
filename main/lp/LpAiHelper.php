@@ -76,7 +76,7 @@ class LpAiHelper
 
         $form->addButton(
             'create_lp_button',
-            get_lang('CreateLp'),
+            get_lang('LearnpathAddLearnpath'),
             '',
             'default',
             'default',

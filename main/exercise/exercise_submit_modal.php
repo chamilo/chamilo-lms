@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use ChamiloSession as Session;
 
 /**
@@ -370,7 +371,7 @@ if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
 }
 
 $destinationId = null;
-if (isset($result['answer_destination'])) {
+if (isset($result['answer_destination']) && CQuizAnswer::DEFAULT_DESTINATION !== $result['answer_destination']) {
     $itemList = explode('@@', $result['answer_destination']);
     $try = $itemList[0];
     $lp = $itemList[1];

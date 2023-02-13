@@ -19,8 +19,11 @@ Currently, this plugin is only integrated into:
 The plugin, created in early 2023, currently only supports OpenAI's ChatGPT API. 
 Create an account at https://beta.openai.com/signup, then generate a secret key at https://beta.openai.com/account/api-keys and fill it inside the key field in the plugin configuration page.
 
-# DB tables
+# Changelog
+
 ## v1.1
+
+To update from v1.0, execute the following queries manually.
 ```sql
 CREATE TABLE plugin_ai_helper_requests (
 id int(11) NOT NULL AUTO_INCREMENT,

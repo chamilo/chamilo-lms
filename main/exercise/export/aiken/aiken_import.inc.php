@@ -49,7 +49,7 @@ function aiken_display_form()
  */
 function generateAikenForm()
 {
-    if ('true' !== api_get_plugin_setting('ai_helper', 'tool_enable')) {
+    if (!('true' === api_get_plugin_setting('ai_helper', 'tool_enable') && 'true' === api_get_plugin_setting('ai_helper', 'tool_quiz_enable'))) {
         return false;
     }
 

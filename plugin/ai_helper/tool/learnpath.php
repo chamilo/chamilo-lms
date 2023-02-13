@@ -28,7 +28,7 @@ switch ($apiName) {
 
         $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
-        $resultText = $plugin->openAiGetCompletionText($prompt);
+        $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
         $lpItems = [];
         if (!empty($resultText)) {
             $items = explode(',', $resultText);
@@ -40,7 +40,7 @@ switch ($apiName) {
                     $lpItems[$position]['title'] = trim($title);
                     $messageGetItemContent = 'In the context of "%s", generate a document with HTML tags in "%s" with %d words of content or less, about "%s"';
                     $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title);
-                    $resultContentText = $plugin->openAiGetCompletionText($promptItem);
+                    $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
                     if (!empty($resultContentText)) {
                         $lpItems[$position]['content'] = trim($resultContentText);
                     }

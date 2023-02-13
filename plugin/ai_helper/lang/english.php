@@ -11,3 +11,6 @@ $strings['api_key_help'] = 'Secret key generated for your Ai api';
 $strings['organization_id'] = 'Organization ID';
 $strings['organization_id_help'] = 'In case your api account is from an organization.';
 $strings['OpenAI'] = 'OpenAI';
+$strings['tool_lp_enable'] = 'Enable in learning paths';
+$strings['tool_quiz_enable'] = 'Enable in exercises (Aiken section)';
+$strings['tokens_limit'] = 'AI tokens limit';

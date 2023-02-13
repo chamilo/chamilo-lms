@@ -1,7 +1,7 @@
 AI Helper plugin
 ======
 
-Version 1.0
+Version 1.1
 
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -20,7 +20,7 @@ The plugin, created in early 2023, currently only supports OpenAI's ChatGPT API.
 Create an account at https://beta.openai.com/signup, then generate a secret key at https://beta.openai.com/account/api-keys and fill it inside the key field in the plugin configuration page.
 
 # DB tables
-## v1.0
+## v1.1
 ```sql
 CREATE TABLE plugin_ai_helper_requests (
 id int(11) NOT NULL AUTO_INCREMENT,

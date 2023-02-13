@@ -11682,7 +11682,7 @@ class Exercise
         if (!empty($temp_question_list)) {
             /* If both array don't match it means that question_order was not correctly set
                for all questions using the default mysql order */
-            if (count($temp_question_list) != $count_question_orders || count($temp_question_list) != count($questionList)) {
+            if (count($temp_question_list) != $count_question_orders ||  count($temp_question_list) != count($questionList)) {
                 $questionList = $temp_question_list;
             }
         }

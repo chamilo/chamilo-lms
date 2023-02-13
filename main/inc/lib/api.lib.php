@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use League\OAuth2\Client\Provider\GenericProvider;
+use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Component\Finder\Finder;
 
@@ -9426,6 +9428,28 @@ function api_mail_html(
     }
 
     $mail = new PHPMailer();
+
+    if (!empty($platform_email['XOAUTH2_METHOD'])) {
+        $provider = new GenericProvider([
+            'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
+            'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
+            'urlAuthorize' => $platform_email['XOAUTH2_URL_AUTHORIZE'],
+            'urlAccessToken' => $platform_email['XOAUTH2_URL_ACCES_TOKEN'],
+            'urlResourceOwnerDetails' => $platform_email['XOAUTH2_URL_RESOURCE_OWNER_DETAILS'],
+            'scopes' => $platform_email['XOAUTH2_SCOPES'],
+        ]);
+        $mail->AuthType = 'XOAUTH2';
+        $mail->setOAuth(
+            new OAuth([
+                'provider' => $provider,
+                'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
+                'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
+                'refreshToken' => $platform_email['XOAUTH2_REFRESH_TOKEN'],
+                'userName' => $platform_email['SMTP_USER'],
+            ])
+        );
+    }
+
     $mail->Mailer = $platform_email['SMTP_MAILER'];
     $mail->Host = $platform_email['SMTP_HOST'];
     $mail->Port = $platform_email['SMTP_PORT'];

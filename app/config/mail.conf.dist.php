@@ -41,3 +41,13 @@ $platform_email['DKIM_PRIVATE_KEY'] = ''; //the private key as the path to a fil
 // showing it as a loose JSON string to the final user. If this is your case,
 // you might want to set the variable below to 'false' to disable this header.
 $platform_email['EXCLUDE_JSON'] = false;
+
+// Fill the following only for mail services with OAuth2.0 authentication. Otherwise leave untouched.
+$platform_email['XOAUTH2_METHOD'] = false;
+$platform_email['XOAUTH2_URL_AUTHORIZE'] = 'https://provider.example/oauth2/auth';
+$platform_email['XOAUTH2_URL_ACCES_TOKEN'] = 'https://provider.example/token';
+$platform_email['XOAUTH2_URL_RESOURCE_OWNER_DETAILS'] = 'https://provider.example/userinfo';
+$platform_email['XOAUTH2_SCOPES'] = '';
+$platform_email['XOAUTH2_CLIENT_ID'] = '';
+$platform_email['XOAUTH2_CLIENT_SECRET'] = '';
+$platform_email['XOAUTH2_REFRESH_TOKEN'] = '';

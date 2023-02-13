@@ -23,6 +23,8 @@ Create an account at https://beta.openai.com/signup, then generate a secret key 
 
 ## v1.1
 
+Added tracking for requests and differential settings to enable only in exercises, only in learning paths, or both.
+
 To update from v1.0, execute the following queries manually.
 ```sql
 CREATE TABLE plugin_ai_helper_requests (

@@ -133,7 +133,7 @@ if ($form->validate()) {
     );
 
     if ($return) {
-        // Delete Picture Session
+        // Delete picture of session
         $deletePicture = $_POST['delete_picture'] ?? '';
         if ($deletePicture && $return) {
             SessionManager::deleteAsset($return);

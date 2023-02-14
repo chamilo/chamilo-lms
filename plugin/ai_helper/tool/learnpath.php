@@ -6,6 +6,8 @@ Create a learnpath with contents based on existing knowledge.
  */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/../AiHelperPlugin.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
+require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_import.inc.php';
 
 $plugin = AiHelperPlugin::create();
 
@@ -25,6 +27,8 @@ switch ($apiName) {
         $wordsCount = (int) $_REQUEST['words_count'];
         $courseCode = (string) $_REQUEST['course_code'];
         $sessionId = (int) $_REQUEST['session_id'];
+        $addTests = ('true' === $_REQUEST['add_tests']);
+        $nQ = ($addTests ? (int) $_REQUEST['nro_questions'] : 0);
 
         $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
@@ -69,7 +73,8 @@ switch ($apiName) {
                     api_get_user_id()
                 );
                 $lp->generate_lp_folder($courseInfo, $topic);
-
+                $order = 1;
+                $lpItemsIds = [];
                 foreach ($lpItems as $dspOrder => $item) {
                     $documentId = $lp->create_document(
                         $courseInfo,
@@ -89,8 +94,87 @@ switch ($apiName) {
                             0,
                             0,
                             api_get_user_id(),
-                            $dspOrder
+                            $order
                         );
+
+                        if ($addTests && !empty($lpItemId)) {
+                            $lpItemsIds[$order]['item_id'] = $lpItemId;
+                            $lpItemsIds[$order]['item_type'] = 'document';
+                            $promptQuiz = 'Generate %d "multiple choice" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
+                            $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title']);
+                            $resultQuizText = $plugin->openAiGetCompletionText($promptQuiz, 'quiz');
+                            if (!empty($resultQuizText)) {
+                                $request = [];
+                                $request['quiz_name'] = get_lang('Exercise').': '.$item['title'];
+                                $request['nro_questions'] = $nQ;
+                                $request['course_id'] = api_get_course_int_id($courseCode);
+                                $request['aiken_format'] = $resultQuizText;
+                                $exerciseId = aikenImportExercise(null, $request);
+                                if (!empty($exerciseId)) {
+                                    $order++;
+                                    $lpQuizItemId = $lp->add_item(
+                                        0,
+                                        0,
+                                        'quiz',
+                                        $exerciseId,
+                                        $request['quiz_name'],
+                                        '',
+                                        0,
+                                        0,
+                                        api_get_user_id(),
+                                        $order
+                                    );
+                                    if (!empty($lpQuizItemId)) {
+                                        $maxScore = (float) $nQ;
+                                        $minScore = round($nQ / 2, 2);
+                                        $lpItemsIds[$order]['item_id'] = $lpQuizItemId;
+                                        $lpItemsIds[$order]['item_type'] = 'quiz';
+                                        $lpItemsIds[$order]['min_score'] = $minScore;
+                                        $lpItemsIds[$order]['max_score'] = $maxScore;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $order++;
+                }
+
+                // Add the final item
+                if ($addTests) {
+                    $finalTitle = get_lang('EndOfLearningPath');
+                    $finalContent = file_get_contents(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
+                    $finalDocId = $lp->create_document(
+                        $courseInfo,
+                        $finalContent,
+                        $finalTitle
+                    );
+                    $lpFinalItemId = $lp->add_item(
+                        0,
+                        0,
+                        TOOL_LP_FINAL_ITEM,
+                        $finalDocId,
+                        $finalTitle,
+                        '',
+                        0,
+                        0,
+                        api_get_user_id(),
+                        $order
+                    );
+                    $lpItemsIds[$order]['item_id'] = $lpFinalItemId;
+                    $lpItemsIds[$order]['item_type'] = TOOL_LP_FINAL_ITEM;
+                }
+
+                // Set lp items prerequisites
+                if (count($lpItemsIds) > 0) {
+                    for ($i = 1; $i <= count($lpItemsIds); $i++) {
+                        $prevIndex = ($i - 1);
+                        if (isset($lpItemsIds[$prevIndex])) {
+                            $itemId = $lpItemsIds[$i]['item_id'];
+                            $prerequisite = $lpItemsIds[$prevIndex]['item_id'];
+                            $minScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['min_score'] : 0);
+                            $maxScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['max_score'] : 100);
+                            $lp->edit_item_prereq($itemId, $prerequisite, $minScore, $maxScore);
+                        }
                     }
                 }
             }

@@ -88,7 +88,7 @@ class AiHelperPlugin extends Plugin
         $result = json_decode($complete, true);
         $resultText = '';
         if (!empty($result['choices'])) {
-            $resultText = trim($result['choices'][0]['text']);
+            $resultText = $result['choices'][0]['text'];
             // saves information of user results.
             $values = [
                 'user_id' => api_get_user_id(),

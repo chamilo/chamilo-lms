@@ -33,6 +33,12 @@ class LpAiHelper
         $form->addElement('number', 'words_count', [get_lang('LpAiWordsCount'), get_lang('LpAiWordsCountHelper')]);
         $form->addRule('words_count', get_lang('ThisFieldIsRequired'), 'required');
 
+        $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('AddTestsAfterEachPage'), ['id' => 'add-lp-quiz']);
+        $form->addHtml('<div id="lp-quiz-area">');
+        $form->addElement('number', 'nro_questions', [get_lang('NumberOfQuestions'), get_lang('AIQuestionsGeneratorNumberHelper')]);
+        $form->addRule('nro_questions', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addHtml('</div>');
+
         $generateUrl = api_get_path(WEB_PLUGIN_PATH).'ai_helper/tool/learnpath.php';
         $language = api_get_interface_language();
         $courseCode = api_get_course_id();
@@ -40,6 +46,15 @@ class LpAiHelper
         $redirectSuccess = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&isStudentView=false&lp_id=';
         $form->addHtml('<script>
                 $(function () {
+                    $("#lp-quiz-area").hide();
+                    $("#add-lp-quiz").change(function() {
+                        if ($(this).is(":checked")) {
+                            $("#lp-quiz-area").show();
+                        } else {
+                            $("#lp-quiz-area").hide();
+                        }
+                    });
+
                     $("#create-lp-ai").on("click", function (e) {
                       e.preventDefault();
                       e.stopPropagation();
@@ -49,8 +64,17 @@ class LpAiHelper
                       var nroItems = parseInt($("[name=\'nro_items\']").val());
                       var wordsCount = parseInt($("[name=\'words_count\']").val());
                       var valid = (lpName != \'\' && nroItems > 0 && wordsCount > 0);
+                      var addTests = $("#add-lp-quiz").is(":checked");
+                      var nroQuestions = parseInt($("[name=\'nro_questions\']").val());
 
                       if (valid) {
+                        if (addTests) {
+                            var quizValid = (nroQuestions > 0 && nroQuestions <= 5);
+                            if (!quizValid) {
+                                alert("'.sprintf(get_lang('NroQuestionsFromXToY'), 1, 5).'");
+                                return false;
+                            }
+                        }
                         btnGenerate.attr("disabled", true);
                         btnGenerate.text("'.get_lang('PleaseWaitThisCouldTakeAWhile').'");
                         $.getJSON("'.$generateUrl.'", {
@@ -59,7 +83,9 @@ class LpAiHelper
                             "words_count": wordsCount,
                             "language": "'.$language.'",
                             "course_code": "'.$courseCode.'",
-                            "session_id": "'.$sessionId.'"
+                            "session_id": "'.$sessionId.'",
+                            "add_tests": addTests,
+                            "nro_questions": nroQuestions
                         }).done(function (data) {
                           btnGenerate.attr("disabled", false);
                           btnGenerate.text("'.get_lang('Generate').'");

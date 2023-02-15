@@ -39,3 +39,4 @@ total_tokens int(11) NOT NULL,
 PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ```
+If you got this update through Git, you will also need to run `composer install` to update the autoload mechanism.

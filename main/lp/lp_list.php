@@ -129,7 +129,7 @@ if ($is_allowed_to_edit) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'help.png',
-                get_lang('CreateLpWithAiHelper'),
+                get_lang('LpAiGenerator'),
                 [],
                 ICON_SIZE_MEDIUM
             ),

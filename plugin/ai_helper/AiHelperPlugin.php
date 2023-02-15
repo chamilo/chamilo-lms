@@ -61,6 +61,13 @@ class AiHelperPlugin extends Plugin
         string $prompt,
         string $toolName
     ) {
+        if (!$this->validateUserTokensLimit(api_get_user_id())) {
+            return [
+                'error' => true,
+                'message' => $this->get_lang('ErrorTokensLimit'),
+            ];
+        }
+
         require_once __DIR__.'/src/openai/OpenAi.php';
 
         $apiKey = $this->get('api_key');
@@ -88,7 +95,7 @@ class AiHelperPlugin extends Plugin
         $result = json_decode($complete, true);
         $resultText = '';
         if (!empty($result['choices'])) {
-            $resultText = trim($result['choices'][0]['text']);
+            $resultText = $result['choices'][0]['text'];
             // saves information of user results.
             $values = [
                 'user_id' => api_get_user_id(),
@@ -102,6 +109,51 @@ class AiHelperPlugin extends Plugin
         }
 
         return $resultText;
+    }
+
+    /**
+     * Validates tokens limit of a user per current month.
+     */
+    public function validateUserTokensLimit(int $userId): bool
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloPluginBundle:AiHelper\Requests');
+
+        $startDate = api_get_utc_datetime(
+            null,
+            false,
+            true)
+            ->modify('first day of this month')->setTime(00, 00, 00)
+        ;
+        $endDate = api_get_utc_datetime(
+            null,
+            false,
+            true)
+            ->modify('last day of this month')->setTime(23, 59, 59)
+        ;
+
+        $qb = $repo->createQueryBuilder('e')
+            ->select('sum(e.totalTokens) as total')
+            ->andWhere('e.requestedAt BETWEEN :dateMin AND :dateMax')
+            ->andWhere('e.userId = :user')
+            ->setMaxResults(1)
+            ->setParameters(
+                [
+                    'dateMin' => $startDate->format('Y-m-d h:i:s'),
+                    'dateMax' => $endDate->format('Y-m-d h:i:s'),
+                    'user' => $userId,
+                ]
+            );
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $totalTokens = !empty($result) ? (int) $result['total'] : 0;
+
+        $valid = true;
+        $tokensLimit = $this->get('tokens_limit');
+        if (!empty($tokensLimit)) {
+            $valid = ($totalTokens <= (int) $tokensLimit);
+        }
+
+        return $valid;
     }
 
     /**

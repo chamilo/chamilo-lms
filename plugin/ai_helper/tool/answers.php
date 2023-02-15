@@ -34,6 +34,15 @@ switch ($apiName) {
         $prompt = sprintf($prompt, $nQ, $questionType, $lang, $topic);
 
         $resultText = $plugin->openAiGetCompletionText($prompt, 'quiz');
+
+        if (isset($resultText['error']) && true === $resultText['error']) {
+            echo json_encode([
+                'success' => false,
+                'text' => $resultText['message'],
+            ]);
+            exit;
+        }
+
         // Returns the text answers generated.
         $return = ['success' => false, 'text' => ''];
         if (!empty($resultText)) {

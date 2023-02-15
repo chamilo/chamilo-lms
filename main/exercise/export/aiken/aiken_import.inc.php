@@ -110,7 +110,11 @@ function generateAikenForm()
                             $("input[name=\'ai_total_weight\']").val(nroQ * qWeight);
                             $("#textarea-aiken").focus();
                           } else {
-                            alert("'.get_lang('NoSearchResults').'. '.get_lang('PleaseTryAgain').'");
+                            var errorMessage = "'.get_lang('NoSearchResults').'. '.get_lang('PleaseTryAgain').'";
+                            if (data.text) {
+                                errorMessage = data.text;
+                            }
+                            alert(errorMessage);
                           }
                         });
                       }
@@ -285,14 +289,15 @@ function aikenImportExercise($file = null, $request = [])
     } elseif (!empty($request)) {
         // The import is from aiken generated in textarea.
         $exerciseInfo['name'] = $request['quiz_name'];
-        $exerciseInfo['total_weight'] = !empty($_POST['ai_total_weight']) ? (int) ($_POST['ai_total_weight']) : 20;
+        $exerciseInfo['total_weight'] = !empty($_POST['ai_total_weight']) ? (int) ($_POST['ai_total_weight']) : (int) $request['nro_questions'];
         $exerciseInfo['question'] = [];
+        $exerciseInfo['course_id'] = isset($request['course_id']) ? (int) $request['course_id'] : 0;
         setExerciseInfoFromAikenText($request['aiken_format'], $exerciseInfo);
     }
 
     // 1. Create exercise.
     if (!empty($exerciseInfo)) {
-        $exercise = new Exercise();
+        $exercise = new Exercise($exerciseInfo['course_id']);
         $exercise->exercise = $exerciseInfo['name'];
         $exercise->disable(); // Invisible by default
         $exercise->updateResultsDisabled(0); // Auto-evaluation mode: show score and expected answers
@@ -301,8 +306,11 @@ function aikenImportExercise($file = null, $request = [])
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         if (!empty($lastExerciseId)) {
-            $courseId = api_get_course_int_id();
+            $courseId = !empty($exerciseInfo['course_id']) ? (int) $exerciseInfo['course_id'] : api_get_course_int_id();
             foreach ($exerciseInfo['question'] as $key => $questionArray) {
+                if (!isset($questionArray['title'])) {
+                    continue;
+                }
                 // 2. Create question.
                 $question = new Aiken2Question();
                 $question->type = $questionArray['type'];
@@ -313,13 +321,14 @@ function aikenImportExercise($file = null, $request = [])
                     $question->updateDescription($questionArray['description']);
                 }
                 $type = $question->selectType();
+                $question->course = api_get_course_info_by_id($courseId);
                 $question->type = constant($type);
                 $question->save($exercise);
                 $last_question_id = $question->selectId();
 
                 // 3. Create answer
                 $answer = new Answer($last_question_id, $courseId, $exercise, false);
-                $answer->new_nbrAnswers = count($questionArray['answer']);
+                $answer->new_nbrAnswers = isset($questionArray['answer']) ? count($questionArray['answer']) : 0;
                 $max_score = 0;
 
                 $scoreFromFile = 0;

@@ -14,3 +14,5 @@ $strings['OpenAI'] = 'OpenAI';
 $strings['tool_lp_enable'] = "Activarlo en las lecciones";
 $strings['tool_quiz_enable'] = "Activarlo en los ejercicios";
 $strings['tokens_limit'] = "Limite de tokens IA";
+$strings['tokens_limit_help'] = 'Limitar la cantidad máxima de tokens disponibles por usuario por mes para evitar un alto costo de servicio.';
+$strings['ErrorTokensLimit'] = 'Lo sentimos, ha alcanzado la cantidad máxima de tokens o solicitudes configuradas por el administrador de la plataforma para el mes calendario actual. Comuníquese con su equipo de soporte o espere hasta el próximo mes antes de poder enviar nuevas solicitudes a AI Helper.';

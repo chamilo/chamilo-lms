@@ -54,9 +54,7 @@ switch ($apiName) {
                     $messageGetItemContent = 'In the context of "%s", generate a document with HTML tags in "%s" with %d words of content or less, about "%s"';
                     $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title);
                     $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
-                    if (!empty($resultContentText)) {
-                        $lpItems[$position]['content'] = trim($resultContentText);
-                    }
+                    $lpItems[$position]['content'] = (!empty($resultContentText) ? trim($resultContentText) : '');
                     $position++;
                 }
             }

@@ -14,3 +14,5 @@ $strings['OpenAI'] = 'OpenAI';
 $strings['tool_lp_enable'] = "Activer dans les parcours";
 $strings['tool_quiz_enable'] = "Activer dans les exercices";
 $strings['tokens_limit'] = "Limite de jetons IA";
+$strings['tokens_limit_help'] = 'Limiter le nombre maximum de jetons disponibles pour chaque utilisateur, par mois, pour éviter des frais de service surdimensionnés.';
+$strings['ErrorTokensLimit'] = 'Désolé, vous avez atteint le nombre maximum de jetons ou de requêtes configurés par l\'administrateur de la plateforme pour le mois civil en cours. Veuillez contacter votre équipe d\'assistance ou attendre le mois prochain avant de pouvoir envoyer de nouvelles demandes à AI Helper.';

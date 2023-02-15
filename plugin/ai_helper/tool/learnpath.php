@@ -33,6 +33,15 @@ switch ($apiName) {
         $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
+
+        if (isset($resultText['error']) && true === $resultText['error']) {
+            echo json_encode([
+                'success' => false,
+                'text' => $resultText['message'],
+            ]);
+            exit;
+        }
+
         $lpItems = [];
         if (!empty($resultText)) {
             $items = explode(',', $resultText);

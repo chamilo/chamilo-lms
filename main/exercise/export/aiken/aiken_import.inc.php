@@ -110,7 +110,11 @@ function generateAikenForm()
                             $("input[name=\'ai_total_weight\']").val(nroQ * qWeight);
                             $("#textarea-aiken").focus();
                           } else {
-                            alert("'.get_lang('NoSearchResults').'. '.get_lang('PleaseTryAgain').'");
+                            var errorMessage = "'.get_lang('NoSearchResults').'. '.get_lang('PleaseTryAgain').'";
+                            if (data.text) {
+                                errorMessage = data.text;
+                            }
+                            alert(errorMessage);
                           }
                         });
                       }

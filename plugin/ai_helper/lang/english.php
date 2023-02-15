@@ -14,3 +14,5 @@ $strings['OpenAI'] = 'OpenAI';
 $strings['tool_lp_enable'] = 'Enable in learning paths';
 $strings['tool_quiz_enable'] = 'Enable in exercises (Aiken section)';
 $strings['tokens_limit'] = 'AI tokens limit';
+$strings['tokens_limit_help'] = 'Limit the maximum number of tokens each user has available per month, to avoid high costs of service.';
+$strings['ErrorTokensLimit'] = 'Sorry, you have reached the maximum number of tokens or requests configured by the platform administrator for the current calendar month. Please contact your support team or wait for next month before you can issue new requests to the AI Helper.';

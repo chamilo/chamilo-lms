@@ -63,7 +63,6 @@ switch ($apiName) {
         // Create the learnpath and return the id generated.
         $return = ['success' => false, 'lp_id' => 0];
         if (!empty($lpItems)) {
-            krsort($lpItems);
             $lpId = learnpath::add_lp(
                 $courseCode,
                 $topic,

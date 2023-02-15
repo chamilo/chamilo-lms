@@ -91,9 +91,10 @@ switch ($apiName) {
                     );
 
                     if (!empty($documentId)) {
+                        $prevDocItem = (isset($lpItemsIds[$order - 1]) ? (int) $lpItemsIds[$order - 1]['item_id'] : 0);
                         $lpItemId = $lp->add_item(
                             0,
-                            0,
+                            $prevDocItem,
                             'document',
                             $documentId,
                             $item['title'],
@@ -103,10 +104,9 @@ switch ($apiName) {
                             api_get_user_id(),
                             $order
                         );
-
+                        $lpItemsIds[$order]['item_id'] = $lpItemId;
+                        $lpItemsIds[$order]['item_type'] = 'document';
                         if ($addTests && !empty($lpItemId)) {
-                            $lpItemsIds[$order]['item_id'] = $lpItemId;
-                            $lpItemsIds[$order]['item_type'] = 'document';
                             $promptQuiz = 'Generate %d "multiple choice" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
                             $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title']);
                             $resultQuizText = $plugin->openAiGetCompletionText($promptQuiz, 'quiz');
@@ -119,9 +119,10 @@ switch ($apiName) {
                                 $exerciseId = aikenImportExercise(null, $request);
                                 if (!empty($exerciseId)) {
                                     $order++;
+                                    $prevQuizItem = (isset($lpItemsIds[$order - 1]) ? (int) $lpItemsIds[$order - 1]['item_id'] : 0);
                                     $lpQuizItemId = $lp->add_item(
                                         0,
-                                        0,
+                                        $prevQuizItem,
                                         'quiz',
                                         $exerciseId,
                                         $request['quiz_name'],
@@ -155,9 +156,10 @@ switch ($apiName) {
                         $finalContent,
                         $finalTitle
                     );
+                    $prevFinalItem = (isset($lpItemsIds[$order - 1]) ? (int) $lpItemsIds[$order - 1]['item_id'] : 0);
                     $lpFinalItemId = $lp->add_item(
                         0,
-                        0,
+                        $prevFinalItem,
                         TOOL_LP_FINAL_ITEM,
                         $finalDocId,
                         $finalTitle,
@@ -169,18 +171,18 @@ switch ($apiName) {
                     );
                     $lpItemsIds[$order]['item_id'] = $lpFinalItemId;
                     $lpItemsIds[$order]['item_type'] = TOOL_LP_FINAL_ITEM;
-                }
 
-                // Set lp items prerequisites
-                if (count($lpItemsIds) > 0) {
-                    for ($i = 1; $i <= count($lpItemsIds); $i++) {
-                        $prevIndex = ($i - 1);
-                        if (isset($lpItemsIds[$prevIndex])) {
-                            $itemId = $lpItemsIds[$i]['item_id'];
-                            $prerequisite = $lpItemsIds[$prevIndex]['item_id'];
-                            $minScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['min_score'] : 0);
-                            $maxScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['max_score'] : 100);
-                            $lp->edit_item_prereq($itemId, $prerequisite, $minScore, $maxScore);
+                    // Set lp items prerequisites
+                    if (count($lpItemsIds) > 0) {
+                        for ($i = 1; $i <= count($lpItemsIds); $i++) {
+                            $prevIndex = ($i - 1);
+                            if (isset($lpItemsIds[$prevIndex])) {
+                                $itemId = $lpItemsIds[$i]['item_id'];
+                                $prerequisite = $lpItemsIds[$prevIndex]['item_id'];
+                                $minScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['min_score'] : 0);
+                                $maxScore = ('quiz' === $lpItemsIds[$prevIndex]['item_type'] ? $lpItemsIds[$prevIndex]['max_score'] : 100);
+                                $lp->edit_item_prereq($itemId, $prerequisite, $minScore, $maxScore);
+                            }
                         }
                     }
                 }

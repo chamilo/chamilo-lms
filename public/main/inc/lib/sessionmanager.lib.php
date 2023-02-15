@@ -8112,7 +8112,7 @@ class SessionManager
         $allowedPictureTypes = api_get_supported_image_extensions(false);
         $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
 
-        if ($session && $session->getAsset()) {
+        if ($session && $session->getImage()) {
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
             $imageUrl = self::getSessionPictureUrl($session);
             $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
@@ -8161,7 +8161,7 @@ class SessionManager
 
         /** @var Session $session */
         $session = $sessionRepo->find($sessionId);
-        $session->setAsset($asset);
+        $session->setImage($asset);
         $sessionRepo->update($session);
     }
 
@@ -8177,8 +8177,8 @@ class SessionManager
         /** @var Session $session */
         $session = $sessionRepo->find($sessionId);
         $em = Database::getManager();
-        if ($session->hasAsset()) {
-            $asset = $session->getAsset();
+        if ($session->hasImage()) {
+            $asset = $session->getImage();
             $em->remove($asset);
             $em->flush();
         }
@@ -8193,7 +8193,7 @@ class SessionManager
     public static function getSessionPictureUrl(Session $session): string
     {
         $assetRepo = Container::getAssetRepository();
-        $imageUrl = $assetRepo->getAssetUrl($session->getAsset());
+        $imageUrl = $assetRepo->getAssetUrl($session->getImage());
 
         return $imageUrl;
     }

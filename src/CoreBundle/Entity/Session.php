@@ -277,9 +277,9 @@ class Session implements ResourceWithAccessUrlInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?Asset $asset = null;
+    protected ?Asset $image = null;
 
     public function __construct()
     {
@@ -1176,21 +1176,21 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->resourceLinks;
     }
 
-    public function getAsset(): ?Asset
+    public function getImage(): ?Asset
     {
-        return $this->asset;
+        return $this->image;
     }
 
-    public function setAsset(?Asset $asset): self
+    public function setImage(?Asset $asset): self
     {
-        $this->asset = $asset;
+        $this->image = $asset;
 
         return $this;
     }
 
-    public function hasAsset(): bool
+    public function hasImage(): bool
     {
-        return null !== $this->asset;
+        return null !== $this->image;
     }
 
     /**

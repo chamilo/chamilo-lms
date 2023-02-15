@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 use ExtraField;
@@ -31,7 +32,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
         $dql  = "SELECT v FROM Chamilo\CoreBundle\Entity\ExtraFieldValues v";
-        $dql .= " JOIN v.ExtraField f";
+        $dql .= " JOIN v.field f";
         $dql .= " WHERE f.variable = :variable AND f.itemType = :itemType";
         $q = $em->createQuery($dql);
         $q->setParameters([
@@ -39,6 +40,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
             'itemType' => ExtraField::SESSION_FIELD_TYPE,
         ]);
 
+        $sessionRepo = $container->get(Session::class);
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {
             $path = $item->getFieldValue();
@@ -59,6 +61,12 @@ class Version20230204150030 extends AbstractMigrationChamilo
                 $em->flush();
                 $item->setAsset($asset);
                 $em->persist($item);
+
+                $sessionId = $item->getItemId();
+                /** @var Session $session */
+                $session = $sessionRepo->find($sessionId);
+                $session->setImage($asset);
+                $sessionRepo->update($session);
             }
 
             if (($counter % $batchSize) === 0) {

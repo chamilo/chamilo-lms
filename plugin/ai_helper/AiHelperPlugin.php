@@ -61,7 +61,6 @@ class AiHelperPlugin extends Plugin
         string $prompt,
         string $toolName
     ) {
-
         if (!$this->validateUserTokensLimit(api_get_user_id())) {
             return [
                 'error' => true,
@@ -114,9 +113,6 @@ class AiHelperPlugin extends Plugin
 
     /**
      * Validates tokens limit of a user per current month.
-     *
-     * @param int $userId
-     * @return bool
      */
     public function validateUserTokensLimit(int $userId): bool
     {
@@ -145,7 +141,7 @@ class AiHelperPlugin extends Plugin
                 [
                     'dateMin' => $startDate->format('Y-m-d h:i:s'),
                     'dateMax' => $endDate->format('Y-m-d h:i:s'),
-                    'user' => $userId
+                    'user' => $userId,
                 ]
             );
         $result = $qb->getQuery()->getOneOrNullResult();

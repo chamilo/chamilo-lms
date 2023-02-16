@@ -8998,4 +8998,6 @@ $LpAiWordsCountHelper = "Rough maximum number of words (actually number of token
 $OnlySelectedUsersWillSeeTheContent = "Only selected users will see the content";
 $LeaveEmptyToEnableTheContentForEveryone = "Leave empty to enable the content for everyone";
 $ExportCoursesReportsComplete = "Export courses reports complete";
+$NumberOfQuestionsLimitedFromXToY = "The number of questions is limited to between %d and %d.";
+$AddTestAfterEachPage = "Add a test after each page";
 ?>

@@ -8932,4 +8932,6 @@ $LpAiWordsCountHelper = "Nombre maximum approximatif de mots (plus précisément
 $OnlySelectedUsersWillSeeTheContent = "Seul les utilisateurs sélectionnés pourront voir le contenu";
 $LeaveEmptyToEnableTheContentForEveryone = "Laisser vide pour que tout le monde ait accès au contenu.";
 $ExportCoursesReportsComplete = "Export des rapports de cours complet";
+$NumberOfQuestionsLimitedFromXToY = "Le nombre de questions est limité entre %d et %d.";
+$AddTestAfterEachPage = "Ajouter un test après chaque page";
 ?>

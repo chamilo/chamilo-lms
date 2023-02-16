@@ -33,7 +33,7 @@ class LpAiHelper
         $form->addElement('number', 'words_count', [get_lang('LpAiWordsCount'), get_lang('LpAiWordsCountHelper')]);
         $form->addRule('words_count', get_lang('ThisFieldIsRequired'), 'required');
 
-        $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('AddTestsAfterEachPage'), ['id' => 'add-lp-quiz']);
+        $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('AddTestAfterEachPage'), ['id' => 'add-lp-quiz']);
         $form->addHtml('<div id="lp-quiz-area">');
         $form->addElement('number', 'nro_questions', [get_lang('NumberOfQuestions'), get_lang('AIQuestionsGeneratorNumberHelper')]);
         $form->addRule('nro_questions', get_lang('ThisFieldIsRequired'), 'required');
@@ -72,7 +72,7 @@ class LpAiHelper
                         if (addTests) {
                             var quizValid = (nroQuestions > 0 && nroQuestions <= 5);
                             if (!quizValid) {
-                                alert("'.sprintf(get_lang('NroQuestionsFromXToY'), 1, 5).'");
+                                alert("'.sprintf(get_lang('NumberOfQuestionsLimitedFromXToY'), 1, 5).'");
                                 return false;
                             }
                         }

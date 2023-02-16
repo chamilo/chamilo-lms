@@ -128,7 +128,7 @@ if ($is_allowed_to_edit) {
     ) {
         $actionLeft .= Display::url(
             Display::return_icon(
-                'help.png',
+                'new_learnpath_ai.png',
                 get_lang('LpAiGenerator'),
                 [],
                 ICON_SIZE_MEDIUM

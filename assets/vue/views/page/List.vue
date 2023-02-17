@@ -1,150 +1,254 @@
 <template>
-  <div v-if="isAdmin"  class="q-card">
-    <div class="p-4 flex flex-row gap-1 mb-2">
-      <div class="flex flex-row gap-2" >
-<!--        <Button class="btn btn--primary" @click="openNew">-->
-<!--          <v-icon icon="mdi-folder-plus"/>-->
-<!--          {{ $t('New category') }}-->
-<!--        </Button>-->
-        <Button label="{{ $t('New page') }}" class="btn btn--primary" @click="addHandler()" >
-          <v-icon icon="mdi-file-plus"/>
-          {{ $t('New page') }}
-        </Button>
-<!--        <Button label="{{ $t('Delete selected') }}" class="btn btn--danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">-->
-<!--          <v-icon icon="mdi-delete"/>-->
-<!--          {{ $t('Delete selected') }}-->
-<!--        </Button>-->
-      </div>
-    </div>
-  </div>
+  <PrimeToolbar
+    v-if="isAdmin"
+  >
+    <template #start>
+      <Button
+        :label="$t('New page')"
+        class="p-button-outlined"
+        icon="mdi mdi-file-plus"
+        @click="addHandler()"
+      />
+      <!--        <Button class="btn btn--primary" @click="openNew">-->
+      <!--          <v-icon icon="mdi-folder-plus"/>-->
+      <!--          {{ $t('New category') }}-->
+      <!--        </Button>-->
+
+      <!--        <Button label="{{ $t('Delete selected') }}" class="btn btn--danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">-->
+      <!--          <v-icon icon="mdi-delete"/>-->
+      <!--          {{ $t('Delete selected') }}-->
+      <!--        </Button>-->
+    </template>
+  </PrimeToolbar>
 
   <DataTable
-      v-if="isAdmin"
-      class="p-datatable-sm"
-      :value="items"
-      v-model:selection="selectedItems"
-      dataKey="iid"
-      v-model:filters="filters"
-      filterDisplay="menu"
-      :lazy="true"
-      :paginator="true"
-      :rows="10"
-      :totalRecords="totalItems"
-      :loading="isLoading"
-      @page="onPage($event)"
-      @sort="sortingChanged($event)"
-      paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      responsiveLayout="scroll"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+    v-if="isAdmin"
+    v-model:selection="selectedItems"
+    v-model:filters="filters"
+    class="p-datatable-sm"
+    :value="items"
+    data-key="iid"
+    filter-display="menu"
+    :lazy="true"
+    :paginator="true"
+    :rows="10"
+    :total-records="totalItems"
+    :loading="isLoading"
+    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    responsive-layout="scroll"
+    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    @page="onPage($event)"
+    @sort="sortingChanged($event)"
   >
-    <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-    <Column field="title" :header="$t('Title')" :sortable="true">
+    <Column
+      selection-mode="multiple"
+      style="width: 3rem"
+      :exportable="false"
+    />
+    <Column
+      field="title"
+      :header="$t('Title')"
+      :sortable="true"
+    >
       <template #body="slotProps">
         <a
-            v-if="slotProps.data"
-            @click="showHandler(slotProps.data)"
-            class="cursor-pointer "
+          v-if="slotProps.data"
+          class="cursor-pointer "
+          @click="showHandler(slotProps.data)"
         >
           {{ slotProps.data.title }}
         </a>
       </template>
     </Column>
 
-    <Column field="locale" :header="$t('Locale')" />
-    <Column field="category.title" :header="$t('Category')" />
-    <Column field="enabled" :header="$t('Enabled')" />
+    <Column
+      field="locale"
+      :header="$t('Locale')"
+    />
+    <Column
+      field="category.title"
+      :header="$t('Category')"
+    />
+    <Column
+      field="enabled"
+      :header="$t('Enabled')"
+    />
 
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-<!--          <Button class="btn btn--primary" @click="showHandler(slotProps.data)">-->
-<!--            <v-icon icon="mdi-information"/>-->
-<!--          </Button>-->
+          <!--          <Button class="btn btn--primary" @click="showHandler(slotProps.data)">-->
+          <!--            <v-icon icon="mdi-information"/>-->
+          <!--          </Button>-->
 
-          <Button v-if="isAuthenticated" class="btn btn--primary p-mr-2" @click="editHandler(slotProps.data)">
-            <v-icon icon="mdi-pencil"/>
-          </Button>
+          <Button
+            v-if="isAuthenticated"
+            class="p-button-primary p-button-outlined p-mr-2"
+            icon="mdi mdi-pencil"
+            @click="editHandler(slotProps.data)"
+          />
 
-          <Button v-if="isAuthenticated" class="btn btn--danger" @click="confirmDeleteItem(slotProps.data)" >
-            <v-icon icon="mdi-delete"/>
-          </Button>
+          <Button
+            v-if="isAuthenticated"
+            class="p-button-danger p-button-outlined"
+            icon="mdi mdi-delete"
+            @click="confirmDeleteItem(slotProps.data)"
+          />
         </div>
       </template>
     </Column>
   </DataTable>
 
-  <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
-    <div class="p-field">
-      <label for="name">{{ $t('Name') }}</label>
-      <InputText
-          autocomplete="off"
+  <Dialog
+    v-model:visible="itemDialog"
+    :style="{width: '450px'}"
+    :header="$t('New folder')"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field">
+      <div class="p-float-label">
+        <InputText
           id="title"
           v-model.trim="item.title"
-          required="true"
-          autofocus
           :class="{'p-invalid': submitted && !item.title}"
+          autocomplete="off"
+          autofocus
+          required="true"
+        />
+        <label
+          v-t="'Name'"
+          for="name"
+        />
+      </div>
+      <small
+        v-if="submitted && !item.title"
+        v-t="'Title is required'"
+        class="p-error"
       />
-      <small class="p-error" v-if="submitted && !item.title">$t('Title is required')</small>
     </div>
 
     <template #footer>
-      <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-      <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveItem" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        label="Cancel"
+        @click="hideDialog"
+      />
+      <Button
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="saveItem"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteItemDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+  <Dialog
+    v-model:visible="deleteItemDialog"
+    :style="{width: '450px'}"
+    header="Confirm"
+    :modal="true"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">Are you sure you want to delete <b>{{item.title}}</b>?</span>
+      <i
+        class="pi pi-exclamation-triangle p-mr-3"
+        style="font-size: 2rem"
+      />
+      <span v-if="item">Are you sure you want to delete <b>{{ item.title }}</b>?</span>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton" />
+      <Button
+        label="No"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="deleteItemDialog = false"
+      />
+      <Button
+        label="Yes"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="deleteItemButton"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteMultipleDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+  <Dialog
+    v-model:visible="deleteMultipleDialog"
+    :style="{width: '450px'}"
+    header="Confirm"
+    :modal="true"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
+      <i
+        class="pi pi-exclamation-triangle p-mr-3"
+        style="font-size: 2rem"
+      />
       <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteMultipleDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteMultipleItems" />
+      <Button
+        label="No"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="deleteMultipleDialog = false"
+      />
+      <Button
+        label="Yes"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="deleteMultipleItems"
+      />
     </template>
   </Dialog>
 </template>
 
 <script>
-import {mapActions, mapGetters, useStore} from 'vuex';
+import PrimeToolbar from 'primevue/toolbar';
+import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
-import {useRoute, useRouter} from "vue-router";
+import { useDatatableList } from '../../composables/datatableList';
+import { inject, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   name: 'PageList',
   servicePrefix: 'Page',
-  mixins: [ListMixin],
   components: {
+    PrimeToolbar,
   },
+  mixins: [ListMixin],
   setup() {
-    const store = useStore();
-    const route = useRoute();
+    const { filters, options, onUpdateOptions } = useDatatableList('Page')
+
+    const { t } = useI18n();
+
+    const flashMessageList = inject('flashMessageList');
+
+    onMounted(() => {
+      onUpdateOptions(options.value);
+    });
+
+    function deletedPage() {
+      flashMessageList.value.push({
+        severity: 'success',
+        detail: t('Deleted')
+      });
+
+      onUpdateOptions(options.value);
+    }
+
+    return {
+      onUpdateOptions,
+      deletedPage,
+    };
   },
   data() {
     return {
       sortBy: 'title',
       sortDesc: false,
-      columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Category'), field: 'category.title', name: 'category', sortable: true},
-        { label: this.$i18n.t('Locale'), field: 'locale', name: 'locale', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'updatedAt', name: 'updatedAt', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
-      ],
-      pageOptions: [10, 20, 50, this.$i18n.t('All')],
       selected: [],
       isBusy: false,
       options: [],
@@ -156,13 +260,6 @@ export default {
       item: {},
       submitted: false,
     };
-  },
-  mounted() {
-    this.onUpdateOptions(this.options);
-  },
-  deletedPage(item) {
-    this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
-    this.onUpdateOptions(this.options);
   },
   computed: {
     ...mapGetters({

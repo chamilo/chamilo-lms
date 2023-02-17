@@ -1,147 +1,87 @@
 <template>
-   <v-card
-       elevation="2"
-   >
-<!--    <div class="p-4 flex flex-row gap-1 mb-2">-->
-      <slot name="left" />
-      <q-btn
+  <PrimeToolbar>
+    <template #start>
+      <PrimeButton
         v-if="handleList"
+        :label="$t('List')"
         :loading="isLoading"
-        color="primary"
+        class="p-button-outlined"
         @click="listItem"
-        unelevated
-      >
-        {{ $t('List') }}
-      </q-btn>
+      />
 
-      <v-btn
+      <PrimeButton
         v-if="handleEdit"
         :loading="isLoading"
-        @click="editItem"
-        tile
-        icon
         :title="$t('Edit')"
-      >
-        <v-icon icon="mdi-pencil"/>
-      </v-btn>
+        class="p-button-outlined"
+        icon="mdi mdi-pencil"
+        @click="editItem"
+      />
 
-<!--      <q-btn-->
-<!--        v-if="handleSubmit"-->
-<!--        no-caps-->
-<!--        class="btn btn--primary"-->
-<!--        :loading="isLoading"-->
-<!--        @click="submitItem"-->
-<!--        unelevated-->
-<!--      >-->
-<!--        <v-icon icon="mdi-content-save"/>-->
-<!--        {{ $t('Submit') }}-->
-<!--      </q-btn>-->
+      <PrimeButton
+        v-if="handleSubmit"
+        :loading="isLoading"
+        :title="$t('Submit')"
+        class="p-button-outlined"
+        icon="mdi mdi-content-save"
+        @click="submitItem"
+      />
 
-      <v-btn
-          v-if="handleSubmit"
-          :loading="isLoading"
-          tile
-          icon
-          @click="submitItem"
-          :title="$t('Submit')"
-      >
-        <v-icon icon="mdi-content-save" />
-      </v-btn>
+      <PrimeButton
+        v-if="handleSend"
+        :loading="isLoading"
+        :title="$t('Send')"
+        class="p-button-outlined"
+        icon="mdi mdi-send"
+        @click="sendItem"
+      />
 
-      <v-btn
-          v-if="handleSend"
-          :loading="isLoading"
-          tile
-          icon
-          @click="sendItem"
-          :title="$t('Send')"
-      >
-        <v-icon icon="mdi-send" />
-      </v-btn>
+      <PrimeButton
+        v-if="handleDelete"
+        :loading="isLoading"
+        :title="$t('Delete')"
+        class="p-button-outlined"
+        icon="mdi mdi-delete"
+        @click="confirmDeleteClick = true"
+      />
 
-      <!--      <v-btn-->
-      <!--        v-if="handleReset"-->
-      <!--        color="primary"-->
-      <!--        class="ml-sm-2"-->
-      <!--        @click="resetItem"-->
-      <!--      >-->
-      <!--        {{ $t('Reset') }}-->
-      <!--      </v-btn>-->
-      <v-btn
-          v-if="handleDelete"
-          :loading="isLoading"
-          tile
-          icon
-          @click="confirmDeleteClick = true"
-          :title="$t('Delete')"
-      >
-        <v-icon icon="mdi-delete" />
-      </v-btn>
-<!--      color="primary"-->
-      <q-btn
+      <PrimeButton
         v-if="handleAdd"
-        no-caps
-        class="btn btn--primary"
+        :label="$t('New folder')"
+        class="p-button-outlined"
+        icon="mdi mdi-folder-plus"
         @click="addItem"
-      >
-        <v-icon icon="mdi-folder-plus"/>
-        New folder
-      </q-btn>
+      />
 
-      <q-btn
-        no-caps
-        class="btn btn--primary"
+      <PrimeButton
         v-if="handleAddDocument"
+        :label="$t('New document')"
+        class="p-button-outlined"
+        icon="mdi mdi-file-plus"
         @click="addDocument"
-      >
-        <v-icon icon="mdi-file-plus"/>
-        New document
-      </q-btn>
+      />
 
-      <q-btn
-        no-caps
-        class="btn btn--primary"
+      <PrimeButton
         v-if="handleUploadDocument"
+        :label="$t('File upload')"
+        class="p-button-outlined"
+        icon="mdi mdi-cloud-upload"
         @click="uploadDocument"
-      >
-        <v-icon icon="mdi-cloud-upload"/>
-        File upload
-      </q-btn>
+      />
 
-<!--      <v-btn-->
-<!--          v-if="handleUploadDocument"-->
-<!--          :loading="isLoading"-->
-<!--          tile-->
-<!--          icon-->
-<!--          @click="uploadDocument"-->
-<!--      >-->
-<!--        <v-icon icon="mdi-cloud-upload"/>-->
-<!--      </v-btn>-->
-
-
-
-  <!--    <DataFilter-->
-  <!--      v-if="filters"-->
-  <!--      :handle-filter="onSendFilter"-->
-  <!--      :handle-reset="resetFilter"-->
-  <!--    >-->
-  <!--      <DocumentsFilterForm-->
-  <!--        ref="filterForm"-->
-  <!--        slot="filter"-->
-  <!--        :values="filters"-->
-  <!--      />-->
-  <!--    </DataFilter>-->
-     <slot name="right" />
       <ConfirmDelete
         v-if="handleDelete"
         :show="confirmDeleteClick"
         :handle-delete="handleDelete"
         :handle-cancel="() => confirmDeleteClick = false"
       />
-  </v-card>
+    </template>
+  </PrimeToolbar>
 </template>
 
 <script>
+import PrimeToolbar from 'primevue/toolbar';
+import PrimeButton from 'primevue/button';
 import ConfirmDelete from './ConfirmDelete.vue';
 import DocumentsFilterForm from './documents/Filter.vue';
 import DataFilter from './DataFilter.vue';
@@ -149,6 +89,8 @@ import DataFilter from './DataFilter.vue';
 export default {
   name: 'Toolbar',
   components: {
+    PrimeToolbar,
+    PrimeButton,
     ConfirmDelete,
     DocumentsFilterForm,
     DataFilter

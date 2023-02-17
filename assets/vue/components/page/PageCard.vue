@@ -1,25 +1,33 @@
 <template>
   <q-card
-      v-if="page"
-      elevation="4"
+    v-if="page"
+    elevation="4"
   >
     <q-card-section>
-      <div class="text-h6">{{ page.title }}</div>
+      <div class="text-h6">
+        {{ page.title }}
+      </div>
     </q-card-section>
 
     <q-card-section>
-        <p v-html="page.content"/>
+      <p v-html="page.content" />
     </q-card-section>
 
     <q-card-actions v-if="isAdmin">
-      <q-btn flat label="Edit" color="primary" v-close-popup @click="handleClick(page)"/>
+      <q-btn
+        v-close-popup
+        flat
+        label="Edit"
+        color="primary"
+        @click="handleClick(page)"
+      />
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
 
-import {mapGetters, useStore} from "vuex";
+import {mapGetters} from "vuex";
 import {useRouter} from "vue-router";
 import {reactive, toRefs} from "vue";
 
@@ -32,10 +40,7 @@ export default {
     const router = useRouter();
     const state = reactive({
       handleClick: function (page) {
-        router
-            .push({name: `PageUpdate`, params: {id: page['@id']}})
-            .catch(() => {
-            });
+        router.push({name: 'PageUpdate', query: {id: page['@id']}});
       },
     });
     return toRefs(state);

@@ -1,29 +1,69 @@
 <template>
-  <q-form>
-    <q-input
-        id="item_title"
-        v-model="item.title"
-        :placeholder="$t('Title')"
-        :error="v$.item.title.$error"
-        @input="v$.item.title.$touch()"
-        @blur="v$.item.title.$touch()"
-        :error-message="titleErrors"
-    />
-
-    <div class="q-gutter-sm">
-      <q-checkbox v-model="item.enabled" :label="$t('Enabled')"/>
+  <form action="#">
+    <div class="field">
+      <div class="p-float-label">
+        <PrimeInputText
+          id="item_title"
+          v-model="v$.item.title.$model"
+          :class="{ 'p-invalid': v$.item.title.$invalid }"
+        />
+        <label
+          v-t="'Title'"
+          for="item_title"
+          :class="{ 'p-error': v$.item.title.$invalid }"
+        />
+      </div>
+      <small
+        v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
+        v-t="v$.item.title.required.$message"
+        class="p-error"
+      />
     </div>
 
-    <q-select
-        v-model="item.category"
-        :options="categories" :label="$t('Category')"
-        option-value="id"
-        option-label="title"
-    />
+    <div class="field-checkbox">
+      <PrimeCheckbox
+        v-model="item.enabled"
+        :binary="true"
+        input-id="enabled"
+      />
+      <label
+        v-t="'Enabled'"
+        for="enabled"
+      />
+    </div>
 
-    <q-select v-model="item.locale" :options="locales" :label="$t('Locale')"/>
+    <div class="field">
+      <div class="p-float-label">
+        <PrimeDropdown
+          v-model="item.category"
+          :options="categories"
+          input-id="category"
+          option-value="@id"
+          option-label="title"
+        />
+        <label
+          v-t="'Category'"
+          for="category"
+        />
+      </div>
+    </div>
 
-    <TinyEditor
+    <div class="field">
+      <div class="p-float-label">
+        <PrimeDropdown
+          v-model="item.locale"
+          :options="locales"
+          input-id="locale"
+        />
+        <label
+          v-t="'Locale'"
+          for="locale"
+        />
+      </div>
+    </div>
+
+    <div class="field">
+      <TinyEditor
         id="item_content"
         v-model="item.content"
         required
@@ -44,36 +84,29 @@
           toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' + extraPlugins,
         }
         "
-    />
-    <slot></slot>
-  </q-form>
+      />
+    </div>
+  </form>
 </template>
 
 <script>
+import PrimeInputText from 'primevue/inputtext';
+import PrimeCheckbox from 'primevue/checkbox';
+import PrimeDropdown from 'primevue/dropdown';
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import {computed, ref} from "vue";
+import { ref } from "vue";
 import {mapGetters, useStore} from "vuex";
 import isEmpty from 'lodash/isEmpty';
 
 export default {
   name: 'PageForm',
-  setup () {
-    let locales = ref([]);
-    const store = useStore();
-
-    let categories = ref([]);
-    locales = window.languages.map(locale => locale.isocode);
-    let allCategories = store.dispatch('pagecategory/findAll');
-
-    allCategories.then((response) => {
-      categories.value = response.map(function(data) {
-        return data;
-      })
-    });
-
-    return { v$: useVuelidate(), locales, categories}
+  servicePrefix: 'pages',
+  components: {
+    PrimeInputText,
+    PrimeCheckbox,
+    PrimeDropdown,
   },
   props: {
     values: {
@@ -88,6 +121,22 @@ export default {
       type: Object,
       default: () => {}
     },
+  },
+  setup () {
+    let locales = ref([]);
+    const store = useStore();
+
+    let categories = ref([]);
+    locales.value = window.languages.map(locale => locale.isocode);
+    let allCategories = store.dispatch('pagecategory/findAll');
+
+    allCategories.then((response) => {
+      categories.value = response.map(function(data) {
+        return data;
+      })
+    });
+
+    return { v$: useVuelidate(), locales, categories, }
   },
   data() {
     return {
@@ -106,7 +155,7 @@ export default {
       if (this.values) {
         this.values.creator = this.currentUser['@id'];
         this.values.url = '/api/access_urls/' + window.access_url_id;
-        if (!isEmpty(this.values.category)) {
+        if (!isEmpty(this.values.category) && !isEmpty(this.values.category['@id'])) {
           this.values.category = this.values.category['@id'];
         }
       }

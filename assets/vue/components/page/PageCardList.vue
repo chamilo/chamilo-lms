@@ -1,25 +1,23 @@
 <template>
   <div
-      v-for="page in pages"
-      :key="page.id"
+    v-for="page in pages"
+    :key="page.id"
   >
     <PageCard
-        :page="page"
+      :page="page"
     />
   </div>
 </template>
 
-<script>
-
+<script setup>
 import PageCard from './PageCard.vue';
 
-export default {
-  name: 'PageCardList',
-  components: {
-    PageCard
+defineProps({
+  pages: {
+    type: Array,
+    default () {
+      return [];
+    }
   },
-  props: {
-    pages: Array,
-  },
-};
+});
 </script>

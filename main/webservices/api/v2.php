@@ -624,8 +624,12 @@ try {
             );
             break;
         case Rest::GET_COURSES:
-            Event::addEvent(LOG_WS.$action, 'id_campus', (int) $_POST['id_campus']);
-            $data = $restApi->getCoursesCampus($_POST);
+            $campusId = api_get_current_access_url_id();
+            if (!empty($_POST['id_campus'])) {
+                $campusId = (int) $_POST['id_campus'];
+            }
+            Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
+            $data = $restApi->getCoursesCampus($campusId);
             $restResponse->setData($data);
             break;
         case Rest::GET_COURSES_FROM_EXTRA_FIELD:

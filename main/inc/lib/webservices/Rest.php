@@ -1550,12 +1550,13 @@ class Rest extends WebService
     }
 
     /**
+     * Returns a list of courses in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
+     * return all the courses.
+     * @param int $campusId
      * @return array
      */
-    public function getCoursesCampus(array $params)
+    public function getCoursesCampus($campusId = null): array
     {
-        $idCampus = $params['id_campus'];
-
         return CourseManager::get_courses_list(
             0, //offset
             0, //howMany
@@ -1563,7 +1564,7 @@ class Rest extends WebService
             'ASC',
             -1, //visibility
             null,
-            $idCampus, //$urlId
+            empty($campusId) ? null : $campusId, //$urlId
             true //AlsoSearchCode
         );
     }

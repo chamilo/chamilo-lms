@@ -3224,6 +3224,18 @@ class Rest extends WebService
                 }
             }
         }
+        foreach ($list as $id => $row) {
+            // Get item authoring data
+            $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $row['iid']);
+            $createdBy = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+            if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                $updatedBy = $createdBy;
+            } else {
+                $updatedBy = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
+            }
+            $list[$id]['created_by'] = $createdBy;
+            $list[$id]['updated_by'] = $updatedBy;
+        }
         return $list;
     }
 

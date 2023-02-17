@@ -1200,6 +1200,27 @@ class Rest extends WebService
     }
 
     /**
+     * Get user's username or another field if so configured through $_configuration['webservice_return_user_field']
+     * @param int $userId
+     * @return string
+     */
+    private function __getConfiguredUsernameById(int $userId): string
+    {
+        $userField = api_get_configuration_value('webservice_return_user_field');
+        if (empty($userField)) {
+            return api_get_user_info($userId)['username'];
+        }
+
+        $fieldValue = new ExtraFieldValue('user');
+        $extraInfo = $fieldValue->get_values_by_handler_and_field_variable($userId, $userField);
+        if (!empty($extraInfo)) {
+            return $extraInfo['value'];
+        } else {
+            return api_get_user_info($userId)['username'];
+        }
+    }
+
+    /**
      * Get one's own (avg) progress in learning paths.
      */
     public function getCourseLpProgress(): array
@@ -2876,7 +2897,7 @@ class Rest extends WebService
                         if ($fieldDetails['item_type'] == 'course') {
                             $itemId = $row['c_id'];
                         } else {
-                            $itemId = $row['iid'];
+                            $itemId = $row['id'];
                         }
                         $fieldResult = Database::query(sprintf($fieldsSearchString, $itemId, $fieldDetails['id']));
                         if (Database::num_rows($fieldResult) > 0) {
@@ -2886,6 +2907,14 @@ class Rest extends WebService
                             $row['extra_'.$fieldName] = '';
                         }
                     }
+                }
+                // Get item authoring data
+                $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $row['id']);
+                $row['created_by'] = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+                if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                    $row['updated_by'] = $row['created_by'];
+                } else {
+                    $row['updated_by'] = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
                 }
                 $resultArray[] = $row;
             }
@@ -2961,6 +2990,15 @@ class Rest extends WebService
                 $type = Exercise::getFeedbackTypeLiteral($row['feedback_type']);
                 $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
 
+                // Get item authoring data
+                $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $item);
+                $createdBy = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+                if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                    $updatedBy = $createdBy;
+                } else {
+                    $updatedBy = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
+                }
+
                 $sql = "
                     SELECT a.exe_exo_id AS id,
                            a.exe_user_id,
@@ -3009,7 +3047,8 @@ class Rest extends WebService
                     $resultArray[] = [
                         'id' => $item,
                         'title' => $title,
-                        'updated_by' => '',
+                        'created_by' => $createdBy,
+                        'updated_by' => $updatedBy,
                         'type' => $type,
                         'completion' => $completion,
                         'completion_method' => $completionMethod,

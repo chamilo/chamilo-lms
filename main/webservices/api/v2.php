@@ -223,7 +223,8 @@ try {
             break;
         case Rest::GET_COURSE_DESCRIPTIONS:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
-            $descriptions = $restApi->getCourseDescriptions();
+            $fields = $_POST['fields'] ?? [];
+            $descriptions = $restApi->getCourseDescriptions($fields);
             $restResponse->setData($descriptions);
             break;
         case Rest::GET_COURSE_DOCUMENTS:
@@ -304,8 +305,9 @@ try {
             break;
         case Rest::GET_COURSE_EXERCISES:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
+            $fields = $_POST['fields'] ?? [];
             $restResponse->setData(
-                $restApi->getCourseExercises()
+                $restApi->getCourseExercises($fields)
             );
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:
@@ -822,8 +824,9 @@ try {
             break;
         case Rest::GET_TEST_UPDATES_LIST:
             Event::addEvent(LOG_WS.$action, 'success', 'true');
+            $fields = $_POST['fields'] ?? [];
             $restResponse->setData(
-                $restApi->getTestUpdatesList()
+                $restApi->getTestUpdatesList($fields)
             );
             break;
         case Rest::GET_TEST_AVERAGE_RESULTS_LIST:

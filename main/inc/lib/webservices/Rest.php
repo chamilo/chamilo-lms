@@ -2952,7 +2952,7 @@ class Rest extends WebService
             }
             if (!empty($fields)) {
                 foreach ($fields as $field) {
-                    $extraArray[$field] = '-';
+                    $extraArray['extra_'.$field] = '';
                 }
             }
 
@@ -3044,7 +3044,7 @@ class Rest extends WebService
                             $completion = $countSuccess / $countUsersInCourses[$cId];
                         }
                     }
-                    $resultArray[] = [
+                    $params = [
                         'id' => $item,
                         'title' => $title,
                         'created_by' => $createdBy,
@@ -3054,8 +3054,11 @@ class Rest extends WebService
                         'completion_method' => $completionMethod,
                         'number_of_last_attempts' => $countAttempts,
                         'average_score_in_percent' => $averageScore,
-                        'extra' => $extraArray,
                     ];
+                    foreach ($extraArray as $name => $value) {
+                        $params[$name] = $value;
+                    }
+                    $resultArray[] = $params;
                 }
             }
         }

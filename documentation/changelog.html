@@ -110,6 +110,88 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.20">
+        <a id="1.11.20"></a>
+
+        <h1>Chamilo 1.11.20 - </h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.20 is a minor bug fix release on top of 1.11.18.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/"></a> is ...</p>
+        <h3>Security fixes</h3>
+        No new vulnerability has been reported to us in 1.11.18.
+        <ul aria-live="off">
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+        <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/f86cf35055b1f6bbc900255b60cf890623799b11">f86cf350</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4594">GH#4594</a>) Plugin: AI Helper: Add feature to use AI Helper to create learning paths</li>
+        <li>[2023-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/08fc2d135f46ab55583282b3374daff1686bdc3c">08fc2d13</a> - <a href="https://task.beeznest.com/issues/20535">BT#20535</a>) Session: Add export of results of session courses in CSV</li>
+        <li>[2023-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/159e8ee075cc1d3b8d2cba68e98d05cc705ed3e5">159e8ee0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4594">GH#4594</a>) Plugin: AI Helper: Add tracking table and option to enable in quiz and learnpaths separately</li>
+        <li>[2023-02-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/7fd2013f0cb54713b27eae73e88591cb682c5af0">7fd2013f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4608">GH#4608</a>) Plugin: AI Helper: Add option to generate tests within learnpath generation</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+        <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/84135b4045cb9def219e2861f5957ec9cb9b6bee">84135b40</a> - <a href="https://task.beeznest.com/issues/18201">BT#18201</a>) Admin: Add configuration setting 'portfolio_advanced_sharing' to select who can view the portfolio comments</li>
+        <li>[2023-02-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/354f0830452b799abf99426bee735db582391c18">354f0830</a> - <a href="https://task.beeznest.com/issues/20250">BT#20250</a>) Admin: Add configuration setting 'gradebook_display_extra_stats' to control columns shown in the gradebook</li>
+        <li>[2023-02-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/3748da213fe35a69f540d3b4506993248ed64634">3748da21</a> - <a href="https://task.beeznest.com/issues/20512">BT#20512</a>) Internal: Mail: Add options to allow configuring mail with XOAuth method</li>
+
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2023-02-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/d0fb74ff7acb11229c570ac70e1f5d0d43b09cb7">d0fb74ff</a>) Documentation: Update AI Helper plugin changelog for v1.1</li>
+            <li>[2023-02-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/f9d7be71d3ef9a2710a05a8d54f649190a61e140">f9d7be71</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4604">GH#4604</a>) Plugin: AI Helper: Fix wrong order of items in learning path</li>
+            <li>[2023-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e3965e4d4ee3c0b5a7aeca9597ff8795fecc19f">6e3965e4</a> - <a href="https://task.beeznest.com/issues/20558">BT#20558</a>) Document: Avoid to show ElFinder CourseDriver to students if tool Documents is hidden</li>
+            <li>[2023-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/49217c048130490b8f8651f7d2c4eb14c71a556f">49217c04</a> - <a href="https://task.beeznest.com/issues/20554">BT#20554</a>) Exercise: fix problem with default mysql order not set correctly that blocked correct max prerequisities calculation</li>
+            <li>[2023-02-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c33fe2becf1c25f204254c457c818a13995c4f09">c33fe2be</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4596">GH#4596</a>) Exercise: Fix link to next question in feedback as pop-up mode</li>
+            <li>[2023-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/eda6756faa7ce5c59d3aed48d66473b87526294f">eda6756f</a> - <a href="https://task.beeznest.com/issues/19577">BT#19577</a>) Plugin: LTI provider: minor: adding indication of configuration to add to be able to access content from other domain</li>
+            <li>[2023-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/b6262eb082c02bbbda8f07d645430e8b243345f0">b6262eb0</a> - <a href="https://task.beeznest.com/issues/20535">BT#20535</a>) Admin: minor update partial translation in FR, EN, ES for session list new global course report export</li>
+            <li>[2023-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/6cb4c0269b0b804e1d3bdd6875a4251255fe215a">6cb4c026</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4570">GH#4570</a>) Plugin: Zoom: Fix meeting page for students</li>
+            <li>[2023-02-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/3387e66134a155634fed1c2393cd12aaa64403be">3387e661</a> - <a href="https://task.beeznest.com/issues/20250">BT#20250</a>) Gradebook: Fix styles in columns to avoid empty cells</li>
+            <li>[2023-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/414099302f5ef55c64532842f8b87121e1ad70c5">41409930</a> - <a href="https://task.beeznest.com/issues/18201">BT#18201</a>) Portfolio: minor update partial translation in FR, EN, ES for eportfolio advanced sharing option</li>
+            <li>[2023-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/90d9d4696c97e92d9d7117a8ed40c716a3062c15">90d9d469</a> - <a href="https://task.beeznest.com/issues/18201">BT#18201</a>) Portfolio: Allow advanced selection of who can view the comments</li>
+            <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/27326a28940044b83eb4c01e7a0cf57ab2a8c7e2">27326a28</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4555">GH#4555</a>) Exercise: Fix issue with tag attribute for modal window question</li>
+            <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/03c2cc020bef01d64a52916c6bc246ed0a47c8ea">03c2cc02</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4555">GH#4555</a>) Exercise: Allow teachers to remove a question from a test</li>
+            <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/938e57fd3ae891a3e2c451d9db200452ee6a8803">938e57fd</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4590">GH#4590</a>) Plugin: Buy Courses: Fix issue with services list not loading + improve breadcrumbs and redirections</li>
+            <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/2d887e8b985e71712052297de3ac4284671a3080">2d887e8b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4584">GH#4584</a>) Maintenance: Fix missing learning paths when importing course</li>
+            <li>[2023-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/bdac1544e2e2704bb882b9886fdc418f612465de">bdac1544</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4589">GH#4589</a>) Plugin: AI helper: default visibility now hidden, default results display is now to show answers, default score is now number of questions</li>
+            <li>[2023-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/1491e42c66107316a4cdf888bc7ba61daaa7f8f1">1491e42c</a> - <a href="https://task.beeznest.com/issues/20509">BT#20509</a>) Admin: Fix password checker for php >= 8.0 complement</li>
+            <li>[2023-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/df03d25871808f1500f693c4d9db8b946033fe24">df03d258</a> - <a href="https://task.beeznest.com/issues/18201">BT#18201</a>) Portfolio: Fix saving of comment item property</li>
+            <li>[2023-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1d10357b0449c346a6196ed0595c36134c02453">a1d10357</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4589">GH#4589</a>) Plugin: AI Helper: Improve AI helper plugin, generate a test with results shown</li>
+            <li>[2023-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/2fae2e2984e9d2cbdf50d6af941b5bcac5ed98ef">2fae2e29</a> - <a href="https://task.beeznest.com/issues/20509">BT#20509</a>) Admin: Fix password checker for php >= 8.0</li>
+            <li>[2023-02-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/fdb5df8e0967dff6af4b73e2105a9f7c8dff162f">fdb5df8e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4555">GH#4555</a>) Exercise: Fix delete question when it was imported from other exercise in different course</li>
+            <li>[2023-02-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/31635d10cae83bac7813c592977a426583fdfa00">31635d10</a> - <a href="https://task.beeznest.com/issues/20531">BT#20531</a>) Admin: More efficient fix configuration variable recuperation for none multiURL plateforms</li>
+            <li>[2023-02-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/142514c95a9b93871b4f14b55463e8def476af62">142514c9</a> - <a href="https://task.beeznest.com/issues/20531">BT#20531</a>) Admin: Fix configuration variable recovery for none multiURL plateforms</li>
+            <li>[2023-02-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/c336df09efb25bbb416645f7d73b0ff1c5c1fd65">c336df09</a> - <a href="https://task.beeznest.com/issues/20518">BT#20518</a>) Exercise: Rename global questions to exact combination in code</li>
+            <li>[2023-01-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/e750540586d9a5603d31a5e09bf79d186656c84a">e7505405</a> - <a href="https://task.beeznest.com/issues/20362">BT#20362</a>) Learnpath: Fix order menu tree when it has final item</li>
+            <li>[2023-01-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/9635771a4cace20db5aa49a360a449c8b8ce91a0">9635771a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4558">GH#4558</a>) Attendance: Fix entities and fields created through installation of 1.11.18 (and not update from 1.11.16)</li>
+            <li>[2023-01-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/922850c471a8a2dba8dcce863a356c306be3ebcd">922850c4</a> - <a href="https://task.beeznest.com/issues/19577">BT#19577</a>) Plugin: LTI provider: bumping to version 1.1</li>
+            <li>[2023-01-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d54f1bbe36e5e0dfa35aa60bd2f3a9115eeea3a">0d54f1bb</a> - <a href="https://task.beeznest.com/issues/19577">BT#19577</a>) Plugin: LTI provider: adapt entity to accept string as indicated in the IMS LTI standard</li>
+            <li>[2023-01-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/39ab49fb2beb3261a03ff2749183a2fdf2dc7f6e">39ab49fb</a> - <a href="https://task.beeznest.com/issues/20518">BT#20518</a>) Exercise: Fix error in calculated score with "Global multiple answer"</li>
+            <li>[2023-01-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/6999ab22a1f71ec1352613eca46784724fce71bf">6999ab22</a> - <a href="https://task.beeznest.com/issues/20503">BT#20503</a>) Maintenance: Fix calendar events don't copy (missing properties) from backup</li>
+            <li>[2023-01-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/865408c7cedb939b3d1f04181eeb21101465f8bc">865408c7</a> - <a href="https://task.beeznest.com/issues/20496">BT#20496</a>) Plugin: Fix encoding answers in Test2Pdf plugin</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>No notable webservice change</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+                    <li>No notable removal</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>No notable remaining issue that we know of</li>
+        </ul>
+    </div>
+
     <div class="version" aria-label="1.11.18">
         <a id="1.11.18"></a>
 
@@ -311,7 +393,7 @@ We feel it shares significance with this Chamilo version because, as we are prep
             <li>[2023-01-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/ba9fe06600106c7ddf0e06d99b36d4abc2350e6b">ba9fe066</a>) Admin: Add configuration setting 'notifications_extended_footer_message' to add optional (extra) footer in emails</li>
             <li>[2023-01-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/2efeb868850386dfeb56a13e9bd3f8b3535bcef7">2efeb868</a> - <a href="https://task.beeznest.com/issues/20357">BT#20357</a>) Wiki: Add support for page categories</li>
         </ul>
-<h3>Improvements (minor features) and debug</h3>
+        <h3>Improvements (minor features) and debug</h3>
         In reverse chronological order...
         <ul aria-live="off">
             <li>[2023-01-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e51ad8de21cfeb230a3238ce053f577cdc250a06">e51ad8de</a> Plugin: AI Helper: Rename class URL to avoid conflict</li>

@@ -1204,8 +1204,11 @@ class Rest extends WebService
      * @param int $userId
      * @return string
      */
-    private function __getConfiguredUsernameById(int $userId): string
+    private function __getConfiguredUsernameById(int $userId = null): string
     {
+        if (empty($userId)) {
+            return '';
+        }
         $userField = api_get_configuration_value('webservice_return_user_field');
         if (empty($userField)) {
             return api_get_user_info($userId)['username'];

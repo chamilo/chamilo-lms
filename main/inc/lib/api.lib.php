@@ -4949,6 +4949,48 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
 }
 
 /**
+ * Gets the last item property data from tool of a course id, in chronological order
+ *
+ * @param int $courseId
+ * @param string $tool       tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int    $ref        id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int   $sessionId
+ * @param int   $groupId
+ *
+ * @return array with all fields from c_item_property, empty array if not found or false if course could not be found
+ */
+function api_get_last_item_property_info(int $courseId, string $tool, int $ref, int $sessionId = null, int $groupId = null): array
+{
+    $tool = Database::escape_string($tool);
+    // Definition of tables.
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $sessionCondition = " session_id = $sessionId";
+    if (empty($sessionId)) {
+        $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
+    }
+
+    $sql = "SELECT * FROM $table
+            WHERE
+                c_id = $courseId AND
+                tool = '$tool' AND
+                ref = $ref AND
+                $sessionCondition ";
+
+    if (!empty($groupId)) {
+        $sql .= " AND to_group_id = $groupId ";
+    }
+    // Add criteria to only get the last one
+    $sql .= "ORDER BY lastedit_date DESC LIMIT 1";
+    $rs = Database::query($sql);
+    $row = [];
+    if (Database::num_rows($rs) > 0) {
+        $row = Database::fetch_array($rs, 'ASSOC');
+    }
+
+    return $row;
+}
+
+/**
  * Displays a combo box so the user can select his/her preferred language.
  *
  * @param string The desired name= value for the select

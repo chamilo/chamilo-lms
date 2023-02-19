@@ -8236,7 +8236,7 @@ class SessionManager
         $extraFields = [],
         $addExtraFields = true
     ) {
-        $showCount = api_get_configuration_value('session_list_show_count_users');
+        $showCount = ('true' === api_get_setting('session.session_list_show_count_users'));
         // Column config
         $operators = ['cn', 'nc'];
         $date_operators = ['gt', 'ge', 'lt', 'le'];
@@ -9592,7 +9592,7 @@ class SessionManager
     public static function getDefaultSessionTab()
     {
         $default = 'all';
-        $view = api_get_configuration_value('default_session_list_view');
+        $view = api_get_setting('session.default_session_list_view');
 
         if (!empty($view)) {
             $default = $view;

@@ -455,7 +455,7 @@ class ScheduledAnnouncement extends Model
      */
     public function allowed()
     {
-        return api_get_configuration_value('allow_scheduled_announcements');
+        return ('true' === api_get_setting('announcement.allow_scheduled_announcements'));
     }
 
     private function setTagsInForm(FormValidator $form)

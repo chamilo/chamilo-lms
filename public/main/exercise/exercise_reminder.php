@@ -107,7 +107,7 @@ if ($time_control) {
 }
 
 $selectionType = $objExercise->getQuestionSelectionType();
-if (api_get_configuration_value('block_category_questions') &&
+if (('true' === api_get_setting('exercise.block_category_questions')) &&
     ONE_PER_PAGE == $objExercise->type &&
     EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
 ) {

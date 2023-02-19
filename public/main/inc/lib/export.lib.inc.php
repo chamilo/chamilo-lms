@@ -229,7 +229,7 @@ class Export
      */
     public static function htmlToOdt($html, $name, $format = 'odt')
     {
-        $unoconv = api_get_configuration_value('unoconv.binaries');
+        $unoconv = api_get_setting('platform.unoconv_binaries');
 
         if (empty($unoconv)) {
             return false;

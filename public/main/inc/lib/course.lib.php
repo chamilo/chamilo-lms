@@ -519,7 +519,7 @@ class CourseManager
                 );
             }
         }
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
             $course = Container::getCourseRepository()->findOneBy([
@@ -604,7 +604,7 @@ class CourseManager
 
         $userId = api_get_user_id();
 
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
@@ -621,7 +621,7 @@ class CourseManager
                     return false;
                 }
                 // user has no session at all, create one starting now
-                $numberOfDays = api_get_configuration_value('user_s_session_duration') ?: 3 * 365;
+                $numberOfDays = (int) api_get_setting('session.user_s_session_duration');
                 try {
                     $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
                 } catch (Exception $exception) {
@@ -644,7 +644,7 @@ class CourseManager
                 $session->setCoachAccessEndDate($endDate);
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
-                $adminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
+                $adminId = (int) api_get_setting('session.session_automatic_creation_user_id');
                 $session->addSessionAdmin(api_get_user_entity($adminId));
                 $session->addUserInSession(0, $user);
                 Database::getManager()->persist($session);
@@ -1125,7 +1125,7 @@ class CourseManager
         $userId = (int) $userId;
         $session_id = (int) $session_id;
 
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             // with this option activated, only check whether the course is in one of the users' sessions
             $course = Container::getCourseRepository()->findOneBy([
                 'code' => $course_code,
@@ -2826,7 +2826,7 @@ class CourseManager
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3475,7 +3475,7 @@ class CourseManager
 
         // Filter by language
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3618,7 +3618,7 @@ class CourseManager
         }
 
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3767,7 +3767,7 @@ class CourseManager
             $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
 
-            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page')
+            if ('true' === api_get_setting('course.enable_unsubscribe_button_on_my_course_page')
                 && '1' === $course_info['unsubscribe']
             ) {
                 $params['unregister_button'] = CoursesAndSessionsCatalog::return_unregister_button(
@@ -3847,7 +3847,7 @@ class CourseManager
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
         $course_visibility = (int) $course_info['visibility'];
-        $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
+        $allowUnsubscribe = ('true' === api_get_setting('course.enable_unsubscribe_button_on_my_course_page'));
 
         if (Course::HIDDEN === $course_visibility) {
             return '';
@@ -4858,7 +4858,7 @@ class CourseManager
             $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['rating_html'] = '';
-            if (false === api_get_configuration_value('hide_course_rating')) {
+            if (('false' === api_get_setting('course.hide_course_rating'))) {
                 $my_course['rating_html'] = Display::return_rating_system(
                     'star_'.$course_info['real_id'],
                     $ajax_url.'&course_id='.$course_info['real_id'],

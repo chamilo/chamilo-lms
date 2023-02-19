@@ -69,7 +69,7 @@ switch ($action) {
         }
         break;
     case 'export_table':
-        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        $hidePdfReport = ('true' === api_get_setting('gradebook.gradebook_hide_pdf_report_button'));
         if ($hidePdfReport) {
             api_not_allowed(true);
         }
@@ -831,7 +831,7 @@ if (!empty($selectCat)) {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    $allowButton = false === api_get_configuration_value('gradebook_hide_pdf_report_button');
+    $allowButton = ('false' === api_get_setting('gradebook.gradebook_hide_pdf_report_button'));
     if ($allowButton) {
         $actionsLeft .= Display::url(
             Display::getMdiIcon('file-pdf-box').get_lang('Download report in PDF'),
@@ -933,7 +933,7 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $i = 0;
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
-        $allowGraph = false === api_get_configuration_value('gradebook_hide_graph');
+        $allowGraph = ('false' === api_get_setting('gradebook.gradebook_hide_graph'));
         $isAllow = api_is_allowed_to_edit(null, true);
 
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
@@ -983,7 +983,7 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                     if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                         $loadStats = [1, 2, 3];
                     } else {
-                        if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
+                        if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
                             $loadStats = [2];
                         }
                     }

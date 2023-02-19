@@ -1682,7 +1682,7 @@ class learnpath
     ) {
         $courseId = $course->getId();
 
-        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        $allow = ('true' === api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite'));
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
@@ -1975,7 +1975,7 @@ class learnpath
         // If the option to use the score as progress is set for this learning
         // path, then the rules are completely different: we assume only one
         // item exists and the progress of the LP depends on the score
-        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
         if (true === $scoreAsProgressSetting) {
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress) {
@@ -3114,7 +3114,7 @@ class learnpath
      */
     public function prerequisites_match($itemId = null)
     {
-        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        $allow = ('true' === api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite'));
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
@@ -3590,7 +3590,7 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             [$progress] = $this->get_progress_bar_text('%');
-            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
                 if ($debug) {
@@ -8386,7 +8386,7 @@ class learnpath
 
     public function setItemTitle(FormValidator $form)
     {
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
                 'title',
                 get_lang('Title'),
@@ -8482,13 +8482,14 @@ class learnpath
      */
     public static function getUserIdentifierForExternalServices()
     {
-        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
+        $scormApiExtraFieldUseStudentId = api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id');
+        if ('true' === api_get_setting('lp.scorm_api_username_as_student_id')) {
             return api_get_user_info(api_get_user_id())['username'];
-        } elseif (null != api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')) {
+        } elseif (!empty($scormApiExtraFieldUseStudentId)) {
             $extraFieldValue = new ExtraFieldValue('user');
             $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
                 api_get_user_id(),
-                api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')
+                $scormApiExtraFieldUseStudentId
             );
 
             return $extrafield['value'];

@@ -44,7 +44,7 @@ $allowEdition = false;
 if ($isCourseManager) {
     $allowEdition = true;
     if (!empty($work->getQualification()) &&
-        api_get_configuration_value('block_student_publication_score_edition')
+        ('true' === api_get_setting('work.block_student_publication_score_edition'))
     ) {
         $allowEdition = false;
     }
@@ -94,7 +94,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$workId.'&'.api_get_cidreq();
 
-            $allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
+            $allowRedirect = ('true' === api_get_setting('work.allow_redirect_to_main_page_after_work_upload'));
             $urlToRedirect = '';
             if ($allowRedirect) {
                 $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();

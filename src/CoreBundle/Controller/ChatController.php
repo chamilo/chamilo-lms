@@ -42,7 +42,7 @@ class ChatController extends AbstractResourceController implements CourseControl
         return $this->render(
             '@ChamiloCore/Chat/chat.html.twig',
             [
-                'restrict_to_coach' => api_get_configuration_value('course_chat_restrict_to_coach'),
+                'restrict_to_coach' => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
                 'user' => api_get_user_info(),
             ]
         );

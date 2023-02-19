@@ -232,7 +232,7 @@ class IndexManager
             return [];
         }
 
-        $allow = api_get_configuration_value('allow_my_student_publication_page');
+        $allow = ('true' === api_get_setting('work.allow_my_student_publication_page'));
         $items = [];
 
         if ($allow) {
@@ -745,7 +745,7 @@ class IndexManager
             unset($this->tpl->menu_navigation['myprofile']);
         }
 
-        $hideMenu = api_get_configuration_value('hide_main_navigation_menu');
+        $hideMenu = ('true' === api_get_setting('platform.hide_main_navigation_menu'));
         if (true === $hideMenu) {
             return '';
         }
@@ -770,7 +770,7 @@ class IndexManager
      */
     public function return_course_block()
     {
-        if (api_get_configuration_value('hide_course_sidebar')) {
+        if ('true' === api_get_setting('course.hide_course_sidebar')) {
             return '';
         }
         $isHrm = api_is_drh();
@@ -885,11 +885,11 @@ class IndexManager
         $loadHistory = false
     ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
-        $viewGridCourses = api_get_configuration_value('view_grid_courses');
-        $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
+        $viewGridCourses = ('true' === api_get_setting('course.view_grid_courses'));
+        $showSimpleSessionInfo = ('true' === api_get_setting('course.show_simple_session_info'));
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
-        $showAllSessions = true === api_get_configuration_value('show_all_sessions_on_my_course_page');
+        $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
 
         if ($loadHistory) {
             // Load sessions in category in *history*
@@ -1151,7 +1151,7 @@ class IndexManager
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
-        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        $collapsable = ('true' === api_get_setting('session.allow_user_session_collapsable'));
         $collapsableLink = '';
         if ($collapsable) {
             $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
@@ -1159,7 +1159,7 @@ class IndexManager
 
         $extraFieldValue = new ExtraFieldValue('session');
         if ($showSessions) {
-            $coursesListSessionStyle = api_get_configuration_value('courses_list_session_title_link');
+            $coursesListSessionStyle = api_get_setting('course.courses_list_session_title_link');
             $coursesListSessionStyle = false === $coursesListSessionStyle ? 1 : $coursesListSessionStyle;
             if (api_is_drh()) {
                 $coursesListSessionStyle = 1;

@@ -87,7 +87,7 @@ switch ($action) {
         );
         // Setting the form elements
         $form->addElement('header', get_lang('Add new glossary term'));
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
                 'name',
                 get_lang('Term'),
@@ -152,7 +152,7 @@ switch ($action) {
             // Setting the form elements
             $form->addElement('header', get_lang('Edit term'));
             $form->addElement('hidden', 'glossary_id');
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'name',
                     get_lang('Term'),
@@ -447,7 +447,7 @@ switch ($action) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');
-            $defaultView = api_get_configuration_value('default_glossary_view');
+            $defaultView = api_get_setting('glossary.default_glossary_view');
             if (empty($defaultView)) {
                 $defaultView = 'table';
             }

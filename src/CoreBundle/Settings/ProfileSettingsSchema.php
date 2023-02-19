@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ProfileSettingsSchema extends AbstractSettingsSchema
@@ -35,6 +37,16 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'hide_username_with_complete_name' => 'false',
                     'hide_username_in_course_chat' => 'false',
                     'show_official_code_whoisonline' => 'false',
+                    'allow_career_diagram' => 'false',
+                    'disable_change_user_visibility_for_public_courses' => 'true',
+                    'my_space_users_items_per_page' => '10',
+                    'add_user_course_information_in_mailto' => 'false',
+                    'pass_reminder_custom_link' => '',
+                    'registration_add_helptext_for_2_names' => 'false',
+                    'disable_gdpr' => 'true',
+                    'data_protection_officer_name' => '',
+                    'data_protection_officer_role' => '',
+                    'data_protection_officer_email' => '',
                 ]
             )
             ->setTransformer(
@@ -96,6 +108,23 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('hide_username_with_complete_name', YesNoType::class)
             ->add('hide_username_in_course_chat', YesNoType::class)
             ->add('show_official_code_whoisonline', YesNoType::class)
+            ->add('allow_career_diagram', YesNoType::class)
+            ->add('disable_change_user_visibility_for_public_courses', YesNoType::class)
+            ->add('my_space_users_items_per_page', TextType::class)
+            ->add('add_user_course_information_in_mailto', YesNoType::class)
+            ->add(
+                'pass_reminder_custom_link',
+                TextType::class,
+                [
+                    'label' => 'PassReminderCustomLinkTitle',
+                    'help' => 'PassReminderCustomLinkComment',
+                ]
+            )
+            ->add('registration_add_helptext_for_2_names', YesNoType::class)
+            ->add('disable_gdpr', YesNoType::class)
+            ->add('data_protection_officer_name', TextType::class)
+            ->add('data_protection_officer_role', TextType::class)
+            ->add('data_protection_officer_email', TextType::class)
         ;
     }
 }

@@ -37,6 +37,9 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                     'enable_iframe_inclusion' => '',
                     'enabled_mathjax' => '',
                     'translate_html' => 'false',
+                    'save_titles_as_html' => 'false',
+                    'full_ckeditor_toolbar_set' => 'false',
+                    'ck_editor_block_image_copy_paste' => 'false',
                 ]
             )
             /*->setAllowedTypes(
@@ -69,6 +72,9 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('enable_iframe_inclusion', YesNoType::class)
             ->add('enabled_mathjax', YesNoType::class)
             ->add('translate_html', YesNoType::class)
+            ->add('save_titles_as_html', YesNoType::class)
+            ->add('full_ckeditor_toolbar_set', YesNoType::class)
+            ->add('ck_editor_block_image_copy_paste', YesNoType::class)
         ;
     }
 }

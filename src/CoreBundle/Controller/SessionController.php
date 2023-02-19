@@ -205,7 +205,7 @@ class SessionController extends AbstractController
             }
         }
 
-        $redirectToSession = api_get_configuration_value('allow_redirect_to_session_after_inscription_about');
+        $redirectToSession = ('true' === Container::getSettingsManager()->getSetting('session.allow_redirect_to_session_after_inscription_about'));
         $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
         $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);

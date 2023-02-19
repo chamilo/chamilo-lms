@@ -21,6 +21,8 @@ class SocialSettingsSchema extends AbstractSettingsSchema
                     'allow_students_to_create_groups_in_social' => 'false',
                     'social_enable_messages_feedback' => 'false',
                     'disable_dislike_option' => 'false',
+                    'social_show_language_flag_in_profile' => 'false',
+                    'social_make_teachers_friend_all' => 'false',
                 ]
             )
         ;
@@ -40,6 +42,8 @@ class SocialSettingsSchema extends AbstractSettingsSchema
             ->add('allow_students_to_create_groups_in_social', YesNoType::class)
             ->add('social_enable_messages_feedback', YesNoType::class)
             ->add('disable_dislike_option', YesNoType::class)
+            ->add('social_show_language_flag_in_profile', YesNoType::class)
+            ->add('social_make_teachers_friend_all', YesNoType::class)
         ;
     }
 }

@@ -113,7 +113,7 @@ if ($is_allowed_to_edit) {
 $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
 
 // Exercise name.
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $html .= Display::div(
         $objExercise->get_formated_title().PHP_EOL.$editLink
     );
@@ -160,7 +160,7 @@ $exercise_url_button = Display::url(
 );
 
 $btnCheck = '';
-$quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+$quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_button_enable'));
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
@@ -434,7 +434,7 @@ if ($time_control) {
 
 $html .= $message;
 
-$disable = api_get_configuration_value('exercises_disable_new_attempts');
+$disable = ('true' === api_get_setting('exercise.exercises_disable_new_attempts'));
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('The portal do not allowed to start new test for the moment, please come back later.'));
 }

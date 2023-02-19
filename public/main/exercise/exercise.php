@@ -22,7 +22,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 
 $allowDelete = Exercise::allowAction('delete');
 $allowClean = Exercise::allowAction('clean_results');

@@ -157,7 +157,7 @@ class Tracking
             return '';
         }
 
-        $hideTime = api_get_configuration_value('hide_lp_time');
+        $hideTime = ('true' === api_get_setting('lp.hide_lp_time'));
         $lp_id = (int) $lp_id;
 
         $lp_item_id = (int) $lp_item_id;
@@ -1782,7 +1782,7 @@ class Tracking
      */
     public static function minimumTimeAvailable($sessionId, $courseId)
     {
-        if (!api_get_configuration_value('lp_minimum_time')) {
+        if (!('true' === api_get_setting('lp.lp_minimum_time'))) {
             return false;
         }
 

@@ -228,7 +228,7 @@ abstract class Question
      */
     public function selectTitle()
     {
-        if (!api_get_configuration_value('save_titles_as_html')) {
+        if (!('true' === api_get_setting('editor.save_titles_as_html'))) {
             return $this->question;
         }
 
@@ -237,9 +237,9 @@ abstract class Question
 
     public function getTitleToDisplay(Exercise $exercise, int $itemNumber): string
     {
-        $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $showQuestionTitleHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
         $title = '';
-        if (api_get_configuration_value('show_question_id')) {
+        if ('true' === api_get_setting('exercise.show_question_id')) {
             $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
         }
 
@@ -1205,7 +1205,7 @@ abstract class Question
         }
 
         // question name
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
                 'questionName',
@@ -1651,7 +1651,7 @@ abstract class Question
                         $score['result'] = ' ? ';
                     }
 
-                    $hide = api_get_configuration_value('hide_free_question_score');
+                    $hide = ('true' === api_get_setting('exercise.hide_free_question_score'));
                     if (true === $hide) {
                         $score['result'] = '-';
                     }
@@ -1695,7 +1695,7 @@ abstract class Question
         // dont display score for certainty degree questions
         if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $this->type) {
             $showRibbon = false;
-            $ribbonResult = api_get_configuration_value('show_exercise_question_certainty_ribbon_result');
+            $ribbonResult = ('true' === api_get_setting('exercise.show_exercise_question_certainty_ribbon_result'));
             if (true === $ribbonResult) {
                 $showRibbon = true;
             }

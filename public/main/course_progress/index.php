@@ -232,7 +232,7 @@ switch ($action) {
                 $form->addHidden('thematic_id', $thematicId);
             }
 
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'title',
                     get_lang('Title'),
@@ -416,7 +416,7 @@ switch ($action) {
         break;
     case 'export_documents':
     case 'thematic_export_pdf':
-        $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
+        $pdfOrientation = api_get_setting('document.thematic_pdf_orientation');
         $view = new Template('', false, false, false, true, false, false);
         $list = $thematicManager->getThematicList($course, $session);
         $view->assign('data', $list);
@@ -461,7 +461,7 @@ switch ($action) {
         $view->assign('thematic', $thematicEntity);
         $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
 
-        $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
+        $pdfOrientation = api_get_setting('document.thematic_pdf_orientation');
         $format = 'portrait' !== $pdfOrientation ? 'A4-L' : 'A4-P';
         $orientation = 'portrait' !== $pdfOrientation ? 'L' : 'P';
         $title = get_lang('Thematic').'-'.$thematicEntity->getTitle();

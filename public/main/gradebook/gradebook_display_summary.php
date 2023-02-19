@@ -30,13 +30,13 @@ $loadStats = [];
 if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
     $loadStats = [1, 2, 3];
 } else {
-    if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
+    if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
         $loadStats = [2];
     }
 }
 
 /*Session::write('use_gradebook_cache', false);
-$useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+$useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
 $cacheAvailable = api_get_configuration_value('apc') && $useCache;
 
 if ($cacheAvailable) {

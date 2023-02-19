@@ -22,7 +22,7 @@ if ('true' !== api_get_setting('course_catalog_published')) {
     api_block_anonymous_users();
 }
 
-$allowExtraFields = api_get_configuration_value('allow_course_extra_field_in_catalog');
+$allowExtraFields = ('true' === api_get_setting('course.allow_course_extra_field_in_catalog'));
 
 // For students
 $userCanViewPage = true;
@@ -116,7 +116,7 @@ switch ($action) {
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
             if ('course_home' === $redirectAfterSubscription) {
                 $redirectionTarget = $courseInfo['course_public_url'];
-                if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
                     $user = api_get_user_entity(api_get_user_id());
                     if ($user) {
                         foreach ($user->getCurrentlyAccessibleSessions() as $session) {
@@ -164,7 +164,7 @@ switch ($action) {
 
                 if ('course_home' === $redirectAfterSubscription) {
                     $redirectionTarget = $courseInfo['course_public_url'];
-                    if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                    if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
                         $user = api_get_user_entity(api_get_user_id());
                         if ($user) {
                             foreach ($user->getCurrentlyAccessibleSessions() as $session) {
@@ -413,7 +413,7 @@ switch ($action) {
             }
 
             $courseUrl = api_get_path(WEB_COURSE_PATH);
-            $hideRating = api_get_configuration_value('hide_course_rating');
+            $hideRating = ('true' === api_get_setting('course.hide_course_rating'));
 
             if (!empty($courses)) {
                 foreach ($courses as &$course) {

@@ -4,7 +4,7 @@
     <div class="question-result">
         <div class="panel panel-default">
             <div class="panel-body">
-                {% if 'save_titles_as_html'|api_get_configuration_value %}
+                {% if 'editor.save_titles_as_html'|api_get_setting == 'true' %}
                     {{ data.title }}
                 {% else %}
                     <h3>{{ data.title }}</h3>

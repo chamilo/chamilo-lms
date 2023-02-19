@@ -1131,7 +1131,7 @@ class Event
             Database::query($sql);
         }
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if ('true' === api_get_setting('lp.lp_minimum_time')) {
             $sql = "DELETE FROM track_e_access_complete
                     WHERE
                         tool = 'learnpath' AND

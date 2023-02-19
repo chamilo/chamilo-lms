@@ -3256,7 +3256,8 @@ if (isset($_configuration['import_csv_disable_dump']) &&
     $import->setDumpValues($dump);
 }
 
-$import->setUpdateEmailToDummy(api_get_configuration_value('update_users_email_to_dummy_except_admins'));
+$settingEmailDummy = ('true' === api_get_setting('mail.update_users_email_to_dummy_except_admins'));
+$import->setUpdateEmailToDummy($settingEmailDummy);
 
 // Do not moves the files to treated
 if (isset($_configuration['import_csv_test'])) {

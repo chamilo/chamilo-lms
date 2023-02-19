@@ -148,7 +148,7 @@ class Exercise
         $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
-        $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');
+        $this->questionFeedbackEnabled = ('true' === api_get_setting('exercise.allow_quiz_question_feedback'));
         $this->showPreviousButton = true;
     }
 
@@ -1615,12 +1615,12 @@ class Exercise
 
         $exercise->setPreventBackwards($this->getPreventBackwards());
 
-        $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+        $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'));
         if (true === $allow) {
             $exercise->setShowPreviousButton($this->showPreviousButton());
         }
 
-        $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+        $allow = ('true' === api_get_setting('exercise.allow_notification_setting_per_exercise'));
         if (true === $allow) {
             $notifications = $this->getNotifications();
             if (!empty($notifications)) {
@@ -1765,7 +1765,7 @@ class Exercise
      */
     public function delete()
     {
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 
         if ($limitTeacherAccess && !api_is_platform_admin()) {
             return false;
@@ -1838,7 +1838,7 @@ class Exercise
         $form->addHeader($form_title);
 
         // Title.
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
                 'exerciseTitle',
                 get_lang('Test name'),
@@ -2143,7 +2143,7 @@ class Exercise
             ];
             $form->addGroup($group, null, get_lang('Hide question title'));
 
-            $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+            $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'))
 
             if (true === $allow) {
                 // Hide question title.
@@ -2282,7 +2282,7 @@ class Exercise
                 $editor_config
             );
 
-            $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+            $allow = ('true' === api_get_setting('exercise.allow_notification_setting_per_exercise'));
             if (true === $allow) {
                 $settings = ExerciseLib::getNotificationSettings();
                 $group = [];
@@ -6199,7 +6199,7 @@ class Exercise
 
         if (!empty($sessionId)) {
             $addGeneralCoach = true;
-            $setting = api_get_configuration_value('block_quiz_mail_notification_general_coach');
+            $setting = ('true' === api_get_setting('exercise.block_quiz_mail_notification_general_coach'));
             if (true === $setting) {
                 $addGeneralCoach = false;
             }
@@ -6239,9 +6239,9 @@ class Exercise
 
         $scoreLabel = '';
         if ($sendEnd &&
-            true == api_get_configuration_value('send_score_in_exam_notification_mail_to_manager')
+            ('true' === api_get_setting('exercise.send_score_in_exam_notification_mail_to_manager'))
         ) {
-            $notificationPercentage = api_get_configuration_value('send_notification_score_in_percentage');
+            $notificationPercentage = ('true' === api_get_setting('mail.send_notification_score_in_percentage'));
             $scoreLabel = ExerciseLib::show_score($score, $weight, $notificationPercentage, true);
             $scoreLabel = '<tr>
                             <td>'.get_lang('Score')."</td>
@@ -6329,7 +6329,7 @@ class Exercise
         $allowSignature = false,
         $allowExportPdf = false
     ) {
-        if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
+        if ('true' === api_get_setting('exercise.hide_user_info_in_quiz_result')) {
             return '';
         }
 
@@ -6372,7 +6372,7 @@ class Exercise
         $data['duration'] = $duration;
         $data['ip'] = $ip;
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html'))) {
             $data['title'] = $this->get_formated_title().get_lang('Result');
         } else {
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
@@ -7931,7 +7931,7 @@ class Exercise
      */
     public function get_formated_title()
     {
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
         }
 
         return api_html_entity_decode($this->selectTitle());
@@ -8242,7 +8242,7 @@ class Exercise
      */
     public function showPreviousButton()
     {
-        $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+        $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'))
         if (false === $allow) {
             return true;
         }
@@ -8385,7 +8385,7 @@ class Exercise
      */
     public function showExpectedChoice()
     {
-        return api_get_configuration_value('show_exercise_expected_choice');
+        return ('true' === api_get_setting('exercise.show_exercise_expected_choice'));
     }
 
     /**
@@ -8434,7 +8434,7 @@ class Exercise
         $ribbonClassModifier = '';
 
         if ($this->showExpectedChoice()) {
-            $hideLabel = api_get_configuration_value('exercise_hide_label');
+            $hideLabel = ('true' === api_get_setting('exercise.exercise_hide_label'));
             if (true === $hideLabel) {
                 $ribbonClassModifier = 'question-answer-result__header-ribbon--no-ribbon';
                 $html = '';
@@ -8748,7 +8748,7 @@ class Exercise
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
         $autoLaunchAvailable = false;
         if (1 == api_get_course_setting('enable_exercise_auto_launch') &&
-            api_get_configuration_value('allow_exercise_auto_launch')
+            ('true' === api_get_setting('exercise.allow_exercise_auto_launch'))
         ) {
             $autoLaunchAvailable = true;
         }
@@ -8759,7 +8759,7 @@ class Exercise
         $charset = 'utf-8';
         $token = Security::get_token();
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, ['real_id' => $courseId]);
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
         $content = '';
         $column = 0;
         if ($is_allowedToEdit) {
@@ -8818,7 +8818,7 @@ class Exercise
 
         $webPath = api_get_path(WEB_CODE_PATH);
         if (!empty($exerciseList)) {
-            $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
+            $visibilitySetting = ('true' === api_get_setting('lp.show_hidden_exercise_added_to_lp'));
             //avoid sending empty parameters
             $mylpid = empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id;
             $mylpitemid = empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id;
@@ -9892,8 +9892,8 @@ class Exercise
             return true;
         }
 
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-        $disableClean = api_get_configuration_value('disable_clean_exercise_results_for_teachers');
+        $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
+        $disableClean = ('true' === api_get_setting('exercise.disable_clean_exercise_results_for_teachers'));
 
         switch ($action) {
             case 'delete':

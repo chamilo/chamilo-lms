@@ -1426,7 +1426,7 @@ class MessageManager
 
         $emailsubject = '['.get_lang('ApprovalForNewAccount').'] '.$user->getUsername();
 
-        if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
+        if ('true' === api_get_setting('admin.send_inscription_notification_to_general_admin_only')) {
             $email = api_get_setting('emailAdministrator');
             $firstname = api_get_setting('administratorSurname');
             $lastname = api_get_setting('administratorName');

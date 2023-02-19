@@ -179,7 +179,7 @@ class CoursesAndSessionsCatalog
         $allCategories = CourseCategory::getAllCategories();
         $categoryToAvoid = '';
         if (api_is_student()) {
-            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
         }
         foreach ($allCategories as $category) {
             $categoryCode = $category['code'];
@@ -262,7 +262,7 @@ class CoursesAndSessionsCatalog
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
                 $urlCondition = ' access_url_id = '.$urlId.' ';
-                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
                 if ($allowBaseCategories) {
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
                 }
@@ -479,7 +479,7 @@ class CoursesAndSessionsCatalog
             if (-1 != $urlId) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $urlCondition = ' access_url_id = '.$urlId.' AND';
-                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
                 if ($allowBaseCategories) {
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }

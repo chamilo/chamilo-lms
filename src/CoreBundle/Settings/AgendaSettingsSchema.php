@@ -25,6 +25,8 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     //'number_of_upcoming_events' => '0',
                     'default_calendar_view' => 'month',
                     'personal_calendar_show_sessions_occupation' => 'false',
+                    'personal_agenda_show_all_session_events' => 'false',
+                    'allow_agenda_edit_for_hrm' => 'false',
                 ]
             )
         ;
@@ -57,6 +59,8 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('personal_calendar_show_sessions_occupation', YesNoType::class)
+            ->add('personal_agenda_show_all_session_events', YesNoType::class)
+            ->add('allow_agenda_edit_for_hrm', YesNoType::class)
         ;
     }
 }

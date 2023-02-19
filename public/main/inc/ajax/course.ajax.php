@@ -106,7 +106,7 @@ switch ($action) {
 
             $categoryToAvoid = '';
             if (!api_is_platform_admin()) {
-                $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+                $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
             }
             $list = [];
             foreach ($categories as $item) {
@@ -147,7 +147,7 @@ switch ($action) {
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
-                    $category = api_get_configuration_value('course_category_code_to_use_as_model');
+                    $category = api_get_setting('course.course_category_code_to_use_as_model');
                     if (!empty($category)) {
                         $alreadyAdded = [];
                         if (!empty($courseList)) {

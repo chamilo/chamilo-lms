@@ -135,8 +135,8 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
-$showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
-$allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+$showBlockedPrerequisite = ('true' === api_get_setting('lp.show_prerequisite_as_blocked'));
+$allowLpChamiloExport = ('true' === api_get_setting('lp.allow_lp_chamilo_export'));
 $allowMinTime = Tracking::minimumTimeAvailable($sessionId, $courseId);
 $accumulateWorkTimeTotal = 0;
 if ($allowMinTime) {

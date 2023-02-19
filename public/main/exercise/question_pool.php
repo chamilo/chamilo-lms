@@ -98,7 +98,7 @@ if ($is_allowedToEdit) {
 
     // Deletes a question from the database and all exercises
     if ($delete) {
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
         if ($limitTeacherAccess && !api_is_platform_admin()) {
             api_not_allowed(true);
         }
@@ -376,7 +376,7 @@ if (1 == $exercise_id_changed) {
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllTests');
 $my_exercise_list['-1'] = get_lang('Orphan questions');
-$titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
+$titleSavedAsHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
         $my_exercise_list[$row['iid']] = '';
@@ -851,7 +851,7 @@ $nbrQuestions = getQuestions(
     $formValues
 );
 
-$length = api_get_configuration_value('question_pagination_length');
+$length = api_get_setting('exercise.question_pagination_length');
 if (empty($length)) {
     $length = 20;
 }
@@ -1227,7 +1227,7 @@ function get_action_icon_for_question(
     $in_exercise_id,
     Exercise $myObjEx
 ) {
-    $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+    $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
     $res = '';
     switch ($in_action) {

@@ -67,7 +67,7 @@ switch ($action) {
 
         break;
     case 'get_latest_news':
-        if (true === api_get_configuration_value('admin_chamilo_announcements_disable')) {
+        if ('true' === api_get_setting('announcement.admin_chamilo_announcements_disable')) {
             break;
         }
 
@@ -178,7 +178,7 @@ function check_system_version()
 
         // The number of sessions
         $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
-        $packager = api_get_configuration_value('packager');
+        $packager = api_get_setting('platform.packager');
         if (empty($packager)) {
             $packager = 'chamilo';
         }

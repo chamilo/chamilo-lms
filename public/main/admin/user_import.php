@@ -339,7 +339,7 @@ function save_data($users, $sendMail = false)
 function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = true, $resumeImport = false)
 {
     $usersFromOrigin = $users;
-    $allowRandom = api_get_configuration_value('generate_random_login');
+    $allowRandom = ('true' === api_get_setting('platform.generate_random_login'));
     if ($allowRandom) {
         $factory = new RandomLib\Factory();
         $generator = $factory->getLowStrengthGenerator();
@@ -749,7 +749,7 @@ if ($count_fields > 0) {
     }
 }
 
-if (api_get_configuration_value('plugin_redirection_enabled')) {
+if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
     $list[] = 'Redirection';
     $list_reponse[] = api_get_path(WEB_PATH);
 }

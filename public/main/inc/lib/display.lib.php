@@ -524,7 +524,7 @@ class Display
             $hmail .= '&#'.ord($email[$i]).';';
         }
 
-        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+        $value = ('true' === api_get_setting('profile.add_user_course_information_in_mailto'));
 
         if ($value) {
             if ('false' === api_get_setting('allow_email_editor')) {
@@ -1204,7 +1204,7 @@ class Display
             $extra_params['rowList'] = $rowList;
         }
 
-        $defaultRow = api_get_configuration_value('table_default_row');
+        $defaultRow = api_get_setting('platform.table_default_row');
         if (!empty($defaultRow)) {
             $obj->rowNum = (int) $defaultRow;
         }

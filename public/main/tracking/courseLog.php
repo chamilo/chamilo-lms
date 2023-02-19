@@ -290,7 +290,7 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-$showReporting = false === api_get_configuration_value('hide_reporting_session_list');
+$showReporting = ('false' === api_get_setting('session.hide_reporting_session_list'));
 if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseId);
     if (!empty($sessionList)) {

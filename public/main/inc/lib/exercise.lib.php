@@ -2728,7 +2728,7 @@ HOTSPOT;
 
         // Ignore other formats and use the configuration['exercise_score_format'] value
         // But also keep the round values settings.
-        $format = api_get_configuration_value('exercise_score_format');
+        $format = (int) api_get_setting('exercise.exercise_score_format');
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
@@ -4655,7 +4655,7 @@ EOT;
         echo $certificateBlock;
 
         // Ofaj change BT#11784
-        if (api_get_configuration_value('quiz_show_description_on_results_page') &&
+        if (('true' === api_get_setting('exercise.quiz_show_description_on_results_page')) &&
             !empty($objExercise->description)
         ) {
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
@@ -5304,7 +5304,7 @@ EOT;
         $courseId,
         $sessionId = 0
     ) {
-        if (!api_get_configuration_value('quiz_generate_certificate_ending') ||
+        if (!('true' === api_get_setting('exercise.quiz_generate_certificate_ending')) ||
             !self::isSuccessExerciseResult($totalScore, $totalWeight, $objExercise->selectPassPercentage())
         ) {
             return '';

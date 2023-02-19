@@ -194,7 +194,7 @@ class ExerciseLink extends AbstractLink
             $this->get_id().
             'exerciseId:'.$exerciseId.'student:'.$studentId.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
 
-        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
         $cacheDriver = null;
         if ($cacheAvailable) {

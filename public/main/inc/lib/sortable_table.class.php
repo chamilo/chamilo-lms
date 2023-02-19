@@ -158,7 +158,7 @@ class SortableTable extends HTML_Table
         $this->defaultItemsPerPage = $default_items_per_page;
         $this->hideItemSelector = false;
 
-        $defaultRow = api_get_configuration_value('table_default_row');
+        $defaultRow = api_get_setting('platform.table_default_row');
         if (!empty($defaultRow)) {
             $this->defaultItemsPerPage = $default_items_per_page = $defaultRow;
         }

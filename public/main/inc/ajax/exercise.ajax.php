@@ -919,7 +919,7 @@ switch ($action) {
         $objExercise->read($exerciseId);
         $objQuestion = Question::read($questionId);
         $id = '';
-        if (api_get_configuration_value('show_question_id')) {
+        if ('true' === api_get_setting('exercise.show_question_id')) {
             $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
         }
         echo $id;
@@ -982,7 +982,7 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'browser_test':
-        $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+        $quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_button_enable'));
 
         if ($quizCheckButtonEnabled) {
             if (isset($_POST['sleep'])) {

@@ -65,7 +65,7 @@ class GradebookDataGenerator
         $this->items = array_merge($allcats, $allevals, $tabLinkToDisplay);
         $this->evals_links = array_merge($allevals, $tabLinkToDisplay);
         $this->userId = api_get_user_id();
-        $this->hidePercentage = api_get_configuration_value('hide_gradebook_percentage_user_result');
+        $this->hidePercentage = ('true' === api_get_setting('gradebook.hide_gradebook_percentage_user_result'));
     }
 
     /**
@@ -118,7 +118,7 @@ class GradebookDataGenerator
         $scoreDisplay = ScoreDisplay::instance();
         $defaultData = Session::read($this->preLoadDataKey);
         $model = ExerciseLib::getCourseScoreModel();
-        $useExerciseScoreInTotal = api_get_configuration_value('gradebook_use_exercise_score_settings_in_total');
+        $useExerciseScoreInTotal = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_total'));
 
         /** @var GradebookItem $item */
         foreach ($visibleItems as $item) {

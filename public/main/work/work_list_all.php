@@ -175,7 +175,7 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
     Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
-    $blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
+    $blockAddDocuments = ('true' === api_get_setting('work.block_student_publication_add_documents'));
     if (!$blockAddDocuments) {
         $actionsLeft .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
@@ -197,7 +197,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $editLink = '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
     $editLink .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $blockEdition = api_get_configuration_value('block_student_publication_edition');
+    $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
     if ($blockEdition && !api_is_platform_admin()) {
         $editLink = '';
     }

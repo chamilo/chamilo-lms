@@ -32,7 +32,7 @@ $form = new FormValidator(
 $form->addElement('header', null, get_lang('Add learning path category'));
 
 // Title
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor(
         'name',
         get_lang('Name'),

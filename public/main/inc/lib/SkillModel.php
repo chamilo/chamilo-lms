@@ -192,7 +192,7 @@ class SkillModel extends Model
                 break;
         }
 
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
         $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
@@ -711,7 +711,7 @@ class SkillModel extends Model
      */
     public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
         $subTable = '';
         if ($vertex->getVerticesEdgeTo()->count() > 0) {
             if ($isHierarchicalTable) {
@@ -818,7 +818,7 @@ class SkillModel extends Model
             $tableRows[] = $tableRow;
         }
 
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
         $allowLevels = api_get_configuration_value('skill_levels_names');
 
         $tableResult = '<div id="skillList">';
@@ -1651,7 +1651,7 @@ class SkillModel extends Model
                 }
             }
 
-            $allow = api_get_configuration_value('allow_private_skills');
+            $allow = ('true' === api_get_setting('skill.allow_private_skills'));
             if (true === $allow) {
                 if (api_is_teacher()) {
                     return UserManager::isTeacherOfStudent(
@@ -2341,7 +2341,7 @@ class SkillModel extends Model
         string $argumentation,
         int $authorId
     ): ?SkillRelUser {
-        $showLevels = false === api_get_configuration_value('hide_skill_levels');
+        $showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
         $entityManager = Database::getManager();
 

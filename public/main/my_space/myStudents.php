@@ -35,8 +35,8 @@ $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
 $currentUrl = api_get_self().'?student='.$studentId.'&course='.$courseCode.'&sid='.$sessionId
     .'&origin='.$origin.'&details='.$details.'&cid='.$courseId;
-$allowMessages = api_get_configuration_value('private_messages_about_user');
-$workingTime = api_get_configuration_value('considered_working_time');
+$allowMessages = ('true' === api_get_setting('message.private_messages_about_user'));
+$workingTime = api_get_setting('work.considered_working_time');
 $workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
 
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
@@ -1185,7 +1185,7 @@ $content = $tpl->fetch($templateName);
 
 echo $content;
 
-$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
+$allowAll = ('true' === api_get_setting('skill.allow_teacher_access_student_skills'));
 if ($allowAll) {
     // Show all skills
     echo Tracking::displayUserSkills(
@@ -2276,7 +2276,7 @@ if ($allowMessages) {
     $form->display();
 }
 
-$allow = api_get_configuration_value('allow_user_message_tracking');
+$allow = ('true' === api_get_setting('mail.allow_user_message_tracking'));
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
     echo Display::page_subheader2(get_lang('MessageReporting'));

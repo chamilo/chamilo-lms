@@ -2981,7 +2981,7 @@ class SurveyUtil
 
         $survey_id = $survey->getIid();
         $actions = [];
-        $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
+        $hideReportingButton = ('true' === api_get_setting('survey.hide_survey_reporting_button'));
         $codePath = api_get_path(WEB_CODE_PATH);
         $params = [];
         parse_str(api_get_cidreq(), $params);
@@ -3277,7 +3277,7 @@ class SurveyUtil
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Searching
         $search_restriction = self::survey_search_restriction();
@@ -3427,7 +3427,7 @@ class SurveyUtil
     public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
         $repo = Container::getSurveyRepository();
         $qb = $repo->findAllByCourse(
             api_get_course_entity(),
@@ -3529,7 +3529,7 @@ class SurveyUtil
         $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);

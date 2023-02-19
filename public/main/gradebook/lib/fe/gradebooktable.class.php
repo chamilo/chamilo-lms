@@ -81,7 +81,7 @@ class GradebookTable extends SortableTable
         $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
         $this->datagen->exportToPdf = $this->exportToPdf;
         $this->datagen->preLoadDataKey = $this->getPreloadDataKey();
-        $this->datagen->hidePercentage = api_get_configuration_value('hide_gradebook_percentage_user_result');
+        $this->datagen->hidePercentage = ('true' === api_get_setting('gradebook.hide_gradebook_percentage_user_result'));
 
         if (!empty($userId)) {
             $this->datagen->userId = $userId;
@@ -388,10 +388,8 @@ class GradebookTable extends SortableTable
         }
 
         $model = ExerciseLib::getCourseScoreModel();
-        $userExerciseScoreInCategory = api_get_configuration_value(
-            'gradebook_use_exercise_score_settings_in_categories'
-        );
-        $useExerciseScoreInTotal = api_get_configuration_value('gradebook_use_exercise_score_settings_in_total');
+        $userExerciseScoreInCategory = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_categories'));
+        $useExerciseScoreInTotal = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_total'));
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $defaultData = Session::read($this->getPreloadDataKey());

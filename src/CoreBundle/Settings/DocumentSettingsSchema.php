@@ -58,6 +58,10 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'allow_personal_user_files' => '',
                     // ?
                     'if_file_exists_option' => 'rename',
+                    'send_notification_when_document_added' => 'false',
+                    'thematic_pdf_orientation' => 'landscape',
+                    'certificate_pdf_orientation' => 'landscape',
+                    'allow_general_certificate' => 'false',
                 ]
             )
             ->setTransformer(
@@ -147,6 +151,28 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
+            ->add('send_notification_when_document_added', YesNoType::class)
+            ->add(
+                'thematic_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add(
+                'certificate_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add('allow_general_certificate', YesNoType::class)
         ;
     }
 }

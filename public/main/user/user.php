@@ -49,7 +49,7 @@ if (!empty($sessionId)) {
 }
 
 $disableUsers = 3 === (int) $course_info['visibility'] &&
-    api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+    ('true' === api_get_setting('profile.disable_change_user_visibility_for_public_courses'));
 
 if (false === $canEdit && $disableUsers) {
     api_not_allowed(true);

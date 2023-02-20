@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
-use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -151,6 +150,30 @@ class Rest extends WebService
     public function __construct($username, $apiKey)
     {
         parent::__construct($username, $apiKey);
+    }
+
+    /**
+     * Get user's username or another field if so configured through $_configuration['webservice_return_user_field'].
+     *
+     * @param int $userId
+     */
+    private function __getConfiguredUsernameById(int $userId = null): string
+    {
+        if (empty($userId)) {
+            return '';
+        }
+        $userField = api_get_configuration_value('webservice_return_user_field');
+        if (empty($userField)) {
+            return api_get_user_info($userId)['username'];
+        }
+
+        $fieldValue = new ExtraFieldValue('user');
+        $extraInfo = $fieldValue->get_values_by_handler_and_field_variable($userId, $userField);
+        if (!empty($extraInfo)) {
+            return $extraInfo['value'];
+        } else {
+            return api_get_user_info($userId)['username'];
+        }
     }
 
     /**
@@ -487,9 +510,8 @@ class Rest extends WebService
      * Get the course descriptions.
      *
      * @param array $fields A list of extra fields to include in the answer. Searches for the field in the including course
-     * @throws Exception
      *
-     * @return array
+     * @throws Exception
      */
     public function getCourseDescriptions($fields = []): array
     {
@@ -1200,30 +1222,6 @@ class Rest extends WebService
     }
 
     /**
-     * Get user's username or another field if so configured through $_configuration['webservice_return_user_field']
-     * @param int $userId
-     * @return string
-     */
-    private function __getConfiguredUsernameById(int $userId = null): string
-    {
-        if (empty($userId)) {
-            return '';
-        }
-        $userField = api_get_configuration_value('webservice_return_user_field');
-        if (empty($userField)) {
-            return api_get_user_info($userId)['username'];
-        }
-
-        $fieldValue = new ExtraFieldValue('user');
-        $extraInfo = $fieldValue->get_values_by_handler_and_field_variable($userId, $userField);
-        if (!empty($extraInfo)) {
-            return $extraInfo['value'];
-        } else {
-            return api_get_user_info($userId)['username'];
-        }
-    }
-
-    /**
      * Get one's own (avg) progress in learning paths.
      */
     public function getCourseLpProgress(): array
@@ -1609,8 +1607,8 @@ class Rest extends WebService
     /**
      * Returns a list of courses in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
      * return all the courses.
+     *
      * @param int $campusId
-     * @return array
      */
     public function getCoursesCampus($campusId = null): array
     {
@@ -2843,9 +2841,10 @@ class Rest extends WebService
 
     /**
      * Get the list of test with last user attempt and his datetime.
+     *
      * @param array $fields A list of extra fields to include in the answer. Searches for the field in exercise, then in course
+     *
      * @throws Exception
-     * @return array
      */
     public function getTestUpdatesList($fields = []): array
     {
@@ -3177,8 +3176,8 @@ class Rest extends WebService
 
     /**
      * Returns a list of exercises in the given course. The given course is received through generic param at instanciation.
+     *
      * @param array $fields A list of extra fields to include in the answer. Searches for the field in exercise, then in course
-     * @return array
      */
     public function getCourseExercises($fields = []): array
     {
@@ -3242,6 +3241,7 @@ class Rest extends WebService
             $list[$id]['created_by'] = $createdBy;
             $list[$id]['updated_by'] = $updatedBy;
         }
+
         return $list;
     }
 

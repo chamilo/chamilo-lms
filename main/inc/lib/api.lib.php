@@ -4949,13 +4949,12 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
 }
 
 /**
- * Gets the last item property data from tool of a course id, in chronological order
+ * Gets the last item property data from tool of a course id, in chronological order.
  *
- * @param int $courseId
- * @param string $tool       tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param int    $ref        id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
- * @param int   $sessionId
- * @param int   $groupId
+ * @param string $tool      tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int    $ref       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int    $sessionId
+ * @param int    $groupId
  *
  * @return array with all fields from c_item_property, empty array if not found or false if course could not be found
  */

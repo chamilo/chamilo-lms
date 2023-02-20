@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="portfolio_comment")
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioCommentRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioCommentRepository")
  */
 class PortfolioComment
 {
@@ -29,7 +29,7 @@ class PortfolioComment
      * @var int
      *
      * Add @ to the next line if portfolio_advanced_sharing config setting is true
-     * ORM\Column(name="visibility", type="smallint", options={"default": 1})
+     * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */
     protected $visibility = 1;
 

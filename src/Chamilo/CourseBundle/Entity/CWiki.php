@@ -225,8 +225,8 @@ class CWiki
      * @var Collection<int, CWikiCategory>
      *
      * Add @ to the next lines if api_get_configuration_value('wiki_categories_enabled') is true
-     * ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy="wikiPages")
-     * ORM\JoinTable(
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy="wikiPages")
+     * @ORM\JoinTable(
      *     name="c_wiki_rel_category",
      *     joinColumns={@ORM\JoinColumn(name="wiki_id", referencedColumnName="iid", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}

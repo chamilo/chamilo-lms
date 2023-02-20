@@ -3342,7 +3342,7 @@ class PortfolioController
             'url' => $this->baseUrl,
         ];
         $interbreadcrumb[] = [
-            'name' => $item->getExcerpt(40),
+            'name' => $item->getTitle(true),
             'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
         ];
         $interbreadcrumb[] = [

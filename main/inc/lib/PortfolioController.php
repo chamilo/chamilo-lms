@@ -3131,6 +3131,7 @@ class PortfolioController
                 false
             )
         );
+        $form->addCheckBox('hidden', '', get_lang('HiddenButVisibleForMe'));
         $form->addButtonSave(get_lang('Save'));
 
         if ($form->validate()) {
@@ -3147,24 +3148,26 @@ class PortfolioController
                 ]
             );
 
-            foreach ($recipients as $userId) {
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_PORTFOLIO,
-                    $item->getId(),
-                    'visible',
-                    api_get_user_id(),
-                    [],
-                    $userId,
-                    '',
-                    '',
-                    $sessionId
-                );
-            }
-
-            if (empty($recipients)) {
+            if (empty($recipients) && empty($values['hidden'])) {
                 $item->setVisibility(Portfolio::VISIBILITY_VISIBLE);
             } else {
+                if (empty($values['hidden'])) {
+                    foreach ($recipients as $userId) {
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_PORTFOLIO,
+                            $item->getId(),
+                            'visible',
+                            api_get_user_id(),
+                            [],
+                            $userId,
+                            '',
+                            '',
+                            $sessionId
+                        );
+                    }
+                }
+
                 $item->setVisibility(Portfolio::VISIBILITY_PER_USER);
             }
 
@@ -3197,7 +3200,13 @@ class PortfolioController
             $result
         );
 
-        $form->setDefaults(['users' => $recipients]);
+        $defaults = ['users' => $recipients];
+
+        if (empty($recipients) && Portfolio::VISIBILITY_PER_USER === $item->getVisibility()) {
+            $defaults['hidden'] = true;
+        }
+
+        $form->setDefaults($defaults);
         $form->protect();
 
         $interbreadcrumb[] = [

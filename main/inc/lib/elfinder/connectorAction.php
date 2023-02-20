@@ -20,14 +20,9 @@ if (empty($driverList)) {
         //'CourseUserDriver',
         //'HomeDriver'
     ];
-    $isVisible = CourseHome::getToolVisibility(
-        TOOL_DOCUMENT,
-        api_get_course_int_id(),
-        api_get_session_id()
-    );
     $block = api_get_configuration_value('block_editor_file_manager_for_students');
     $newDriverList = [];
-    if (($block || !$isVisible) && !api_is_allowed_to_edit()) {
+    if (($block) && !api_is_allowed_to_edit()) {
         foreach ($driverList as $driver) {
             if ($driver === 'CourseDriver') {
                 continue;

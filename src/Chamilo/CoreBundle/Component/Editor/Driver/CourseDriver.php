@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
+use CourseHome;
+
 /**
  * Class CourseDriver.
  *
@@ -347,12 +349,24 @@ class CourseDriver extends Driver implements DriverInterface
             return false;
         }
 
+        $isAllowedToEdit = api_is_allowed_to_edit();
+
         $block = api_get_configuration_value('block_editor_file_manager_for_students');
-        if ($block && !api_is_allowed_to_edit()) {
+        if ($block && !$isAllowedToEdit) {
             return false;
         }
 
         if (isset($this->connector->course) && !empty($this->connector->course)) {
+            $isDocumentsToolVisible = CourseHome::getToolVisibility(
+                TOOL_DOCUMENT,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
+            if (!$isDocumentsToolVisible && !$isAllowedToEdit) {
+                return false;
+            }
+
             return true;
         }
 

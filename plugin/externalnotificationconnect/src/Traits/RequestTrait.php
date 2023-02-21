@@ -110,6 +110,48 @@ trait RequestTrait
     /**
      * @throws Exception
      */
+    protected function doVisibilityRequest(array $data)
+    {
+        try {
+            $token = $this->plugin->getAccessToken();
+        } catch (OptimisticLockException|ORMException|Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
+        $options = [
+            'headers' => [
+                'Authorization' => "Bearer $token",
+            ],
+            'json' => $data,
+        ];
+
+        $client = new Client();
+
+        try {
+            $response = $client->post(
+                $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL).'/visibility',
+                $options
+            );
+        } catch (ClientException|ServerException $e) {
+            if (!$e->hasResponse()) {
+                throw new Exception($e->getMessage());
+            }
+
+            $response = $e->getResponse();
+        }
+
+        $json = json_decode((string) $response->getBody(), true);
+
+        if (isset($json['status']) && 500 === $json['status']) {
+            throw new Exception($json['message']);
+        }
+
+        return $json;
+    }
+
+    /**
+     * @throws Exception
+     */
     protected function doDeleteRequest(int $contentId, string $contentType): array
     {
         try {

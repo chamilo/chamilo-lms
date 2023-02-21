@@ -3173,6 +3173,14 @@ class PortfolioController
 
             $em->flush();
 
+            HookPortfolioItemVisibility::create()
+                ->setEventData([
+                    'item' => $item,
+                    'recipients' => array_values($recipients),
+                ])
+                ->notifyItemVisibility()
+            ;
+
             Display::addFlash(
                 Display::return_message(get_lang('VisibilityChanged'), 'success')
             );

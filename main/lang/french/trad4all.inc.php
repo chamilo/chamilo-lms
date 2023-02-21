@@ -8934,4 +8934,5 @@ $LeaveEmptyToEnableTheContentForEveryone = "Laisser vide pour que tout le monde 
 $ExportCoursesReportsComplete = "Export des rapports de cours complet";
 $NumberOfQuestionsLimitedFromXToY = "Le nombre de questions est limité entre %d et %d.";
 $AddTestAfterEachPage = "Ajouter un test après chaque page";
+$HiddenButVisibleForMe = "Invisible pour tous sauf pour moi";
 ?>

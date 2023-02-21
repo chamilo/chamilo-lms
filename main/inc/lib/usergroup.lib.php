@@ -1545,20 +1545,7 @@ class UserGroup extends Model
 
         $list = array_map('intval', $list);
         $listToString = implode("','", $list);
-
-        $sql = 'SELECT * ';
-        $urlCondition = '';
-        if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id)";
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql = " FROM $this->table g ";
-        }
-
-        $sql .= " WHERE g.id NOT IN ('$listToString') $urlCondition ";
+        $sql = "SELECT * FROM $this->table g WHERE g.id NOT IN ('$listToString')";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

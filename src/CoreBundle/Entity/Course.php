@@ -286,7 +286,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
-    #[Groups(['course:read','session:read'])]
+    #[Groups(['course:read', 'session:read'])]
     #[Assert\NotBlank]
     protected string $courseLanguage;
 
@@ -316,7 +316,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      */
     #[ApiSubresource]
-    #[Groups(['course:read', 'course:write', 'course_rel_user:read' ,'session:read'])]
+    #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session:read'])]
     protected Collection $categories;
 
     /**

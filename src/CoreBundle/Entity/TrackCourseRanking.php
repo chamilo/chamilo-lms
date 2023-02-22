@@ -6,12 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Metadata\ApiResource;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -25,7 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @ORM\Entity
  */
-
 #[\ApiPlatform\Core\Annotation\ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_USER')",
@@ -40,10 +35,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class TrackCourseRanking
 {
     /**
+     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     */
+    #[Groups(['trackCourseRanking:read'])]
+    protected int $cId;
+
+    /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackCourseRanking")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    #[Groups(['course:read','trackCourseRanking:read'])]
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
     protected Course $course;
 
     /**
@@ -61,13 +62,13 @@ class TrackCourseRanking
     /**
      * @ORM\Column(name="accesses", type="integer", nullable=false)
      */
-    #[Groups(['course:read','trackCourseRanking:read'])]
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
     protected int $accesses;
 
     /**
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
-    #[Groups(['course:read','trackCourseRanking:read'])]
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
     protected int $totalScore;
 
     /**
@@ -86,13 +87,11 @@ class TrackCourseRanking
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[Groups(['course:read','trackCourseRanking:read'])]
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
     protected ?int $id = null;
 
     public function __construct()
     {
-        $this->id = 0;
-        $this->sessionId = 0;
         $this->urlId = 0;
         $this->accesses = 0;
         $this->totalScore = 0;
@@ -122,6 +121,17 @@ class TrackCourseRanking
         return $this->cId;
     }
 
+    public function setCourse(Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
     /**
      * Set sessionId.
      *

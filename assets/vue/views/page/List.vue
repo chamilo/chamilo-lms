@@ -4,58 +4,62 @@
   >
     <template #start>
       <Button
-        :label="$t('New page')"
+        :label="t('New page')"
         class="p-button-outlined"
         icon="mdi mdi-file-plus"
-        @click="addHandler()"
+        @click="goToAddItem"
       />
-      <!--        <Button class="btn btn--primary" @click="openNew">-->
-      <!--          <v-icon icon="mdi-folder-plus"/>-->
-      <!--          {{ $t('New category') }}-->
-      <!--        </Button>-->
+      <!--      <Button-->
+      <!--        :label="t('New category')"-->
+      <!--        class="p-button-outlined"-->
+      <!--        icon="mdi mdi-folder-plus"-->
+      <!--        @click="openNew"-->
+      <!--      />-->
 
-      <!--        <Button label="{{ $t('Delete selected') }}" class="btn btn--danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">-->
-      <!--          <v-icon icon="mdi-delete"/>-->
-      <!--          {{ $t('Delete selected') }}-->
-      <!--        </Button>-->
+      <!--      <Button-->
+      <!--        :label="t('Delete selected')"-->
+      <!--        class="p-button-outlined p-button-danger"-->
+      <!--        :disabled="!selectedItems.length > 0"-->
+      <!--        icon="mdi mdi-delete"-->
+      <!--        @click="confirmDeleteMultiple"-->
+      <!--      />-->
     </template>
   </PrimeToolbar>
 
   <DataTable
     v-if="isAdmin"
-    v-model:selection="selectedItems"
     v-model:filters="filters"
-    class="p-datatable-sm"
+    v-model:selection="selectedItems"
+    :lazy="true"
+    :loading="isLoading"
+    :paginator="true"
+    :rows="options.itemsPerPage"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    :total-records="totalItems"
     :value="items"
+    current-page-report-template="Showing {first} to {last} of {totalRecords}"
     data-key="iid"
     filter-display="menu"
-    :lazy="true"
-    :paginator="true"
-    :rows="10"
-    :total-records="totalItems"
-    :loading="isLoading"
     paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    :rows-per-page-options="[5, 10, 20, 50]"
     responsive-layout="scroll"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    striped-rows
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
     <Column
-      selection-mode="multiple"
-      style="width: 3rem"
       :exportable="false"
+      selection-mode="multiple"
     />
     <Column
-      field="title"
-      :header="$t('Title')"
+      :header="t('Title')"
       :sortable="true"
+      field="title"
     >
       <template #body="slotProps">
         <a
           v-if="slotProps.data"
           class="cursor-pointer "
-          @click="showHandler(slotProps.data)"
+          @click="onShowItem(slotProps.data)"
         >
           {{ slotProps.data.title }}
         </a>
@@ -63,30 +67,43 @@
     </Column>
 
     <Column
+      :header="t('Locale')"
       field="locale"
-      :header="$t('Locale')"
     />
     <Column
+      :header="t('Category')"
       field="category.title"
-      :header="$t('Category')"
     />
     <Column
+      :header="t('Enabled')"
       field="enabled"
-      :header="$t('Enabled')"
-    />
+    >
+      <template #body="slotProps">
+        <span
+          v-if="slotProps.data.enabled"
+          v-t="'Yes'"
+        />
+        <span
+          v-else
+          v-t="'No'"
+        />
+      </template>
+    </Column>
 
     <Column :exportable="false">
       <template #body="slotProps">
-        <div class="flex flex-row gap-2">
-          <!--          <Button class="btn btn--primary" @click="showHandler(slotProps.data)">-->
-          <!--            <v-icon icon="mdi-information"/>-->
-          <!--          </Button>-->
+        <div class="text-right space-x-2">
+          <!--          <Button-->
+          <!--            class="p-button-outlined p-button-info"-->
+          <!--            icon="mdi mdi-information"-->
+          <!--            @click="showHandler(slotProps.data)"-->
+          <!--          />-->
 
           <Button
             v-if="isAuthenticated"
-            class="p-button-primary p-button-outlined p-mr-2"
+            class="p-button-primary p-button-outlined"
             icon="mdi mdi-pencil"
-            @click="editHandler(slotProps.data)"
+            @click="goToEditItem(slotProps.data)"
           />
 
           <Button
@@ -102,9 +119,9 @@
 
   <Dialog
     v-model:visible="itemDialog"
-    :style="{width: '450px'}"
-    :header="$t('New folder')"
+    :header="t('New folder')"
     :modal="true"
+    :style="{width: '450px'}"
     class="p-fluid"
   >
     <div class="field">
@@ -137,9 +154,9 @@
         @click="hideDialog"
       />
       <Button
-        label="Save"
-        icon="pi pi-check"
         class="p-button-text"
+        icon="pi pi-check"
+        label="Save"
         @click="saveItem"
       />
     </template>
@@ -147,9 +164,9 @@
 
   <Dialog
     v-model:visible="deleteItemDialog"
+    :modal="true"
     :style="{width: '450px'}"
     header="Confirm"
-    :modal="true"
   >
     <div class="confirmation-content">
       <i
@@ -160,15 +177,15 @@
     </div>
     <template #footer>
       <Button
-        label="No"
-        icon="pi pi-times"
         class="p-button-text"
+        icon="pi pi-times"
+        label="No"
         @click="deleteItemDialog = false"
       />
       <Button
-        label="Yes"
-        icon="pi pi-check"
         class="p-button-text"
+        icon="pi pi-check"
+        label="Yes"
         @click="deleteItemButton"
       />
     </template>
@@ -176,214 +193,162 @@
 
   <Dialog
     v-model:visible="deleteMultipleDialog"
+    :modal="true"
     :style="{width: '450px'}"
     header="Confirm"
-    :modal="true"
   >
     <div class="confirmation-content">
       <i
         class="pi pi-exclamation-triangle p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
+      <span
+        v-if="item"
+        v-t="'Are you sure you want to delete the selected items?'"
+      />
     </div>
     <template #footer>
       <Button
-        label="No"
-        icon="pi pi-times"
         class="p-button-text"
+        icon="pi pi-times"
+        label="No"
         @click="deleteMultipleDialog = false"
       />
       <Button
-        label="Yes"
-        icon="pi pi-check"
         class="p-button-text"
+        icon="pi pi-check"
+        label="Yes"
         @click="deleteMultipleItems"
       />
     </template>
   </Dialog>
 </template>
 
-<script>
+<script setup>
 import PrimeToolbar from 'primevue/toolbar';
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import ListMixin from '../../mixins/ListMixin';
+import { useStore } from 'vuex';
 import { useDatatableList } from '../../composables/datatableList';
-import { inject, onMounted } from 'vue';
+import { computed, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'PageList',
-  servicePrefix: 'Page',
-  components: {
-    PrimeToolbar,
-  },
-  mixins: [ListMixin],
-  setup() {
-    const { filters, options, onUpdateOptions } = useDatatableList('Page')
+const store = useStore();
 
-    const { t } = useI18n();
+const { t } = useI18n();
 
-    const flashMessageList = inject('flashMessageList');
+const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem } = useDatatableList('Page');
 
-    onMounted(() => {
-      onUpdateOptions(options.value);
-    });
+const flashMessageList = inject('flashMessageList');
 
-    function deletedPage() {
+onMounted(() => {
+  filters.value.loadNode = 0;
+
+  onUpdateOptions(options.value);
+});
+
+const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
+const isAdmin = computed(() => store.getters['security/isAdmin']);
+
+const items = computed(() => store.state['page'].recents);
+
+// const deletedPage = computed(() => store.state['page'].deleted);
+const isLoading = computed(() => store.state['page'].isLoading)
+const totalItems = computed(() => store.state['page'].totalItems)
+
+const selectedItems = ref([]);
+const itemDialog = ref(false);
+const deleteItemDialog = ref(false);
+const deleteMultipleDialog = ref(false);
+const item = ref({});
+const submitted = ref(false);
+
+const onPage = (event) => {
+  options.value.itemsPerPage = event.rows;
+  options.value.page = event.page + 1;
+  options.value.sortBy = event.sortField;
+  options.value.sortDesc = event.sortOrder === -1;
+
+  onUpdateOptions(options.value);
+};
+
+const sortingChanged = (event) => {
+  options.value.sortBy = event.sortField
+  options.value.sortDesc = event.sortOrder === -1
+
+  onUpdateOptions(options.value);
+};
+
+/*const openNew = () => {
+  item.value = {};
+  submitted.value = false;
+  itemDialog.value = true;
+};*/
+
+const saveItem = () => {
+  submitted.value = true;
+
+  if (item.value.title.trim()) {
+    if (!item.value.id) {
+      // item.value.creator
+      //createCategory.value(item.value);
       flashMessageList.value.push({
         severity: 'success',
-        detail: t('Deleted')
+        detail: t('Saved')
       });
-
-      onUpdateOptions(options.value);
     }
 
-    return {
-      onUpdateOptions,
-      deletedPage,
-    };
-  },
-  data() {
-    return {
-      sortBy: 'title',
-      sortDesc: false,
-      selected: [],
-      isBusy: false,
-      options: [],
-      selectedItems: [],
-      // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
-      deleteMultipleDialog: false,
-      item: {},
-      submitted: false,
-    };
-  },
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'isCurrentTeacher': 'security/isCurrentTeacher',
-    }),
-
-    ...mapGetters('page', {
-      items: 'list',
-    }),
-
-    //...getters
-
-    // From ListMixin
-    ...mapFields('page', {
-      deletedPage: 'deleted',
-      error: 'error',
-      isLoading: 'isLoading',
-      resetList: 'resetList',
-      totalItems: 'totalItems',
-      view: 'view'
-    }),
-  },
-  methods: {
-    // prime
-    onPage(event) {
-      this.options.itemsPerPage = event.rows;
-      this.options.page = event.page + 1;
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-
-      this.onUpdateOptions(this.options);
-    },
-    sortingChanged(event) {
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-      this.onUpdateOptions(this.options);
-      // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
-      // ctx.sortDesc ==> true if sorting descending, false otherwise
-    },
-    openNew() {
-      this.item = {};
-      this.submitted = false;
-      this.itemDialog = true;
-    },
-    hideDialog() {
-      this.itemDialog = false;
-      this.submitted = false;
-    },
-    saveItem() {
-      this.submitted = true;
-
-      if (this.item.title.trim()) {
-        if (this.item.id) {
-        } else {
-          // this.item.creator
-          this.createCategory(this.item);
-          this.showMessage('Saved');
-        }
-        this.itemDialog = false;
-        this.item = {};
-      }
-    },
-    editItem(item) {
-      this.item = {...item};
-      this.itemDialog = true;
-    },
-    confirmDeleteItem(item) {
-      this.item = item;
-      this.deleteItemDialog = true;
-    },
-    confirmDeleteMultiple() {
-      this.deleteMultipleDialog = true;
-    },
-    deleteMultipleItems() {
-      console.log('deleteMultipleItems');
-      console.log(this.selectedItems);
-      this.deleteMultipleAction(this.selectedItems);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-      this.deleteMultipleDialog = false;
-      this.selectedItems = null;
-      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
-    },
-    deleteItemButton() {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
-    },
-    onRowSelected(items) {
-      this.selected = items
-    },
-    selectAllRows() {
-      this.$refs.selectableTable.selectAllRows()
-    },
-    clearSelected() {
-      this.$refs.selectableTable.clearSelected()
-    },
-    async deleteSelected() {
-      console.log('deleteSelected');
-      this.deleteMultipleAction(this.selected);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-    },
-    //...actions,
-    // From ListMixin
-    ...mapActions('page', {
-      getPage: 'fetchAll',
-      createWithFormData: 'createWithFormData',
-      deleteItem: 'del',
-      deleteMultipleAction: 'delMultiple'
-    }),
-    /*...mapActions('pagecategory', {
-      getCategories: 'fetchAll',
-      createCategory: 'create',
-      deleteItem: 'del',
-      deleteMultipleAction: 'delMultiple'
-    }),*/
+    itemDialog.value = false;
+    item.value = {};
   }
+};
+
+const deleteMultipleItems = () => {
+  console.log('deleteMultipleItems'. selectedItems.value);
+
+  store.dispatch('page/delMultiple', selectedItems.value).then(() => {
+    deleteMultipleDialog.value = false;
+    selectedItems.value = [];
+
+    flashMessageList.value.push({
+      severity: 'success',
+      detail: t('Pages deleted')
+    });
+  });
+
+  onUpdateOptions(options.value);
+};
+
+const hideDialog = () => {
+  itemDialog.value = false;
+  submitted.value = false;
+};
+
+/*const editItem = (item) => {
+  item.value = { ...item };
+  itemDialog.value = true;
+};*/
+
+const confirmDeleteItem = (item) => {
+  item.value = item;
+  deleteItemDialog.value = true;
+};
+
+/*const confirmDeleteMultiple = () => {
+  deleteMultipleDialog.value = true;
+};*/
+
+const deleteItemButton = () => {
+  console.log('deleteItem');
+
+  store.dispatch('page/del', item.value).then(() => {
+    deleteItemDialog.value = false;
+    item.value = {};
+
+    flashMessageList.value.push({
+      severity: 'success',
+      detail: t('Deleted')
+    });
+  });
+
+  onUpdateOptions(options.value);
 };
 </script>

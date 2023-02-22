@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,13 +51,15 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['page:read', 'timestampable_created:read', 'timestampable_updated:read'],
     ],
 )]
-
 #[ApiFilter(SearchFilter::class, properties: [
     'locale' => 'exact',
     'url' => 'exact',
     'enabled' => 'exact',
     'category' => 'exact',
     'category.title' => 'partial',
+])]
+#[ApiFilter(OrderFilter::class, properties: [
+    'title',
 ])]
 class Page
 {

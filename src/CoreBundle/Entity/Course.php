@@ -515,9 +515,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * @return TrackCourseRanking|null
-     */
     public function getTrackCourseRanking(): TrackCourseRanking|null
     {
         return $this->trackCourseRanking;

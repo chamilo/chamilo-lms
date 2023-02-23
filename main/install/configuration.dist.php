@@ -2377,6 +2377,17 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // 3. Add an "@" before "ORM\Entity" in the "CWikiCategory" class definition (in src/Chamilo/CourseBundle/Entity/CWikiCategory.php)
 //$_configuration['wiki_categories_enabled'] = false;
 
+// Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php
+/*$_configuration['session_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'client' => 'client',
+        'region' => 'region',
+    ]
+];*/
+
+// Configuration setting to make some extra field required in session creation form on main/session/session_add.php.
+// $_configuration['session_creation_form_set_extra_fields_mandatory'] = ['fields' => ['client','region']];
+
 // Ask REST webservices (v2.php) to return another identifier for fields related to user ID.
 // This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps
 // the external system match the user data return with some external data that is know to Chamilo. For example, if

@@ -75,7 +75,7 @@ if (isset($_POST['formSent'])) {
     }
 
     $result = Database::query($sql);
-
+    $extraVariables = [];
     if (Database::num_rows($result)) {
         $sessionListToExport = [];
         if (in_array($file_type, ['csv', 'xls'])) {
@@ -90,6 +90,13 @@ if (isset($_POST['formSent'])) {
                 'Visibility',
                 'SessionCategory',
             ];
+
+            $extraField = new ExtraField('session');
+            $allExtraFields = $extraField->get_all();
+            foreach ($allExtraFields as $extra) {
+                $exportHeaders[] = $extra['display_text'];
+                $extraVariables[] = $extra['variable'];
+            }
 
             if ($includeUsers) {
                 $exportHeaders[] = 'Users';
@@ -119,6 +126,7 @@ if (isset($_POST['formSent'])) {
             fputs($fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sessions>\n");
         }
 
+        $extraFieldValueSession = new ExtraFieldValue('session');
         while ($row = Database::fetch_array($result)) {
             $row['name'] = str_replace(';', ',', $row['name']);
             $row['username'] = str_replace(';', ',', $row['username']);
@@ -273,6 +281,16 @@ if (isset($_POST['formSent'])) {
                     $row['visibility'],
                     $row['session_category'],
                 ];
+
+                if (!empty($extraVariables)) {
+                    foreach ($extraVariables as $variable) {
+                        $extraData = $extraFieldValueSession->get_values_by_handler_and_field_variable(
+                            $row['id'],
+                            $variable
+                        );
+                        $exportContent[] = !empty($extraData['value']) ? $extraData['value'] : '';
+                    }
+                }
 
                 if ($includeUsers) {
                     $exportContent[] = $users;

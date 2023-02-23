@@ -8190,8 +8190,29 @@ class SessionManager
         );
 
         // Extra fields
+        $setExtraFieldsMandatory = api_get_configuration_value('session_creation_form_set_extra_fields_mandatory');
+        $fieldsRequired = [];
+        if (false !== $setExtraFieldsMandatory && !empty($setExtraFieldsMandatory['fields'])) {
+            $fieldsRequired = $setExtraFieldsMandatory['fields'];
+        }
         $extra_field = new ExtraFieldModel('session');
-        $extra = $extra_field->addElements($form, $sessionId);
+        $extra = $extra_field->addElements(
+            $form,
+            $sessionId,
+            [],
+            false,
+            false,
+            [],
+            [],
+            [],
+            false,
+            false,
+            [],
+            [],
+            false,
+            [],
+            $fieldsRequired
+        );
 
         $form->addElement('html', '</div>');
 

@@ -48,7 +48,7 @@ function getSessionCreatorId($sessionId):int
             default_user_id
         FROM $tblTrackDefault
         WHERE default_value_type = 'session_id' AND
-              default_value = '$sessionId'
+              default_value = '$sessionId' AND
               default_event_type = '".LOG_SESSION_CREATE."'";
     $rs = Database::query($sql);
     $creatorId = Database::result($rs, 0, 0);

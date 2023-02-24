@@ -772,19 +772,13 @@ class learnpath
         if (empty($publicated_on)) {
             $publicated_on = null;
         } else {
-            $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
+            $publicated_on = api_get_utc_datetime($publicated_on, false, true);
         }
 
         if (empty($expired_on)) {
             $expired_on = null;
         } else {
             $expired_on = api_get_utc_datetime($expired_on, false, true);
-        }
-
-        if (empty($publicated_on)) {
-            $publicated_on = null;
-        } else {
-            $publicated_on = api_get_utc_datetime($publicated_on, false, true);
         }
 
         $check_name = "SELECT * FROM $tbl_lp

@@ -2756,64 +2756,57 @@ class learnpathItem
         // in case it's a SCORM, we should get:
         if ($this->type == 'sco' || $this->type == 'au') {
             $status = $this->get_status(true);
-            if ($this->prevent_reinit == 1 &&
-                $status != $this->possible_status[0] && // not attempted
-                $status != $this->possible_status[1]    //incomplete
-            ) {
+            if ($debug) {
+                error_log(
+                    'learnpathItem::save() - SCORM save request received',
+                    0
+                );
+            }
+            // Get all new settings from the URL
+            if ($from_outside) {
                 if ($debug) {
                     error_log(
-                        'learnpathItem::save() - save reinit blocked by setting',
+                        'learnpathItem::save() - Getting item data from outside',
                         0
                     );
                 }
-                // Do nothing because the status has already been set. Don't allow it to change.
-                // TODO: Check there isn't a special circumstance where this should be saved.
-            } else {
-                if ($debug) {
-                    error_log(
-                        'learnpathItem::save() - SCORM save request received',
-                        0
-                    );
-                }
-                // Get all new settings from the URL
-                if ($from_outside) {
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Getting item data from outside',
-                            0
-                        );
-                    }
-                    foreach ($_GET as $param => $value) {
-                        switch ($param) {
-                            case 'score':
-                                $this->set_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'max':
-                                $this->set_max_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting view_max_score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'min':
-                                $this->min_score = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting min_score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'lesson_status':
-                                if (!empty($value)) {
+                foreach ($_GET as $param => $value) {
+                    switch ($param) {
+                        case 'score':
+                            $this->set_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'max':
+                            $this->set_max_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting view_max_score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'min':
+                            $this->min_score = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting min_score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'lesson_status':
+                            if (!empty($value)) {
+                                if ($this->prevent_reinit == 1 &&
+                                    $status != $this->possible_status[0] && // not attempted
+                                    $status != $this->possible_status[1]    // incomplete
+                                ) {
+                                    // do nothing: status was already completed or similar and we don't want to allow the SCO to reinitialize
+                                } else {
                                     $this->set_status($value);
                                     if ($debug) {
                                         error_log(
@@ -2822,61 +2815,60 @@ class learnpathItem
                                         );
                                     }
                                 }
-                                break;
-                            case 'time':
-                                $this->set_time($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting time to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'suspend_data':
-                                $this->current_data = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting suspend_data to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'lesson_location':
-                                $this->set_lesson_location($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting lesson_location to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'core_exit':
-                                $this->set_core_exit($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting core_exit to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'interactions':
-                                break;
-                            case 'objectives':
-                                break;
-                            default:
-                                // Ignore.
-                                break;
-                        }
+                            }
+                            break;
+                        case 'time':
+                            $this->set_time($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting time to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'suspend_data':
+                            $this->current_data = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting suspend_data to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'lesson_location':
+                            $this->set_lesson_location($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting lesson_location to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'core_exit':
+                            $this->set_core_exit($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting core_exit to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'interactions':
+                        case 'objectives':
+                            break;
+                        default:
+                            // Ignore.
+                            break;
                     }
-                } else {
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Using inside item status',
-                            0
-                        );
-                    }
-                    // Do nothing, just let the local attributes be used.
                 }
+            } else {
+                if ($debug) {
+                    error_log(
+                        'learnpathItem::save() - Using inside item status',
+                        0
+                    );
+                }
+                // Do nothing, just let the local attributes be used.
             }
         } else {
             // If not SCO, such messages should not be expected.
@@ -3702,26 +3694,14 @@ class learnpathItem
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
 
-        $my_case_completed = [
-            'completed',
-            'passed',
-            'browsed',
-            'failed',
-        ];
-
         $oldTotalTime = $row_verified['total_time'];
         $this->oldTotalTime = $oldTotalTime;
+        $inserted = false;
 
-        $save = true;
-        if (isset($row_verified) && isset($row_verified['status'])) {
-            if (in_array($row_verified['status'], $my_case_completed)) {
-                $save = false;
-            }
-        }
-
-        if ((($save === false && $this->type === 'sco') ||
-           ($this->type === 'sco' && ($credit === 'no-credit' || $mode === 'review' || $mode === 'browse'))) &&
-           ($this->seriousgame_mode != 1 && $this->type === 'sco')
+        if (
+            $this->type === 'sco' &&
+            ($credit === 'no-credit' || $mode === 'review' || $mode === 'browse') &&
+            $this->seriousgame_mode != 1
         ) {
             if ($debug) {
                 error_log(
@@ -3735,7 +3715,6 @@ class learnpathItem
             }
         } else {
             // Check the row exists.
-            $inserted = false;
             // This a special case for multiple attempts and Chamilo exercises.
             if ($this->type === 'quiz' &&
                 $this->get_prevent_reinit() == 0 &&
@@ -3863,7 +3842,7 @@ class learnpathItem
                             error_log('get_type_static: '.$my_type_lp);
                         }
 
-                        // This is a array containing values finished
+                        // This is an array containing values equivalent to a finished state
                         $case_completed = [
                             'completed',
                             'passed',

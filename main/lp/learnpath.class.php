@@ -5070,6 +5070,7 @@ class learnpath
                         WHERE
                             c_id = $courseId AND
                             lp_id = ".$this->get_id()." AND
+                            progress < $progress AND
                             user_id = ".$userId." ".$sessionCondition;
             // Ignore errors as some tables might not have the progress field just yet.
             Database::query($sql);

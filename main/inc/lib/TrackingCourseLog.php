@@ -369,6 +369,7 @@ class TrackingCourseLog
 
         // the select field with the additional user profile fields, this is where we select the field of which we want to see
         // the information the users have entered or selected.
+        $return .= '<div class="form-group">';
         $return .= '<select class="chzn-select" name="additional_profile_field[]" multiple>';
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
         $extraFieldsToShow = 0;
@@ -379,7 +380,7 @@ class TrackingCourseLog
             }
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
             if ($field[6] == 1 && $field[8] == 1) {
-                if (isset($_GET['additional_profile_field']) && $field[0] == $_GET['additional_profile_field']) {
+                if (isset($_GET['additional_profile_field']) && in_array($field[0], $_GET['additional_profile_field'])) {
                     $selected = 'selected="selected"';
                 } else {
                     $selected = '';
@@ -389,6 +390,7 @@ class TrackingCourseLog
             }
         }
         $return .= '</select>';
+        $return .= '</div>';
 
         // the form elements for the $_GET parameters (because the form is passed through GET
         foreach ($_GET as $key => $value) {
@@ -399,7 +401,10 @@ class TrackingCourseLog
             }
         }
         // the submit button
-        $return .= '<button class="save" type="submit">'.get_lang('AddAdditionalProfileField').'</button>';
+        $return .= '<div class="form-group">';
+        $return .= '<button class="save btn btn-primary" type="submit">'
+            .get_lang('AddAdditionalProfileField').'</button>';
+        $return .= '</div>';
         $return .= '</form>';
 
         return $extraFieldsToShow > 0 ? $return : '';

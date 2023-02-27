@@ -9001,4 +9001,5 @@ $ExportCoursesReportsComplete = "Export courses reports complete";
 $NumberOfQuestionsLimitedFromXToY = "The number of questions is limited to between %d and %d.";
 $AddTestAfterEachPage = "Add a test after each page";
 $HiddenButVisibleForMe = "Hidden but visible for me";
+$EndOfLearningPath = "Conclusion";
 ?>

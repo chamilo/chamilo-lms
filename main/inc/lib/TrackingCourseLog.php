@@ -359,14 +359,16 @@ class TrackingCourseLog
         ];
     }
 
-    public static function displayAdditionalProfileFields(array $exclude = []): string
+    public static function displayAdditionalProfileFields(array $exclude = [], $formAction = null): string
     {
+        $formAction = $formAction ?: 'courseLog.php';
+
         // getting all the extra profile fields that are defined by the platform administrator
         $extraFields = UserManager::get_extra_fields(0, 50);
 
         // creating the form
-        $return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';
-
+        $return = '<form action="'.$formAction.'" method="get" name="additional_profile_field_form"
+            id="additional_profile_field_form">';
         // the select field with the additional user profile fields, this is where we select the field of which we want to see
         // the information the users have entered or selected.
         $return .= '<div class="form-group">';

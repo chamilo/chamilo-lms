@@ -33,7 +33,7 @@ switch ($apiName) {
         $addTests = ('true' === $_REQUEST['add_tests']);
         $nQ = ($addTests ? (int) $_REQUEST['nro_questions'] : 0);
 
-        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number';
+        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number. Do not include a conclusion chapter.';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
 
@@ -123,8 +123,8 @@ switch ($apiName) {
                         $lpItemsIds[$order]['item_id'] = $lpItemId;
                         $lpItemsIds[$order]['item_type'] = 'document';
                         if ($addTests && !empty($lpItemId)) {
-                            $promptQuiz = 'Generate %d "multiple choice" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
-                            $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title']);
+                            $promptQuiz = 'Generate %d "multiple choice" questions in Aiken format in the %s language about "%s" in the context of "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
+                            $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title'], $topic);
                             $resultQuizText = $plugin->openAiGetCompletionText($promptQuiz, 'quiz');
                             if (!empty($resultQuizText)) {
                                 $request = [];

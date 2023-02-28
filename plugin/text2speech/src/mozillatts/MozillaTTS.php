@@ -22,11 +22,11 @@ class MozillaTTS implements IProvider
 
     private function request(string $data): string
     {
-        $filename =  uniqid().'.wav';
+        $filename = uniqid().'.wav';
         $filePath = $this->filePath.$filename;
         file_put_contents($filePath, file_get_contents(
             $this->url.'?api_key='.urlencode($this->apiKey).
-            '&text='.str_replace('%0A','+',urlencode($data))
+            '&text='.str_replace('%0A','+', urlencode($data))
         ));
 
         return $filename;

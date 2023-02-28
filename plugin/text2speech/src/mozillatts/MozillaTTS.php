@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../IProvider.php';
+require_once __DIR__.'/../IProvider.php';
 
 class MozillaTTS implements IProvider
 {
@@ -15,18 +15,18 @@ class MozillaTTS implements IProvider
         $this->filePath = $filePath;
     }
 
-    public function convert(string $text) : string
+    public function convert(string $text): string
     {
         return $this->request($text);
     }
 
-    private function request(string $data) : string
+    private function request(string $data): string
     {
-        $filename =  uniqid() . '.wav';
-        $filePath = $this->filePath . $filename;
+        $filename =  uniqid().'.wav';
+        $filePath = $this->filePath.$filename;
         file_put_contents($filePath, file_get_contents(
-            $this->url . '?api_key=' . urlencode($this->apiKey) .
-            '&text=' . str_replace('%0A','+',urlencode($data))
+            $this->url.'?api_key='.urlencode($this->apiKey).
+            '&text='.str_replace('%0A','+',urlencode($data))
         ));
 
         return $filename;

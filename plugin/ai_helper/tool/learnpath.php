@@ -9,8 +9,12 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/../AiHelperPlugin.php';
+require_once __DIR__.'/../../text2speech/Text2SpeechPlugin.php';
 require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
 require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_import.inc.php';
+
+$text2speechPlugin = Text2SpeechPlugin::create();
+$isTextToSpeechEnabled = $text2speechPlugin->get_name('tool_enable') && $text2speechPlugin->get_name('tool_lp_enable');
 
 $plugin = AiHelperPlugin::create();
 
@@ -35,6 +39,7 @@ switch ($apiName) {
 
         $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number. Do not include a conclusion chapter.';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
+
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
 
         if (isset($resultText['error']) && true === $resultText['error']) {
@@ -65,10 +70,19 @@ switch ($apiName) {
                     $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title);
                     $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
                     $lpItemContent = (!empty($resultContentText) ? trim($resultContentText) : '');
+                    $audioControl = '';
+                    if ($isTextToSpeechEnabled && !empty($lpItemContent)) {
+                        $filePath = $text2speechPlugin->convert(strip_tags($lpItemContent));
+                        $audioControl = '<audio controls>' .
+                            '<source src="' . $filePath . '" type="audio/ogg">' .
+                            'Your browser does not support the audio element.' .
+                            '</audio>';
+                    }
+
                     if (false !== stripos($lpItemContent, '</head>')) {
-                        $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $lpItemContent);
+                        $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $audioControl . $lpItemContent);
                     } else {
-                        $lpItemContent = '<html><head><title>'.trim($title).'</title>'.$style.'</head><body>'.$lpItemContent.'</body></html>';
+                        $lpItemContent = '<html><head><title>'.trim($title).'</title>'.$style.'</head><body>'. $audioControl . $lpItemContent.'</body></html>';
                     }
                     $lpItems[$position]['content'] = $lpItemContent;
                     $position++;

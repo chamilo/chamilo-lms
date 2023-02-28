@@ -9,7 +9,7 @@
 class Text2SpeechPlugin extends Plugin
 {
     public const MOZILLATTS_API = 'mozillatts';
-    public const PATH_TO_SAVE_FILES = __DIR__ . '/files/';
+    public const PATH_TO_SAVE_FILES = __DIR__.'/files/';
 
     protected function __construct()
     {
@@ -55,7 +55,7 @@ class Text2SpeechPlugin extends Plugin
         $path = '/plugin/text2speech/files/';
         switch ($this->get('api_name')) {
             case self::MOZILLATTS_API:
-                require_once __DIR__ . '/src/mozillatts/MozillaTTS.php';
+                require_once __DIR__.'/src/mozillatts/MozillaTTS.php';
 
                 $mozillaTTS = new MozillaTTS($this->get('url'), $this->get('api_key'), self::PATH_TO_SAVE_FILES);
                 $path .= $mozillaTTS->convert($text);

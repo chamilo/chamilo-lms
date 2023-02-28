@@ -73,16 +73,16 @@ switch ($apiName) {
                     $audioControl = '';
                     if ($isTextToSpeechEnabled && !empty($lpItemContent)) {
                         $filePath = $text2speechPlugin->convert(strip_tags($lpItemContent));
-                        $audioControl = '<audio controls>' .
-                            '<source src="' . $filePath . '" type="audio/ogg">' .
-                            'Your browser does not support the audio element.' .
+                        $audioControl = '<audio controls>'.
+                            '<source src="'.$filePath.'" type="audio/ogg">'.
+                            'Your browser does not support the audio element.'.
                             '</audio>';
                     }
 
                     if (false !== stripos($lpItemContent, '</head>')) {
-                        $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $audioControl . $lpItemContent);
+                        $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $audioControl.$lpItemContent);
                     } else {
-                        $lpItemContent = '<html><head><title>'.trim($title).'</title>'.$style.'</head><body>'. $audioControl . $lpItemContent.'</body></html>';
+                        $lpItemContent = '<html><head><title>'.trim($title).'</title>'.$style.'</head><body>'.$audioControl.$lpItemContent.'</body></html>';
                     }
                     $lpItems[$position]['content'] = $lpItemContent;
                     $position++;

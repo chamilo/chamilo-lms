@@ -14,7 +14,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.ph
 require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_import.inc.php';
 
 $text2speechPlugin = Text2SpeechPlugin::create();
-$isTextToSpeechEnabled = $text2speechPlugin->get_name('tool_enable') && $text2speechPlugin->get_name('tool_lp_enable');
+$isTextToSpeechEnabled = $text2speechPlugin->get('tool_enable') && $text2speechPlugin->get('tool_lp_enable');
 
 $plugin = AiHelperPlugin::create();
 

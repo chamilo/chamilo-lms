@@ -9,7 +9,7 @@
 class Text2SpeechPlugin extends Plugin
 {
     public const MOZILLATTS_API = 'mozillatts';
-    public const PATH_TO_SAVE_FILES = __DIR__.'/files/';
+    public const PATH_TO_SAVE_FILES = __DIR__.'/../../app/upload/plugins/text2speech/';
 
     protected function __construct()
     {
@@ -52,7 +52,7 @@ class Text2SpeechPlugin extends Plugin
      */
     public function convert(string $text)
     {
-        $path = '/plugin/text2speech/files/';
+        $path = '/app/upload/plugins/text2speech/';
         switch ($this->get('api_name')) {
             case self::MOZILLATTS_API:
                 require_once __DIR__.'/src/mozillatts/MozillaTTS.php';
@@ -101,7 +101,8 @@ class Text2SpeechPlugin extends Plugin
     public function uninstall()
     {
         if (file_exists(self::PATH_TO_SAVE_FILES)) {
-            unlink(self::PATH_TO_SAVE_FILES);
+            array_map('unlink', glob(self::PATH_TO_SAVE_FILES. '/*.*'));
+            rmdir(self::PATH_TO_SAVE_FILES);
         }
     }
 }

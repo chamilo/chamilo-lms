@@ -24,10 +24,17 @@ class MozillaTTS implements IProvider
     {
         $filename = uniqid().'.wav';
         $filePath = $this->filePath.$filename;
-        file_put_contents($filePath, file_get_contents(
-            $this->url.'?api_key='.urlencode($this->apiKey).
-            '&text='.str_replace('%0A', '+', urlencode($data))
-        ));
+        $resource = fopen($filePath, 'w');
+
+        $client = new GuzzleHttp\Client();
+        $client->get($this->url.'?api_key='.urlencode($this->apiKey).
+            '&text='.str_replace('%0A', '+', urlencode($data)), [
+            'headers' => [
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'audio/wav'
+            ],
+            'sink' => $resource,
+        ]);
 
         return $filename;
     }

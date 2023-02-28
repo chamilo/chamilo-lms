@@ -2734,7 +2734,7 @@ class Tracking
      *
      * @return string|bool Date format long without day or false if there are no connections
      */
-    public static function get_first_connection_date($student_id)
+    public static function get_first_connection_date($student_id, $dateFormat = DATE_FORMAT_SHORT)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date
@@ -2748,7 +2748,7 @@ class Tracking
             if ($first_login_date = Database::result($rs, 0, 0)) {
                 return api_convert_and_format_date(
                     $first_login_date,
-                    DATE_FORMAT_SHORT
+                    $dateFormat
                 );
             }
         }
@@ -2769,7 +2769,8 @@ class Tracking
     public static function get_last_connection_date(
         $student_id,
         $warning_message = false,
-        $return_timestamp = false
+        $return_timestamp = false,
+        $dateFormat = DATE_FORMAT_SHORT
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date
@@ -2786,7 +2787,7 @@ class Tracking
                     return api_strtotime($last_login_date, 'UTC');
                 } else {
                     if (!$warning_message) {
-                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        return api_format_date($last_login_date, $dateFormat);
                     } else {
                         $timestamp = api_strtotime($last_login_date, 'UTC');
                         $currentTimestamp = time();
@@ -2794,9 +2795,9 @@ class Tracking
                         //If the last connection is > than 7 days, the text is red
                         //345600 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
-                            return '<span style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</span>';
+                            return '<span style="color: #F00;">'.api_format_date($last_login_date, $dateFormat).'</span>';
                         } else {
-                            return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            return api_format_date($last_login_date, $dateFormat);
                         }
                     }
                 }
@@ -3121,6 +3122,19 @@ class Tracking
         }
 
         return $nb_courses;
+    }
+
+    public static function countSessionsPerStudent(int $userId): int
+    {
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = 'SELECT DISTINCT id
+            FROM '.$tblSessionUser.'
+            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
+
+        $rs = Database::query($sql);
+
+        return Database::num_rows($rs);
     }
 
     /**
@@ -8839,5 +8853,9 @@ class Tracking
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    private static function countSubscribedCoursesPerUser()
+    {
     }
 }

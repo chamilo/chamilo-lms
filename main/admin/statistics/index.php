@@ -355,6 +355,7 @@ $tools = [
         'report=users_active' => get_lang('UserStats'),
         'report=users_online' => get_lang('UsersOnline'),
         'report=invoicing' => get_lang('InvoicingByAccessUrl'),
+        'report=duplicated_users' => get_lang('DuplicatedUsers'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -1848,6 +1849,19 @@ switch ($report) {
             );
         }
 
+        break;
+    case 'duplicated_users':
+        $interbreadcrumb[] = [
+            'name' => $tool_name,
+            'url' => 'index.php',
+        ];
+
+        $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
+
+        $content .= Display::page_subheader2(get_lang('DuplicatedUsers'));
+        $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname'));
+
+        $content .= Statistics::returnDuplicatedUsersTable();
         break;
 }
 

@@ -58,7 +58,7 @@ class Statistics
                     FROM $courseTable AS c
                     WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE c.category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
             }
         }
 

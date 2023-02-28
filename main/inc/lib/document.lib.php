@@ -3490,8 +3490,8 @@ class DocumentManager
 
         // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
         $lp_visibility_condition = null;
-        if ($lp_id) {
-            if ($showInvisibleFiles) {
+        if ($lp_id || $showOnlyFolders) {
+            if ($showInvisibleFiles || $showOnlyFolders) {
                 $lp_visibility_condition .= ' OR last.visibility = 0';
             }
         }
@@ -3599,6 +3599,14 @@ class DocumentManager
                     $session_id,
                     api_get_user_id()
                 );
+
+                if ($showOnlyFolders) {
+                    $isFolder = ('folder' === $resource['filetype']);
+                    $visibility = (int) $resource['visibility'];
+                    if (!$isFolder && 0 == $visibility) {
+                        continue;
+                    }
+                }
 
                 if ($showInvisibleFiles === false) {
                     if (!$is_visible) {

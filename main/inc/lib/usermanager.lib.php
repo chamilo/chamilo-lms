@@ -7826,6 +7826,92 @@ SQL;
     }
 
     /**
+     * Build the active-column of the table to lock or unlock a certain user
+     * lock = the user can no longer use this account.
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
+     * @return string Some HTML-code with the lock/unlock button
+     */
+    public static function getActiveFilterForTable(string $active, string $params, array $row): string
+    {
+        if ('1' == $active) {
+            $action = 'Lock';
+            $image = 'accept';
+        } elseif ('-1' == $active) {
+            $action = 'edit';
+            $image = 'warning';
+        } elseif ('0' == $active) {
+            $action = 'Unlock';
+            $image = 'error';
+        }
+
+        if ('edit' === $action) {
+            return Display::return_icon(
+                $image.'.png',
+                get_lang('AccountExpired'),
+                [],
+                ICON_SIZE_TINY
+            );
+        }
+
+        if ($row['0'] != api_get_user_id()) {
+            // you cannot lock yourself out otherwise you could disable all the
+            // accounts including your own => everybody is locked out and nobody
+            // can change it anymore.
+            return Display::return_icon(
+                $image.'.png',
+                get_lang(ucfirst($action)),
+                ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0'], 'style' => 'cursor: pointer;'],
+                ICON_SIZE_TINY
+            );
+        }
+
+        return '';
+    }
+
+    public static function getScriptFunctionForActiveFilter(): string
+    {
+        return 'function active_user(element_div) {
+            id_image = $(element_div).attr("id");
+            image_clicked = $(element_div).attr("src");
+            image_clicked_info = image_clicked.split("/");
+            image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+            var status = 1;
+            if (image_real_clicked == "accept.png") {
+                status = 0;
+            }
+            user_id = id_image.split("_");
+            ident = "#img_"+user_id[1];
+            if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
+                 $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(myObject) {
+                        $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); //candy eye stuff
+                    },
+                    type: "GET",
+                    url: _p.web_ajax + "user_manager.ajax.php?a=active_user",
+                    data: "user_id=" + user_id[1] + "&status=" + status,
+                    success: function(data) {
+                        if (data == 1) {
+                            $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
+                            $(ident).attr("title","'.get_lang('Lock').'");
+                        }
+                        if (data == 0) {
+                            $(ident).attr("src","'.Display::returnIconPath('error.png').'");
+                            $(ident).attr("title","'.get_lang('Unlock').'");
+                        }
+                        if (data == -1) {
+                            $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
+                            $(ident).attr("title","'.get_lang('ActionNotAllowed').'");
+                        }
+                    }
+                });
+            }
+        }';
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()

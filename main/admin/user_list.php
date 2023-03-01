@@ -100,42 +100,7 @@ function load_session_list(div_session, my_user_id) {
     });
 }
 
-function active_user(element_div) {
-    id_image=$(element_div).attr("id");
-    image_clicked=$(element_div).attr("src");
-    image_clicked_info = image_clicked.split("/");
-    image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-    var status = 1;
-    if (image_real_clicked == "accept.png") {
-        status = 0;
-    }
-    user_id=id_image.split("_");
-    ident="#img_"+user_id[1];
-    if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
-         $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {
-                $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
-            type: "GET",
-            url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
-            data: "user_id="+user_id[1]+"&status="+status,
-            success: function(data) {
-                if (data == 1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
-                    $(ident).attr("title","'.get_lang('Lock').'");
-                }
-                if (data == 0) {
-                    $(ident).attr("src","'.Display::returnIconPath('error.png').'");
-                    $(ident).attr("title","'.get_lang('Unlock').'");
-                }
-                if (data == -1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
-                    $(ident).attr("title","'.get_lang('ActionNotAllowed').'");
-                }
-            }
-        });
-    }
-}
+'.UserManager::getScriptFunctionForActiveFilter().'
 
 function clear_course_list(div_course) {
     $("div#"+div_course).html("&nbsp;");
@@ -821,57 +786,6 @@ function modify_filter($user_id, $url_params, $row)
 }
 
 /**
- * Build the active-column of the table to lock or unlock a certain user
- * lock = the user can no longer use this account.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int    $active the current state of the account
- * @param string $params
- * @param array  $row
- *
- * @return string Some HTML-code with the lock/unlock button
- */
-function active_filter($active, $params, $row)
-{
-    $_user = api_get_user_info();
-
-    if ('1' == $active) {
-        $action = 'Lock';
-        $image = 'accept';
-    } elseif ('-1' == $active) {
-        $action = 'edit';
-        $image = 'warning';
-    } elseif ('0' == $active) {
-        $action = 'Unlock';
-        $image = 'error';
-    }
-
-    $result = '';
-
-    if ('edit' === $action) {
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang('AccountExpired'),
-            [],
-            16
-        );
-    } elseif ($row['0'] != $_user['user_id']) {
-        // you cannot lock yourself out otherwise you could disable all the
-        // accounts including your own => everybody is locked out and nobody
-        // can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang(ucfirst($action)),
-            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']],
-            16
-        );
-    }
-
-    return $result;
-}
-
-/**
  * Instead of displaying the integer of the status, we give a translation for the status.
  *
  * @param int $status
@@ -1167,7 +1081,7 @@ $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
-$table->set_column_filter(8, 'active_filter');
+$table->set_column_filter(8, [UserManager::class, 'getActiveFilterForTable']);
 $table->set_column_filter(11, 'modify_filter');
 
 // Hide email column if login is email, to avoid column with same data

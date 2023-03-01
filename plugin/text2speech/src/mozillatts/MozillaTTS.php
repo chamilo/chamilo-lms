@@ -31,7 +31,7 @@ class MozillaTTS implements IProvider
             '&text='.str_replace('%0A', '+', urlencode($data)), [
             'headers' => [
                 'Cache-Control' => 'no-cache',
-                'Content-Type' => 'audio/wav'
+                'Content-Type' => 'audio/wav',
             ],
             'sink' => $resource,
         ]);

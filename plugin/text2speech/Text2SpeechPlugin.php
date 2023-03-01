@@ -101,7 +101,7 @@ class Text2SpeechPlugin extends Plugin
     public function uninstall()
     {
         if (file_exists(self::PATH_TO_SAVE_FILES)) {
-            array_map('unlink', glob(self::PATH_TO_SAVE_FILES. '/*.*'));
+            array_map('unlink', glob(self::PATH_TO_SAVE_FILES.'/*.*'));
             rmdir(self::PATH_TO_SAVE_FILES);
         }
     }

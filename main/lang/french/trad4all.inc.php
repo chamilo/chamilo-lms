@@ -8936,4 +8936,7 @@ $NumberOfQuestionsLimitedFromXToY = "Le nombre de questions est limité entre %d
 $AddTestAfterEachPage = "Ajouter un test après chaque page";
 $HiddenButVisibleForMe = "Invisible pour tous sauf pour moi";
 $EndOfLearningPath = "Conclusion";
+$UnableToDeleteTempFile = "Impossible d'accéder au fichier temporaire";
+$DuplicatedUsers = "Utilisateurs en double";
+$ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Ce rapport ne liste que les utilisateurs qui ont les mêmes nom et prénom.";
 ?>

@@ -9002,4 +9002,7 @@ $NumberOfQuestionsLimitedFromXToY = "The number of questions is limited to betwe
 $AddTestAfterEachPage = "Add a test after each page";
 $HiddenButVisibleForMe = "Hidden but visible for me";
 $EndOfLearningPath = "Conclusion";
+$UnableToDeleteTempFile = "Unable to access temp file";
+$DuplicatedUsers = "Duplicated users";
+$ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "This report only lists users that have the same firstname and lastname.";
 ?>

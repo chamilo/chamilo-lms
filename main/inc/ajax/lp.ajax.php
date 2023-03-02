@@ -60,7 +60,7 @@ switch ($action) {
             null,
             $url,
             true,
-            false,
+            true,
             $folderId,
             false
         );

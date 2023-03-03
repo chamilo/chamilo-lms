@@ -2973,7 +2973,7 @@ function api_get_session_visibility(
  * the user is not a student.
  *
  * @param int $sessionId
- * @param int $statusId  User status id - if 5 (student), will return empty
+ * @param int $statusId  User status id - if 5 (student) or in student view, will return empty
  *
  * @return string Session icon
  */
@@ -2981,7 +2981,8 @@ function api_get_session_image($sessionId, $statusId)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if ($statusId != STUDENT) {
+    $studentView = !empty($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview';
+    if ($statusId != STUDENT && !$studentView) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(

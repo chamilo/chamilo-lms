@@ -15,9 +15,9 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = api_is_student_view_active();
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $lp_item_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-$type = isset($_GET['type']) ? $_GET['type'] : null;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$submit = $_POST['submit_button'] ?? null;
+$type = $_GET['type'] ?? null;
+$action = $_GET['action'] ?? null;
 $courseInfo = api_get_course_info();
 
 if (!$is_allowed_to_edit || $isStudentView) {
@@ -48,7 +48,7 @@ $interbreadcrumb[] = [
     'name' => $lp->getNameNoTags(),
 ];
 
-$audioPreview = DocumentManager::generateAudioJavascript([]);
+$audioPreview = DocumentManager::generateAudioJavascript();
 $htmlHeadXtra[] = "<script>
     $(function() {
         $audioPreview
@@ -99,7 +99,7 @@ $currentDir = '/audio';
 $audioFolderId = DocumentManager::get_document_id($courseInfo, $currentDir);
 
 if (isset($_REQUEST['folder_id'])) {
-    $folderIdFromRequest = isset($_REQUEST['folder_id']) ? (int) $_REQUEST['folder_id'] : 0;
+    $folderIdFromRequest = (int) $_REQUEST['folder_id'];
     $documentData = DocumentManager::get_document_data_by_id($folderIdFromRequest, $courseInfo['code']);
     if ($documentData) {
         $audioFolderId = $folderIdFromRequest;
@@ -111,6 +111,7 @@ if (isset($_REQUEST['folder_id'])) {
 }
 
 $file = null;
+$urlFile = '';
 if (!empty($lp_item->audio)) {
     $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio;
     $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio.'?'.api_get_cidreq();
@@ -132,10 +133,14 @@ $page .= '</div>';
 
 $recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
 $page .= '<div id="doc_form" class="col-md-8">';
+
+$webLibraryPath = api_get_path(WEB_LIBRARY_PATH);
+$webCodePath = api_get_path(WEB_CODE_PATH);
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.$webLibraryPath.'wami-recorder/recorder.js"></script>';
+$htmlHeadXtra[] = '<script src="'.$webLibraryPath.'wami-recorder/gui.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.$webLibraryPath.'swfobject/swfobject.js"></script>';
 
 $tpl = new Template(get_lang('Add'));
 $tpl->assign('unique_file_id', api_get_unique_id());
@@ -161,7 +166,14 @@ if (!empty($file)) {
         Display::getMediaPlayer($file, ['url' => $urlFile]).
         "</div>";
     $form->addElement('label', get_lang('Listen'), $audioPlayer);
-    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?lp_id='.$lp->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $url = $webCodePath.'lp/lp_controller.php?&'
+        .http_build_query([
+            'lp_id' => $lp->get_id(),
+            'action' => 'add_audio',
+            'id' => $lp_item_id,
+            'delete_file' => 1,
+        ])
+        .'&'.api_get_cidreq();
     $form->addElement(
         'label',
         null,
@@ -184,7 +196,7 @@ $documentTree = DocumentManager::get_document_preview(
     api_get_session_id(),
     false,
     '',
-    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
+    $webCodePath.'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
     true,
     $audioFolderId,
@@ -229,7 +241,7 @@ $page .= '<ul class="lp_resource">';
 $page .= '<li class="doc_folder" style="margin-left: 36px;">'.get_lang('Audio').'</li>';
 $page .= '<li class="doc_folder">';
 $page .= '<ul class="lp_resource">'.$documentTree.'</ul>';
-$page .= '</div>';
+$page .= '</li>';
 $page .= '</ul>';
 $page .= '</div>';
 $page .= '</div>';

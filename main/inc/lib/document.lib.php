@@ -3650,8 +3650,9 @@ class DocumentManager
 
         $return .= $writeResult;
         $lpAjaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
+        $extraAjaxParams = ($showOnlyFolders ? '&showOnlyFolders='.(int) $showOnlyFolders : '');
         if ($lp_id === false) {
-            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'].$extraAjaxParams;
             $return .= "<script>
             $(function() {
                 $('.close_div').click(function() {
@@ -3665,7 +3666,7 @@ class DocumentManager
             </script>";
         } else {
             // For LPs
-            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.(int) $lp_id.'&'.api_get_cidreq();
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.(int) $lp_id.'&'.api_get_cidreq().$extraAjaxParams;
         }
 
         if (!empty($overwrite_url)) {

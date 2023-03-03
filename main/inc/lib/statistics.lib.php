@@ -1787,6 +1787,8 @@ class Statistics
 
     public static function returnDuplicatedUsersTable(): string
     {
+        $formFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+
         $additionalProfileField = $_GET['additional_profile_field'] ?? [];
 
         $additionalExtraFieldsInfo = [];
@@ -1853,7 +1855,7 @@ class Statistics
         );
         $table->setHideColumn(0);
 
-        return TrackingCourseLog::displayAdditionalProfileFields([], api_get_self())
+        return $formFields
             .PHP_EOL
             .$table->return_table();
     }

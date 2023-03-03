@@ -2306,7 +2306,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Hide IP in exercises reports
 // $_configuration['exercise_hide_ip'] = false;
 
-// Enable sign in attendance sheet for users
+// Enable signature in attendance sheet for users
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
 // ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;

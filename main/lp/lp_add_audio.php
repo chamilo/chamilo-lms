@@ -208,6 +208,96 @@ $documentTree = DocumentManager::get_document_preview(
 $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
+
+$text2speechPlugin = Text2SpeechPlugin::create();
+
+if ($text2speechPlugin->isEnabled(true)) {
+    $page .= '<div class="clearfix"></div>
+        <h3 class="page-header">
+            <small>'.get_lang('Or').'</small>
+            '.$text2speechPlugin->get_title().'
+        </h3>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <p>
+                    <button id="btn-tts" class="btn btn-default" type="button">
+                        <span id="btn-tts__spinner" class="fa fa-spinner fa-spin" aria-hidden="true" style="display: none;"></span>
+                        '.$text2speechPlugin->get_lang('GenerateAudioFromContent').'
+                    </button>
+                </p>
+                <p id="tts-player" id="tts-player" style="display: none;">
+                    <audio controls class="skip"></audio>
+                </p>
+                <p id="tts-warning" class="alert alert-warning" style="display: none;">
+                    '.get_lang('ErrorOccurred').'
+                </p>
+                <p>
+                    <button id="btn-save-tts" class="btn btn-primary" type="button" disabled>
+                        <span id="btn-save-tts__spinner" class="fa fa-spinner fa-spin" aria-hidden="true" style="display: none;"></span>
+                        '.get_lang('SaveRecordedAudio').'
+                    </button>
+                </p>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                var btnTts = $(\'#btn-tts\');
+                var btnTssSpiner = $(\'#btn-tts__spinner\');
+                var ttsPlayer = $(\'#tts-player\');
+                var ttsPlayerAudio = $(\'#tts-player audio\');
+                var ttsWarning =  $(\'#tts-warning\');
+                
+                var btnSaveTts = $(\'#btn-save-tts\');
+                var btnSaveTtsSpiner = $(\'#btn-save-tts__spinner\');
+                
+                var audioSrc = \'\';
+                
+                btnTts.on(\'click\', function (e) {
+                    e.preventDefault();
+                
+                    ttsWarning.hide();
+                    btnTts.prop(\'disabled\', true);
+                    btnTssSpiner.show();
+                
+                    $
+                        .ajax(_p.web_plugin + \'text2speech/convert.php?item_id='.$lp_item_id.'\')
+                        .done(function (response) {
+                            audioSrc = response;
+                            ttsPlayer.show();
+                            ttsPlayerAudio.prop(\'src\', audioSrc).mediaelementplayer();
+                            btnSaveTts.prop(\'disabled\', false);
+                        })
+                        .fail(function () {
+                            ttsPlayer.hide();
+                            ttsWarning.show();
+                            btnSaveTts.prop(\'disabled\', true);
+                        })
+                        .always(function () {
+                            btnTssSpiner.hide();
+                            btnTts.prop(\'disabled\', false);
+                        });
+                });
+    
+                btnSaveTts.on(\'click\', function () {
+                    btnSaveTts.prop(\'disabled\', true);
+                    btnSaveTtsSpiner.show();
+
+                    $.ajax({
+                        type: \'post\',
+                        url: \''.api_get_self().'?action=add_audio&tts=1&id='.$lp_item_id.'&'.api_get_cidreq().'&lp_id='.$learnpath_id.'\',
+                        data: {
+                            file: audioSrc,
+                        },
+                        success: function () {
+                            window.location.reload();
+                        },
+                    });
+                });
+            });
+        </script>
+    ';
+}
+
 $page .= '<h3 class="page-header">
             <small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
 
@@ -243,6 +333,7 @@ $page .= '<li class="doc_folder">';
 $page .= '<ul class="lp_resource">'.$documentTree.'</ul>';
 $page .= '</li>';
 $page .= '</ul>';
+
 $page .= '</div>';
 $page .= '</div>';
 

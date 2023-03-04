@@ -16,7 +16,7 @@ class Text2SpeechPlugin extends Plugin
         $version = '0.1';
         $author = 'Francis Gonzales';
 
-        $message = 'Description';
+        $message = '<p>'.$this->get_lang('plugin_comment').'</p>';
 
         $settings = [
             $message => 'html',

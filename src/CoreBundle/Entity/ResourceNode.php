@@ -100,6 +100,13 @@ class ResourceNode
     protected ResourceType $resourceType;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceFormat", inversedBy="resourceNode", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="resource_format_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    #[Assert\NotNull]
+    protected ResourceFormat $resourceFormat;
+
+    /**
      * @var Collection<int, ResourceLink>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
@@ -434,6 +441,18 @@ class ResourceNode
     public function setResourceType(ResourceType $resourceType): self
     {
         $this->resourceType = $resourceType;
+
+        return $this;
+    }
+
+    public function getResourceFormat(): ResourceFormat
+    {
+        return $this->resourceFormat;
+    }
+
+    public function setResourceFormat(ResourceFormat $resourceFormat): self
+    {
+        $this->resourceFormat = $resourceFormat;
 
         return $this;
     }

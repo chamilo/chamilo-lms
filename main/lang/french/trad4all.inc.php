@@ -8939,4 +8939,5 @@ $EndOfLearningPath = "Conclusion";
 $UnableToDeleteTempFile = "Impossible d'accéder au fichier temporaire";
 $DuplicatedUsers = "Utilisateurs en double";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Ce rapport ne liste que les utilisateurs qui ont les mêmes nom et prénom.";
+$RemoveOldRelationshipsHelp = "En cochant cette case, vous donnez votre approbation pour que le système élimine toutes les relations qui ne sont *pas* dans votre fichier et utilise votre fichier comme une liste exclusive des relations (ce qui n'existe pas dans le fichier est éliminé du système).";
 ?>

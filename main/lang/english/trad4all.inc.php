@@ -9005,4 +9005,5 @@ $EndOfLearningPath = "Conclusion";
 $UnableToDeleteTempFile = "Unable to access temp file";
 $DuplicatedUsers = "Duplicated users";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "This report only lists users that have the same firstname and lastname.";
+$RemoveOldRelationshipsHelp = "By checking this box, you authorize the platform to remove all relationships that are *not* contained in the file you are importing. It will then use your file as the exclusive relationships and will remove all current relationships that are not in the file.";
 ?>

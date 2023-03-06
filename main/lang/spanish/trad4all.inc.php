@@ -9030,4 +9030,5 @@ $EndOfLearningPath = "Conclusión";
 $UnableToDeleteTempFile = "No se puede acceder al archivo temporal";
 $DuplicatedUsers = "Usuarios duplicados";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Este reporte solo lista usuarios que tienen el mismo nombre y apellido.";
+$RemoveOldRelationshipsHelp = "Marcando esta casilla, dará aprobación al sistema para eliminar todas las relaciones que *no* estén en el archivo. Usa el archivo como la lista exclusiva de relaciones (lo que no existe en el archivo es eliminado del sistema en general).";
 ?>

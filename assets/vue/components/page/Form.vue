@@ -1,16 +1,16 @@
 <template>
-  <form action="#">
+  <div>
     <div class="field">
       <div class="p-float-label">
-        <PrimeInputText
+        <InputText
           id="item_title"
           v-model="v$.item.title.$model"
           :class="{ 'p-invalid': v$.item.title.$invalid }"
         />
         <label
           v-t="'Title'"
-          for="item_title"
           :class="{ 'p-error': v$.item.title.$invalid }"
+          for="item_title"
         />
       </div>
       <small
@@ -21,8 +21,8 @@
     </div>
 
     <div class="field-checkbox">
-      <PrimeCheckbox
-        v-model="item.enabled"
+      <Checkbox
+        v-model="v$.item.enabled.$model"
         :binary="true"
         input-id="enabled"
       />
@@ -34,39 +34,50 @@
 
     <div class="field">
       <div class="p-float-label">
-        <PrimeDropdown
-          v-model="item.category"
+        <Dropdown
+          v-model="v$.item.category.$model"
           :options="categories"
           input-id="category"
-          option-value="@id"
           option-label="title"
+          option-value="@id"
+          :class="{ 'p-invalid': v$.item.category.$invalid }"
         />
         <label
           v-t="'Category'"
           for="category"
         />
       </div>
+      <small
+        v-if="v$.item.category.$invalid || v$.item.category.$pending.$response"
+        v-t="v$.item.category.required.$message"
+        class="p-error"
+      />
     </div>
 
     <div class="field">
       <div class="p-float-label">
-        <PrimeDropdown
-          v-model="item.locale"
+        <Dropdown
+          v-model="v$.item.locale.$model"
           :options="locales"
           input-id="locale"
+          :class="{ 'p-invalid': v$.item.locale.$invalid }"
         />
         <label
           v-t="'Locale'"
           for="locale"
         />
       </div>
+      <small
+        v-if="v$.item.locale.$invalid || v$.item.locale.$pending.$response"
+        v-t="v$.item.locale.required.$message"
+        class="p-error"
+      />
     </div>
 
     <div class="field">
       <TinyEditor
         id="item_content"
-        v-model="item.content"
-        required
+        v-model="v$.item.content.$model"
         :init="{
           skin_url: '/build/libs/tinymce/skins/ui/oxide',
           content_css: '/build/libs/tinymce/skins/content/default/content.css',
@@ -84,114 +95,106 @@
           toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' + extraPlugins,
         }
         "
+        required
       />
     </div>
-  </form>
+
+    <div class="text-right">
+      <Button
+        :disabled="v$.item.$invalid"
+        :label="t('Save')"
+        icon="mdi mdi-content-save"
+        type="button"
+        @click="btnSaveOnClick"
+      />
+    </div>
+  </div>
 </template>
 
-<script>
-import PrimeInputText from 'primevue/inputtext';
-import PrimeCheckbox from 'primevue/checkbox';
-import PrimeDropdown from 'primevue/dropdown';
-import has from 'lodash/has';
+<script setup>
+import { computed, ref, defineProps, defineEmits, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import InputText from 'primevue/inputtext';
+import Checkbox from 'primevue/checkbox';
+import Dropdown from 'primevue/dropdown';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import { ref } from "vue";
-import {mapGetters, useStore} from "vuex";
 import isEmpty from 'lodash/isEmpty';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'PageForm',
-  servicePrefix: 'pages',
-  components: {
-    PrimeInputText,
-    PrimeCheckbox,
-    PrimeDropdown,
-  },
-  props: {
-    values: {
-      type: Object,
-      required: true
-    },
-    errors: {
-      type: Object,
-      default: () => {}
-    },
-    initialValues: {
-      type: Object,
-      default: () => {}
-    },
-  },
-  setup () {
-    let locales = ref([]);
-    const store = useStore();
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => {},
+  }
+});
 
-    let categories = ref([]);
-    locales.value = window.languages.map(locale => locale.isocode);
-    let allCategories = store.dispatch('pagecategory/findAll');
+const emit = defineEmits([
+  'update:modelValue',
+  'submit',
+]);
 
-    allCategories.then((response) => {
-      categories.value = response.map(function(data) {
-        return data;
-      })
+const store = useStore();
+const { t } = useI18n();
+
+let locales = ref([]);
+
+let categories = ref([]);
+locales.value = window.languages.map(locale => locale.isocode);
+
+store.dispatch('pagecategory/findAll')
+  .then((response) => {
+    categories.value = response.map(data => data);
+  });
+
+const currentUser = computed(() => store.getters['security/getUser']);
+
+onMounted(() => {
+  if (!props.modelValue) {
+    return;
+  }
+
+  emit('update:modelValue', {
+    ...props.modelValue,
+    creator: currentUser.value['@id'],
+    url: '/api/access_urls/' + window.access_url_id,
+  });
+
+  if (!isEmpty(props.modelValue.category) && !isEmpty(props.modelValue.category['@id'])) {
+    emit('update:modelValue', {
+      ...props.modelValue,
+      category: props.modelValue.category['@id']
     });
+  }
+});
 
-    return { v$: useVuelidate(), locales, categories, }
-  },
-  data() {
-    return {
-      title: null,
-      content: null,
-      locale: null,
-      enabled: true,
-    };
-  },
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'currentUser': 'security/getUser',
-    }),
-    item() {
-      if (this.values) {
-        this.values.creator = this.currentUser['@id'];
-        this.values.url = '/api/access_urls/' + window.access_url_id;
-        if (!isEmpty(this.values.category) && !isEmpty(this.values.category['@id'])) {
-          this.values.category = this.values.category['@id'];
-        }
-      }
-
-      return this.initialValues || this.values;
+const validations = {
+  item: {
+    title: {
+      required,
     },
-    titleErrors() {
-      const errors = [];
-      if (!this.v$.item.title.$dirty) return errors;
-      has(this.violations, 'title') && errors.push(this.violations.title);
-
-      if (this.v$.item.title.required) {
-        return this.$t('Field is required')
-      }
-
-      return errors;
+    enabled: {
+      required,
     },
-    violations() {
-      return this.errors || {};
-    }
-  },
-  validations: {
-    item: {
-      title: {
-        required,
-      },
-      enabled: {
-        required,
-      },
-      content: {
-        required,
-      },
-      locale: {
-        required,
-      },
-    }
+    content: {
+      required,
+    },
+    locale: {
+      required,
+    },
+    category: {
+      required,
+    },
   }
 };
+
+const v$ = useVuelidate(validations, { item: props.modelValue });
+
+function btnSaveOnClick () {
+  const item = { ...props.modelValue, ...v$.value.item.$model };
+
+  emit('update:modelValue', item)
+
+  emit('submit', item)
+}
 </script>

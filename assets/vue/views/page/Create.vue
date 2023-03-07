@@ -1,54 +1,48 @@
 <template>
   <div>
-    <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
-    />
     <PageForm
-      ref="createForm"
-      :values="item"
-      :errors="violations"
+      v-model="item"
+      @submit="onSubmitForm"
     />
     <Loading :visible="isLoading" />
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-import { createHelpers } from 'vuex-map-fields';
+<script setup>
+import { computed, inject, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+
 import PageForm from '../../components/page/Form.vue';
 import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import CreateMixin from '../../mixins/CreateMixin';
 
-const servicePrefix = 'Page';
+import { useDatatableCreate } from '../../composables/datatableCreate';
 
-const { mapFields } = createHelpers({
-  getterType: 'page/getField',
-  mutationType: 'page/updateField'
+const store = useStore();
+
+const { onSubmitForm, onCreated } = useDatatableCreate('Page');
+
+const flashMessageList = inject('flashMessageList');
+
+const error = computed(() => store.state['page'].error);
+const isLoading = computed(() => store.state['page'].isLoading);
+const created = computed(() => store.state['page'].created);
+
+const item = ref({
+  enabled: true,
 });
 
-export default {
-  name: 'PageCreate',
-  servicePrefix,
-  components: {
-    Loading,
-    Toolbar,
-    PageForm
-  },
-  mixins: [CreateMixin],
-  data() {
-    return {
-      item: {
-        enabled: true
-      }
-    };
-  },
-  computed: {
-    ...mapFields(['error', 'isLoading', 'created', 'violations'])
-  },
-  methods: {
-    ...mapActions('page', ['create', 'reset'])
+watch(created, (newCreated) => {
+  if (!newCreated) {
+    return;
   }
-};
+
+  onCreated(item);
+});
+
+watch(error, (newError) => {
+  flashMessageList.value.push({
+    severity: 'error',
+    detail: newError,
+  });
+});
 </script>

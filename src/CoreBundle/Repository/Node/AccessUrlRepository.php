@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class AccessUrlRepository extends ResourceRepository
@@ -28,6 +30,10 @@ class AccessUrlRepository extends ResourceRepository
 
         $q = $qb->getQuery();
 
-        return (int) $q->execute();
+        try {
+            return (int) $q->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException $e) {
+            return 0;
+        }
     }
 }

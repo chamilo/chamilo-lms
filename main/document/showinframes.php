@@ -255,6 +255,12 @@ if ($originIsLearnpath) {
     Display::display_header();
 }
 
+if (!$is_allowed_to_edit && !$is_visible) {
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    Display::display_footer();
+    exit;
+}
+
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 if ($playerSupported) {

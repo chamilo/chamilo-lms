@@ -15,7 +15,7 @@
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-//exit; //remove this line to execute from the command line
+exit; //remove this line to execute from the command line
 
 use ChamiloSession as Session;
 

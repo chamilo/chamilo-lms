@@ -1,8 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script removes duplicated tests and questions created
- * through something gone wrong in the course backup/copy process.
+ * This script removes duplicated documents.
  * It identifies duplicate documents by title, path and size, and
  * makes sure no usage is associated with the duplicated document, and
  * that the duplicated document is not used in a learning path.

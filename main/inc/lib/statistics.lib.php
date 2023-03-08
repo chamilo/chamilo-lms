@@ -1857,6 +1857,16 @@ class Statistics
             [UserManager::class, 'getActiveFilterForTable']
         );
         $table->setHideColumn(0);
+        $table->actionButtons = [
+            'export_excel' => [
+                'label' => get_lang('ExportAsXLS'),
+                'icon' => Display::return_icon('export_excel.png'),
+            ],
+            'export_csv' => [
+                'label' => get_lang('ExportAsCSV'),
+                'icon' => Display::return_icon('export_csv.png'),
+            ],
+        ];
 
         return $table;
     }

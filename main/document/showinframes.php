@@ -99,11 +99,6 @@ $is_visible = DocumentManager::check_visibility_tree(
     false
 );
 
-if (!$is_allowed_to_edit && !$is_visible) {
-    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
-    api_not_allowed(false, '&nbsp;');
-}
-
 $pathinfo = pathinfo($header_file);
 $playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm', 'wav'];
 $playerSupported = false;

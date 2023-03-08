@@ -7847,24 +7847,27 @@ SQL;
         }
 
         if ('edit' === $action) {
+            $langAccountExpired = get_lang('AccountExpired');
+
             return Display::return_icon(
                 $image.'.png',
-                get_lang('AccountExpired'),
+                    $langAccountExpired,
                 [],
                 ICON_SIZE_TINY
-            );
+            ).'<span class="sr-only" aria-hidden="true">'.$langAccountExpired.'</span>';
         }
 
         if ($row['0'] != api_get_user_id()) {
+            $langAction = get_lang(ucfirst($action));
             // you cannot lock yourself out otherwise you could disable all the
             // accounts including your own => everybody is locked out and nobody
             // can change it anymore.
             return Display::return_icon(
                 $image.'.png',
-                get_lang(ucfirst($action)),
+                $langAction,
                 ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0'], 'style' => 'cursor: pointer;'],
                 ICON_SIZE_TINY
-            );
+                ).'<span class="sr-only" aria-hidden="true">'.$langAction.'</span>';
         }
 
         return '';

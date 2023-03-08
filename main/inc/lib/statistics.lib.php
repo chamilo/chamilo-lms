@@ -1836,7 +1836,22 @@ class Statistics
             $table->set_header($column++, $fieldInfo['display_text']);
         }
 
-        $table->set_header($column, get_lang('Active'));
+        $table->set_header($column++, get_lang('Active'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                if ('1' == $value) {
+                    return get_lang('Active');
+                }
+
+                if ('0' == $value) {
+                    return get_lang('Inactive');
+                }
+
+                return get_lang('ActionNotAllowed');
+            }
+        );
+        $table->set_header($column, get_lang('Actions'));
         $table->set_column_filter(
             $column,
             [UserManager::class, 'getActiveFilterForTable']
@@ -1939,7 +1954,8 @@ class Statistics
                     $studentInfo[] = $extraValue['value'] ?? null;
                 }
 
-                $studentInfo[] = $rowUser['active'];
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
 
                 $usersInfo[] = $studentInfo;
             }

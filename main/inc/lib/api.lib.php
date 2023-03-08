@@ -749,7 +749,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * a slash too, so an additional check about presence of leading system server base is implemented. For example, the function is
  * able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  * 3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
- * no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
+ * no mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  * It has not been identified as needed yet.
  * 4. Also, resolving the meta-symbols "." and ".." within paths has not been implemented, it is to be identified as needed.
  *

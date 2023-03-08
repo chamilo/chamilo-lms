@@ -1856,12 +1856,18 @@ switch ($report) {
             'url' => 'index.php',
         ];
 
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+        $table = Statistics::returnDuplicatedUsersTable($additionalExtraFieldsInfo);
+
         $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
 
         $content .= Display::page_subheader2(get_lang('DuplicatedUsers'));
         $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname'));
 
-        $content .= Statistics::returnDuplicatedUsersTable();
+        $content .= $frmFields;
+        $content .= $table->return_table();
         break;
 }
 

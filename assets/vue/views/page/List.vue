@@ -38,7 +38,7 @@
     :total-records="totalItems"
     :value="items"
     current-page-report-template="Showing {first} to {last} of {totalRecords}"
-    data-key="iid"
+    data-key="@id"
     filter-display="menu"
     paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
     responsive-layout="scroll"
@@ -177,16 +177,16 @@
     </div>
     <template #footer>
       <Button
-        class="p-button-text"
+        :label="t('No')"
+        class="p-button-outlined p-button-plain"
         icon="pi pi-times"
-        label="No"
         @click="deleteItemDialog = false"
       />
       <Button
-        class="p-button-text"
+        :label="t('Yes')"
+        class="p-button-secondary"
         icon="pi pi-check"
-        label="Yes"
-        @click="deleteItemButton"
+        @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
   </Dialog>
@@ -235,7 +235,7 @@ const store = useStore();
 
 const { t } = useI18n();
 
-const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem } = useDatatableList('Page');
+const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem, deleteItem } = useDatatableList('Page');
 
 const flashMessageList = inject('flashMessageList');
 
@@ -327,8 +327,8 @@ const hideDialog = () => {
   itemDialog.value = true;
 };*/
 
-const confirmDeleteItem = (item) => {
-  item.value = item;
+const confirmDeleteItem = (itemToDelete) => {
+  item.value = itemToDelete;
   deleteItemDialog.value = true;
 };
 
@@ -336,19 +336,11 @@ const confirmDeleteItem = (item) => {
   deleteMultipleDialog.value = true;
 };*/
 
-const deleteItemButton = () => {
-  console.log('deleteItem');
+const btnCofirmSingleDeleteOnClick = () => {
+  deleteItem(item);
 
-  store.dispatch('page/del', item.value).then(() => {
-    deleteItemDialog.value = false;
-    item.value = {};
+  item.value = {};
 
-    flashMessageList.value.push({
-      severity: 'success',
-      detail: t('Deleted')
-    });
-  });
-
-  onUpdateOptions(options.value);
+  deleteItemDialog.value = false;
 };
 </script>

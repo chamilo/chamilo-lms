@@ -1,9 +1,10 @@
 import { useStore } from 'vuex'
-import { ref } from 'vue'
+import { inject, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { isEmpty } from 'lodash'
 
 import { useCidReq } from './cidReq'
+import { useI18n } from 'vue-i18n';
 
 export function useDatatableList (servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -11,8 +12,11 @@ export function useDatatableList (servicePrefix) {
   const store = useStore()
   const router = useRouter()
   const route = useRoute()
+  const { t } = useI18n()
 
   const { cid, sid, gid } = useCidReq()
+
+  const flashMessageList = inject('flashMessageList')
 
   const filters = ref({})
 
@@ -107,6 +111,17 @@ export function useDatatableList (servicePrefix) {
     });
   }
 
+  async function deleteItem (item) {
+    await store.dispatch(`${moduleName}/del`, item.value)
+
+    onUpdateOptions(options.value);
+
+    flashMessageList.value.push({
+      severity: 'success',
+      detail: t('Deleted')
+    })
+  }
+
   return {
     filters,
     expandedFilter,
@@ -115,5 +130,6 @@ export function useDatatableList (servicePrefix) {
     goToAddItem,
     onShowItem,
     goToEditItem,
+    deleteItem,
   }
 }

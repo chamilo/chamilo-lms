@@ -199,16 +199,16 @@
     </div>
     <template #footer>
       <Button
+        :label="t('No')"
         class="p-button-outlined p-button-plain"
         icon="pi pi-times"
-        label="No"
         @click="deleteItemDialog = false"
       />
       <Button
+        :label="t('Yes')"
         class="p-button-secondary"
         icon="pi pi-check"
-        label="Yes"
-        @click="deleteItemButton"
+        @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
   </Dialog>
@@ -263,7 +263,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
-const { filters, options, onUpdateOptions } = useDatatableList('Documents')
+const { filters, options, onUpdateOptions, deleteItem } = useDatatableList('Documents')
 
 const flashMessageList = inject('flashMessageList')
 
@@ -369,8 +369,8 @@ function confirmDeleteMultiple () {
   deleteMultipleDialog.value = true
 }
 
-function confirmDeleteItem (newItem) {
-  item.value = newItem
+function confirmDeleteItem (itemToDelete) {
+  item.value = itemToDelete
   deleteItemDialog.value = true
 }
 
@@ -385,14 +385,12 @@ function deleteMultipleItems () {
 //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
 }
 
-function deleteItemButton () {
-  store.dispatch('documents/del', item.value)
-      .then(() => {
-        deleteItemDialog.value = false
-        item.value = {}
-      })
-  //this.items = this.items.filter(val => val.iid !== this.item.iid);
-  onUpdateOptions(options.value)
+function btnCofirmSingleDeleteOnClick () {
+  deleteItem(item)
+
+  item.value = {}
+
+  deleteItemDialog.value = false
 }
 
 function onPage (event) {

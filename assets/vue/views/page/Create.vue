@@ -2,7 +2,7 @@
   <div>
     <PageForm
       v-model="item"
-      @submit="onSubmitForm"
+      @submit="createItem"
     />
     <Loading :visible="isLoading" />
   </div>
@@ -19,7 +19,7 @@ import { useDatatableCreate } from '../../composables/datatableCreate';
 
 const store = useStore();
 
-const { onSubmitForm, onCreated } = useDatatableCreate('Page');
+const { createItem, onCreated } = useDatatableCreate('Page');
 
 const flashMessageList = inject('flashMessageList');
 

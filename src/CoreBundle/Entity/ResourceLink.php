@@ -74,6 +74,11 @@ class ResourceLink
     protected ?User $user = null;
 
     /**
+     * @ORM\Column(name="display_order", type="integer", nullable=true)
+     */
+    protected int $displayOrder;
+
+    /**
      * @var Collection|ResourceRight[]
      *
      * @ORM\OneToMany(
@@ -312,6 +317,24 @@ class ResourceLink
             'Published' => self::VISIBILITY_PUBLISHED,
             'Deleted' => self::VISIBILITY_DELETED,
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getDisplayOrder(): int
+    {
+        return $this->displayOrder;
+    }
+
+    /**
+     * @param int $displayOrder
+     */
+    public function setDisplayOrder(int $displayOrder): self
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
     }
 
     public function getVisibilityName(): string

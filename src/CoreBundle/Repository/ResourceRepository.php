@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -66,6 +67,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($resource);
         $this->getEntityManager()->flush();
+
+        $this->setLinkDisplayOrder($resource);
     }
 
     public function update(AbstractResource | User $resource, bool $andFlush = true): void
@@ -384,6 +387,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+        $qb = $this->addDisplayOrderQueryBuilder($qb);
 
         return $qb;
     }
@@ -501,6 +505,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $em->remove($resource);
         $em->flush();
+
+        $this->orderResourcesLinks($resource->getResourceNode()->getParent());
     }
 
     /**
@@ -848,6 +854,69 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ;
 
         return $qb;
+    }
+
+
+    public function addDisplayOrderQueryBuilder(QueryBuilder $qb): QueryBuilder
+    {
+        $qb->orderBy('links.displayOrder, links.id', 'ASC');
+
+        return $qb;
+    }
+
+    private function orderResourcesLinks(ResourceNode $parentNode = null):bool
+    {
+        $qb = $this->getResources($parentNode);
+        $qb->select('links.id');
+        $qb->orderBy('links.displayOrder, links.id', 'ASC');
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        $repo = $this->getEntityManager()->getRepository(ResourceLink::class);
+
+        $em = $this->getEntityManager();
+        $i = 1;
+        /** @var ResourceLink $link */
+        foreach ($result as $item) {
+            $linkId = (int) $item['id'];
+            $link = $repo->find($linkId);
+            if ($link) {
+                $link->setDisplayOrder($i);
+                $em->persist($link);
+                $em->flush();
+            }
+            $i++;
+        }
+
+        return true;
+    }
+
+    private function setLinkDisplayOrder(AbstractResource $resource):bool
+    {
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $em = $this->getEntityManager();
+
+        // Get the max display order in resources links
+        $qb = $this->getResources($resourceNode->getParent());
+        $qb->select('links.displayOrder');
+        $qb->orderBy('links.displayOrder', 'DESC');
+        $qb->setMaxResults(1);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $maxDisplayOrder = isset($result['displayOrder']) ? (int) $result['displayOrder'] : 0;
+
+        /** @var ResourceLink $link */
+        $link = $resourceNode->getResourceLinks()->first();
+        if ($link) {
+            $link->setDisplayOrder($maxDisplayOrder + 1);
+            $em->persist($link);
+            $em->flush();
+        }
+
+        return true;
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

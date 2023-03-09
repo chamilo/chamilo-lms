@@ -35,10 +35,10 @@ foreach ($users as $user) {
             UserManager::update_extra_field_value(
                 $userInfo['user_id'],
                 $extraFieldName,
-                api_replace_dangerous_char($user[$extraFieldName])
+                $user[$extraFieldName]
             );
         }
-        echo 'Updating extrafield "'.$extraFieldName.'" -  user:'.$userInfo['username'].' -> value: '.$user[$extraFieldName].'<br />';
+        echo 'Updating extrafield "'.$extraFieldName.'":  '.$user[$extraFieldName].'<br />';
     } else {
         echo 'User does not exists: '.$user['user'].'<br />';
     }

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgenda
 {
     // Uncomment next line when activating the agenda_collective_invitations configuration setting.
-    use EventCollectiveTrait;
+    //use EventCollectiveTrait;
 
     /**
      * @var int

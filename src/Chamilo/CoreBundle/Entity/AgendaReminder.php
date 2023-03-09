@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="agenda_reminder")
  * Add @ to the next line when activatiing the agenda_reminders configuration setting
- * @ORM\Entity()
+ * ORM\Entity()
  */
 class AgendaReminder
 {

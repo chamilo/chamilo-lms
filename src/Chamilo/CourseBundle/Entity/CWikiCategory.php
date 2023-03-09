@@ -15,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="c_wiki_category")
  * Add @ to the next line if api_get_configuration_value('wiki_categories_enabled') is true
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CWikiCategoryRepository")
+ * ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CWikiCategoryRepository")
  */
 class CWikiCategory
 {

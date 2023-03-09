@@ -1,60 +1,45 @@
 <template>
-  <Toolbar
-    :handle-submit="onSendForm"
-    :handle-reset="resetForm"
-  />
   <PageForm
-    ref="updateForm"
-    :values="item"
-    :errors="violations"
+    v-model="item"
+    @submit="updateItem"
   />
   <Loading :visible="isLoading" />
 </template>
 
-<script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
+<script setup>
 import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import UpdateMixin from '../../mixins/UpdateMixin';
-
-const servicePrefix = 'Page';
 import PageForm from '../../components/page/Form.vue';
-import useVuelidate from "@vuelidate/core";
+import { useDatatableUpdate } from '../../composables/datatableUpdate';
+import { ref, watch } from 'vue';
 
-export default {
-  name: 'PageUpdate',
-  servicePrefix,
-  components: {
-    Loading,
-    Toolbar,
-    PageForm
-  },
-  mixins: [UpdateMixin],
-  setup () {
-    return { v$: useVuelidate() }
-  },
-  computed: {
-    ...mapFields('page', {
-      deleteLoading: 'isLoading',
-      isLoading: 'isLoading',
-      error: 'error',
-      updated: 'updated',
-      violations: 'violations'
-    }),
-    ...mapGetters('page', ['find'])
+const item = ref({});
 
-  },
+const {
+  isLoading,
+  retrieve,
+  retrievedItem,
+  updateItem,
+  updated,
+  onUpdated
+} = useDatatableUpdate('Page');
 
-  methods: {
-    ...mapActions('page', {
-      createReset: 'resetCreate',
-      deleteItem: 'del',
-      delReset: 'resetDelete',
-      retrieve: 'load',
-      update: 'update',
-      updateReset: 'resetUpdate'
-    })
+retrieve();
+
+watch(
+  retrievedItem,
+  (newValue) => {
+    item.value = newValue;
   }
-};
+);
+
+watch(
+  updated,
+  (newValue) => {
+    if (!newValue) {
+      return;
+    }
+
+    onUpdated(item);
+  }
+);
 </script>

@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-import { computed, ref, defineProps, defineEmits, onMounted } from 'vue';
+import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import InputText from 'primevue/inputtext';
 import Checkbox from 'primevue/checkbox';
@@ -149,24 +149,27 @@ store.dispatch('pagecategory/findAll')
 
 const currentUser = computed(() => store.getters['security/getUser']);
 
-onMounted(() => {
-  if (!props.modelValue) {
-    return;
-  }
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (!newValue) {
+      return;
+    }
 
-  emit('update:modelValue', {
-    ...props.modelValue,
-    creator: currentUser.value['@id'],
-    url: '/api/access_urls/' + window.access_url_id,
-  });
-
-  if (!isEmpty(props.modelValue.category) && !isEmpty(props.modelValue.category['@id'])) {
     emit('update:modelValue', {
-      ...props.modelValue,
-      category: props.modelValue.category['@id']
+      ...newValue,
+      creator: currentUser.value['@id'],
+      url: '/api/access_urls/' + window.access_url_id,
     });
+
+    if (!isEmpty(newValue.category) && !isEmpty(newValue.category['@id'])) {
+      emit('update:modelValue', {
+        ...newValue,
+        category: newValue.category['@id']
+      });
+    }
   }
-});
+);
 
 const validations = {
   item: {
@@ -188,7 +191,10 @@ const validations = {
   }
 };
 
-const v$ = useVuelidate(validations, { item: props.modelValue });
+const v$ = useVuelidate(
+  validations,
+  { item: computed(() => props.modelValue) }
+);
 
 function btnSaveOnClick () {
   const item = { ...props.modelValue, ...v$.value.item.$model };

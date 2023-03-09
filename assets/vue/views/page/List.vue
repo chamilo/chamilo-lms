@@ -94,21 +94,21 @@
       <template #body="slotProps">
         <div class="text-right space-x-2">
           <!--          <Button-->
-          <!--            class="p-button-outlined p-button-info"-->
+          <!--            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"-->
           <!--            icon="mdi mdi-information"-->
           <!--            @click="showHandler(slotProps.data)"-->
           <!--          />-->
 
           <Button
             v-if="isAuthenticated"
-            class="p-button-primary p-button-outlined"
+            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
             icon="mdi mdi-pencil"
             @click="goToEditItem(slotProps.data)"
           />
 
           <Button
             v-if="isAuthenticated"
-            class="p-button-danger p-button-outlined"
+            class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
             icon="mdi mdi-delete"
             @click="confirmDeleteItem(slotProps.data)"
           />

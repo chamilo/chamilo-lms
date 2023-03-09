@@ -1785,28 +1785,16 @@ class Statistics
         return $results;
     }
 
-    public static function returnDuplicatedUsersTable(): string
+    public static function returnDuplicatedUsersTable(array $additionalExtraFieldsInfo): SortableTableFromArray
     {
-        $formFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
-
-        $additionalProfileField = $_GET['additional_profile_field'] ?? [];
-
-        $additionalExtraFieldsInfo = [];
-
-        $objExtraField = new ExtraField('user');
-
-        foreach ($additionalProfileField as $fieldId) {
-            $additionalExtraFieldsInfo[$fieldId] = $objExtraField->getFieldInfoByFieldId($fieldId);
-        }
-
         $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
 
         $column = 0;
 
-        $table = new SortableTableFromArray(array_values($usersInfo));
+        $table = new SortableTableFromArray($usersInfo);
         $table->set_additional_parameters([
             'report' => 'duplicated_users',
-            'additional_profile_field' => $additionalProfileField,
+            'additional_profile_field' => array_keys($additionalExtraFieldsInfo),
         ]);
         $table->set_header($column++, get_lang('Id'));
 
@@ -1848,16 +1836,39 @@ class Statistics
             $table->set_header($column++, $fieldInfo['display_text']);
         }
 
-        $table->set_header($column, get_lang('Active'));
+        $table->set_header($column++, get_lang('Active'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                if ('1' == $value) {
+                    return get_lang('Active');
+                }
+
+                if ('0' == $value) {
+                    return get_lang('Inactive');
+                }
+
+                return get_lang('ActionNotAllowed');
+            }
+        );
+        $table->set_header($column, get_lang('Actions'));
         $table->set_column_filter(
             $column,
             [UserManager::class, 'getActiveFilterForTable']
         );
         $table->setHideColumn(0);
+        $table->actionButtons = [
+            'export_excel' => [
+                'label' => get_lang('ExportAsXLS'),
+                'icon' => Display::return_icon('export_excel.png'),
+            ],
+            'export_csv' => [
+                'label' => get_lang('ExportAsCSV'),
+                'icon' => Display::return_icon('export_csv.png'),
+            ],
+        ];
 
-        return $formFields
-            .PHP_EOL
-            .$table->return_table();
+        return $table;
     }
 
     /**
@@ -1921,39 +1932,42 @@ class Statistics
             while ($rowUser = Database::fetch_assoc($result)) {
                 $studentId = $rowUser['id'];
 
-                $usersInfo[$studentId] = [];
-                $usersInfo[$studentId][] = $rowUser['id'];
+                $studentInfo = [];
+                $studentInfo[] = $rowUser['id'];
 
                 if (api_is_western_name_order()) {
-                    $usersInfo[$studentId][] = $rowStat['firstname'];
-                    $usersInfo[$studentId][] = $rowStat['lastname'];
+                    $studentInfo[] = $rowStat['firstname'];
+                    $studentInfo[] = $rowStat['lastname'];
                 } else {
-                    $usersInfo[$studentId][] = $rowStat['lastname'];
-                    $usersInfo[$studentId][] = $rowStat['firstname'];
+                    $studentInfo[] = $rowStat['lastname'];
+                    $studentInfo[] = $rowStat['firstname'];
                 }
 
-                $usersInfo[$studentId][] = $rowUser['email'];
-                $usersInfo[$studentId][] = $rowUser['registration_date'];
-                $usersInfo[$studentId][] = Tracking::get_first_connection_date(
+                $studentInfo[] = $rowUser['email'];
+                $studentInfo[] = $rowUser['registration_date'];
+                $studentInfo[] = Tracking::get_first_connection_date(
                     $studentId,
                     DATE_TIME_FORMAT_LONG
                 );
-                $usersInfo[$studentId][] = Tracking::get_last_connection_date(
+                $studentInfo[] = Tracking::get_last_connection_date(
                     $studentId,
                     true,
                     false,
                     DATE_TIME_FORMAT_LONG
                 );
-                $usersInfo[$studentId][] = $rowUser['status'];
-                $usersInfo[$studentId][] = Tracking::count_course_per_student($studentId);
-                $usersInfo[$studentId][] = Tracking::countSessionsPerStudent($studentId);
+                $studentInfo[] = $rowUser['status'];
+                $studentInfo[] = Tracking::count_course_per_student($studentId);
+                $studentInfo[] = Tracking::countSessionsPerStudent($studentId);
 
                 foreach ($additionalExtraFieldsInfo as $fieldInfo) {
                     $extraValue = $objExtraValue->get_values_by_handler_and_field_id($studentId, $fieldInfo['id'], true);
-                    $usersInfo[$studentId][] = $extraValue['value'] ?? null;
+                    $studentInfo[] = $extraValue['value'] ?? null;
                 }
 
-                $usersInfo[$studentId][] = $rowUser['active'];
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
+
+                $usersInfo[] = $studentInfo;
             }
         }
 

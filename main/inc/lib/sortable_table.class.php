@@ -355,11 +355,31 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
-    public function toArray()
+    public function toArray($applyFilters = false, $stripTags = false)
     {
         $headers = array_column($this->getHeaders(), 'label');
 
-        return array_merge([$headers], $this->table_data);
+        if ($stripTags) {
+            $headers = array_map('strip_tags', $headers);
+        }
+
+        if ($applyFilters) {
+            $data = [];
+
+            foreach ($this->table_data as $row) {
+                $filtered = $this->filter_data($row);
+
+                if ($stripTags) {
+                    $filtered = array_map('strip_tags', $filtered);
+                }
+
+                $data[] = $filtered;
+            }
+        } else {
+            $data = $this->table_data;
+        }
+
+        return array_merge([$headers], $data);
     }
 
     /**

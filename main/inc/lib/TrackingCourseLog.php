@@ -359,6 +359,21 @@ class TrackingCourseLog
         ];
     }
 
+    public static function getAdditionalProfileExtraFields(): array
+    {
+        $additionalProfileField = $_GET['additional_profile_field'] ?? [];
+
+        $additionalExtraFieldsInfo = [];
+
+        $objExtraField = new ExtraField('user');
+
+        foreach ($additionalProfileField as $fieldId) {
+            $additionalExtraFieldsInfo[$fieldId] = $objExtraField->getFieldInfoByFieldId($fieldId);
+        }
+
+        return $additionalExtraFieldsInfo;
+    }
+
     public static function displayAdditionalProfileFields(array $exclude = [], $formAction = null): string
     {
         $formAction = $formAction ?: 'courseLog.php';

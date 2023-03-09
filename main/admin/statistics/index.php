@@ -1856,12 +1856,30 @@ switch ($report) {
             'url' => 'index.php',
         ];
 
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+        $table = Statistics::returnDuplicatedUsersTable($additionalExtraFieldsInfo);
+
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+
+            exit;
+        }
+
         $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
 
         $content .= Display::page_subheader2(get_lang('DuplicatedUsers'));
         $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname'));
 
-        $content .= Statistics::returnDuplicatedUsersTable();
+        $content .= $frmFields;
+        $content .= $table->return_table();
         break;
 }
 

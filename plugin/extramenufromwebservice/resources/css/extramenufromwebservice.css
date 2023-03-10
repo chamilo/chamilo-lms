@@ -73,7 +73,7 @@
 }
 
 .menu-btn > span::after {
-  content: '';
+  content: "";
   top: 8px;
 }
 

@@ -11,7 +11,14 @@
 {% endif %}
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-3">
+        {% if plugin_header_left_logo is not null %}
+        <div class="col-xs-2 col-md-1">
+            <div id="plugin_header_left_logo" class="">
+                {{ plugin_header_left_logo }}
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-xs-10 col-md-3">
             {% if _u.logged != 1 %}
                 <div class="key-login">
                     <a href="#login-block" id="btn-login" class="btn btn-default">
@@ -23,7 +30,7 @@
                 {{ logo }}
             </div>
         </div>
-        <div class="col-xs-12 col-md-9">
+        <div class="col-xs-12 col-md-8">
             <div class="row">
                 <div class="col-sm-4">
                     {% if plugin_header_left is not null %}

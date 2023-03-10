@@ -28,7 +28,7 @@ if (!api_is_anonymous()) {
             false,
             true
         );
-
+        $pluginPath = api_get_path(WEB_PLUGIN_PATH).'extramenufromwebservice/resources/';
         //Check if the token is in session, if not get a new token and write in session
         if (
             Session::has('extramenufromwebservice_plugin_token') &&
@@ -65,6 +65,8 @@ if (!api_is_anonymous()) {
         );
         if (!empty($menuResponse)) {
             $menuContent = $menuResponse;
+            $fh = '<script type="text/javascript" src="'.$pluginPath.'js/extramenufromwebservice.js" ></script>';
+            $fh .= '<link href="'.$pluginPath.'css/extramenufromwebservice.css" rel="stylesheet" type="text/css">';
             if (!empty($extraMenuFromWebservice->get('list_css_imports'))) {
                 $cssListToImport = $extraMenuFromWebservice->getImports(
                     $extraMenuFromWebservice->get('list_css_imports')
@@ -75,8 +77,12 @@ if (!api_is_anonymous()) {
                     $extraMenuFromWebservice->get('list_fonts_imports')
                 );
             }
-
-            $fh = '<div class="nav-from-webservice">';
+            $fh .= '<div class="extra-menu-from-webservice">';
+            $fh .= '<input id="menu-toggle" type="checkbox" />';
+            $fh .= '<label class="menu-btn" for="menu-toggle">';
+            $fh .= '<span></span>';
+            $fh .= '</label>';
+            $fh .= '<div class="nav-from-webservice" id="nav-from-webservice">';
 
             if (isset($cssListToImport)) {
                 foreach ($cssListToImport as $cssUrl) {
@@ -99,6 +105,7 @@ if (!api_is_anonymous()) {
             $fh .= $menuContent['js'];
             $fh .= '</script>';
 
+            $fh .= '</div>';
             $fh .= '</div>';
 
             echo $fh;

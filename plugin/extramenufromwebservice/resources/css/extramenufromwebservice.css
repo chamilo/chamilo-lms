@@ -68,7 +68,7 @@
 }
 
 .menu-btn > span::before {
-  content: '';
+  content: "";
   top: -8px;
 }
 

@@ -1,15 +1,18 @@
 <template>
   <div v-if="!isLoading && item && isCurrentTeacher">
     <Toolbar
-        :handle-submit="onSendFormData"
-        :handle-reset="resetForm"
+      :handle-submit="onSendFormData"
+      :handle-reset="resetForm"
     />
     <DocumentsForm
       ref="updateForm"
       :values="item"
       :errors="violations"
     >
-      <EditLinks :item="item" links-type="users" />
+      <EditLinks
+        :item="item"
+        links-type="users"
+      />
     </DocumentsForm>
     <Loading :visible="isLoading || deleteLoading" />
   </div>

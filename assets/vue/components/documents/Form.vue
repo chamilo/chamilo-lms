@@ -1,15 +1,15 @@
 <template>
   <q-form>
     <q-input
-        id="item_title"
-        v-model="item.title"
-        :placeholder="$t('Title')"
-        :error="v$.item.title.$error"
-        @input="v$.item.title.$touch()"
-        @blur="v$.item.title.$touch()"
-        :error-message="titleErrors"
+      id="item_title"
+      v-model="item.title"
+      :placeholder="$t('Title')"
+      :error="v$.item.title.$error"
+      :error-message="titleErrors"
+      @input="v$.item.title.$touch()"
+      @blur="v$.item.title.$touch()"
     />
-    <slot></slot>
+    <slot />
   </q-form>
 </template>
 
@@ -20,9 +20,6 @@ import { required } from '@vuelidate/validators';
 
 export default {
   name: 'DocumentsForm',
-  setup () {
-    return { v$: useVuelidate() }
-  },
   props: {
     values: {
       type: Object,
@@ -36,6 +33,9 @@ export default {
       type: Object,
       default: () => {}
     },
+  },
+  setup () {
+    return { v$: useVuelidate() }
   },
   data() {
     return {

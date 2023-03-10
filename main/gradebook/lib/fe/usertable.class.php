@@ -22,7 +22,7 @@ class UserTable extends SortableTable
         $this->userid = $userid;
         $this->datagen = new UserDataGenerator($userid, $evals, $links);
         if (isset($addparams)) {
-            $this->set_additional_parameters($addparams);
+            $this->set_additional_parameters($addparams ?: []);
         }
         $column = 0;
         $this->set_header($column++, get_lang('Type'));

@@ -19,6 +19,7 @@ class AppPlugin
         'content_bottom',
         'header_main',
         'header_center',
+        'header_left_logo',
         'header_left',
         'header_right',
         'pre_footer',

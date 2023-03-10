@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * @ORM\Entity()
+ * ORM\Entity()
  */
 class PortfolioCategory
 {

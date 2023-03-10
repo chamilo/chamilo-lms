@@ -131,7 +131,7 @@ switch ($apiName) {
                                 $request['quiz_name'] = get_lang('Exercise').': '.$item['title'];
                                 $request['nro_questions'] = $nQ;
                                 $request['course_id'] = api_get_course_int_id($courseCode);
-                                $request['aiken_format'] = $resultQuizText;
+                                $request['aiken_format'] = trim($resultQuizText);
                                 $exerciseId = aikenImportExercise(null, $request);
                                 if (!empty($exerciseId)) {
                                     $order++;

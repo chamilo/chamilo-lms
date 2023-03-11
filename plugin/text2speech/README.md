@@ -33,3 +33,13 @@ Clone the repository and then run
 (where <LANGUAGE> is one of the supported languages (en, es, fr, de) for this image. If no language is given,
 U.S. English is used). This image will serve the necessary API to configure in the plugin.
 
+## Configuring the plugin
+
+The plugin configuration asks for an API key which is *not* necessary if using a local Docker container.
+The TTS URL field, in the case of the Docker container described above, should simply point to `http://localhost:5002/`. Requests sent by Chamilo will be visible in the Docker container console, if left open.
+This plugin and the suggested TTS model only allow for very small character strings to be translated, as documented here: https://github.com/synesthesiam/docker-mozillatts/issues/3.
+
+## Using the plugin
+
+The plugin, once enabled and properly configured, will add an audio creation block in the learning path edition screen, when clicking the audio speaker icon just under any document item of the learning path. The block is identified by "Text to Speech". Click the button to generate the audio, check if the quality is satisfying, then save the audio.
+When student open this learning path item, the audio will play.

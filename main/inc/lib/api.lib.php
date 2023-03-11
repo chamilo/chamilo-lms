@@ -6464,10 +6464,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
     $apcVar = [];
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable) {
-        $apcVarName = api_get_configuration_value('apc_prefix').
-            'settings_'.
-            $access_url
-        ;
+        $apcVarName = api_get_configuration_value('apc_prefix').'settings';
         $catName = (empty($cat) ? 'global' : $cat);
 
         if (apcu_exists($apcVarName)) {
@@ -10504,13 +10501,14 @@ function api_calculate_increment_percent(int $newValue, int $oldValue)
  */
 function api_flush_settings_cache(int $url_id): bool
 {
+    global $_configuration;
     $cacheAvailable = api_get_configuration_value('apc');
     if (!$cacheAvailable) {
         return false;
     }
-    $apcRootVarName = api_get_configuration_value('apc_prefix').'settings_';
+    $apcRootVarName = api_get_configuration_value('apc_prefix');
     // Delete the APCu-stored settings array, if present
-    $apcVarName = $apcRootVarName.$url_id;
+    $apcVarName = $apcRootVarName.'settings';
     apcu_delete($apcVarName);
     if (api_is_multiple_url_enabled() && $url_id === 1) {
         // if we are on the main URL of a multi-url portal, we must
@@ -10521,7 +10519,7 @@ function api_flush_settings_cache(int $url_id): bool
             if ($row['id'] == 1) {
                 continue;
             }
-            $apcVarName = $apcRootVarName.$row['id'];
+            $apcVarName = $_configuration['main_database'].'_'.$row['id'].'_settings';
             apcu_delete($apcVarName);
         }
     }

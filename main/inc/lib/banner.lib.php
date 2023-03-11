@@ -165,7 +165,7 @@ function getCustomTabs()
     $isStudent = api_is_student();
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent ? '1' : '0');
+        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_student_'.($isStudent ? '1' : '0');
         if (apcu_exists($apcVar)) {
             return apcu_fetch($apcVar);
         }

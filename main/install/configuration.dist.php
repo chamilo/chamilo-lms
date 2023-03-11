@@ -2395,6 +2395,10 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // external authentication system rather than user.id.
 // $_configuration['webservice_return_user_field'] = 'oauth2_id';
 
+// Set to true to hide settings completely in a sub-URL if the setting is disabled in the
+// main URL (where the access_url_changeable field = 0)
+// $_configuration['multiple_url_hide_disabled_settings'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -263,7 +263,7 @@ class BBBPlugin extends Plugin
             copy($src, $dest);
         }
         // Installing course settings
-        $this->install_course_fields_in_all_courses(true, 'bigbluebutton.png');
+        $this->install_course_fields_in_all_courses(true);
     }
 
     /**

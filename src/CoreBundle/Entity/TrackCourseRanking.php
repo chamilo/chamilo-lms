@@ -257,7 +257,7 @@ class TrackCourseRanking
     public function getRealTotalScore(): int
     {
         if (0 !== $this->totalScore && 0 !== $this->users) {
-            return intval(round($this->totalScore / $this->users));
+            return (int) round($this->totalScore / $this->users);
         }
 
         return 0;

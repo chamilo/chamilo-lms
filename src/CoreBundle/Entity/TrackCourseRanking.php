@@ -6,14 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiSubresource;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
@@ -52,19 +49,19 @@ class TrackCourseRanking
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="cascade")
      */
     #[ApiSubresource]
-    #[Groups(['course:read', 'trackCourseRanking:read','trackCourseRanking:write'])]
+    #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected Course $course;
 
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    #[Groups(['trackCourseRanking:read','trackCourseRanking:write'])]
+    #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $sessionId;
 
     /**
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
-    #[Groups(['trackCourseRanking:read','trackCourseRanking:write'])]
+    #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $urlId;
 
     /**
@@ -187,7 +184,6 @@ class TrackCourseRanking
      */
     public function setTotalScore(int $totalScore)
     {
-
         $this->users++;
         $this->totalScore += $totalScore;
 
@@ -260,10 +256,10 @@ class TrackCourseRanking
 
     public function getRealTotalScore(): int
     {
-        if ($this->totalScore !== 0 && $this->users !== 0) {
+        if (0 !== $this->totalScore && 0 !== $this->users) {
             return intval(round($this->totalScore / $this->users));
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 }

@@ -6,9 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
@@ -21,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @ORM\Entity
  */
-#[\ApiPlatform\Core\Annotation\ApiResource(
+#[ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_USER')",
     ],
@@ -35,28 +40,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class TrackCourseRanking
 {
     /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[Groups(['trackCourseRanking:read'])]
-    protected int $cId;
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
+    protected ?int $id = null;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackCourseRanking")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="cascade")
      */
-    #[Groups(['course:read', 'trackCourseRanking:read'])]
+    #[ApiSubresource]
+    #[Groups(['course:read', 'trackCourseRanking:read','trackCourseRanking:write'])]
     protected Course $course;
 
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    #[Groups(['trackCourseRanking:read'])]
+    #[Groups(['trackCourseRanking:read','trackCourseRanking:write'])]
     protected int $sessionId;
 
     /**
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
-    #[Groups(['trackCourseRanking:read'])]
+    #[Groups(['trackCourseRanking:read','trackCourseRanking:write'])]
     protected int $urlId;
 
     /**
@@ -68,7 +76,7 @@ class TrackCourseRanking
     /**
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
-    #[Groups(['course:read', 'trackCourseRanking:read'])]
+    #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $totalScore;
 
     /**
@@ -82,13 +90,8 @@ class TrackCourseRanking
      */
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
     #[Groups(['course:read', 'trackCourseRanking:read'])]
-    protected ?int $id = null;
+    protected ?int $realTotalScore = null;
 
     public function __construct()
     {
@@ -131,6 +134,12 @@ class TrackCourseRanking
     public function getCourse(): Course
     {
         return $this->course;
+    }
+
+    public function addCourse(Course $course)
+    {
+        $this->cId = $course->getId();
+        return $this;
     }
     /**
      * Set sessionId.
@@ -205,7 +214,9 @@ class TrackCourseRanking
      */
     public function setTotalScore(int $totalScore)
     {
-        $this->totalScore = $totalScore;
+
+        $this->users++;
+        $this->totalScore += $totalScore;
 
         return $this;
     }
@@ -272,5 +283,14 @@ class TrackCourseRanking
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getRealTotalScore(): int
+    {
+        if ($this->totalScore !== 0 && $this->users !== 0) {
+            return intval(round($this->totalScore / $this->users));
+        } else {
+            return 0;
+        }
     }
 }

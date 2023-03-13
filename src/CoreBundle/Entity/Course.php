@@ -204,7 +204,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var TrackCourseRanking
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackCourseRanking", mappedBy="course")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackCourseRanking",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true)
      */
     #[Groups(['course:read'])]
     protected TrackCourseRanking|null $trackCourseRanking = null;
@@ -519,7 +522,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         return $this->trackCourseRanking;
     }
+    public function setTrackCourseRanking($trackCourseRanking): self
+    {
+        $this->trackCourseRanking = $trackCourseRanking;
 
+        return $this;
+    }
     /**
      * @return AccessUrlRelCourse[]|Collection
      */

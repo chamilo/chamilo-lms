@@ -102,28 +102,6 @@ class TrackCourseRanking
         $this->creationDate = new DateTime();
     }
 
-    /**
-     * Set cId.
-     *
-     * @return TrackCourseRanking
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function setCourse(Course $course): self
     {
         $this->course = $course;

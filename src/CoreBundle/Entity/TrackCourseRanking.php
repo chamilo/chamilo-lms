@@ -114,11 +114,6 @@ class TrackCourseRanking
         return $this->course;
     }
 
-    public function addCourse(Course $course)
-    {
-        $this->cId = $course->getId();
-        return $this;
-    }
     /**
      * Set sessionId.
      *

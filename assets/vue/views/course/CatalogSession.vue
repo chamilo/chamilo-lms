@@ -77,6 +77,7 @@
         style="min-width:12rem"
       >
         <template #body="{data}">
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <span v-html="data.description" />
         </template>
       </Column>
@@ -100,7 +101,7 @@
         style="min-width:12rem"
       >
         <template #body="{data}">
-          <i class="pi pi-calendar-times"></i> {{ formatDate(data.displayStartDate) }}
+          <i class="pi pi-calendar-times" /> {{ formatDate(data.displayStartDate) }}
         </template>
       </Column>
       <Column
@@ -122,11 +123,11 @@
           </router-link>
         </template>
       </Column>
-      <template #expansion="data">
+      <template #expansion="item">
         <div class="orders-subtable">
-          <h4>{{ $t('Courses in this session') + " - " + data.data.name }}</h4>
+          <h5>{{ $t('Courses in this session') + " - " + item.data.name }}</h5>
           <DataTable
-            :value="data.data.courses"
+            :value="item.data.courses"
             responsive-layout="scroll"
             striped-rows
           >
@@ -155,7 +156,7 @@
               style="min-width:6rem"
             >
               <template #body="{data}">
-                {{ data.course.courseLanguage }}
+                {{ this.getOriginalLanguageName(data.course.courseLanguage) }}
               </template>
             </Column>
             <Column
@@ -210,7 +211,6 @@ import {FilterMatchMode} from "primevue/api";
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import {useI18n} from "vue-i18n";
 
 export default {
   name: 'SessionCatalog',
@@ -265,6 +265,15 @@ export default {
             day: 'numeric',
             year: 'numeric',
         });
+    },
+    getOriginalLanguageName(courseLanguage) {
+        const languages = window.languages;
+        let language =  languages.find(element => element.isocode === courseLanguage);
+        if (language) {
+            return language.originalName;
+        } else {
+            return '';
+        }
     },
   }
 };

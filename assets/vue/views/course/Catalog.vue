@@ -187,7 +187,6 @@ export default {
   created: function () {
     this.load();
     this.initFilters();
-    const  t  = useI18n();
   },
   mounted: function () {
 
@@ -264,8 +263,7 @@ export default {
         }
     },
     onRatingChange(event, trackCourseRanking, courseId) {
-        let { originalEvent, value } = event;
-
+        let { value } = event;
         if (value > 0) {
             if (trackCourseRanking)
                 this.updateRating(trackCourseRanking.id, value);

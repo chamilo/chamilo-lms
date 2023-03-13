@@ -163,7 +163,6 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Rating from 'primevue/rating';
 import TeacherBar from '../../components/TeacherBar.vue'
-import {useI18n} from "vue-i18n";
 
 export default {
   name: 'Catalog',

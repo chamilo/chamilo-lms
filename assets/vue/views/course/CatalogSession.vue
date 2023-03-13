@@ -156,7 +156,7 @@
               style="min-width:6rem"
             >
               <template #body="{data}">
-                {{ this.getOriginalLanguageName(data.course.courseLanguage) }}
+                {{ getOriginalLanguageName(data.course.courseLanguage) }}
               </template>
             </Column>
             <Column

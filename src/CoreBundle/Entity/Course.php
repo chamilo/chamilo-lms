@@ -154,6 +154,18 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $users;
 
     /**
+     * @var Collection|CourseRelUser[]
+     *
+     * "orphanRemoval" is needed to delete the CourseRelUser relation
+     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
+     * addUsers methods need to be added.
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"})
+     */
+    #[Groups(['course:read', 'user:read'])]
+    protected Collection $teachers;
+
+    /**
      * @var AccessUrlRelCourse[]|Collection
      *
      * @ORM\OneToMany(
@@ -180,11 +192,25 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection|CTool[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CTool",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     *     )
      */
     #[Groups(['course:read'])]
     protected Collection $tools;
 
+    /**
+     * @var TrackCourseRanking
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackCourseRanking",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true)
+     */
+    #[Groups(['course:read'])]
+    protected TrackCourseRanking|null $trackCourseRanking = null;
     protected Session $currentSession;
 
     protected AccessUrl $currentUrl;
@@ -263,7 +289,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
-    #[Groups(['course:read'])]
+    #[Groups(['course:read', 'session:read'])]
     #[Assert\NotBlank]
     protected string $courseLanguage;
 
@@ -293,7 +319,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      */
     #[ApiSubresource]
-    #[Groups(['course:read', 'course:write', 'course_rel_user:read'])]
+    #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session:read'])]
     protected Collection $categories;
 
     /**
@@ -492,6 +518,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
+    public function getTrackCourseRanking(): TrackCourseRanking|null
+    {
+        return $this->trackCourseRanking;
+    }
+    public function setTrackCourseRanking($trackCourseRanking): self
+    {
+        $this->trackCourseRanking = $trackCourseRanking;
+
+        return $this;
+    }
     /**
      * @return AccessUrlRelCourse[]|Collection
      */

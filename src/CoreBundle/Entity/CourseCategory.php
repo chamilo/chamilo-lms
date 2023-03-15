@@ -57,7 +57,7 @@ class CourseCategory
     protected Collection $children;
 
     /**
-     * @Groups({"course_category:read", "course_category:write", "course:read"})
+     * @Groups({"course_category:read", "course_category:write", "course:read", "session:read"})
      * @ORM\Column(name="name", type="text", nullable=false)
      */
     #[Assert\NotBlank]

@@ -1,274 +1,286 @@
 <template>
   <div class="card">
-    <DataView :value="courses" :layout="layout" :paginator="true" :rows="9" :sortOrder="sortOrder" :sortField="sortField">
+    <DataTable
+      v-model:filters="filters"
+      :value="courses"
+      edit-mode="cell"
+      :paginator="true"
+      class="p-datatable-courses p-datatable-lg"
+      :rows="9"
+      data-key="id"
+      filter-display="menu"
+      :loading="status"
+      responsive-layout="scroll"
+      striped-rows
+      :global-filter-fields="['title','description','category.name','courseLanguage']"
+    >
       <template #header>
-        <div class="p-grid p-nogutter">
-          <div class="p-col-3" style="text-align: left">
-            <Dropdown
-                v-model="sortKey"
-                :options="sortOptions"
-                optionLabel="label"
-                placeholder="Sort By Title"
-                @change="onSortChange($event)"
+        <div class="table-header-container">
+          <div class="flex justify-content-end">
+            <Button
+              type="button"
+              icon="pi pi-filter-slash"
+              :label="$t('Clear filter results')"
+              class="p-button-outlined mr-2"
+              @click="clearFilter()"
             />
-          </div>
-<!--          <div class="p-col-3" style="text-align: left">-->
-<!--            <Dropdown-->
-<!--                v-model="sortKey"-->
-<!--                :options="sortOptions"-->
-<!--                optionLabel="label"-->
-<!--                placeholder="Categories"-->
-<!--                @change="onSortChange($event)"-->
-<!--            />-->
-<!--          </div>-->
-<!--          <div class="p-col-6" style="text-align: right">-->
-<!--            <DataViewLayoutOptions v-model="layout" />-->
-<!--          </div>-->
-        </div>
-      </template>
-
-      <template #list="slotProps">
-        <div class="p-col-12">
-          <div class="course-list-item">
-
-            <img src="/img/session_default.png" :alt="slotProps.data.title"/>
-
-            <div class="course-list-detail">
-              <div class="course-name">{{ slotProps.data.title }}</div>
-              <div class="course-description">{{ slotProps.data.description }}</div>
-<!--              <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false"></Rating>-->
-
-              <span v-for="category in slotProps.data.categories">
-                   <i class="pi pi-tag course-category-icon"></i>
-                   <span class="course-category">{{ category.name }}</span>&nbsp;
-              </span>
-            </div>
-            <div class="course-list-action">
-<!--              <span class="course-price">${{slotProps.data.price}}</span>-->
-<!--              <Button icon="pi pi-shopping-cart" label="Add to Cart" :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"></Button>-->
-<!--              <span :class="'course-badge status-'+slotProps.data.inventoryStatus.toLowerCase()">{{slotProps.data.inventoryStatus}}</span>-->
-            </div>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search" />
+              <InputText
+                v-model="filters['global'].value"
+                :placeholder="$t('Search')"
+              />
+            </span>
           </div>
         </div>
       </template>
-
-      <template #grid="slotProps">
-        <div class="p-col-12 p-md-4">
-          <div class="course-grid-item card">
-            <div class="course-grid-item-top">
-              <div>
-                <i class="pi pi-tag course-category-icon"></i>
-                <span class="course-category">{{ slotProps.data.title }}</span>
-              </div>
-<!--              <span :class="'course-badge status-'+slotProps.data.inventoryStatus.toLowerCase()">{{slotProps.data.inventoryStatus}}</span>-->
-            </div>
-            <div class="course-grid-item-content">
-              <img src="/img/icons/64/course.png" :alt="slotProps.data.title"/>
-              <div class="course-name">{{ slotProps.data.title }}</div>
-              <div class="course-description">{{ slotProps.data.description }}</div>
-<!--              <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false"></Rating>-->
-            </div>
-            <div class="course-grid-item-bottom">
-<!--              <span class="course-price">${{slotProps.data.price}}</span>-->
-<!--              <Button icon="pi pi-shopping-cart" :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"></Button>-->
-            </div>
-          </div>
-        </div>
+      <template #empty>
+        {{ $t('No course available') }}
       </template>
-    </DataView>
+      <template #loading>
+        {{ $t('Loading courses. Please wait.') }}
+      </template>
+      <Column header="">
+        <template #body="{data}">
+          <img
+            :src="data.illustrationUrl"
+            :alt="data.title"
+            class="course-image"
+          >
+        </template>
+      </Column>
+      <Column
+        field="title"
+        :header="$t('Title')"
+        :sortable="true"
+        style="min-width:10rem"
+      >
+        <template #body="{data}">
+          {{ data.title }}
+        </template>
+      </Column>
+      <Column
+        field="description"
+        :header="$t('Course description')"
+        :sortable="true"
+        style="min-width:12rem"
+      >
+        <template #body="{data}">
+          {{ data.description }}
+        </template>
+      </Column>
+      <Column
+        field="teachers"
+        :header="$t('Teachers')"
+        :sortable="true"
+        style="min-width:20rem"
+      >
+        <template #body="{data}">
+          <TeacherBar
+            :teachers="data.teachers.map(
+              teacher => ({
+                id: teacher.id,
+                ...teacher.user,
+              })
+            )"
+          />
+        </template>
+      </Column>
+      <Column
+        field="courseLanguage"
+        :header="$t('Language')"
+        :sortable="true"
+        style="min-width:7rem"
+      >
+        <template #body="{data}">
+          {{ data.courseLanguage }}
+        </template>
+      </Column>
+      <Column
+        field="categories"
+        :header="$t('Categories')"
+        :sortable="true"
+        style="min-width:11rem"
+      >
+        <template #body="{data}">
+          <span
+            v-for="category in data.categories"
+            :key="category.id"
+          >
+            <em class="pi pi-tag course-category-icon" />
+            <span class="course-category">{{ category.name }}</span><br>
+          </span>
+        </template>
+      </Column>
+      <Column
+        field="trackCourseRanking.realTotalScore"
+        :header="$t('Ranking')"
+        :sortable="true"
+        style="min-width:8rem"
+      >
+        <template #body="{data}">
+          <Rating
+            :model-value="data.trackCourseRanking ? data.trackCourseRanking.realTotalScore : 0"
+            :stars="5"
+            :cancel="false"
+            class="pointer-events: none"
+            @change="onRatingChange($event, data.trackCourseRanking, data.id)"
+          />
+        </template>
+      </Column>
+      <Column
+        field="link"
+        header=""
+        style="min-width:8rem"
+      >
+        <template #body="{data}">
+          <router-link
+            v-slot="{ navigate }"
+            :to="{ name: 'CourseHome', params: {id: data.id} }"
+          >
+            <Button
+              :label="$t('Go to the course')"
+              class="p-button-sm"
+              icon="pi pi-external-link"
+              @click="navigate"
+            />
+          </router-link>
+        </template>
+      </Column>
+      <template #footer>
+        {{ $t('Total number of courses').concat(": ", courses ? courses.length.toString() : "0") }}
+      </template>
+    </DataTable>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.card {
-  background: #ffffff;
-  padding: 2rem;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-  border-radius: 4px;
-  margin-bottom: 2rem;
-}
-.p-dropdown {
-  width: 14rem;
-  font-weight: normal;
-}
-
-.course-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.course-description {
-  margin: 0 0 1rem 0;
-}
-
-.course-category-icon {
-  vertical-align: middle;
-  margin-right: .5rem;
-}
-
-.course-category {
-  font-weight: 600;
-  vertical-align: middle;
-}
-
-::v-deep(.course-list-item) {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  width: 100%;
-
-  img {
-    width: 150px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    margin-right: 2rem;
-  }
-
-  .course-list-detail {
-    flex: 1 1 0;
-  }
-
-  .p-rating {
-    margin: 0 0 .5rem 0;
-  }
-
-  .course-price {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: .5rem;
-    align-self: flex-end;
-  }
-
-  .course-list-action {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .p-button {
-    margin-bottom: .5rem;
-  }
-}
-
-::v-deep(.course-grid-item) {
-  margin: .5rem;
-  border: 1px solid #dee2e6;
-
-  .course-grid-item-top,
-  .course-grid-item-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  img {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    margin: 2rem 0;
-  }
-
-  .course-grid-item-content {
-    text-align: center;
-  }
-
-  .course-price {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .course-list-item {
-    flex-direction: column;
-    align-items: center;
-
-    img {
-      margin: 2rem 0;
-    }
-
-    .course-list-detail {
-      text-align: center;
-    }
-
-    .course-price {
-      align-self: center;
-    }
-
-    .course-list-action {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .course-list-action {
-      margin-top: 2rem;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-  }
-}
-</style>
 <script>
 
 import {ENTRYPOINT} from '../../config/entrypoint';
 import axios from "axios";
-import Dropdown from "primevue/dropdown";
-import DataView from 'primevue/dataview';
-import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
+import {FilterMatchMode} from "primevue/api";
+import Button from 'primevue/button';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Rating from 'primevue/rating';
+import TeacherBar from '../../components/TeacherBar.vue'
 
 export default {
   name: 'Catalog',
   components: {
-    DataView,
-    Dropdown,
-    DataViewLayoutOptions
+    DataTable,
+    Column,
+    Button,
+    TeacherBar,
+    Rating,
   },
+
   data() {
     return {
-      status: '',
+      status: null,
       courses: [],
-      layout: 'list',
-      sortKey: null,
-      sortOrder: null,
-      sortField: null,
-      sortOptions: [
-        {label: 'A-z', value: 'title'},
-        {label: 'Z-a', value: '!title'},
-      ]
+      filters: null,
+      teachers: [],
     };
   },
+
   created: function () {
     this.load();
+    this.initFilters();
   },
   mounted: function () {
 
   },
   methods: {
     load: function () {
-      //this.status = 'Loading';
-      //let user = this.$store.getters['security/getUser'];
+      this.status = true;
         axios.get(ENTRYPOINT + 'courses.json').then(response => {
-          this.status = '';
+          this.status = false;
           if (Array.isArray(response.data)) {
-            this.courses = response.data;
+              response.data.forEach(course => course.courseLanguage = this.getOriginalLanguageName(course.courseLanguage));
+              this.courses = response.data;
           }
         }).catch(function (error) {
           console.log(error);
         });
     },
-    onSortChange(event) {
-      const value = event.value.value;
-      const sortValue = event.value;
+    updateRating: function (id, value) {
+        this.status = true;
+        axios.patch(ENTRYPOINT + 'track_course_rankings/' + id,
+            {"totalScore": value},
+            {headers: {'Content-Type': 'application/merge-patch+json'}}
+        ).then(response => {
+            this.courses.forEach(
+                course => {
+                  if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
+                      course.trackCourseRanking.realTotalScore = response.data.realTotalScore;
+                  }
+              }
+            );
+            this.status = false;
+        }).catch(function (error) {
+            console.log(error);
+        });
+    },
+    newRating: function (courseId, value) {
+        this.status = true;
+        axios.post(ENTRYPOINT + 'track_course_rankings',
+            {
+                totalScore: value,
+                course: ENTRYPOINT + "courses/" + courseId,
+                url_id: window.access_url_id,
+                sessionId: 0
+            },
+            {headers: {'Content-Type': 'application/ld+json'}}
+        ).then(response => {
+            this.courses.forEach(
+                course => {
+                    if (course.id === courseId) {
+                        course.trackCourseRanking = response.data;
+                    }
+                }
+            );
+            this.status = false;
+        }).catch(function (error) {
+            console.log(error);
+        });
+    },
+    clearFilter() {
+        this.initFilters();
+    },
+    initFilters() {
+        this.filters = {
+            'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        }
+    },
+    getOriginalLanguageName(courseLanguage) {
+        const languages = window.languages;
+        let language =  languages.find(element => element.isocode === courseLanguage);
+        if (language) {
+            return language.originalName;
+        } else {
+            return '';
+        }
+    },
+    onRatingChange(event, trackCourseRanking, courseId) {
+        let { value } = event;
+        if (value > 0) {
+            if (trackCourseRanking)
+                this.updateRating(trackCourseRanking.id, value);
+            else
+                this.newRating(courseId, value);
+        } else {
+            event.preventDefault();
+        }
 
-      if (value.indexOf('!') === 0) {
-        this.sortOrder = -1;
-        this.sortField = value.substring(1, value.length);
-        this.sortKey = sortValue;
-      }
-      else {
-        this.sortOrder = 1;
-        this.sortField = value;
-        this.sortKey = sortValue;
-      }
+    },
+    onNewRatingChange(event, courseId) {
+        let { value } = event;
+        if (value > 0)
+            this.newRating(courseId, value);
+        else
+            event.preventDefault();
     }
   }
 };
+
 </script>

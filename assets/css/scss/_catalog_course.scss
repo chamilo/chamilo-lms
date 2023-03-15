@@ -1,0 +1,59 @@
+::v-deep(.p-paginator) {
+  .p-paginator-current {
+    margin-left: auto;
+  }
+}
+.course-image {
+  width: 130px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+}
+.p-input-icon-left > i:first-of-type {
+  left: 0.75rem;
+  color: #6c757d;
+}
+.p-input-icon-left > i, .p-input-icon-right > i {
+  margin-top: -.5rem;
+  position: absolute;
+  top: 50%;
+}
+.p-input-icon-left > .p-inputtext {
+  padding-left: 2.5rem;
+}
+.p-inputtext {
+  font-size: 1rem;
+  color: #495057;
+  background: #ffffff;
+  padding: 0.75rem 0.75rem;
+  border: 1px solid #ced4da;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  border-radius: 6px;
+}
+.p-inputtext:enabled:hover {
+  border-color: #3B82F6;
+}
+.p-inputtext:enabled:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem #BFDBFE;
+  border-color: #3B82F6;
+}
+::v-deep(.p-datatable.p-datatable-courses) {
+  .p-datatable-header {
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+  }
+
+  .p-paginator {
+    padding: 1rem;
+  }
+
+  .p-datatable-thead > tr > th {
+    text-align: left;
+  }
+
+  .p-datatable-tbody > tr > td {
+    cursor: auto;
+  }
+}

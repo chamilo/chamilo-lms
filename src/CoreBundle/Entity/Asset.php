@@ -35,6 +35,7 @@ class Asset
     public const SKILL = 'skill';
     public const EXERCISE_ATTEMPT = 'exercise_attempt';
     public const EXERCISE_FEEDBACK = 'exercise_feedback';
+    public const SYSTEM_TEMPLATE = 'system_template';
 
     /**
      * @ORM\Id

@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\Asset;
 
 /**
  * Library of the settings.php file.
@@ -1030,7 +1032,7 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     $column = (int) $column;
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // The sql statement.
-    $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
+    $sql = "SELECT id as col0, title as col1, id as col2 FROM $table_system_template";
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $result = Database::query($sql);
@@ -1077,10 +1079,18 @@ function actionsFilter($id)
  *
  * @since v1.8.6
  */
-function searchImageFilter($image)
+function searchImageFilter($id)
 {
-    if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/'.$image.'" alt="'.get_lang('Template preview').'"/>';
+    $em = Database::getManager();
+
+    /** @var SystemTemplate $template */
+    $template = $em->find('ChamiloCoreBundle:SystemTemplate', $id);
+
+    $assetRepo = Container::getAssetRepository();
+    $imageUrl = $assetRepo->getAssetUrl($template->getImage());
+
+    if (!empty($imageUrl)) {
+        return '<img src="'.$imageUrl.'" alt="'.get_lang('Template preview').'"/>';
     } else {
         return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>';
     }
@@ -1100,6 +1110,8 @@ function addEditTemplate()
 {
     $em = Database::getManager();
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+    $assetRepo = Container::getAssetRepository();
 
     /** @var SystemTemplate $template */
     $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $id) : new SystemTemplate();
@@ -1132,8 +1144,15 @@ function addEditTemplate()
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    if (empty($template->getImage())) {
-        $form->addElement('file', 'template_image', get_lang('Image'), '');
+    if (!$template->hasImage()) {
+        // Picture
+        $form->addFile(
+            'template_image',
+            get_lang('Add image'),
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
+        );
+        $allowedPictureTypes = api_get_supported_image_extensions(false);
+        $form->addRule('template_image', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
     }
 
     // Setting the form elements: a little bit information about the template image.
@@ -1152,12 +1171,13 @@ function addEditTemplate()
 
         // Adding an extra field: a preview of the image that is currently used.
 
-        if (!empty($template->getImage())) {
+        if ($template->hasImage()) {
+            $imageUrl = $assetRepo->getAssetUrl($template->getImage());
             $form->addElement(
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/'.$template->getImage()
+                '<img src="'.$imageUrl
                     .'" alt="'.get_lang('Template preview')
                     .'"/>'
             );
@@ -1178,7 +1198,7 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Validate'), 'submit');
 
     // Setting the rules: the required fields.
-    if (empty($template->getImage())) {
+    if (!$template->hasImage()) {
         $form->addRule(
             'template_image',
             get_lang('Required field'),
@@ -1195,38 +1215,23 @@ function addEditTemplate()
         if ($check) {
             // Exporting the values.
             $values = $form->exportValues();
-            $isDelete = null;
-            if (isset($values['delete_image'])) {
-                $isDelete = $values['delete_image'];
+            $asset = null;
+            if (isset($values['delete_image']) && !empty($id)) {
+                deleteTemplateImage($id);
             }
 
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
-                $upload_ok = process_uploaded_file($_FILES['template_image']);
-
-                if ($upload_ok) {
-                    // Try to add an extension to the file if it hasn't one.
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
-
-                    // The upload directory.
-                    // todo
-
-                    $upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
-
-                    // Create the directory if it does not exist.
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, api_get_permissions_for_new_directories());
+                $picture = $_FILES['template_image'];
+                if (!empty($picture['name'])) {
+                    $asset = (new Asset())
+                        ->setCategory(Asset::SYSTEM_TEMPLATE)
+                        ->setTitle($picture['name'])
+                    ;
+                    if (!empty($values['picture_crop_result'])) {
+                        $asset->setCrop($values['picture_crop_result']);
                     }
-
-                    // Resize the preview image to max default and upload.
-                    $temp = new Image($_FILES['template_image']['tmp_name']);
-                    $picture_info = $temp->get_image_info();
-
-                    $max_width_for_picture = 100;
-                    if ($picture_info['width'] > $max_width_for_picture) {
-                        $temp->resize($max_width_for_picture);
-                    }
-                    $temp->send_image($upload_dir.$new_file_name);
+                    $asset = $assetRepo->createFromRequest($asset, $picture);
                 }
             }
 
@@ -1241,7 +1246,7 @@ function addEditTemplate()
                     ->setTitle($values['title'])
                     ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
-                    ->setImage($new_file_name);
+                    ->setImage($asset);
                 $em->persist($template);
                 $em->flush();
 
@@ -1261,8 +1266,8 @@ function addEditTemplate()
                     ->setTitle($values['title'])
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
-                if (!empty($new_file_name)) {
-                    $template->setImage($new_file_name);
+                if ($asset) {
+                    $template->setImage($asset);
                 }
 
                 $em->persist($template);
@@ -1280,6 +1285,25 @@ function addEditTemplate()
         $form->setConstants(['sec_token' => $token]);
         // Display the form.
         $form->display();
+    }
+}
+
+/**
+ * Deletes the template picture as asset.
+ *
+ * @param int $id
+ */
+function deleteTemplateImage($id)
+{
+    $em = Database::getManager();
+
+    /** @var SystemTemplate $template */
+    $template = $em->find('ChamiloCoreBundle:SystemTemplate', $id);
+
+    if ($template && $template->hasImage()) {
+        $image = $template->getImage();
+        $em->remove($image);
+        $em->flush();
     }
 }
 
@@ -1309,6 +1333,8 @@ function deleteTemplate($id)
     // Now we remove it from the database.
     $sql = "DELETE FROM $table WHERE id = $id";
     Database::query($sql);
+
+    deleteTemplateImage($id);
 
     // Display a feedback message.
     echo Display::return_message(get_lang('Template deleted'), 'confirm');

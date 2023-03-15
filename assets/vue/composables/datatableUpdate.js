@@ -1,4 +1,4 @@
-import { computed, inject } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { isEmpty } from 'lodash';
@@ -14,6 +14,8 @@ export function useDatatableUpdate (servicePrefix) {
     const flashMessageList = inject('flashMessageList');
 
     const isLoading = computed(() => store.getters[`${moduleName}/isLoading`]);
+
+    const item = ref({});
 
     async function retrieve () {
         let id = route.params.id;
@@ -43,11 +45,33 @@ export function useDatatableUpdate (servicePrefix) {
         return store.getters[`${moduleName}/find`](id);
     });
 
+    watch(
+        retrievedItem,
+        (newValue) => {
+            item.value = newValue;
+        }
+    );
+
     async function updateItem (item) {
         await store.dispatch(`${moduleName}/update`, item);
     }
 
     const updated = computed(() => store.state[moduleName].updated);
+
+    watch(
+        updated,
+        (newValue) => {
+            if (!newValue) {
+                return;
+            }
+
+            onUpdated(item);
+        }
+    );
+
+    async function updateItemWithFormData (item) {
+        await store.dispatch(`${moduleName}/updateWithFormData`, item);
+    }
 
     function onUpdated (item) {
         flashMessageList.value.push({
@@ -60,9 +84,11 @@ export function useDatatableUpdate (servicePrefix) {
 
     return {
         isLoading,
+        item,
         retrieve,
         retrievedItem,
         updateItem,
+        updateItemWithFormData,
         updated,
         onUpdated,
     };

@@ -10,36 +10,13 @@
 import Loading from '../../components/Loading.vue';
 import PageForm from '../../components/page/Form.vue';
 import { useDatatableUpdate } from '../../composables/datatableUpdate';
-import { ref, watch } from 'vue';
-
-const item = ref({});
 
 const {
+  item,
   isLoading,
   retrieve,
-  retrievedItem,
-  updateItem,
-  updated,
-  onUpdated
+  updateItem
 } = useDatatableUpdate('Page');
 
 retrieve();
-
-watch(
-  retrievedItem,
-  (newValue) => {
-    item.value = newValue;
-  }
-);
-
-watch(
-  updated,
-  (newValue) => {
-    if (!newValue) {
-      return;
-    }
-
-    onUpdated(item);
-  }
-);
 </script>

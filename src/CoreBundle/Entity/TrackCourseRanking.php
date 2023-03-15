@@ -6,13 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * TrackCourseRanking.
- *
- * @ORM\Table(name="track_course_ranking", indexes={
+ * @ORM\Table(
+ *     name="track_course_ranking",
+ *     indexes={
  *     @ORM\Index(name="idx_tcc_cid", columns={"c_id"}),
  *     @ORM\Index(name="idx_tcc_sid", columns={"session_id"}),
  *     @ORM\Index(name="idx_tcc_urlid", columns={"url_id"}),
@@ -20,36 +23,63 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['trackCourseRanking:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['trackCourseRanking:read'],
+    ],
+)]
 class TrackCourseRanking
 {
     /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $cId;
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
+    protected ?int $id = null;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackCourseRanking")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="cascade")
+     */
+    #[ApiSubresource]
+    #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
+    protected Course $course;
 
     /**
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
+    #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $sessionId;
 
     /**
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
+    #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $urlId;
 
     /**
      * @ORM\Column(name="accesses", type="integer", nullable=false)
      */
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
     protected int $accesses;
 
     /**
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
+    #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
     protected int $totalScore;
 
     /**
      * @ORM\Column(name="users", type="integer", nullable=false)
      */
+    #[Groups(['course:read'])]
     protected int $users;
 
     /**
@@ -57,33 +87,28 @@ class TrackCourseRanking
      */
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected ?int $id = null;
+    #[Groups(['course:read', 'trackCourseRanking:read'])]
+    protected ?int $realTotalScore = null;
 
-    /**
-     * Set cId.
-     *
-     * @return TrackCourseRanking
-     */
-    public function setCId(int $cId)
+    public function __construct()
     {
-        $this->cId = $cId;
+        $this->urlId = 0;
+        $this->accesses = 0;
+        $this->totalScore = 0;
+        $this->users = 0;
+        $this->creationDate = new DateTime();
+    }
+
+    public function setCourse(Course $course): self
+    {
+        $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getCourse(): Course
     {
-        return $this->cId;
+        return $this->course;
     }
 
     /**
@@ -159,7 +184,8 @@ class TrackCourseRanking
      */
     public function setTotalScore(int $totalScore)
     {
-        $this->totalScore = $totalScore;
+        $this->users++;
+        $this->totalScore += $totalScore;
 
         return $this;
     }
@@ -226,5 +252,14 @@ class TrackCourseRanking
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getRealTotalScore(): int
+    {
+        if (0 !== $this->totalScore && 0 !== $this->users) {
+            return (int) round($this->totalScore / $this->users);
+        }
+
+        return 0;
     }
 }

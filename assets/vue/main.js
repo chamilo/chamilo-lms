@@ -251,6 +251,7 @@ app.component('EmptyLayout', EmptyLayout);
 app.component('TinyEditor', Editor);
 
 app.config.globalProperties.axios = axios;
+app.config.globalProperties.window = window
 const prettyBytes = require('pretty-bytes');
 const { DateTime } = require("luxon");
 

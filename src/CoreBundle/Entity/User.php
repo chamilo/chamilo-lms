@@ -138,6 +138,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[Groups([
         'user:read',
+        'course:read',
         'resource_node:read',
         'user_json:read',
         'message:read',
@@ -794,7 +795,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     // Property used only during installation.
     protected bool $skipResourceNode = false;
 
-    #[Groups(['user:read', 'user_json:read', 'social_post:read'])]
+    #[Groups(['user:read', 'user_json:read', 'social_post:read', 'course:read'])]
     protected string $fullName;
 
     /**

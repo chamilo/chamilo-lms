@@ -172,6 +172,22 @@ switch ($action) {
             api_not_allowed(true);
         }
         break;
+    case 'download_certificates_report':
+       $exportData = array_map(function($learner) {
+            return [
+                $learner['user_id'],
+                $learner['username'],
+                $learner['firstname'],
+                $learner['lastname'],
+                $learner['created_at'],
+            ];
+        }, $certificate_list);
+
+        array_unshift($exportData, ['Id usuario', 'Usuario', 'Nombre', 'Apellidos', 'Certificado']);
+
+        $fileName = 'learner_certificate_report_'.api_get_local_time();
+        Export::arrayToCsv($exportData, $fileName);
+        break;
 }
 
 $interbreadcrumb[] = [
@@ -300,6 +316,11 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     $actions .= Display::url(
         Display::return_icon('notification_mail.png', get_lang('SendCertificateNotifications'), [], ICON_SIZE_MEDIUM),
         $url.'&action=show_notification_form'
+    );
+
+    $actions .= Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportCertificateReport'), [], ICON_SIZE_MEDIUM),
+        $url.'&action=download_certificates_report'
     );
 }
 

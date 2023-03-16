@@ -3,6 +3,9 @@
  *	This file holds the configuration settings
  *	for phpmailer Class.
  *
+ *	The settings can use an optional index at the first level to represent the ID of the
+ *	URL in case you use multi-url for example: $platform_email[2]['SMTP_HOST'] = 'awesome.mail.server'.
+ *
  *	@package chamilo.configuration
  */
 

@@ -9162,6 +9162,37 @@ function api_get_configuration_value($variable)
 }
 
 /**
+ * Gets value of a variable from app/config/mail.conf.php
+ *
+ * @param string $variable
+ *
+ * @return bool|mixed
+ */
+function api_get_mail_configuration_value($variable)
+{
+    global $_configuration;
+    global $platform_email;
+
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    $variable = trim($variable);
+
+    // Check if variable exists for the sub portal
+    if (api_is_multiple_url_enabled() && isset($platform_email[$urlId][$variable])) {
+        return $platform_email[$urlId][$variable];
+    } else if (isset($platform_email[1][$variable])) {
+        // Try to found element with id = 1 (master portal)
+        return $platform_email[$variable];
+    } else if (isset($platform_email[$variable])) {
+        // If variable it´s not found for the sub portal or master portal, try to found the default element
+        return $platform_email[$variable];
+    }
+
+    return false;
+}
+
+/**
  * Retreives and returns a value in a hierarchical configuration array
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
  *
@@ -9475,52 +9506,50 @@ function api_mail_html(
     $additionalParameters = [],
     $sendErrorTo = ''
 ) {
-    global $platform_email;
-
     if (true === api_get_configuration_value('disable_send_mail')) {
         return true;
     }
 
     $mail = new PHPMailer();
 
-    if (!empty($platform_email['XOAUTH2_METHOD'])) {
+    if (!empty(api_get_mail_configuration_value('XOAUTH2_METHOD'))) {
         $provider = new GenericProvider([
-            'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
-            'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
-            'urlAuthorize' => $platform_email['XOAUTH2_URL_AUTHORIZE'],
-            'urlAccessToken' => $platform_email['XOAUTH2_URL_ACCES_TOKEN'],
-            'urlResourceOwnerDetails' => $platform_email['XOAUTH2_URL_RESOURCE_OWNER_DETAILS'],
-            'scopes' => $platform_email['XOAUTH2_SCOPES'],
+            'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+            'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+            'urlAuthorize' => api_get_mail_configuration_value('XOAUTH2_URL_AUTHORIZE'),
+            'urlAccessToken' => api_get_mail_configuration_value('XOAUTH2_URL_ACCES_TOKEN'),
+            'urlResourceOwnerDetails' => api_get_mail_configuration_value('XOAUTH2_URL_RESOURCE_OWNER_DETAILS'),
+            'scopes' => api_get_mail_configuration_value('XOAUTH2_SCOPES'),
         ]);
         $mail->AuthType = 'XOAUTH2';
         $mail->setOAuth(
             new OAuth([
                 'provider' => $provider,
-                'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
-                'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
-                'refreshToken' => $platform_email['XOAUTH2_REFRESH_TOKEN'],
-                'userName' => $platform_email['SMTP_USER'],
+                'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+                'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+                'refreshToken' => api_get_mail_configuration_value('XOAUTH2_REFRESH_TOKEN'),
+                'userName' => api_get_mail_configuration_value('SMTP_USER'),
             ])
         );
     }
 
-    $mail->Mailer = $platform_email['SMTP_MAILER'];
-    $mail->Host = $platform_email['SMTP_HOST'];
-    $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
+    $mail->Mailer = api_get_mail_configuration_value('SMTP_MAILER');
+    $mail->Host = api_get_mail_configuration_value('SMTP_HOST');
+    $mail->Port = api_get_mail_configuration_value('SMTP_PORT');
+    $mail->CharSet = api_get_mail_configuration_value('SMTP_CHARSET') ? api_get_mail_configuration_value('SMTP_CHARSET') : 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
-    $mail->SMTPOptions = $platform_email['SMTPOptions'] ?? [];
+    $mail->SMTPOptions = api_get_mail_configuration_value('SMTPOptions') ?? [];
 
-    if ($platform_email['SMTP_AUTH']) {
+    if (api_get_mail_configuration_value('SMTP_AUTH')) {
         $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-        if (isset($platform_email['SMTP_SECURE'])) {
-            $mail->SMTPSecure = $platform_email['SMTP_SECURE'];
+        $mail->Username = api_get_mail_configuration_value('SMTP_USER');
+        $mail->Password = api_get_mail_configuration_value('SMTP_PASS');
+        if (api_get_mail_configuration_value('SMTP_SECURE')) {
+            $mail->SMTPSecure = api_get_mail_configuration_value('SMTP_SECURE');
         }
     }
-    $mail->SMTPDebug = isset($platform_email['SMTP_DEBUG']) ? $platform_email['SMTP_DEBUG'] : 0;
+    $mail->SMTPDebug = api_get_mail_configuration_value('SMTP_DEBUG') ? api_get_mail_configuration_value('SMTP_DEBUG') : 0;
 
     // 5 = low, 1 = high
     $mail->Priority = 3;
@@ -9609,7 +9638,7 @@ function api_mail_html(
     }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
-    $mailView->assign('include_ldjson', (empty($platform_email['EXCLUDE_JSON']) ? true : false));
+    $mailView->assign('include_ldjson', (empty(api_get_mail_configuration_value('EXCLUDE_JSON')) ? true : false));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
@@ -9686,17 +9715,17 @@ function api_mail_html(
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
 
-    if (!empty($platform_email['DKIM']) &&
-        !empty($platform_email['DKIM_SELECTOR']) &&
-        !empty($platform_email['DKIM_DOMAIN']) &&
-        (!empty($platform_email['DKIM_PRIVATE_KEY_STRING']) || !empty($platform_email['DKIM_PRIVATE_KEY']))) {
-        $mail->DKIM_selector = $platform_email['DKIM_SELECTOR'];
-        $mail->DKIM_domain = $platform_email['DKIM_DOMAIN'];
-        if (!empty($platform_email['SMTP_UNIQUE_SENDER'])) {
-            $mail->DKIM_identity = $platform_email['SMTP_FROM_EMAIL'];
+    if (!empty(api_get_mail_configuration_value('DKIM')) &&
+        !empty(api_get_mail_configuration_value('DKIM_SELECTOR')) &&
+        !empty(api_get_mail_configuration_value('DKIM_DOMAIN')) &&
+        (!empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING')) || !empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY')))) {
+        $mail->DKIM_selector = api_get_mail_configuration_value('DKIM_SELECTOR');
+        $mail->DKIM_domain = api_get_mail_configuration_value('DKIM_DOMAIN');
+        if (!empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER'))) {
+            $mail->DKIM_identity = api_get_mail_configuration_value('SMTP_FROM_EMAIL');
         }
-        $mail->DKIM_private_string = $platform_email['DKIM_PRIVATE_KEY_STRING'];
-        $mail->DKIM_private = $platform_email['DKIM_PRIVATE_KEY'];
+        $mail->DKIM_private_string = api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING');
+        $mail->DKIM_private = api_get_mail_configuration_value('DKIM_PRIVATE_KEY');
     }
 
     // Send the mail message.

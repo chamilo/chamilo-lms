@@ -9182,7 +9182,7 @@ function api_get_mail_configuration_value($variable)
     if (api_is_multiple_url_enabled() && isset($platform_email[$urlId][$variable])) {
         return $platform_email[$urlId][$variable];
     } else if (isset($platform_email[1][$variable])) {
-        // Try to found element with id = 1 (master portal)
+        // Try to find element with id = 1 (master portal)
         return $platform_email[$variable];
     } else if (isset($platform_email[$variable])) {
         // If variable it´s not found for the sub portal or master portal, try to found the default element

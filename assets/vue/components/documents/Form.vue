@@ -6,7 +6,6 @@
           id="item_title"
           v-model="v$.item.title.$model"
           :class="{ 'p-invalid': v$.item.title.$invalid }"
-          :placeholder="t('Title')"
         />
         <label
           v-t="'Title'"
@@ -16,7 +15,7 @@
       </div>
       <small
         v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
-        v-t="v$.item.title.$error"
+        v-t="v$.item.title.required.$message"
         class="p-error"
       />
     </div>

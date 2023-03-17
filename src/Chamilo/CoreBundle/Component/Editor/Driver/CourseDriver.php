@@ -397,6 +397,7 @@ class CourseDriver extends Driver implements DriverInterface
             return false;
         }
 
+        $name= api_replace_dangerous_char($name);
         $result = parent::mkdir($path, $name);
 
         if ($result && isset($result['hash'])) {

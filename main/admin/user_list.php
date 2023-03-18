@@ -321,6 +321,8 @@ function prepare_user_sql_query($getCount)
             $sql .= ' AND u.active = 0';
         }
         $sql .= ' ) ';
+    } else {
+        $sql .= ' WHERE 1 = 1 ';
     }
 
     if ($classId) {

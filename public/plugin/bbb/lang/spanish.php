@@ -44,7 +44,7 @@ $strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueB
 $strings['enable_global_conference'] = 'Activar la conferencia global';
 $strings['enable_global_conference_per_user'] = 'Activar la conferencia global por usuario';
 $strings['enable_conference_in_course_groups'] = 'Activar las conferencias en grupos';
-$strings['enable_global_conference_link'] = 'Actvivar el enlace hacia la conferencia global desde la página principal';
+$strings['enable_global_conference_link'] = 'Activar el enlace hacia la conferencia global desde la página principal';
 
 $strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia.';
 $strings['bbb_enable_conference_in_groups'] = 'Activar la creación de videoconferencia en los grupos.';
@@ -64,14 +64,6 @@ $strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha
 $strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';
 $strings['global_conference_allow_roles'] = 'El enlace de videoconferencia global es disponible para estos perfiles';
 $strings['CreatedAt'] = 'Creado el';
-
-$strings['interface'] = 'Interfaz por defecto';
-$strings['launch_type'] = 'Elección de la interfaz en el lanzamiento';
-$strings['EnterConferenceFlash'] = 'Ingresar a la conferencia (con Flash)';
-$strings['EnterConferenceHTML5'] = 'Ingresar a la conferencia (con HTML5)';
-$strings['ParticipantsWillUseSameInterface'] = 'Los participantes usarán la misma interfaz que Ud';
-$strings['SetByDefault'] = 'Lanzamiento con la interfaz por defecto';
-$strings['SetByTeacher'] = 'Elegido por el profesor';
-$strings['SetByStudent'] = 'Elegido por el alumno';
 $strings['ThereIsNoVideoConferenceActive'] = "No hay una videoconferencia actualmente activa";
 $strings['meeting_duration'] = 'Duración de la reunión (en minutos)';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a los estudiantes iniciar una videoconferencia en sus grupos.';

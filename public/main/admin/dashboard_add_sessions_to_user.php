@@ -25,21 +25,22 @@ $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')]
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // Initializing variables
 $user_id = isset($_GET['user']) ? (int) ($_GET['user']) : null;
-$user_info = api_get_user_info($user_id);
+
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+$user = api_get_user_entity($user_id);
+$isSessionAdmin = api_is_session_admin($user);
 $ajax_search = false;
 
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-    $tool_name = get_lang('AssignSessionsToAdministrationistrator');
-} elseif (SESSIONADMIN == $user_info['status']) {
-    $tool_name = get_lang('assign sessions to sessions administrator');
+    $tool_name = get_lang('Assign sessions to platform administrator');
+} elseif ($isSessionAdmin) {
+    $tool_name = get_lang('Assign sessions to sessions administrator');
 } else {
     $tool_name = get_lang('Assign sessions to Human Resources manager');
 }
@@ -72,10 +73,10 @@ function search_sessions($needle, $type)
 
         if (api_is_multiple_url_enabled()) {
             $sql = " SELECT s.id, s.name FROM $tbl_session s
-                     LEFT JOIN $tbl_session_rel_access_url a 
+                     LEFT JOIN $tbl_session_rel_access_url a
                      ON (s.id = a.session_id)
-                     WHERE  
-                        s.name LIKE '$needle%' $without_assigned_sessions AND 
+                     WHERE
+                        s.name LIKE '$needle%' $without_assigned_sessions AND
                         access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT s.id, s.name FROM $tbl_session s
@@ -172,7 +173,7 @@ if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
 Display::display_header($tool_name);
 
 // Actions
-if (SESSIONADMIN != $user_info['status']) {
+if (!$isSessionAdmin) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
         Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
@@ -182,7 +183,7 @@ if (SESSIONADMIN != $user_info['status']) {
 }
 
 echo Display::page_header(
-    sprintf(get_lang('Assign sessions to %s'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    sprintf(get_lang('Assign sessions to %s'), UserManager::formatUserFullName($user)),
     null,
     'h3'
 );
@@ -243,7 +244,7 @@ $result = Database::query($sql);
                 <p><?php echo get_lang('Session title\'s first letter'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
-                        <?php  echo Display :: get_alphabet_options($firstLetterSession); ?>
+                        <?php echo Display :: get_alphabet_options($firstLetterSession); ?>
                 </select>
                 <?php
                     } ?>
@@ -253,7 +254,7 @@ $result = Database::query($sql);
                 if ($ajax_search) {
                     ?>
                     <div class="separate-action">
-                        <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
+                        <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))">
                             <em class="fa fa-arrow-left"></em>
                         </button>
                     </div>
@@ -261,19 +262,19 @@ $result = Database::query($sql);
                 } else {
                     ?>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                    <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
                 </div>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                    <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
                 </div>
 
                 <?php
                 }
-                echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+                echo '<button class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
                 ?>
             </div>
         </div>
@@ -281,8 +282,8 @@ $result = Database::query($sql);
             <h5>
                 <?php
                 if (UserManager::is_admin($user_id)) {
-                    echo get_lang('AssignedSessionsListToAdministrationistrator');
-                } elseif (SESSIONADMIN == $user_info['status']) {
+                    echo get_lang('Assigned sessions list to platform administrator');
+                } elseif ($isSessionAdmin) {
                     echo get_lang('Assigned sessions list to sessions administrator');
                 } else {
                     echo get_lang('List of sessions assigned to the Human Resources manager');

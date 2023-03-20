@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 
 /**
  * Edit a Forum Thread.
@@ -21,7 +21,59 @@ $cidreq = api_get_cidreq();
 $nameTools = get_lang('Forums');
 $_user = api_get_user_info();
 
-require_once 'forumfunction.inc.php';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+// The next javascript script is to manage ajax upload file
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
 
 // Are we in a lp ?
 $origin = api_get_origin();
@@ -30,7 +82,7 @@ $origin = api_get_origin();
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
 $repo = Container::getForumRepository();
-/** @var CForumForum $forum */
+/** @var CForum $forum */
 $forum = $repo->find($forumId);
 if (empty($forum)) {
     api_not_allowed();
@@ -85,9 +137,9 @@ if (!$_user['user_id'] && 1 != $forum->getAllowAnonymous()) {
 
 // 5. Check user access
 if (0 != $forum->getForumOfGroup()) {
-    $show_forum = GroupManager::user_has_access(
+    $show_forum = GroupManager::userHasAccess(
         api_get_user_id(),
-        $forum->getForumOfGroup(),
+        api_get_group_entity($forum->getForumOfGroup()),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -122,7 +174,7 @@ if (!empty($groupId)) {
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$category->getIid(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq.'&forumcategory='.$category->getIid(),
         'name' => $category->getCatTitle(),
     ];
     $interbreadcrumb[] = [
@@ -162,7 +214,7 @@ $actions = [
     search_link(),
 ];
 
-$threadData = getThreadInfo($threadId, $courseId);
+$threadData = getThreadInfo($threadId);
 $gradeThisThread = empty($_POST) && ($threadData && ($threadData['threadQualifyMax'] > 0 || $threadData['threadWeight'] > 0));
 
 $form = new FormValidator(
@@ -222,12 +274,17 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
 }
 
 if (api_is_allowed_to_edit(null, true)) {
-    $form->addElement('checkbox', 'thread_sticky', '', get_lang('This is a sticky message (appears always on top and has a special sticky icon)'));
+    $form->addElement(
+        'checkbox',
+        'thread_sticky',
+        '',
+        get_lang('This is a sticky message (appears always on top and has a special sticky icon)')
+    );
 }
 
 $form->addElement('html', '</div>');
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 
 $defaults = [];
 $defaults['thread_qualify_gradebook'] = 0;
@@ -257,7 +314,7 @@ if ($form->validate()) {
         $values = $form->exportValues();
         Security::clear_token();
         updateThread($values);
-        Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+        SkillModel::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
         header('Location: '.$redirectUrl);
         exit;
     }

@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -17,189 +22,148 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class BranchSync
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var AccessUrl
-     *
-     * @ORM\ManyToOne(targetEntity="AccessUrl", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="unique_id", type="string", length=50, nullable=false, unique=true)
      */
-    protected $uniqueId;
+    protected string $uniqueId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="branch_name", type="string", length=250, nullable=false, unique=false)
+     * @ORM\Column(name="branch_name", type="string", length=250)
      */
-    protected $branchName;
+    protected string $branchName;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="branch_ip", type="string", length=40, nullable=true, unique=false)
      */
-    protected $branchIp;
+    protected ?string $branchIp = null;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="latitude", type="decimal", nullable=true, unique=false)
      */
-    protected $latitude;
+    protected ?float $latitude = null;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="longitude", type="decimal", nullable=true, unique=false)
      */
-    protected $longitude;
+    protected ?float $longitude = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="dwn_speed", type="integer", nullable=true, unique=false)
      */
-    protected $dwnSpeed;
+    protected ?int $dwnSpeed = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="up_speed", type="integer", nullable=true, unique=false)
      */
-    protected $upSpeed;
+    protected ?int $upSpeed = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="delay", type="integer", nullable=true, unique=false)
      */
-    protected $delay;
+    protected ?int $delay = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="admin_mail", type="string", length=250, nullable=true, unique=false)
      */
-    protected $adminMail;
+    protected ?string $adminMail = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="admin_name", type="string", length=250, nullable=true, unique=false)
      */
-    protected $adminName;
+    protected ?string $adminName = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="admin_phone", type="string", length=250, nullable=true, unique=false)
      */
-    protected $adminPhone;
+    protected ?string $adminPhone = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="last_sync_trans_id", type="bigint", nullable=true, unique=false)
      */
-    protected $lastSyncTransId;
+    protected ?int $lastSyncTransId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="last_sync_trans_date", type="datetime", nullable=true, unique=false)
      */
-    protected $lastSyncTransDate;
+    protected ?DateTime $lastSyncTransDate = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="last_sync_type", type="string", length=20, nullable=true, unique=false)
      */
-    protected $lastSyncType;
+    protected ?string $lastSyncType = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
      */
-    protected $sslPubKey;
+    protected ?string $sslPubKey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="branch_type", type="string", length=250, nullable=true, unique=false)
      */
-    protected $branchType;
+    protected ?string $branchType = null;
 
     /**
-     * @var int
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
-    protected $lft;
+    protected ?int $lft = null;
 
     /**
-     * @var int
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
      */
-    protected $rgt;
+    protected ?int $rgt = null;
 
     /**
-     * @var int
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
      */
-    protected $lvl;
+    protected ?int $lvl = null;
 
     /**
-     * @var int
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
      */
-    protected $root;
+    protected ?int $root = null;
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="BranchSync", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $parent;
+    protected ?BranchSync $parent = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="BranchSync", mappedBy="parent")
-     * @ORM\OrderBy({"lft" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", mappedBy="parent")
+     * @ORM\OrderBy({"lft"="ASC"})
+     *
+     * @var BranchSync[]|Collection
      */
-    protected $children;
+    protected Collection $children;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->uniqueId = sha1(uniqid());
         $this->sslPubKey = sha1(uniqid());
+        $this->description = '';
         // $this->lastSyncTransDate = new \DateTime();
     }
 
@@ -213,14 +177,7 @@ class BranchSync
         return $this->id;
     }
 
-    /**
-     * Set branchName.
-     *
-     * @param string $branchName
-     *
-     * @return BranchSync
-     */
-    public function setBranchName($branchName)
+    public function setBranchName(string $branchName): self
     {
         $this->branchName = $branchName;
 
@@ -237,14 +194,7 @@ class BranchSync
         return $this->branchName;
     }
 
-    /**
-     * Set branchIp.
-     *
-     * @param string $branchIp
-     *
-     * @return BranchSync
-     */
-    public function setBranchIp($branchIp)
+    public function setBranchIp(string $branchIp): self
     {
         $this->branchIp = $branchIp;
 
@@ -261,14 +211,7 @@ class BranchSync
         return $this->branchIp;
     }
 
-    /**
-     * Set latitude.
-     *
-     * @param float $latitude
-     *
-     * @return BranchSync
-     */
-    public function setLatitude($latitude)
+    public function setLatitude(float $latitude): self
     {
         $this->latitude = $latitude;
 
@@ -285,14 +228,7 @@ class BranchSync
         return $this->latitude;
     }
 
-    /**
-     * Set longitude.
-     *
-     * @param float $longitude
-     *
-     * @return BranchSync
-     */
-    public function setLongitude($longitude)
+    public function setLongitude(float $longitude): self
     {
         $this->longitude = $longitude;
 
@@ -312,11 +248,9 @@ class BranchSync
     /**
      * Set dwnSpeed.
      *
-     * @param int $dwnSpeed
-     *
      * @return BranchSync
      */
-    public function setDwnSpeed($dwnSpeed)
+    public function setDwnSpeed(int $dwnSpeed)
     {
         $this->dwnSpeed = $dwnSpeed;
 
@@ -336,11 +270,9 @@ class BranchSync
     /**
      * Set upSpeed.
      *
-     * @param int $upSpeed
-     *
      * @return BranchSync
      */
-    public function setUpSpeed($upSpeed)
+    public function setUpSpeed(int $upSpeed)
     {
         $this->upSpeed = $upSpeed;
 
@@ -360,11 +292,9 @@ class BranchSync
     /**
      * Set delay.
      *
-     * @param int $delay
-     *
      * @return BranchSync
      */
-    public function setDelay($delay)
+    public function setDelay(int $delay)
     {
         $this->delay = $delay;
 
@@ -384,11 +314,9 @@ class BranchSync
     /**
      * Set adminMail.
      *
-     * @param string $adminMail
-     *
      * @return BranchSync
      */
-    public function setAdminMail($adminMail)
+    public function setAdminMail(string $adminMail)
     {
         $this->adminMail = $adminMail;
 
@@ -408,11 +336,9 @@ class BranchSync
     /**
      * Set adminName.
      *
-     * @param string $adminName
-     *
      * @return BranchSync
      */
-    public function setAdminName($adminName)
+    public function setAdminName(string $adminName)
     {
         $this->adminName = $adminName;
 
@@ -432,11 +358,9 @@ class BranchSync
     /**
      * Set adminPhone.
      *
-     * @param string $adminPhone
-     *
      * @return BranchSync
      */
-    public function setAdminPhone($adminPhone)
+    public function setAdminPhone(string $adminPhone)
     {
         $this->adminPhone = $adminPhone;
 
@@ -456,11 +380,9 @@ class BranchSync
     /**
      * Set lastSyncTransId.
      *
-     * @param int $lastSyncTransId
-     *
      * @return BranchSync
      */
-    public function setLastSyncTransId($lastSyncTransId)
+    public function setLastSyncTransId(int $lastSyncTransId)
     {
         $this->lastSyncTransId = $lastSyncTransId;
 
@@ -480,11 +402,9 @@ class BranchSync
     /**
      * Set lastSyncTransDate.
      *
-     * @param \DateTime $lastSyncTransDate
-     *
      * @return BranchSync
      */
-    public function setLastSyncTransDate($lastSyncTransDate)
+    public function setLastSyncTransDate(DateTime $lastSyncTransDate)
     {
         $this->lastSyncTransDate = $lastSyncTransDate;
 
@@ -494,11 +414,9 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @param string $sslPubKey
-     *
      * @return BranchSync
      */
-    public function setSslPubKey($sslPubKey)
+    public function setSslPubKey(string $sslPubKey)
     {
         $this->sslPubKey = $sslPubKey;
 
@@ -518,11 +436,9 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @param string $branchType
-     *
      * @return BranchSync
      */
-    public function setBranchType($branchType)
+    public function setBranchType(string $branchType)
     {
         $this->branchType = $branchType;
 
@@ -542,7 +458,7 @@ class BranchSync
     /**
      * Get lastSyncTransDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastSyncTransDate()
     {
@@ -552,11 +468,9 @@ class BranchSync
     /**
      * Set lastSyncType.
      *
-     * @param string $lastSyncType
-     *
      * @return BranchSync
      */
-    public function setLastSyncType($lastSyncType)
+    public function setLastSyncType(string $lastSyncType)
     {
         $this->lastSyncType = $lastSyncType;
 
@@ -576,11 +490,9 @@ class BranchSync
     /**
      * Set lft.
      *
-     * @param int $lft
-     *
      * @return BranchSync
      */
-    public function setLft($lft)
+    public function setLft(int $lft)
     {
         $this->lft = $lft;
 
@@ -600,11 +512,9 @@ class BranchSync
     /**
      * Set rgt.
      *
-     * @param int $rgt
-     *
      * @return BranchSync
      */
-    public function setRgt($rgt)
+    public function setRgt(int $rgt)
     {
         $this->rgt = $rgt;
 
@@ -624,11 +534,9 @@ class BranchSync
     /**
      * Set lvl.
      *
-     * @param int $lvl
-     *
      * @return BranchSync
      */
-    public function setLvl($lvl)
+    public function setLvl(int $lvl)
     {
         $this->lvl = $lvl;
 
@@ -648,11 +556,9 @@ class BranchSync
     /**
      * Set root.
      *
-     * @param int $root
-     *
      * @return BranchSync
      */
-    public function setRoot($root)
+    public function setRoot(int $root)
     {
         $this->root = $root;
 
@@ -669,81 +575,36 @@ class BranchSync
         return $this->root;
     }
 
-    /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return BranchSync
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
-     * @param BranchSync $parent
-     *
-     * @return $this
-     */
-    public function setParent(self $parent = null)
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * @return string
-     */
-    public function getUniqueId()
+    public function getUniqueId(): string
     {
         return $this->uniqueId;
     }
 
-    /**
-     * @param string $uniqueId
-     *
-     * @return $this
-     */
-    public function setUniqueId($uniqueId)
+    public function setUniqueId(string $uniqueId): self
     {
         $this->uniqueId = $uniqueId;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return BranchSync
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -760,5 +621,13 @@ class BranchSync
         $this->url = $url;
 
         return $this;
+    }
+
+    /**
+     * @return BranchSync[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
 
@@ -77,7 +78,7 @@ switch ($action) {
         $form->addSelectAjax(
             'course_id',
             get_lang('Course'),
-            null,
+            [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
             ]
@@ -86,7 +87,7 @@ switch ($action) {
         $form->addSelectAjax(
             'depends',
             get_lang('DependsOnAssessments'),
-            null,
+            [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
                 'multiple' => 'multiple',
@@ -266,7 +267,7 @@ switch ($action) {
         break;
     case 'list':
     default:
-        $paginator = new Paginator();
+        $paginator = new Paginator(Container::$container->get('event_dispatcher'));
         $pagination = $paginator->paginate(
             $gradeBookList,
             $page,

@@ -86,11 +86,6 @@ class CourseCopyLearnpath extends Resource
     public $author;
 
     /**
-     * Author's image.
-     */
-    public $preview_image;
-
-    /**
      * Create a new learnpath.
      *
      * @param int    $id                ID
@@ -132,12 +127,12 @@ class CourseCopyLearnpath extends Resource
         $debug,
         $visibility,
         $author,
-        $preview_image,
+        //$preview_image,
         $use_max_score,
         $autolaunch,
         $created_on,
         $modified_on,
-        $publicated_on,
+        $published_on,
         $expired_on,
         $session_id,
         $categoryId,
@@ -164,11 +159,11 @@ class CourseCopyLearnpath extends Resource
         $this->autolaunch = $autolaunch;
         $this->created_on = $created_on;
         $this->modified_on = $modified_on;
-        $this->publicated_on = $publicated_on;
+        $this->published_on = $published_on;
         $this->expired_on = $expired_on;
         $this->session_id = $session_id;
         $this->author = $author;
-        $this->preview_image = $preview_image;
+        //$this->preview_image = $preview_image;
         $this->categoryId = $categoryId;
         $this->items = $items;
     }

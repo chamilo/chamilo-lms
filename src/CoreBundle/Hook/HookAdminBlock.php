@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Hook;
 use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockObserverInterface;
 use Doctrine\ORM\EntityManager;
+use Exception;
 
 /**
  * Class HookAdminBlock
@@ -18,7 +19,7 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
     /**
      * Constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function __construct(EntityManager $entityManager)
     {

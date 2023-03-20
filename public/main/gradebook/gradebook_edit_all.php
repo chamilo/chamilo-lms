@@ -30,7 +30,9 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
+//$course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
+$course_id = api_get_course_int_id();
+
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -39,7 +41,7 @@ $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $table_evaluated[LINK_EXERCISE] = [
     TABLE_QUIZ_TEST,
     'title',
-    'id',
+    'iid',
     get_lang('Test'),
 ];
 $table_evaluated[LINK_DROPBOX] = [
@@ -51,31 +53,31 @@ $table_evaluated[LINK_DROPBOX] = [
 $table_evaluated[LINK_STUDENTPUBLICATION] = [
     TABLE_STUDENT_PUBLICATION,
     'url',
-    'id',
+    'iid',
     get_lang('Assignments'),
 ];
 $table_evaluated[LINK_LEARNPATH] = [
     TABLE_LP_MAIN,
     'name',
-    'id',
+    'iid',
     get_lang('Courses'),
 ];
 $table_evaluated[LINK_FORUM_THREAD] = [
     TABLE_FORUM_THREAD,
     'thread_title_qualify',
-    'thread_id',
+    'iid',
     get_lang('Forum'),
 ];
 $table_evaluated[LINK_ATTENDANCE] = [
     TABLE_ATTENDANCE,
     'attendance_title_qualify',
-    'id',
+    'iid',
     get_lang('Attendance'),
 ];
 $table_evaluated[LINK_SURVEY] = [
     TABLE_SURVEY,
     'code',
-    'survey_id',
+    'iid',
     get_lang('Survey'),
 ];
 
@@ -147,7 +149,12 @@ foreach ($links as &$row) {
         ).' </td>';
     $output .= '<td>
                     <input type="hidden" name="link_'.$row['id'].'" value="1" />
-                    <input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/>
+                    <input
+                        class="form-control col-md-3"
+                        size="10"
+                        type="text"
+                        name="link['.$row['id'].']"
+                        value="'.$item_weight.'"/>
                </td></tr>';
 }
 
@@ -165,7 +172,6 @@ foreach ($evaluations as $evaluationRow) {
             $evaluationRow['id'],
             $new_weight
         );
-
         $item_weight = $new_weight;
     }
 
@@ -174,7 +180,12 @@ foreach ($evaluations as $evaluationRow) {
                 <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Score')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
-                    <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>
+                    <input
+                        type="text"
+                        class="form-control col-md-3"
+                        size="10"
+                        name="evaluation['.$evaluationRow['id'].']"
+                        value="'.$item_weight.'"/>
                 </td></tr>';
 }
 
@@ -182,12 +193,20 @@ $currentUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.$my_selectcat;
 
 $form = new FormValidator('auto_weight', 'post', $currentUrl);
 $form->addHeader(get_lang('Automatic weight'));
-$form->addLabel(null, get_lang('Automatic weightExplanation'));
+$form->addLabel(
+    null,
+    get_lang(
+        'Use the automatic weight distribution to speed things up. The system will then distribute the total weight evenly between the evaluation items below.'
+    )
+);
 $form->addButtonUpdate(get_lang('Automatic weight'));
 
 if ($form->validate()) {
     $itemCount = count($links) + count($evaluations);
-    $weight = round($original_total / $itemCount, 2);
+    $weight = 0;
+    if (!empty($itemCount)) {
+        $weight = round($original_total / $itemCount, 2);
+    }
     $total = $weight * $itemCount;
 
     $diff = null;
@@ -234,8 +253,7 @@ if ($form->validate()) {
     exit;
 }
 
-// 	DISPLAY HEADERS AND MESSAGES
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
@@ -260,18 +278,17 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
         Display:: display_header('');
     }
 }
-?>
-    <div class="actions">
-        <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat; ?>">
-            <?php echo Display::return_icon(
-                'back.png',
-                get_lang('Assessment home'),
-                '',
-                ICON_SIZE_MEDIUM
-            ); ?>
-        </a>
-    </div>
-<?php
+
+$actions = '<a href="'.Category::getUrl().'&selectcat='.$my_selectcat.'">
+            '.Display::return_icon(
+        'back.png',
+        get_lang('Assessment home'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'
+    </a>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $form->display();
 
@@ -294,7 +311,7 @@ echo Display::return_message($warning_message, 'warning', false);
     </table>
     <input type="hidden" name="submitted" value="1"/>
     <br/>
-    <button class="btn btn-primary" type="submit" name="name"
+    <button class="btn btn--primary" type="submit" name="name"
             value="<?php echo get_lang('Save'); ?>">
         <?php echo get_lang('Save weights in report'); ?>
     </button>

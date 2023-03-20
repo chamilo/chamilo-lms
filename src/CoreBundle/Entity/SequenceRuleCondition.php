@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,25 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRuleCondition
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRule")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    protected $rule;
+    protected ?SequenceRule $rule = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceCondition")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
-    protected $condition;
+    protected ?SequenceCondition $condition = null;
 
     /**
      * Get id.
@@ -45,30 +45,24 @@ class SequenceRuleCondition
         return $this->id;
     }
 
-    public function getRule()
+    public function getRule(): ?SequenceRule
     {
         return $this->rule;
     }
 
-    /**
-     * @return SequenceRuleCondition
-     */
-    public function setRule($rule)
+    public function setRule(?SequenceRule $rule): self
     {
         $this->rule = $rule;
 
         return $this;
     }
 
-    public function getCondition()
+    public function getCondition(): ?SequenceCondition
     {
         return $this->condition;
     }
 
-    /**
-     * @return SequenceRuleCondition
-     */
-    public function setCondition($condition)
+    public function setCondition(?SequenceCondition $condition): self
     {
         $this->condition = $condition;
 

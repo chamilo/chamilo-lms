@@ -31,7 +31,7 @@ switch ($type) {
         );
 
         $iframe = Display::return_message(
-            Display::url(get_lang('Download'), $file, ['class' => 'btn btn-primary']),
+            Display::url(get_lang('Download'), $file, ['class' => 'btn btn--primary']),
             'info',
             false
         );

@@ -1,50 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
+use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Illustration.
- *
- * @ApiResource(
- *      normalizationContext={"groups"={"illustration:read"}}
- * )
  * @ORM\Table(name="illustration")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\IllustrationRepository")
  */
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['illustration:read'],
+    ],
+)]
 class Illustration extends AbstractResource implements ResourceInterface
 {
     use PersonalResourceTrait;
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="uuid")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected Uuid $id;
 
     /**
-     * @var string
-     * @Groups({"illustration:read"})
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
-    /**
-     * Illustration constructor.
-     */
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->name = 'illustration';
     }
 
@@ -53,21 +50,14 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function setName(string $name): self
@@ -77,7 +67,7 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): Uuid
     {
         return $this->getId();
     }

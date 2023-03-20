@@ -25,7 +25,7 @@ foreach ($types as $key => $label) {
         Display::url(
             get_lang('List'),
             $url.''.$label,
-            ['class' => 'btn btn-default']
+            ['class' => 'btn btn--plain']
         )
     );
     $row++;

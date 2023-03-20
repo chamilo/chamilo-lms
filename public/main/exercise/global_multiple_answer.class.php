@@ -12,9 +12,6 @@ class GlobalMultipleAnswer extends Question
     public $typePicture = 'mcmagl.png';
     public $explanationLangVar = 'Global multiple answer';
 
-    /**
-     * GlobalMultipleAnswer constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -113,14 +110,14 @@ class GlobalMultipleAnswer extends Question
             );
             $answer_number->freeze();
 
-            $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox"');
+            $form->addCheckBox('correct['.$i.']', null);
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'answer['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
@@ -128,11 +125,11 @@ class GlobalMultipleAnswer extends Question
                 ]
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'comment['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
@@ -155,8 +152,8 @@ class GlobalMultipleAnswer extends Question
         $form->addElement('text', 'weighting[1]', get_lang('Score'));
 
         //--------- Creation coche pour ne pas prendre en compte les n�gatifs
-        $form->addElement('checkbox', 'pts', '', get_lang('No negative score'));
-        $form->addElement('html', '<br />');
+        $form->addCheckBox('pts', '', get_lang('No negative score'));
+        $form->addHtml('html', '<br />');
 
         // Affiche un message si le score n'est pas renseign�
         $form->addRule('weighting[1]', get_lang('Required field'), 'required');
@@ -247,18 +244,18 @@ class GlobalMultipleAnswer extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER])) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<thclass="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';

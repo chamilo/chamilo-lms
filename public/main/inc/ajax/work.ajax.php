@@ -2,16 +2,18 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
 $courseEntity = api_get_course_entity();
+$repo = Container::getStudentPublicationRepository();
 
 switch ($action) {
     case 'show_student_work':
@@ -86,7 +88,7 @@ switch ($action) {
                     $counter++;
                 }
             }
-
+            $router = Container::getRouter();
             $resultList = [];
             foreach ($fileList as $file) {
                 $globalFile = [];
@@ -98,7 +100,7 @@ switch ($action) {
                     'description' => '',
                 ];
 
-                $result = processWorkForm(
+                $studentPublication = processWorkForm(
                     $workInfo,
                     $values,
                     $courseInfo,
@@ -111,15 +113,16 @@ switch ($action) {
                 );
 
                 $json = [];
-                if (!empty($result) && is_array($result) && empty($result['error'])) {
-                    $json['name'] = api_htmlentities($result['title']);
+                if (null !== $studentPublication) {
+                    $url = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
+                    $json['name'] = api_htmlentities($studentPublication->getTitle());
                     $json['link'] = Display::url(
-                        api_htmlentities($result['title']),
-                        api_htmlentities($result['view_url']),
+                        api_htmlentities($studentPublication->getTitle()),
+                        api_htmlentities($url),
                         ['target' => '_blank']
                     );
 
-                    $json['url'] = $result['view_url'];
+                    $json['url'] = $url;
                     $json['size'] = '';
                     //$json['type'] = api_htmlentities($result['filetype']);
                     $json['result'] = Display::return_icon(
@@ -128,7 +131,7 @@ switch ($action) {
                     );
                 } else {
                     $json['url'] = '';
-                    $json['error'] = isset($result['error']) ? $result['error'] : get_lang('Error');
+                    $json['error'] = get_lang('Error');
                 }
                 $resultList[] = $json;
             }

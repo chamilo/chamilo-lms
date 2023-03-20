@@ -1,0 +1,29 @@
+@layer components {
+  .teacher-bar {
+    @apply flex flex-wrap gap-4;
+
+    &__item {
+      @apply flex gap-0.5 items-center;
+
+      > div.p-avatar {
+        @apply flex-none;
+      }
+    }
+
+    &__item-caption {
+      @apply flex flex-col flex-grow text-caption;
+
+      span:first-child {
+        @apply line-clamp-1 font-semibold;
+      }
+    }
+
+    &--simple {
+      @apply flex-nowrap;
+
+      .teacher-bar__item {
+        @apply w-1/2;
+      }
+    }
+  }
+}

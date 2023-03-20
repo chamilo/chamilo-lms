@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Notification.
- *
  * @ORM\Table(
  *     name="notification",
  *     indexes={
- *          @ORM\Index(name="mail_notify_sent_index", columns={"sent_at"}),
- *          @ORM\Index(
- *              name="mail_notify_freq_index",
- *              columns={"sent_at", "send_freq", "created_at"}
- *          )
+ *         @ORM\Index(name="mail_notify_sent_index", columns={"sent_at"}),
+ *         @ORM\Index(
+ *             name="mail_notify_freq_index",
+ *             columns={"sent_at", "send_freq", "created_at"}
+ *         )
  *     }
  * )
  * @ORM\Entity
@@ -25,72 +26,54 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Notification
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="dest_user_id", type="integer", nullable=false)
      */
-    protected $destUserId;
+    protected int $destUserId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="dest_mail", type="string", length=255, nullable=true)
      */
-    protected $destMail;
+    protected ?string $destMail = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    protected $title;
+    protected ?string $title = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="send_freq", type="smallint", nullable=true)
      */
-    protected $sendFreq;
+    protected ?int $sendFreq = null;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
-    protected $sentAt;
+    protected ?DateTime $sentAt = null;
 
     /**
      * Set destUserId.
      *
-     * @param int $destUserId
-     *
      * @return Notification
      */
-    public function setDestUserId($destUserId)
+    public function setDestUserId(int $destUserId)
     {
         $this->destUserId = $destUserId;
 
@@ -110,11 +93,9 @@ class Notification
     /**
      * Set destMail.
      *
-     * @param string $destMail
-     *
      * @return Notification
      */
-    public function setDestMail($destMail)
+    public function setDestMail(string $destMail)
     {
         $this->destMail = $destMail;
 
@@ -134,11 +115,9 @@ class Notification
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Notification
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -158,11 +137,9 @@ class Notification
     /**
      * Set content.
      *
-     * @param string $content
-     *
      * @return Notification
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
 
@@ -182,11 +159,9 @@ class Notification
     /**
      * Set sendFreq.
      *
-     * @param int $sendFreq
-     *
      * @return Notification
      */
-    public function setSendFreq($sendFreq)
+    public function setSendFreq(int $sendFreq)
     {
         $this->sendFreq = $sendFreq;
 
@@ -206,11 +181,9 @@ class Notification
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
-     *
      * @return Notification
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -220,7 +193,7 @@ class Notification
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -230,11 +203,9 @@ class Notification
     /**
      * Set sentAt.
      *
-     * @param \DateTime $sentAt
-     *
      * @return Notification
      */
-    public function setSentAt($sentAt)
+    public function setSentAt(DateTime $sentAt)
     {
         $this->sentAt = $sentAt;
 
@@ -244,7 +215,7 @@ class Notification
     /**
      * Get sentAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSentAt()
     {

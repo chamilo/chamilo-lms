@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -18,7 +19,7 @@ class DateTimePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        $attributes['class'] = 'form-control';
+        $attributes['class'] = 'p-component p-inputtext';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
     }
@@ -49,37 +50,7 @@ class DateTimePicker extends HTML_QuickForm_text
 
         //$resetFieldX = sprintf(get_lang('Reset %s'), $label);
 
-        return '
-            <div id="'.$id.'" class="input-group mb-3">
-                <input '.$this->_getAttrString($this->_attributes).'
-                    class="form-control" type="text" value="'.$value.'" data-input>
-                <div class="input-group-prepend" id="button-addon3">
-                    <button class="btn btn-outline-secondary"  type="button" data-toggle>
-                        <i class="fas fa-calendar-alt"></i>
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button" data-clear>
-                        <i class="fas fa-times"></i>
-                    </button>
-              </div>
-            </div>
-        '.$this->getElementJS();
-
-        /*return '
-            <div class="input-group mb-3" id="date_time_wrapper_'.$id.'">
-                <span class="input-group-prepend">
-                    <input '.$this->_getAttrString($this->_attributes).'>
-                </span>
-                <p class="form-control disabled" id="'.$id.'_alt_text">'.$formattedValue.'</p>
-                <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
-                <div class="input-group-append">
-                    <button class="btn btn-light" type="button"
-                            title="'.$resetFieldX.'">
-                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">'.$resetFieldX.'</span>
-                    </button>
-                </div>
-            </div>
-        '.$this->getElementJS();*/
+        return '<input '.$this->_getAttrString($this->_attributes).' />'.$this->getElementJS();
     }
 
     /**
@@ -89,58 +60,6 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(['value' => $value]);
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->calculateSize();
-
-        switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                <div class="form-group {error_class}">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-
-                    {element}
-                </div>';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="form-group row {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' col-form-label {extra_label_class}" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '{element}';
-                break;
-        }
     }
 
     /**
@@ -161,7 +80,10 @@ class DateTimePicker extends HTML_QuickForm_text
                     enableTime: true,
                     dateFormat: 'Y-m-d H:i',
                     time_24hr: true,
-                    wrap: true
+                    wrap: false,
+                    locale: {
+                      firstDayOfWeek: 1
+                    }
                 };
                 $('#{$id}').flatpickr(config);
 

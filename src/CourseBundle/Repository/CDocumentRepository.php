@@ -1,115 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\CDocumentType;
-use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CDocumentRepository.
- */
-final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
+final class CDocumentRepository extends ResourceRepository
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    public function __construct(ManagerRegistry $registry)
     {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        parent::__construct($registry, CDocument::class);
     }
 
-    public function getResourceSettings(): Settings
-    {
-        $settings = parent::getResourceSettings();
-
-        $settings
-            ->setAllowNodeCreation(true)
-            ->setAllowResourceCreation(true)
-            ->setAllowResourceUpload(true)
-            ->setAllowDownloadAll(true)
-            ->setAllowDiskSpace(true)
-            ->setAllowToSaveEditorToResourceFile(true)
-        ;
-
-        return $settings;
-    }
-
-    public function saveUpload(UploadedFile $file)
-    {
-        $resource = new CDocument();
-        $resource
-            ->setFiletype('file')
-            //->setSize($file->getSize())
-            ->setTitle($file->getClientOriginalName())
-        ;
-
-        return $resource;
-    }
-
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
-    {
-        $newResource = $form->getData();
-        $newResource
-            //->setCourse($course)
-            //->setSession($session)
-            ->setFiletype($fileType)
-            //->setTitle($title) // already added in $form->getData()
-            ->setReadonly(false)
-        ;
-
-        return $newResource;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentUrl(CDocument $document, $courseId, $sessionId)
-    {
-        // There are no URL for folders.
-        if ('folder' === $document->getFiletype()) {
-            return '';
-        }
-
-        $file = $document->getResourceNode()->getResourceFile();
-
-        if (null === $file) {
-            return '';
-        }
-
-        $params = [
-            'cid' => $courseId,
-            'sid' => $sessionId,
-            'id' => $document->getResourceNode()->getId(),
-            'tool' => 'document',
-            'type' => $document->getResourceNode()->getResourceType()->getName(),
-        ];
-
-        return $this->getRouter()->generate('chamilo_core_resource_view', $params);
-    }
-
-    /**
-     * @return CDocument|null
-     */
-    public function getParent(CDocument $document)
+    public function getParent(CDocument $document): ?CDocument
     {
         $resourceParent = $document->getResourceNode()->getParent();
 
         if (null !== $resourceParent) {
-            $resourceParentId = $resourceParent->getId();
             $criteria = [
-                'resourceNode' => $resourceParentId,
+                'resourceNode' => $resourceParent->getId(),
             ];
 
             return $this->findOneBy($criteria);
@@ -124,31 +45,46 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     }
 
     /**
-     * @param int $userId
-     *
-     * @return array
+     * @return CDocument[]
      */
-    public function getAllDocumentsByAuthor($userId)
+    public function findDocumentsByAuthor(int $userId)
     {
-        $repo = $this->repository;
-
-        $qb = $repo->createQueryBuilder('d');
+        $qb = $this->createQueryBuilder('d');
         $query = $qb
-            ->innerJoin('d.resourceNode', 'r')
-            ->innerJoin('r.resourceLinks', 'l')
+            ->innerJoin('d.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'l')
             ->where('l.user = :user')
             ->andWhere('l.visibility <> :visibility')
             ->setParameters([
                 'user' => $userId,
                 'visibility' => ResourceLink::VISIBILITY_DELETED,
             ])
-            ->getQuery();
+            ->getQuery()
+        ;
 
         return $query->getResult();
     }
 
-    public function getResourceFormType(): string
+    public function countUserDocuments(User $user, Course $course, Session $session = null, CGroup $group = null): int
     {
-        return CDocumentType::class;
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
+
+        // Add "not deleted" filters.
+        $qb->select('count(resource)');
+
+        $this->addFileTypeQueryBuilder('file', $qb);
+
+        return $this->getCount($qb);
+    }
+
+    protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        $qb
+            ->andWhere('resource.filetype = :filetype')
+            ->setParameter('filetype', $fileType)
+        ;
+
+        return $qb;
     }
 }

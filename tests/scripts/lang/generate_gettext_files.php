@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,7 +8,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
-die(); //remove before execution
+exit(); //remove before execution
 //require_once __DIR__.'/../../../public/main/inc/global.inc.php';
 ini_set('memory_limit', '600M');
 $partial = false; //if set to true, do not add empty strings to .po files
@@ -198,9 +199,9 @@ foreach ($languagesList as $language) {
     $file = $langPath.$language.'/trad4all.inc.php';
     $languageCode = $langToIso639v1[$language];
     $languageFilename = $langToPOFilename[$language];
-    $destinationFile = $destinationDir.'/'.$baseFilename.'/'.$languageFilename.'.po';
+    $destinationFile = $destinationDir.'/'.$baseFilename.'/messages.'.$languageFilename.'.po';
     $header = 'msgid ""'."\n".'msgstr ""'."\n".
-        '"Project-Id-Version: chamilo-lms\n"'."\n".
+        '"Project-Id-Version: chamilo\n"'."\n".
         '"Language: '.$languageCode.'\n"'."\n".
         '"Content-Type: text/plain; charset=UTF-8\n"'."\n".
         '"Content-Transfer-Encoding: 8bit\n"'."\n\n";

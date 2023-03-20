@@ -8,7 +8,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $userGroupInfo = $usergroup->get($id);
 if (empty($userGroupInfo)) {
     api_not_allowed(true);
@@ -225,26 +225,26 @@ function action_formatter(cellvalue, options, rowObject) {
     var value = rowObject[5];
     return \''.
     '&nbsp;'.$link.
-    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.$reportingIcon.'</a>'.
+    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.$reportingIcon.'</a>'.
     ' '.$deleteButton.' \';
 }
 
 function extra_formatter(cellvalue, options, rowObject) {
     var calendarName = rowObject[1];
     var calendarId = rowObject[7];
-    
-    if (calendarName == "") {          
+
+    if (calendarName == "") {
         return \'<a href="'.
-        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?user_id=\'+options.rowId+\'&id='.$id.'&action=add_calendar&width=700" class="btn btn-primary ajax">'.get_lang('Add').'</a>\';
+        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?user_id=\'+options.rowId+\'&id='.$id.'&action=add_calendar&width=700" class="btn btn--primary ajax">'.get_lang('Add').'</a>\';
     } else {
     return \' \'+calendarName+\' <a href="'.
-        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?calendar_id=\'+calendarId+\'&user_id=\'+options.rowId+\'&id='.$id.'&action=edit_calendar&width=700" class="btn btn-primary ajax"> '.get_lang('Edit').'</a>\';
+        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?calendar_id=\'+calendarId+\'&user_id=\'+options.rowId+\'&id='.$id.'&action=edit_calendar&width=700" class="btn btn--primary ajax"> '.get_lang('Edit').'</a>\';
     }
 
     return calendarName;
 
     return \''.
-    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }';
 

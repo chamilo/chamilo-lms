@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -84,7 +85,7 @@ class CoursesAndSessionsCatalog
                 INNER JOIN $TABLE_COURSE_FIELD tcf
                 ON tcfv.field_id =  tcf.id
                 WHERE
-                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.item_type = $extraFieldType AND
                     tcf.variable = 'hide_from_catalog' AND
                     tcfv.value = 1
                 ";
@@ -874,7 +875,7 @@ class CoursesAndSessionsCatalog
                 $qb->expr()->like('t.tag', ':tag')
             )
             ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
+                $qb->expr()->eq('f.itemType', ExtraField::COURSE_FIELD_TYPE)
             )
             ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
             ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
@@ -1065,7 +1066,7 @@ class CoursesAndSessionsCatalog
             id="plist"
             data-trigger="focus"
             tabindex="0" role="button"
-            class="btn btn-default panel_popover"
+            class="btn btn--plain panel_popover"
             data-toggle="popover"
             title="'.addslashes(get_lang('CourseTeachers')).'"
             data-html="true"
@@ -1153,10 +1154,10 @@ class CoursesAndSessionsCatalog
         }
 
         return Display::url(
-            Display::returnFontAwesomeIcon('check').' '.$title,
+            Display::getMdiIcon('check').' '.$title,
             api_get_self().'?action='.$action.'&sec_token='.$stok.
             '&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
-            ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
+            ['class' => 'btn btn--success btn-sm', 'title' => $title, 'aria-label' => $title]
         );
     }
 
@@ -1182,9 +1183,9 @@ class CoursesAndSessionsCatalog
             '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
-            Display::returnFontAwesomeIcon('sign-in').'&nbsp;'.$title,
+            Display::getMdiIcon('login').'&nbsp;'.$title,
             $url,
-            ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
+            ['class' => 'btn btn--danger', 'title' => $title, 'aria-label' => $title]
         );
     }
 
@@ -1319,7 +1320,7 @@ class CoursesAndSessionsCatalog
         return Display::div(
             $icon,
             [
-                'class' => 'btn btn-default btn-sm registered',
+                'class' => 'btn btn--plain btn-sm registered',
                 'title' => get_lang("AlreadyRegisteredToSession"),
             ]
         );
@@ -1565,10 +1566,10 @@ class CoursesAndSessionsCatalog
         $entityManager = Database::getManager();
         $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
         $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-        $extraFieldRelTagRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+        $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
-            'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+            'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 
@@ -1594,7 +1595,7 @@ class CoursesAndSessionsCatalog
                 ]);
                 /** @var SessionRelCourse $sessionRelCourse */
                 foreach ($sessionRelCourses as $sessionRelCourse) {
-                    $courseTags = $extraFieldRelTagRepo->getTags(
+                    $courseTags = $tagRepo->getTagsByItem(
                         $tagsField,
                         $sessionRelCourse->getCourse()->getId()
                     );
@@ -1632,10 +1633,6 @@ class CoursesAndSessionsCatalog
                 $catName = $cat->getName();
             }
 
-            $generalCoach = $session->getGeneralCoach();
-            $coachId = $generalCoach ? $generalCoach->getId() : 0;
-            $coachName = $generalCoach ? UserManager::formatUserFullName($session->getGeneralCoach()) : '';
-
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
@@ -1650,15 +1647,16 @@ class CoursesAndSessionsCatalog
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
-                'coach_id' => $coachId,
-                'coach_url' => $generalCoach
-                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
-                    : '',
-                'coach_name' => $coachName,
-                'coach_avatar' => UserManager::getUserPicture(
-                    $coachId,
-                    USER_IMAGE_SIZE_SMALL
-                ),
+                'coaches' => $session->getGeneralCoaches()
+                    ->map(
+                        fn(User $coach) => [
+                            'id' => $coach->getId(),
+                            'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'
+                                .http_build_query(['a' => 'get_user_popup', 'user_id' => $coach->getId()]),
+                            'name' => $coach->getFullname(),
+                            'avatar' => UserManager::getUserPicture($coach->getId(), USER_IMAGE_SIZE_SMALL),
+                        ]
+                    ),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
                     $session->getId(),
                     $userId

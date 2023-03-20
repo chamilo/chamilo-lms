@@ -73,12 +73,12 @@
                             {% if is_premium == false %}
                                 <h5>{{ 'CourseSubscription'|trans }}</h5>
                                 <div class="session-subscribe">
-                                    {% if _u.logged and not is_subscribed %}
-                                        {{ subscribe_button }}
-                                    {% elseif not _u.logged %}
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY')  and not is_subscribed %}
+{#                                        {{ subscribe_button }}#}
+                                    {% elseif not is_granted('IS_AUTHENTICATED_FULLY')  %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
                                             <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}"
-                                               class="btn btn-success btn-block btn-lg">
+                                               class="btn btn--success btn-block btn-lg">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|trans }}
                                             </a>
                                         {% endif %}
@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="buy-box">
                                         <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
-                                           class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|trans }}</a>
+                                           class="btn btn-lg btn--primary btn-block">{{ 'BuyNow'|trans }}</a>
                                     </div>
                                 </div>
                             {% endif %}

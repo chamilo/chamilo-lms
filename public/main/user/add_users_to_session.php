@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -11,9 +13,11 @@ $xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$id_session = intval($_GET['id_session']);
+$id_session = (int) $_GET['id_session'];
 
 SessionManager::protect_teacher_session_edit($id_session);
+
+$session = api_get_session_entity($id_session);
 
 // setting breadcrumbs
 if (api_is_platform_admin()) {
@@ -32,7 +36,7 @@ if (api_is_platform_admin()) {
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
-if ('true' == $allowTutors) {
+if ('true' === $allowTutors) {
     // Database Table Definitions
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -94,7 +98,7 @@ if ('true' == $allowTutors) {
                     $id_session = intval($id_session);
                     // check id_user from session_rel_user table
                     $sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
-                            WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+                            WHERE session_id ="'.$id_session.'" AND relation_type = '.Session::STUDENT.' ';
                     $res = Database::query($sql);
                     $user_ids = [];
                     if (Database::num_rows($res) > 0) {
@@ -138,6 +142,7 @@ if ('true' == $allowTutors) {
                             $order_clause;
                     break;
             }
+
             if (api_is_multiple_url_enabled()) {
                 $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                 $access_url_id = api_get_current_access_url_id();
@@ -185,7 +190,7 @@ if ('true' == $allowTutors) {
 
             $rs = Database::query($sql);
             $i = 0;
-            if ('single' == $type) {
+            if ('single' === $type) {
                 while ($user = Database::fetch_array($rs)) {
                     $i++;
                     if ($i <= 10) {
@@ -199,7 +204,7 @@ if ('true' == $allowTutors) {
                 $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
             } else {
                 $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-                while ($user = Database :: fetch_array($rs)) {
+                while ($user = Database::fetch_array($rs)) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                     $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
                 }
@@ -284,12 +289,12 @@ if ('true' == $allowTutors) {
 
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
     if ($ajax_search) {
-        $sql = "SELECT u.user_id, lastname, firstname, username, session_id
+        $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                ON 
-                    $tbl_session_rel_user.user_id = u.user_id AND 
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                ON
+                    $tbl_session_rel_user.user_id = u.id AND
+                    $tbl_session_rel_user.relation_type = ".Session::STUDENT." AND
                     $tbl_session_rel_user.session_id = ".intval($id_session)."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
@@ -297,14 +302,14 @@ if ('true' == $allowTutors) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT u.user_id, lastname, firstname, username, session_id
+                $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user
-                        ON 
-                            $tbl_session_rel_user.user_id = u.user_id AND 
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                        ON
+                            $tbl_session_rel_user.user_id = u.id AND
+                            $tbl_session_rel_user.relation_type = ".Session::STUDENT." AND
                             $tbl_session_rel_user.session_id = ".intval($id_session)."
-                        INNER JOIN $tbl_user_rel_access_url url_user 
+                        INNER JOIN $tbl_user_rel_access_url url_user
                         ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
@@ -355,51 +360,52 @@ if ('true' == $allowTutors) {
             $where_filter = '';
             if (api_is_multiple_url_enabled()) {
                 if (is_array($final_result) && count($final_result) > 0) {
-                    $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
+                    $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
                 } else {
                     //no results
-                    $where_filter = " AND u.user_id  = -1";
+                    $where_filter = " AND u.id = -1";
                 }
             } else {
                 if (is_array($final_result) && count($final_result) > 0) {
-                    $where_filter = " WHERE u.user_id IN  ('".implode("','", $final_result)."') ";
+                    $where_filter = " WHERE u.id IN  ('".implode("','", $final_result)."') ";
                 } else {
                     //no results
-                    $where_filter = " WHERE u.user_id  = -1";
+                    $where_filter = " WHERE u.id = -1";
                 }
             }
         }
 
         if ($use_extra_fields) {
-            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
+            $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND
+                    ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                     $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         } else {
-            $sql = "SELECT  user_id, lastname, firstname, username, session_id
+            $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND
+                    ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                     WHERE u.status <> ".DRH." AND u.status<>6
                     $order_clause";
         }
+
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
+                $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         LEFT JOIN $tbl_session_rel_user
                         ON
-                            $tbl_session_rel_user.user_id = u.user_id AND
+                            $tbl_session_rel_user.user_id = u.id AND
                             $tbl_session_rel_user.session_id = '$id_session' AND
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                            $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6
                         $order_clause";
@@ -428,20 +434,20 @@ if ('true' == $allowTutors) {
                 ON
                     $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
+                $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         LEFT JOIN $tbl_session_rel_user
                         ON
-                            $tbl_session_rel_user.user_id = u.user_id AND
+                            $tbl_session_rel_user.user_id = u.id AND
                             $tbl_session_rel_user.session_id = '$id_session' AND
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                            $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
@@ -560,15 +566,15 @@ if ('true' == $allowTutors) {
             <?php
                 if ($ajax_search) {
                     ?>
-                  <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
+                  <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
                 <?php
                 } else {
                     ?>
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
                     <br /><br />
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
                   <?php
@@ -578,7 +584,7 @@ if ('true' == $allowTutors) {
             <br />
             <?php
             if (isset($_GET['add'])) {
-                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Finish session creation').'</button>';
+                echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" >'.get_lang('Finish session creation').'</button>';
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
                 echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('Subscribe users to this session').'</button>';

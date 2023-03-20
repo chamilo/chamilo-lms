@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -225,7 +226,6 @@ class AddCourse
     /**
      * Fills the course database with some required content and example content.
      *
-     * @param array $courseInfo
      * @param bool Whether to fill the course with example content
      * @param int $authorId
      *
@@ -237,7 +237,7 @@ class AddCourse
      * @assert (1, 'TEST', 'spanish', true) === true
      */
     public static function fillCourse(
-        $courseInfo,
+        Course $course,
         $fill_with_exemplary_content = null,
         $authorId = 0
     ) {
@@ -245,19 +245,14 @@ class AddCourse
             $fill_with_exemplary_content = 'false' !== api_get_setting('example_material_course_creation');
         }
 
-        $course_id = (int) $courseInfo['real_id'];
-
-        if (empty($courseInfo)) {
-            return false;
-        }
+        $course_id = $course->getId();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        $TABLEGROUPCATEGORIES = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $course = api_get_course_entity($course_id);
-        $settingsManager = CourseManager::getCourseSettingsManager();
+
+        $settingsManager = Container::getCourseSettingsManager();
         $settingsManager->setCourse($course);
 
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
@@ -313,9 +308,10 @@ class AddCourse
             ->addCourseLink($course)
         ;
         Database::getManager()->persist($groupCategory);
+        Database::getManager()->flush();
 
         $now = api_get_utc_datetime();
-        $files = [
+        /*$files = [
             ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
             [
                 'path' => '/chat_files',
@@ -330,21 +326,21 @@ class AddCourse
         foreach ($files as $file) {
             self::insertDocument($courseInfo, $counter, $file, $authorId);
             $counter++;
-        }
+        }*/
 
         $certificateId = 'NULL';
-
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
+                //['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
             ];
             $paths = [];
+            $courseInfo = ['real_id' => $course->getId()];
             foreach ($files as $file) {
                 $doc = self::insertDocument($courseInfo, $counter, $file, $authorId);
                 $paths[$file['path']] = $doc->getIid();
@@ -471,27 +467,27 @@ class AddCourse
                             <h2>'.get_lang('Introduction text').'</h2>
                          </p>';
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText($intro_text);
+            $toolIntro = (new CToolIntro())
+                ->setIntroText($intro_text)
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText(get_lang('This page allows users and groups to publish documents.'));
+            $toolIntro = (new CToolIntro())
+                ->setIntroText(get_lang('This page allows users and groups to publish documents.'))
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText(get_lang('The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'));
+            $toolIntro = (new CToolIntro())
+                ->setIntroText(
+                    get_lang(
+                        'The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'
+                    )
+                )
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
-
             $manager->flush();
 
             /*  Exercise tool */
@@ -529,16 +525,13 @@ class AddCourse
             $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
             $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
             $answer->save();
-
-            /* Forum tool */
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
+            // Forums.
             $params = [
                 'forum_category_title' => get_lang('Example Forum Category'),
                 'forum_category_comment' => '',
             ];
 
-            $forumCategoryId = store_forumcategory($params, $courseInfo, false);
+            $forumCategoryId = saveForumCategory($params, $courseInfo, false);
 
             $params = [
                 'forum_category' => $forumCategoryId,
@@ -562,7 +555,7 @@ class AddCourse
                 'thread_peer_qualify' => 0,
             ];
 
-            store_thread($forumEntity, $params, $courseInfo, false);
+            saveThread($forumEntity, $params, $courseInfo, false);
 
             /* Gradebook tool */
             $course_code = $courseInfo['code'];
@@ -571,7 +564,7 @@ class AddCourse
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$certificateId)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$certificateId)"
@@ -644,12 +637,10 @@ class AddCourse
      * @param array $params      Course details (see code for details).
      * @param int   $accessUrlId Optional.
      *
-     * @return int Created course ID
-     *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
-    public static function register_course($params, $accessUrlId = 1)
+    public static function register_course($params, $accessUrlId = 1): ?Course
     {
         global $error_msg;
         $title = $params['title'];
@@ -667,42 +658,49 @@ class AddCourse
         $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
-            $default_course_visibility = api_get_setting(
-                'courses_default_creation_visibility'
-            );
+            $default_course_visibility = api_get_setting('courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
                 $visibility = $default_course_visibility;
             } else {
-                $visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
+                $visibility = Course::OPEN_PLATFORM;
             }
         } else {
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
+        $subscribe = false;
+        if (isset($params['subscribe'])) {
+            $subscribe = 1 === (int) $params['subscribe'];
+        } else {
+            if (Course::OPEN_PLATFORM == $visibility) {
+                $subscribe = true;
+            }
+        }
+
+        //$subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
-        $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
-        $teachers = isset($params['teachers']) ? $params['teachers'] : null;
-        $categories = isset($params['course_categories']) ? $params['course_categories'] : null;
-        $ok_to_register_course = true;
+        $expiration_date = $params['expiration_date'] ?? null;
+        $teachers = $params['teachers'] ?? null;
+        $categories = $params['course_categories'] ?? null;
+        $valid = true;
 
         // Check whether all the needed parameters are present.
         if (empty($code)) {
             $error_msg[] = 'courseSysCode is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
         if (empty($visual_code)) {
             $error_msg[] = 'courseScreenCode is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
         if (empty($directory)) {
             $error_msg[] = 'courseRepository is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($title)) {
             $error_msg[] = 'title is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($expiration_date)) {
@@ -715,7 +713,7 @@ class AddCourse
 
         if ($visibility < 0 || $visibility > 4) {
             $error_msg[] = 'visibility is invalid';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($disk_quota)) {
@@ -734,37 +732,39 @@ class AddCourse
         if ('http://' === $department_url) {
             $department_url = '';
         }
-        $course_id = 0;
 
         $userId = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];
         $user = api_get_user_entity($userId);
         if (null === $user) {
             error_log(sprintf('user_id "%s" is invalid', $userId));
 
-            return 0;
+            return null;
         }
 
-        if ($ok_to_register_course) {
+        $course = null;
+        if ($valid) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
 
             $course = new Course();
             $course
-                ->setCode($code)
-                ->setDirectory($directory)
-                ->setCourseLanguage($course_language)
                 ->setTitle($title)
+                ->setCode($code)
+                ->setCourseLanguage($course_language)
                 ->setDescription(get_lang('Course Description'))
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
-                ->setCreationDate(new \DateTime())
                 ->setExpirationDate(new \DateTime($expiration_date))
-                ->setDepartmentName($department_name)
+                ->setDepartmentName((string) $department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
+                ->setSticky(1 === (int) ($params['sticky'] ?? 0))
+                ->setVideoUrl($params['video_url'] ?? '')
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
+                ->addAccessUrl(api_get_url_entity())
+                ->setCreator(api_get_user_entity())
             ;
 
             if (!empty($categories)) {
@@ -778,66 +778,63 @@ class AddCourse
                     }
 
                     $category = $categoryRepo->find($key);
-
-                    $course->addCategory($category);
+                    if (null !== $category) {
+                        $course->addCategory($category);
+                    }
                 }
             }
 
-            $repo->getEntityManager()->persist($course);
-            $repo->getEntityManager()->flush();
+            $sort = api_max_sort_value('0', api_get_user_id());
+            // Default true
+            $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
+            if ($addTeacher) {
+                $iCourseSort = CourseManager::userCourseSort($userId, $code);
+                $courseRelTutor = (new CourseRelUser())
+                    ->setCourse($course)
+                    ->setUser($user)
+                    ->setStatus(1)
+                    ->setTutor(true)
+                    ->setSort($iCourseSort)
+                    ->setRelationType(0)
+                    ->setUserCourseCat(0)
+                ;
+                $course->addUsers($courseRelTutor);
+            }
 
-            $course_id = $course->getId();
-            if ($course_id) {
-                $sort = api_max_sort_value('0', api_get_user_id());
-                // Default true
-                $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
-                if ($addTeacher) {
-                    $iCourseSort = CourseManager::userCourseSort($userId, $code);
-                    $courseRelTutor = (new CourseRelUser())
+            if (!empty($teachers)) {
+                $sort = $user->getMaxSortValue();
+                if (!is_array($teachers)) {
+                    $teachers = [$teachers];
+                }
+                foreach ($teachers as $key) {
+                    // Just in case.
+                    if ($key == $userId) {
+                        continue;
+                    }
+                    if (empty($key)) {
+                        continue;
+                    }
+                    $teacher = api_get_user_entity($key);
+                    if (is_null($teacher)) {
+                        continue;
+                    }
+                    $courseRelTeacher = (new CourseRelUser())
                         ->setCourse($course)
-                        ->setUser($user)
-                        ->setStatus(true)
-                        ->setTutor(true)
-                        ->setSort($iCourseSort)
+                        ->setUser($teacher)
+                        ->setStatus(1)
+                        ->setTutor(false)
+                        ->setSort($sort + 1)
                         ->setRelationType(0)
                         ->setUserCourseCat(0)
                     ;
-                    Database::getManager()->persist($courseRelTutor);
+                    $course->addUsers($courseRelTeacher);
                 }
+            }
 
-                if (!empty($teachers)) {
-                    $sort = $user->getMaxSortValue();
-                    if (!is_array($teachers)) {
-                        $teachers = [$teachers];
-                    }
-                    foreach ($teachers as $key) {
-                        // Just in case.
-                        if ($key == $userId) {
-                            continue;
-                        }
-                        if (empty($key)) {
-                            continue;
-                        }
-                        $teacher = api_get_user_entity($key);
-                        if (is_null($teacher)) {
-                            continue;
-                        }
-                        $courseRelTeacher = (new CourseRelUser())
-                            ->setCourse($course)
-                            ->setUser($teacher)
-                            ->setStatus(true)
-                            ->setTutor(false)
-                            ->setSort($sort + 1)
-                            ->setRelationType(0)
-                            ->setUserCourseCat(0)
-                        ;
-                        Database::getManager()->persist($courseRelTeacher);
-                    }
-                }
+            $repo->create($course);
 
-                // Adding the course to an URL.
-                //UrlManager::add_course_to_url($course_id, $accessUrlId);
-
+            $course_id = $course->getId();
+            if ($course_id) {
                 // Add event to the system log.
                 Event::addEvent(
                     LOG_COURSE_CREATE,
@@ -859,14 +856,9 @@ class AddCourse
                         api_get_setting('administratorSurname')
                     );
                     $iname = api_get_setting('Institution');
-                    $subject = get_lang(
-                            'NewCourseCreatedIn'
-                        ).' '.$siteName.' - '.$iname;
-                    $message = get_lang(
-                            'Dear'
-                        ).' '.$recipient_name.",\n\n".get_lang(
-                            'MessageOfNewCourseToAdmin'
-                        ).' '.$siteName.' - '.$iname."\n";
+                    $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
+                    $message = get_lang('Dear').' '.$recipient_name.",\n\n".
+                        get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
 
                     if ($course->getCategories()->count() > 0) {
@@ -877,13 +869,6 @@ class AddCourse
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
-                    $additionalParameters = [
-                        'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
-                        'userId' => $userId,
-                        'courseName' => $title,
-                        'creatorUsername' => $user->getUsername(),
-                    ];
-
                     api_mail_html(
                         $recipient_name,
                         $recipient_email,
@@ -893,14 +878,13 @@ class AddCourse
                         $recipient_email,
                         null,
                         null,
-                        null,
-                        $additionalParameters
+                        null
                     );
                 }
             }
         }
 
-        return $course_id;
+        return $course;
     }
 
     /**

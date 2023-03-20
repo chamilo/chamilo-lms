@@ -1,175 +1,180 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\UserTrait;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTime;
+use DateTimeZone;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SessionRelUser.
+ * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
  *
  * @ORM\Table(
- *    name="session_rel_user",
- *      indexes={
- *          @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
- *      }
+ *     name="session_rel_user",
+ *     uniqueConstraints={
+ *        @ORM\UniqueConstraint(name="session_user_unique",
+ *            columns={"session_id", "user_id", "relation_type"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
+ *     }
  * )
  * @ORM\Entity
+ * @UniqueEntity(
+ *     fields={"session", "user", "relationType"},
+ *     message="The user-course-relationType is already registered in this session."
+ * )
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    normalizationContext: [
+        'groups' => ['session_rel_user:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact', 'relationType' => 'exact'])]
+#[ApiFilter(
+    DateFilter::class,
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
+)]
 class SessionRelUser
 {
-    use UserTrait;
-
-    public $relationTypeList = [
-        0 => 'student',
-        1 => 'drh',
-    ];
-
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Session
-     *
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session;
+    #[Assert\NotNull]
+    #[Groups(['session_rel_user:read'])]
+    protected ?Session $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    #[Assert\NotNull]
+    #[Groups(['session_rel_user:read'])]
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="relation_type", type="integer")
      */
-    protected $relationType;
+    #[Groups(['session_rel_user:read'])]
+    #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
+    protected int $relationType;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="duration", type="integer", nullable=true)
+     * @ORM\Column(name="duration", type="integer", nullable=false)
      */
-    protected $duration;
+    #[Groups(['session_rel_user:read'])]
+    protected int $duration;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
-    protected $movedTo;
+    protected ?int $movedTo;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
      */
-    protected $movedStatus;
+    protected ?int $movedStatus;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
-    protected $movedAt;
+    protected ?DateTime $movedAt = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="registered_at", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="registered_at", type="datetime")
      */
-    protected $registeredAt;
+    protected DateTime $registeredAt;
 
-    /**
-     * Constructor.
-     */
+    #[Groups(['session_rel_user:read'])]
+    protected Collection $courses;
+
     public function __construct()
     {
+        $this->relationType = Session::STUDENT;
+        $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;
-        $this->movedAt = null;
-        $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
     }
 
-    /**
-     * Set Session.
-     *
-     * @param Session $session
-     *
-     * @return SessionRelUser
-     */
-    public function setSession($session)
+    public function getCourses(): Collection
+    {
+        return $this->session->getSessionRelCourseByUser($this->getUser());
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    public function getSession(): Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return SessionRelUser
-     */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
         return $this;
     }
 
-    /**
-     * Set relationTypeByName.
-     *
-     * @param string $relationType
-     *
-     * @return SessionRelUser
-     */
-    public function setRelationTypeByName($relationType)
-    {
-        if (isset($this->relationTypeList[$relationType])) {
-            $this->setRelationType($this->relationTypeList[$relationType]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }
 
-    /**
-     * Set movedTo.
-     *
-     * @param int $movedTo
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedTo($movedTo)
+    public function setMovedTo(int $movedTo): self
     {
         $this->movedTo = $movedTo;
 
@@ -186,14 +191,7 @@ class SessionRelUser
         return $this->movedTo;
     }
 
-    /**
-     * Set movedStatus.
-     *
-     * @param int $movedStatus
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedStatus($movedStatus)
+    public function setMovedStatus(int $movedStatus): self
     {
         $this->movedStatus = $movedStatus;
 
@@ -210,14 +208,7 @@ class SessionRelUser
         return $this->movedStatus;
     }
 
-    /**
-     * Set movedAt.
-     *
-     * @param \DateTime $movedAt
-     *
-     * @return SessionRelUser
-     */
-    public function setMovedAt($movedAt)
+    public function setMovedAt(DateTime $movedAt): self
     {
         $this->movedAt = $movedAt;
 
@@ -227,19 +218,14 @@ class SessionRelUser
     /**
      * Get movedAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getMovedAt()
     {
         return $this->movedAt;
     }
 
-    /**
-     * Set registeredAt.
-     *
-     * @return $this
-     */
-    public function setRegisteredAt(\DateTime $registeredAt)
+    public function setRegisteredAt(DateTime $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
 
@@ -249,7 +235,7 @@ class SessionRelUser
     /**
      * Get registeredAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRegisteredAt()
     {
@@ -264,14 +250,23 @@ class SessionRelUser
         return $this->duration;
     }
 
-    /**
-     * @param int $duration
-     *
-     * @return SessionRelUser
-     */
-    public function setDuration($duration)
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $user->addSessionRelUser($this);
+
+        $this->user = $user;
 
         return $this;
     }

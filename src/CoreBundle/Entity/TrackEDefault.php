@@ -1,92 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEDefault.
  *
  * @ORM\Table(
- *  name="track_e_default",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session", columns={"session_id"}),
- *      @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
- *  }
+ *     name="track_e_default",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session", columns={"session_id"}),
+ *         @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class TrackEDefault
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="default_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $defaultId;
+    protected int $defaultId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="default_user_id", type="integer", nullable=false)
      */
-    protected $defaultUserId;
+    protected int $defaultUserId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="default_date", type="datetime", nullable=true)
+     * @ORM\Column(name="default_date", type="datetime", nullable=false)
      */
-    protected $defaultDate;
+    protected DateTime $defaultDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_event_type", type="string", length=255, nullable=false)
      */
-    protected $defaultEventType;
+    protected string $defaultEventType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value_type", type="string", length=255, nullable=false)
      */
-    protected $defaultValueType;
+    protected string $defaultValueType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value", type="text", nullable=false)
      */
-    protected $defaultValue;
+    protected string $defaultValue;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId = null;
 
     /**
      * Set defaultUserId.
      *
-     * @param int $defaultUserId
-     *
      * @return TrackEDefault
      */
-    public function setDefaultUserId($defaultUserId)
+    public function setDefaultUserId(int $defaultUserId)
     {
         $this->defaultUserId = $defaultUserId;
 
@@ -103,14 +88,7 @@ class TrackEDefault
         return $this->defaultUserId;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEDefault
-     */
-    public function setCId($cId)
+    public function setCId(int $cId): self
     {
         $this->cId = $cId;
 
@@ -127,14 +105,7 @@ class TrackEDefault
         return $this->cId;
     }
 
-    /**
-     * Set defaultDate.
-     *
-     * @param \DateTime $defaultDate
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultDate($defaultDate)
+    public function setDefaultDate(DateTime $defaultDate): self
     {
         $this->defaultDate = $defaultDate;
 
@@ -144,21 +115,14 @@ class TrackEDefault
     /**
      * Get defaultDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDefaultDate()
     {
         return $this->defaultDate;
     }
 
-    /**
-     * Set defaultEventType.
-     *
-     * @param string $defaultEventType
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultEventType($defaultEventType)
+    public function setDefaultEventType(string $defaultEventType): self
     {
         $this->defaultEventType = $defaultEventType;
 
@@ -175,14 +139,7 @@ class TrackEDefault
         return $this->defaultEventType;
     }
 
-    /**
-     * Set defaultValueType.
-     *
-     * @param string $defaultValueType
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultValueType($defaultValueType)
+    public function setDefaultValueType(string $defaultValueType): self
     {
         $this->defaultValueType = $defaultValueType;
 
@@ -199,14 +156,7 @@ class TrackEDefault
         return $this->defaultValueType;
     }
 
-    /**
-     * Set defaultValue.
-     *
-     * @param string $defaultValue
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
 
@@ -223,14 +173,7 @@ class TrackEDefault
         return $this->defaultValue;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return TrackEDefault
-     */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 

@@ -29,11 +29,11 @@ $output = [];
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
         case 'users':
-            require api_get_path(SYS_TEST_PATH).'datafiller/fill_users.php';
+            require __DIR__.'/../../../tests/datafiller/fill_users.php';
             $output = fill_users();
             break;
         case 'courses':
-            require api_get_path(SYS_TEST_PATH).'datafiller/fill_courses.php';
+            require __DIR__.'/../../../tests/datafiller/fill_courses.php';
             $output = fill_courses();
             break;
         default:
@@ -47,7 +47,6 @@ Display::display_header($nameTools);
 $result = '';
 if (count($output) > 0) {
     $result = '<div class="filler-report">'."\n";
-    $result .= '<h3>'.$output[0]['title'].'</h3>'."\n";
     $result .= '<table>';
     foreach ($output as $line) {
         $result .= '<tr>';
@@ -57,7 +56,8 @@ if (count($output) > 0) {
     }
     $result .= '</table>';
     $result .= '</div>';
-    echo Display::return_message($result, 'normal', false);
+    echo Display::return_message($output[0]['title'], 'normal', false);
+    echo $result;
 }
 ?>
 <div id="datafiller" class="card">

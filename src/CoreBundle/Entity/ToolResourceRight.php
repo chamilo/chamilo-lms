@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -16,33 +18,27 @@ use Doctrine\ORM\Mapping as ORM;
 class ToolResourceRight
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
      */
-    protected $role;
+    protected string $role;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
-    protected $mask;
+    protected int $mask;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRight", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
-    protected $tool;
+    protected ?Tool $tool = null;
 
     /**
      * @return string
@@ -52,20 +48,12 @@ class ToolResourceRight
         return (string) $this->getMask();
     }
 
-    /**
-     * @return Tool
-     */
-    public function getTool()
+    public function getTool(): Tool
     {
         return $this->tool;
     }
 
-    /**
-     * @param Tool $tool
-     *
-     * @return $this
-     */
-    public function setTool($tool)
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
 
@@ -80,12 +68,7 @@ class ToolResourceRight
         return $this->role;
     }
 
-    /**
-     * @param string $role
-     *
-     * @return $this
-     */
-    public function setRole($role)
+    public function setRole(string $role): self
     {
         $this->role = $role;
 
@@ -100,19 +83,13 @@ class ToolResourceRight
         return $this->mask;
     }
 
-    /**
-     * @return $this
-     */
-    public function setMask(int $mask)
+    public function setMask(int $mask): self
     {
         $this->mask = $mask;
 
         return $this;
     }
 
-    /**
-     * Get id.
-     */
     public function getId(): int
     {
         return $this->id;

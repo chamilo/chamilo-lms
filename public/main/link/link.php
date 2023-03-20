@@ -67,13 +67,12 @@ if ('editlink' === $action) {
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
 }
 
-// Statistics
 Event::event_access_tool(TOOL_LINK);
 
 /*	Action Handling */
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
-$show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : '';
+$show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : 'all';
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
 $content = '';
@@ -108,7 +107,7 @@ switch ($action) {
             $link = new Link();
             $link->setCourse($courseInfo);
             $linkId = $link->save($form->exportValues());
-            Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+            SkillModel::saveSkills($form, ITEM_TYPE_LINK, $linkId);
 
             Security::clear_token();
             header('Location: '.$linkListUrl);
@@ -121,7 +120,7 @@ switch ($action) {
         $form = Link::getLinkForm($id, 'editlink');
         if ($form->validate()) {
             Link::editLink($id, $form->getSubmitValues());
-            Skill::saveSkills($form, ITEM_TYPE_LINK, $id);
+            SkillModel::saveSkills($form, ITEM_TYPE_LINK, $id);
             header('Location: '.$linkListUrl);
             exit;
         }

@@ -23,14 +23,13 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
-                $request->setRelationType(USER_RELATION_TYPE_RRHH);
-                $request->setLastEdit(api_get_utc_datetime(null, null, true));
+                $request->setRelationType(UserRelUser::USER_RELATION_TYPE_RRHH);
                 $em->persist($request);
                 $em->flush();
 
@@ -45,9 +44,9 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
@@ -65,9 +64,9 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_RRHH,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_RRHH,
                 ]);
 
             if ($request) {
@@ -119,7 +118,7 @@ function getData(User $hrm, $status = HRM_REQUEST)
 
     foreach ($requests as $request) {
         $line = [];
-        $studentLink = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$request['user_id'];
+        $studentLink = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$request['user_id'];
         $line[] = '<a href="'.$studentLink.'">'.api_get_person_name($request['firstname'], $request['lastname']).'</a>';
         if (HRM_REQUEST == $status) {
             $line[] = Display::url(

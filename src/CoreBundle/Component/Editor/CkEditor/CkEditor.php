@@ -1,25 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SystemTemplate;
+use Chamilo\CoreBundle\Entity\Templates;
+use Database;
 
-/**
- * Class CkEditor.
- */
 class CkEditor extends Editor
 {
     /**
      * Return the HTML code required to run editor.
      *
      * @param string $value
-     *
-     * @return string
      */
-    public function createHtml($value)
+    public function createHtml($value): string
     {
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
                  '.$value.'
@@ -37,7 +38,6 @@ class CkEditor extends Editor
     public function createHtmlStyle($value): string
     {
         $style = '';
-
         $value = trim($value);
 
         if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {
@@ -53,10 +53,7 @@ class CkEditor extends Editor
         return $html;
     }
 
-    /**
-     * @return string
-     */
-    public function editorReplace()
+    public function editorReplace(): string
     {
         $toolbar = new Toolbar\Basic(
             $this->urlGenerator,
@@ -65,31 +62,30 @@ class CkEditor extends Editor
             'CkEditor'
         );
 
-        $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
+        $config['selector'] = '#'.$this->getTextareaId();
         $javascript = $this->toJavascript($config);
 
-        return "<script>
-            $(function () {
-               CKEDITOR.replace('".$this->getTextareaId()."',
-                   $javascript
-               );
-           });
+        // it replaces [browser] by image picker callback
+        $javascript = str_replace('"[browser]"', $this->getImagePicker(), $javascript);
 
+        return "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                tinymce.init(
+                    $javascript
+                );
+           });
            </script>";
     }
 
     /**
      * @param array $templates
-     *
-     * @return string
      */
-    public function formatTemplates($templates)
+    public function formatTemplates($templates): string
     {
         if (empty($templates)) {
-            return null;
+            return '';
         }
-        /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
         $templateList = [];
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
@@ -101,6 +97,7 @@ class CkEditor extends Editor
             '',
         ];
 
+        /** @var SystemTemplate $template */
         foreach ($templates as $template) {
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
@@ -127,7 +124,7 @@ class CkEditor extends Editor
     /**
      * Get the templates in JSON format.
      *
-     * @return string|
+     * @return false|string
      */
     public function simpleFormatTemplates()
     {
@@ -142,6 +139,34 @@ class CkEditor extends Editor
         $templates = array_merge($templates, $personalTemplates);
 
         return json_encode($templates);
+    }
+
+    /**
+     * Get a custom image picker.
+     *
+     * @return string
+     */
+    private function getImagePicker()
+    {
+        return 'function (cb, value, meta) {
+            var input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.onchange = function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var id = "blobid" + (new Date()).getTime();
+                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = reader.result.split(",")[1];
+                    var blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }';
     }
 
     /**
@@ -177,8 +202,8 @@ class CkEditor extends Editor
      */
     private function getPlatformTemplates(): array
     {
-        $entityManager = \Database::getManager();
-        $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
+        $entityManager = Database::getManager();
+        $systemTemplates = $entityManager->getRepository(SystemTemplate::class)->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
         $replace = [
@@ -220,10 +245,10 @@ class CkEditor extends Editor
             $userId = api_get_user_id();
         }
 
-        $entityManager = \Database::getManager();
-        $templatesRepo = $entityManager->getRepository('ChamiloCoreBundle:Templates');
+        $entityManager = Database::getManager();
+        $templatesRepo = $entityManager->getRepository(Templates::class);
         $user = api_get_user_entity($userId);
-        $course = $entityManager->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+        $course = $entityManager->find(Course::class, api_get_course_int_id());
 
         if (!$user || !$course) {
             return [];
@@ -234,7 +259,6 @@ class CkEditor extends Editor
 
         foreach ($courseTemplates as $templateData) {
             $template = $templateData[0];
-            $courseDirectory = $course->getDirectory();
 
             $templateItem = [];
             $templateItem['title'] = $template->getTitle();

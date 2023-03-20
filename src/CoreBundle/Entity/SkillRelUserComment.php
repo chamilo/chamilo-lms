@@ -1,65 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelUserComment class.
- *
  * @ORM\Table(
- *  name="skill_rel_user_comment",
- *  indexes={
- *      @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
- *  }
+ *     name="skill_rel_user_comment",
+ *     indexes={
+ *         @ORM\Index(name="idx_select_su_giver", columns={"skill_rel_user_id", "feedback_giver_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class SkillRelUserComment
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", inversedBy="comments")
      * @ORM\JoinColumn(name="skill_rel_user_id", referencedColumnName="id")
      */
-    protected $skillRelUser;
+    protected ?SkillRelUser $skillRelUser = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="commentedUserSkills")
      * @ORM\JoinColumn(name="feedback_giver_id", referencedColumnName="id")
      */
-    protected $feedbackGiver;
+    protected ?User $feedbackGiver = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback_text", type="text")
      */
-    protected $feedbackText;
+    protected string $feedbackText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="feedback_value", type="integer", nullable=true, options={"default":1})
      */
-    protected $feedbackValue;
+    protected ?int $feedbackValue;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="feedback_datetime", type="datetime")
+     * @ORM\Column(name="feedback_datetime", type="datetime", nullable=false)
      */
-    protected $feedbackDateTime;
+    protected DateTime $feedbackDateTime;
 
     /**
      * Get id.
@@ -91,22 +84,12 @@ class SkillRelUserComment
         return $this->feedbackGiver;
     }
 
-    /**
-     * Get feedbackText.
-     *
-     * @return string
-     */
-    public function getFeedbackText()
+    public function getFeedbackText(): string
     {
         return $this->feedbackText;
     }
 
-    /**
-     * Get feedbackValue.
-     *
-     * @return int
-     */
-    public function getFeedbackValue()
+    public function getFeedbackValue(): ?int
     {
         return $this->feedbackValue;
     }
@@ -114,71 +97,42 @@ class SkillRelUserComment
     /**
      * Get feedbackDateTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFeedbackDateTime()
     {
         return $this->feedbackDateTime;
     }
 
-    /**
-     * Set skillRelUser.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setSkillRelUser(SkillRelUser $skillRelUser)
+    public function setSkillRelUser(SkillRelUser $skillRelUser): self
     {
         $this->skillRelUser = $skillRelUser;
 
         return $this;
     }
 
-    /**
-     * Set feedbackGiver.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackGiver(User $feedbackGiver)
+    public function setFeedbackGiver(User $feedbackGiver): self
     {
         $this->feedbackGiver = $feedbackGiver;
 
         return $this;
     }
 
-    /**
-     * Set feedbackText.
-     *
-     * @param string $feedbackText
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackText($feedbackText)
+    public function setFeedbackText(string $feedbackText): self
     {
         $this->feedbackText = $feedbackText;
 
         return $this;
     }
 
-    /**
-     * Set feebackValue.
-     *
-     * @param int $feedbackValue
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackValue($feedbackValue)
+    public function setFeedbackValue(?int $feedbackValue): self
     {
         $this->feedbackValue = $feedbackValue;
 
         return $this;
     }
 
-    /**
-     * Set feedbackDateTime.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackDateTime(\DateTime $feedbackDateTime)
+    public function setFeedbackDateTime(DateTime $feedbackDateTime): self
     {
         $this->feedbackDateTime = $feedbackDateTime;
 

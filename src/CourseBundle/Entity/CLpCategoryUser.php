@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -19,32 +21,25 @@ class CLpCategoryUser
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="users")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $category;
+    protected CLpCategory $category;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }
@@ -57,32 +52,12 @@ class CLpCategoryUser
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return CLpCategoryUser
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return CLpCategory
-     */
-    public function getCategory()
+    public function getCategory(): CLpCategory
     {
         return $this->category;
     }
 
-    /**
-     * @param CLpCategory $category
-     *
-     * @return CLpCategoryUser
-     */
-    public function setCategory($category)
+    public function setCategory(CLpCategory $category): self
     {
         $this->category = $category;
 

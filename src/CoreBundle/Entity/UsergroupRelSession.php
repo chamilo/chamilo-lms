@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,83 +9,29 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UsergroupRelSession.
- *
  * @ORM\Table(name="usergroup_rel_session")
  * @ORM\Entity
  */
 class UsergroupRelSession
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="sessions")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $usergroupId;
+    protected Usergroup $usergroup;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $sessionId;
-
-    /**
-     * Set usergroupId.
-     *
-     * @param int $usergroupId
-     *
-     * @return UsergroupRelSession
-     */
-    public function setUsergroupId($usergroupId)
-    {
-        $this->usergroupId = $usergroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get usergroupId.
-     *
-     * @return int
-     */
-    public function getUsergroupId()
-    {
-        return $this->usergroupId;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return UsergroupRelSession
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
+    protected Session $session;
 
     /**
      * Get id.
@@ -93,5 +41,29 @@ class UsergroupRelSession
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUsergroup(): Usergroup
+    {
+        return $this->usergroup;
+    }
+
+    public function setUsergroup(Usergroup $usergroup): self
+    {
+        $this->usergroup = $usergroup;
+
+        return $this;
+    }
+
+    public function getSession(): Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
     }
 }

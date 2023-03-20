@@ -2,15 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\Finder\Finder;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
-
-// Including necessary files
-require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -38,7 +33,7 @@ if (empty($workInfo)) {
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-$homework = get_work_assignment_by_id($workInfo['id']);
+$homework = get_work_assignment_by_id($workInfo['iid']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [
@@ -62,14 +57,20 @@ $form = new FormValidator(
 );
 
 $form->addElement('header', get_lang('Upload corrections'));
-$form->addHtml(Display::return_message(
-    sprintf(
-        get_lang('Upload correctionsExplanationWithDownloadLinkX'),
-        $downloadLink
-    ),
-    'normal',
-    false
-));
+$form->addHtml(
+    Display::return_message(
+        sprintf(
+            get_lang(
+                "First you have to download the corrections <a href='%s'> here </a>.
+After that you have to unzip that file and edit the files as you wanted without changing the file names.
+Then create a zip file with those modified files and upload it in this form."
+            ),
+            $downloadLink
+        ),
+        'normal',
+        false
+    )
+);
 $form->addElement('file', 'file', get_lang('Upload a document'));
 $form->addProgress();
 $form->addRule('file', get_lang('Required field'), 'required');
@@ -82,6 +83,8 @@ if ($form->validate()) {
     $upload = process_uploaded_file($_FILES['file'], false);
 
     if ($upload) {
+        throw new Exception('upload corrections');
+        /*
         $zip = new PclZip($_FILES['file']['tmp_name']);
         // Check the zip content (real size and file extension)
         $zipFileList = (array) $zip->listContent();
@@ -100,9 +103,8 @@ if ($form->validate()) {
                     'warning'
                 )
             );
-        }
+        }*/
 
-        throw new Exception('upload corrections');
         /*$folder = api_get_unique_id();
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, api_get_permissions_for_new_directories(), true);

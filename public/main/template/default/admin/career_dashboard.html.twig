@@ -32,7 +32,8 @@
                                     <td class="promo" rowspan="{{ line }}">
                                         <h4 id="promotion-id-{{ prom.id }}">
                                             <a title="{{ prom.name }}"
-                                               href="{{ _p.web }}main/admin/promotions.php?action=edit&id={{ prom.id }}">
+                                               href="{{ url('legacy_main', { 'name' : 'admin/promotions.php', 'action' : 'edit', 'id' : prom.id }) }}"
+                                           >
                                                 {{ prom.name }}
                                             </a>
                                         </h4>

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,59 +18,42 @@ use Doctrine\ORM\Mapping as ORM;
 class ScheduledAnnouncement
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="subject", type="string", length=255)
      */
-    protected $subject;
+    protected string $subject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", unique=false)
      */
-    protected $message;
+    protected string $message;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    protected $date;
+    protected ?DateTime $date = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="sent", type="boolean")
      */
-    protected $sent;
+    protected bool $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -75,13 +61,6 @@ class ScheduledAnnouncement
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getSubject(): string
@@ -108,12 +87,12 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    public function getDate(): \DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): self
+    public function setDate(DateTime $date): self
     {
         $this->date = $date;
 

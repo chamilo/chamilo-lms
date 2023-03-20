@@ -42,6 +42,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $addTeacherColumn = true;
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
     $teachers = '';
     if ($addTeacherColumn) {
         $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col4, ";
@@ -163,7 +170,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('info2.png', get_lang('Info')),
-            "course_information.php?code=$courseCode"
+            "course_information.php?id=$courseId"
         );
         /*$actions[] = Display::url(
             Display::return_icon('course_home.png', get_lang('CourseHomepage')),
@@ -179,7 +186,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         );
         $actions[] = Display::url(
             Display::return_icon('backup.png', get_lang('Create a backup')),
-            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseId)
+            $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
@@ -389,7 +396,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['id' => 'course-search-keyword', 'aria-label' => get_lang('SearchCourse')]
     );
     $form->addButtonSearch(get_lang('SearchCourse'));
-    $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
+    $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
         <em class="fa fa-search"></em> '.
         get_lang('Advanced search').'</a>';
 
@@ -430,11 +437,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     //$actions3 = $sessionFilter->returnForm();
     $actions4 = $advanced;
 
-    $actions = Display::toolbarAction(
-        'toolbar',
-        [$actions1, $actions2, $actions4],
-        [2, 4, 3, 3]
-    );
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions4.$actions2]);
 
     // Create a sortable table with the course data
     $table = new SortableTable(

@@ -1,156 +1,83 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendanceResult.
- *
  * @ORM\Table(
- *  name="c_attendance_result",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"})
- *  }
+ *     name="c_attendance_result",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
 class CAttendanceResult
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $cId;
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="results")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $userId;
+    protected CAttendance $attendance;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
-     */
-    protected $attendanceId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="integer", nullable=false)
      */
-    protected $score;
+    #[Assert\NotNull]
+    protected int $score;
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CAttendanceResult
-     */
-    public function setUserId($userId)
+    public function getUser(): User
     {
-        $this->userId = $userId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function getAttendance(): CAttendance
     {
-        return $this->userId;
+        return $this->attendance;
     }
 
-    /**
-     * Set attendanceId.
-     *
-     * @param int $attendanceId
-     *
-     * @return CAttendanceResult
-     */
-    public function setAttendanceId($attendanceId)
+    public function setAttendance(CAttendance $attendance): self
     {
-        $this->attendanceId = $attendanceId;
+        $this->attendance = $attendance;
 
         return $this;
     }
 
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
-    {
-        return $this->attendanceId;
-    }
-
-    /**
-     * Set score.
-     *
-     * @param int $score
-     *
-     * @return CAttendanceResult
-     */
-    public function setScore($score)
+    public function setScore(int $score): self
     {
         $this->score = $score;
 
         return $this;
     }
 
-    /**
-     * Get score.
-     *
-     * @return int
-     */
-    public function getScore()
+    public function getScore(): int
     {
         return $this->score;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceResult
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

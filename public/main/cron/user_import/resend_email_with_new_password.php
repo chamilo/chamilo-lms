@@ -16,12 +16,12 @@
   Matthew@example.com
   HERMAN@example.com
  */
-die();
+exit();
 //change filename depending on file containing mails list, with one e-mail per line.
 $list = file('input.txt');
 require_once '../../inc/global.inc.php';
 $users = Database::get_main_table(TABLE_MAIN_USER);
-$userManager = UserManager::getManager();
+$userManager = UserManager::getRepository();
 $repository = UserManager::getRepository();
 
 /**
@@ -57,7 +57,7 @@ foreach ($list as $mail) {
             'Password' => $pass,
             'Email' => $mail,
         ];
-        $l = api_get_interface_language();
+        $l = api_get_language_isocode();
         if (!empty($row['language'])) {
             $l = $row['language'];
         }

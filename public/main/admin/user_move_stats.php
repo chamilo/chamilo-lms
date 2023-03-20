@@ -86,7 +86,6 @@ if (isset($_REQUEST['load_ajax'])) {
             }
             //}
             $user_id = (int) $_REQUEST['user_id'];
-
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
 
             $course_founded = false;
@@ -123,6 +122,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 // Begin with the import process
                 $course_info = api_get_course_info($origin_course_code);
                 $course_id = $course_info['real_id'];
+                $course = api_get_course_entity($course_id);
 
                 $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
                 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -141,9 +141,9 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //1. track_e_exercises
                 //ORIGINAL COURSE
-
+                $sessionCondition = api_get_session_condition($origin_session_id);
                 $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                        WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
+                        WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
                 $res = Database::query($sql);
                 $list = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -168,11 +168,13 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 // DESTINY COURSE
                 if (!$update_database) {
+                    $sessionCondition = api_get_session_condition($new_session_id);
                     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                             WHERE
                                 c_id = $course_id AND
-                                session_id = $new_session_id AND
-                                exe_user_id = $user_id ";
+                                exe_user_id = $user_id
+                                $sessionCondition
+                            ";
                     $res = Database::query($sql);
                     $list = [];
                     while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -228,7 +230,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //4. track_e_lastaccess
                 $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                         WHERE c_id = $course_id
-                        AND access_session_id = $origin_session_id
+                        AND session_id = $origin_session_id
                         AND access_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = [];
@@ -240,7 +242,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     foreach ($list as $id) {
                         if ($update_database) {
                             $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                                    SET access_session_id = $new_session_id
+                                    SET session_id = $new_session_id
                                     WHERE access_id = $id";
                             if ($debug) {
                                 echo $sql;
@@ -288,15 +290,15 @@ if (isset($_REQUEST['load_ajax'])) {
                             //Getting all information of that lp_item_id
                             $score = Tracking::get_avg_student_score(
                                 $user_id,
-                                $origin_course_code,
+                                $course,
                                 [$data['lp_id']],
-                                $origin_session_id
+                                $session
                             );
                             $progress = Tracking::get_avg_student_progress(
                                 $user_id,
-                                $origin_course_code,
+                                $course,
                                 [$data['lp_id']],
-                                $origin_session_id
+                                $session
                             );
                             $result_message['LP_VIEW'][$data['lp_id']] = [
                                 'score' => $score,
@@ -402,7 +404,6 @@ if (isset($_REQUEST['load_ajax'])) {
                             $sys_course_path = api_get_path(SYS_COURSE_PATH);
                             $course_dir = $sys_course_path.$course_info['path'];
                             $base_work_dir = $course_dir.'/work';
-                            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
                             // Creating the parent folder in the session if does not exists already
                             //@todo ugly fix
@@ -696,7 +697,7 @@ Display::addFlash(
     )
 );
 Display::display_header(get_lang('Move users results from/to a session'));
-echo  '<div class="actions">';
+echo '<div class="actions">';
 echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
@@ -827,8 +828,8 @@ if (!empty($user_list)) {
                 echo $options;
                 echo '</select>';
                 echo '<br />';
-                echo '<button type="submit" class="btn btn-success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
-                echo '<button type="submit" class="btn btn-success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
+                echo '<button type="submit" class="btn btn--success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
+                echo '<button type="submit" class="btn btn--success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
                 echo '<div id ="reponse_'.$unique_id.'"></div>';
                 echo '</td>';
             }

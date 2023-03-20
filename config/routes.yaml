@@ -1,12 +1,13 @@
-login_check:
-    path: /login_check
-
 logout:
     path: /logout
 
+authentication_token:
+    path: /api/authentication_token
+    methods: ['POST']
+
 legacy_main:
     path: /main/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
+    defaults: {_controller: 'Chamilo\CoreBundle\Controller\IndexController::classic'}
     requirements:
         name: .+
 
@@ -52,6 +53,3 @@ web_ajax:
 
 web_main:
     path: main/
-
-chamilo_lti:
-    resource: "@ChamiloLtiBundle/Resources/config/routing.yml"

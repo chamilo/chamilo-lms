@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,111 +9,48 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FieldRelTag.
- *
  * @ORM\Table(
- *  name="extra_field_rel_tag",
- *  indexes={
- *      @ORM\Index(name="field", columns={"field_id"}),
- *      @ORM\Index(name="item", columns={"item_id"}),
- *      @ORM\Index(name="tag", columns={"tag_id"}),
- *      @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
- *  }
+ *     name="extra_field_rel_tag",
+ *     indexes={
+ *         @ORM\Index(name="field", columns={"field_id"}),
+ *         @ORM\Index(name="item", columns={"item_id"}),
+ *         @ORM\Index(name="tag", columns={"tag_id"}),
+ *         @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
+ *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository")
  */
 class ExtraFieldRelTag
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="field_id", type="integer", nullable=false)
-     */
-    protected $fieldId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="tag_id", type="integer", nullable=false)
-     */
-    protected $tagId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="item_id", type="integer", nullable=false)
-     */
-    protected $itemId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * Set fieldId.
-     *
-     * @param int $fieldId
-     *
-     * @return ExtraFieldRelTag
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public function setFieldId($fieldId)
-    {
-        $this->fieldId = $fieldId;
-
-        return $this;
-    }
+    protected ExtraField $field;
 
     /**
-     * Set tagId.
-     *
-     * @param int $tagId
-     *
-     * @return ExtraFieldRelTag
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag", inversedBy="extraFieldRelTags")
+     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public function setTagId($tagId)
-    {
-        $this->tagId = $tagId;
-
-        return $this;
-    }
+    protected Tag $tag;
 
     /**
-     * Set itemId.
-     *
-     * @param int $itemId
-     *
-     * @return ExtraFieldRelTag
+     * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    public function setItemId($itemId)
+    protected int $itemId;
+
+    public function setItemId(int $itemId): self
     {
         $this->itemId = $itemId;
 
         return $this;
-    }
-
-    /**
-     * Get fieldId.
-     *
-     * @return int
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
-    }
-
-    /**
-     * Get tagId.
-     *
-     * @return int
-     */
-    public function getTagId()
-    {
-        return $this->tagId;
     }
 
     /**
@@ -132,5 +71,29 @@ class ExtraFieldRelTag
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getField(): ExtraField
+    {
+        return $this->field;
+    }
+
+    public function setField(ExtraField $field): self
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    public function getTag(): Tag
+    {
+        return $this->tag;
+    }
+
+    public function setTag(Tag $tag): self
+    {
+        $this->tag = $tag;
+
+        return $this;
     }
 }

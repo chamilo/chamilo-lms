@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Float element.
  *
  * Accepts values like 3.1415 and 3,1415 (its processed and converted to 3.1415)
- *
- * Class Float
  */
 class FloatNumber extends HTML_QuickForm_text
 {
@@ -21,12 +20,13 @@ class FloatNumber extends HTML_QuickForm_text
             $attributes['id'] = $elementName;
         }
 
-        $attributes['type'] = 'float';
+        $attributes['type'] = 'number';
         $attributes['class'] = 'form-control';
+        $attributes['step'] = 'any';
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
-        $this->setType('float');
+        $this->setType('number');
     }
 
     /**
@@ -48,9 +48,8 @@ class FloatNumber extends HTML_QuickForm_text
     public function getValue()
     {
         $value = $this->getAttribute('value');
-        $value = api_float_val($value);
 
-        return $value;
+        return api_float_val($value);
     }
 
     /**

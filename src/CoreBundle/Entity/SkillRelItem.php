@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * SkillRelItem.
- *
  * @ORM\Table(name="skill_rel_item")
  * @ORM\Entity
  */
@@ -18,102 +19,79 @@ class SkillRelItem
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="items")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $skill;
+    protected Skill $skill;
 
     /**
      * See ITEM_TYPE_* constants in api.lib.php.
      *
-     * @var int
-     *
      * @ORM\Column(name="item_type", type="integer", nullable=false)
      */
-    protected $itemType;
+    protected int $itemType;
 
     /**
      * iid value.
      *
-     * @var int
-     *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
-    protected $itemId;
+    protected int $itemId;
 
     /**
      * A text expressing what has to be achieved
      * (view, finish, get more than X score, finishing all children skills, etc),.
      *
-     * @var string
-     *
      * @ORM\Column(name="obtain_conditions", type="string", length=255, nullable=true)
      */
-    protected $obtainConditions;
+    protected ?string $obtainConditions = null;
 
     /**
      * if it requires validation by a teacher.
      *
-     * @var bool
-     *
      * @ORM\Column(name="requires_validation", type="boolean")
      */
-    protected $requiresValidation;
+    protected bool $requiresValidation;
 
     /**
      *  Set to false if this is a children skill used only to obtain a higher-level skill,
      * so a skill with is_real = false never appears in a student portfolio/backpack.
      *
-     * @var bool
-     *
      * @ORM\Column(name="is_real", type="boolean")
      */
-    protected $isReal;
+    protected bool $isReal;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $courseId;
+    protected ?int $courseId = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="created_by", type="integer", nullable=false)
      */
-    protected $createdBy;
+    protected int $createdBy;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="updated_by", type="integer", nullable=false)
      */
-    protected $updatedBy;
+    protected int $updatedBy;
 
-    /**
-     * SkillRelItem constructor.
-     */
     public function __construct()
     {
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
         $this->isReal = false;
         $this->requiresValidation = false;
     }
@@ -126,30 +104,12 @@ class SkillRelItem
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return SkillRelItem
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return Skill
-     */
-    public function getSkill()
+    public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setSkill(Skill $skill)
+    public function setSkill(Skill $skill): self
     {
         $this->skill = $skill;
 
@@ -165,11 +125,9 @@ class SkillRelItem
     }
 
     /**
-     * @param int $itemId
-     *
      * @return SkillRelItem
      */
-    public function setItemId($itemId)
+    public function setItemId(int $itemId)
     {
         $this->itemId = $itemId;
 
@@ -184,52 +142,31 @@ class SkillRelItem
         return $this->obtainConditions;
     }
 
-    /**
-     * @param string $obtainConditions
-     *
-     * @return SkillRelItem
-     */
-    public function setObtainConditions($obtainConditions)
+    public function setObtainConditions(string $obtainConditions): self
     {
         $this->obtainConditions = $obtainConditions;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isRequiresValidation()
+    public function isRequiresValidation(): bool
     {
         return $this->requiresValidation;
     }
 
-    /**
-     * @param bool $requiresValidation
-     *
-     * @return SkillRelItem
-     */
-    public function setRequiresValidation($requiresValidation)
+    public function setRequiresValidation(bool $requiresValidation): self
     {
         $this->requiresValidation = $requiresValidation;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isReal()
+    public function isReal(): bool
     {
         return $this->isReal;
     }
 
-    /**
-     * @param bool $isReal
-     *
-     * @return SkillRelItem
-     */
-    public function setIsReal($isReal)
+    public function setIsReal(bool $isReal): self
     {
         $this->isReal = $isReal;
 
@@ -237,7 +174,7 @@ class SkillRelItem
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -245,11 +182,9 @@ class SkillRelItem
     }
 
     /**
-     * @param \DateTime $createdAt
-     *
      * @return SkillRelItem
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -257,7 +192,7 @@ class SkillRelItem
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -265,11 +200,9 @@ class SkillRelItem
     }
 
     /**
-     * @param \DateTime $updatedAt
-     *
      * @return SkillRelItem
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -284,12 +217,7 @@ class SkillRelItem
         return $this->createdBy;
     }
 
-    /**
-     * @param int $createdBy
-     *
-     * @return SkillRelItem
-     */
-    public function setCreatedBy($createdBy)
+    public function setCreatedBy(int $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -304,12 +232,7 @@ class SkillRelItem
         return $this->updatedBy;
     }
 
-    /**
-     * @param int $updatedBy
-     *
-     * @return SkillRelItem
-     */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedBy(int $updatedBy): self
     {
         $this->updatedBy = $updatedBy;
 
@@ -324,12 +247,7 @@ class SkillRelItem
         return $this->itemType;
     }
 
-    /**
-     * @param int $itemType
-     *
-     * @return SkillRelItem
-     */
-    public function setItemType($itemType)
+    public function setItemType(int $itemType): self
     {
         $this->itemType = $itemType;
 
@@ -344,12 +262,7 @@ class SkillRelItem
         return $this->courseId;
     }
 
-    /**
-     * @param int $courseId
-     *
-     * @return SkillRelItem
-     */
-    public function setCourseId($courseId)
+    public function setCourseId(int $courseId): self
     {
         $this->courseId = $courseId;
 
@@ -364,24 +277,14 @@ class SkillRelItem
         return $this->sessionId;
     }
 
-    /**
-     * @param int $sessionId
-     *
-     * @return SkillRelItem
-     */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * @param string $cidReq
-     *
-     * @return string
-     */
-    public function getItemResultUrl($cidReq)
+    public function getItemResultUrl(string $cidReq): string
     {
         $url = '';
         switch ($this->getItemType()) {
@@ -398,12 +301,7 @@ class SkillRelItem
         return $url;
     }
 
-    /**
-     * @param string $cidReq
-     *
-     * @return string
-     */
-    public function getItemResultList($cidReq)
+    public function getItemResultList(string $cidReq): string
     {
         $url = '';
         switch ($this->getItemType()) {

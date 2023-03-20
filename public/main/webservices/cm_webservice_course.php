@@ -445,15 +445,15 @@ class WSCMCourse extends WSCM
         }
     }
 
-    public function unreadMessage($username, $password)
+    /*public function unreadMessage($username, $password)
     {
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
-            $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
+            $condition_msg_status = ' msg_status = 1 ';
 
             $sql_query = "SELECT COUNT(*) as number_messages
-                          FROM $table_message 
+                          FROM $table_message
                           WHERE $condition_msg_status AND user_receiver_id=".$user_id;
 
             $sql_result = Database::query($sql_query);
@@ -470,7 +470,7 @@ class WSCMCourse extends WSCM
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = get_user_id_from_username($username);
         }
-    }
+    }*/
 
     public function nada($username, $password)
     {
@@ -694,10 +694,10 @@ class WSCMCourse extends WSCM
                     return true;
                 } else {
                     // Subscribe user
-                    if (CourseManager::subscribeUser($user_id, $course_code, $status)) {
+                    if (CourseManager::subscribeUser($user_id, $course_id, $status)) {
                         return true;
                     } else {
-                        return new WSError(203, 'An error occured subscribing to this course');
+                        return new WSError(203, 'An error occurred subscribing to this course');
                     }
                 }
             }

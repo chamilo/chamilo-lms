@@ -41,7 +41,7 @@ Display :: display_header($tool_name);
 
 $link_add_group = '<a href="usergroups.php">'.
     Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>';
-echo '<div class="actions">'.$link_add_group.'</div>';
+echo Display::toolbarAction('subscribe', [$link_add_group]);
 
 $form = new FormValidator('subscribe_user2course');
 $form->addElement('header', '', $tool_name);
@@ -96,7 +96,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
                     if (DRH != $user['status']) {
-                        CourseManager::subscribeUser($user_id, $course_code);
+                        $courseInfo = api_get_course_info($course_code);
+                        CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
                     } else {
                         $errorDrh = 1;
                     }
@@ -104,9 +105,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if (0 == $errorDrh) {
-                echo Display::return_message(get_lang('The selected users are subscribed to the selected course'), 'confirm');
+                echo Display::return_message(
+                    get_lang('The selected users are subscribed to the selected course'),
+                    'confirm'
+                );
             } else {
-                echo Display::return_message(get_lang('Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'), 'error');
+                echo Display::return_message(
+                    get_lang(
+                        'Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'
+                    ),
+                    'error'
+                );
             }
         }
     }
@@ -277,7 +286,7 @@ if (is_array($extra_field_list)) {
             echo $extraHidden;
             echo '&nbsp;&nbsp;';
         }
-        echo '<input class="btn btn-primary" type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" ></input>';
+        echo '<input class="btn btn--primary" type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" ></input>';
         echo '<br /><br />';
     }
 }
@@ -334,7 +343,7 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
+    <button type="submit" class="btn btn--primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
         <em class="fa fa-plus"></em> <?php echo get_lang('Add to the course(s)'); ?>
     </button>
    </td>

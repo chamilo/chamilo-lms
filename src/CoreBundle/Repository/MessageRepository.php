@@ -1,49 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class MessageRepository.
- */
 class MessageRepository extends ServiceEntityRepository
 {
-    /**
-     * MessageRepository constructor.
-     */
+    use RepositoryQueryBuilderTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Message::class);
     }
 
-    /**
-     * @param int $lastMessageId
-     */
-    public function getFromLastOneReceived(User $user, $lastMessageId = 0)
+    public function update(Message $message, bool $andFlush = true): void
     {
-        $qb = $this->createQueryBuilder('m');
+        $this->getEntityManager()->persist($message);
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 
-        $qb
-            ->where(
-                $qb->expr()->eq('m.userReceiver', $user->getId())
-            )
-            ->andWhere(
-                $qb->expr()->eq('m.msgStatus', MESSAGE_STATUS_UNREAD)
-            )
-            ->andWhere(
-                $qb->expr()->gt('m.id', (int) $lastMessageId)
-            )
-            ->orderBy(
-                'm.sendDate',
-                'DESC'
-            );
+    public function delete(Message $message): void
+    {
+        $this->getEntityManager()->remove($message);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return Message[]
+     */
+    public function getMessageByUser(User $user, int $type)
+    {
+        $qb = $this->addReceiverQueryBuilder($user);
+        $qb = $this->addMessageTypeQueryBuilder($type, $qb);
 
         return $qb->getQuery()->getResult();
+    }
+
+    protected function addReceiverQueryBuilder(User $user, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'm');
+        $qb
+            ->join('m.receivers', 'r')
+            ->andWhere('r.receiver = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $qb;
+    }
+
+    protected function addMessageTypeQueryBuilder(int $type, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'm');
+        $qb
+            ->andWhere('m.msgType = :type')
+            ->setParameter('type', $type)
+        ;
+
+        return $qb;
     }
 }

@@ -106,13 +106,13 @@ function handleRegions()
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
+    echo '<button class="btn btn--success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
 }
 
 function handleExtensions()
 {
     echo Display::page_subheader(get_lang('Configure extensions'));
-    echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Chamilo RAPID').'</a>';
+    echo '<a class="btn btn--success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Chamilo RAPID').'</a>';
 }
 
 /**
@@ -149,14 +149,16 @@ function handlePlugins()
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="table table-hover table-striped table-bordered">';
+    echo '<table class="table table-hover table-striped table-bordered table-fixed">';
+    echo '<thead class="bg-gray-50">';
     echo '<tr>';
-    echo '<th width="20px">';
+    echo '<th width="20px" class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Action');
-    echo '</th><th>';
+    echo '</th><th class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Description');
     echo '</th>';
     echo '</tr>';
+    echo '</thead>';
 
     /*$plugin_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
@@ -174,33 +176,33 @@ function handlePlugins()
             $pluginRow = '';
 
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<tr class="row_selected">';
+                $pluginRow .= '<tr class="row_selected whitespace-nowrap">';
             } else {
-                $pluginRow .= '<tr>';
+                $pluginRow .= '<tr class="whitespace-nowrap">';
             }
-            $pluginRow .= '<td>';
+            $pluginRow .= '<td class="px-6 py-4 text-sm text-gray-500">';
             // Checkbox
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked" class="border rounded">';
             } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" class="border rounded">';
             }
-            $pluginRow .= '</td><td>';
-            $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            $pluginRow .= '</td><td class="px-6 py-4 text-sm text-gray-500">';
+            $pluginRow .= '<h3 class="text-3xl font-normal leading-normal mt-0 mb-2">'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
             $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
-            $pluginRow .= '<div class="btn-group btn-group-sm">';
+            $pluginRow .= '<div class="btn-group btn-group-sm mt-4">';
             if (in_array($pluginName, $installed_plugins)) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
                 $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
             }
 
@@ -209,7 +211,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -223,7 +225,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -241,15 +243,16 @@ function handlePlugins()
             }
         }
     }
-
+    echo '<tbody class="bg-white">';
     echo $installed;
     echo $notInstalled;
+    echo '</tbody>';
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+    echo '<button class="btn btn--primary" type="submit" name="submit_plugins">';
     echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo  get_lang('Enable the selected plugins').'</button>';
+    echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -460,8 +463,7 @@ function handleStylesheets()
         ['id' => 'stylesheets_id']
     );
 
-    $styles = $form_change->addElement(
-        'selectTheme',
+    $styles = $form_change->addSelectTheme(
         'style',
         get_lang('Name of the stylesheet')
     );
@@ -747,7 +749,6 @@ function handleSearch()
 {
     global $SettingsStored, $_configuration;
 
-    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $search_enabled = api_get_setting('search_enabled');
 
     $form = new FormValidator(
@@ -833,7 +834,7 @@ function handleSearch()
     echo '</div>';
 
     if ('true' == $search_enabled) {
-        $xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
+        //$xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
         @todo Test the Xapian connection
@@ -1024,6 +1025,10 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
     $sql .= " ORDER BY col$column $direction ";
@@ -1307,55 +1312,6 @@ function deleteTemplate($id)
 
     // Display a feedback message.
     echo Display::return_message(get_lang('Template deleted'), 'confirm');
-}
-
-/**
- * Returns the list of timezone identifiers used to populate the select
- * This function is called through a call_user_func() in the generate_settings_form function.
- *
- * @return array List of timezone identifiers
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- *
- * @since Chamilo 1.8.7
- */
-function select_timezone_value()
-{
-    return api_get_timezones();
-}
-
-/**
- * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- * This function is called through a call_user_func() in the generate_settings_form function.
- *
- * @return array List of gradebook_number_decimals options
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function select_gradebook_number_decimals()
-{
-    return ['0', '1', '2'];
-}
-
-/**
- * Get the options for a select element to select gradebook default grade model.
- *
- * @return array
- */
-function select_gradebook_default_grade_model_id()
-{
-    $grade_model = new GradeModel();
-    $models = $grade_model->get_all();
-    $options = [];
-    $options[-1] = get_lang('none');
-
-    if (!empty($models)) {
-        foreach ($models as $model) {
-            $options[$model['id']] = $model['name'];
-        }
-    }
-
-    return $options;
 }
 
 /**
@@ -1919,7 +1875,7 @@ function generateCSSDownloadLink($style)
         $url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
 
         //@TODO: use more generic script to download.
-        $str = '<a class="btn btn-primary btn-large" href="'.$url.'">'.get_lang('Download the file').'</a>';
+        $str = '<a class="btn btn--primary btn-large" href="'.$url.'">'.get_lang('Download the file').'</a>';
         echo Display::return_message($str, 'normal', false);
     } else {
         echo Display::return_message(get_lang('The file was not found'), 'warning');

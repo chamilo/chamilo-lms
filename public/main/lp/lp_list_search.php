@@ -11,7 +11,6 @@
  */
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
-require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 Event::event_access_tool(TOOL_SEARCH);
 
@@ -112,8 +111,8 @@ if (count($term_array)) {
 }
 
 if ($query) {
-    list($count, $results) = chamilo_query_query(
-        api_convert_encoding($query, 'UTF-8', $charset),
+    [$count, $results] = chamilo_query_query(
+        $query,
         0,
         1000,
         $fixed_queries

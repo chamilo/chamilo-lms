@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 
 $cidReset = true;
@@ -52,7 +53,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
 }
 switch ($action) {
     case 'send_legal':
-        $language = api_get_interface_language();
+        $language = api_get_language_isocode();
         $language = api_get_language_id($language);
         $terms = LegalManager::get_last_condition($language);
         if (!$terms) {
@@ -88,14 +89,14 @@ switch ($action) {
                 $contentEmail = sprintf(
                     get_lang('User %s signed the agreement.TheDateY'),
                     $currentUserInfo['complete_name'],
-                    api_get_local_time($time)
+                    api_get_local_time()
                 );
 
                 MessageManager::send_message_simple(
                     $bossId,
                     $subjectEmail,
                     $contentEmail,
-                    $user_id
+                    api_get_user_id()
                 );
             }
         }
@@ -193,7 +194,7 @@ switch ($action) {
         break;
 }
 
-$propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
+$propertiesToJson = Container::getUserToJsonNormalizer()->getPersonalDataToJson($userId, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
     $filename = md5(mt_rand(0, 1000000)).'.json';
@@ -230,7 +231,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Personal data')];
 $socialMenuBlock = '';
 if ($allowSocial) {
     // Block Social Menu
-    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
+    //$socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 // MAIN CONTENT
@@ -321,7 +322,7 @@ foreach ($properties as $key => $value) {
                 }
                 $personalDataContent .= '</ul>';
                 break;
-            case 'sessionCourseSubscriptions':
+            case 'sessionRelCourseRelUsers':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 foreach ($value as $session => $courseList) {
                     $personalDataContent .= '<li>'.$session.'<ul>';
@@ -369,7 +370,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     );
     $permissionBlock .= Display::return_icon('accept_na.png', get_lang('Rejected'));
     if (isset($value['value']) && !empty($value['value'])) {
-        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+        [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
         $permissionBlock = '<h4>'.get_lang('Current status').'</h4>'.
             get_lang('Legal agreement accepted').' '.Display::return_icon('accept.png', get_lang('Legal agreement accepted'), [], ICON_SIZE_TINY).
             '<br />';
@@ -379,14 +380,14 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     /*$permissionBlock .= Display::url(
         get_lang('Delete legal agreement'),
         api_get_self().'?action=delete_legal&user_id='.$userId,
-        ['class' => 'btn btn-danger btn-xs']
+        ['class' => 'btn btn--danger btn-xs']
     );*/
     } else {
         // @TODO add action handling for button
         $permissionBlock .= Display::url(
             get_lang('Send legal agreement'),
             api_get_self().'?action=send_legal&user_id='.$userId,
-            ['class' => 'btn btn-primary btn-xs']
+            ['class' => 'btn btn--primary btn-xs']
         );
     }
 } else {
@@ -400,7 +401,7 @@ $personalData['data'] = $personalDataContent;
 
 $em = Database::getManager();
 /** @var LegalRepository $legalTermsRepo */
-$legalTermsRepo = $em->getRepository('ChamiloCoreBundle:Legal');
+$legalTermsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Legal::class);
 // Get data about the treatment of data
 $treatmentTypes = LegalManager::getTreatmentTypeList();
 

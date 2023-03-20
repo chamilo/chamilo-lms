@@ -1,0 +1,27 @@
+.course-tool {
+  @apply flex flex-col gap-4 relative;
+
+  &__link {
+    @apply border border-solid border-gray-30 rounded-lg flex place-items-center justify-center shadow-lg w-[7.5rem] h-[7.5rem];
+  }
+
+  &__icon {
+    @apply text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient text-header;
+
+    &::before {
+    }
+  }
+
+  &__title {
+    @apply text-caption-bold text-center text-primary;
+  }
+
+  &__options {
+    @apply absolute flex gap-2 p-2 right-0;
+
+    & > a,
+    & > button {
+      @apply inline-block h-6 text-center w-6;
+    }
+  }
+}

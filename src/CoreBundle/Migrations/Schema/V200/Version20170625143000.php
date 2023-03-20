@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -7,48 +9,118 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_thematic.
- */
 class Version20170625143000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_thematic changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_thematic');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic ADD CONSTRAINT FK_6D8F59B91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE c_thematic ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql(
+                'ALTER TABLE c_thematic ADD CONSTRAINT FK_6D8F59B91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_6D8F59B91BAD783F ON c_thematic (resource_node_id)');
         }
 
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic');
+        }
+        if ($table->hasIndex('active')) {
+            $this->addSql('DROP INDEX active ON c_thematic');
+        }
+
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic DROP c_id');
+        }
+
+        if ($table->hasColumn('session_id')) {
+            //$this->addSql('ALTER TABLE c_thematic DROP session_id');
+        }
+
+        if ($table->hasIndex('active')) {
+            $this->addSql('CREATE INDEX active ON c_thematic (active);');
+        }
+
         $table = $schema->getTable('c_thematic_advance');
-        $this->addSql('ALTER TABLE c_thematic_advance CHANGE thematic_id thematic_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL');
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic_advance');
+        }
+
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
+        }
+
+        if ($table->hasIndex('thematic_id')) {
+            $this->addSql('DROP INDEX thematic_id ON c_thematic_advance');
+        }
+
+        if (false === $table->hasIndex('IDX_62798E972395FCED')) {
+            $this->addSql('CREATE INDEX IDX_62798E972395FCED ON c_thematic_advance (thematic_id)');
+        }
+
+        $this->addSql(
+            'ALTER TABLE c_thematic_advance CHANGE thematic_id thematic_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL'
+        );
+
+        if (false === $table->hasForeignKey('FK_62798E972395FCED')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'
+            );
+        }
+        if (false === $table->hasForeignKey('FK_62798E97163DDA15')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE'
+            );
+        }
+        if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
+            $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id);');
+        }
+
+        /*
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid)');
-            $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id BIGINT DEFAULT NULL');
+
+            //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
-        }
+        }*/
 
-        if ($table->hasIndex('IDX_62798E97163DDA15')) {
-            $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id)');
-        }
-
-        $table = $schema->getTable('c_thematic_advance');
+        $table = $schema->getTable('c_thematic_plan');
         $this->addSql('ALTER TABLE c_thematic_plan CHANGE thematic_id thematic_id INT DEFAULT NULL');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)');
-            $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE INDEX IDX_1197487C2395FCED ON c_thematic_plan (thematic_id)');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_thematic_plan');
         }
+
+        if ($table->hasColumn('c_id')) {
+            //$this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
+        }
+        if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
+            $this->addSql(
+                'ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid) ON DELETE CASCADE'
+            );
+        }
+
+        if (false === $table->hasIndex('IDX_1197487C2395FCED')) {
+            $this->addSql('CREATE INDEX IDX_1197487C2395FCED ON c_thematic_plan (thematic_id)');
+        }
+
+        /*
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id BIGINT DEFAULT NULL');
+
+            $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
+        }*/
 
         // CLink
         $table = $schema->getTable('c_link');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_link ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_link ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -62,23 +134,25 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_link');
         }
 
+        $this->addSql('ALTER TABLE c_link CHANGE on_homepage on_homepage VARCHAR(10) DEFAULT NULL');
+        $this->addSql('UPDATE c_link SET category_id = NULL WHERE category_id = 0');
+
         if (false === $table->hasForeignKey('FK_9209C2A012469DE2')) {
             $this->addSql(
-                'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid)'
+                'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid) ON DELETE SET NULL'
             );
             $this->addSql('CREATE INDEX IDX_9209C2A012469DE2 ON c_link (category_id)');
         }
 
         $table = $schema->getTable('c_link_category');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql(
-                'ALTER TABLE c_link_category ADD resource_node_id INT DEFAULT NULL, DROP c_id, DROP id, DROP session_id'
-            );
+            $this->addSql('ALTER TABLE c_link_category ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_link_category ADD CONSTRAINT FK_319D6C9C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_319D6C9C1BAD783F ON c_link_category (resource_node_id)');
         }
+
         if ($table->hasIndex('session_id')) {
             $this->addSql('DROP INDEX session_id ON c_link_category');
         }
@@ -87,99 +161,21 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_glossary');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_glossary');
+        }
+
+        if ($table->hasIndex('session_id')) {
+            $this->addSql('DROP INDEX session_id ON c_glossary');
+        }
+
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_glossary ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_glossary ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_glossary ADD CONSTRAINT FK_A1168D881BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_A1168D881BAD783F ON c_glossary (resource_node_id)');
-        }
-
-        $table = $schema->getTable('c_student_publication');
-        if (false === $table->hasColumn('filesize')) {
-            $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
-        }
-        $this->addSql('ALTER TABLE c_student_publication CHANGE url url VARCHAR(500) DEFAULT NULL');
-        $this->addSql(
-            'ALTER TABLE c_student_publication CHANGE url_correction url_correction VARCHAR(500) DEFAULT NULL'
-        );
-        $this->addSql('ALTER TABLE c_student_publication CHANGE active active INT DEFAULT NULL');
-
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql(
-                'ALTER TABLE c_student_publication ADD CONSTRAINT FK_5246F7461BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_5246F7461BAD783F ON c_student_publication (resource_node_id)');
-        }
-
-        $table = $schema->getTable('c_student_publication_assignment');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_student_publication_assignment ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql(
-                'ALTER TABLE c_student_publication_assignment ADD CONSTRAINT FK_25687EB81BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
-            $this->addSql(
-                'CREATE UNIQUE INDEX UNIQ_25687EB81BAD783F ON c_student_publication_assignment (resource_node_id)'
-            );
-        }
-
-        $table = $schema->getTable('c_student_publication_comment');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_student_publication_comment ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql(
-                'ALTER TABLE c_student_publication_comment ADD CONSTRAINT FK_35C509F61BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
-            $this->addSql(
-                'CREATE UNIQUE INDEX UNIQ_35C509F61BAD783F ON c_student_publication_comment (resource_node_id)'
-            );
-        }
-        $table = $schema->getTable('c_calendar_event');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql(
-                'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A0622581EE3A445A FOREIGN KEY (parent_event_id) REFERENCES c_calendar_event (iid)'
-            );
-            $this->addSql(
-                'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A06225811BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
-            $this->addSql('CREATE INDEX IDX_A0622581EE3A445A ON c_calendar_event (parent_event_id)');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_A06225811BAD783F ON c_calendar_event (resource_node_id)');
-        }
-
-        $table = $schema->getTable('c_calendar_event_attachment');
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD id resource_node_id INT DEFAULT NULL');
-            $this->addSql(
-                'ALTER TABLE c_calendar_event_attachment ADD CONSTRAINT FK_DDD745A6EA67784A FOREIGN KEY (agenda_id) REFERENCES c_calendar_event (iid) ON DELETE CASCADE'
-            );
-            $this->addSql(
-                'ALTER TABLE c_calendar_event_attachment ADD CONSTRAINT FK_DDD745A61BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
-            );
-            $this->addSql('CREATE INDEX IDX_DDD745A6EA67784A ON c_calendar_event_attachment (agenda_id)');
-            $this->addSql(
-                'CREATE UNIQUE INDEX UNIQ_DDD745A61BAD783F ON c_calendar_event_attachment (resource_node_id)'
-            );
-        }
-
-        $table = $schema->getTable('c_calendar_event_repeat');
-        $this->addSql('ALTER TABLE c_calendar_event_repeat CHANGE cal_id cal_id INT DEFAULT NULL');
-        if (false === $table->hasForeignKey('FK_86FD1CA87300D633')) {
-            $this->addSql(
-                'ALTER TABLE c_calendar_event_repeat ADD CONSTRAINT FK_86FD1CA87300D633 FOREIGN KEY (cal_id) REFERENCES c_calendar_event (iid)'
-            );
-        }
-        if (false === $table->hasIndex('IDX_86FD1CA87300D633')) {
-            $this->addSql('CREATE INDEX IDX_86FD1CA87300D633 ON c_calendar_event_repeat (cal_id)');
-        }
-
-        $this->addSql('ALTER TABLE c_calendar_event_repeat_not CHANGE cal_id cal_id INT DEFAULT NULL');
-        if (false === $table->hasForeignKey('FK_7D4436947300D633')) {
-            $this->addSql(
-                'ALTER TABLE c_calendar_event_repeat_not ADD CONSTRAINT FK_7D4436947300D633 FOREIGN KEY (cal_id) REFERENCES c_calendar_event (iid)'
-            );
-        }
-        if (false === $table->hasIndex('IDX_7D4436947300D633')) {
-            $this->addSql('CREATE INDEX IDX_7D4436947300D633 ON c_calendar_event_repeat_not (cal_id)');
         }
     }
 

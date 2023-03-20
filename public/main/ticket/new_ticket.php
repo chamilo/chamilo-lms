@@ -109,7 +109,7 @@ $htmlHeadXtra[] = '<script>
     var course_required = '.js_array($types, 'course_required', 'course_required').'
     var other_area = '.js_array($types, 'other_area', 'other_area').'
     var email = '.js_array($types, 'email', 'email').
-'</script>';
+    '</script>';
 
 /**
  * @param $array
@@ -143,7 +143,7 @@ function save_ticket()
     $other_area = (int) $_POST['other_area'];
     $personal_email = $_POST['personal_email'];
     $source = (int) $_POST['source_id'];
-    $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+    $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : null;
     $priority = isset($_POST['priority_id']) ? (int) $_POST['priority_id'] : '';
     $status = isset($_POST['status_id']) ? (int) $_POST['status_id'] : '';
     $file_attachments = $_FILES;
@@ -225,59 +225,12 @@ $form = new FormValidator(
     ]
 );
 
-$form->addElement(
-    'hidden',
-    'user_id_request',
-    '',
-    [
-        'id' => 'user_id_request',
-    ]
-);
-
-$form->addElement(
-    'hidden',
-    'project_id',
-    $projectId
-);
-
-$form->addElement(
-    'hidden',
-    'other_area',
-    '',
-    [
-        'id' => 'other_area',
-    ]
-);
-
-$form->addElement(
-    'hidden',
-    'email',
-    '',
-    [
-        'id' => 'email',
-    ]
-);
-
-$form->addSelect(
-    'category_id',
-    get_lang('Category'),
-    $categoryList,
-    [
-        'id' => 'category_id',
-        'for' => 'category_id',
-        'style' => 'width: 562px;',
-    ]
-);
-
-$form->addElement(
-    'text',
-    'subject',
-    get_lang('Subject'),
-    [
-        'id' => 'subject',
-    ]
-);
-
+$form->addHidden('user_id_request', '', ['id' => 'user_id_request']);
+$form->addHidden('project_id', $projectId);
+$form->addHidden('other_area', '', ['id' => 'other_area']);
+$form->addHidden('email', '', ['id' => 'email']);
+$form->addSelect('category_id', get_lang('Category'), $categoryList, ['id' => 'category_id', 'for' => 'category_id']);
+$form->addElement('text', 'subject', get_lang('Subject'), ['id' => 'subject']);
 $form->addHtmlEditor(
     'content',
     get_lang('Message'),
@@ -293,20 +246,12 @@ if (api_is_platform_admin()) {
     $form->addSelectAjax(
         'user_id',
         get_lang('Assign'),
-        null,
+        [],
         ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
     );
 }
 
-$form->addElement(
-    'text',
-    'personal_email',
-    get_lang('Personal e-mail'),
-    [
-        'id' => 'personal_email',
-    ]
-);
-
+$form->addElement('text', 'personal_email', get_lang('Personal e-mail'), ['id' => 'personal_email']);
 $form->addLabel(
     '',
     Display::div(
@@ -317,33 +262,9 @@ $form->addLabel(
     )
 );
 
-$form->addElement(
-    'select',
-    'status_id',
-    get_lang('Status'),
-    $statusList,
-    $statusAttributes
-);
-
-$form->addElement(
-    'select',
-    'priority_id',
-    get_lang('Priority'),
-    $priorityList,
-    [
-        'id' => 'priority_id',
-        'for' => 'priority_id',
-    ]
-);
-
-$form->addElement(
-    'select',
-    'source_id',
-    get_lang('Source'),
-    $sourceList,
-    $sourceAttributes
-);
-
+$form->addSelect('status_id', get_lang('Status'), $statusList, $statusAttributes);
+$form->addSelect('priority_id', get_lang('Priority'), $priorityList, ['id' => 'priority_id', 'for' => 'priority_id']);
+$form->addSelect('source_id', get_lang('Source'), $sourceList, $sourceAttributes);
 $form->addElement(
     'text',
     'phone',
@@ -361,7 +282,6 @@ if (api_is_platform_admin() || !empty($sessionList)) {
     foreach ($sessionList as $sessionInfo) {
         $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
     }
-
     $form->addSelect('session_id', get_lang('Session'), $sessionListToSelect, ['id' => 'session_id']);
 } else {
     $form->addHidden('session_id', 0);
@@ -391,10 +311,13 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
-         </span>
-         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
-    '
+         <span class="btn btn--success" onclick="return add_image_form()">'
+    .get_lang('Add one more file')
+    .'</span></span>('
+    .sprintf(
+        get_lang('Maximun file size: %s'),
+        format_file_size((int) api_get_setting('message_max_upload_filesize'))
+    ).')'
 );
 
 $form->addElement('html', '<br/>');
@@ -405,7 +328,7 @@ $form->addElement(
     null,
     null,
     null,
-    'btn btn-primary',
+    'btn btn--primary',
     [
         'id' => 'btnsubmit',
     ]

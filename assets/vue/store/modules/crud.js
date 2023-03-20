@@ -1,7 +1,8 @@
-import Vue from 'vue';
 import { getField, updateField } from 'vuex-map-fields';
 import remove from 'lodash/remove';
+import map from 'lodash/map';
 import SubmissionError from '../../error/SubmissionError';
+import isEmpty from 'lodash/isEmpty';
 
 const initialState = () => ({
   allIds: [],
@@ -15,13 +16,19 @@ const initialState = () => ({
   totalItems: 0,
   updated: null,
   view: null,
-  violations: null
+  violations: null,
+  resourceNode: null,
+  course: null,
+  session: null,
+  recents: [],
 });
 
 const handleError = (commit, e) => {
+  console.log('handleError');
   commit(ACTIONS.TOGGLE_LOADING);
-
+  console.log(e);
   if (e instanceof SubmissionError) {
+    console.log('SubmissionError');
     commit(ACTIONS.SET_VIOLATIONS, e.errors);
     // eslint-disable-next-line
     commit(ACTIONS.SET_ERROR, e.errors._error);
@@ -29,6 +36,7 @@ const handleError = (commit, e) => {
     return Promise.reject(e);
   }
 
+  console.log('ACTIONS.SET_ERROR');
   // eslint-disable-next-line
   commit(ACTIONS.SET_ERROR, e.message);
 
@@ -51,8 +59,12 @@ export const ACTIONS = {
   SET_UPDATED: 'SET_UPDATED',
   SET_VIEW: 'SET_VIEW',
   SET_VIOLATIONS: 'SET_VIOLATIONS',
+  SET_RECENTS: 'SET_RECENTS',
   TOGGLE_LOADING: 'TOGGLE_LOADING',
-  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE'
+  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE',
+  ADD_COURSE: 'ADD_COURSE',
+  ADD_SESSION: 'ADD_SESSION',
+  REMOVE_SESSION: 'REMOVE_SESSION'
 };
 
 export default function makeCrudModule({
@@ -62,11 +74,40 @@ export default function makeCrudModule({
 } = {}) {
   return {
     actions: {
-      create: ({ commit }, values) => {
+      checkResponse(response) {
+        if (200 === response.status) {
+          return response.json();
+        }
+
+        return response;
+      },
+      createWithFormData: ({ commit }, values) => {
+        console.log('createWithFormData');
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
+            .createWithFormData(values)
+            .then(response => response.json())
+            /*.then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })*/
+            .then(data => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD, data);
+              commit(ACTIONS.SET_CREATED, data);
+            })
+            .catch(e => handleError(commit, e));
+      },
+      create: ({ commit }, values) => {
+        console.log('crud.js create');
+        console.log(values);
+        commit(ACTIONS.SET_ERROR, '');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
           .create(values)
           .then(response => response.json())
           .then(data => {
@@ -77,9 +118,11 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       del: ({ commit }, item) => {
+        console.log('del');
+        commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
           .del(item)
           .then(() => {
             commit(ACTIONS.TOGGLE_LOADING);
@@ -90,42 +133,51 @@ export default function makeCrudModule({
       delMultiple: ({ commit }, items) => {
         commit(ACTIONS.TOGGLE_LOADING);
         const promises = items.map(async item => {
-          const result = await service.del(item).then(() => {
-            //commit(ACTIONS.TOGGLE_LOADING);
-            commit(ACTIONS.SET_DELETED_MULTIPLE, item);
-          });
+          const result = await service.del(item);
+
+          commit(ACTIONS.SET_DELETED_MULTIPLE, item);
 
           return result;
         });
 
-        const result = Promise.all(promises);
-
-        if (result) {
-          commit(ACTIONS.TOGGLE_LOADING);
-        }
+        return Promise.all(promises)
+            .then(() => {
+              commit(ACTIONS.TOGGLE_LOADING);
+            });
       },
+      findAll: ({ commit, state }, params) => {
+        if (!service) throw new Error('No service specified!');
 
+        //commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .findAll({params})
+            .then(response => response.json())
+            .then(retrieved => {
+              console.log('result of retrieved');
+              //commit(ACTIONS.TOGGLE_LOADING);
+
+              return retrieved['hydra:member'];
+            })
+            .catch(e => handleError(commit, e));
+      },
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
-          .findAll({ params })
+        return service
+          .findAll({params})
           .then(response => response.json())
           .then(retrieved => {
+            console.log('result of retrieved');
             commit(ACTIONS.TOGGLE_LOADING);
-
-            commit(
-              ACTIONS.SET_TOTAL_ITEMS,
-              retrieved['hydra:totalItems']
-            );
+            commit(ACTIONS.SET_TOTAL_ITEMS, retrieved['hydra:totalItems']);
             commit(ACTIONS.SET_VIEW, retrieved['hydra:view']);
-
+            commit(ACTIONS.SET_RECENTS, retrieved['hydra:member']);
             if (true === state.resetList) {
               commit(ACTIONS.RESET_LIST);
             }
-
             retrieved['hydra:member'].forEach(item => {
               commit(ACTIONS.ADD, normalizeRelations(item));
             });
@@ -136,44 +188,136 @@ export default function makeCrudModule({
         { commit },
         { params = { properties: ['@id', 'name'] } } = {}
       ) => {
+        console.log('fetchSelectItems');
         commit(ACTIONS.TOGGLE_LOADING);
-
         if (!service) throw new Error('No service specified!');
 
-        service
+        return service
           .findAll({ params })
           .then(response => response.json())
           .then(retrieved => {
-            commit(
-              ACTIONS.SET_SELECT_ITEMS,
-              retrieved['hydra:member']
-            );
+            commit(ACTIONS.TOGGLE_LOADING);
+            commit(ACTIONS.SET_SELECT_ITEMS, retrieved['hydra:member']);
           })
           .catch(e => handleError(commit, e));
       },
-
-      load: ({ commit }, id, options = {}) => {
+      loadWithQuery: ({ commit }, params= {}) => {
         if (!service) throw new Error('No service specified!');
+
+        const id = params['id'];
+        delete params['id'];
+
+        if (isEmpty(id)) {
+          throw new Error('Incorrect id');
+        }
 
         commit(ACTIONS.TOGGLE_LOADING);
         service
-          .find(id, options)
-          .then(response => response.json())
+            .find(id, params)
+            //.then(response => service.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD, normalizeRelations(item));
+            })
+            .catch(e => handleError(commit, e));
+      },
+      load: ({ commit }, id) => {
+        if (!service) throw new Error('No service specified!');
+        console.log('crud load');
+
+        if (isEmpty(id)) {
+          throw new Error('Incorrect id');
+        }
+
+        commit(ACTIONS.TOGGLE_LOADING);
+        return service
+          .find(id)
+          //.then(response => service.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
+
+            return item;
           })
           .catch(e => handleError(commit, e));
       },
-      findResourceNode: ({ commit }, id) => {
+      findCourse: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
         if (!service) throw new Error('No service specified!');
+        console.log('findCourse');
+        commit(ACTIONS.TOGGLE_LOADING);
 
-        service
-            .find(id)
-            .then(response => response.json())
+        return service
+            .find(id, params)
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
             .then(item => {
               commit(ACTIONS.TOGGLE_LOADING);
-              commit(ACTIONS.ADD_RESOURCE_NODE, normalizeRelations(item));
+              commit(ACTIONS.ADD_COURSE, item);
+
+              return item;
+            })
+            .catch(e => handleError(commit, e));
+      },
+      cleanSession: ({ commit }) => {
+        commit(ACTIONS.REMOVE_SESSION);
+      },
+      findSession: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
+        if (!service) throw new Error('No service specified!');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .find(id, params)
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_SESSION, item);
+
+              return item;
+            })
+            .catch(e => handleError(commit, e));
+      },
+      findResourceNode: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
+        console.log('findResourceNode', id);
+        if (!service) throw new Error('No service specified!');
+
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .find(id, params)
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_RESOURCE_NODE, item);
 
               return item;
             })
@@ -188,14 +332,17 @@ export default function makeCrudModule({
       resetShow: ({ commit }) => {
         commit(ACTIONS.RESET_SHOW);
       },
+      resetList: ({ commit }) => {
+        commit(ACTIONS.RESET_LIST);
+      },
       resetUpdate: ({ commit }) => {
         commit(ACTIONS.RESET_UPDATE);
       },
       update: ({ commit }, item) => {
-        commit(ACTIONS.SET_ERROR, '');
+        console.log('crud update');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
           .update(item)
           .then(response => response.json())
           .then(data => {
@@ -203,6 +350,19 @@ export default function makeCrudModule({
             commit(ACTIONS.SET_UPDATED, data);
           })
           .catch(e => handleError(commit, e));
+      },
+      updateWithFormData: ({ commit }, item) => {
+        console.log('crud updateWithFormData');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .updateWithFormData(item)
+            .then(response => response.json())
+            .then(data => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.SET_UPDATED, data);
+            })
+            .catch(e => handleError(commit, e));
       }
     },
     getters: {
@@ -216,19 +376,62 @@ export default function makeCrudModule({
       getResourceNode: (state) => {
         return state.resourceNode;
       },
+      getCourse: (state) => {
+        return state.course;
+      },
+      getSession: (state) => {
+        return state.session;
+      },
+      getDeleted (state) {
+        return state.deleted;
+      },
+      getTotalItems: (state) => {
+        return state.totalItems;
+      },
+      getRecents: (state) => {
+        return state.recents;
+      },
+      isLoading (state) {
+          return state.isLoading;
+      }
     },
     mutations: {
       updateField,
+      [ACTIONS.ADD_COURSE]: (state, item) => {
+        state.course = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
+      [ACTIONS.ADD_SESSION]: (state, item) => {
+        state.session = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
+      [ACTIONS.REMOVE_SESSION]: (state) => {
+        state.session = null;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
       [ACTIONS.ADD_RESOURCE_NODE]: (state, item) => {
-        Vue.set(state, 'resourceNode', item);
-        Vue.set(state, 'isLoading', false);
+        state.resourceNode = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
       },
       [ACTIONS.ADD]: (state, item) => {
-        Vue.set(state.byId, item['@id'], item);
-        Vue.set(state, 'isLoading', false);
-        if (state.allIds.includes(item['@id'])) return;
+        //this.$set(state.byId, item['@id'], item);
+        state.byId[item['@id']] = item;
+        state.isLoading = false;
+        //this.$set(state, 'isLoading', false);
+        if (state.allIds.includes(item['@id'])) {
+          return;
+        }
         state.allIds.push(item['@id']);
       },
+      [ACTIONS.SET_RECENTS]: (state, items) => state.recents = items,
       [ACTIONS.RESET_CREATE]: state => {
         Object.assign(state, {
           isLoading: false,
@@ -268,9 +471,13 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_CREATED]: (state, created) => {
+        //console.log('set _created');
+        //console.log(created);
         Object.assign(state, { created });
+        state.created = created;
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
+        //console.log('SET_DELETED');
         if (!state.allIds.includes(deleted['@id'])) {
           return;
         }
@@ -281,6 +488,7 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_DELETED_MULTIPLE]: (state, deleted) => {
+        console.log('SET_DELETED_MULTIPLE');
         //console.log(deleted['@id']);
         /*if (!state.allIds.includes(deleted['@id'])) {
           return;
@@ -292,7 +500,9 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_ERROR]: (state, error) => {
-        Object.assign(state, { error, isLoading: false });
+        state.error = error;
+        state.isLoading = false;
+        //Object.assign(state, { error, isLoading: false });
       },
       [ACTIONS.SET_SELECT_ITEMS]: (state, selectItems) => {
         Object.assign(state, {
@@ -305,12 +515,17 @@ export default function makeCrudModule({
         Object.assign(state, { totalItems });
       },
       [ACTIONS.SET_UPDATED]: (state, updated) => {
-        Object.assign(state, {
+        console.log('SET_UPDATED');
+        console.log(updated);
+        state.byId[updated['@id']] = updated;
+        state.isLoading = false;
+        state.updated = updated;
+        /*Object.assign(state, {
           byId: {
             [updated['@id']]: updated
           },
           updated
-        });
+        });*/
       },
       [ACTIONS.SET_VIEW]: (state, view) => {
         Object.assign(state, { view });

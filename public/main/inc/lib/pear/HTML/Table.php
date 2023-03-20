@@ -1,5 +1,5 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
 /**
  * PEAR::HTML_Table makes the design of HTML tables easy, flexible, reusable and
  * efficient.
@@ -164,7 +164,7 @@ class HTML_Table extends HTML_Common
      */
     public function __construct($attributes = null, $tabOffset = 0, $useTGroups = false)
     {
-        parent::__construct($attributes, (int)$tabOffset);
+        parent::__construct($attributes, (int) $tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;
         $this->addBody();
         if ($this->_useTGroups) {
@@ -193,12 +193,15 @@ class HTML_Table extends HTML_Common
     {
         if (is_null($this->_thead)) {
             $this->_useTGroups = true;
-            $this->_thead = new HTML_Table_Storage($this->_tabOffset,
-                                                    $this->_useTGroups);
+            $this->_thead = new HTML_Table_Storage(
+                $this->_tabOffset,
+                $this->_useTGroups
+            );
             for ($i = 0; $i < $this->_tbodyCount; $i++) {
                 $this->_tbodies[$i]->setUseTGroups(true);
             }
         }
+
         return $this->_thead;
     }
 
@@ -211,12 +214,15 @@ class HTML_Table extends HTML_Common
     {
         if (is_null($this->_tfoot)) {
             $this->_useTGroups = true;
-            $this->_tfoot = new HTML_Table_Storage($this->_tabOffset,
-                                                    $this->_useTGroups);
+            $this->_tfoot = new HTML_Table_Storage(
+                $this->_tabOffset,
+                $this->_useTGroups
+            );
             for ($i = 0; $i < $this->_tbodyCount; $i++) {
                 $this->_tbodies[$i]->setUseTGroups(true);
             }
         }
+
         return $this->_tfoot;
     }
 
@@ -235,6 +241,7 @@ class HTML_Table extends HTML_Common
         if (PEAR::isError($ret)) {
             return $ret;
         }
+
         return $this->_tbodies[$body];
     }
 
@@ -255,10 +262,13 @@ class HTML_Table extends HTML_Common
         }
 
         $body = $this->_tbodyCount++;
-        $this->_tbodies[$body] = new HTML_Table_Storage($this->_tabOffset,
-                                                         $this->_useTGroups);
+        $this->_tbodies[$body] = new HTML_Table_Storage(
+            $this->_tabOffset,
+            $this->_useTGroups
+        );
         $this->_tbodies[$body]->setAutoFill($this->_autoFill);
         $this->_tbodies[$body]->setAttributes($attributes);
+
         return $body;
     }
 
@@ -657,9 +667,30 @@ class HTML_Table extends HTML_Common
         if (PEAR::isError($ret)) {
             return $ret;
         }
-        $this->_tbodies[$body]->setHeaderContents($row, $col, $contents, $attributes);
+        $this->getHeader()->setHeaderContents($row, $col, $contents, $attributes);
     }
 
+    public function setHeaders($headers)
+    {
+        $column = 0;
+        foreach ($headers as $header) {
+            $this->setHeaderContents(0, $column, $header);
+            $column++;
+        }
+    }
+
+    public function setData($data)
+    {
+        $row = 1;
+        foreach ($data as $line) {
+            $column = 0;
+            foreach ($line as $content) {
+                $this->setCellContents($row, $column, $content);
+                $column++;
+            }
+            $row++;
+        }
+    }
     /**
      * Adds a table row and returns the row identifier
      * @param    array     $contents     (optional) Must be a indexed array of
@@ -1005,7 +1036,7 @@ class HTML_Table extends HTML_Common
                 for ($i = 0; $i < $this->_tbodyCount; $i++) {
                     $this->_tbodies[$i]->setColCount($maxColCount);
                     if ($this->_tbodies[$i]->getRowCount() > 0) {
-                        $strHtml .= $tabs . $tab . '<tbody' .
+                        $strHtml .= $tabs . $tab . '<tbody ' .
                                     $this->_getAttrString($this->_tbodies[$i]->_attributes) .
                                     '>' . $lnEnd;
                         $strHtml .= $this->_tbodies[$i]->toHtml($tabs, $tab);

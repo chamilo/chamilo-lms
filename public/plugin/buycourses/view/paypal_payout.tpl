@@ -28,7 +28,7 @@
                 {% endif %}
                 <td class="text-right" style="vertical-align:middle">
                     <button id="{{ payout.id }}" type="button"
-                            class="btn btn-danger fa fa-ban cancelPayout"> {{ 'CancelPayout'| get_plugin_lang('BuyCoursesPlugin') }}</button>
+                            class="btn btn--danger fa fa-ban cancelPayout"> {{ 'CancelPayout'| get_plugin_lang('BuyCoursesPlugin') }}</button>
                 </td>
             </tr>
         {% endfor %}
@@ -46,18 +46,18 @@
                 </div>
                 <div class="modal-footer">
                     <button id="proceedPayout" type="button"
-                            class="btn btn-success fa fa-paypal"> {{ 'ProceedPayout'|get_plugin_lang('BuyCoursesPlugin') }}</button>
-                    <button id="cancelPayout" type="button" class="btn btn-danger"
+                            class="btn btn--success fa fa-paypal"> {{ 'ProceedPayout'|get_plugin_lang('BuyCoursesPlugin') }}</button>
+                    <button id="cancelPayout" type="button" class="btn btn--danger"
                             data-dismiss="modal">{{ 'Cancel'|get_lang }}</button>
                     <button id="responseButton" type="button"
-                            class="btn btn-primary">{{ 'Confirm'|get_lang }}</button>
+                            class="btn btn--primary">{{ 'Confirm'|get_lang }}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div>
-    <button id="continuePayout" type="button" class="btn btn-primary fa fa-caret-square-o-right" data-toggle="modal"
+    <button id="continuePayout" type="button" class="btn btn--primary fa fa-caret-square-o-right" data-toggle="modal"
             data-target="#startPayout" data-backdrop="static"
             data-keyboard="false"> {{ 'ContinuePayout'|get_plugin_lang('BuyCoursesPlugin') }}</button>
 </div>

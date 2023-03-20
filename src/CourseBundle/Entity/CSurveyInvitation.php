@@ -1,168 +1,123 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyInvitation.
- *
  * @ORM\Table(
- *  name="c_survey_invitation",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="idx_survey_inv_code", columns={"survey_code"})
- *  }
+ *     name="c_survey_invitation",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
 class CSurveyInvitation
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected $cId;
+    protected ?Course $course = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_invitation_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected $surveyInvitationId;
+    protected ?Session $session = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    protected $surveyCode;
+    protected ?CGroup $group = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="user", type="string", length=250, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="invitations")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
-    protected $user;
+    protected CSurvey $survey;
 
     /**
-     * @var string
-     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="surveyInvitations")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected User $user;
+
+    protected string $externalEmail;
+
+    /**
      * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
      */
-    protected $invitationCode;
+    protected string $invitationCode;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
-     */
-    protected $invitationDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
-     */
-    protected $reminderDate;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    protected $answered;
+    protected int $answered;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
      */
-    protected $sessionId;
+    protected DateTime $invitationDate;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
      */
-    protected $groupId;
+    protected ?DateTime $reminderDate = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="answered_at", type="datetime", nullable=true)
      */
-    protected $answeredAt;
+    protected ?DateTime $answeredAt = null;
 
-    /**
-     * Set surveyCode.
-     *
-     * @param string $surveyCode
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSurveyCode($surveyCode)
+    public function __construct()
     {
-        $this->surveyCode = $surveyCode;
+        $this->answered = 0;
+        $this->invitationDate = new DateTime();
+    }
+
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
 
         return $this;
     }
 
-    /**
-     * Get surveyCode.
-     *
-     * @return string
-     */
-    public function getSurveyCode()
+    public function getUser(): User
     {
-        return $this->surveyCode;
+        return $this->user;
     }
 
-    /**
-     * Set user.
-     *
-     * @param string $user
-     *
-     * @return CSurveyInvitation
-     */
-    public function setUser($user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get user.
-     *
-     * @return string
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set invitationCode.
-     *
-     * @param string $invitationCode
-     *
-     * @return CSurveyInvitation
-     */
-    public function setInvitationCode($invitationCode)
+    public function setInvitationCode(string $invitationCode): self
     {
         $this->invitationCode = $invitationCode;
 
@@ -179,14 +134,7 @@ class CSurveyInvitation
         return $this->invitationCode;
     }
 
-    /**
-     * Set invitationDate.
-     *
-     * @param \DateTime $invitationDate
-     *
-     * @return CSurveyInvitation
-     */
-    public function setInvitationDate($invitationDate)
+    public function setInvitationDate(DateTime $invitationDate): self
     {
         $this->invitationDate = $invitationDate;
 
@@ -196,21 +144,14 @@ class CSurveyInvitation
     /**
      * Get invitationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInvitationDate()
     {
         return $this->invitationDate;
     }
 
-    /**
-     * Set reminderDate.
-     *
-     * @param \DateTime $reminderDate
-     *
-     * @return CSurveyInvitation
-     */
-    public function setReminderDate($reminderDate)
+    public function setReminderDate(DateTime $reminderDate): self
     {
         $this->reminderDate = $reminderDate;
 
@@ -220,21 +161,14 @@ class CSurveyInvitation
     /**
      * Get reminderDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getReminderDate()
     {
         return $this->reminderDate;
     }
 
-    /**
-     * Set answered.
-     *
-     * @param int $answered
-     *
-     * @return CSurveyInvitation
-     */
-    public function setAnswered($answered)
+    public function setAnswered(int $answered): self
     {
         $this->answered = $answered;
 
@@ -251,110 +185,50 @@ class CSurveyInvitation
         return $this->answered;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set groupId.
-     *
-     * @param int $groupId
-     *
-     * @return CSurveyInvitation
-     */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set surveyInvitationId.
-     *
-     * @param int $surveyInvitationId
-     *
-     * @return CSurveyInvitation
-     */
-    public function setSurveyInvitationId($surveyInvitationId)
-    {
-        $this->surveyInvitationId = $surveyInvitationId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyInvitationId.
-     *
-     * @return int
-     */
-    public function getSurveyInvitationId()
-    {
-        return $this->surveyInvitationId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CSurveyInvitation
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    public function getAnsweredAt(): \DateTime
+    public function getAnsweredAt(): DateTime
     {
         return $this->answeredAt;
     }
 
-    public function setAnsweredAt(\DateTime $answeredAt): self
+    public function setAnsweredAt(DateTime $answeredAt): self
     {
         $this->answeredAt = $answeredAt;
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    public function getGroup(): ?CGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?CGroup $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }

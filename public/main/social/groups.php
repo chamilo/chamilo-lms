@@ -40,7 +40,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 // getting group information
 $relation_group_title = '';
 $my_group_role = 0;
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $create_thread_link = '';
 
 $show_menu = 'browse_groups';
@@ -102,9 +102,9 @@ if (is_array($results) && count($results) > 0) {
             $result['picture'],
             80
         );
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
 
-        $members = Display::returnFontAwesomeIcon('user').$count_users_group;
+        $members = Display::getMdiIcon('account').$count_users_group;
         $html = '<div class="row">';
         $html .= '<div class="col-md-2">';
         $html .= $result['picture'];
@@ -155,8 +155,8 @@ foreach ($results as $result) {
     $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';
 
     $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
-    $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
-    $members = Display::returnFontAwesomeIcon('user').$count_users_group;
+    $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
+    $members = Display::getMdiIcon('account').$count_users_group;
 
     $html = '<div class="row">';
     $html .= '<div class="col-md-2">';
@@ -172,7 +172,7 @@ foreach ($results as $result) {
     }
     // Avoiding my groups
     if (!in_array($id, $my_group_list)) {
-        $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
+        $html .= '<a class="btn btn--primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
             get_lang('Join group').'</a> ';
     }
 
@@ -216,7 +216,7 @@ if (is_array($results) && count($results) > 0) {
         $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';
 
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
 
         $html = '<div class="row">';
         $html .= '<div class="col-md-2">';
@@ -234,7 +234,7 @@ if (is_array($results) && count($results) > 0) {
         }
         // Avoiding my groups
         if (!in_array($id, $my_group_list)) {
-            $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
+            $html .= '<a class="btn btn--primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
                 get_lang('Join group').'</a> ';
         }
 
@@ -267,12 +267,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             }
             if ('true' == api_get_setting('allow_students_to_create_groups_in_social')) {
                 $create_group_item =
-                    '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+                    '<a class="btn btn--plain" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                     get_lang('Create a social group').'</a>';
             } else {
                 if (api_is_allowed_to_edit(null, true)) {
                     $create_group_item =
-                        '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+                        '<a class="btn btn--plain" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                         get_lang('Create a social group').'</a>';
                 }
             }
@@ -319,14 +319,14 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     } else {
         $my_group_content = '<span class="muted">'.get_lang('(none)').'</span>';
     }
-    if ('true' == api_get_setting('allow_students_to_create_groups_in_social')) {
+    if ('true' === api_get_setting('allow_students_to_create_groups_in_social')) {
         $create_group_item =
-            '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+            '<a class="btn btn--plain" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
             get_lang('Create a social group').'</a>';
     } else {
         if (api_is_allowed_to_edit(null, true)) {
             $create_group_item =
-                '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
+                '<a class="btn btn--plain" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                 get_lang('Create a social group').'</a>';
         }
     }
@@ -377,11 +377,9 @@ if (isset($_GET['view']) && 'mygroups' == $_GET['view']) {
     $show_menu = $_GET['view'];
 }
 
-$social_menu_block = SocialManager::show_social_menu($show_menu);
-$templateName = 'social/groups.tpl';
+//$social_menu_block = SocialManager::show_social_menu($show_menu);
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_menu_block', $social_menu_block);
+//$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template($templateName);
-$tpl->display($social_layout);
+$tpl->display($tpl->get_template('social/groups.html.twig'));

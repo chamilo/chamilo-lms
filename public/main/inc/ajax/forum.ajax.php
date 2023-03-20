@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -9,7 +10,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
 require_once __DIR__.'/../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 // First, protect this script
 api_protect_course_script(false);
@@ -133,10 +133,10 @@ if (!empty($action)) {
                     break;
                 }
                 $group_id = api_get_group_id();
-                $groupInfo = GroupManager::get_group_properties($group_id);
+                $groupEntity = api_get_group_entity();
                 if (!api_is_allowed_to_edit(null, true) &&
                     0 == $current_forum['allow_edit'] &&
-                    ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
+                    ($group_id && !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity))
                 ) {
                     $json['errorMessage'] = '4. if editing of replies is not allowed';
                     break;
@@ -163,9 +163,9 @@ if (!empty($action)) {
                 $postId = str_replace('status_post_', '', $postId);
                 $em = Database::getManager();
                 /** @var CForumPost $post */
-                $post = $em->find('ChamiloCourseBundle:CForumPost', $postId);
+                $post = $em->find(CForumPost::class, $postId);
                 if ($post) {
-                    $forum = get_forums($post->getForumId(), api_get_course_id());
+                    $forum = $post->getForum();
                     $status = $post->getStatus();
                     if (empty($status)) {
                         $status = CForumPost::STATUS_WAITING_MODERATION;

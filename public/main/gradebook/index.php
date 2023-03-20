@@ -4,6 +4,8 @@
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
+use Chamilo\CoreBundle\Framework\Container;
+
 $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -465,7 +467,7 @@ if (isset($_GET['deletelink'])) {
             $sql = 'UPDATE '.$tbl_attendance.' SET
                         attendance_weight = 0,
                         attendance_qualify_title = ""
-				 	WHERE c_id = '.$course_id.' AND id = (
+				 	WHERE iid = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
 				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
                     )';
@@ -481,7 +483,7 @@ if (isset($_GET['deletelink'])) {
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die('Error: movecat or moveeval not defined');
+        exit('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
@@ -759,7 +761,7 @@ if (isset($_GET['studentoverview'])) {
             $cat->set_session_id($session_id);
         } else {
             $cat->set_name($course_code);
-            $cat->setIsRequirement(1);
+            $cat->setIsRequirement(true);
         }
         $cat->set_course_code($course_code);
         $cat->set_description(null);
@@ -800,33 +802,30 @@ $no_qualification = false;
 $certificate = [];
 $actionsLeft = '';
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
-
+$category = null;
 if (!empty($selectCat)) {
-    $cat = new Category();
+    $repo = Container::getGradeBookCategoryRepository();
+    if (!empty($categoryId)) {
+        $category = $repo->find($selectCat);
+    }
     $course_id = CourseManager::get_course_by_category($selectCat);
-    $show_message = $cat->show_message_resource_delete($course_id);
+    $show_message = Category::show_message_resource_delete($course_id);
     if ('' == $show_message) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-            $certificate = Category::generateUserCertificate(
-                $selectCat,
-                $stud_id
-            );
+            if ($category) {
+                $certificate = Category::generateUserCertificate($category, $stud_id);
+                if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
+                    $actionsLeft .= Display::url(
+                        Display::getMdiIcon('file-pdf-box').get_lang('Download certificate in PDF'),
+                        $certificate['pdf_url'],
+                        ['class' => 'btn btn--plain']
+                    );
+                }
 
-            if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
-                $actionsLeft .= Display::url(
-                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download certificate in PDF'),
-                    $certificate['pdf_url'],
-                    ['class' => 'btn btn-default']
-                );
+                $currentScore = Category::getCurrentScore($stud_id, $category, true);
+                Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
             }
-
-            $currentScore = Category::getCurrentScore(
-                $stud_id,
-                $cats[0],
-                true
-            );
-            Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
         }
     }
 }
@@ -835,9 +834,9 @@ if (!api_is_allowed_to_edit(null, true)) {
     $allowButton = false === api_get_configuration_value('gradebook_hide_pdf_report_button');
     if ($allowButton) {
         $actionsLeft .= Display::url(
-            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download report in PDF'),
+            Display::getMdiIcon('file-pdf-box').get_lang('Download report in PDF'),
             api_get_self().'?action=export_table&'.api_get_cidreq().'&category_id='.$selectCat,
-            ['class' => 'btn btn-default']
+            ['class' => 'btn btn--plain']
         );
     }
 }
@@ -937,6 +936,11 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $allowGraph = false === api_get_configuration_value('gradebook_hide_graph');
         $isAllow = api_is_allowed_to_edit(null, true);
 
+        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $showFeedBack = true;
+        if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
+            $showFeedBack = false;
+        }
         /** @var Category $cat */
         foreach ($cats as $cat) {
             $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -1026,13 +1030,13 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                         'orientation' => 'P',
                     ];
 
+                    $feedback = '';
+                    if ($showFeedBack) {
+                        $feedback = '<br />'.get_lang('Feedback').'<br />
+                                      <textarea rows="5" cols="100" >&nbsp;</textarea>';
+                    }
                     $pdf = new PDF('A4', $params['orientation'], $params);
-                    $pdf->html_to_pdf_with_template(
-                        $table.
-                        $graph.
-                        '<br />'.get_lang('Feedback').'<br />
-                        <textarea rows="5" cols="100" >&nbsp;</textarea>'
-                    );
+                    $pdf->html_to_pdf_with_template($table.$graph.$feedback);
                 } else {
                     echo $table;
                     echo $graph;

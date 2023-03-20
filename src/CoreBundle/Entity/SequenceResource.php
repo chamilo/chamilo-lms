@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,35 +20,27 @@ class SequenceResource
     public const SESSION_TYPE = 2;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Sequence
-     *
-     * @ORM\ManyToOne(targetEntity="Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Sequence")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $sequence;
+    protected Sequence $sequence;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer")
      */
-    protected $type;
+    protected int $type;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="resource_id", type="integer")
      */
-    protected $resourceId;
+    protected int $resourceId;
 
     /**
      * Get id.
@@ -69,11 +63,9 @@ class SequenceResource
     /**
      * Set the integer type.
      *
-     * @param int $type
-     *
      * @return SequenceResource
      */
-    public function setType($type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -95,7 +87,7 @@ class SequenceResource
     {
         $graph = $this->getSequence()->getGraph();
 
-        return !empty($graph) ? true : false;
+        return !empty($graph);
     }
 
     /**
@@ -107,11 +99,9 @@ class SequenceResource
     }
 
     /**
-     * @param int $resourceId
-     *
      * @return $this
      */
-    public function setResourceId($resourceId)
+    public function setResourceId(int $resourceId): self
     {
         $this->resourceId = $resourceId;
 
@@ -129,7 +119,7 @@ class SequenceResource
     /**
      * @return $this
      */
-    public function setSequence(Sequence $sequence)
+    public function setSequence(Sequence $sequence): self
     {
         $this->sequence = $sequence;
 

@@ -206,7 +206,7 @@ class Resource
      *
      * @return bool true if already restored (i.e. destination_id is set).
      */
-    public function is_restored()
+    public function is_restored(): bool
     {
         return $this->destination_id > -1;
     }

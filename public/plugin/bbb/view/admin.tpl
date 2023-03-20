@@ -1,3 +1,4 @@
+{% autoescape false %}
 {{ settings_form }}
 
 {{ 'RecordList'|get_plugin_lang('BBBPlugin') }}
@@ -6,8 +7,8 @@
 <table class="table table-hover table-striped">
     <thead>
         <tr>
-            <th>{{ 'DateStart'|get_lang }}</th>
-            <th>{{ 'DateEnd'|get_lang }}</th>
+            <th>{{ 'Start date'|trans }}</th>
+            <th>{{ 'End date'|trans }}</th>
             <th>{{ 'Status'|get_lang }}</th>
             <th>{{ 'Records'|get_plugin_lang('BBBPlugin') }}</th>
             <th>{{ 'Course'|get_lang }}</th>
@@ -56,3 +57,5 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% endautoescape %}

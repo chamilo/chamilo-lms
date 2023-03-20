@@ -20,6 +20,7 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use ZoomPlugin;
 
 /**
  * Class Meeting.
@@ -453,7 +454,7 @@ class Meeting
             }
         } else {
             if (null !== $this->course) {
-                $subscriptions = $this->session->getUserCourseSubscriptionsByStatus($this->course, Session::STUDENT);
+                $subscriptions = $this->session->getSessionRelCourseRelUsersByStatus($this->course, Session::STUDENT);
                 if ($subscriptions) {
                     /** @var SessionRelCourseRelUser $sessionCourseUser */
                     foreach ($subscriptions as $sessionCourseUser) {
@@ -487,8 +488,7 @@ class Meeting
      */
     public function requiresRegistration()
     {
-        return
-            MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
+        return MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
         /*return
             MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;*/
     }
@@ -498,7 +498,7 @@ class Meeting
      */
     public function hasCloudAutoRecordingEnabled()
     {
-        return \ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
+        return ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
     }
 
     /**
@@ -569,7 +569,7 @@ class Meeting
      */
     private function initializeDisplayableProperties()
     {
-        $zoomPlugin = new \ZoomPlugin();
+        $zoomPlugin = new ZoomPlugin();
 
         $typeList = [
             API\Meeting::TYPE_INSTANT => $zoomPlugin->get_lang('InstantMeeting'),

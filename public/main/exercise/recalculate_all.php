@@ -1,7 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -30,7 +31,7 @@ $result = ExerciseLib::get_exam_results_data(
     $exerciseId,
     '',
     false,
-    null,
+    api_get_course_int_id(),
     false,
     false,
     [],
@@ -40,7 +41,7 @@ $result = ExerciseLib::get_exam_results_data(
 );
 
 foreach ($result as $track) {
-    /** @var TrackEExercises $trackedExercise */
+    /** @var TrackEExercise $trackedExercise */
     $trackedExercise = ExerciseLib::recalculateResult(
         $track['id'],
         $track['user_id'],
@@ -54,8 +55,6 @@ foreach ($result as $track) {
     }
 }
 
-$url = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'
-    .api_get_cidreq()
-    ."&exerciseId=$exerciseId";
-
+$url = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq()."&exerciseId=$exerciseId";
 header("Location: $url");
+exit;

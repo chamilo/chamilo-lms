@@ -1,8 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CTool;
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 // @todo refactor this script, create a class that manage the jqgrid requests
 /**
@@ -11,266 +9,6 @@ use ChamiloSession as Session;
 $action = $_GET['a'];
 
 switch ($action) {
-    case 'set_visibility':
-        require_once __DIR__.'/../global.inc.php';
-        $course_id = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-        // Allow tool visibility in sessions.
-        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-        $em = Database::getManager();
-        $repository = $em->getRepository('ChamiloCourseBundle:CTool');
-        if (api_is_allowed_to_edit(null, true)) {
-            $criteria = [
-                'course' => $course_id,
-                'sessionId' => 0,
-                'iid' => (int) $_GET['id'],
-            ];
-            /** @var CTool $tool */
-            $tool = $repository->findOneBy($criteria);
-            $visibility = $tool->getVisibility();
-
-            if ($allowEditionInSession && !empty($sessionId)) {
-                $criteria = [
-                    'cId' => $course_id,
-                    'sessionId' => $sessionId,
-                    'name' => $tool->getName(),
-                ];
-
-                /** @var CTool $tool */
-                $toolInSession = $repository->findOneBy($criteria);
-                if ($toolInSession) {
-                    // Use the session
-                    $tool = $toolInSession;
-                    $visibility = $toolInSession->getVisibility();
-                } else {
-                    // Creates new row in c_tool
-                    $toolInSession = clone $tool;
-                    $toolInSession->setIid(0);
-                    $toolInSession->setId(0);
-                    $toolInSession->setVisibility(0);
-                    $toolInSession->setSessionId($session_id);
-                    $em->persist($toolInSession);
-                    $em->flush();
-                    // Update id with iid
-                    $toolInSession->setId($toolInSession->getIid());
-                    $em->persist($toolInSession);
-                    $em->flush();
-                    // $tool will be updated later
-                    $tool = $toolInSession;
-                }
-            }
-
-            $toolImage = $tool->getImage();
-            $customIcon = $tool->getCustomIcon();
-
-            if ('activity_big' != api_get_setting('homepage_view')) {
-                $toolImage = Display::return_icon(
-                    $toolImage,
-                    null,
-                    null,
-                    null,
-                    null,
-                    true
-                );
-                $inactiveImage = str_replace('.gif', '_na.gif', $toolImage);
-            } else {
-                // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
-                $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))).'.png';
-                $toolImage = Display::return_icon(
-                    $toolImage,
-                    get_lang(ucfirst($tool->getName())),
-                    null,
-                    ICON_SIZE_BIG,
-                    null,
-                    true
-                );
-                $inactiveImage = str_replace('.png', '_na.png', $toolImage);
-            }
-
-            if (isset($customIcon) && !empty($customIcon)) {
-                $toolImage = CourseHome::getCustomWebIconPath().$customIcon;
-                $inactiveImage = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($customIcon);
-            }
-
-            $requested_image = 0 == $visibility ? $toolImage : $inactiveImage;
-            $requested_class = 0 == $visibility ? '' : 'text-muted';
-            $requested_message = 0 == $visibility ? 'is_active' : 'is_inactive';
-            $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
-            $requestedVisible = 0 == $visibility ? 1 : 0;
-            $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
-            $requestedVisible = 0 == $visibility ? 1 : 0;
-
-            // HIDE AND REACTIVATE TOOL
-            if ($_GET['id'] == strval(intval($_GET['id']))) {
-                $tool->setVisibility($requestedVisible);
-                $em->persist($tool);
-                $em->flush();
-
-                // Also hide the tool in all sessions
-                if ($allowEditionInSession && empty($sessionId)) {
-                    $criteria = [
-                        'cId' => $course_id,
-                        'name' => $tool->getName(),
-                    ];
-
-                    /** @var CTool $toolItem */
-                    $tools = $repository->findBy($criteria);
-                    foreach ($tools as $toolItem) {
-                        $toolSessionId = $toolItem->getSessionId();
-                        if (!empty($toolSessionId)) {
-                            $toolItem->setVisibility($requestedVisible);
-                            $em->persist($toolItem);
-                        }
-                    }
-                    $em->flush();
-                }
-            }
-
-            $response = [
-                'image' => $requested_image,
-                'tclass' => $requested_class,
-                'message' => $requested_message,
-                'view' => $requested_view,
-                'fclass' => $requested_fa_class,
-            ];
-            echo json_encode($response);
-        }
-        break;
-    case 'set_visibility_for_all':
-        require_once __DIR__.'/../global.inc.php';
-        $course_id = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-        $response = [];
-        $tools_ids = json_decode($_GET['tools_ids']);
-        $em = Database::getManager();
-        $repository = $em->getRepository('ChamiloCourseBundle:CTool');
-        // Allow tool visibility in sessions.
-        if (api_is_allowed_to_edit(null, true)) {
-            if (is_array($tools_ids) && 0 != count($tools_ids)) {
-                $total_tools = count($tools_ids);
-                for ($i = 0; $i < $total_tools; $i++) {
-                    $tool_id = (int) $tools_ids[$i];
-
-                    $criteria = [
-                        'cId' => $course_id,
-                        'sessionId' => 0,
-                        'iid' => $tool_id,
-                    ];
-                    /** @var CTool $tool */
-                    $tool = $repository->findOneBy($criteria);
-                    $visibility = $tool->getVisibility();
-
-                    if ($allowEditionInSession && !empty($sessionId)) {
-                        $criteria = [
-                            'cId' => $course_id,
-                            'sessionId' => $sessionId,
-                            'name' => $tool->getName(),
-                        ];
-
-                        /** @var CTool $tool */
-                        $toolInSession = $repository->findOneBy($criteria);
-                        if ($toolInSession) {
-                            // Use the session
-                            $tool = $toolInSession;
-                            $visibility = $toolInSession->getVisibility();
-                        } else {
-                            // Creates new row in c_tool
-                            $toolInSession = clone $tool;
-                            $toolInSession->setIid(0);
-                            $toolInSession->setId(0);
-                            $toolInSession->setVisibility(0);
-                            $toolInSession->setSessionId($session_id);
-                            $em->persist($toolInSession);
-                            $em->flush();
-                            // Update id with iid
-                            $toolInSession->setId($toolInSession->getIid());
-                            $em->persist($toolInSession);
-                            $em->flush();
-                            // $tool will be updated later
-                            $tool = $toolInSession;
-                        }
-                    }
-
-                    $toolImage = $tool->getImage();
-                    $customIcon = $tool->getCustomIcon();
-
-                    if ('activity_big' != api_get_setting('homepage_view')) {
-                        $toolImage = Display::return_icon(
-                            $toolImage,
-                            null,
-                            null,
-                            null,
-                            null,
-                            true
-                        );
-                        $inactiveImage = str_replace('.gif', '_na.gif', $toolImage);
-                    } else {
-                        // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
-                        $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))).'.png';
-                        $toolImage = Display::return_icon(
-                            $toolImage,
-                            get_lang(ucfirst($tool->getName())),
-                            null,
-                            ICON_SIZE_BIG,
-                            null,
-                            true
-                        );
-                        $inactiveImage = str_replace('.png', '_na.png', $toolImage);
-                    }
-
-                    if (isset($customIcon) && !empty($customIcon)) {
-                        $toolImage = CourseHome::getCustomWebIconPath().$customIcon;
-                        $inactiveImage = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($customIcon);
-                    }
-
-                    $requested_image = 0 == $visibility ? $toolImage : $inactiveImage;
-                    $requested_class = 0 == $visibility ? '' : 'text-muted';
-                    $requested_message = 0 == $visibility ? 'is_active' : 'is_inactive';
-                    $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
-                    $requestedVisible = 0 == $visibility ? 1 : 0;
-                    $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
-                    $requested_fa_class = 0 == $visibility ? 'fa fa-eye '.$requested_class : 'fa fa-eye-slash '.$requested_class;
-                    $requestedVisible = 0 == $visibility ? 1 : 0;
-
-                    // HIDE AND REACTIVATE TOOL
-                    if ($tool_id == strval(intval($tool_id))) {
-                        $tool->setVisibility($requestedVisible);
-                        $em->persist($tool);
-                        $em->flush();
-
-                        // Also hide the tool in all sessions
-                        if ($allowEditionInSession && empty($sessionId)) {
-                            $criteria = [
-                                'cId' => $course_id,
-                                'name' => $tool->getName(),
-                            ];
-
-                            /** @var CTool $toolItem */
-                            $tools = $repository->findBy($criteria);
-                            foreach ($tools as $toolItem) {
-                                $toolSessionId = $toolItem->getSessionId();
-                                if (!empty($toolSessionId)) {
-                                    $toolItem->setVisibility($requestedVisible);
-                                    $em->persist($toolItem);
-                                }
-                            }
-                            $em->flush();
-                        }
-                    }
-                    $response[] = [
-                        'image' => $requested_image,
-                        'tclass' => $requested_class,
-                        'message' => $requested_message,
-                        'view' => $requested_view,
-                        'fclass' => $requested_fa_class,
-                        'id' => $tool_id,
-                    ];
-                }
-            }
-        }
-        echo json_encode($response);
-        break;
     case 'show_course_information':
         require_once __DIR__.'/../global.inc.php';
 
@@ -339,9 +77,10 @@ switch ($action) {
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
         $temp = [];
+        $userId = api_get_user_id();
         foreach ($course_list as $item) {
             $courseInfo = api_get_course_info($item['code']);
-            $list = new LearnpathList(api_get_user_id(), $courseInfo, $session_id);
+            $list = new LearnpathList($userId, $courseInfo, $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -350,7 +89,7 @@ switch ($action) {
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id'] = $lp_id;
 
-                $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
+                $lp = new learnpath(api_get_lp_entity($lp_id), $courseInfo, $userId);
                 if (100 == $lp->progress_db) {
                     continue;
                 }
@@ -379,15 +118,15 @@ switch ($action) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 }
@@ -405,7 +144,7 @@ switch ($action) {
                 ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
-                $temp[$count]['date'] = $lp_item['publicated_on'];
+                $temp[$count]['date'] = $lp_item['published_on'];
                 $count++;
             }
         }
@@ -481,7 +220,7 @@ switch ($action) {
                 api_get_user_id(),
                 api_get_course_info($item['code']),
                 $session_id,
-                'lp.publicatedOn DESC'
+                'lp.publishedOn DESC'
             );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
@@ -516,16 +255,16 @@ switch ($action) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    $week_data = date('Y', api_strtotime($lp_item['publicated_on'], 'UTC')).' - '.get_week_from_day($lp_item['publicated_on']);
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    $week_data = date('Y', api_strtotime($lp_item['published_on'], 'UTC')).' - '.get_week_from_day($lp_item['published_on']);
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 } else {
@@ -654,15 +393,15 @@ switch ($action) {
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 }
@@ -678,7 +417,7 @@ switch ($action) {
                 ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
-                $temp[$count]['date'] = $lp_item['publicated_on'];
+                $temp[$count]['date'] = $lp_item['published_on'];
                 $count++;
             }
         }
@@ -708,27 +447,6 @@ switch ($action) {
         $response->records = $count;
 
         echo json_encode($response);
-        break;
-    case 'get_notification':
-        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
-        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
-        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
-        if (empty($courseId)) {
-            break;
-        }
-        require_once __DIR__.'/../global.inc.php';
-
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseInfo['id_session'] = $sessionId;
-        $courseInfo['status'] = $status;
-        $id = 'notification_'.$courseId.'_'.$sessionId.'_'.$status;
-
-        $notificationId = Session::read($id);
-        if ($notificationId) {
-            echo Display::show_notification($courseInfo, false);
-            Session::erase($notificationId);
-        }
-
         break;
     default:
         echo '';

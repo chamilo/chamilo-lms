@@ -1,37 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class CourseVoter.
- */
 class CourseVoter extends Voter
 {
     public const VIEW = 'VIEW';
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    //private $entityManager;
-    //private $courseManager;
-    private $security;
+    private EntityManagerInterface $entityManager;
+    private Security $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
       //  CourseRepository $courseManager,
         Security $security
     ) {
-        //$this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
         //$this->courseManager = $courseManager;
         $this->security = $security;
     }
@@ -45,28 +43,24 @@ class CourseVoter extends Voter
         ];
 
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options)) {
+        if (!\in_array($attribute, $options, true)) {
             return false;
         }
 
         // only vote on Post objects inside this voter
-        if (!$subject instanceof Course) {
-            return false;
-        }
-
-        return true;
+        return $subject instanceof Course;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
-        // Anons can enter a course depending of the course visibility
+        // Anons can enter a course depending on the course visibility.
         /*if (!$user instanceof UserInterface) {
             return false;
         }*/
 
-        // Admins have access to everything
+        // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
@@ -92,7 +86,7 @@ class CourseVoter extends Voter
                 }
 
                 // User should be instance of UserInterface.
-                if (!$user instanceof UserInterface) {
+                if (!($user instanceof UserInterface)) {
                     return false;
                 }
 
@@ -126,7 +120,7 @@ class CourseVoter extends Voter
                 break;
             case self::EDIT:
             case self::DELETE:
-                // Only teacher can edit/delete stuff
+                // Only teacher can edit/delete stuff.
                 if ($course->hasTeacher($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
                     $token->setUser($user);

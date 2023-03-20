@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+/* For licensing terms, see /license.txt */
 
 /**
  * Responses to AJAX calls.
@@ -28,22 +27,6 @@ switch ($action) {
             false
         );
         echo $rating;
-        break;
-    case 'get_course_image':
-        $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
-        if ($courseInfo && $image) {
-            // Arbitrarily set a cache of 10' for the course image to
-            // avoid hammering the server with otherwise unfrequently
-            // changed images that can have some weight
-            $now = time() + 600; //time must be in GMT anyway
-            $headers = [
-              'Expires' => gmdate('D, d M Y H:i:s ', $now).'GMT',
-              'Cache-Control' => 'max-age=600',
-            ];
-            DocumentManager::file_send_for_download($courseInfo[$image], null, null, null, $headers);
-        }
         break;
     case 'get_user_courses':
         // Only search my courses
@@ -121,8 +104,16 @@ switch ($action) {
                 break;
             }
 
+            $categoryToAvoid = '';
+            if (!api_is_platform_admin()) {
+                $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            }
             $list = [];
             foreach ($categories as $item) {
+                $categoryCode = $item['code'];
+                if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                    continue;
+                }
                 $list['items'][] = [
                     'id' => $item['id'],
                     'text' => strip_tags($item['name']),
@@ -145,17 +136,30 @@ switch ($action) {
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 if (api_is_platform_admin()) {
                     $courseList = CourseManager::get_courses_list(
-                        0, //offset
-                        0, //howMany
-                        1, //$orderby = 1
+                        0,
+                        0,
+                        'title',
                         'ASC',
-                        -1, //visibility
+                        -1,
                         $_GET['q'],
-                        null, //$urlId
-                        true //AlsoSearchCode
+                        null,
+                        true
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);
+                    $category = api_get_configuration_value('course_category_code_to_use_as_model');
+                    if (!empty($category)) {
+                        $alreadyAdded = [];
+                        if (!empty($courseList)) {
+                            $alreadyAdded = array_column($courseList, 'id');
+                        }
+                        $coursesInCategory = CourseCategory::getCoursesInCategory($category, $_GET['q']);
+                        foreach ($coursesInCategory as $course) {
+                            if (!in_array($course['id'], $alreadyAdded)) {
+                                $courseList[] = $course;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -176,7 +180,7 @@ switch ($action) {
 
                 $results['items'][] = [
                     'id' => $course['id'],
-                    'text' => $title,
+                    'text' => $title.' ('.$course['code'].') ',
                 ];
             }
 
@@ -191,10 +195,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ('id' == $id) {
+                        if ('id' === $id) {
                             $item2[$id] = $internal;
                         }
-                        if ('title' == $id) {
+                        if ('title' === $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -208,7 +212,7 @@ switch ($action) {
         break;
     case 'search_course_by_session_all':
         if (api_is_platform_admin()) {
-            if ('TODOS' == $_GET['session_id'] || 'T' == $_GET['session_id']) {
+            if ('TODOS' === $_GET['session_id'] || 'T' === $_GET['session_id']) {
                 $_GET['session_id'] = '%';
             }
 
@@ -236,12 +240,18 @@ switch ($action) {
         }
         break;
     case 'search_user_by_course':
-        if (api_is_platform_admin()) {
-            $user = Database::get_main_table(TABLE_MAIN_USER);
-            $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $sessionId = $_GET['session_id'];
-            $course = api_get_course_info_by_id($_GET['course_id']);
+        $sessionId = $_GET['session_id'];
+        $course = api_get_course_info_by_id($_GET['course_id']);
 
+        $isPlatformAdmin = api_is_platform_admin();
+        $userIsSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+            api_get_user_id(),
+            $course['code'],
+            !empty($sessionId),
+            $sessionId
+        );
+
+        if ($isPlatformAdmin || $userIsSubscribedInCourse) {
             $json = [
                 'items' => [],
             ];
@@ -279,30 +289,6 @@ switch ($action) {
             }
 
             echo json_encode($json);
-        }
-        break;
-    case 'search_exercise_by_course':
-        if (api_is_platform_admin()) {
-            $course = api_get_course_info_by_id($_GET['course_id']);
-            $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
-            $exercises = ExerciseLib::get_all_exercises(
-                $course,
-                $session_id,
-                false,
-                $_GET['q'],
-                true,
-                3
-            );
-
-            foreach ($exercises as $exercise) {
-                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
-            }
-            if (!empty($data)) {
-                $data[] = ['id' => 'T', 'text' => 'TODOS'];
-                echo json_encode($data);
-            } else {
-                echo json_encode([['id' => 'T', 'text' => 'TODOS']]);
-            }
         }
         break;
     case 'search_survey_by_course':
@@ -375,8 +361,6 @@ switch ($action) {
 
         $logInfo = [
             'tool' => 'close-window',
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'exit',
         ];
         Event::registerLog($logInfo);

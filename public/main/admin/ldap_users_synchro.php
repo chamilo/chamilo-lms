@@ -28,9 +28,6 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_class = Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
-
 $tbl_session_rel_etape = "session_rel_etape";
 
 $id_session = intval($_GET['id_session']);
@@ -44,7 +41,7 @@ $action = $_REQUEST['action'];
 
 $tool_name = get_lang('Synchro LDAP : Import Etudiants/Etapes dans session');
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
+//Display::page_subheader2($tool_name);
 
 ?>
 		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">

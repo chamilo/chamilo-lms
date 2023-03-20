@@ -14,7 +14,7 @@ switch ($action) {
     case 'get_class_by_keyword':
         $keyword = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
         if (api_is_platform_admin() && !empty($keyword)) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $where = ['where' => ['name like ?' => "%$keyword%"], 'order' => 'name '];
             $items = [];
             $list = $userGroup->get_all($where);
@@ -29,7 +29,7 @@ switch ($action) {
         break;
     case 'delete_user_in_usergroup':
         if ($isAllowedToEdit) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $userId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
             $userIdList = explode(',', $userId);
             $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;

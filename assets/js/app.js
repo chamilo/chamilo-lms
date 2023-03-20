@@ -1,55 +1,90 @@
 /* For licensing terms, see /license.txt */
 
-// Load symfony routes in order to use it in a js
-const routes = require('../../public/js/fos_js_routes.json');
-import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
-import $ from 'jquery';
+const $ = require('jquery');
 
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
+global.$ = global.jQuery = $
 
-Routing.setRoutingData(routes);
+//Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
-const moment = require('moment');
-global.moment = moment;
-require('select2/dist/js/select2.full.min');
-require('flatpickr');
-//import('bootstrap-vue');
-import('bootstrap');
-require('bootstrap-daterangepicker');
-import('webpack-jquery-ui');
-import('webpack-jquery-ui/css');
-require('./vendor');
-import('./main');
+// moment
+const { DateTime } = require("luxon");
+window.luxon = global.luxon = DateTime;
+import 'select2/dist/js/select2.full.min';
+import 'select2/dist/css/select2.min.css';
+import 'moment';
 
-require('webpack-jquery-ui');
-require('webpack-jquery-ui/css');
+// Gets HTML content from tinymce
+window.getContentFromEditor = function (id) {
+  if (typeof tinymce == "undefined") {
+    return false;
+  }
+
+  let content = '';
+  if (tinymce.get(id)) {
+    content = tinymce.get(id).getContent();
+  }
+
+  return content;
+};
+
+window.setContentFromEditor = function (id, content) {
+  if (tinymce.get(id)) {
+    tinymce.get(id).setContent(content);
+    return true;
+  }
+
+  return false;
+};
+
+//require('flatpickr');
+import 'jquery-ui-dist/jquery-ui.js';
+
+// const frameReady = require('/public/main/inc/lib/javascript/jquery.frameready.js');
+//
+// global.frameReady = frameReady;
+// window.frameReady = frameReady;
+
+require('./vendor');
+import './main';
+
+// Date time settings.
+import moment from 'moment'
+global.moment = moment;
+moment.locale(locale);
+//$.datepicker.setDefaults($.datepicker.regional[locale]);
+//$.datepicker.regional["local"] = $.datepicker.regional[locale];
+
+import('qtip2');
+require('bootstrap-daterangepicker/daterangepicker.js');
+
 require('blueimp-file-upload');
 require('blueimp-load-image');
 import('mediaelement');
 require('multiselect-two-sides');
+require('datepair.js');
+require('timepicker');
+
+//import 'jquery-sortablejs';
+
+import Sortable from 'sortablejs';
+window.Sortable = Sortable;
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;
 
 // @todo rework url naming
-const homePublicUrl = Routing.generate('home');
+//const homePublicUrl = Routing.generate('index');
+const homePublicUrl = '/';
 const mainUrl = homePublicUrl + 'main/';
 const webAjax = homePublicUrl + 'main/inc/ajax/';
 
-var ajax_url = webAjax + 'chat.ajax.php';
-var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
-var offline_button = '<img src="' + homePublicUrl + 'img/statusoffline.png">';
-/*var connect_lang = '{{ "ChatConnected"|get_lang }}';
-var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
-
-var connect_lang = 'ChatConnected';
-var disconnect_lang = 'ChatDisconnected';
-
 $(function () {
-  var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
+  let courseId = $('body').attr('data-course-id');
+  let webCidReq = '&cid=' + courseId + '&sid=' + $('body').attr('data-session-id');
   window.webCidReq = webCidReq;
 
   $("#menu_courses").click(function(){
@@ -62,15 +97,14 @@ $(function () {
     return false;
   });
 
-  var isInCourse = $("body").data("in-course");
-  if (isInCourse == true) {
-    var courseCode = $("body").data("course-code");
-    var logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
+  if (courseId >0) {
+    let courseCode = $("body").data("course-code");
+    let logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
     function courseLogout() {
       $.ajax({
         async: false,
         url: logOutUrl,
-        success: function (data) {
+        success: function () {
           return 1;
         }
       });
@@ -101,7 +135,7 @@ $(function () {
   $('.delete-swal').click(function (e) {
     e.preventDefault(); // Prevent the href from redirecting directly
     var url = $(this).attr("href");
-    var title = $(this).attr("title");
+    var title = $(this).data('title') || $(this).attr("title");
 
     Swal.fire({
       title: title,
@@ -134,34 +168,25 @@ $(function () {
       self = $(this);
 
     $.when(loadModalContent).done(function (modalContent) {
-      var modalDialog = $('#global-modal').find('.modal-dialog'),
-        modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
-        modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
-        modalTitle = self.data('title') || ' ';
+      var modalTitle = self.data('title') || ' ',
+        globalModalTitle = $('#global-modal').find('#global-modal-title'),
+        globalModalBody = $('#global-modal').find('#global-modal-body');
 
-      modalDialog.removeClass('modal-lg modal-sm').css('width', '');
+      globalModalTitle.text(modalTitle);
+      globalModalBody.html(modalContent);
 
-      if (modalSize && modalSize.length != 0) {
-        switch (modalSize) {
-        case 'lg':
-          modalDialog.addClass('modal-lg');
-          break;
-        case 'sm':
-          modalDialog.addClass('modal-sm');
-          break;
-        }
-      } else if (modalWidth) {
-        modalDialog.css('width', modalWidth + 'px');
-      }
+      globalModalBody.css({'max-height' : "500px", "overflow" : "auto"});
 
-      $('#global-modal').find('.modal-title').text(modalTitle);
-      $('#global-modal').find('.modal-body').html(modalContent);
-      $('#global-modal').modal('show');
+      toggleModal('global-modal');
     });
   });
 
   $('#global-modal').on('hidden.bs.modal', function () {
-    jQuery(".embed-responsive").find('iframe').remove();
+    $(".embed-responsive").find('iframe').remove();
+  });
+
+  $('#close-global-model').on('click', function () {
+    toggleModal('global-modal');
   });
 
   // Expands an image modal
@@ -216,9 +241,6 @@ $(function () {
     }
   );
 
-  /* Make responsive image maps */
-  //$('map').imageMapResize();
-
   jQuery.fn.filterByText = function (textbox) {
     return this.each(function () {
       var select = this;
@@ -262,43 +284,6 @@ $(function () {
     });
   });
 
-  // Date time settings.
-  //moment.locale(locale);
-  $.datepicker.setDefaults($.datepicker.regional[locale]);
-  $.datepicker.regional["local"] = $.datepicker.regional[locale];
-
-  // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
-  // see BT#13405
-  $('embed').each(function () {
-    var flashVars = $(this).attr('flashvars');
-    if (flashVars && flashVars.indexOf("file") == -1) {
-      var audioId = Math.floor(Math.random() * 99999);
-      flashVars = flashVars.replace('&autostart=false', '');
-      flashVars = flashVars.replace('&autostart=true', '');
-      var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
-      $(this).hide();
-      $(this).after(audioDiv);
-    }
-  });
-
-  // Chosen select
-  // $(".chzn-select").chosen({
-  //   disable_search_threshold: 10,
-  //   /*no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
-  //       placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
-  //       placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',*/
-  //   width: "100%"
-  // });
-
-  // Bootstrap tabs.
-  $('.tab_wrapper .nav a').on('click', function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  });
-
-  // Fixes bug when loading links inside a tab.
-  $('.tab_wrapper .tab-pane a').unbind();
-
   /**
      * Advanced options
      * Usage
@@ -329,8 +314,6 @@ $(function () {
       $("#column-left").addClass('col-md-12');
       $("#column-right").addClass('col-md-12');
     }
-
-
     if ($("#preview_course_add_course").length >= 0) {
       $("#preview_course_add_course").toggle();
     }
@@ -385,27 +368,7 @@ $(function () {
   var tip_options = {
     placement: 'right'
   };
-  $('.boot-tooltip').tooltip(tip_options);
-
-  $('.star-rating li a').on('click', function (event) {
-    var id = $(this).parents('ul').attr('id');
-    //$('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
-    $('#vote_label2_' + id).html("loading");
-    $.ajax({
-      url: $(this).attr('data-link'),
-      success: function (data) {
-        $("#rating_wrapper_" + id).html(data);
-        if (data == 'added') {
-          //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
-        }
-        if (data == 'updated') {
-          //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
-        }
-      }
-    });
-  });
-
-  $("#notifications").load(webAjax + "online.ajax.php?a=get_users_online");
+  //$('.boot-tooltip').tooltip(tip_options);
 });
 
 $(document).scroll(function () {
@@ -422,8 +385,8 @@ $(document).scroll(function () {
     $('.bottom_actions').addClass('bottom_actions_fixed');
   }
 
-  //Exercise warning fixed at the top
-  var fixed =  $("#exercise_clock_warning");
+  // Exercise warning fixed at the top.
+  var fixed = $("#exercise_clock_warning");
   if (fixed.length) {
     if (!fixed.attr('data-top')) {
       // If already fixed, then do nothing
@@ -533,7 +496,7 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
   }
 }
 
-function expandColumnToogle(buttonSelector, col1Info, col2Info)
+function expandColumnToggle(buttonSelector, col1Info, col2Info)
 {
   $(buttonSelector).on('click', function (e) {
     e.preventDefault();
@@ -569,84 +532,6 @@ function expandColumnToogle(buttonSelector, col1Info, col2Info)
   });
 }
 
-// Load ckeditor plugins
-if (typeof CKEDITOR !== 'undefined') {
-  // External plugins not part of the default Ckeditor package.
-  var plugins = [
-    'asciimath',
-    'asciisvg',
-    'audio',
-    'ckeditor_wiris',
-    'dialogui',
-    'flash',
-    'glossary',
-    'image2_chamilo',
-    'inserthtml',
-    'leaflet',
-    'mapping',
-    'mathjax',
-    'maximize',
-    'oembed',
-    'qmarkersrolls',
-    'toolbar',
-    'toolbarswitch',
-    'video',
-    'wikilink',
-    'wordcount',
-    'youtube',
-  ];
-
-  plugins.forEach(function (plugin) {
-    CKEDITOR.plugins.addExternal(
-      plugin,
-      mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
-    );
-  });
-
-  /**
-     * Function use to load templates in a div
-     **/
-  var showTemplates = function (ckeditorName) {
-    var editorName = 'content';
-    if (ckeditorName && ckeditorName.length > 0) {
-      editorName = ckeditorName;
-    }
-    CKEDITOR.editorConfig(CKEDITOR.config);
-    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
-      var templatesConfig = CKEDITOR.getTemplates("default");
-      var $templatesUL = $("<ul>");
-      if (templatesConfig) {
-        $.each(templatesConfig.templates, function () {
-          var template = this;
-          var $templateLi = $("<li>");
-          var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-          templateHTML += "<b>" + template.title + "</b>";
-
-          if (template.description) {
-            templateHTML += "<div class=description>" + template.description + "</div>";
-          }
-          templateHTML += "</div>";
-
-          $("<a>", {
-            href: "#",
-            html: templateHTML,
-            click: function (e) {
-              e.preventDefault();
-              if (CKEDITOR.instances[editorName]) {
-                CKEDITOR.instances[editorName].setData(template.html, function () {
-                  this.checkDirty();
-                });
-              }
-            }
-          }).appendTo($templateLi);
-          $templatesUL.append($templateLi);
-        });
-      }
-      $templatesUL.appendTo("#frmModel");
-    });
-  };
-}
-
 function addMainEvent(elm, evType, fn, useCapture)
 {
   if (elm.addEventListener) {
@@ -672,12 +557,20 @@ function copyTextToClipBoard(elementId)
   document.execCommand('copy');
 }
 
+function toggleModal(modalID)
+{
+  document.getElementById(modalID).classList.toggle("hidden");
+  document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+  document.getElementById(modalID).classList.toggle("flex");
+  document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+}
+
 // Expose functions to be use inside chamilo.
 // @todo check if there's a better way to expose functions.
-window.expandColumnToogle = expandColumnToogle;
+window.expandColumnToggle = expandColumnToggle;
 window.get_url_params = get_url_params;
 window.setCheckbox = setCheckbox;
 window.action_click = action_click;
 window.hideUnhide = hideUnhide;
 window.addMainEvent = addMainEvent;
-window.showTemplates = showTemplates;
+//window.showTemplates = showTemplates;

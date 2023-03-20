@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,83 +9,52 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyQuestionOption.
- *
  * @ORM\Table(
- *  name="c_survey_question_option",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="idx_survey_qo_qid", columns={"question_id"})
- *  }
+ *     name="c_survey_question_option",
+ *     indexes={
+ *         @ORM\Index(name="idx_survey_qo_qid", columns={"question_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CSurveyQuestionOption
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="options")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    protected CSurveyQuestion $question;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="question_option_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="options")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $questionOptionId;
+    protected CSurvey $survey;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
-    protected $questionId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
-     */
-    protected $surveyId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="option_text", type="text", nullable=false)
      */
-    protected $optionText;
+    protected string $optionText;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
-    protected $value;
+    protected int $value;
 
-    /**
-     * CSurveyQuestionOption constructor.
-     */
     public function __construct()
     {
-        $this->questionOptionId = 0;
     }
 
     public function getIid(): int
@@ -91,69 +62,7 @@ class CSurveyQuestionOption
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
-     * Set optionText.
-     *
-     * @param string $optionText
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setOptionText($optionText)
+    public function setOptionText(string $optionText): self
     {
         $this->optionText = $optionText;
 
@@ -170,14 +79,7 @@ class CSurveyQuestionOption
         return $this->optionText;
     }
 
-    /**
-     * Set sort.
-     *
-     * @param int $sort
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setSort($sort)
+    public function setSort(int $sort): self
     {
         $this->sort = $sort;
 
@@ -194,14 +96,7 @@ class CSurveyQuestionOption
         return $this->sort;
     }
 
-    /**
-     * Set value.
-     *
-     * @param int $value
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setValue($value)
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
@@ -218,51 +113,27 @@ class CSurveyQuestionOption
         return $this->value;
     }
 
-    /**
-     * Set questionOptionId.
-     *
-     * @param int $questionOptionId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setQuestionOptionId($questionOptionId)
+    public function getQuestion(): CSurveyQuestion
     {
-        $this->questionOptionId = $questionOptionId;
+        return $this->question;
+    }
+
+    public function setQuestion(CSurveyQuestion $question): self
+    {
+        $this->question = $question;
 
         return $this;
     }
 
-    /**
-     * Get questionOptionId.
-     *
-     * @return int
-     */
-    public function getQuestionOptionId()
+    public function getSurvey(): CSurvey
     {
-        return $this->questionOptionId;
+        return $this->survey;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CSurveyQuestionOption
-     */
-    public function setCId($cId)
+    public function setSurvey(CSurvey $survey): self
     {
-        $this->cId = $cId;
+        $this->survey = $survey;
 
         return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

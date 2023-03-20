@@ -1,9 +1,10 @@
 <?php
+
 /* See license terms in /license.txt */
 
-use Chamilo\CoreBundle\Component\Editor\Connector;
-use MediaAlchemyst\Alchemyst;
-use MediaAlchemyst\DriversContainer;
+//use Chamilo\CoreBundle\Component\Editor\Connector;
+//use MediaAlchemyst\Alchemyst;
+//use MediaAlchemyst\DriversContainer;
 use Neutron\TemporaryFilesystem\Manager;
 use Neutron\TemporaryFilesystem\TemporaryFilesystem;
 use Sonata\Exporter\Handler;
@@ -188,7 +189,7 @@ class Export
         unset($data[0]);
 
         $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : [];
-        $table = new HTML_Table(['class' => 'data_table', 'repeat_header' => '1']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table', 'repeat_header' => '1']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -213,9 +214,8 @@ class Export
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
             $row++;
         }
-        $table_tp_html = $table->toHtml();
 
-        return $table_tp_html;
+        return $table->toHtml();
     }
 
     /**
@@ -236,7 +236,7 @@ class Export
         }
 
         if (!empty($html)) {
-            $fs = new Filesystem();
+            /*$fs = new Filesystem();
             $paths = [
                 'root_sys' => api_get_path(SYS_PATH),
                 'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
@@ -279,7 +279,7 @@ class Export
                 } catch (Exception $e) {
                     // error_log($e->getMessage());
                 }
-            }
+            }*/
         }
     }
 }

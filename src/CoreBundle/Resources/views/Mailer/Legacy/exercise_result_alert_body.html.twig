@@ -1,0 +1,19 @@
+<div id="email-message" style="padding-top:10px; padding-bottom:10px;">
+    <p><strong>{{ 'DearStudentEmailIntroduction'|trans }}</strong> {{ 'AttemptVCC'|trans }} </p>
+    <div style="border-color: #bce8f1; padding: 15px; background-color: #d9edf7; margin-bottom: 15px; font-size: 16px; color:#31708f;">
+        <p>
+            <strong>{{ 'CourseName'|trans }}: </strong>
+            {{ course_title }}
+        <br>
+            <strong>{{ 'Exercise'|trans }}: </strong>
+            {{ test_title }}
+        </p>
+    </div>
+
+    <p>{{ 'ClickLinkToViewComment'|trans }}</p>
+    <p><a style="font-weight: bold; color: #2BA6CB;" href="{{ url }}">{{ url }}</a></p>
+    <div style="text-align: right;">
+        <p><strong>{{ 'Regards'|trans }}</strong><br>
+        {{ teacher_name }}</p>
+    </div>
+</div>

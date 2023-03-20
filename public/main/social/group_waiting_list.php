@@ -9,13 +9,13 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if ('true' != api_get_setting('allow_social_tool')) {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
 $this_section = SECTION_SOCIAL;
 $group_id = intval($_GET['id']);
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
@@ -46,7 +46,7 @@ $admins = $usergroup->get_users_by_group(
 );
 $show_message = '';
 
-if (isset($_GET['action']) && 'accept' == $_GET['action']) {
+if (isset($_GET['action']) && 'accept' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -56,7 +56,7 @@ if (isset($_GET['action']) && 'accept' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'deny' == $_GET['action']) {
+if (isset($_GET['action']) && 'deny' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -66,7 +66,7 @@ if (isset($_GET['action']) && 'deny' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'set_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //if i'm the admin
@@ -85,7 +85,6 @@ $users = $usergroup->get_users_by_group(
 );
 
 $new_member_list = [];
-$social_left_content = SocialManager::show_social_menu('waiting_list', $group_id);
 
 // Display form
 foreach ($users as $user) {
@@ -111,8 +110,7 @@ if (empty($new_member_list) > 0) {
 $tpl = new Template(null);
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
-$tpl->assign('social_menu_block', $social_menu_block);
+
 $tpl->setHelp('Groups');
 $tpl->assign('members', $new_member_list);
 $tpl->assign('social_right_content', $social_right_content);

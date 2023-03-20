@@ -8,18 +8,18 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
-// Clear the exercise session just in case
+$current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();
+$this_section = SECTION_COURSES;
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
+//$js = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = $js;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
 $courseCode = api_get_course_id();
-$exercise_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id, true);
@@ -28,15 +28,21 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) ($_REQUEST['learnpath_id']) : null;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) ($_REQUEST['learnpath_item_id']) : null;
-$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) ($_REQUEST['learnpath_item_view_id']) : null;
+if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+    $plugin = Positioning::create();
+    if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, api_get_course_int_id(), $sessionId)) {
+        api_not_allowed(true);
+    }
+}
+
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
+$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : null;
 $origin = api_get_origin();
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,
-    'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
@@ -69,7 +75,6 @@ if ($time_control) {
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     SessionManager::addFlashSessionReadOnly();
-
     Display::display_header();
 } else {
     $htmlHeadXtra[] = '
@@ -80,11 +85,10 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     Display::display_reduced_header();
 }
 
-if ('mobileapp' == $origin) {
-    echo '<div class="actions">';
-    echo '<a href="javascript:window.history.go(-1);">'.
+if ('mobileapp' === $origin) {
+    $actions = '<a href="javascript:window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 $html = '';
@@ -96,12 +100,12 @@ if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&id='.$objExercise->id
+            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
         );
     }
     $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results and feedback and feedback'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&id='.$objExercise->id,
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
         ['title' => get_lang('Results and feedback and feedback')]
     );
 }
@@ -119,7 +123,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
     );
 }
 
-// Exercise description
+// Exercise description.
 if (!empty($objExercise->description)) {
     $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
 }
@@ -147,32 +151,32 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
+    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
-    ['class' => 'btn btn-success btn-large']
+    ['class' => 'btn btn--success btn-large']
 );
 
 $btnCheck = '';
 $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
-
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
-            Display::returnFontAwesomeIcon('spinner', '', true, 'fa-spin hidden').' '.get_lang('TestYourBrowser'),
+            Display::getMdiIcon('loading', 'animate-spin hidden').' '.get_lang('TestYourBrowser'),
             [
                 'type' => 'button',
                 'role' => 'button',
                 'id' => 'quiz-check-request-button',
-                'class' => 'btn btn-default',
+                'class' => 'btn btn--plain',
                 'data-loading-text' => get_lang('Loading'),
                 'autocomplete' => 'off',
             ]
         ).PHP_EOL.'<strong id="quiz-check-request-text"></strong>';
 }
 
-//3. Checking visibility of the exercise (overwrites the exercise button)
+// 3. Checking visibility of the exercise (overwrites the exercise button).
 $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
@@ -204,7 +208,6 @@ $attempts = Event::getExerciseResultsByUser(
     'desc'
 );
 $counter = count($attempts);
-
 $my_attempt_array = [];
 $table_content = '';
 
@@ -218,6 +221,7 @@ if (in_array(
     $objExercise->results_disabled,
     [
         RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        //RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
         RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
     ])
 ) {
@@ -237,7 +241,7 @@ if (!empty($attempts)) {
                 $attempt_result['max_score'],
                 $objExercise,
                 $attempt_result['exe_user_id'],
-                $courseCode,
+                api_get_course_int_id(),
                 $sessionId
             );
         }
@@ -252,7 +256,7 @@ if (!empty($attempts)) {
             get_lang('Show'),
             $attempt_url,
             [
-                'class' => $btn_class.'btn btn-default',
+                'class' => $btn_class.'btn btn--plain',
                 'data-title' => get_lang('Show'),
                 'data-size' => 'lg',
             ]
@@ -264,10 +268,7 @@ if (!empty($attempts)) {
         }
         $row = [
             'count' => $i,
-            'date' => api_convert_and_format_date(
-                $attempt_result['start_date'],
-                DATE_TIME_FORMAT_LONG
-            ),
+            'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
         $attempt_link .= PHP_EOL.$teacher_revised;
@@ -280,6 +281,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -295,6 +297,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -330,8 +333,7 @@ if (!empty($attempts)) {
 
     $header_names = [];
     $table = new HTML_Table(['class' => 'table table-striped table-hover']);
-
-    // Hiding score and answer
+    // Hiding score and answer.
     switch ($objExercise->results_disabled) {
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
             if ($blockShowAnswers) {
@@ -347,6 +349,7 @@ if (!empty($attempts)) {
             }
 
             break;
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
                 $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
@@ -415,7 +418,6 @@ if (!empty($attempts)) {
 $selectAttempts = $objExercise->selectAttempts();
 if ($selectAttempts) {
     $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
-
     if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
@@ -433,7 +435,6 @@ if ($time_control) {
 $html .= $message;
 
 $disable = api_get_configuration_value('exercises_disable_new_attempts');
-
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('The portal do not allowed to start new test for the moment, please come back later.'));
 }
@@ -503,15 +504,15 @@ if ($quizCheckButtonEnabled) {
     $html .= "<script>
         $(function () {
             var btnTest = $('#quiz-check-request-button'),
-                iconBtnTest = btnTest.children('.fa.fa-spin');
+                iconBtnTest = btnTest.children('.animate-spin');
 
             btnTest.on('click', function (e) {
                 e.preventDefault();
 
-                btnTest.prop('disabled', true).removeClass('btn-success btn-danger').addClass('btn-default');
+                btnTest.prop('disabled', true).removeClass('btn--success btn--danger').addClass('btn--plain');
                 iconBtnTest.removeClass('hidden');
 
-                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-error').hide();
 
                 $
                     .when(
@@ -532,16 +533,16 @@ if ($quizCheckButtonEnabled) {
                             var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
 
                             if (xhr1IsOk && xhr2IsOk) {
-                                btnTest.removeClass('btn-default btn-danger').addClass('btn-success');
+                                btnTest.removeClass('btn--plain btn--danger').addClass('btn--success');
                                 txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
                             } else {
-                                btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
-                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                                btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
+                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
                             }
                         },
                         function () {
-                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
-                            btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
+                            btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
                         }
                     )
                     .always(function () {

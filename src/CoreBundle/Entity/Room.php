@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Room.
@@ -15,56 +18,43 @@ use Doctrine\ORM\Mapping as ORM;
 class Room
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true, unique=false)
+     * @ORM\Column(name="title", type="string", length=255)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="geolocation", type="string", length=255, nullable=true, unique=false)
      */
-    protected $geolocation;
+    protected ?string $geolocation = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ip", type="string", length=39, nullable=true, unique=false)
+     * @ORM\Column(name="ip", type="string", length=45, nullable=true, unique=false)
      */
-    protected $ip;
+    protected ?string $ip = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ip_mask", type="string", length=6, nullable=true, unique=false)
      */
-    protected $ipMask;
+    protected ?string $ipMask = null;
 
     /**
-     * @var BranchSync
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    protected $branch;
+    protected BranchSync $branch;
 
     /**
      * Get id.
@@ -76,14 +66,7 @@ class Room
         return $this->id;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return $this
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -108,12 +91,7 @@ class Room
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return Room
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -128,12 +106,7 @@ class Room
         return $this->geolocation;
     }
 
-    /**
-     * @param string $geolocation
-     *
-     * @return Room
-     */
-    public function setGeolocation($geolocation)
+    public function setGeolocation(string $geolocation): self
     {
         $this->geolocation = $geolocation;
 
@@ -148,12 +121,7 @@ class Room
         return $this->ip;
     }
 
-    /**
-     * @param string $ip
-     *
-     * @return Room
-     */
-    public function setIp($ip)
+    public function setIp(string $ip): self
     {
         $this->ip = $ip;
 
@@ -168,12 +136,7 @@ class Room
         return $this->ipMask;
     }
 
-    /**
-     * @param string $ipMask
-     *
-     * @return Room
-     */
-    public function setIpMask($ipMask)
+    public function setIpMask(string $ipMask): self
     {
         $this->ipMask = $ipMask;
 
@@ -188,12 +151,7 @@ class Room
         return $this->branch;
     }
 
-    /**
-     * @param BranchSync $branch
-     *
-     * @return $this
-     */
-    public function setBranch($branch)
+    public function setBranch(BranchSync $branch): self
     {
         $this->branch = $branch;
 

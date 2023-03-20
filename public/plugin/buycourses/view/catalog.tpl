@@ -56,12 +56,12 @@
                                                 </div>
                                             {% elseif course.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="ajax btn btn-info btn-block btn-sm" title=""
+                                                    <a class="ajax btn btn--info btn-block btn-sm" title=""
                                                        href="{{ course_description_url }}"
                                                        data-title="{{ course.title }}">
                                                         <em class="fa fa-file-text"></em> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
-                                                    <a class="btn btn-success btn-block btn-sm" title=""
+                                                    <a class="btn btn--success btn-block btn-sm" title=""
                                                        href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
@@ -88,7 +88,9 @@
                                                 <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
                                             </h4>
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
-                                                <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
+                                                {% for coach in session.coaches %}
+                                                    <p><em class="fa fa-user fa-fw"></em> {{ coach }}</p>
+                                                {% endfor %}
                                             {% endif %}
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                                             <p class="text-right">
@@ -116,7 +118,7 @@
                                                 </div>
                                             {% elseif session.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="btn btn-success btn-block btn-sm"
+                                                    <a class="btn btn--success btn-block btn-sm"
                                                        href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
@@ -181,11 +183,11 @@
                                                 </span>
                                             </p>
                                             <div class="toolbar">
-                                                <a class="btn btn-info btn-block btn-sm" title=""
+                                                <a class="btn btn--info btn-block btn-sm" title=""
                                                    href="{{ _p.web }}service/{{ service.id }}">
                                                     <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
-                                                <a class="btn btn-success btn-block btn-sm" title=""
+                                                <a class="btn btn--success btn-block btn-sm" title=""
                                                    href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
                                                     <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>

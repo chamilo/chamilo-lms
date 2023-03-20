@@ -12,7 +12,7 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
-$get_select_cat = intval($_GET['selectcat']);
+$get_select_cat = (int) $_GET['selectcat'];
 
 $catadd = new Category();
 $my_user_id = api_get_user_id();
@@ -100,8 +100,6 @@ if ($form->validate()) {
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'add-cat',
     'action_details' => Category::getUrl().'selectcat='.$get_select_cat,
 ];
@@ -114,11 +112,11 @@ if (!$_in_course) {
     ];
 }
 $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Assessments')];
-Display :: display_header(get_lang('New category'));
+Display::display_header(get_lang('New category'));
 
 $display_form = true;
 if ($display_form) {
     $form->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

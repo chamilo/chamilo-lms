@@ -1,4 +1,7 @@
 <?php
+
+define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
+
 /**
  * Copyright (c) 2005-2009, Laurent Laville <pear@laurent-laville.org>
  *
@@ -29,8 +32,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * PHP versions 4 and 5
- *
  * @category  HTML
  * @package   HTML_QuickForm_advmultiselect
  * @author    Laurent Laville <pear@laurent-laville.org>
@@ -39,33 +40,10 @@
  * @version   CVS: $Id: advmultiselect.php,v 1.36 2009/04/05 07:03:39 farell Exp $
  * @link      http://pear.php.net/package/HTML_QuickForm_advmultiselect
  * @since     File available since Release 0.4.0
- */
-
-/**
- * Basic error codes
- *
- * @var        integer
- * @since      1.5.0
- */
-define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
-
-/**
- * @todo clean class to use only with the multiselect.js library
- *
- * Element for HTML_QuickForm that emulate a multi-select.
  *
  * The HTML_QuickForm_advmultiselect package adds an element to the
  * HTML_QuickForm package that is two select boxes next to each other
  * emulating a multi-select.
- *
- * @category  HTML
- * @package   HTML_QuickForm_advmultiselect
- * @author    Laurent Laville <pear@laurent-laville.org>
- * @copyright 2005-2009 Laurent Laville
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/HTML_QuickForm_advmultiselect
- * @since     Class available since Release 0.4.0
  */
 class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 {
@@ -239,32 +217,37 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $elementName = null,
         $elementLabel = null,
         $options = null,
-        $attributes = null,
+        array $attributes = [],
         $sort = null
     ) {
         $opts = $options;
         $options = null;  // prevent to use the default select element load options
 
         parent::__construct($elementName, $elementLabel, $options, $attributes);
-        $this->selectAllCheckBox = isset($attributes['select_all_checkbox']) ? $attributes['select_all_checkbox'] : false;
+        $this->selectAllCheckBox = $attributes['select_all_checkbox'] ?? false;
 
         // allow to load options at once and take care of fancy attributes
         $this->load($opts);
 
         // add multiple selection attribute by default if missing
-        $this->updateAttributes(array('multiple' => 'multiple'));
+        $class = '
+                block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none
+                focus:bg-white focus:border-gray-500 w-full mt-1 overflow-auto w-full border
+                bg-white rounded px-3 py-2 outline-none text-gray-700';
+
+        $this->updateAttributes(['multiple' => 'multiple']);
 
         if (is_null($this->getAttribute('size'))) {
             // default size is ten item on each select box (left and right)
-            $this->updateAttributes(array('size' => 10));
+            $this->updateAttributes(['size' => 10]);
         }
         if (is_null($this->getAttribute('class'))) {
             // default width of each select box
-            $this->updateAttributes(array('class' => 'form-control'));
+            $this->updateAttributes(['class' => $class]);
         }
 
         $this->removeAttribute('class');
-        $this->setAttribute('class','form-control');
+        $this->setAttribute('class', $class);
 
         // set default add button attributes
         $this->setButtonAttributes('add');
@@ -363,7 +346,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                         'name'  => 'add',
                         'value' => ' ',
                         'type'  => 'button',
-                        'class'=> 'btn btn-primary'
+                        'class'=> 'btn btn--primary'
                     );
                 } else {
                     $this->_updateAttrArray(
@@ -378,7 +361,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                         'name'  => 'remove',
                         'value' => '  ',
                         'type'  => 'button',
-                        'class'=> 'btn btn-primary'
+                        'class'=> 'btn btn--primary'
                     );
                 } else {
                     $this->_updateAttrArray($this->_removeButtonAttributes,
@@ -490,10 +473,10 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
             {javascript}
-            <div class="row">
-              <div class="col-sm"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
-              <div class="col-sm-auto"><div class="text-center">{add}{remove}</div></div>
-              <div class="col-sm"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+            <div class="grid grid-cols-3">
+              <div><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
+              <div><div class="text-center">{add}{remove}</div></div>
+              <div><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
             </div>
             ';
         }
@@ -571,8 +554,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $checkbox_id_suffix = 0;
 
             foreach ($this->_options as $option) {
-                $_labelAttributes
-                    = array('style', 'class', 'onmouseover', 'onmouseout');
+                $_labelAttributes = ['style', 'class', 'onmouseover', 'onmouseout'];
                 $labelAttributes = array();
                 foreach ($_labelAttributes as $attr) {
                     if (isset($option['attr'][$attr])) {
@@ -644,20 +626,18 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $attrUnselected = $this->_getAttrString($this->_attributesUnselected);
 
             // set name of Select To Box
-            $this->_attributesSelected
-                = array(
+            $this->_attributesSelected = [
                 'id' => $selectId.'_to',
                 'name' => $selectNameTo,
-            );
+            ];
             $this->_attributesSelected = array_merge($this->_attributes, $this->_attributesSelected);
             $attrSelected = $this->_getAttrString($this->_attributesSelected);
 
             // set name of Select hidden Box
-            $this->_attributesHidden
-                = array(
+            $this->_attributesHidden = [
                 'name' => $selectName,
                 'style' => 'overflow: hidden; visibility: hidden; width: 1px; height: 0;',
-            );
+            ];
             $this->_attributesHidden
                 = array_merge($this->_attributes, $this->_attributesHidden);
             $attrHidden = $this->_getAttrString($this->_attributesHidden);
@@ -753,24 +733,24 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_removeButtonAttributes
                 = array_merge($this->_removeButtonAttributes, $attributes);
             $attrStrRemove = $this->_getAttrString($this->_removeButtonAttributes);
-            $strHtmlRemove = "<button $attrStrRemove  /> <em class='fa fa-arrow-left'></em></button>";
+            $strHtmlRemove = "<button $attrStrRemove  /> <em class='mdi mdi-chevron-left'></em></button>";
 
             // build the add button with all its attributes
             $attributes = array('id' => $selectId.'_rightSelected');
             $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-            $strHtmlAdd = "<button $attrStrAdd  /> <em class='fa fa-arrow-right'></em></button><br /><br />";
+            $strHtmlAdd = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-right'></em></button><br /><br />";
 
             if ($this->selectAllCheckBox) {
                 $attributes = array('id' => $selectId.'_rightAll');
                 $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
                 $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-                $rightAll = "<button $attrStrAdd  /> <em class='fa fa-forward'></em></button><br /><br />";
+                $rightAll = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-double-right'></em></button><br /><br />";
 
                 $attributes = array('id' => $selectId.'_leftAll');
                 $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
                 $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-                $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='fa fa-backward'></em></button>";
+                $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='mdi mdi-chevron-double-left'></em></button>";
             }
 
             // build the select all button with all its attributes
@@ -925,7 +905,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                             left: \''.$search.'\',
                             right: \''.$search.'\'
                         },
-                        fireSearch: function(value) {                        
+                        fireSearch: function(value) {
                             return value.length > 2;
                         }
                     });

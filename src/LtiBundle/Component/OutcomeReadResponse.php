@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeReadResponse.
- */
+use SimpleXMLElement;
+
 class OutcomeReadResponse extends OutcomeResponse
 {
     /**
@@ -21,12 +22,13 @@ class OutcomeReadResponse extends OutcomeResponse
         parent::__construct($statusInfo, $bodyParam);
     }
 
-    protected function generateBody(\SimpleXMLElement $xmlBody)
+    protected function generateBody(SimpleXMLElement $xmlBody): void
     {
         $resultResponse = $xmlBody->addChild('readResultResponse');
 
         $xmlResultScore = $resultResponse->addChild('result')
-            ->addChild('resultScore');
+            ->addChild('resultScore')
+        ;
 
         $xmlResultScore->addChild('language', 'en');
         $xmlResultScore->addChild('textString', $this->bodyParams);

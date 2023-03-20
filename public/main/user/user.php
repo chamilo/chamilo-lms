@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * This script displays a list of the users of the current course.
  * Course admins can change user permissions, subscribe and unsubscribe users...
@@ -36,7 +39,7 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
-$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' || api_is_platform_admin();
+$canEditUsers = 'true' === api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 $canEdit = api_is_allowed_to_edit(null, true);
 $canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
@@ -63,7 +66,9 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (count($user_ids) > 0) {
                         CourseManager::unsubscribe_user($user_ids, $courseCode);
                         Display::addFlash(
-                            Display::return_message(get_lang('The selected users have been unsubscribed from the course'))
+                            Display::return_message(
+                                get_lang('The selected users have been unsubscribed from the course')
+                            )
                         );
                     }
                 }
@@ -75,7 +80,6 @@ if (api_is_allowed_to_edit(null, true)) {
 $extraField = new ExtraField('user');
 $extraFields = $extraField->get_all(['filter = ?' => 1]);
 $user_image_pdf_size = 80;
-
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -239,9 +243,9 @@ if (isset($_GET['action'])) {
 
                 // only users no coaches/teachers
                 if (COURSEMANAGER == $type) {
-                    $sql .= " AND session_course_user.status = 2 ";
+                    $sql .= " AND session_course_user.status = ".Session::COURSE_COACH;
                 } else {
-                    $sql .= " AND session_course_user.status = 0 ";
+                    $sql .= " AND session_course_user.status = .".Session::STUDENT;
                 }
                 $sql .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 
@@ -437,7 +441,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT user.id as user_id
 					FROM $tbl_user user
 					INNER JOIN $tbl_session_rel_user reluser
-					ON user.id = reluser.user_id AND reluser.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+					ON user.id = reluser.user_id AND reluser.relation_type = ".Session::STUDENT."
 					INNER JOIN $tbl_session_rel_course rel_course
 					ON rel_course.session_id = reluser.session_id
 					WHERE
@@ -464,7 +468,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 } else {
     // If student can unsubscribe
-    if (isset($_REQUEST['unregister']) && 'yes' == $_REQUEST['unregister']) {
+    if (isset($_REQUEST['unregister']) && 'yes' === $_REQUEST['unregister']) {
         if (1 == $course_info['unsubscribe']) {
             $user_id = api_get_user_id();
             CourseManager::unsubscribe_user($user_id, $course_info['code']);
@@ -479,7 +483,6 @@ if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 
-// Statistics
 Event::event_access_tool(TOOL_USER);
 
 $default_column = 3;
@@ -562,7 +565,6 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-/*	Header */
 if (isset($origin) && 'learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
@@ -579,13 +581,11 @@ if (isset($origin) && 'learnpath' === $origin) {
     Display::display_header($tool_name, 'User');
 }
 
-// Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
 $selectedTab = 1;
 
 if ($canRead) {
-    echo '<div class="actions">';
     switch ($type) {
         case STUDENT:
             $selectedTab = 1;
@@ -605,34 +605,28 @@ if ($canRead) {
             break;
     }
 
-    echo '<div class="row">';
-    echo '<div class="col-md-6">';
-
+    $actionsLeft = '';
     if ($canEdit) {
-        echo $icon;
+        $actionsLeft .= $icon;
     }
 
     if ($canRead) {
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
             Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM).'</a> ';
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
             Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 
     if ($canEditUsers && $canEdit) {
-        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
+        $actionsLeft .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
             Display::return_icon('import_csv.png', get_lang('Import users list'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 
     if ($canRead) {
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
             Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
-    echo $actions;
 
-    echo '</div>';
-    echo '<div class="col-md-6">';
-    echo '<div class="pull-right">';
     // Build search-form
     $form = new FormValidator(
         'search_user',
@@ -646,17 +640,15 @@ if ($canRead) {
     $form->addText('keyword', '', false);
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addButtonSearch(get_lang('Search'));
-    $form->display();
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
+    $actionsRight = $form->returnForm();
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && 'true' === $allowTutors) {
-        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
+        $actionsRight .= ' <a class="btn btn--plain" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Course sessions').'</a>';
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 
 echo UserManager::getUserSubscriptionTab($selectedTab);
@@ -667,7 +659,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (!isset($origin) || 'learnpath' != $origin) {
+if (!isset($origin) || 'learnpath' !== $origin) {
     Display::display_footer();
 }
 
@@ -827,19 +819,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
             break;
     }
 
-    $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $active = $_GET['active'] ?? null;
 
     if (empty($sessionId)) {
         $status = $type;
     } else {
+        $status = 0;
         if (COURSEMANAGER == $type) {
             $status = 2;
-        } else {
-            $status = 0;
         }
     }
 
-    $users = CourseManager :: get_user_list_from_course_code(
+    $users = CourseManager::get_user_list_from_course_code(
         $course_code,
         $sessionId,
         $limit,
@@ -853,6 +844,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
         [],
         $active
     );
+
+    $illustrationRepo = Container::getIllustrationRepository();
 
     foreach ($users as $user_id => $userData) {
         if ((
@@ -873,9 +866,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
 
             $temp = [];
+            $user = api_get_user_entity($user_id);
+            $url = $illustrationRepo->getIllustrationUrl($user, 'user_picture_small', ICON_SIZE_BIG);
+            $photo = Display::img($url, '', [], false);
+
             if (api_is_allowed_to_edit(null, true)) {
-                $userInfo = api_get_user_info($user_id);
-                $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
                 $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $userData['official_code'];
@@ -918,9 +913,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         );
                         if (isset($data['value'])) {
                             $optionList = $extraFieldOption->get_field_option_by_field_and_option(
-                            $extraField['id'],
-                            $data['value']
-                        );
+                                $extraField['id'],
+                                $data['value']
+                            );
                             if (!empty($optionList)) {
                                 $options = implode(', ', array_column($optionList, 'display_text'));
                                 $temp[] = Security::remove_XSS($options);
@@ -935,14 +930,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // User id for actions
                 $temp[] = $user_id;
-                $temp['is_tutor'] = isset($userData['is_tutor']) ? $userData['is_tutor'] : '';
-                $temp['user_status_in_course'] = isset($userData['status_rel']) ? $userData['status_rel'] : '';
+                $temp['is_tutor'] = $userData['is_tutor'] ?? '';
+                $temp['user_status_in_course'] = $userData['status_rel'] ?? '';
             } else {
-                $userInfo = api_get_user_info($user_id);
-                $userPicture = $userInfo['avatar'];
-
-                $photo = '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
-
                 $temp[] = '';
                 $temp[] = $photo;
                 $temp[] = $userData['official_code'];
@@ -1029,7 +1019,7 @@ function modify_filter($user_id, $row, $data)
 
     $result = '';
     if ($is_allowed_to_track) {
-        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$courseId.'&origin=user_course&id_session='.api_get_session_id().'"
+        $result .= '<a href="../my_space/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$courseId.'&origin=user_course&id_session='.api_get_session_id().'"
         title="'.get_lang('Reporting').'">
             '.Display::return_icon('statistics.png', get_lang('Reporting')).'
         </a>';
@@ -1072,7 +1062,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                    ['class' => 'btn btn-default '.$disabled]
+                    ['class' => 'btn btn--plain '.$disabled]
                 ).'&nbsp;';
             }
         }
@@ -1082,7 +1072,7 @@ function modify_filter($user_id, $row, $data)
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a
-                class="btn btn-sm btn-danger delete-swal"
+                class="btn btn-sm btn--danger delete-swal"
                 href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
                 title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' " >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';
@@ -1093,7 +1083,7 @@ function modify_filter($user_id, $row, $data)
         if (1 == $course_info['unsubscribe']) {
             if ($user_id == $current_user_id) {
                 $result .= '<a
-                class="btn btn-sm btn-danger delete-swal"
+                class="btn btn-sm btn--danger delete-swal"
                 href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
                 title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';

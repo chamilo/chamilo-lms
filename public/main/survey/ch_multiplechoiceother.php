@@ -10,9 +10,9 @@ class ch_multiplechoiceother extends survey_question
      *
      * @return FormValidator
      */
-    public function createForm($survey_data, $formData)
+    public function createForm($surveyData, $formData)
     {
-        parent::createForm($survey_data, $formData);
+        parent::createForm($surveyData, $formData);
 
         $options = [
             'horizontal' => get_lang('Horizontal'),

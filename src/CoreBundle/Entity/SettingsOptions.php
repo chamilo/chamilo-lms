@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,51 +13,38 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="settings_options",
- *     options={"row_format":"DYNAMIC"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})}
+ *     options={"row_format"="DYNAMIC"},
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})
+ *     }
  * )
  * @ORM\Entity
  */
 class SettingsOptions
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="variable", type="string", length=190, nullable=true)
+     * @ORM\Column(name="variable", type="string", length=190, nullable=false)
      */
-    protected $variable;
+    protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="string", length=190, nullable=true)
      */
-    protected $value;
+    protected ?string $value = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
      */
-    protected $displayText;
+    protected string $displayText;
 
-    /**
-     * Set variable.
-     *
-     * @param string $variable
-     *
-     * @return SettingsOptions
-     */
-    public function setVariable($variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 
@@ -72,14 +61,7 @@ class SettingsOptions
         return $this->variable;
     }
 
-    /**
-     * Set value.
-     *
-     * @param string $value
-     *
-     * @return SettingsOptions
-     */
-    public function setValue($value)
+    public function setValue(string $value): self
     {
         $this->value = $value;
 
@@ -96,14 +78,7 @@ class SettingsOptions
         return $this->value;
     }
 
-    /**
-     * Set displayText.
-     *
-     * @param string $displayText
-     *
-     * @return SettingsOptions
-     */
-    public function setDisplayText($displayText)
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
 

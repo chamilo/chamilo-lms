@@ -75,36 +75,10 @@ $interbreadcrumb[] = [
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 Display::display_header(get_lang('Move'), 'Path');
-
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-</script>
-<?php
-
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
-echo '<div class="col-md-3">';
-    echo $learnPath->return_new_tree();
-echo '</div>';
-
+echo $learnPath->showBuildSideBar();
 echo '<div class="col-md-9">';
-
 if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been moved.';

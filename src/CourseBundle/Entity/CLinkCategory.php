@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,53 +17,47 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLinkCategory.
  *
  * @ORM\Table(
- *  name="c_link_category",
- *  indexes={
- *  }
+ *     name="c_link_category",
+ *     indexes={
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLinkCategoryRepository")
  */
 class CLinkCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     * @Assert\NotBlank()
      * @ORM\Column(name="category_title", type="string", length=255, nullable=false)
      */
-    protected $categoryTitle;
+    #[Assert\NotBlank]
+    protected string $categoryTitle;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var ArrayCollection|CLink[]
+     * @var Collection|CLink[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
      */
-    protected $links;
+    protected Collection $links;
 
     public function __construct()
     {
+        $this->description = '';
         $this->displayOrder = 0;
         $this->links = new ArrayCollection();
     }
@@ -75,81 +72,50 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set categoryTitle.
-     *
-     * @param string $categoryTitle
-     *
-     * @return CLinkCategory
-     */
-    public function setCategoryTitle($categoryTitle)
+    public function setCategoryTitle(string $categoryTitle): self
     {
         $this->categoryTitle = $categoryTitle;
 
         return $this;
     }
 
-    /**
-     * Get categoryTitle.
-     *
-     * @return string
-     */
-    public function getCategoryTitle()
+    public function getCategoryTitle(): string
     {
-        return (string) $this->categoryTitle;
+        return $this->categoryTitle;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CLinkCategory
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     *
-     * @return CLinkCategory
-     */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
         return $this;
     }
 
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
     }
 
     /**
-     * Resource identifier.
+     * @return CLink[]|Collection
      */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->iid;

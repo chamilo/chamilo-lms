@@ -5,7 +5,7 @@
 /**
  * Code init - comment die() call to enable.
  */
-die();
+exit();
 require '../../inc/global.inc.php';
 if (empty($_GET['doc'])) {
     echo "To add a document name to search, add ?doc=abc to the URL\n";
@@ -36,7 +36,6 @@ $allowed_extensions = [
 $courses_list = CourseManager::get_courses_list();
 
 // Simulating empty specific fields (this is necessary for indexing)
-require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 $specific_fields = get_specific_field_list();
 $specific_fields_values = [];
 foreach ($specific_fields as $sf) {

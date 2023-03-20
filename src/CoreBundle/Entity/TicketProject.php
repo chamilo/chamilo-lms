@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,76 +18,55 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketProject
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", nullable=true)
      */
-    protected $email;
+    protected ?string $email = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="other_area", type="integer", nullable=true)
      */
-    protected $otherArea;
+    protected ?string $otherArea = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
-    /**
-     * Project constructor.
-     */
     public function __construct()
     {
-        $this->insertDateTime = new \DateTime();
+        $this->insertDateTime = new DateTime();
     }
 
     /**
@@ -96,18 +78,6 @@ class TicketProject
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketProject
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -115,12 +85,7 @@ class TicketProject
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return TicketProject
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -135,12 +100,7 @@ class TicketProject
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return TicketProject
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -155,12 +115,7 @@ class TicketProject
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return TicketProject
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -175,12 +130,7 @@ class TicketProject
         return $this->otherArea;
     }
 
-    /**
-     * @param string $otherArea
-     *
-     * @return TicketProject
-     */
-    public function setOtherArea($otherArea)
+    public function setOtherArea(string $otherArea): self
     {
         $this->otherArea = $otherArea;
 
@@ -195,12 +145,7 @@ class TicketProject
         return $this->insertUserId;
     }
 
-    /**
-     * @param int $insertUserId
-     *
-     * @return TicketProject
-     */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId): self
     {
         $this->insertUserId = $insertUserId;
 
@@ -208,19 +153,14 @@ class TicketProject
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
         return $this->insertDateTime;
     }
 
-    /**
-     * @param \DateTime $insertDateTime
-     *
-     * @return TicketProject
-     */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -235,12 +175,7 @@ class TicketProject
         return $this->lastEditUserId;
     }
 
-    /**
-     * @param int $lastEditUserId
-     *
-     * @return TicketProject
-     */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId): self
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -248,19 +183,14 @@ class TicketProject
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @param \DateTime $lastEditDateTime
-     *
-     * @return TicketProject
-     */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

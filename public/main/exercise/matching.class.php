@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 /**
  * Class Matching
  * Matching questions type class.
@@ -17,9 +19,6 @@ class Matching extends Question
     public $typePicture = 'matching.png';
     public $explanationLangVar = 'Matching';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -272,26 +271,21 @@ class Matching extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">';
+        $header .= '<table class="'.$this->questionTableClass.'">';
         $header .= '<tr>';
-
         $header .= '<th>'.get_lang('Elements list').'</th>';
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
-            //if ($exercise->showExpectedYour choiceColumn()) {
-                //$header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
-            //}
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
+            }
         }
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
-        } else {
-            if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('Corresponds to').'</th>';
-            }
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '</tr>';
 
@@ -309,20 +303,10 @@ class Matching extends Question
      */
     public static function isCorrect($position, $answer, $questionId)
     {
-        $em = Database::getManager();
+        $count = Database::getManager()
+            ->getRepository(CQuizAnswer::class)
+            ->count(['iid' => $position, 'correct' => $answer, 'question' => $questionId]);
 
-        $count = $em
-            ->createQuery('
-                SELECT COUNT(a) From ChamiloCourseBundle:CQuizAnswer a
-                WHERE a.iid = :position AND a.correct = :answer AND a.questionId = :question
-            ')
-            ->setParameters([
-                'position' => $position,
-                'answer' => $answer,
-                'question' => $questionId,
-            ])
-            ->getSingleScalarResult();
-
-        return $count ? true : false;
+        return (bool) $count;
     }
 }

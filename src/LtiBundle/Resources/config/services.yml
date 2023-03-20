@@ -1,0 +1,17 @@
+# Settings parameters that will be used in the 'services' section
+services:
+  _defaults:
+    autowire: true
+    public: true
+    autoconfigure: true
+
+  Chamilo\LtiBundle\:
+    resource: '../../*'
+    exclude: '../../{Component,Form,ChamiloLtiBundle.php,Entity,Util}'
+    public: true
+
+  Chamilo\LtiBundle\Util\Utils:
+
+  Chamilo\LtiBundle\Controller\:
+    resource: '../../Controller'
+    tags: ['controller.service_arguments']

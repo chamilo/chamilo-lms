@@ -1,16 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Brumann\Polyfill\Unserialize;
-
-/**
- * Class UnserializeApi.
- */
 class UnserializeApi
 {
     /**
-     * Unserialize content using Brummann\Polyfill\Unserialize.
-     *
      * @param string $type
      * @param string $serialized
      *
@@ -98,11 +92,6 @@ class UnserializeApi
                         scormOrganization::class,
                         scormResource::class,
                         Link::class,
-                        LpItem::class,
-                        \Chamilo\CourseBundle\Entity\CLp::class,
-                        \Chamilo\CoreBundle\Entity\Course::class,
-                        \Chamilo\CoreBundle\Entity\ResourceNode::class,
-                        \Chamilo\CoreBundle\Entity\ResourceType::class,
                     ]
                 );
                 break;

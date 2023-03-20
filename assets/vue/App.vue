@@ -1,195 +1,181 @@
 <template>
-  <div class="d-flex flex-column h-100">
-    <transition
-        name="fade"
-        mode="out-in"
-        appear
+  <component
+    :is="layout"
+    :show-breadcrumb="route.meta.showBreadcrumb"
+  >
+    <transition-group
+      name="p-message"
+      tag="div"
     >
-      <Header/>
-    </transition>
-
-    <Sidebar/>
-
-    <main
-        role="main"
-        class="flex-shrink-0"
-    >
-      <b-container fluid>
-        <b-row>
-          <b-col cols="12">
-            <Breadcrumb :legacy="breadcrumb"/>
-            <!--            <snackbar />-->
-            <router-view/>
-
-            <!--            <div class="lang-dropdown">-->
-            <!--              <select v-model="$i18n.locale">-->
-            <!--                <option-->
-            <!--                    v-for="(lang, i) in languageArray"-->
-            <!--                    :key="`lang${i}`"-->
-            <!--                    :value="lang"-->
-            <!--                >-->
-            <!--                  {{ lang }}-->
-            <!--                </option>-->
-            <!--              </select>-->
-            <!--            </div>-->
-
-            <div
-                id="legacy_content"
-                v-html="legacy_content"
-            />
-          </b-col>
-        </b-row>
-      </b-container>
-    </main>
-
-    <Footer/>
-  </div>
+      <Message
+        v-for="(toastObj, index) in flashMessageList"
+        :key="index"
+        :severity="toastObj.severity"
+      >
+        <div v-html="toastObj.detail" />
+      </Message>
+    </transition-group>
+    <slot />
+    <div
+      id="legacy_content"
+      v-html="legacyContent"
+    />
+    <ConfirmDialog />
+  </component>
 </template>
-<style>
-</style>
-<script>
 
-import {mapGetters} from 'vuex';
-
-import NotificationMixin from './mixins/NotificationMixin';
-import Breadcrumb from './components/Breadcrumb';
-import Snackbar from './components/Snackbar';
+<script setup>
+import {computed, onMounted, provide, ref, watch, watchEffect} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {DefaultApolloClient} from '@vue/apollo-composable';
+import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core';
+import {useStore} from "vuex";
 import axios from "axios";
+import {isEmpty} from "lodash";
+import Message from "primevue/message";
+import ConfirmDialog from "primevue/confirmdialog";
 
-import Header from "./components/layout/Header";
-import Sidebar from "./components/layout/Sidebar";
-import Footer from "./components/layout/Footer";
-
-export default {
-  name: "App",
-  components: {
-    Header,
-    Sidebar,
-    Footer,
-    Breadcrumb,
-    Snackbar
-  },
-
-  mixins: [NotificationMixin],
-  data: () => ({
-    drawer: true,
-    breadcrumb: [],
-    languageArray: ['en', 'fr'],
-    courses: [
-      ['Courses', 'mdi-book', 'CourseList'],
-      ['Courses category', 'mdi-book', 'CourseCategoryList'],
-    ],
-    cruds: [
-      ['Create', 'add'],
-      ['Read', 'insert_drive_file'],
-      ['Update', 'update'],
-      ['Delete', 'delete'],
-    ],
-    legacy_content: null,
+const apolloClient = new ApolloClient({
+  link: createHttpLink({
+    uri: '/api/graphql',
   }),
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-    }),
-  },
-  watch: {
-    $route(to, from) {
-      this.$data.legacy_content = '';
-      if (document.querySelector("#sectionMainContent")) {
-        document.querySelector("#sectionMainContent").remove();
-      }
-      let url = window.location.href;
-      var n = url.indexOf("main/");
+  cache: new InMemoryCache(),
+});
 
-      if (n > 0) {
-        axios.get(url, {
-          params: {
-            from_vue: 1
-          }
-        })
-            .then((response) => {
-              // handle success
-              this.$data.legacy_content = response.data;
-            })
-            .catch(function (error) {
-              if (error.response) {
-                // Request made and server responded
-                this.showMessage(error.response.data.detail);
+provide(DefaultApolloClient, apolloClient);
 
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-              } else if (error.request) {
-                // The request was made but no response was received
-                console.log(error.request);
-              } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-              }
-            });
-      }
-    },
-    legacy_content: {
-      handler: function () {
-      },
-      immediate: true
-    },
-  },
-  mounted() {
-    let legacyContent = document.querySelector("#sectionMainContent");
-    if (legacyContent) {
-      document.querySelector("#sectionMainContent").remove();
-      legacyContent.style.display = 'block';
-      this.$data.legacy_content = legacyContent.outerHTML;
-    }
-  },
-  created() {
-    this.$data.legacy_content = '';
+const route = useRoute();
+const router = useRouter();
 
-    let isAuthenticated = false;
-    if (this.$parent.$el.attributes["data-is-authenticated"].value) {
-      isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value);
+const layout = computed(
+  () => {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    if (queryParams.has('lp')
+      || (queryParams.has('origin') && 'learnpath' === queryParams.get('origin'))
+    ) {
+      return 'EmptyLayout';
     }
 
-    let user = null;
-    if (this.$parent.$el.attributes["data-user-json"].value) {
-      user = JSON.parse(this.$parent.$el.attributes["data-user-json"].value);
-    }
-
-    let payload = {isAuthenticated: isAuthenticated, user: user};
-
-    this.$store.dispatch("security/onRefresh", payload);
-    if (this.$parent.$el.attributes["data-flashes"]) {
-      let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
-      if (flashes) {
-        for (const key in flashes) {
-          for (const text in flashes[key]) {
-            this.showMessage(flashes[key][text], key);
-          }
-        }
-      }
-    }
-
-    if (this.$parent.$el.attributes["data-breadcrumb"]) {
-      this.breadcrumb = JSON.parse(this.$parent.$el.attributes["data-breadcrumb"].value);
-    }
-
-    axios.interceptors.response.use(undefined, (err) => {
-      return new Promise(() => {
-        if (err.response.status === 401) {
-          // Redirect to the login if status 401.
-          this.$router.push({path: "/login"}).catch(()=>{});
-        } else if (err.response.status === 500) {
-          document.open();
-          document.write(err.response.data);
-          document.close();
-        }
-        throw err;
-      });
-    });
-  },
-  beforeMount() {
+    return `${router.currentRoute.value.meta.layout ?? 'Dashboard'}Layout`;
   }
+);
+
+const legacyContent = ref('');
+let isFirstTime = false;
+
+onMounted(
+  () => {
+    isFirstTime = true;
+  }
+);
+
+watch(
+  route,
+  () => {
+    legacyContent.value = '';
+
+    const currentUrl = window.location.href;
+
+    if (currentUrl.indexOf('main/') > 0) {
+      if (isFirstTime) {
+        const content = document.querySelector('#sectionMainContent');
+
+        if (content) {
+          content.style.display = 'block';
+          document.querySelector('#sectionMainContent').remove();
+          legacyContent.value = content.outerHTML;
+        }
+      } else {
+        document.querySelector('#sectionMainContent')?.remove();
+
+        window.location.replace(currentUrl);
+      }
+    } else {
+      if (isFirstTime) {
+        const content = document.querySelector("#sectionMainContent");
+
+        if (content) {
+          content.style.display = 'block';
+          document.querySelector("#sectionMainContent").remove();
+          legacyContent.value = content.outerHTML;
+        }
+      } else {
+        document.querySelector("#sectionMainContent")?.remove();
+
+        legacyContent.value = '';
+      }
+    }
+
+    isFirstTime = false;
+  }
+);
+
+watchEffect(
+  async () => {
+    try {
+      const component = `${route.meta.layout}.vue`;
+      layout.value = component?.default || 'Dashboard';
+    } catch (e) {
+      layout.value = 'Dashboard';
+    }
+  }
+);
+
+const user = ref({});
+
+let isAuthenticated = false;
+
+if (!isEmpty(window.user)) {
+  user.value = window.user;
+  isAuthenticated = true;
 }
+
+const store = useStore();
+
+const payload = {isAuthenticated, user};
+
+store.dispatch('security/onRefresh', payload);
+
+const flashMessageList = ref([]);
+
+provide('flashMessageList', flashMessageList);
+
+onMounted(() => {
+  const app = document.getElementById('app');
+
+  if (!(app && app.dataset.flashes)) {
+    return;
+  }
+
+  const flashes = JSON.parse(app.dataset.flashes);
+
+  for (const key in flashes) {
+    for (const flashText in flashes[key]) {
+      flashMessageList.value.push({
+        severity: key,
+        detail: flashes[key][flashText],
+      });
+    }
+  }
+});
+
+axios.interceptors.response.use(
+  undefined,
+  (error) => new Promise(() => {
+    if (401 === error.response.status) {
+      flashMessageList.value.push({
+        severity: 'warn',
+        detail: error.response.data.error,
+      });
+    } else if (500 === error.response.status) {
+      flashMessageList.value.push({
+        severity: 'warn',
+        detail: error.response.data.detail,
+      });
+    }
+
+    throw error;
+  })
+);
 </script>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -7,17 +9,11 @@ namespace Chamilo\CoreBundle\Settings;
 use Doctrine\ORM\NonUniqueResultException;
 use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
 
-/**
- * Class SessionSettingsSchema.
- */
 class SettingsResolver implements SettingsResolverInterface
 {
-    public function resolve($schemaAlias, $namespace = null)
+    public function resolve($schemaAlias, $namespace = null): void
     {
-        try {
-            /*$criteria = [
-                'category' => $schemaAlias,
-            ];*/
+        /*try {
             $criteria = [];
             if (null !== $namespace) {
                 $criteria['category'] = $namespace;
@@ -25,7 +21,11 @@ class SettingsResolver implements SettingsResolverInterface
 
             return $this->settingsRepository->findBy($criteria);
         } catch (NonUniqueResultException $e) {
-            throw new \LogicException(sprintf('Multiple schemas found for "%s". You should probably define a custom settings resolver for this schema.', $schemaAlias));
-        }
+            $message = sprintf(
+                'Multiple schemas found for "%s". You should probably define a custom settings resolver for this schema.',
+                $schemaAlias
+            );
+            throw new \LogicException($message);
+        }*/
     }
 }

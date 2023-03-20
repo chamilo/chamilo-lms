@@ -32,14 +32,16 @@ $(function() {
                 $(this).dialog("close");
             }
             }
-        });
+        })
 
         $("a#assign").click(function () {
             $( "#dialog-form" ).dialog( "open" );
         });
 
         $(".responseyes").click(function () {
-            if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('Yes')).'. '.get_lang('If you are certain, the ticket will be closed.').'")){
+            if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('Yes')).'. '.get_lang(
+        'If you are certain, the ticket will be closed.'
+    ).'")){
                 return false;
             }
         });
@@ -48,8 +50,8 @@ $(function() {
             if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('No')).'")){
                 return false;
             }
-        });     
-       
+        });
+
         '.$disableReponseButtons.'
 });
 
@@ -117,48 +119,39 @@ $htmlHeadXtra[] = '<style>
 }
 </style>';
 
-$ticket_id = (int) $_REQUEST['ticket_id'];
-$ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
-if (!isset($ticket['ticket']) ||
-    // make sure it's either a user assigned to this ticket, or the reporter, or and admin
-    !($ticket['ticket']['assigned_last_user'] == $user_id ||
-      $ticket['ticket']['sys_insert_user_id'] == $user_id ||
-      $isAdmin)
-    ) {
-    api_not_allowed(true);
-}
 if (!isset($_REQUEST['ticket_id'])) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
 
-/*if (isset($_POST['response'])) {
-    if ($user_id == $ticket['ticket']['assigned_last_user'] || api_is_platform_admin()) {
-        $response = $_POST['response'] === '1' ? true : false;
-        $newStatus = TicketManager::STATUS_PENDING;
-        if ($response) {
-            $newStatus = TicketManager::STATUS_CLOSE;
-        }
-        TicketManager::update_ticket_status(
-            TicketManager::getStatusIdFromCode($newStatus),
-            $ticket_id,
-            $user_id
-        );
-        Display::addFlash(Display::return_message(get_lang('Update successful')));
-        header("Location:".api_get_self()."?ticket_id=".$ticket_id);
-        exit;
+$userInfo = api_get_user_info();
+$ticket_id = (int) $_REQUEST['ticket_id'];
+$ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
+if (empty($ticket)) {
+    api_not_allowed(true);
+}
+$projectId = (int) $ticket['ticket']['project_id'];
+$userIsAllowInProject = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
+$allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id
+    || $ticket['ticket']['sys_insert_user_id']
+    == $user_id
+    || $isAdmin;
+
+if (false === $userIsAllowInProject) {
+    // make sure it's either a user assigned to this ticket, or the reporter, or and admin
+    if (false === $allowEdition) {
+        api_not_allowed(true);
     }
-}*/
+}
 
 $title = 'Ticket #'.$ticket['ticket']['code'];
 
-if (isset($_REQUEST['close'])) {
+if ($allowEdition && isset($_REQUEST['close'])) {
     TicketManager::close_ticket($ticket_id, $user_id);
     $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
     $ticket['ticket']['status'] = get_lang('Closed');
 }
 
-$projectId = $ticket['ticket']['project_id'];
 $messages = $ticket['messages'];
 $counter = 1;
 $messageToShow = '';
@@ -185,17 +178,18 @@ foreach ($messages as $message) {
             'class' => 'attachment-link',
         ];
         foreach ($message['attachments'] as $attach) {
-            $attachmentLinks .= Display::tag('div', $attach['attachment_link'], $attributeClass);
+            $attachmentLinks .= Display::tag('div', $attach, $attributeClass);
         }
     }
 
     $entireMessage = $receivedMessage.$attachmentLinks;
     $counterLink = Display::url('#'.$counter, api_get_self().'?ticket_id='.$ticket_id.'#note-'.$counter);
 
-    $messageToShow .= '<a id="note-'.$counter.'"> </a><h4>'.sprintf(
-        get_lang('Update successfulByX'),
-        $message['user_info']['complete_name_with_message_link']
-    );
+    $messageToShow .= '<a id="note-'.$counter.'"> </a><h4>'
+        .sprintf(
+            get_lang('Update successfulByX'),
+            $message['user_info']['complete_name_with_message_link']
+        );
 
     $messageToShow .= ' '.$date.' <span class="pull-right">'.$counterLink.'</span></h4>';
     $messageToShow .= '<hr />';
@@ -211,164 +205,162 @@ foreach ($messages as $message) {
 
 $subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);
 
-if (TicketManager::STATUS_FORWARDED != $ticket['ticket']['status_id'] &&
-    TicketManager::STATUS_CLOSE != $ticket['ticket']['status_id']
+if ($allowEdition
+    && TicketManager::STATUS_FORWARDED != $ticket['ticket']['status_id']
+    && TicketManager::STATUS_CLOSE
+    != $ticket['ticket']['status_id']
 ) {
-    if ($ticket['ticket']['assigned_last_user'] == $user_id ||
-        $ticket['ticket']['sys_insert_user_id'] == $user_id ||
-        $isAdmin
-    ) {
-        $form = getForm($ticket['ticket']);
-        $formToShow = $form->returnForm();
+    $form = getForm($ticket['ticket']);
+    $formToShow = $form->returnForm();
 
-        if ($form->validate()) {
-            $ticket_id = (int) $_POST['ticket_id'];
-            $messageToSend = '';
-            $message = isset($_POST['confirmation']) ? true : false;
-            $file_attachments = $_FILES;
+    if ($form->validate()) {
+        $ticket_id = (int) $_POST['ticket_id'];
+        $messageToSend = '';
+        $message = isset($_POST['confirmation']) ? true : false;
+        $file_attachments = $_FILES;
 
-            if ($isAdmin) {
-                $oldUserId = $ticket['ticket']['assigned_last_user'];
-                if (isset($_POST['assigned_last_user']) && !empty($_POST['assigned_last_user']) &&
-                    $_POST['assigned_last_user'] != $oldUserId
-                ) {
-                    TicketManager::assignTicketToUser(
-                        $ticket_id,
+        if ($isAdmin) {
+            $oldUserId = $ticket['ticket']['assigned_last_user'];
+            if (isset($_POST['assigned_last_user'])
+                && !empty($_POST['assigned_last_user'])
+                && $_POST['assigned_last_user'] != $oldUserId
+            ) {
+                TicketManager::assignTicketToUser(
+                    $ticket_id,
+                    $_POST['assigned_last_user']
+                );
+                $oldUserName = '-';
+                if (!empty($oldUserId)) {
+                    $oldUserInfo = api_get_user_info($oldUserId);
+                    $oldUserName = $oldUserInfo['complete_name_with_message_link'];
+                }
+
+                $userCompleteName = '-';
+                if (!empty($_POST['assigned_last_user'])) {
+                    $userInfo = api_get_user_info(
                         $_POST['assigned_last_user']
                     );
-                    $oldUserName = '-';
-                    if (!empty($oldUserId)) {
-                        $oldUserInfo = api_get_user_info($oldUserId);
-                        $oldUserName = $oldUserInfo['complete_name_with_message_link'];
-                    }
-
-                    $userCompleteName = '-';
-                    if (!empty($_POST['assigned_last_user'])) {
-                        $userInfo = api_get_user_info(
-                            $_POST['assigned_last_user']
-                        );
-                        $userCompleteName = $userInfo['complete_name_with_message_link'];
-                    }
-
-                    $messageToSend .= sprintf(
-                        get_lang('Assignee changed from %s to %s'),
-                        $oldUserName,
-                        $userCompleteName
-                    ).'<br />';
+                    $userCompleteName = $userInfo['complete_name_with_message_link'];
                 }
 
-                TicketManager::updateTicket(
-                    [
-                        'priority_id' => (int) $_POST['priority_id'],
-                        'status_id' => (int) $_POST['status_id'],
-                    ],
-                    $ticket_id,
-                    api_get_user_id()
-                );
-
-                if ($_POST['priority_id'] != $ticket['ticket']['priority_id']) {
-                    $newPriority = TicketManager::getPriority(
-                        $_POST['priority_id']
-                    );
-                    $newPriorityTitle = '-';
-                    if ($newPriority) {
-                        $newPriorityTitle = $newPriority->getName();
-                    }
-                    $oldPriority = TicketManager::getPriority(
-                        $ticket['ticket']['priority_id']
-                    );
-                    $oldPriorityTitle = '-';
-                    if ($oldPriority) {
-                        $oldPriorityTitle = $oldPriority->getName();
-                    }
-                    $messageToSend .= sprintf(
-                        get_lang('Priority changed from %s to %s'),
-                        $oldPriorityTitle,
-                        $newPriorityTitle
-                    ).'<br />';
-                }
-
-                if ($_POST['status_id'] != $ticket['ticket']['status_id']) {
-                    $newStatus = TicketManager::getStatus(
-                        $_POST['status_id']
-                    );
-                    $newTitle = '-';
-                    if ($newStatus) {
-                        $newTitle = $newStatus->getName();
-                    }
-                    $oldStatus = TicketManager::getStatus(
-                        $ticket['ticket']['status_id']
-                    );
-                    $oldStatusTitle = '-';
-                    if ($oldStatus) {
-                        $oldStatusTitle = $oldStatus->getName();
-                    }
-
-                    $messageToSend .= sprintf(
-                        get_lang('Status changed from %s to %s'),
-                        $oldStatusTitle,
-                        $newTitle
-                    ).'<br />';
-                }
+                $messageToSend .= sprintf(
+                    get_lang('Assignee changed from %s to %s'),
+                    $oldUserName,
+                    $userCompleteName
+                ).'<br />';
             }
 
-            $messageToSend .= $_POST['content'];
-
-            TicketManager::insertMessage(
+            TicketManager::updateTicket(
+                [
+                    'priority_id' => (int) $_POST['priority_id'],
+                    'status_id' => (int) $_POST['status_id'],
+                ],
                 $ticket_id,
-                $_POST['subject'],
-                $messageToSend,
-                $file_attachments,
-                $user_id,
-                'NOL',
-                $message
+                api_get_user_id()
             );
 
-            TicketManager::sendNotification(
-                $ticket_id,
-                get_lang('TicketUpdate successful'),
-                $messageToSend
-            );
+            if ($_POST['priority_id'] != $ticket['ticket']['priority_id']) {
+                $newPriority = TicketManager::getPriority(
+                    $_POST['priority_id']
+                );
+                $newPriorityTitle = '-';
+                if ($newPriority) {
+                    $newPriorityTitle = $newPriority->getName();
+                }
+                $oldPriority = TicketManager::getPriority(
+                    $ticket['ticket']['priority_id']
+                );
+                $oldPriorityTitle = '-';
+                if ($oldPriority) {
+                    $oldPriorityTitle = $oldPriority->getName();
+                }
+                $messageToSend .= sprintf(
+                    get_lang('Priority changed from %s to %s'),
+                    $oldPriorityTitle,
+                    $newPriorityTitle
+                ).'<br />';
+            }
 
-            Display::addFlash(Display::return_message(get_lang('Saved.')));
-            header('Location:'.api_get_self().'?ticket_id='.$ticket_id);
-            exit;
+            if ($_POST['status_id'] != $ticket['ticket']['status_id']) {
+                $newStatus = TicketManager::getStatus(
+                    $_POST['status_id']
+                );
+                $newTitle = '-';
+                if ($newStatus) {
+                    $newTitle = $newStatus->getName();
+                }
+                $oldStatus = TicketManager::getStatus(
+                    $ticket['ticket']['status_id']
+                );
+                $oldStatusTitle = '-';
+                if ($oldStatus) {
+                    $oldStatusTitle = $oldStatus->getName();
+                }
+
+                $messageToSend .= sprintf(
+                    get_lang('Status changed from %s to %s'),
+                    $oldStatusTitle,
+                    $newTitle
+                ).'<br />';
+            }
         }
+
+        $messageToSend .= $_POST['content'];
+
+        TicketManager::insertMessage(
+            $ticket_id,
+            $_POST['subject'],
+            $messageToSend,
+            $file_attachments,
+            $user_id,
+            'NOL',
+            $message
+        );
+
+        TicketManager::sendNotification(
+            $ticket_id,
+            get_lang('TicketUpdate successful'),
+            $messageToSend
+        );
+
+        Display::addFlash(Display::return_message(get_lang('Saved.')));
+        header('Location:'.api_get_self().'?ticket_id='.$ticket_id);
+        exit;
     }
 }
 
 Display::display_header();
-echo '<div class="actions">';
-echo Display::url(
+$actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
 );
-echo '</div>';
+echo Display::toolbarAction('ticket', [$actions]);
+
 $bold = '';
 if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
 }
 $senderData = get_lang('added by').' '.$ticket['usuario']['complete_name_with_message_link'];
-
-echo '<table width="100%" >
+echo '<div class="prose">';
+echo '<table width="100%">
         <tr>
           <td colspan="3">
           <h1>'.$title.'</h1>
           <h2>'.Security::remove_XSS($ticket['ticket']['subject']).'</h2>
           <p>
             '.$senderData.' '.
-            get_lang('Created').' '.
-            Display::url(
-                date_to_str_ago($ticket['ticket']['start_date_from_db']),
-                '#',
-                ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
-            ).'. '.
-            get_lang('TicketUpdate successful').' '.
-            Display::url(
-                date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
-                '#',
-                ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'class' => 'boot-tooltip']
-            ).'
+    get_lang('Created').' '.
+    Display::url(
+        date_to_str_ago($ticket['ticket']['start_date_from_db']),
+        '#',
+        ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
+    ).'. '.
+    get_lang('TicketUpdate successful').' '.
+    Display::url(
+        date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
+        '#',
+        ['title' => $ticket['ticket']['sys_lastedit_datetime'], 'class' => 'boot-tooltip']
+    ).'
           </p>
           </td>
         </tr>
@@ -385,11 +377,11 @@ echo '<table width="100%" >
 if (!empty($ticket['ticket']['assigned_last_user'])) {
     $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
     echo '<tr>
-            <td><p><b>'.get_lang('Assigned to').': </b>'.$assignedUser['complete_name_with_message_link'].'<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>'.$assignedUser['complete_name_with_message_link'].'</p></td>
         </tr>';
 } else {
     echo '<tr>
-            <td><p><b>'.get_lang('Assigned to').': </b>-<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>-</p></td>
         </tr>';
 }
 if (null != $ticket['ticket']['course_url']) {
@@ -407,21 +399,35 @@ if (null != $ticket['ticket']['course_url']) {
             <td></td>
             <td colspan="2"></td>
           </tr>';
+    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+        if (!empty($ticket['ticket']['exercise_url'])) {
+            echo '<tr>
+                <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>
+                <td></td>
+                <td colspan="2"></td>
+              </tr>';
+        }
+
+        if (!empty($ticket['ticket']['lp_id'])) {
+            echo '<tr>
+                <td><b>'.get_lang('LearningPath').':</b> '.$ticket['ticket']['lp_url'].' </td>
+                <td></td>
+                <td colspan="2"></td>
+              </tr>';
+        }
+    }
 }
 
 echo '<tr>
         <td>
-        <hr />
-        <b>'.get_lang('Description').':</b> <br />
-        '.Security::remove_XSS($ticket['ticket']['message']).'
-        <hr />
-        </td>            
+            <b>'.get_lang('Description').':</b><br />'.Security::remove_XSS($ticket['ticket']['message']).'
+        </td>
      </tr>
     ';
 echo '</table>';
 
 echo $messageToShow;
-
+echo '</div>';
 echo $formToShow;
 
 Display::display_footer();
@@ -449,16 +455,14 @@ function getForm($ticket)
 
     if ($isAdmin) {
         $statusList = TicketManager::getStatusList();
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'status_id',
             get_lang('Status'),
             $statusList
         );
 
         $priorityList = TicketManager::getPriorityList();
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'priority_id',
             get_lang('Priority'),
             $priorityList,
@@ -471,7 +475,7 @@ function getForm($ticket)
         $form->addSelectAjax(
             'assigned_last_user',
             get_lang('Assign'),
-            null,
+            [],
             ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
         );
 
@@ -525,10 +529,13 @@ function getForm($ticket)
     );
     $form->addLabel(
         '',
-        '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
-         </span>
-         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+        '<span id="link-more-attach"><span class="btn btn--success" onclick="return add_image_form()">'
+        .get_lang('Add one more file')
+        .'</span></span>('
+        .sprintf(
+            get_lang('Maximun file size: %s'),
+            format_file_size((int) api_get_setting('message_max_upload_filesize'))
+        ).')'
     );
 
     $form->addElement('html', '<br/>');

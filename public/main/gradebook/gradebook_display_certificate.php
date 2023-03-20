@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -29,6 +31,11 @@ function confirmation() {
 </script>";
 
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
+$category = null;
+$repo = Container::getGradeBookCategoryRepository();
+if (!empty($categoryId)) {
+    $category = $repo->find($categoryId);
+}
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
@@ -135,7 +142,7 @@ switch ($action) {
                 'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
             if (api_is_student_boss()) {
-                $userGroup = new UserGroup();
+                $userGroup = new UserGroupModel();
                 $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
             } else {
                 $userList = [];
@@ -162,17 +169,13 @@ switch ($action) {
         }
         exit;
     case 'generate_all_certificates':
-        $userList = CourseManager::get_user_list_from_course_code(
-            api_get_course_id(),
-            api_get_session_id()
-        );
-
+        $userList = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
                 if (INVITEE == $userInfo['status']) {
                     continue;
                 }
-                Category::generateUserCertificate($categoryId, $userInfo['user_id']);
+                Category::generateUserCertificate($category, $userInfo['user_id']);
             }
         }
         header('Location: '.$url);
@@ -199,7 +202,7 @@ if ('delete' === $action) {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);
-        $result = $certificate->delete(true);
+        $result = $certificate->deleteCertificate(true);
         Security::clear_token();
         if (true == $result) {
             echo Display::return_message(get_lang('Certificate removed'), 'confirmation');
@@ -327,7 +330,7 @@ if (0 == count($certificate_list)) {
             $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,
-                ['target' => '_blank', 'class' => 'btn btn-default']
+                ['target' => '_blank', 'class' => 'btn btn--plain']
             );
             echo $certificateUrl.PHP_EOL;
 

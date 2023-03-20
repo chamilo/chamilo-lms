@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -22,11 +24,11 @@ class TitleAsHtml extends Basic
                 'groups' => ['basicstyles', 'cleanup'],
                 'items' => ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor', 'BGColor'],
             ],
-//            [
-//                'name' => 'paragraph',
-//                'groups' => ['list', 'indent', 'blocks', 'align', 'bidi'],
-//                'items' => ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
-//            ],
+            //            [
+            //                'name' => 'paragraph',
+            //                'groups' => ['list', 'indent', 'blocks', 'align', 'bidi'],
+            //                'items' => ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
+            //            ],
             [
                 'name' => 'links',
                 'items' => ['Link', 'Unlink', 'Source'],

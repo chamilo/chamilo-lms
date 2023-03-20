@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 
 /**
  * Responses to AJAX calls.
@@ -14,11 +15,11 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 api_block_anonymous_users();
 
-Skill::isAllowed(api_get_user_id());
+SkillModel::isAllowed(api_get_user_id());
 
-$skill = new Skill();
+$skill = new SkillModel();
 $gradebook = new Gradebook();
-$skillGradeBook = new SkillRelGradebook();
+$skillGradeBook = new SkillRelGradebookModel();
 $userId = api_get_user_id();
 
 switch ($action) {
@@ -103,13 +104,13 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
-        $skillRelProfile = new SkillRelProfile();
+        $skillRelProfile = new SkillRelProfileModel();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
         $skills = $skillRelProfile->getSkillsByProfile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
-        $skillProfile = new SkillProfile();
+        $skillProfile = new SkillProfileModel();
         $profiles = $skillProfile->get_all();
         Display::display_no_header();
         Display::$global_template->assign('profiles', $profiles);
@@ -119,7 +120,7 @@ switch ($action) {
     case 'get_skills':
         $loadUserData = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $id = intval($_REQUEST['id']);
-        $skills = $skill->get_all($loadUserData, false, $id);
+        $skills = $skill->getAllSkills($loadUserData, false, $id);
         echo json_encode($skills);
         break;
     case 'get_skill_info':
@@ -215,7 +216,7 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'profile_matches':
-        $skill_rel_user = new SkillRelUser();
+        $skill_rel_user = new SkillRelUserModel();
         $skills = !empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : [];
         $total_skills_to_search = $skills;
         $users = $skill_rel_user->getUserBySkills($skills);
@@ -303,14 +304,14 @@ switch ($action) {
         }
         break;
     case 'get_profile':
-        $skillRelProfile = new SkillRelProfile();
+        $skillRelProfile = new SkillRelProfileModel();
         $profileId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : null;
         $profile = $skillRelProfile->getProfileInfo($profileId);
         echo json_encode($profile);
         break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
-            $skill_profile = new SkillProfile();
+            $skill_profile = new SkillProfileModel();
             $params = $_REQUEST;
             $params['skills'] = isset($params['skill_id']) ? $params['skill_id'] : null;
             $profileId = isset($_REQUEST['profile']) ? intval($_REQUEST['profile']) : null;
@@ -334,7 +335,7 @@ switch ($action) {
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $profileId = $_REQUEST['profile'];
-            $skillProfile = new SkillProfile();
+            $skillProfile = new SkillProfileModel();
             $isDeleted = $skillProfile->delete($profileId);
 
             echo json_encode([
@@ -415,7 +416,7 @@ switch ($action) {
         if (!empty($typeId) && !empty($itemId) && !empty($skillId) && !empty($userId) && !empty($courseId)) {
             $em = Database::getManager();
             $user = api_get_user_entity($userId);
-            $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
+            $skill = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class)->find($skillId);
             if (empty($user) || empty($skill)) {
                 exit;
             }
@@ -435,13 +436,13 @@ switch ($action) {
                     'user' => $userId,
                     'skillRelItem' => $skillRelItem,
                 ];
-                $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skillRelItemRelUser = $em->getRepository(SkillRelItemRelUser::class)->findOneBy($criteria);
                 if ($skillRelItemRelUser) {
                     $em->remove($skillRelItemRelUser);
                     $em->flush();
                     $skillRelItemRelUser = null;
                 } else {
-                    $skillRelItemRelUser = new Chamilo\CoreBundle\Entity\SkillRelItemRelUser();
+                    $skillRelItemRelUser = new SkillRelItemRelUser();
                     $skillRelItemRelUser
                         ->setUser($user)
                         ->setSkillRelItem($skillRelItem)
@@ -453,7 +454,7 @@ switch ($action) {
                     $em->flush();
                 }
             }
-            echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
+            echo SkillModel::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
         }
         break;
     case 'assign_user_to_skill':
@@ -476,7 +477,7 @@ switch ($action) {
         }
 
         $em = Database::getManager();
-        $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+        $skillRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class);
         $skill = $skillRepo->find($skillId);
         $user = api_get_user_entity($userId);
 
@@ -484,7 +485,7 @@ switch ($action) {
             exit;
         }
 
-        $skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
+        $skillUserRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
         $criteria = [
             'user' => $user,
             'skill' => $skill,
@@ -502,7 +503,7 @@ switch ($action) {
             $course = api_get_course_entity($courseId);
             $skillUser->setCourse($course);
             if (!empty($sessionId)) {
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $session = api_get_session_entity($sessionId);
                 $skillUser->setSession($session);
             }
 

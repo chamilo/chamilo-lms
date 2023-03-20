@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Number element.
- *
- * Class Number
- */
 class Number extends HTML_QuickForm_text
 {
     /**

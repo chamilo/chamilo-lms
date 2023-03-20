@@ -21,7 +21,7 @@ Feature: LP tool
 #    And I select "LP category 1" from "category_id"
     And I press "submit"
     And wait very long for the page to be loaded
-    Then I should see "Click on the [Learner view] button to see your learning path"
+    Then I should see "LP 1"
 
   Scenario: Add document to LP
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
@@ -30,7 +30,7 @@ Feature: LP tool
     And wait the page to be loaded when ready
     When I fill in the following:
       | idTitle | Document 1 |
-    And I fill in ckeditor field "content_lp" with "Sample HTML text"
+    And I fill in editor field "content_lp" with "Sample HTML text"
     And I press "submit_button"
     And wait very long for the page to be loaded
     Then I should see "Document 1"

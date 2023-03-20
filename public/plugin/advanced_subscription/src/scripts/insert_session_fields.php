@@ -13,7 +13,7 @@ api_protect_admin_script();
 
 $teachingHours = new ExtraField('session');
 $teachingHours->save([
-    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+    'value_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'teaching_hours',
     'display_text' => get_lang('Lecture hours'),
     'visible_to_self' => 1,
@@ -22,7 +22,7 @@ $teachingHours->save([
 
 $cost = new ExtraField('session');
 $cost->save([
-    'field_type' => ExtraField::FIELD_TYPE_FLOAT,
+    'value_type' => ExtraField::FIELD_TYPE_FLOAT,
     'variable' => 'cost',
     'display_text' => get_lang('Cost'),
     'visible_to_self' => 1,
@@ -31,7 +31,7 @@ $cost->save([
 
 $vacancies = new ExtraField('session');
 $vacancies->save([
-    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+    'value_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'vacancies',
     'display_text' => get_lang('Vacancies'),
     'visible_to_self' => 1,
@@ -40,7 +40,7 @@ $vacancies->save([
 
 $recommendedNumberOfParticipants = new ExtraField('session');
 $recommendedNumberOfParticipants->save([
-    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+    'value_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'recommended_number_of_participants',
     'display_text' => get_lang('Recommended number of participants'),
     'visible_to_self' => 1,
@@ -49,7 +49,7 @@ $recommendedNumberOfParticipants->save([
 
 $place = new ExtraField('session');
 $place->save([
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'value_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'place',
     'display_text' => get_lang('Place/Location'),
     'visible_to_self' => 1,
@@ -58,7 +58,7 @@ $place->save([
 
 $schedule = new ExtraField('session');
 $schedule->save([
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'value_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'schedule',
     'display_text' => get_lang('Schedule'),
     'visible_to_self' => 1,
@@ -67,7 +67,7 @@ $schedule->save([
 
 $allowVisitors = new ExtraField('session');
 $allowVisitors->save([
-    'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+    'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'allow_visitors',
     'display_text' => get_lang('Allow visitors'),
     'visible_to_self' => 1,
@@ -82,7 +82,7 @@ $modeOptions = [
 
 $mode = new ExtraField('session');
 $mode->save([
-    'field_type' => ExtraField::FIELD_TYPE_SELECT,
+    'value_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'mode',
     'display_text' => get_lang('Mode'),
     'visible_to_self' => 1,
@@ -92,7 +92,7 @@ $mode->save([
 
 $isInductionSession = new ExtraField('session');
 $isInductionSession->save([
-    'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+    'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_induction_session',
     'display_text' => get_lang('Induction-type session'),
     'visible_to_self' => 1,
@@ -101,7 +101,7 @@ $isInductionSession->save([
 
 $isOpenSession = new ExtraField('session');
 $isOpenSession->save([
-    'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+    'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_open_session',
     'display_text' => get_lang('Open session'),
     'visible_to_self' => 1,
@@ -110,7 +110,7 @@ $isOpenSession->save([
 
 $duration = new ExtraField('session');
 $duration->save([
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'value_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'human_text_duration',
     'display_text' => get_lang('Duration in words'),
     'visible_to_self' => 1,
@@ -125,7 +125,7 @@ $showStatusOptions = [
 
 $showStatus = new ExtraField('session');
 $showStatus->save([
-    'field_type' => ExtraField::FIELD_TYPE_SELECT,
+    'value_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'show_status',
     'display_text' => get_lang('Show status'),
     'visible_to_self' => 1,
@@ -135,7 +135,7 @@ $showStatus->save([
 
 $publicationStartDate = new ExtraField('session');
 $publicationStartDate->save([
-    'field_type' => ExtraField::FIELD_TYPE_DATE,
+    'value_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_start_date',
     'display_text' => get_lang('Published start date'),
     'visible_to_self' => 1,
@@ -144,7 +144,7 @@ $publicationStartDate->save([
 
 $publicationEndDate = new ExtraField('session');
 $publicationEndDate->save([
-    'field_type' => ExtraField::FIELD_TYPE_DATE,
+    'value_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_end_date',
     'display_text' => get_lang('Published end date'),
     'visible_to_self' => 1,
@@ -153,7 +153,7 @@ $publicationEndDate->save([
 
 $banner = new ExtraField('session');
 $banner->save([
-    'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
+    'value_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
     'variable' => 'banner',
     'display_text' => get_lang('Session banner'),
     'visible_to_self' => 1,
@@ -162,7 +162,7 @@ $banner->save([
 
 $brochure = new ExtraField('session');
 $brochure->save([
-    'field_type' => ExtraField::FIELD_TYPE_FILE,
+    'value_type' => ExtraField::FIELD_TYPE_FILE,
     'variable' => 'brochure',
     'display_text' => get_lang('Brochure'),
     'visible_to_self' => 1,
@@ -176,7 +176,7 @@ $targetOptions = [
 
 $target = new ExtraField('session');
 $target->save([
-    'field_type' => ExtraField::FIELD_TYPE_SELECT,
+    'value_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'target',
     'display_text' => get_lang('Target audience'),
     'visible_to_self' => 1,
@@ -186,7 +186,7 @@ $target->save([
 
 $shortDescription = new ExtraField('session');
 $shortDescription->save([
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'value_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'short_description',
     'display_text' => get_lang('Short description'),
     'visible_to_self' => 1,
@@ -195,7 +195,7 @@ $shortDescription->save([
 
 $id = new ExtraField('session');
 $id->save([
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'value_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'code',
     'display_text' => get_lang('Course code'),
     'visible_to_self' => 1,

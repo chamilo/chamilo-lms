@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,55 +17,38 @@ use Doctrine\ORM\Mapping as ORM;
 class SystemTemplate
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
-    protected $image;
+    protected string $image;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    protected string $content;
 
     public function __construct()
     {
         $this->comment = '';
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return SystemTemplate
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -80,14 +65,7 @@ class SystemTemplate
         return $this->title;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     *
-     * @return SystemTemplate
-     */
-    public function setComment($comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -104,14 +82,7 @@ class SystemTemplate
         return $this->comment;
     }
 
-    /**
-     * Set image.
-     *
-     * @param string $image
-     *
-     * @return SystemTemplate
-     */
-    public function setImage($image)
+    public function setImage(string $image): self
     {
         $this->image = $image;
 
@@ -128,14 +99,7 @@ class SystemTemplate
         return $this->image;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return SystemTemplate
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 

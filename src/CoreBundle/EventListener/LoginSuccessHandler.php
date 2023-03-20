@@ -1,29 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use UserManager;
 
-/**
- * Class LoginSuccessHandler.
- */
 //class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 class LoginSuccessHandler
 {
-    protected $router;
-    protected $checker;
-    protected $settingsManager;
+    protected UrlGeneratorInterface $router;
+    protected AuthorizationCheckerInterface $checker;
+    protected SettingsManager $settingsManager;
 
-    /**
-     * LoginSuccessHandler constructor.
-     */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerInterface $checker,
@@ -35,14 +32,13 @@ class LoginSuccessHandler
     }
 
     /**
-     * @return RedirectResponse|null
+     * @return null|RedirectResponse
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $request = $event->getRequest();
-        $user = $event->getAuthenticationToken()->getUser();
         /** @var User $user */
-        //$user = $token->getUser();
+        $user = $event->getAuthenticationToken()->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
 
@@ -72,7 +68,7 @@ class LoginSuccessHandler
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
 
-        $legacyIndex = $this->router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $legacyIndex = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         // Default redirect:
         $url = $legacyIndex;
@@ -103,7 +99,7 @@ class LoginSuccessHandler
         // Redirecting to a course or a session.
         if ('true' === $goToCourse) {
             // Get the courses list
-            $personal_course_list = \UserManager::get_personal_session_course_list($userId);
+            $personal_course_list = UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];
             $count_of_courses_no_sessions = 0;
             foreach ($personal_course_list as $course) {
@@ -114,15 +110,15 @@ class LoginSuccessHandler
                 }
             }
 
-            $count_of_sessions = count($my_session_list);
-            if (1 == $count_of_sessions && 0 == $count_of_courses_no_sessions) {
+            $count_of_sessions = \count($my_session_list);
+            if (1 === $count_of_sessions && 0 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $sessionId = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$sessionId;
             }
 
-            if (0 == $count_of_sessions && 1 == $count_of_courses_no_sessions) {
+            if (0 === $count_of_sessions && 1 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';

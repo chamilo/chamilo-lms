@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
  * Library for the import of Aiken format.
  *
@@ -43,66 +44,6 @@ function aiken_display_form()
 }
 
 /**
- * Gets the uploaded file (from $_FILES) and unzip it to the given directory.
- *
- * @param string The directory where to do the work
- * @param string The path of the temporary directory where the exercise was uploaded and unzipped
- * @param string $baseWorkDir
- * @param string $uploadPath
- *
- * @return bool True on success, false on failure
- */
-function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
-{
-    $_course = api_get_course_info();
-    $_user = api_get_user_info();
-
-    // Check if the file is valid (not to big and exists)
-    if (!isset($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
-        // upload failed
-        return false;
-    }
-
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
-            $_course,
-            $_FILES['userFile'],
-            $baseWorkDir,
-            $uploadPath,
-            $_user['user_id'],
-            0,
-            null,
-            1,
-            'overwrite',
-            false
-        )
-    ) {
-        if (!function_exists('gzopen')) {
-            return false;
-        }
-        // upload successful
-        return true;
-    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
-            $_course,
-            $_FILES['userFile'],
-            $baseWorkDir,
-            $uploadPath,
-            $_user['user_id'],
-            0,
-            null,
-            0,
-            'overwrite',
-            false
-        )
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Main function to import the Aiken exercise.
  *
  * @param string $file
@@ -111,63 +52,19 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
  */
 function aiken_import_exercise($file)
 {
-    $archive_path = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
-    $baseWorkDir = $archive_path;
-
-    if (!is_dir($baseWorkDir)) {
-        mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
-    }
-
-    $uploadPath = 'aiken_'.api_get_unique_id().'/';
-
     // set some default values for the new exercise
     $exercise_info = [];
-    $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
+    $exercise_info['name'] = preg_replace('/.(txt)$/i', '', $file);
     $exercise_info['question'] = [];
 
     // if file is not a .zip, then we cancel all
-    if (!preg_match('/.(zip|txt)$/i', $file)) {
-        return 'YouMustUploadAZipOrTxtFile';
+    if (!preg_match('/.(zip)$/i', $file)) {
+        return 'You must upload a .txt file';
     }
 
-    // unzip the uploaded file in a tmp directory
-    if (preg_match('/.(zip|txt)$/i', $file)) {
-        if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-            return 'ThereWasAProblemWithYourFile';
-        }
-    }
-
-    // find the different manifests for each question and parse them
-    $exerciseHandle = opendir($baseWorkDir.$uploadPath);
     $file_found = false;
     $operation = false;
-    $result = false;
-
-    // Parse every subdirectory to search txt question files
-    while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$uploadPath.$file) && '.' != $file && '..' != $file) {
-            //find each manifest for each question repository found
-            $questionHandle = opendir($baseWorkDir.'/'.$uploadPath.$file);
-            while (false !== ($questionFile = readdir($questionHandle))) {
-                if (preg_match('/.txt$/i', $questionFile)) {
-                    $result = aiken_parse_file(
-                        $exercise_info,
-                        $baseWorkDir,
-                        $file,
-                        $questionFile
-                    );
-                    $file_found = true;
-                }
-            }
-        } elseif (preg_match('/.txt$/i', $file)) {
-            $result = aiken_parse_file($exercise_info, $baseWorkDir.$uploadPath, '', $file);
-            $file_found = true;
-        }
-    }
-
-    if (!$file_found) {
-        $result = 'NoTxtFileFoundInTheZip';
-    }
+    $result = aiken_parse_file($exercise_info, $file);
 
     if (true !== $result) {
         return $result;
@@ -177,14 +74,13 @@ function aiken_import_exercise($file)
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
-    $last_exercise_id = $exercise->selectId();
+    $last_exercise_id = $exercise->getId();
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
-        // For each question found...
         $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
-            // 2.create question
+            // 2. Create question.
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();
@@ -196,7 +92,7 @@ function aiken_import_exercise($file)
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($exercise);
-            $last_question_id = $question->selectId();
+            $last_question_id = $question->getId();
 
             // 3. Create answer
             $answer = new Answer($last_question_id, $courseId, $exercise, false);
@@ -249,8 +145,7 @@ function aiken_import_exercise($file)
                 $answerId = Database::insert($tableAnswer, $params);
                 if ($answerId) {
                     $params = [
-                        'id_auto' => $answerId,
-                        'id' => $answerId,
+                        'iid' => $answerId,
                     ];
                     Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
                 }
@@ -260,8 +155,6 @@ function aiken_import_exercise($file)
                 $max_score = $scoreFromFile;
             }
 
-            //$answer->save();
-
             $params = ['ponderation' => $max_score];
             Database::update(
                 $tableQuestion,
@@ -270,8 +163,6 @@ function aiken_import_exercise($file)
             );
         }
 
-        // Delete the temp dir where the exercise was unzipped
-        my_delete($baseWorkDir.$uploadPath);
         $operation = $last_exercise_id;
     }
 
@@ -293,15 +184,13 @@ function aiken_import_exercise($file)
  * @return string|bool True on success, error message on error
  * @assert ('','','') === false
  */
-function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
+function aiken_parse_file(&$exercise_info, $file)
 {
-    $questionTempDir = $exercisePath.'/'.$file.'/';
-    $questionFilePath = $questionTempDir.$questionFile;
-
-    if (!is_file($questionFilePath)) {
+    if (!is_file($file)) {
         return 'FileNotFound';
     }
-    $text = file_get_contents($questionFilePath);
+
+    $text = file_get_contents($file);
     $detect = mb_detect_encoding($text, 'ASCII', true);
     if ('ASCII' === $detect) {
         $data = explode("\n", $text);
@@ -315,7 +204,6 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     foreach ($data as $line => $info) {
         $info = trim($info);
         if (empty($info)) {
-            // double empty line
             continue;
         }
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
@@ -339,6 +227,9 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                 continue;
             }
 
+            if (false !== strpos($data[$next], 'DESCRIPTION:')) {
+                continue;
+            }
             // Check if next has score, otherwise loop too next question.
             if (false === strpos($data[$next], 'SCORE:')) {
                 $answers_array = [];
@@ -352,6 +243,17 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             continue;
         } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['description'] = $matches[1];
+            $next = $line + 1;
+
+            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
+                continue;
+            }
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);

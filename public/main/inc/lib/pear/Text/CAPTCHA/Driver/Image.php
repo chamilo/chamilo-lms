@@ -234,7 +234,7 @@ class Text_CAPTCHA_Driver_Image extends Text_CAPTCHA_Driver_Base
      *
      * @return string image contents
      */
-    private function _getCAPTCHAAsJPEG($image)
+    public function _getCAPTCHAAsJPEG($image)
     {
         ob_start();
         imagejpeg($image);

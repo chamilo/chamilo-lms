@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CourseRequest.
- *
- * @ORM\Table(name="course_request", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
+ * @ORM\Table(name="course_request", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="code", columns={"code"})
+ * })
  * @ORM\Entity
  */
 class CourseRequest
@@ -18,143 +22,90 @@ class CourseRequest
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
-    protected $code;
+    #[Assert\NotBlank]
+    protected string $code;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="directory", type="string", length=40, nullable=true)
+     * @ORM\Column(name="course_language", type="string", length=20, nullable=false)
      */
-    protected $directory;
+    protected string $courseLanguage;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="db_name", type="string", length=40, nullable=true)
+     * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $dbName;
+    protected string $title;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_language", type="string", length=20, nullable=true)
-     */
-    protected $courseLanguage;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=250, nullable=true)
-     */
-    protected $title;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="category_code", type="string", length=40, nullable=true)
      */
-    protected $categoryCode;
+    protected ?string $categoryCode = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true)
      */
-    protected $tutorName;
+    protected ?string $tutorName = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="visual_code", type="string", length=40, nullable=true)
      */
-    protected $visualCode;
+    protected ?string $visualCode = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="request_date", type="datetime", nullable=false)
      */
-    protected $requestDate;
+    protected DateTime $requestDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="objetives", type="text", nullable=true)
      */
-    protected $objetives;
+    protected ?string $objetives = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="target_audience", type="text", nullable=true)
      */
-    protected $targetAudience;
+    protected ?string $targetAudience = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    protected $status;
+    protected int $status;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="info", type="integer", nullable=false)
      */
-    protected $info;
+    protected int $info;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exemplary_content", type="integer", nullable=false)
      */
-    protected $exemplaryContent;
+    protected int $exemplaryContent;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->requestDate = new \DateTime();
+        $this->requestDate = new DateTime();
     }
 
-    /**
-     * Set code.
-     *
-     * @param string $code
-     *
-     * @return CourseRequest
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -171,62 +122,7 @@ class CourseRequest
         return $this->code;
     }
 
-    /**
-     * Set directory.
-     *
-     * @param string $directory
-     *
-     * @return CourseRequest
-     */
-    public function setDirectory($directory)
-    {
-        $this->directory = $directory;
-
-        return $this;
-    }
-
-    /**
-     * Get directory.
-     *
-     * @return string
-     */
-    public function getDirectory()
-    {
-        return $this->directory;
-    }
-
-    /**
-     * Set dbName.
-     *
-     * @param string $dbName
-     *
-     * @return CourseRequest
-     */
-    public function setDbName($dbName)
-    {
-        $this->dbName = $dbName;
-
-        return $this;
-    }
-
-    /**
-     * Get dbName.
-     *
-     * @return string
-     */
-    public function getDbName()
-    {
-        return $this->dbName;
-    }
-
-    /**
-     * Set courseLanguage.
-     *
-     * @param string $courseLanguage
-     *
-     * @return CourseRequest
-     */
-    public function setCourseLanguage($courseLanguage)
+    public function setCourseLanguage(string $courseLanguage): self
     {
         $this->courseLanguage = $courseLanguage;
 
@@ -243,14 +139,7 @@ class CourseRequest
         return $this->courseLanguage;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CourseRequest
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -267,14 +156,7 @@ class CourseRequest
         return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CourseRequest
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -291,14 +173,7 @@ class CourseRequest
         return $this->description;
     }
 
-    /**
-     * Set categoryCode.
-     *
-     * @param string $categoryCode
-     *
-     * @return CourseRequest
-     */
-    public function setCategoryCode($categoryCode)
+    public function setCategoryCode(string $categoryCode): self
     {
         $this->categoryCode = $categoryCode;
 
@@ -315,14 +190,7 @@ class CourseRequest
         return $this->categoryCode;
     }
 
-    /**
-     * Set tutorName.
-     *
-     * @param string $tutorName
-     *
-     * @return CourseRequest
-     */
-    public function setTutorName($tutorName)
+    public function setTutorName(string $tutorName): self
     {
         $this->tutorName = $tutorName;
 
@@ -339,14 +207,7 @@ class CourseRequest
         return $this->tutorName;
     }
 
-    /**
-     * Set visualCode.
-     *
-     * @param string $visualCode
-     *
-     * @return CourseRequest
-     */
-    public function setVisualCode($visualCode)
+    public function setVisualCode(string $visualCode): self
     {
         $this->visualCode = $visualCode;
 
@@ -363,14 +224,7 @@ class CourseRequest
         return $this->visualCode;
     }
 
-    /**
-     * Set requestDate.
-     *
-     * @param \DateTime $requestDate
-     *
-     * @return CourseRequest
-     */
-    public function setRequestDate($requestDate)
+    public function setRequestDate(DateTime $requestDate): self
     {
         $this->requestDate = $requestDate;
 
@@ -380,21 +234,14 @@ class CourseRequest
     /**
      * Get requestDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getRequestDate()
     {
         return $this->requestDate;
     }
 
-    /**
-     * Set objetives.
-     *
-     * @param string $objetives
-     *
-     * @return CourseRequest
-     */
-    public function setObjetives($objetives)
+    public function setObjetives(string $objetives): self
     {
         $this->objetives = $objetives;
 
@@ -411,14 +258,7 @@ class CourseRequest
         return $this->objetives;
     }
 
-    /**
-     * Set targetAudience.
-     *
-     * @param string $targetAudience
-     *
-     * @return CourseRequest
-     */
-    public function setTargetAudience($targetAudience)
+    public function setTargetAudience(string $targetAudience): self
     {
         $this->targetAudience = $targetAudience;
 
@@ -435,14 +275,7 @@ class CourseRequest
         return $this->targetAudience;
     }
 
-    /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return CourseRequest
-     */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -459,14 +292,7 @@ class CourseRequest
         return $this->status;
     }
 
-    /**
-     * Set info.
-     *
-     * @param int $info
-     *
-     * @return CourseRequest
-     */
-    public function setInfo($info)
+    public function setInfo(int $info): self
     {
         $this->info = $info;
 
@@ -483,14 +309,7 @@ class CourseRequest
         return $this->info;
     }
 
-    /**
-     * Set exemplaryContent.
-     *
-     * @param int $exemplaryContent
-     *
-     * @return CourseRequest
-     */
-    public function setExemplaryContent($exemplaryContent)
+    public function setExemplaryContent(int $exemplaryContent): self
     {
         $this->exemplaryContent = $exemplaryContent;
 

@@ -2,7 +2,7 @@
     {{ meeting.typeName }} {{ meeting.meetingId }}
 </h4>
 
-<a class="btn btn-primary" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
+<a class="btn btn--primary" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
     {{ 'Edit'|get_lang }}
 </a>
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceTypeEntity
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ent_table", type="string", length=255, nullable=false)
      */
-    protected $entityTable;
+    protected string $entityTable;
 
     /**
      * Get id.
@@ -63,11 +57,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $name
-     *
      * @return SequenceTypeEntity
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -83,11 +75,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceTypeEntity
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -103,11 +93,9 @@ class SequenceTypeEntity
     }
 
     /**
-     * @param string $entityTable
-     *
      * @return SequenceTypeEntity
      */
-    public function setEntityTable($entityTable)
+    public function setEntityTable(string $entityTable): self
     {
         $this->entityTable = $entityTable;
 

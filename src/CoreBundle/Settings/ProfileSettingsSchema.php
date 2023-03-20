@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -10,12 +12,9 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class ProfileSettingsSchema.
- */
 class ProfileSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -50,7 +49,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add(
@@ -76,14 +75,19 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'extended_profile',
                 YesNoType::class,
-                ['label' => 'ExtendedProfileTitle', 'help' => 'ExtendedProfileComment']
+                [
+                    'label' => 'ExtendedProfileTitle',
+                    'help' => 'ExtendedProfileComment',
+                ]
             )
             ->add('account_valid_duration')
             ->add('split_users_upload_directory', YesNoType::class)
             ->add('user_selected_theme', YesNoType::class)
             ->add('use_users_timezone', YesNoType::class)
             ->add('allow_users_to_change_email_with_no_password', YesNoType::class)
-            ->add('login_is_email', YesNoType::class, ['label' => 'LoginIsEmailTitle'])
+            ->add('login_is_email', YesNoType::class, [
+                'label' => 'LoginIsEmailTitle',
+            ])
             ->add('profiling_filter_adding_users', YesNoType::class)
             ->add('enable_profile_user_address_geolocalization', YesNoType::class)
             ->add('allow_show_skype_account', YesNoType::class)

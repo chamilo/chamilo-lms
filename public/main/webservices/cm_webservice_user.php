@@ -96,7 +96,7 @@ class WSCMUser extends WSCM
         return "0";
     }
 
-    public function send_invitation(
+    /*public function send_invitation(
         $username,
         $password,
         $userfriend_id,
@@ -166,7 +166,7 @@ class WSCMUser extends WSCM
         }
 
         return get_lang('Login failed - incorrect login or password.');
-    }
+    }*/
 
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
@@ -195,7 +195,7 @@ class WSCMUser extends WSCM
         }
         $order = '';
         foreach ($order_by as $orderByItem) {
-            $order .= Database::escape_string($orderByItem, null, false).', ';
+            $order .= Database::escape_string($orderByItem).', ';
         }
         $order = substr($order, 0, -2);
         if (count($order_by) > 0) {

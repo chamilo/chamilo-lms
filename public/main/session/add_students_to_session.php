@@ -26,7 +26,8 @@ $form_sent = 0;
 $errorMsg = '';
 $users = $sessions = [];
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-SessionManager::protectSession($id);
+$session = api_get_session_entity($id);
+SessionManager::protectSession($session);
 
 $htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {

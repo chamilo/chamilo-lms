@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CCourseDescription.
- *
- * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
- * @ORM\Entity
+ * @ORM\Table(name="c_course_description")
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCourseDescriptionRepository")
  */
-class CCourseDescription extends AbstractResource implements ResourceInterface
+class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     public const TYPE_DESCRIPTION = 1;
     public const TYPE_OBJECTIVES = 2;
@@ -27,63 +28,37 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public const TYPE_CUSTOM = 8;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected ?string $title = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
-    protected $descriptionType;
+    #[Assert\Choice(callback: 'getTypes')]
+    protected int $descriptionType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
-    protected $progress;
+    protected int $progress;
 
-    /**
-     * CCourseDescription constructor.
-     */
     public function __construct()
     {
+        $this->content = '';
         $this->progress = 0;
         $this->descriptionType = 1;
     }
@@ -93,14 +68,21 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CCourseDescription
-     */
-    public function setTitle($title)
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_DESCRIPTION,
+            self::TYPE_OBJECTIVES,
+            self::TYPE_TOPICS,
+            self::TYPE_METHODOLOGY,
+            self::TYPE_COURSE_MATERIAL,
+            self::TYPE_RESOURCES,
+            self::TYPE_ASSESSMENT,
+            self::TYPE_CUSTOM,
+        ];
+    }
+
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -117,14 +99,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return CCourseDescription
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -141,38 +116,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->content;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CCourseDescription
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set descriptionType.
-     *
-     * @param int $descriptionType
-     *
-     * @return CCourseDescription
-     */
-    public function setDescriptionType($descriptionType)
+    public function setDescriptionType(int $descriptionType): self
     {
         $this->descriptionType = $descriptionType;
 
@@ -189,14 +133,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->descriptionType;
     }
 
-    /**
-     * Set progress.
-     *
-     * @param int $progress
-     *
-     * @return CCourseDescription
-     */
-    public function setProgress($progress)
+    public function setProgress(int $progress): self
     {
         $this->progress = $progress;
 
@@ -214,30 +151,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CCourseDescription
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * @return int
      */
     public function getIid()
@@ -245,9 +158,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -1,0 +1,11 @@
+.p-progressbar {
+  @apply bg-gray-30 rounded-full border-none h-1.5;
+
+  &-value {
+    @apply bg-primary;
+  }
+
+  &-label {
+    @apply text-white;
+  }
+}

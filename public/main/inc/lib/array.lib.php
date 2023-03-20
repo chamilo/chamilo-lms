@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * This is the array library for Chamilo.
- * Include/require it in your code to use its functionality.
- */
 
 /**
+ * This is the array library for Chamilo.
+
  * Removes duplicate values from a dimensional array.
  *
  * @param array $array dimensional array
@@ -51,7 +50,7 @@ function msort($array, $id = 'id', $order = 'desc')
         $lowest_id = 0;
         $index = 0;
         foreach ($array as $item) {
-            if ('desc' == $order) {
+            if ('desc' === $order) {
                 if (strip_tags($item[$id]) < strip_tags($array[$lowest_id][$id])) {
                     $lowest_id = $index;
                 }

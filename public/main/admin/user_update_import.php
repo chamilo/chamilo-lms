@@ -25,7 +25,7 @@ function validate_data($users)
     $errors = [];
     $usernames = [];
     $classExistList = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
 
     foreach ($users as $user) {
         // 2. Check username, first, check whether it is empty.
@@ -93,7 +93,7 @@ function updateUsers(
     $resetPassword = false,
     $sendEmail = false)
 {
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     if (is_array($users)) {
         foreach ($users as $user) {
             if (isset($user['Status'])) {
@@ -141,7 +141,7 @@ function updateUsers(
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
             //$sendEmail = false;
             // see BT#17893
-            if ($resetPassword && $sendEmail == false) {
+            if ($resetPassword && false == $sendEmail) {
                 $sendEmail = true;
             }
 
@@ -174,7 +174,8 @@ function updateUsers(
             if (!empty($user['Courses']) && is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
-                        CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                        $courseInfo = api_get_course_info($course);
+                        CourseManager::subscribeUser($user_id, $courseInfo['real_id'], $user['Status']);
                     }
                 }
             }
@@ -251,7 +252,7 @@ function parse_xml_data($file)
     foreach ($crawler as $domElement) {
         $row = [];
         foreach ($domElement->childNodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ('#text' != $node->nodeName) {
                 $row[$node->nodeName] = $node->nodeValue;
             }
         }
@@ -301,7 +302,7 @@ if ($form->validate()) {
 
         $uploadInfo = pathinfo($_FILES['import_file']['name']);
 
-        if ($uploadInfo['extension'] !== 'csv') {
+        if ('csv' !== $uploadInfo['extension']) {
             Display::addFlash(
                 Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error')
             );
@@ -386,17 +387,20 @@ if ($count_fields > 0) {
     }
 }
 
-?>
-    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+$content = '<p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').') :</p>
     <blockquote>
     <pre>
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
-            style="color:red;"><?php if (count($list_reponse) > 0) {
-    echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;1;<br/>
+        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;
+        <span style="color:red;">';
+if (count($list_reponse) > 0) {
+    $content .= implode(';', $list_reponse).';';
+} else {
+    $content .= '</span>xxx1|xxx2|xxx3;1;<br/>
     </pre>
     </blockquote>
     <p>
-<?php
+    ';
+}
+echo Display::prose($content);
 Display::display_footer();

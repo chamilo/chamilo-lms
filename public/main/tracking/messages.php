@@ -70,11 +70,11 @@ $content = Display::page_subheader2(sprintf(
 ));
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
+    'url' => api_get_path(WEB_CODE_PATH).'my_space/student.php',
     'name' => get_lang('My learners'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$fromUserId,
+    'url' => api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$fromUserId,
     'name' => get_lang('Learner details'),
 ];
 

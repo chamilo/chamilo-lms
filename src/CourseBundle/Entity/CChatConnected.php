@@ -1,78 +1,67 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CChatConnected.
  *
  * @ORM\Table(
- *  name="c_chat_connected",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user", columns={"user_id"}),
- *      @ORM\Index(name="char_connected_index", columns={"user_id", "session_id", "to_group_id"})
- *  }
+ *     name="c_chat_connected",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="user", columns={"user_id"}),
+ *         @ORM\Index(name="char_connected_index", columns={"user_id", "session_id", "to_group_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CChatConnected
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="to_group_id", type="integer", nullable=false)
      */
-    protected $toGroupId;
+    protected int $toGroupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="last_connection", type="datetime")
      */
-    protected $lastConnection;
+    protected DateTime $lastConnection;
 
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CChatConnected
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -92,11 +81,9 @@ class CChatConnected
     /**
      * Set toGroupId.
      *
-     * @param int $toGroupId
-     *
      * @return CChatConnected
      */
-    public function setToGroupId($toGroupId)
+    public function setToGroupId(int $toGroupId)
     {
         $this->toGroupId = $toGroupId;
 
@@ -116,11 +103,9 @@ class CChatConnected
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CChatConnected
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -140,11 +125,9 @@ class CChatConnected
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CChatConnected
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -164,11 +147,9 @@ class CChatConnected
     /**
      * Set lastConnection.
      *
-     * @param \DateTime $lastConnection
-     *
      * @return CChatConnected
      */
-    public function setLastConnection($lastConnection)
+    public function setLastConnection(DateTime $lastConnection)
     {
         $this->lastConnection = $lastConnection;
 
@@ -178,7 +159,7 @@ class CChatConnected
     /**
      * Get lastConnection.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastConnection()
     {

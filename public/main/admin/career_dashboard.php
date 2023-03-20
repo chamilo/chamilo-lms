@@ -120,9 +120,7 @@ if (!empty($careers)) {
                 );
                 $session_list = [];
                 foreach ($sessions as $session_item) {
-                    $course_list = SessionManager::get_course_list_by_session_id(
-                        $session_item['id']
-                    );
+                    $course_list = SessionManager::get_course_list_by_session_id($session_item['id']);
                     $session_list[] = [
                         'data' => $session_item,
                         'courses' => $course_list,

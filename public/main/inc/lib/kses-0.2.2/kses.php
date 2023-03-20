@@ -631,7 +631,7 @@ function kses_html_error($string)
  */
 function kses_bad_protocol_once($string, $allowed_protocols)
 {
-    $string2 = preg_split('/:|&#0*58;|&#x0*3a;/i', $string, 2);
+    $string2 = preg_split('/:|&#0*58;|&#x0*3a;|&colon;/i', $string, 2);
     if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
     {
         $string = kses_bad_protocol_once2($string2[0],$allowed_protocols).trim($string2[1]);

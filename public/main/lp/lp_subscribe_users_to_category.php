@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpCategoryUser;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -78,12 +78,11 @@ $links = $category->getResourceNode()->getResourceLinks();
 $selectedGroupChoices = [];
 foreach ($links as $link) {
     if (null !== $link->getGroup()) {
-        $selectedGroupChoices[] = $link->getGroup()->getId();
+        $selectedGroupChoices[] = $link->getGroup()->getIid();
     }
 }
 
-$groupMultiSelect = $form->addElement(
-    'advmultiselect',
+$groupMultiSelect = $form->addMultiSelect(
     'groups',
     get_lang('Groups'),
     $groupChoices
@@ -96,7 +95,7 @@ if ($allowUserGroups) {
     $formUserGroup = new FormValidator('lp_edit', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $conditions = [];
     $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
     $groups = $userGroup->getUserGroupInCourse($conditions);
@@ -112,8 +111,7 @@ if ($allowUserGroups) {
         }
     }
 
-    $userGroupMultiSelect = $formUserGroup->addElement(
-        'advmultiselect',
+    $userGroupMultiSelect = $formUserGroup->addMultiSelect(
         'usergroups',
         get_lang('Classes'),
         $allOptions
@@ -191,7 +189,7 @@ if ($allowUserGroups) {
                 }
             }
 
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         } else {
@@ -207,7 +205,7 @@ if ($allowUserGroups) {
                         $sessionCondition
                     ";
             Database::query($sql);
-            $em->merge($category);
+            $em->persist($category);
             $em->flush();
         }
         header("Location: $url");
@@ -252,8 +250,7 @@ $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 $formUsers->addLabel('', $message);
 
-$userMultiSelect = $formUsers->addElement(
-    'advmultiselect',
+$userMultiSelect = $formUsers->addMultiSelect(
     'users',
     get_lang('Users'),
     $choices
@@ -269,7 +266,6 @@ $formUsers->setDefaults($defaults);
 
 // Building the form for Groups
 $tpl = new Template();
-
 
 if ($formUsers->validate()) {
     $values = $formUsers->getSubmitValues();
@@ -316,21 +312,21 @@ if ($formUsers->validate()) {
                 foreach ($diff as $groupIdToDelete) {
                     foreach ($links as $link) {
                         if ($link->getGroup() && $link->getGroup()->getIid()) {
-                            $repo->getEntityManager()->remove($link);
+                            $em->remove($link);
                         }
                     }
                 }
-                $repo->getEntityManager()->flush();
+                $em->flush();
             }
         }
 
         foreach ($groups as $groupId) {
             $group = api_get_group_entity($groupId);
-            $category->addGroupLink($group);
+            $category->addGroupLink($course, $group);
         }
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $em->persist($category);
+        $em->flush();
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }

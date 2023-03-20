@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,29 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class UserFriendRelationType
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=20, nullable=true)
+     * @ORM\Column(name="title", type="string", length=20, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return UserFriendRelationType
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -62,15 +58,5 @@ class UserFriendRelationType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 }

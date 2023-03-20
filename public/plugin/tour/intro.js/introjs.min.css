@@ -253,7 +253,7 @@
 .tour-warning:focus,
 .tour-warning:active,
 .tour-warning.active,
-.open > .dropdown-toggle.btn-warning {
+.open > .dropdown-toggle.btn--warning {
   color: #fff;
   background-color: #EC7063;
 }

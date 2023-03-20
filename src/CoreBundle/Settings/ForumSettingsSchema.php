@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,12 +11,9 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class ForumSettingsSchema.
- */
 class ForumSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -31,7 +30,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add(
@@ -45,6 +44,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('display_groups_forum_in_general_tool', YesNoType::class);
+            ->add('display_groups_forum_in_general_tool', YesNoType::class)
+        ;
     }
 }

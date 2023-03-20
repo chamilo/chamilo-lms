@@ -16,12 +16,10 @@ define('DB_COURSE_PREFIX', 'c_');
 // Main database tables
 define('TABLE_MAIN_COURSE', 'course');
 define('TABLE_MAIN_USER', 'user');
-define('TABLE_MAIN_CLASS', 'class_item');
 define('TABLE_MAIN_ADMIN', 'admin');
 define('TABLE_MAIN_COURSE_CLASS', 'course_rel_class');
 define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
 define('TABLE_MAIN_COURSE_CATALOGUE_USER', 'course_rel_user_catalogue');
-define('TABLE_MAIN_CLASS_USER', 'class_user');
 define('TABLE_MAIN_CATEGORY', 'course_category');
 define('TABLE_MAIN_COURSE_REL_CATEGORY', 'course_rel_category');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
@@ -35,9 +33,6 @@ define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');
 define('TABLE_MAIN_SESSION_USER', 'session_rel_user');
 define('TABLE_MAIN_SESSION_CLASS', 'session_rel_class');
 define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
-define('TABLE_MAIN_SHARED_SURVEY', 'shared_survey');
-define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
-define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES', 'templates');
 define('TABLE_MAIN_SYSTEM_TEMPLATE', 'system_template');
 define('TABLE_MAIN_COURSE_REQUEST', 'course_request');
@@ -53,6 +48,7 @@ define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 'gradebook_certificate');
 define('TABLE_MAIN_GRADEBOOK_SCORE_LOG', 'gradebook_score_log');
 define('TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT', 'gradebook_result_attempt');
+define('TABLE_MAIN_GRADEBOOK_COMMENT', 'gradebook_comment');
 
 // Profiling
 define('TABLE_EXTRA_FIELD', 'extra_field');
@@ -62,14 +58,6 @@ define('TABLE_EXTRA_FIELD_VALUES', 'extra_field_values');
 define('TABLE_MAIN_USER_FIELD', 'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS', 'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES', 'user_field_values');
-
-/*define('TABLE_MAIN_LP_FIELD', 'lp_field');
-define('TABLE_MAIN_LP_FIELD_OPTIONS', 'lp_field_options');
-define('TABLE_MAIN_LP_FIELD_VALUES', 'lp_field_values');*/
-
-/*define('TABLE_MAIN_CALENDAR_EVENT_FIELD', 'calendar_event_field');
-define('TABLE_MAIN_CALENDAR_EVENT_OPTIONS', 'calendar_event_options');
-define('TABLE_MAIN_CALENDAR_EVENT_VALUES', 'calendar_event_values');*/
 
 //User tags
 define('TABLE_MAIN_TAG', 'tag');
@@ -130,7 +118,7 @@ define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording')
 define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS', 'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 'track_e_hotspot');
-define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
+//define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS', 'track_filtered_terms');
 
 // Course catalog stats see #4191
@@ -147,7 +135,6 @@ define('TABLE_ANNOUNCEMENT_ATTACHMENT', 'announcement_attachment');
 define('TABLE_CHAT_CONNECTED', 'chat_connected');
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
 define('TABLE_DOCUMENT', 'document');
-define('TABLE_ITEM_PROPERTY', 'item_property');
 define('TABLE_LINK', 'link');
 define('TABLE_LINK_CATEGORY', 'link_category');
 define('TABLE_TOOL_LIST', 'tool');
@@ -203,40 +190,17 @@ define('TABLE_LP_ITEM_VIEW', 'lp_item_view');
 define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 define('TABLE_LP_IV_OBJECTIVE', 'lp_iv_objective'); // IV = Item View
 define('TABLE_LP_CATEGORY', 'lp_category');
-
-// Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
-// Permission tables
-define('TABLE_PERMISSION_USER', 'permission_user');
-define('TABLE_PERMISSION_TASK', 'permission_task');
-define('TABLE_PERMISSION_GROUP', 'permission_group');
-// Role tables
-define('TABLE_ROLE', 'role');
-define('TABLE_ROLE_PERMISSION', 'role_permissions');
-define('TABLE_ROLE_USER', 'role_user');
-define('TABLE_ROLE_GROUP', 'role_group');
-// Blog tables
-define('TABLE_BLOGS', 'blog');
-define('TABLE_BLOGS_POSTS', 'blog_post');
-define('TABLE_BLOGS_COMMENTS', 'blog_comment');
-define('TABLE_BLOGS_REL_USER', 'blog_rel_user');
-define('TABLE_BLOGS_TASKS', 'blog_task');
-define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
-define('TABLE_BLOGS_RATING', 'blog_rating');
-define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
-define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
+define('TABLE_LP_REL_USERGROUP', 'lp_rel_usergroup');
+define('TABLE_LP_CATEGORY_REL_USERGROUP', 'lp_category_rel_usergroup');
 
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
-
-// Course online tables
-define('TABLE_ONLINE_LINK', 'online_link');
-define('TABLE_ONLINE_CONNECTED', 'online_connected');
 
 // User database
 define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
 define('TABLE_PERSONAL_AGENDA_REPEAT', 'personal_agenda_repeat');
 define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 'personal_agenda_repeat_not');
-define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
+//define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 
 // Survey
 // @TODO: Are these MAIN tables or course tables?
@@ -329,14 +293,5 @@ define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'ticket_message_attachments');
 define('TABLE_BRANCH', 'branch_sync');
 define('TABLE_BRANCH_TRANSACTION', 'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS', 'branch_transaction_status');
-
-// main/extra @todo after code is finished remove constants not used
-define('TABLE_CAL_DATE', 'cal_dates');
-define('TABLE_CAL_HORAIRE', 'cal_horaire');
-define('TABLE_CAL_TEMP', 'cal_temp');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
-
-define('TABLE_USER_INFO_DEF', 'userinfo_def');
-define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
 
 define('TABLE_MAIN_USER_CAREER', 'user_career');

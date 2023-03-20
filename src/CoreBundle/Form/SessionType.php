@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -11,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SessionType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', 'text')
@@ -34,7 +36,9 @@ class SessionType extends AbstractType
             ->add(
                 'visibility',
                 'choice',
-                ['choices' => Session::getStatusList()]
+                [
+                    'choices' => Session::getStatusList(),
+                ]
             )
             ->add(
                 'session_category_id',
@@ -58,22 +62,22 @@ class SessionType extends AbstractType
             ->add('access_end_date', 'sonata_type_datetime_picker')
             ->add('coach_access_start_date', 'sonata_type_datetime_picker')
             ->add('coach_access_end_date', 'sonata_type_datetime_picker')
-            ->add('save', 'submit', ['label' => 'Update']);
+            ->add('save', 'submit', [
+                'label' => 'Update',
+            ])
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Session',
+                'data_class' => Session::class,
             ]
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'session';
     }

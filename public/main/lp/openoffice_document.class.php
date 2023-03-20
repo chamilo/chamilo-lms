@@ -100,7 +100,7 @@ abstract class OpenofficeDocument extends learnpath
 
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
 
-        if ('localhost' == $ppt2lp_host) {
+        if ('localhost' === $ppt2lp_host) {
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
             //var_dump( $this->base_work_dir.$this->created_dir.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');

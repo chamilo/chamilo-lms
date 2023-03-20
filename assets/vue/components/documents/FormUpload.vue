@@ -1,24 +1,22 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        cols="12"
-        sm="6"
-        md="6"
-      >
+  <q-form>
+<!--        <q-uploader-->
+<!--            :factory="processFiles"-->
+<!--            label="Batch upload"-->
+<!--            multiple-->
+<!--            style="max-width: 800px;width: 800px"-->
+<!--        />-->
+
         <!--          v-model="item.uploadFile"-->
 <!--        <b-form-file-->
 <!--          ref="fileList"-->
 <!--          multiple-->
 <!--          @change="selectFile"-->
 <!--        />-->
-
-
         <div class="input-group mb-3">
           <div class="custom-file">
-
             <input
-                id="inputGroupFile02"
+                id="file_upload"
                 type="file"
                 class="custom-file-input"
                 ref="fileList"
@@ -26,8 +24,10 @@
                 placeholder="File upload"
                 @change="selectFile"
             />
-
-            <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+            <label
+                class="custom-file-label"
+                for="file_upload"
+                aria-describedby="File upload">
               Choose file
             </label>
           </div>
@@ -46,30 +46,30 @@
               </span>
               <span>
               <a @click.prevent="files.splice(index, 1)"
-                 class="delete">
-                <font-awesome-icon icon="trash"/>
+                 class="delete"
+              >
+                <v-icon icon="mdi-delete"/>
               </a>
             </span>
             </div>
-
           </div>
         </div>
-      </b-col>
-    </b-row>
-  </b-form>
+  </q-form>
 </template>
 
 <script>
 import has from 'lodash/has';
 import map from 'lodash/map';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 
 export default {
   name: 'DocumentsFormUpload',
-  mixins: [validationMixin],
+  setup () {
+    return { v$: useVuelidate() }
+  },
   props: {
     values: {
       type: Array,
@@ -84,7 +84,11 @@ export default {
     errors: {
       type: Object,
       default: () => {}
-    }
+    },
+    processFiles: {
+      type: Function,
+      required: false
+    },
   },
   data() {
     return {

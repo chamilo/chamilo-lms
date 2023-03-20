@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,31 +17,25 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgendaRepeatNot
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $calId;
+    protected int $calId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_date", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $calDate;
+    protected int $calDate;
 
     /**
      * Set calId.
      *
-     * @param int $calId
-     *
      * @return PersonalAgendaRepeatNot
      */
-    public function setCalId($calId)
+    public function setCalId(int $calId)
     {
         $this->calId = $calId;
 
@@ -59,11 +55,9 @@ class PersonalAgendaRepeatNot
     /**
      * Set calDate.
      *
-     * @param int $calDate
-     *
      * @return PersonalAgendaRepeatNot
      */
-    public function setCalDate($calDate)
+    public function setCalDate(int $calDate)
     {
         $this->calDate = $calDate;
 

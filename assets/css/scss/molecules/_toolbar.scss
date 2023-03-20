@@ -1,0 +1,12 @@
+.p-toolbar {
+  @apply border-b border-solid border-gray-30 pb-4 mb-4;
+
+  &-group-left,
+  &-group-right {
+    @apply flex flex-row gap-2;
+  }
+
+  &-separator {
+
+  }
+}

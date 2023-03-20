@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,12 +10,9 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class ExerciseSettingsSchema.
- */
 class ExerciseSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -28,18 +27,19 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'configure_exercise_visibility_in_course' => 'false',
                     'exercise_invisible_in_session' => 'false',
                     'allow_edit_exercise_in_lp' => 'false',
+                    'exercise_hide_label' => 'false',
                 ]
             )
         ;
         $allowedTypes = [
-            'exercise_min_score' => ['string'],
-            'exercise_max_score' => ['string'],
+            'exercise_min_score' => ['string', 'null'],
+            'exercise_max_score' => ['string', 'null'],
             'enable_quiz_scenario' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('exercise_min_score')
@@ -51,6 +51,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('exercise_max_ckeditors_in_page')
             ->add('configure_exercise_visibility_in_course', YesNoType::class)
             ->add('exercise_invisible_in_session', YesNoType::class)
+            ->add('exercise_hide_label', YesNoType::class)
         ;
     }
 }

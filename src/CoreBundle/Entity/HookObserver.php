@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,51 +13,43 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="hook_observer",
- *     options={"row_format":"DYNAMIC"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})}
+ *     options={"row_format"="DYNAMIC"},
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="class_name", columns={"class_name"})
+ *     }
  * )
  * @ORM\Entity
  */
 class HookObserver
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
-     */
-    protected $className;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    protected $path;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
-     */
-    protected $pluginName;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
+
+    /**
+     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
+     */
+    protected ?string $className = null;
+
+    /**
+     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     */
+    protected string $path;
+
+    /**
+     * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
+     */
+    protected ?string $pluginName = null;
 
     /**
      * Set className.
      *
-     * @param string $className
-     *
      * @return HookObserver
      */
-    public function setClassName($className)
+    public function setClassName(string $className)
     {
         $this->className = $className;
 
@@ -75,11 +69,9 @@ class HookObserver
     /**
      * Set path.
      *
-     * @param string $path
-     *
      * @return HookObserver
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
 
@@ -99,11 +91,9 @@ class HookObserver
     /**
      * Set pluginName.
      *
-     * @param string $pluginName
-     *
      * @return HookObserver
      */
-    public function setPluginName($pluginName)
+    public function setPluginName(string $pluginName)
     {
         $this->pluginName = $pluginName;
 

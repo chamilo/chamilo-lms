@@ -196,13 +196,14 @@ class NotebookTeacher
     {
         $plugin = NotebookTeacherPlugin::create();
         $userInfo = api_get_user_info();
+        $user = api_get_user_entity();
         $sortDirection = 'DESC';
         $linkSortDirection = 'ASC';
 
         if (!isset($_GET['direction'])) {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
-        } elseif ('ASC' == $_GET['direction']) {
+        } elseif ('ASC' === $_GET['direction']) {
             $sortDirection = 'ASC';
             $linkSortDirection = 'DESC';
         }
@@ -299,7 +300,7 @@ class NotebookTeacher
         $view = Session::read('notebook_view');
         // Database table definition
         $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-        if ('creation_date' == $view || 'update_date' == $view) {
+        if ('creation_date' === $view || 'update_date' === $view) {
             $orderBy = " ORDER BY $view $sortDirection ";
         } else {
             $orderBy = " ORDER BY $view $sortDirection ";
@@ -307,7 +308,7 @@ class NotebookTeacher
 
         // condition for the session
         $conditionSession = api_get_session_condition($sessionId);
-        $condExtra = 'update_date' == $view ? " AND update_date <> ''" : ' ';
+        $condExtra = 'update_date' === $view ? " AND update_date <> ''" : ' ';
 
         if ($studentId > 0) {
             // Only one student
@@ -335,7 +336,7 @@ class NotebookTeacher
                     }
 
                     // Validation when belongs to a session
-                    $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
+                    $sessionImg = api_get_session_image($row['session_id'], $user);
                     $updateValue = '';
                     if ($row['update_date'] != $row['creation_date']) {
                         $updateValue = ', '.get_lang('Updated').': '.
@@ -385,7 +386,7 @@ class NotebookTeacher
                     echo Display::page_subheader($studentText);
                     while ($row = Database::fetch_array($result)) {
                         // Validation when belongs to a session
-                        $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
+                        $sessionImg = api_get_session_image($row['session_id'], $user);
                         $updateValue = '';
 
                         if ($row['update_date'] != $row['creation_date']) {
@@ -437,7 +438,7 @@ class NotebookTeacher
                 echo Display::page_subheader($plugin->get_lang('NotebookNoLearnerAssigned'));
                 while ($row = Database::fetch_array($result)) {
                     // Validation when belongs to a session
-                    $sessionImg = api_get_session_image($row['session_id'], $userInfo['status']);
+                    $sessionImg = api_get_session_image($row['session_id'], $user);
                     $updateValue = '';
 
                     if ($row['update_date'] != $row['creation_date']) {

@@ -62,26 +62,26 @@ foreach ($instances as $instance) {
 
     if ($instance->visible) {
         $status = '<a href="'.$thisurl.'?what=disableinstances&vids[]='.$instance->id.'" >
-                  '.Display::returnFontAwesomeIcon('toggle-on', 2).'</a>';
+                  '.Display::getMdiIcon('toggle-switch').'</a>';
     } else {
         $status = '<a href="'.$thisurl.'?what=enableinstances&vids[]='.$instance->id.'" >
-                  '.Display::returnFontAwesomeIcon('toggle-off', 2).'</a>';
+                  '.Display::getMdiIcon('toggle-switch-off').'</a>';
     }
 
     $cmd = '&nbsp;<a href="'.$thisurl.'?what=editinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('edit').'">
-            '.Display::returnFontAwesomeIcon('pencil', 2).'</a>';
+            '.Display::getMdiIcon('pencil').'</a>';
     $cmd .= '&nbsp;<a href="'.$thisurl.'?what=snapshotinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('snapshotinstance').'">
-        '.Display::returnFontAwesomeIcon('camera', 2).'</a>';
+        '.Display::getMdiIcon('camera').'</a>';
 
     $cmd .= '<a href="'.$thisurl.'?what=upgrade&vids[]='.$instance->id.'" title="'.$plugin->get_lang('Upgrade Chamilo').'">
-         &nbsp;'.Display::returnFontAwesomeIcon('wrench', 2).' </a>';
+         &nbsp;'.Display::getMdiIcon('hammer-wrench').' </a>';
 
     if (!$instance->visible) {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
-        &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
+        &nbsp;'.Display::getMdiIcon('delete').' </a>';
     } else {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
-         &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
+         &nbsp;'.Display::getMdiIcon('delete').' </a>';
     }
 
     $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
@@ -143,8 +143,8 @@ $selectionoptions[] = '<option value="setconfigvalue">'.$plugin->get_lang('setco
 $selectionaction = '<select name="what" onchange="this.form.submit()">'.implode('', $selectionoptions).'</select>';
 
 $content .= '<div class="vchamilo-right"><div></div><div>
-<a href="javascript:selectallhosts()">'.$plugin->get_lang('selectall').'</a> - 
-<a href="javascript:deselectallhosts()">'.$plugin->get_lang('selectnone').'</a> - 
+<a href="javascript:selectallhosts()">'.$plugin->get_lang('selectall').'</a> -
+<a href="javascript:deselectallhosts()">'.$plugin->get_lang('selectnone').'</a> -
 &nbsp; - '.$plugin->get_lang('withselection').' '.$selectionaction.'</div></div>';
 
 $content .= '</form>';

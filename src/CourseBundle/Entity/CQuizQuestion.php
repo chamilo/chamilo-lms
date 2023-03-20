@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -15,133 +17,120 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizQuestion.
  *
  * @ORM\Table(
- *  name="c_quiz_question",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="position", columns={"position"})
- *  }
+ *     name="c_quiz_question",
+ *     indexes={
+ *         @ORM\Index(name="position", columns={"position"})
+ *     }
  * )
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="question", type="text", nullable=false)
      */
-    protected $question;
+    #[Assert\NotBlank]
+    protected string $question;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    protected $ponderation;
+    protected float $ponderation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="picture", type="string", length=50, nullable=true)
      */
-    protected $picture;
+    protected ?string $picture = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    protected $level;
+    protected int $level;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected $feedback;
+    protected ?string $feedback = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
-    protected $extra;
+    protected ?string $extra = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
      */
-    protected $questionCode;
+    protected ?string $questionCode = null;
 
     /**
      * @var Collection|CQuizQuestionCategory[]
      *
      * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questions")
      * @ORM\JoinTable(name="c_quiz_question_rel_category",
-     *      joinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="iid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="iid")}
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     *     }
      * )
      */
-    protected $categories;
+    protected Collection $categories;
 
     /**
+     * @var Collection|CQuizRelQuestion[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
-    protected $relQuizzes;
+    protected Collection $relQuizzes;
 
     /**
-     * @var int
+     * @var Collection|CQuizAnswer[]
      *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizAnswer", mappedBy="question", cascade={"persist"})
+     */
+    protected Collection $answers;
+
+    /**
+     * @var Collection|CQuizQuestionOption[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionOption", mappedBy="question", cascade={"persist"})
+     */
+    protected Collection $options;
+
+    /**
      * @ORM\Column(name="mandatory", type="integer")
      */
-    protected $mandatory;
+    protected int $mandatory;
 
-    /**
-     * CQuizQuestion constructor.
-     */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->relQuizzes = new ArrayCollection();
+        $this->answers = new ArrayCollection();
+        $this->options = new ArrayCollection();
         $this->ponderation = 0.0;
         $this->mandatory = 0;
     }
@@ -151,17 +140,17 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->getQuestion();
     }
 
-    public function addCategory(CQuizQuestionCategory $category)
+    public function addCategory(CQuizQuestionCategory $category): void
     {
         if ($this->categories->contains($category)) {
-            return false;
+            return;
         }
 
         $this->categories->add($category);
         $category->addQuestion($this);
     }
 
-    public function updateCategory(CQuizQuestionCategory $category)
+    public function updateCategory(CQuizQuestionCategory $category): void
     {
         if (0 === $this->categories->count()) {
             $this->addCategory($category);
@@ -176,11 +165,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         }
 
         $this->addCategory($category);
-
-        return $this;
     }
 
-    public function removeCategory(CQuizQuestionCategory $category)
+    public function removeCategory(CQuizQuestionCategory $category): void
     {
         if (!$this->categories->contains($category)) {
             return;
@@ -190,62 +177,31 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         $category->removeQuestion($this);
     }
 
-    /**
-     * Set question.
-     *
-     * @param string $question
-     *
-     * @return CQuizQuestion
-     */
-    public function setQuestion($question)
+    public function setQuestion(string $question): self
     {
         $this->question = $question;
 
         return $this;
     }
 
-    /**
-     * Get question.
-     *
-     * @return string
-     */
-    public function getQuestion()
+    public function getQuestion(): string
     {
-        return (string) $this->question;
+        return $this->question;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CQuizQuestion
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set ponderation.
-     *
-     * @param float $ponderation
-     *
-     * @return CQuizQuestion
-     */
-    public function setPonderation($ponderation)
+    public function setPonderation(float $ponderation): self
     {
         $this->ponderation = $ponderation;
 
@@ -262,14 +218,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->ponderation;
     }
 
-    /**
-     * Set position.
-     *
-     * @param int $position
-     *
-     * @return CQuizQuestion
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -286,14 +235,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->position;
     }
 
-    /**
-     * Set type.
-     *
-     * @param int $type
-     *
-     * @return CQuizQuestion
-     */
-    public function setType($type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -310,14 +252,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->type;
     }
 
-    /**
-     * Set picture.
-     *
-     * @param string $picture
-     *
-     * @return CQuizQuestion
-     */
-    public function setPicture($picture)
+    public function setPicture(string $picture): self
     {
         $this->picture = $picture;
 
@@ -334,14 +269,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->picture;
     }
 
-    /**
-     * Set level.
-     *
-     * @param int $level
-     *
-     * @return CQuizQuestion
-     */
-    public function setLevel($level)
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
@@ -358,14 +286,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->level;
     }
 
-    /**
-     * Set extra.
-     *
-     * @param string $extra
-     *
-     * @return CQuizQuestion
-     */
-    public function setExtra($extra)
+    public function setExtra(string $extra): self
     {
         $this->extra = $extra;
 
@@ -382,14 +303,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->extra;
     }
 
-    /**
-     * Set questionCode.
-     *
-     * @param string $questionCode
-     *
-     * @return CQuizQuestion
-     */
-    public function setQuestionCode($questionCode)
+    public function setQuestionCode(string $questionCode): self
     {
         $this->questionCode = $questionCode;
 
@@ -406,44 +320,61 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->questionCode;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CQuizQuestion
-     */
-    public function setCId($cId)
+    public function getFeedback(): ?string
     {
-        $this->cId = $cId;
+        return $this->feedback;
+    }
+
+    public function setFeedback(?string $feedback): self
+    {
+        $this->feedback = $feedback;
 
         return $this;
     }
 
     /**
-     * Get cId.
-     *
-     * @return int
+     * @return CQuizQuestionCategory[]|Collection
      */
-    public function getCId()
+    public function getCategories()
     {
-        return $this->cId;
+        return $this->categories;
     }
 
     /**
-     * @return string
+     * @return CQuizRelQuestion[]|Collection
      */
-    public function getFeedback()
+    public function getRelQuizzes()
     {
-        return $this->feedback;
+        return $this->relQuizzes;
     }
 
     /**
-     * @param string $feedback
+     * @return CQuizAnswer[]|Collection
      */
-    public function setFeedback($feedback): self
+    public function getAnswers()
     {
-        $this->feedback = $feedback;
+        return $this->answers;
+    }
+
+    public function getMandatory(): int
+    {
+        return $this->mandatory;
+    }
+
+    /**
+     * @return CQuizQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param CQuizQuestionOption[]|Collection $options
+     */
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
 
         return $this;
     }
@@ -458,9 +389,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

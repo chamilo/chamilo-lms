@@ -1,32 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class LanguageRepository.
- */
 class LanguageRepository extends ServiceEntityRepository
 {
-    /**
-     * LanguageRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Language::class);
     }
 
+    public function getAllAvailable(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb
+            ->where(
+                $qb->expr()->eq('l.available', true)
+            )
+            /*->andWhere(
+                $qb->expr()->isNull('l.parent')
+            )*/
+        ;
+
+        return $qb;
+    }
+
+    public function getAllAvailableToArray(): array
+    {
+        $languages = $this->getAllAvailable()->getQuery()->getResult();
+
+        $list = [];
+        /** @var Language $language */
+        foreach ($languages as $language) {
+            $list[$language->getIsocode()] = $language->getOriginalName();
+        }
+
+        return $list;
+    }
+
     /**
      * Get all the sub languages that are made available by the admin.
      *
-     * @return array
+     * @return Collection|Language[]
      */
-    public function findAllPlatformSubLanguages()
+    public function findAllSubLanguages()
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l')
@@ -35,7 +61,8 @@ class LanguageRepository extends ServiceEntityRepository
             )
             ->andWhere(
                 $qb->expr()->isNotNull('l.parent')
-            );
+            )
+        ;
 
         return $qb->getQuery()->getResult();
     }

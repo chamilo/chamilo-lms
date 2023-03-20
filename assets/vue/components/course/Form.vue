@@ -55,14 +55,16 @@
 
 <script>
   import has from 'lodash/has';
-  import { validationMixin } from 'vuelidate';
-  import { required } from 'vuelidate/lib/validators';
+  import useVuelidate from '@vuelidate/core';
+  import { required } from '@vuelidate/validators';
   import { mapActions } from 'vuex';
   import { mapFields } from 'vuex-map-fields';
 
   export default {
     name: 'CourseForm',
-    mixins: [validationMixin],
+    setup () {
+      return { v$: useVuelidate() }
+    },
     props: {
       values: {
         type: Object,

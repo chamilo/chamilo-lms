@@ -1,0 +1,61 @@
+input.p-inputtext {
+  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition outline-none w-full
+    hover:border-primary focus:border-primary;
+
+  &:focus,
+  &.p-filled {
+    ~ {
+      label {
+        @apply text-caption text-primary;
+      }
+    }
+  }
+
+  &.p-invalid.p-component {
+    @apply border-error text-error;
+  }
+
+  &.p-inputtext-sm {
+    @apply px-2 py-1;
+  }
+
+  &.p-inputtext-lg {
+    @apply px-6 py-5;
+  }
+
+  &.p-invalid {
+    ~ label,
+    &:focus ~ label {
+      @apply text-error;
+    }
+  }
+}
+
+.p-input-icon-right {
+  > .p-inputtext {
+    @apply pr-10;
+  }
+
+  > i:last-of-type {
+    @apply right-3;
+  }
+}
+
+.p-float-label {
+  input.p-inputtext {
+    @apply w-full;
+
+    &:focus,
+    &.p-filled {
+      ~ {
+        label {
+          @apply top-0;
+        }
+      }
+    }
+  }
+
+  > label {
+    @apply bg-white duration-200 left-2 px-1 text-support-3;
+  }
+}

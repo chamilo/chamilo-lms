@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 
 /**
  * Class Answer
@@ -125,7 +127,6 @@ class Answer
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id ='".$questionId."'
                 ORDER BY position";
 
@@ -134,6 +135,9 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
+            $this->id[$i] = $object->iid;
+            $this->autoId[$i] = $object->iid;
+            $this->iid[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -142,38 +146,9 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            //$this->autoId[$i] = $object->id_auto;
-            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i - 1;
-    }
-
-    /**
-     * Get answers already added to question.
-     *
-     * @return array
-     */
-    public function getAnswers()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = $this->questionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
-                ORDER BY position";
-
-        $result = Database::query($sql);
-
-        $answers = [];
-
-        // while a record is found
-        while ($answer = Database::fetch_assoc($result)) {
-            $answers[] = $answer;
-        }
-
-        return $answers;
     }
 
     /**
@@ -250,7 +225,7 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -270,11 +245,9 @@ class Answer
                     hotspot_coordinates,
                     hotspot_type,
                     destination,
-                    id_auto,
                     iid
                 FROM $TBL_ANSWER
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
         $result = Database::query($sql);
@@ -296,7 +269,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
-            $this->autoId[$i] = $object->id_auto;
+            $this->autoId[$i] = $object->iid;
             $this->iid[$i] = $object->iid;
             $i++;
         }
@@ -310,7 +283,7 @@ class Answer
             $this->hotspot_coordinates[$i] = isset($object->hotspot_coordinates) ? $object->hotspot_coordinates : 0;
             $this->hotspot_type[$i] = isset($object->hotspot_type) ? $object->hotspot_type : 0;
             $this->destination[$i] = $doubt_data->destination;
-            $this->autoId[$i] = $doubt_data->id_auto;
+            $this->autoId[$i] = $doubt_data->iid;
             $this->iid[$i] = $doubt_data->iid;
             $i++;
         }
@@ -328,7 +301,7 @@ class Answer
      */
     public function selectAutoId($id)
     {
-        return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
+        return isset($this->iid[$id]) ? (int) $this->iid[$id] : 0;
     }
 
     /**
@@ -394,8 +367,8 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql = "SELECT iid, answer FROM $table
+                WHERE iid='$auto_id'";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -496,13 +469,15 @@ class Answer
      *
      * @author    Yannick Warnier <ywarnier@beeznest.org>
      *
+     * @todo remove this function use CQuizQuestion
+     *
      * @return int The type of the question this answer is bound to
      */
     public function getQuestionType()
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND iid = '".$this->questionId."'";
+                WHERE iid = '".$this->questionId."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
@@ -666,14 +641,15 @@ class Answer
         $quizAnswer = $em->find(CQuizAnswer::class, $iid);
         if ($quizAnswer) {
             $quizAnswer
-                ->setAnswer($answer)
-                ->setComment($comment)
-                ->setCorrect($correct)
+                ->setAnswer((string) $answer)
+                ->setComment((string) $comment)
+                ->setCorrect((int) $correct)
                 ->setPonderation($weighting)
                 ->setPosition($position)
                 ->setDestination($destination)
                 ->setHotspotCoordinates($hotSpotCoordinates)
-                ->setHotspotType($hotSpotType);
+                ->setHotspotType($hotSpotType)
+            ;
 
             $em->persist($quizAnswer);
             $em->flush();
@@ -697,24 +673,27 @@ class Answer
 
         $courseId = $this->course['real_id'];
         $answerList = [];
+        $questionRepo = Container::getQuestionRepository();
+        /** @var CQuizQuestion $question */
+        $question = $questionRepo->find($questionId);
+        $questionType = $question->getType();
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-            $answer = $this->new_answer[$i];
-            $correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
-            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
-            $weighting = isset($this->new_weighting[$i]) ? $this->new_weighting[$i] : '';
-            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : '';
-            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
-            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
-            $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
-            $autoId = $this->selectAutoId($i);
+            $answer = (string) $this->new_answer[$i];
+            $correct = isset($this->new_correct[$i]) ? (int) $this->new_correct[$i] : null;
+            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : null;
+            $weighting = isset($this->new_weighting[$i]) ? (float) $this->new_weighting[$i] : null;
+            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : null;
+            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : null;
+            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : null;
+            $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : null;
+            //$autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
                 $quizAnswer
-                    ->setCId($courseId)
-                    ->setQuestionId($questionId)
+                    ->setQuestion($question)
                     ->setAnswer($answer)
                     ->setCorrect($correct)
                     ->setComment($comment)
@@ -730,11 +709,7 @@ class Answer
                 $iid = $quizAnswer->getIid();
 
                 if ($iid) {
-                    $questionType = $this->getQuestionType();
-                    if (in_array(
-                        $questionType,
-                        [MATCHING, MATCHING_DRAGGABLE]
-                    )) {
+                    if (in_array($questionType, [MATCHING, MATCHING_DRAGGABLE])) {
                         $answer = new self($this->questionId, $courseId, $this->exercise, false);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
@@ -771,8 +746,6 @@ class Answer
             $answerList[$i] = $iid;
         }
 
-        $questionType = $this->getQuestionType();
-
         switch ($questionType) {
             case MATCHING_DRAGGABLE:
                 foreach ($this->new_correct as $value => $status) {
@@ -786,7 +759,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }
@@ -801,7 +774,7 @@ class Answer
                         $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
-                                id_auto = $myAutoId
+                                iid = $myAutoId
                             ";
                         Database::query($sql);
                     }
@@ -812,13 +785,12 @@ class Answer
 
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
-            while ($this->position[$i]) {
+            while (isset($this->position[$i])) {
                 $position = $this->position[$i];
                 $sql = "DELETE FROM $answerTable
-                        WHERE
-                            c_id = {$this->course_id} AND
-                            question_id = '".$questionId."' AND
-                            position ='$position'";
+                    WHERE
+                        question_id = '".$questionId."' AND
+                        position ='$position'";
                 Database::query($sql);
                 $i++;
             }
@@ -843,187 +815,174 @@ class Answer
      *
      * @author Olivier Brouckaert
      *
-     * @param Question $newQuestion
-     * @param array    $course_info destination course info (result of the function api_get_course_info() )
+     * @param null $courseInfo destination course info (result of the function api_get_course_info() )
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function duplicate($newQuestion, $course_info = null)
+    public function duplicate(Question $newQuestion, $courseInfo = null)
     {
         $newQuestionId = $newQuestion->id;
 
-        if (empty($course_info)) {
-            $course_info = $this->course;
+        $em = Database::getManager();
+        $questionRepo = Container::getQuestionRepository();
+        $answerRepo = $em->getRepository(CQuizAnswer::class);
+        $question = $questionRepo->find($newQuestionId);
+
+        if (empty($courseInfo)) {
+            $courseInfo = $this->course;
         }
 
-        $fixed_list = [];
-        $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $fixedList = [];
 
-        if (MULTIPLE_ANSWER_TRUE_FALSE == self::getQuestionType() ||
-            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == self::getQuestionType()
+        if (MULTIPLE_ANSWER_TRUE_FALSE === self::getQuestionType() ||
+            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === self::getQuestionType()
         ) {
             // Selecting origin options
-            $origin_options = Question::readQuestionOption(
-                $this->selectQuestionId(),
-                $this->course['real_id']
-            );
+            $originOptions = Question::readQuestionOption($this->selectQuestionId());
 
-            if (!empty($origin_options)) {
-                foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['id'];
+            if (!empty($originOptions)) {
+                foreach ($originOptions as $item) {
+                    $newOptionList[] = $item['iid'];
                 }
             }
 
-            $destination_options = Question::readQuestionOption(
-                $newQuestionId,
-                $course_info['real_id']
-            );
+            $destinationOptions = Question::readQuestionOption($newQuestionId);
             $i = 0;
-            if (!empty($destination_options)) {
-                foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['id'];
+            if (!empty($destinationOptions)) {
+                foreach ($destinationOptions as $item) {
+                    $fixedList[$newOptionList[$i]] = $item['iid'];
                     $i++;
                 }
             }
         }
 
         // if at least one answer
-        if ($this->nbrAnswers) {
-            // inserts new answers into data base
-            $courseId = $course_info['real_id'];
-            $correctAnswers = [];
-            $onlyAnswers = [];
-            $allAnswers = [];
+        if (empty($this->nbrAnswers)) {
+            return;
+        }
+        // inserts new answers into data base
+        $correctAnswers = [];
+        $onlyAnswers = [];
+        $allAnswers = [];
 
-            $em = Database::getManager();
-
-            if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
-                $temp = [];
-                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    $answer = [
-                        'id' => $this->id[$i],
-                        'answer' => $this->answer[$i],
-                        'correct' => $this->correct[$i],
-                        'comment' => $this->comment[$i],
-                        'weighting' => $this->weighting[$i],
-                        'ponderation' => $this->weighting[$i],
-                        'position' => $this->position[$i],
-                        'hotspot_coordinates' => $this->hotspot_coordinates[$i],
-                        'hotspot_type' => $this->hotspot_type[$i],
-                        'destination' => $this->destination[$i],
-                    ];
-                    $temp[$answer['position']] = $answer;
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
-                }
-
-                foreach ($temp as $answer) {
-                    if ($this->course['id'] != $course_info['id']) {
-                        // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                        $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $answer['answer'],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-
-                        $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $answer['comment'],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                    }
-
-                    $quizAnswer = new CQuizAnswer();
-                    $quizAnswer
-                        ->setCId($courseId)
-                        ->setQuestionId($newQuestionId)
-                        ->setAnswer($answer['answer'])
-                        ->setCorrect($answer['correct'])
-                        ->setComment($answer['comment'])
-                        ->setPonderation($answer['ponderation'])
-                        ->setPosition($answer['position'])
-                        ->setHotspotCoordinates($answer['hotspot_coordinates'])
-                        ->setHotspotType($answer['hotspot_type'])
-                    ;
-
-                    $em->persist($quizAnswer);
-                    $em->flush();
-
-                    $answerId = $quizAnswer->getIid();
-
-                    if ($answerId) {
-                        $em->persist($quizAnswer);
-                        $em->flush();
-
-                        $correctAnswers[$answerId] = $answer['correct'];
-                        $onlyAnswers[$answerId] = $answer['answer'];
-                    }
-                }
-            } else {
-                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    if ($this->course['id'] != $course_info['id']) {
-                        $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $this->answer[$i],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                        $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $this->comment[$i],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                    }
-
-                    $correct = $this->correct[$i];
-                    if (MULTIPLE_ANSWER_TRUE_FALSE == $newQuestion->type ||
-                        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $newQuestion->type
-                    ) {
-                        $correct = $fixed_list[(int) $correct];
-                    }
-
-                    $quizAnswer = new CQuizAnswer();
-                    $quizAnswer
-                        ->setCId($courseId)
-                        ->setQuestionId($newQuestionId)
-                        ->setAnswer($this->answer[$i])
-                        ->setCorrect($correct)
-                        ->setComment($this->comment[$i])
-                        ->setPonderation($this->weighting[$i])
-                        ->setPosition($this->position[$i])
-                        ->setHotspotCoordinates($this->hotspot_coordinates[$i])
-                        ->setHotspotType($this->hotspot_type[$i])
-                        ->setDestination($this->destination[$i]);
-
-                    $em->persist($quizAnswer);
-                    $em->flush();
-
-                    $answerId = $quizAnswer->getIid();
-
-                    $correctAnswers[$answerId] = $correct;
-                    $onlyAnswers[$answerId] = $this->answer[$i];
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
-                }
+        if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
+            $temp = [];
+            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+                $answer = [
+                    'id' => $this->id[$i],
+                    'answer' => $this->answer[$i],
+                    'correct' => $this->correct[$i],
+                    'comment' => $this->comment[$i],
+                    'weighting' => $this->weighting[$i],
+                    'ponderation' => $this->weighting[$i],
+                    'position' => $this->position[$i],
+                    'hotspot_coordinates' => $this->hotspot_coordinates[$i],
+                    'hotspot_type' => $this->hotspot_type[$i],
+                    'destination' => $this->destination[$i],
+                ];
+                $temp[$answer['position']] = $answer;
+                $allAnswers[$this->id[$i]] = $this->answer[$i];
             }
 
-            // Fix correct answers
-            if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $onlyAnswersFlip = array_flip($onlyAnswers);
-                foreach ($correctAnswers as $answer_id => $correct_answer) {
-                    $params = [];
-                    if (isset($allAnswers[$correct_answer]) &&
-                        isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
-                    ) {
-                        $params['correct'] = $onlyAnswersFlip[$allAnswers[$correct_answer]];
-                        Database::update(
-                            $tableAnswer,
-                            $params,
-                            [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
-                                    $answer_id,
-                                    $courseId,
-                                    $newQuestionId,
-                                ],
-                            ]
-                        );
-                    }
+            foreach ($temp as $answer) {
+                if ($this->course['id'] != $courseInfo['id']) {
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
+                    $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $answer['answer'],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+
+                    $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $answer['comment'],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
                 }
+
+                $quizAnswer = new CQuizAnswer();
+                $quizAnswer
+                    ->setQuestion($question)
+                    ->setAnswer($answer['answer'])
+                    ->setCorrect($answer['correct'])
+                    ->setComment($answer['comment'])
+                    ->setPonderation($answer['ponderation'])
+                    ->setPosition($answer['position'])
+                    ->setHotspotCoordinates($answer['hotspot_coordinates'])
+                    ->setHotspotType($answer['hotspot_type'])
+                ;
+
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $answerId = $quizAnswer->getIid();
+
+                if ($answerId) {
+                    $em->persist($quizAnswer);
+                    $em->flush();
+
+                    $correctAnswers[$answerId] = $answer['correct'];
+                    $onlyAnswers[$answerId] = $answer['answer'];
+                }
+            }
+        } else {
+            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+                if ($this->course['id'] != $courseInfo['id']) {
+                    $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $this->answer[$i],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+                    $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $this->comment[$i],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+                }
+
+                $correct = $this->correct[$i];
+                if (MULTIPLE_ANSWER_TRUE_FALSE == $newQuestion->type ||
+                    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $newQuestion->type
+                ) {
+                    $correct = $fixedList[(int) $correct];
+                }
+
+                $quizAnswer = new CQuizAnswer();
+                $quizAnswer
+                    ->setQuestion($question)
+                    ->setAnswer($this->answer[$i])
+                    ->setCorrect($correct)
+                    ->setComment($this->comment[$i])
+                    ->setPonderation($this->weighting[$i])
+                    ->setPosition($this->position[$i])
+                    ->setHotspotCoordinates($this->hotspot_coordinates[$i])
+                    ->setHotspotType($this->hotspot_type[$i])
+                    ->setDestination($this->destination[$i]);
+
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $answerId = $quizAnswer->getIid();
+
+                $correctAnswers[$answerId] = $correct;
+                $onlyAnswers[$answerId] = $this->answer[$i];
+                $allAnswers[$this->id[$i]] = $this->answer[$i];
+            }
+        }
+
+        // Fix correct answers
+        if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+            $onlyAnswersFlip = array_flip($onlyAnswers);
+            foreach ($correctAnswers as $answerIdItem => $correctAnswer) {
+                if (!isset($allAnswers[$correctAnswer]) || !isset($onlyAnswersFlip[$allAnswers[$correctAnswer]])) {
+                    continue;
+                }
+                $answer = $answerRepo->find($answerIdItem);
+                $answer->setCorrect((int) $onlyAnswersFlip[$allAnswers[$correctAnswer]]);
+
+                $em->persist($answer);
+                $em->flush();
             }
         }
     }

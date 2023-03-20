@@ -1,85 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxFeedback.
  *
  * @ORM\Table(
- *  name="c_dropbox_feedback",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="file_id", columns={"file_id"}),
- *      @ORM\Index(name="author_user_id", columns={"author_user_id"})
- *  }
+ *     name="c_dropbox_feedback",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="file_id", columns={"file_id"}),
+ *         @ORM\Index(name="author_user_id", columns={"author_user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CDropboxFeedback
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="feedback_id", type="integer")
      */
-    protected $feedbackId;
+    protected int $feedbackId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="file_id", type="integer", nullable=false)
      */
-    protected $fileId;
+    protected int $fileId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author_user_id", type="integer", nullable=false)
      */
-    protected $authorUserId;
+    protected int $authorUserId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=false)
      */
-    protected $feedback;
+    protected string $feedback;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    protected $feedbackDate;
+    protected DateTime $feedbackDate;
 
     /**
      * Set fileId.
      *
-     * @param int $fileId
-     *
      * @return CDropboxFeedback
      */
-    public function setFileId($fileId)
+    public function setFileId(int $fileId)
     {
         $this->fileId = $fileId;
 
@@ -99,11 +86,9 @@ class CDropboxFeedback
     /**
      * Set authorUserId.
      *
-     * @param int $authorUserId
-     *
      * @return CDropboxFeedback
      */
-    public function setAuthorUserId($authorUserId)
+    public function setAuthorUserId(int $authorUserId)
     {
         $this->authorUserId = $authorUserId;
 
@@ -123,11 +108,9 @@ class CDropboxFeedback
     /**
      * Set feedback.
      *
-     * @param string $feedback
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedback($feedback)
+    public function setFeedback(string $feedback)
     {
         $this->feedback = $feedback;
 
@@ -147,11 +130,9 @@ class CDropboxFeedback
     /**
      * Set feedbackDate.
      *
-     * @param \DateTime $feedbackDate
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedbackDate($feedbackDate)
+    public function setFeedbackDate(DateTime $feedbackDate)
     {
         $this->feedbackDate = $feedbackDate;
 
@@ -161,7 +142,7 @@ class CDropboxFeedback
     /**
      * Get feedbackDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFeedbackDate()
     {
@@ -171,11 +152,9 @@ class CDropboxFeedback
     /**
      * Set feedbackId.
      *
-     * @param int $feedbackId
-     *
      * @return CDropboxFeedback
      */
-    public function setFeedbackId($feedbackId)
+    public function setFeedbackId(int $feedbackId)
     {
         $this->feedbackId = $feedbackId;
 
@@ -195,11 +174,9 @@ class CDropboxFeedback
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxFeedback
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

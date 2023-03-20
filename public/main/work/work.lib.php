@@ -4,8 +4,11 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use ChamiloSession as Session;
 
@@ -30,7 +33,7 @@ use ChamiloSession as Session;
 function displayWorkActionLinks($id, $action, $isTutor)
 {
     $id = $my_back_id = (int) $id;
-    if ('list' == $action) {
+    if ('list' === $action) {
         $my_back_id = 0;
     }
 
@@ -44,7 +47,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
     }
 
     if (($isTutor || api_is_allowed_to_edit(null, true)) &&
-        'learnpath' != $origin
+        'learnpath' !== $origin
     ) {
         // Create dir
         if (empty($id)) {
@@ -59,7 +62,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
         }
     }
 
-    if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin && 'list' == $action) {
+    if (api_is_allowed_to_edit(null, true) && 'learnpath' !== $origin && 'list' === $action) {
         $output .= '<a id="open-view-list" href="#">'.
             Display::return_icon(
                 'listwork.png',
@@ -70,10 +73,8 @@ function displayWorkActionLinks($id, $action, $isTutor)
             '</a>';
     }
 
-    if ('' != $output) {
-        echo '<div class="actions">';
-        echo $output;
-        echo '</div>';
+    if ('' !== $output) {
+        echo Display::toolbarAction('toolbar', [$output]);
     }
 }
 
@@ -93,7 +94,7 @@ function get_work_data_by_path($path, $courseId = 0)
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT *  FROM $table
-            WHERE url = '$path' AND c_id = $courseId ";
+            WHERE url = '$path' ";
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
@@ -119,38 +120,30 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($id);
 
-    if (empty($studentPublication)) {
+    if (null === $studentPublication) {
         return [];
     }
-
-    $router = Container::getRouter();
 
     $work = [];
     if ($studentPublication) {
         $workId = $studentPublication->getIid();
         $work['iid'] = $workId;
         $work['description'] = $studentPublication->getDescription();
-        $work['url'] = $studentPublication->getUrl();
+        $work['url'] = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
         $work['active'] = $studentPublication->getActive();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
-        $work['c_id'] = $studentPublication->getCId();
-        $work['user_id'] = $studentPublication->getUserId();
-        $work['parent_id'] = $studentPublication->getParentId();
+        //$work['c_id'] = $studentPublication->getCId();
+        $work['user_id'] = $studentPublication->getUser()->getId();
+        $work['parent_id'] = 0;
+        if (null !== $studentPublication->getPublicationParent()) {
+            $work['parent_id'] = $studentPublication->getPublicationParent()->getIid();
+        }
+
         $work['qualification'] = $studentPublication->getQualification();
         $work['contains_file'] = $studentPublication->getContainsFile();
         $work['title'] = $studentPublication->getTitle();
-        if (empty($studentPublication->getTitle())) {
-            $work['title'] = basename($studentPublication->getUrl());
-        }
-        $work['download_url'] = $router->generate(
-                'chamilo_core_resource_download',
-                [
-                    'id' => $studentPublication->getResourceNode()->getId(),
-                    'tool' => 'student_publication',
-                    'type' => 'student_publications',
-                ]
-            ).'?'.api_get_cidreq();
-
+        $url = $repo->getResourceFileDownloadUrl($studentPublication);
+        $work['download_url'] = $url.'?'.api_get_cidreq();
         $work['view_url'] = $webCodePath.'work/view.php?id='.$workId.'&'.api_get_cidreq();
         $showUrl = $work['show_url'] = $webCodePath.'work/show_file.php?id='.$workId.'&'.api_get_cidreq();
         $work['show_content'] = '';
@@ -192,7 +185,6 @@ function get_work_count_by_student($user_id, $work_id)
     $sql = "SELECT COUNT(*) as count
             FROM  $table
             WHERE
-                c_id = $course_id AND
                 parent_id = $work_id AND
                 user_id = $user_id AND
                 active IN (0, 1)
@@ -222,7 +214,7 @@ function get_work_assignment_by_id($id, $courseId = 0)
     $id = (int) $id;
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
-            WHERE c_id = $courseId AND publication_id = $id";
+            WHERE publication_id = $id";
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
@@ -239,7 +231,7 @@ function get_work_assignment_by_id($id, $courseId = 0)
  * @param int    $course_id
  * @param int    $session_id
  *
- * @return array
+ * @return CStudentPublication[]
  */
 function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_id = 0, $session_id = 0)
 {
@@ -268,32 +260,39 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
 
     if ($linkInfo) {
         $workInGradeBookLinkId = $linkInfo['id'];
-        if ($workInGradeBookLinkId) {
-            if ($is_allowed_to_edit) {
-                if (0 == (int) ($my_folder_data['qualification'])) {
-                    echo Display::return_message(
-                        get_lang('Max weight need to be provided'),
-                        'warning'
-                    );
-                }
+        if ($workInGradeBookLinkId && $is_allowed_to_edit) {
+            if (0 == (int) ($my_folder_data['qualification'])) {
+                echo Display::return_message(
+                    get_lang('Max weight need to be provided'),
+                    'warning'
+                );
             }
         }
     }
 
+    $repo = Container::getStudentPublicationRepository();
+    $course = api_get_course_entity($course_id);
+    $session = api_get_session_entity($session_id);
+    $group = api_get_group_entity($group_id);
+
+    $qb = $repo->getResourcesByCourse($course, $session, $group);
+
     $contains_file_query = '';
     // Get list from database
     if ($is_allowed_to_edit) {
-        $active_condition = ' active IN (0, 1)';
-        $sql = "SELECT * FROM $work_table
-                WHERE
-                    c_id = $course_id
-                    $add_in_where_query
-                    $condition_session AND
-                    $active_condition AND
-                    (parent_id = 0)
-                    $contains_file_query AND
-                    post_group_id = $groupIid
-                ORDER BY sent_date DESC";
+        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+    /*$active_condition = ' active IN (0, 1)';
+    $sql = "SELECT * FROM $work_table
+            WHERE
+                c_id = $course_id
+                $add_in_where_query
+                $condition_session AND
+                $active_condition AND
+                (parent_id = 0)
+                $contains_file_query AND
+                post_group_id = $groupIid
+            ORDER BY sent_date DESC";*/
     } else {
         if (!empty($group_id)) {
             // set to select only messages posted by the user's group
@@ -314,6 +313,8 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
                 ORDER BY title";
     }
 
+    return $qb->getQuery()->getResult();
+
     $work_parents = [];
 
     $sql_result = Database::query($sql);
@@ -326,39 +327,6 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     }
 
     return $work_parents;
-}
-
-/**
- * @param int $userId
- * @param int $courseId
- * @param int $sessionId
- *
- * @return array
- */
-function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
-{
-    $works = getWorkList(null, null, null, $courseId, $sessionId);
-    $result = [];
-    if (!empty($works)) {
-        foreach ($works as $workData) {
-            $workId = $workData->iid;
-            $result[$workId]['work'] = $workData;
-            $result[$workId]['work']->user_results = get_work_user_list(
-                0,
-                100,
-                null,
-                null,
-                $workId,
-                null,
-                $userId,
-                false,
-                $courseId,
-                $sessionId
-            );
-        }
-    }
-
-    return $result;
 }
 
 /**
@@ -393,8 +361,6 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
             INNER JOIN $user_table u
             ON w.user_id = u.id
             WHERE
-                w.c_id = $course_id
-                $sessionCondition AND
                 w.parent_id = $workId AND
                 w.post_group_id = $groupIid AND
                 w.active IN (0, 1)
@@ -471,8 +437,6 @@ function getUniqueStudentAttempts(
                 ON w.user_id = u.id
                 WHERE
                     w.filetype = 'file' AND
-                    w.c_id = $course_id
-                    $sessionCondition AND
                     $workCondition
                     w.post_group_id = $groupIid AND
                     w.active IN (0, 1) $studentCondition
@@ -697,7 +661,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT title, url FROM $tbl_work
-            WHERE c_id = $course_id AND id ='".$move_file."'";
+            WHERE iid ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
@@ -775,11 +739,11 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
         $checkDirName = $desiredDirName.$counter;
     }
 
-    if (@mkdir($workDir.$checkDirName, api_get_permissions_for_new_directories())) {
+    /*if (@mkdir($workDir.$checkDirName, api_get_permissions_for_new_directories())) {
         return $checkDirName;
     } else {
         return false;
-    }
+    }*/
 }
 
 /**
@@ -792,9 +756,13 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
 function deleteDirWork($id)
 {
     $locked = api_resource_is_locked_by_gradebook($id, LINK_STUDENTPUBLICATION);
-
-    if (true == $locked) {
-        echo Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
+    if ($locked) {
+        echo Display::return_message(
+            get_lang(
+                'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+            ),
+            'warning'
+        );
 
         return false;
     }
@@ -816,120 +784,120 @@ function deleteDirWork($id)
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
     $check = true;
-    if (!empty($work_data['url'])) {
-        if ($check) {
-            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
-            if (!empty($consideredWorkingTime)) {
-                $fieldValue = new ExtraFieldValue('work');
-                $resultExtra = $fieldValue->getAllValuesForAnItem(
-                    $work_data['id'],
-                    true
-                );
 
-                $workingTime = null;
-                foreach ($resultExtra as $field) {
-                    $field = $field['value'];
-                    if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
-
-                        break;
-                    }
-                }
-
-                $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
-                if (!empty($workingTime)) {
-                    foreach ($courseUsers as $user) {
-                        $userWorks = get_work_user_list(
-                            0,
-                            100,
-                            null,
-                            null,
-                            $work_data['iid'],
-                            null,
-                            $user['user_id'],
-                            false,
-                            $course_id,
-                            $sessionId
-                        );
-
-                        if (1 != count($userWorks)) {
-                            continue;
-                        }
-                        Event::eventRemoveVirtualCourseTime(
-                            $course_id,
-                            $user['user_id'],
-                            $sessionId,
-                            $workingTime,
-                            $work_data['iid']
-                        );
-                    }
-                }
-            }
-
-            // Deleting all contents inside the folder
-            $sql = "UPDATE $table SET active = 2
-                    WHERE filetype = 'folder' AND iid = $id";
-            Database::query($sql);
-
-            $sql = "UPDATE $table SET active = 2
-                    WHERE parent_id = $id";
-            Database::query($sql);
-
-            /*$new_dir = $work_data_url.'_DELETED_'.$id;
-
-            if ('true' == api_get_setting('permanently_remove_deleted_files')) {
-                my_delete($work_data_url);
-            } else {
-                if (file_exists($work_data_url)) {
-                    rename($work_data_url, $new_dir);
-                }
-            }*/
-
-            // Gets calendar_id from student_publication_assigment
-            $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
-                    WHERE c_id = $course_id AND publication_id = $id";
-            $res = Database::query($sql);
-            $calendar_id = Database::fetch_row($res);
-
-            // delete from agenda if it exists
-            if (!empty($calendar_id[0])) {
-                $sql = "DELETE FROM $t_agenda
-                        WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
-                Database::query($sql);
-            }
-            $sql = "DELETE FROM $TSTDPUBASG
-                    WHERE c_id = $course_id AND publication_id = $id";
-            Database::query($sql);
-
-            Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
-
-            Event::addEvent(
-                LOG_WORK_DIR_DELETE,
-                LOG_WORK_DATA,
-                [
-                    'id' => $work_data['iid'],
-                    'url' => $work_data['url'],
-                    'title' => $work_data['title'],
-                ],
-                null,
-                api_get_user_id(),
-                api_get_course_int_id(),
-                $sessionId
+    if ($check) {
+        $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+        if (!empty($consideredWorkingTime)) {
+            $fieldValue = new ExtraFieldValue('work');
+            $resultExtra = $fieldValue->getAllValuesForAnItem(
+                $work_data['id'],
+                true
             );
 
-            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-                api_get_course_id(),
-                3,
-                $id,
-                api_get_session_id()
-            );
-            $link_id = $linkInfo['id'];
-            if (false !== $linkInfo) {
-                GradebookUtils::remove_resource_from_course_gradebook($link_id);
+            $workingTime = null;
+            foreach ($resultExtra as $field) {
+                $field = $field['value'];
+                if ($consideredWorkingTime == $field->getField()->getVariable()) {
+                    $workingTime = $field->getFieldValue();
+
+                    break;
+                }
             }
 
-            return true;
+            $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+            if (!empty($workingTime)) {
+                foreach ($courseUsers as $user) {
+                    $userWorks = get_work_user_list(
+                        0,
+                        100,
+                        null,
+                        null,
+                        $work_data['iid'],
+                        null,
+                        $user['user_id'],
+                        false,
+                        $course_id,
+                        $sessionId
+                    );
+
+                    if (1 != count($userWorks)) {
+                        continue;
+                    }
+                    Event::eventRemoveVirtualCourseTime(
+                        $course_id,
+                        $user['user_id'],
+                        $sessionId,
+                        $workingTime,
+                        $work_data['iid']
+                    );
+                }
+            }
         }
+
+        // Deleting all contents inside the folder
+        $sql = "UPDATE $table SET active = 2
+                WHERE filetype = 'folder' AND iid = $id";
+        Database::query($sql);
+
+        $sql = "UPDATE $table SET active = 2
+                WHERE parent_id = $id";
+        Database::query($sql);
+
+        /*$new_dir = $work_data_url.'_DELETED_'.$id;
+
+        if ('true' == api_get_setting('permanently_remove_deleted_files')) {
+            my_delete($work_data_url);
+        } else {
+            if (file_exists($work_data_url)) {
+                rename($work_data_url, $new_dir);
+            }
+        }*/
+
+        // Gets calendar_id from student_publication_assigment
+        $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
+                WHERE publication_id = $id";
+        $res = Database::query($sql);
+        $calendar_id = Database::fetch_row($res);
+
+        // delete from agenda if it exists
+        if (!empty($calendar_id[0])) {
+            $sql = "DELETE FROM $t_agenda
+                    WHERE id = '".$calendar_id[0]."'";
+            Database::query($sql);
+        }
+        $sql = "DELETE FROM $TSTDPUBASG
+                WHERE publication_id = $id";
+        Database::query($sql);
+
+        SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
+
+        Event::addEvent(
+            LOG_WORK_DIR_DELETE,
+            LOG_WORK_DATA,
+            [
+                'id' => $work_data['iid'],
+                'url' => $work_data['url'],
+                'title' => $work_data['title'],
+            ],
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            $sessionId
+        );
+
+        $linkInfo = GradebookUtils::isResourceInCourseGradebook(
+            api_get_course_id(),
+            3,
+            $id,
+            $sessionId
+        );
+
+        if (false !== $linkInfo) {
+            $link_id = $linkInfo['id'];
+            GradebookUtils::remove_resource_from_course_gradebook($link_id);
+        }
+
+        return true;
     }
 }
 
@@ -945,7 +913,7 @@ function get_work_path($id)
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = api_get_course_int_id();
     $sql = 'SELECT url FROM '.$table.'
-            WHERE c_id = '.$course_id.' AND id='.(int) $id;
+            WHERE id='.(int) $id;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
         $row = Database::fetch_array($res);
@@ -976,7 +944,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
     $parent_id = (int) $parent_id;
 
     $sql = "SELECT * FROM $table
-            WHERE c_id = $course_id AND id = $id";
+            WHERE iid = $id";
     $res = Database::query($sql);
     if (1 != Database::num_rows($res)) {
         return -1;
@@ -1005,7 +973,6 @@ function updateWorkUrl($id, $new_path, $parent_id)
  */
 function updateDirName($work_data, $newPath)
 {
-    $course_id = $work_data['c_id'];
     $work_id = (int) ($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
@@ -1095,56 +1062,6 @@ function to_javascript_work()
 }
 
 /**
- * Gets the id of a student publication with a given path.
- *
- * @param string $path
- *
- * @return true if is found / false if not found
- */
-// TODO: The name of this function does not fit with the kind of information it returns.
-// Maybe check_work_id() or is_work_id()?
-function get_work_id($path)
-{
-    $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id = api_get_course_int_id();
-    $path = Database::escape_string($path);
-
-    if (api_is_allowed_to_edit()) {
-        $sql = "SELECT work.iid
-                FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
-                WHERE
-                    props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    props.tool='work' AND
-                    work.id=props.ref AND
-                    work.url LIKE 'work/".$path."%' AND
-                    work.filetype='file' AND
-                    props.visibility<>'2'";
-    } else {
-        $sql = "SELECT work.iid
-                FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
-                WHERE
-                    props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    props.tool='work' AND
-                    work.id=props.ref AND
-                    work.url LIKE 'work/".$path."%' AND
-                    work.filetype='file' AND
-                    props.visibility<>'2' AND
-                    props.lastedit_user_id = '".api_get_user_id()."'";
-    }
-    $result = Database::query($sql);
-    $num_rows = Database::num_rows($result);
-
-    if ($result && $num_rows > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * @param int $work_id
  * @param int $onlyMeUserId show only my works
  * @param int $notMeUserId  show works from everyone except me
@@ -1162,7 +1079,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
         $session_id,
         true,
         false,
-        'work.session_id'
+        'link.session_id'
     );
 
     $group_id = api_get_group_id();
@@ -1262,10 +1179,7 @@ function getWorkListStudent(
     $group_id = api_get_group_id();
     $userId = api_get_user_id();
 
-    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-        $userId,
-        $courseInfo
-    );
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
 
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
@@ -1302,7 +1216,27 @@ function getWorkListStudent(
         $select = 'SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ';
     }
 
-    $sql = "$select
+    $repo = Container::getStudentPublicationRepository();
+    $course = api_get_course_entity($course_id);
+    $session = api_get_session_entity($session_id);
+    $group = api_get_group_entity($group_id);
+
+    $qb = $repo->getResourcesByCourse($course, $session, $group);
+    $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+    $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+
+    if ($getCount) {
+        $qb->select('count(resource)');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    $qb
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+    ;
+
+    /*$sql = "$select
             FROM $workTable w
             LEFT JOIN $workTableAssignment a
             ON (a.publication_id = w.iid AND a.c_id = w.c_id)
@@ -1313,7 +1247,7 @@ function getWorkListStudent(
                 $where_condition
             ";
 
-    $sql .= " ORDER BY $column $direction ";
+    $sql .= " ORDER BY `$column` $direction ";
 
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
@@ -1325,7 +1259,7 @@ function getWorkListStudent(
         $row = Database::fetch_array($result);
 
         return $row['count'];
-    }
+    }*/
 
     $works = [];
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
@@ -1333,44 +1267,50 @@ function getWorkListStudent(
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
     }
 
+    $studentPublications = $qb->getQuery()->getResult();
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
-    while ($work = Database::fetch_array($result, 'ASSOC')) {
-        $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $course_id);
-        if (false == $isSubscribed) {
+    //while ($work = Database::fetch_array($result, 'ASSOC')) {
+    $icon = Display::return_icon('work.png');
+
+    /** @var CStudentPublication $studentPublication */
+    foreach ($studentPublications as $studentPublication) {
+        $workId = $studentPublication->getIid();
+        $assignment = $studentPublication->getAssignment();
+        $isSubscribed = userIsSubscribedToWork($userId, $workId, $course_id);
+        if (false === $isSubscribed) {
             continue;
         }
 
-        /*$visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $session_id);
+        /*$visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
         if ($visibility != 1) {
             continue;
         }*/
 
-        $work['type'] = Display::return_icon('work.png');
-        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
-
-        if (empty($work['title'])) {
-            $work['title'] = basename($work['url']);
+        $work['type'] = $icon;
+        $work['expires_on'] = '';
+        if ($assignment) {
+            $work['expires_on'] = api_get_local_time($assignment->getExpiresOn());
         }
 
-        $whereCondition = " AND u.id = $userId ";
+        $title = $studentPublication->getTitle();
 
+        /*$whereCondition = " AND u.id = $userId ";
         $workList = get_work_user_list(
             0,
             1000,
             null,
             null,
-            $work['iid'],
+            $workId,
             $whereCondition
         );
-
-        $count = getTotalWorkComment($workList, $courseInfo);
-        $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
-
+        $count = getTotalWorkComment($workList, $courseInfo);*/
+        $count = 0;
+        //$lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
+        $lastWork = null;
         if (null !== $count && !empty($count)) {
             $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.api_get_cidreq();
-
             $feedback = '&nbsp;'.Display::url(
-                Display::returnFontAwesomeIcon('comments-o'),
+                Display::getMdiIcon('comment-multiple-outline'),
                 $urlView,
                 ['title' => get_lang('View')]
             );
@@ -1383,10 +1323,10 @@ function getWorkListStudent(
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
 
-        $work['title'] = Display::url($work['title'], $url.'&id='.$work['iid']);
+        $work['title'] = Display::url($title, $url.'&id='.$workId);
         $work['others'] = Display::url(
             Display::return_icon('group.png', get_lang('Others')),
-            $urlOthers.$work['iid']
+            $urlOthers.$workId
         );
         $works[] = $work;
     }
@@ -1508,7 +1448,7 @@ function getAllWorkListStudent(
                 $where
             ";
 
-    $sql .= " ORDER BY $column $direction ";
+    $sql .= " ORDER BY `$column` $direction ";
 
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
@@ -1530,10 +1470,9 @@ function getAllWorkListStudent(
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $courseId = $work['c_id'];
         $courseInfo = $courseList[$work['c_id']];
-        $courseCode = $courseInfo['code'];
         $sessionId = $work['session_id'];
 
-        $cidReq = api_get_cidreq_params($courseCode, $sessionId);
+        $cidReq = api_get_cidreq_params($courseId, $sessionId);
         $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
         $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $courseId);
         if (false == $isSubscribed) {
@@ -1554,7 +1493,7 @@ function getAllWorkListStudent(
         }
 
         if ($withResults) {
-            $whereCondition = " AND u.user_id = $userId ";
+            $whereCondition = " AND u.id = $userId ";
             $workList = get_work_user_list(
                 0,
                 1000,
@@ -1575,7 +1514,7 @@ function getAllWorkListStudent(
                 $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.$cidReq;
 
                 $feedback = '&nbsp;'.Display::url(
-                        Display::returnFontAwesomeIcon('comments-o'),
+                        Display::getMdiIcon('comment-outline'),
                         $urlView,
                         ['title' => get_lang('View')]
                     );
@@ -1614,21 +1553,14 @@ function getWorkListTeacher(
     $where_condition,
     $getCount = false
 ) {
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
-    $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
         $groupIid = $groupInfo['iid'];
     }
-    $groupIid = (int) $groupIid;
-
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
@@ -1642,6 +1574,11 @@ function getWorkListTeacher(
     $limit = (int) $limit;
     $works = [];
 
+    $repo = Container::getStudentPublicationRepository();
+    $course = api_get_course_entity($course_id);
+    $session = api_get_session_entity($session_id);
+    $group = api_get_group_entity($group_id);
+
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
@@ -1650,7 +1587,21 @@ function getWorkListTeacher(
         } else {
             $select = ' SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ';
         }
-        $sql = " $select
+
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
+
+        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+        if ($getCount) {
+            $qb->select('count(resource)');
+        }
+
+        $qb
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+        ;
+
+        /*$sql = " $select
                 FROM $workTable w
                 LEFT JOIN $workTableAssignment a
                 ON (a.publication_id = w.iid AND a.c_id = w.c_id)
@@ -1661,38 +1612,42 @@ function getWorkListTeacher(
                     parent_id = 0 AND
                     post_group_id = $groupIid
                     $where_condition
-                ORDER BY $column $direction
+                ORDER BY `$column` $direction
                 LIMIT $start, $limit";
-
-        $result = Database::query($sql);
+        $result = Database::query($sql);*/
 
         if ($getCount) {
-            $row = Database::fetch_array($result);
-
-            return (int) $row['count'];
+            return (int) $qb->getQuery()->getSingleScalarResult();
+            /*$row = Database::fetch_array($result);
+            return (int) $row['count'];*/
         }
+
+        $studentPublications = $qb->getQuery()->getResult();
 
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
-        $repo = Container::getStudentPublicationRepository();
-        $courseEntity = api_get_course_entity($course_id);
-        $sessionEntity = api_get_session_entity($session_id);
 
-        while ($work = Database::fetch_array($result, 'ASSOC')) {
-            /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($work['iid']);
+        //while ($work = Database::fetch_array($result, 'ASSOC')) {
+        $icon = Display::return_icon('work.png');
+        /** @var CStudentPublication $studentPublication */
+        foreach ($studentPublications as $studentPublication) {
             $workId = $studentPublication->getIid();
+            $work = [];
+            $work['iid'] = $workId;
+            $work['type'] = $icon;
+            $assignment = $studentPublication->getAssignment();
+            $work['expires_on'] = '';
+            if ($assignment) {
+                $work['expires_on'] = api_get_local_time($assignment->getExpiresOn());
+            }
 
-            $work['type'] = Display::return_icon('work.png');
-            $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
-
-            $countUniqueAttempts = getUniqueStudentAttemptsTotal(
+            /*$countUniqueAttempts = getUniqueStudentAttemptsTotal(
                 $workId,
                 $group_id,
                 $course_id,
                 $session_id
-            );
-
+            );*/
+            $countUniqueAttempts = 0;
             $totalUsers = getStudentSubscribedToWork(
                 $workId,
                 $course_id,
@@ -1701,14 +1656,10 @@ function getWorkListTeacher(
                 true
             );
 
-            $work['amount'] = Display::label(
-                $countUniqueAttempts.'/'.
-                $totalUsers,
-                'success'
-            );
+            $work['amount'] = Display::label($countUniqueAttempts.'/'.$totalUsers, 'success');
 
             //$visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
-            $isVisible = $studentPublication->isVisible($courseEntity, $sessionEntity);
+            $isVisible = $studentPublication->isVisible($course, $session);
             if ($isVisible) {
                 $icon = 'visible.png';
                 $text = get_lang('Visible');
@@ -1726,12 +1677,10 @@ function getWorkListTeacher(
                 api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
             );
 
-            if (empty($work['title'])) {
-                $work['title'] = basename($work['url']);
-            }
-            $work['title'] = Display::url($work['title'], $url.'&id='.$workId, ['class' => $class]);
-            $work['title'] .= ' '.Display::label(get_count_work($work['iid']), 'success');
-            $work['sent_date'] = api_get_local_time($work['sent_date']);
+            $title = $studentPublication->getTitle();
+            $work['title'] = Display::url($title, $url.'&id='.$workId, ['class' => $class]);
+            $work['title'] .= ' '.Display::label(get_count_work($workId), 'success');
+            $work['sent_date'] = api_get_local_time($studentPublication->getSentDate());
 
             if ($blockEdition && !api_is_platform_admin()) {
                 $editLink = '';
@@ -1901,7 +1850,7 @@ function get_work_user_list_from_documents(
         return $result['count'];
     }
 
-    $sql .= " ORDER BY $column $direction";
+    $sql .= " ORDER BY `$column` $direction";
     $sql .= " LIMIT $start, $limit";
 
     $result = Database::query($sql);
@@ -2034,23 +1983,24 @@ function get_work_user_list(
     $limit,
     $column,
     $direction,
-    $work_id,
+    $workId,
     $whereCondition = '',
     $studentId = null,
     $getCount = false,
     $courseId = 0,
     $sessionId = 0
 ) {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $user_table = Database::get_main_table(TABLE_MAIN_USER);
-
     $session_id = $sessionId ? (int) $sessionId : api_get_session_id();
-    $group_id = api_get_group_id();
+    $groupId = api_get_group_id();
     $course_info = api_get_course_info();
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
-    $course_id = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
+    $courseId = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
 
-    $work_id = (int) $work_id;
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+    $group = api_get_group_entity($groupId);
+
+    $workId = (int) $workId;
     $start = (int) $start;
     $limit = (int) $limit;
 
@@ -2064,7 +2014,7 @@ function get_work_user_list(
         $direction = 'desc';
     }
 
-    $work_data = get_work_data_by_id($work_id, $courseId, $sessionId);
+    //$work_data = get_work_data_by_id($workId, $courseId, $sessionId);
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     $condition_session = api_get_session_condition(
         $session_id,
@@ -2074,7 +2024,7 @@ function get_work_user_list(
     );
 
     $locked = api_resource_is_locked_by_gradebook(
-        $work_id,
+        $workId,
         LINK_STUDENTPUBLICATION,
         $course_info['code']
     );
@@ -2086,23 +2036,19 @@ function get_work_user_list(
 
     $isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $session_id));
 
-    $groupIid = 0;
-    if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        if ($groupInfo) {
-            $groupIid = $groupInfo['iid'];
-        }
-    }
+    $repo = Container::getStudentPublicationRepository();
+    /** @var CStudentPublication $studentPublication */
+    $studentPublication = $repo->find($workId);
 
-    if (!empty($work_data)) {
-        if (!empty($group_id)) {
+    if (null !== $studentPublication) {
+        /*if (!empty($group_id)) {
             // set to select only messages posted by the user's group
             $extra_conditions = " work.post_group_id = '".$groupIid."' ";
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
-        }
+        }*/
 
-        if ($is_allowed_to_edit || $isDrhOfCourse || $isDrhOfSession) {
+        /*if ($is_allowed_to_edit || $isDrhOfCourse || $isDrhOfSession) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
             if (isset($course_info['show_score']) &&
@@ -2114,7 +2060,7 @@ function get_work_user_list(
             }
         }
 
-        $extra_conditions .= " AND parent_id  = $work_id ";
+        $extra_conditions .= " AND parent_id  = $workId ";*/
 
         $select = 'SELECT DISTINCT
                         u.id as user_id,
@@ -2134,22 +2080,32 @@ function get_work_user_list(
                         u.username,
                         parent_id,
                         accepted,
-                        qualificator_id,
-                        url_correction,
-                        title_correction
+                        qualificator_id
                         ';
         if ($getCount) {
             $select = 'SELECT DISTINCT count(u.id) as count ';
         }
 
-        $work_assignment = get_work_assignment_by_id($work_id, $courseId);
-
+        /*$work_assignment = get_work_assignment_by_id($workId, $courseId);
         if (!empty($studentId)) {
             $studentId = (int) $studentId;
             $whereCondition .= " AND u.id = $studentId ";
+        }*/
+
+        $qb = $repo->getStudentAssignments($studentPublication, $course, $session, $group);
+
+        if ($getCount) {
+            $qb->select('count(resource)');
+
+            return $qb->getQuery()->getSingleScalarResult();
         }
 
-        $sql = " $select
+        $qb->setFirstResult($start);
+        $qb->setMaxResults($limit);
+
+        $assignments = $qb->getQuery()->getResult();
+
+        /*$sql = " $select
                 FROM $work_table work
                 INNER JOIN $user_table u
                 ON (work.user_id = u.id)
@@ -2159,22 +2115,21 @@ function get_work_user_list(
                     $whereCondition
                     $condition_session
                     AND u.status != ".INVITEE."
-                ORDER BY $column $direction";
+                ORDER BY `$column` $direction";
 
         if (!empty($start) && !empty($limit)) {
             $sql .= " LIMIT $start, $limit";
         }
-        $result = Database::query($sql);
+        $result = Database::query($sql);*/
         $works = [];
-
-        if ($getCount) {
+        /*if ($getCount) {
             $work = Database::fetch_array($result, 'ASSOC');
             if ($work) {
                 return (int) $work['count'];
             }
 
             return 0;
-        }
+        }*/
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
         $unoconv = api_get_configuration_value('unoconv.binaries');
@@ -2217,19 +2172,16 @@ function get_work_user_list(
 
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
-
+        $loading = Display::getMdiIcon('loading', 'animate-spin');
         $router = Container::getRouter();
-        $repo = Container::getStudentPublicationRepository();
-        while ($work = Database::fetch_array($result, 'ASSOC')) {
-            /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($work['id']);
-            $item_id = $work['id'];
+        $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication');
+        /** @var CStudentPublication $assignment */
+        foreach ($assignments as $assignment) {
+            $item_id = $assignment->getIid();
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
-            $owner_id = $work['user_id'];
-
+            $owner_id = $assignment->getUser()->getId();
             /* Because a bug found when saving items using the api_item_property_update()
                the field $item_property_data['insert_user_id'] is not reliable. */
             if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
@@ -2239,96 +2191,95 @@ function get_work_user_list(
             if (0 == $course_info['show_score']) {
                 $can_read = true;
             }
-
+            $qualification = $assignment->getQualification();
             $qualification_exists = false;
-            if (!empty($work_data['qualification']) &&
-                (int) ($work_data['qualification']) > 0
+            if (!empty($qualification) &&
+                (int) ($qualification) > 0
             ) {
                 $qualification_exists = true;
             }
 
             $qualification_string = '';
             if ($qualification_exists) {
-                if ('' == $work['qualification']) {
+                if ('' == $qualification) {
                     $qualification_string = Display::label('-');
                 } else {
-                    $qualification_string = formatWorkScore($work['qualification'], $work_data['qualification']);
+                    $qualification_string = formatWorkScore($qualification, $qualification);
+                }
+            }
+            $work['iid'] = $assignment->getIid();
+            $work['qualification_score'] = $studentPublication->getQualification();
+            $add_string = '';
+            $time_expires = '';
+            $assignmentConfiguration = $studentPublication->getAssignment();
+            $expiresOn = null;
+            if (!empty($assignmentConfiguration)) {
+                $expiresOn = $assignmentConfiguration->getExpiresOn();
+                if (!empty($expiresOn)) {
+                    $time_expires = api_strtotime(
+                        $expiresOn->format('Y-m-d H:i:s'),
+                        'UTC'
+                    );
                 }
             }
 
-            $work['qualification_score'] = $work['qualification'];
-            $add_string = '';
-            $time_expires = '';
-            if (!empty($work_assignment['expires_on'])) {
-                $time_expires = api_strtotime(
-                    $work_assignment['expires_on'],
-                    'UTC'
-                );
-            }
-
-            if (!empty($work_assignment['expires_on']) &&
-                !empty($time_expires) && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
+            if (!empty($expiresOn) &&
+                !empty($time_expires) &&
+                ($time_expires < api_strtotime($studentPublication->getSentDate(), 'UTC'))
+            ) {
                 $add_string = Display::label(get_lang('Expired'), 'important').' - ';
             }
 
-            if (($can_read && '1' == $work['accepted']) ||
-                ($is_author && in_array($work['accepted'], ['1', '0'])) ||
+            $accepted = $studentPublication->getAccepted();
+            if (($can_read && $accepted) ||
+                $is_author ||
                 ($is_allowed_to_edit || api_is_drh())
             ) {
                 // Firstname, lastname, username
                 $work['fullname'] = Display::div(
-                    api_get_person_name($work['firstname'], $work['lastname']),
+                    UserManager::formatUserFullName($assignment->getUser()),
                     ['class' => 'work-name']
                 );
                 // Title
-                $work['title_clean'] = $work['title'];
-                $work['title'] = Security::remove_XSS($work['title']);
-                if (strlen($work['title']) > 30) {
-                    $short_title = substr($work['title'], 0, 27).'...';
-                    $work['title'] = Display::span($short_title, ['class' => 'work-title', 'title' => $work['title']]);
+                $title = $assignment->getTitle();
+                $work['title_clean'] = $title;
+                $title = Security::remove_XSS($title);
+                if (strlen($title) > 30) {
+                    $short_title = substr($title, 0, 27).'...';
+                    $work['title'] = Display::span($short_title, ['class' => 'work-title', 'title' => $title]);
                 } else {
-                    $work['title'] = Display::div($work['title'], ['class' => 'work-title']);
+                    $work['title'] = Display::div($title, ['class' => 'work-title']);
                 }
 
                 // Type.
-                $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
+                //$work['type'] = DocumentManager::build_document_icon_tag('file', $studentPublication->getUrl());
+                $work['type'] = '';
 
                 // File name.
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
-                if ($work['contains_file']) {
-                    $downloadUrl = $router->generate('chamilo_core_resource_download',
-                            [
-                                'id' => $studentPublication->getResourceNode()->getId(),
-                                'tool' => 'student_publication',
-                                'type' => 'student_publications',
-                            ]
-                        ).'?'.api_get_cidreq();
+                if ($studentPublication->getContainsFile()) {
+                    $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
                 $feedback = '';
-                $count = getWorkCommentCount($item_id, $course_info);
+                $count = count($studentPublication->getComments()); // getWorkCommentCount($item_id, $course_info);
                 if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
                     $feedback .= Display::url(
-                        $count.' '.Display::returnFontAwesomeIcon('comments-o'),
+                        $count.' '.Display::getMdiIcon('comment-multiple-outline'),
                         $url.'view.php?'.api_get_cidreq().'&id='.$item_id
                     );
                 }
 
                 $correction = '';
                 $hasCorrection = '';
-                if (!empty($work['url_correction'])) {
-                    $downloadUrl = $router->generate('chamilo_core_resource_download',
-                            [
-                                'id' => $studentPublication->getResourceNode()->getId(),
-                                'tool' => 'student_publication',
-                                'type' => 'student_publications',
-                            ]
-                        ).'?'.api_get_cidreq();
+                $correctionEntity = $assignment->getCorrection();
+                if (null !== $correctionEntity) {
+                    $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $hasCorrection = Display::url(
                         $correctionIcon,
                         $downloadUrl
@@ -2344,44 +2295,53 @@ function get_work_user_list(
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.
-                $work_date = api_get_local_time($work['sent_date']);
-                $date = date_to_str_ago($work['sent_date']).' '.$work_date;
+                $sendDate = $studentPublication->getSentDate();
+                $sendDateToString = $studentPublication->getSentDate()->format('Y-m-d H:i:s');
+
+                $work_date = api_get_local_time($sendDate);
+                $date = date_to_str_ago($sendDate).' '.$work_date;
                 $work['formatted_date'] = $work_date.' '.$add_string;
                 $work['expiry_note'] = $add_string;
-                $work['sent_date_from_db'] = $work['sent_date'];
+                $work['sent_date_from_db'] = $sendDateToString;
                 $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.
-                    $add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
+                    $add_string.' '.Display::dateToStringAgoAndLongDate($sendDate).
+                    '</div>';
                 $work['status'] = $hasCorrection;
                 $work['has_correction'] = $hasCorrection;
 
                 // Actions.
                 $action = '';
+                $qualificatorId = $assignment->getQualificatorId();
                 if (api_is_allowed_to_edit()) {
-                    if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
+                    if ($blockScoreEdition && !api_is_platform_admin() && !empty($studentPublication->getQualification())) {
                         $rateLink = '';
                     } else {
-                        $rateLink = '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        $rateLink = '<a
+                            href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                             $rateIcon.'</a> ';
                     }
                     $action .= $rateLink;
 
-                    if ($unoconv && empty($work['contains_file'])) {
+                    if ($unoconv && empty($assignment->getContainsFile())) {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('Export to .doc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('Export to .doc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
 
                     $alreadyUploaded = '';
-                    if (!empty($work['url_correction'])) {
-                        $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
+                    if ($correctionEntity) {
+                        $alreadyUploaded = '<br />'.
+                            $assignment->getResourceNode()->getTitle().' '.$correctionIconSmall;
                     }
 
                     $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
                         class="work_correction_file_upload file_upload_small fileinput-button"
-                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
+                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'"
+                        method="POST"
+                        enctype="multipart/form-data"
                         >
                         <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.addslashes(get_lang('Click or drop one file here')).'
@@ -2442,23 +2402,21 @@ function get_work_user_list(
                             $editLink = '';
                         } else {
                             if ($qualification_exists) {
-                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
-                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
-                                        'Edit'
-                                    ).'"  >'.
+                                $editLink = '<a
+                                    href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
+                                    title="'.get_lang('Edit').'"  >'.
                                     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                             } else {
-                                $editLink = '<a href="'.$url.'edit.php?'.api_get_cidreq(
-                                    ).'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang(
-                                        'Edit'
-                                    ).'">'.
+                                $editLink = '<a
+                                    href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
+                                    title="'.get_lang('Edit').'">'.
                                     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                             }
                         }
                         $action .= $editLink;
                     }
 
-                    if ($work['contains_file']) {
+                    if ($assignment->getContainsFile()) {
                         if ($locked) {
                             $action .= Display::return_icon(
                                 'move_na.png',
@@ -2467,44 +2425,67 @@ function get_work_user_list(
                                 ICON_SIZE_SMALL
                             );
                         } else {
-                            $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
+                            $action .= '<a
+                                href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'&id='.$workId.'"
+                                title="'.get_lang('Move').'">'.
                                 Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
                         }
                     }
 
-                    if ('1' == $work['accepted']) {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('invisible').'" >'.
-                            Display::return_icon('visible.png', get_lang('invisible'), [], ICON_SIZE_SMALL).'</a>';
+                    if ($assignment->getAccepted()) {
+                        $action .= '<a
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'"
+                            title="'.get_lang('invisible').'" >'.
+                            Display::return_icon('visible.png', get_lang('invisible'), [], ICON_SIZE_SMALL).
+                            '</a>';
                     } else {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
-                            Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).'</a> ';
+                        $action .= '<a
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id.'"
+                            title="'.get_lang('Visible').'" >'.
+                            Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).
+                            '</a> ';
                     }
 
                     if ($locked) {
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
                     } else {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
+                        $action .= '<a
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id.'"
+                            onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
+                            title="'.get_lang('Delete').'" >'.
                             Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                     }
-                } elseif ($is_author && (empty($work['qualificator_id']) || 0 == $work['qualificator_id'])) {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+                } elseif ($is_author && (empty($qualificatorId) || 0 == $qualificatorId)) {
+                    $action .= '<a
+                            href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'"
+                            title="'.get_lang('View').'">'.
+                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).
+                        '</a>';
 
-                    if (1 == api_get_course_setting('student_delete_own_publication')) {
+                    if (1 == $studentDeleteOwnPublication) {
                         if (api_is_allowed_to_session_edit(false, true)) {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).'</a>';
+                            $action .= '<a
+                                href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
+                                title="'.get_lang('Edit').'">'.
+                                Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).
+                                '</a>';
                         }
-                        $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
+                        $action .= ' <a
+                            href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId.'"
+                            onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
+                            title="'.get_lang('Delete').'"  >'.
                             Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
                     }
                 } else {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+                    $action .= '<a
+                        href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'"
+                        title="'.get_lang('View').'">'.
+                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).
+                        '</a>';
                 }
 
                 // Status.
-                if (empty($work['qualificator_id'])) {
+                if (empty($qualificatorId)) {
                     $qualificator_id = Display::label(get_lang('Not reviewed'), 'warning');
                 } else {
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
@@ -2533,7 +2514,7 @@ function get_work_user_list(
                                 get_lang('Analyse'),
                                 'javascript:void(0)',
                                 [
-                                    'class' => 'getSingleCompilatio btn btn-primary btn-xs',
+                                    'class' => 'getSingleCompilatio btn btn--primary btn-xs',
                                     'onclick' => "getSingleCompilatio($item_id);",
                                 ]
                             );
@@ -2550,6 +2531,514 @@ function get_work_user_list(
     }
 }
 
+function getAllWork(
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $whereCondition = '',
+    $getCount = false,
+    $courseId = 0,
+    $status = 0
+) {
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $userId = api_get_user_id();
+    if (empty($userId)) {
+        return [];
+    }
+
+    $courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
+
+    if (!empty($whereCondition)) {
+        $whereCondition = ' AND '.$whereCondition;
+    }
+    $whereCondition = Database::escape_string($whereCondition);
+
+    if (!in_array($direction, ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
+    $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
+    $start = (int) $start;
+    $limit = (int) $limit;
+    $courseQuery = [];
+    $courseList = [];
+    $withResults = 0;
+    foreach ($courses as $course) {
+        $courseIdItem = $course['real_id'];
+        if (!empty($courseId) && $courseIdItem != $courseId) {
+            continue;
+        }
+        $courseInfo = api_get_course_info_by_id($courseIdItem);
+        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
+        //$conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
+        $conditionSession = '';
+        $parentCondition = '';
+        if ($withResults) {
+            $parentCondition = 'AND ww.parent_id is NOT NULL';
+        }
+        $courseQuery[] = " (work.c_id = $courseIdItem $conditionSession $parentCondition )";
+        $courseList[$courseIdItem] = $courseInfo;
+    }
+
+    $courseQueryToString = implode(' OR ', $courseQuery);
+    $compilation = null;
+    /*if (api_get_configuration_value('allow_compilatio_tool')) {
+        $compilation = new Compilatio();
+    }*/
+
+    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
+
+    if ($getCount) {
+        if (empty($courseQuery)) {
+            return 0;
+        }
+        $select = 'SELECT DISTINCT count(u.id) as count ';
+    } else {
+        $select = 'SELECT DISTINCT
+                    u.id as user_id,
+                    work.id as id,
+                    title as title,
+                    description,
+                    url,
+                    sent_date,
+                    contains_file,
+                    has_properties,
+                    view_properties,
+                    qualification,
+                    weight,
+                    allow_text_assignment,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    parent_id,
+                    accepted,
+                    qualificator_id,
+                    url_correction,
+                    title_correction,
+                    work.c_id,
+                    work.session_id ';
+    }
+
+    $statusCondition = '';
+    if (!empty($status)) {
+        switch ($status) {
+            case 2:
+                $statusCondition = ' AND (qualificator_id IS NULL OR qualificator_id = 0) ';
+                break;
+            case 3:
+                $statusCondition = ' AND (qualificator_id <> 0 AND qualificator_id IS NOT NULL) ';
+                break;
+        }
+    }
+
+    $sql = " $select
+            FROM $work_table work
+            INNER JOIN $user_table u
+            ON (work.user_id = u.id)
+            WHERE
+                work.parent_id <> 0 AND
+                work.active IN (1, 0)
+                $whereCondition AND
+                ($courseQueryToString)
+                $statusCondition
+                AND u.status != ".INVITEE;
+
+    $sql .= " ORDER BY `$column` $direction ";
+
+    if (!empty($start) && !empty($limit)) {
+        $sql .= " LIMIT $start, $limit";
+    }
+
+    $result = Database::query($sql);
+    $works = [];
+    if ($getCount) {
+        $work = Database::fetch_array($result, 'ASSOC');
+        if ($work) {
+            return (int) $work['count'];
+        }
+
+        return 0;
+    }
+
+    $url = api_get_path(WEB_CODE_PATH).'work/';
+    $unoconv = api_get_configuration_value('unoconv.binaries');
+    $loadingText = addslashes(get_lang('Loading'));
+    $uploadedText = addslashes(get_lang('Uploaded'));
+    $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
+    $failsUploadIcon = Display::return_icon(
+        'closed-circle.png',
+        '',
+        [],
+        ICON_SIZE_TINY
+    );
+    $saveIcon = Display::return_icon(
+        'save.png',
+        get_lang('Save'),
+        [],
+        ICON_SIZE_SMALL
+    );
+
+    $correctionIcon = Display::return_icon(
+        'check-circle.png',
+        get_lang('Correction'),
+        null,
+        ICON_SIZE_SMALL
+    );
+
+    $correctionIconSmall = Display::return_icon(
+        'check-circle.png',
+        get_lang('Correction'),
+        null,
+        ICON_SIZE_TINY
+    );
+
+    $rateIcon = Display::return_icon(
+        'rate_work.png',
+        get_lang('CorrectAndRate'),
+        [],
+        ICON_SIZE_SMALL
+    );
+    $parentList = [];
+    $blockEdition = api_get_configuration_value('block_student_publication_edition');
+    $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+    $loading = Display::getMdiIcon('loading', 'animate-spin');
+    $qualification_exists = true;
+    $repo = Container::getStudentPublicationRepository();
+    while ($work = Database::fetch_array($result, 'ASSOC')) {
+        $courseId = $work['c_id'];
+        $courseInfo = $courseList[$work['c_id']];
+        $sessionId = $work['session_id'];
+        $cidReq = 'cidReq='.$courseInfo['code'].'&id_session='.$sessionId;
+
+        $item_id = $workId = $work['id'];
+        $dbTitle = $work['title'];
+        // Get the author ID for that document from the item_property table
+        $is_author = false;
+        $can_read = false;
+        $owner_id = $work['user_id'];
+        //$visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
+        $studentPublication = $repo->find($work['iid']);
+        $workId = $studentPublication->getIid();
+        $isVisible = $studentPublication->isVisible($courseEntity, $sessionEntity);
+        if (false === $isVisible) {
+            continue;
+        }
+        /*$locked = api_resource_is_locked_by_gradebook(
+            $item_id,
+            LINK_STUDENTPUBLICATION,
+            $courseInfo['code']
+        );*/
+        $locked = false;
+
+        /* Because a bug found when saving items using the api_item_property_update()
+           the field $item_property_data['insert_user_id'] is not reliable. */
+        if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
+            $is_author = true;
+        }
+
+        /*if ($course_info['show_score'] == 0) {
+            $can_read = true;
+        }*/
+
+        $qualification_string = '';
+        if ($qualification_exists) {
+            if ('' == $work['qualification']) {
+                $qualification_string = Display::label('-');
+            } else {
+                $qualification_string = formatWorkScore($work['qualification'], $work['qualification']);
+            }
+        }
+
+        $work_assignment = get_work_assignment_by_id($workId, $courseId);
+
+        $work['qualification_score'] = $work['qualification'];
+        $add_string = '';
+        $time_expires = '';
+        if (!empty($work_assignment['expires_on'])) {
+            $time_expires = api_strtotime(
+                $work_assignment['expires_on'],
+                'UTC'
+            );
+        }
+
+        if (!empty($work_assignment['expires_on']) &&
+            !empty($time_expires) && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
+            $add_string = Display::label(get_lang('Expired'), 'important').' - ';
+        }
+
+        if (($can_read && '1' == $work['accepted']) ||
+            ($is_author && in_array($work['accepted'], ['1', '0'])) ||
+            ($is_allowed_to_edit || api_is_drh())
+        ) {
+            // Firstname, lastname, username
+            $work['fullname'] = Display::div(
+                api_get_person_name($work['firstname'], $work['lastname']),
+                ['class' => 'work-name']
+            );
+            // Title
+            $work['title_clean'] = $work['title'];
+            $work['title'] = Security::remove_XSS($work['title']);
+            if (strlen($work['title']) > 30) {
+                $short_title = substr($work['title'], 0, 27).'...';
+                $work['title'] = Display::span($short_title, ['class' => 'work-title', 'title' => $work['title']]);
+            } else {
+                $work['title'] = Display::div($work['title'], ['class' => 'work-title']);
+            }
+
+            // Type.
+            $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
+
+            // File name.
+            $linkToDownload = '';
+            // If URL is present then there's a file to download keep BC.
+            if ($work['contains_file'] || !empty($work['url'])) {
+                $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.$cidReq.'">'.$saveIcon.'</a> ';
+            }
+
+            $feedback = '';
+            $count = getWorkCommentCount($item_id, $courseInfo);
+            if (!is_null($count) && !empty($count)) {
+                if ($qualification_exists) {
+                    $feedback .= ' ';
+                }
+                $feedback .= Display::url(
+                    $count.' '.Display::getMdiIcon('comment-multiple-outline'),
+                    $url.'view.php?'.$cidReq.'&id='.$item_id
+                );
+            }
+
+            $correction = '';
+            $hasCorrection = '';
+            if (!empty($work['url_correction'])) {
+                $hasCorrection = Display::url(
+                    $correctionIcon,
+                    api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.$cidReq.'&correction=1'
+                );
+            }
+
+            if ($qualification_exists) {
+                $work['qualification'] = $qualification_string.$feedback;
+            } else {
+                $work['qualification'] = $qualification_string.$feedback.$hasCorrection;
+            }
+
+            $work['qualification_only'] = $qualification_string;
+
+            // Date.
+            $work_date = api_get_local_time($work['sent_date']);
+            $date = date_to_str_ago($work['sent_date']).' '.$work_date;
+            $work['formatted_date'] = $work_date.' '.$add_string;
+            $work['expiry_note'] = $add_string;
+            $work['sent_date_from_db'] = $work['sent_date'];
+            $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.
+                $add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
+            $work['status'] = $hasCorrection;
+            $work['has_correction'] = $hasCorrection;
+            $work['course'] = $courseInfo['title'];
+
+            if (isset($parentList[$work['parent_id']])) {
+                $parent = $parentList[$work['parent_id']];
+            } else {
+                $parent = get_work_data_by_id($work['parent_id'], $courseId);
+                $parentList[$work['parent_id']] = $parent;
+            }
+            $work['work_name'] = $parent['title'];
+
+            // Actions.
+            $action = '';
+            if (api_is_allowed_to_edit()) {
+                if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
+                    $rateLink = '';
+                } else {
+                    $rateLink = '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        $rateIcon.'</a> ';
+                }
+                $action .= $rateLink;
+
+                if ($unoconv && empty($work['contains_file'])) {
+                    $action .= '<a
+                        href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
+                        title="'.get_lang('ExportToDoc').'" >'.
+                        Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
+                }
+
+                $alreadyUploaded = '';
+                if (!empty($work['url_correction'])) {
+                    $alreadyUploaded = '<br />'.$work['title_correction'].' '.$correctionIconSmall;
+                }
+
+                $correction = '
+                    <form
+                    id="file_upload_'.$item_id.'"
+                    class="work_correction_file_upload file_upload_small fileinput-button"
+                    action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.$cidReq.'&a=upload_correction_file&item_id='.$item_id.'"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    >
+                    <div id="progress_'.$item_id.'" class="text-center button-load">
+                        '.addslashes(get_lang('ClickOrDropOneFileHere')).'
+                        '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
+                        '.$alreadyUploaded.'
+                    </div>
+                    <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
+                    </form>
+                ';
+
+                $correction .= "<script>
+                $(function() {
+                    $('.work_correction_file_upload').each(function () {
+                        $(this).fileupload({
+                            dropZone: $(this)
+                        });
+                    });
+
+                    $('#file_upload_".$item_id."').fileupload({
+                        add: function (e, data) {
+                            $('#progress_$item_id').html();
+                            data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
+                            data.submit();
+                            $(this).removeClass('hover');
+                        },
+                        dragover: function (e, data) {
+                            $(this).addClass('hover');
+                        },
+                        done: function (e, data) {
+                            if (data._response.result.name) {
+                                $('#progress_$item_id').html('$uploadedText '+data._response.result.result+'<br />'+data._response.result.name);
+                            } else {
+                                $('#progress_$item_id').html('$failsUploadText $failsUploadIcon');
+                            }
+                            $(this).removeClass('hover');
+                        }
+                    });
+                    $('#file_upload_".$item_id."').on('dragleave', function (e) {
+                        // dragleave callback implementation
+                        $(this).removeClass('hover');
+                    });
+                });
+                </script>";
+
+                if ($locked) {
+                    if ($qualification_exists) {
+                        $action .= Display::return_icon(
+                            'edit_na.png',
+                            get_lang('CorrectAndRate'),
+                            [],
+                            ICON_SIZE_SMALL
+                        );
+                    } else {
+                        $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
+                    }
+                } else {
+                    if ($blockEdition && !api_is_platform_admin()) {
+                        $editLink = '';
+                    } else {
+                        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL);
+                        if ($qualification_exists) {
+                            $editLink = '<a
+                                href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
+                                title="'.get_lang('Edit').'"  >'.
+                                $editIcon.
+                            '</a>';
+                        } else {
+                            $editLink = '<a
+                                href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
+                                title="'.get_lang('Modify').'">'.
+                                $editIcon.'</a>';
+                        }
+                    }
+                    $action .= $editLink;
+                }
+
+                /*if ($work['contains_file']) {
+                    if ($locked) {
+                        $action .= Display::return_icon(
+                            'move_na.png',
+                            get_lang('Move'),
+                            [],
+                            ICON_SIZE_SMALL
+                        );
+                    } else {
+                        $action .= '<a href="'.$url.'work.php?'.$cidReq.'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
+                            Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
+                    }
+                }*/
+
+                /*if ($work['accepted'] == '1') {
+                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.
+                        Display::return_icon('visible.png', get_lang('Invisible'), [], ICON_SIZE_SMALL).'</a>';
+                } else {
+                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
+                        Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).'</a> ';
+                }*/
+                /*if ($locked) {
+                    $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+                } else {
+                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
+                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                }*/
+            } elseif ($is_author && (empty($work['qualificator_id']) || 0 == $work['qualificator_id'])) {
+                $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+
+                if (1 == api_get_course_setting('student_delete_own_publication')) {
+                    if (api_is_allowed_to_session_edit(false, true)) {
+                        $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
+                            Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).'</a>';
+                    }
+                    $action .= ' <a href="'.$url.'work_list.php?'.$cidReq.'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
+                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                }
+            } else {
+                $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+            }
+
+            // Status.
+            if (empty($work['qualificator_id'])) {
+                $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
+            } else {
+                $qualificator_id = Display::label(get_lang('Revised'), 'success');
+            }
+            $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
+            $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
+            $work['correction'] = $correction;
+
+            /*if (!empty($compilation) && $is_allowed_to_edit) {
+                $compilationId = $compilation->getCompilatioId($item_id, $courseId);
+                if ($compilationId) {
+                    $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
+                        ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
+                } else {
+                    $workDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
+                    if (!Compilatio::verifiFileType($dbTitle)) {
+                        $actionCompilatio = get_lang('FileFormatNotSupported');
+                    } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
+                        $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
+                        $actionCompilatio = get_lang('UplFileTooBig').': '.format_file_size($sizeFile).'<br />';
+                    } else {
+                        $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
+                        $actionCompilatio .= Display::url(
+                            get_lang('CompilatioAnalysis'),
+                            'javascript:void(0)',
+                            [
+                                'class' => 'getSingleCompilatio btn btn--primary btn-xs',
+                                'onclick' => "getSingleCompilatio($item_id);",
+                            ]
+                        );
+                        $actionCompilatio .= get_lang('CompilatioWithCompilatio');
+                    }
+                }
+                $work['compilatio'] = $actionCompilatio;
+            }*/
+            $works[] = $work;
+        }
+    }
+
+    return $works;
+}
 /**
  * Send reminder to users who have not given the task.
  *
@@ -2615,7 +3104,7 @@ function sendEmailToDrhOnHomeworkCreation($workId, $courseId, $sessionId = 0)
             $bodyView->assign('hrm_name', $hrmName);
             $bodyView->assign('student', $studentInfo);
             $bodyView->assign('course', $courseInfo);
-            $bodyView->assign('course_link', api_get_course_url($courseInfo['code'], $sessionId));
+            $bodyView->assign('course_link', api_get_course_url($courseInfo['real_id'], $sessionId));
             $bodyView->assign('work', $workInfo);
 
             $bodyTemplate = $bodyView->get_template('mail/new_work_alert_hrm.tpl');
@@ -2665,22 +3154,10 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
                     '<a href="'.$link.'">'.get_lang('Please check the assignments page.').'</a>';
                 $emailbody .= "\n\n".$currentUser['complete_name'];
 
-                $additionalParameters = [
-                    'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
-                    'userId' => $student['user_id'],
-                    'courseTitle' => $courseCode,
-                    'link' => $link,
-                ];
-
                 MessageManager::send_message_simple(
                     $student['user_id'],
                     $emailsubject,
-                    $emailbody,
-                    null,
-                    false,
-                    false,
-                    $additionalParameters,
-                    false
+                    $emailbody
                 );
             }
         }
@@ -2800,13 +3277,11 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     if (0 == $session_id) {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
-                    c_id = $course_id AND
                     parent_id = '$task_id' AND
                     active IN (0, 1)";
     } else {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
-                    c_id = $course_id AND
                     parent_id = '$task_id' $sessionCondition AND
                     active IN (0, 1)";
     }
@@ -2839,8 +3314,8 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     $new_group_user_list = [];
 
     if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        $group_user_list = GroupManager::get_subscribed_users($groupInfo);
+        $group = api_get_group_entity($group_id);
+        $group_user_list = GroupManager::get_subscribed_users($group);
         if (!empty($group_user_list)) {
             foreach ($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];
@@ -3011,7 +3486,7 @@ function getAllDocumentToWork($workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'work_id = ? and c_id = ?' => [$workId, $courseId],
+        'work_id = ?' => [$workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3075,7 +3550,7 @@ function getAllUserToWork($workId, $courseId, $getCount = false)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'work_id = ? and c_id = ?' => [$workId, $courseId],
+        'work_id = ?' => [$workId],
     ];
     if ($getCount) {
         $count = 0;
@@ -3218,29 +3693,35 @@ function allowOnlySubscribedUser($userId, $workId, $courseId, $forceAccessForCou
  * @param array $courseInfo
  * @param int   $documentId
  *
- * @return array
+ * @return CDocument
  */
 function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    $docRepo = Container::getDocumentRepository();
     if (!empty($documents)) {
         foreach ($documents as $doc) {
-            if ($documentId != $doc['document_id']) {
+            if ($documentId !== $doc['document_id']) {
                 continue;
             }
-            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
-            $fileInfo = pathinfo($docData['path']);
+
+            /** @var CDocument $docData */
+            $docData = $docRepo->find($doc['document_id']);
+
+            return $docData;
+
+            /*$fileInfo = pathinfo($docData['path']);
             if ('html' == $fileInfo['extension']) {
                 if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
                     $docData['file_content'] = file_get_contents($docData['absolute_path']);
 
                     return $docData;
                 }
-            }
+            }*/
         }
     }
 
-    return [];
+    return null;
 }
 
 /**
@@ -3252,14 +3733,21 @@ function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
 function getAllDocumentsFromWorkToString($workId, $courseInfo)
 {
     $documents = getAllDocumentToWork($workId, $courseInfo['real_id']);
+    $docRepo = Container::getDocumentRepository();
     $content = null;
     if (!empty($documents)) {
         $content .= '<ul class="nav nav-list well">';
         $content .= '<li class="nav-header">'.get_lang('Documents').'</li>';
         foreach ($documents as $doc) {
-            $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
+            /** @var CDocument $docData */
+            $docData = $docRepo->find($doc['document_id']);
+            $url = $docRepo->getResourceFileUrl($docData);
             if ($docData) {
-                $content .= '<li><a class="link_to_download" target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
+                $content .= '<li>
+                                <a class="link_to_download" target="_blank" href="'.$url.'">'.
+                                    $docData->getTitle().'
+                                </a>
+                            </li>';
             }
         }
         $content .= '</ul><br />';
@@ -3283,47 +3771,20 @@ function getWorkDescriptionToolbar()
     ];
 }
 
-/**
- * @param array $work
- *
- * @return array
- */
-function getWorkComments($work)
+function getWorkComments(CStudentPublication $work)
 {
-    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-    $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-    $courseId = (int) $work['c_id'];
-    $workId = (int) $work['iid'];
-
-    if (empty($courseId) || empty($workId)) {
-        return [];
-    }
-
-    $sql = "SELECT
-                c.id,
-                c.user_id
-            FROM $commentTable c
-            INNER JOIN $userTable u
-            ON (u.id = c.user_id)
-            WHERE c_id = $courseId AND work_id = $workId
-            ORDER BY sent_at
-            ";
-    $result = Database::query($sql);
-    $comments = Database::store_result($result, 'ASSOC');
+    $comments = $work->getComments();
+    $commentList = [];
     if (!empty($comments)) {
-        foreach ($comments as &$comment) {
-            $userInfo = api_get_user_info($comment['user_id']);
-            $comment['picture'] = $userInfo['avatar'];
-            $comment['complete_name'] = $userInfo['complete_name_with_username'];
-            $commentInfo = getWorkComment($comment['iid']);
-            if (!empty($commentInfo)) {
-                $comment = array_merge($comment, $commentInfo);
-            }
+        foreach ($comments as $comment) {
+            //$userInfo = api_get_user_info($comment['user_id']);
+            //$comment['picture'] = $userInfo['avatar'];
+            //$comment['complete_name'] = $userInfo['complete_name_with_username'];
+            $commentList[] = getWorkComment($comment);
         }
     }
 
-    return $comments;
+    return $commentList;
 }
 
 /**
@@ -3577,18 +4038,12 @@ function formatWorkScore($score, $weight)
             $finalScore,
             $label
         );
-    } else {
-        return $scoreBasedInModel;
     }
+
+    return $scoreBasedInModel;
 }
 
-/**
- * @param int   $id         comment id
- * @param array $courseInfo
- *
- * @return string
- */
-function getWorkComment($id, $courseInfo = [])
+function getWorkComment(CStudentPublicationComment $commentEntity, array $courseInfo = []): array
 {
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
@@ -3599,13 +4054,6 @@ function getWorkComment($id, $courseInfo = [])
     }
 
     $repo = Container::getStudentPublicationCommentRepository();
-    $criteria = [
-        'iid' => $id,
-        'cId' => $courseInfo['real_id'],
-    ];
-
-    /** @var CStudentPublicationComment $commentEntity */
-    $commentEntity = $repo->findOneBy($criteria);
 
     $comment = [];
     if ($commentEntity) {
@@ -3613,11 +4061,13 @@ function getWorkComment($id, $courseInfo = [])
         $fileUrl = null;
         $deleteUrl = null;
         $fileName = null;
+        $id = $commentEntity->getIid();
         if ($commentEntity->getResourceNode()->hasResourceFile()) {
             $fileUrl = $repo->getResourceFileDownloadUrl($commentEntity);
-            $workId = $commentEntity->getWorkId();
+            $workId = $commentEntity->getPublication()->getIid();
             $filePath = '';
-            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
+            $deleteUrl = api_get_path(WEB_CODE_PATH).
+                'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
             $fileName = $commentEntity->getResourceNode()->getResourceFile()->getName();
         }
         $comment['comment'] = $commentEntity->getComment();
@@ -3638,6 +4088,7 @@ function getWorkComment($id, $courseInfo = [])
 function deleteCommentFile($id, $courseInfo = [])
 {
     $repo = Container::getStudentPublicationCommentRepository();
+    $em = Database::getManager();
     $criteria = [
         'iid' => $id,
         'cId' => $courseInfo['real_id'],
@@ -3650,8 +4101,8 @@ function deleteCommentFile($id, $courseInfo = [])
         $file = $commentEntity->getResourceNode()->getResourceFile();
 
         $commentEntity->getResourceNode()->setResourceFile(null);
-        $repo->getEntityManager()->remove($file);
-        $repo->getEntityManager()->flush();
+        $em->remove($file);
+        $em->flush();
     }
 
     /*
@@ -3674,15 +4125,15 @@ function deleteCommentFile($id, $courseInfo = [])
 /**
  * Adds a comments to the work document.
  *
- * @param array $courseInfo
- * @param int   $userId
- * @param array $parentWork
- * @param array $work
- * @param array $data
+ * @param array               $courseInfo
+ * @param int                 $userId
+ * @param array               $parentWork
+ * @param CStudentPublication $work
+ * @param array               $data
  *
  * @return int
  */
-function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
+function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $studentPublication, $data)
 {
     $fileData = isset($data['attachment']) ? $data['attachment'] : null;
     // If no attachment and no comment then don't save comment
@@ -3692,35 +4143,30 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $courseId = $courseInfo['real_id'];
     $courseEntity = api_get_course_entity($courseId);
 
-    /** @var CStudentPublication $studentPublication */
-    $studentPublication = Container::getStudentPublicationRepository()->find($work['iid']);
-
     $request = Container::getRequest();
-    $fileObject = $request->files->get('attachment');
-    if (is_array($fileObject)) {
-        $fileObject = $fileObject[0];
+    $file = $request->files->get('attachment');
+    if (is_array($file)) {
+        $file = $file[0];
     }
 
-    $comment = new CStudentPublicationComment();
-    $comment
-        ->setCId($courseId)
+    $em = Database::getManager();
+    $comment = (new CStudentPublicationComment())
         ->setComment($data['comment'])
-        ->setUserId($userId)
-        ->setWorkId($work['iid'])
+        ->setUser(api_get_user_entity($userId))
+        ->setPublication($studentPublication)
         ->setParent($studentPublication)
         ->addCourseLink(
             $courseEntity,
             api_get_session_entity(),
             api_get_group_entity()
-        );
+        )
+    ;
 
     $repo = Container::getStudentPublicationCommentRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($comment);
-    $em->flush();
+    $repo->create($comment);
 
-    if ($fileObject) {
-        $repo->addFile($comment, $fileObject);
+    if ($file) {
+        $repo->addFile($comment, $file);
         $em->flush();
     }
 
@@ -3728,7 +4174,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     if (api_is_allowed_to_edit()) {
         if (isset($data['send_email']) && $data['send_email']) {
             // Teacher sends a feedback
-            $userIdListToSend = [$work['user_id']];
+            $userIdListToSend = [$studentPublication->getUser()->getId()];
         }
     } else {
         $sessionId = api_get_session_id();
@@ -3755,10 +4201,11 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
             $userIdListToSend = [];
         }
     }
-
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$work['iid'];
+    $id = $studentPublication->getIid();
+    $title = $studentPublication->getTitle();
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
     $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $parentWork['title']);
-    $content = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $work['title'], $url);
+    $content = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $title, $url);
 
     if (!empty($data['comment'])) {
         $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
@@ -3793,14 +4240,15 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 }
 
 /**
- * @param array $work
  * @param array $workParent
  *
  * @return string
  */
-function getWorkCommentForm($work, $workParent)
+function getWorkCommentForm(CStudentPublication $work, $workParent)
 {
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['iid'].'&action=send_comment&'.api_get_cidreq();
+    $id = $work->getIid();
+
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$id.'&action=send_comment&'.api_get_cidreq();
     $form = new FormValidator(
         'work_comment',
         'post',
@@ -3815,7 +4263,9 @@ function getWorkCommentForm($work, $workParent)
     $allowEdition = false;
     if ($isCourseManager) {
         $allowEdition = true;
-        if (!empty($work['qualification']) && api_get_configuration_value('block_student_publication_score_edition')) {
+        if (!empty($work->getQualification()) &&
+            api_get_configuration_value('block_student_publication_score_edition')
+        ) {
             $allowEdition = false;
         }
     }
@@ -3842,18 +4292,24 @@ function getWorkCommentForm($work, $workParent)
                     $form,
                     'qualification',
                     $qualification,
-                    $work['qualification']
+                    $work->getQualification()
                 );
             }
             $form->addFile('file', get_lang('Correction'));
-            $form->setDefaults(['qualification' => $work['qualification']]);
+            $form->setDefaults(['qualification' => $work->getQualification()]);
         }
     }
 
-    Skill::addSkillsToUserForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workParent['iid'], $work['user_id'], $work['iid']);
+    SkillModel::addSkillsToUserForm(
+        $form,
+        ITEM_TYPE_STUDENT_PUBLICATION,
+        $workParent['iid'],
+        $work->getUser()->getId(),
+        $id
+    );
     $form->addHtmlEditor('comment', get_lang('Comment'), false);
     $form->addFile('attachment', get_lang('Attachment'));
-    $form->addElement('hidden', 'iid', $work['iid']);
+    $form->addElement('hidden', 'iid', $id);
 
     if (api_is_allowed_to_edit()) {
         $form->addCheckBox(
@@ -4151,8 +4607,10 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
     }
 
     if ($send) {
-        $folderUrl = api_get_path(WEB_CODE_PATH)."work/work_list_all.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workInfo['iid'];
-        $fileUrl = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['iid'];
+        $folderUrl = api_get_path(WEB_CODE_PATH).
+            "work/work_list_all.php?cid=".$courseInfo['real_id']."&sid=".$sessionId."&id=".$workInfo['iid'];
+        $fileUrl = api_get_path(WEB_CODE_PATH).
+            "work/view.php?cid=".$courseInfo['real_id']."&sid=".$sessionId."&id=".$workData['iid'];
 
         foreach ($userList as $userData) {
             $userId = $userData['user_id'];
@@ -4181,7 +4639,6 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
                 0,
                 false,
                 false,
-                [],
                 false
             );
         }
@@ -4220,7 +4677,7 @@ function checkExistingWorkFileName($filename, $workId)
  * @param bool  $checkDuplicated
  * @param bool  $showFlashMessage
  *
- * @return string|null
+ * @return CStudentPublication|null
  */
 function processWorkForm(
     $workInfo,
@@ -4233,9 +4690,8 @@ function processWorkForm(
     $checkDuplicated = false,
     $showFlashMessage = true
 ) {
-    $courseEntity = $courseInfo['entity'];
-
     $courseId = $courseInfo['real_id'];
+    $courseEntity = api_get_course_entity($courseId);
     $groupId = (int) $groupId;
     $sessionId = (int) $sessionId;
     $userId = (int) $userId;
@@ -4267,7 +4723,9 @@ function processWorkForm(
         if ($checkDuplicated) {
             if (checkExistingWorkFileName($file['name'], $workInfo['iid'])) {
                 $saveWork = false;
-                $result['error'] = get_lang('You have already sent this file or another file with the same name. Please make sure you only upload each file once.');
+                $result['error'] = get_lang(
+                    'You have already sent this file or another file with the same name. Please make sure you only upload each file once.'
+                );
                 $workData['error'] = get_lang(' already exists.');
             } else {
                 $result = uploadWork($workInfo, $courseEntity, false, [], $file);
@@ -4300,13 +4758,7 @@ function processWorkForm(
         $title = get_lang('Untitled');
     }
 
-    $groupIid = 0;
-    $groupInfo = [];
-    if ($groupId) {
-        $groupInfo = GroupManager::get_group_properties($groupId);
-        $groupIid = $groupInfo['iid'];
-    }
-
+    $studentPublication = null;
     if ($saveWork) {
         $documentId = isset($values['document_id']) ? (int) $values['document_id'] : 0;
 
@@ -4324,35 +4776,31 @@ function processWorkForm(
         }
 
         $session = api_get_session_entity($sessionId);
-        $courseEntity = api_get_course_entity($courseId);
 
         $repo = Container::getStudentPublicationRepository();
         $parentResource = $repo->find($workInfo['iid']);
+        $user = api_get_user_entity($userId);
 
-        $studentPublication = new CStudentPublication();
-        $studentPublication
-            ->setCId($courseId)
-            //->setUrl($url)
+        $studentPublication = (new CStudentPublication())
             ->setFiletype('file')
             ->setTitle($title)
             ->setDescription($description)
             ->setContainsFile($containsFile)
             ->setActive(1)
-            ->setAccepted(1)
+            ->setAccepted(true)
             ->setQualificatorId(0)
             ->setWeight(0)
             ->setAllowTextAssignment(0)
-            ->setPostGroupId($groupIid)
-            ->setParentId($workInfo['iid'])
-            ->setSession(api_get_session_entity($sessionId))
+            ->setPostGroupId(api_get_group_id())
+            ->setPublicationParent($parentResource)
             ->setFilesize($filesize)
-            ->setUserId($userId)
+            ->setUser($user)
             ->setDocumentId($documentId)
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, api_get_group_entity())
         ;
 
-        $em = $repo->getEntityManager();
+        $em = Database::getManager();
         $em->persist($studentPublication);
         $repo->addFile($studentPublication, $content);
         $em->flush();
@@ -4385,7 +4833,7 @@ function processWorkForm(
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
                     if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
+                        $workingTime = $field->getFieldValue();
                     }
                 }
 
@@ -4406,7 +4854,7 @@ function processWorkForm(
                         $sessionId
                     );
 
-                    if (1 == count($userWorks)) {
+                    if (1 === count($userWorks)) {
                         // The student only uploaded one doc so far, so add the
                         // considered work time to his course connection time
                         Event::eventAddVirtualCourseTime(
@@ -4419,8 +4867,8 @@ function processWorkForm(
                     }
                 }
             }
-            $workData = get_work_data_by_id($workId);
-            if ($workData && $showFlashMessage) {
+
+            if ($showFlashMessage) {
                 Display::addFlash(Display::return_message(get_lang('The file has been added to the list of publications.')));
             }
         }
@@ -4435,7 +4883,7 @@ function processWorkForm(
         }
     }
 
-    return $workData;
+    return $studentPublication;
 }
 
 /**
@@ -4494,19 +4942,17 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $studentPublication = new CStudentPublication();
     $studentPublication
-        ->setCId($course_id)
         ->setTitle($title)
         ->setDescription($formValues['description'])
-        ->setActive(true)
+        ->setActive(1)
         ->setAccepted(true)
         ->setFiletype('folder')
         ->setPostGroupId($groupIid)
         ->setSentDate($today)
         ->setQualification('' != $formValues['qualification'] ? $formValues['qualification'] : 0)
         ->setWeight(!empty($formValues['weight']) ? $formValues['weight'] : 0)
-        ->setSession($session)
-        ->setAllowTextAssignment($formValues['allow_text_assignment'])
-        ->setUserId($user_id)
+        ->setAllowTextAssignment(1 === (int) $formValues['allow_text_assignment'] ? 1 : 0)
+        ->setUser(api_get_user_entity($user_id))
         ->setParent($courseEntity)
         ->addCourseLink(
             $courseEntity,
@@ -4516,9 +4962,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     ;
 
     $repo = Container::getStudentPublicationRepository();
-    $em = $repo->getEntityManager();
-    $em->persist($studentPublication);
-    $em->flush();
+    $repo->create($studentPublication);
 
     // Folder created
     /*api_item_property_update(
@@ -4613,9 +5057,8 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
         $workTable,
         $filteredParams,
         [
-            'iid = ? AND c_id = ?' => [
+            'iid = ?' => [
                 $workId,
-                $courseInfo['real_id'],
             ],
         ]
     );
@@ -4718,26 +5161,39 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $endOnCondition = 'ends_on = null, ';
     }
 
-    if (empty($data)) {
-        $sql = "INSERT INTO $table SET
-                c_id = $course_id ,
-                $expiryDateCondition
-                $endOnCondition
-                add_to_calendar = $agendaId,
-                enable_qualification = '$qualification',
-                publication_id = '$workId'";
-        Database::query($sql);
-        $my_last_id = Database::insert_id();
+    /** @var CStudentPublication $publication */
+    $publication = Container::getStudentPublicationRepository()->find($workId);
+    $em = Database::getManager();
 
-        if ($my_last_id) {
-            $sql = "UPDATE $workTable SET
-                        has_properties  = $my_last_id,
-                        view_properties = 1
-                    WHERE iid = $workId";
-            Database::query($sql);
-        }
+    if (empty($data)) {
+        $assignment = new CStudentPublicationAssignment();
+
+        $publication
+            ->setHasProperties(1)
+            ->setViewProperties(1)
+        ;
+        $em->persist($publication);
+
+    /*$sql = "INSERT INTO $table SET
+            c_id = $course_id ,
+            $expiryDateCondition
+            $endOnCondition
+            add_to_calendar = $agendaId,
+            enable_qualification = '$qualification',
+            publication_id = '$workId'";
+    Database::query($sql);
+    $my_last_id = Database::insert_id();
+
+    if ($my_last_id) {
+        $sql = "UPDATE $workTable SET
+                    has_properties  = $my_last_id,
+                    view_properties = 1
+                WHERE iid = $workId";
+        Database::query($sql);
+    }*/
     } else {
-        $sql = "UPDATE $table SET
+        $assignment = $em->getRepository(CStudentPublicationAssignment::class)->find($data['iid']);
+        /*$sql = "UPDATE $table SET
                     $expiryDateCondition
                     $endOnCondition
                     add_to_calendar  = $agendaId,
@@ -4745,8 +5201,23 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 WHERE
                     publication_id = $workId AND
                     iid = ".$data['iid'];
-        Database::query($sql);
+        Database::query($sql);*/
     }
+
+    $assignment
+        ->setAddToCalendar($agendaId)
+        ->setEnableQualification(1 === $qualification)
+        ->setPublication($publication)
+    ;
+    if (!empty($expiryDate)) {
+        $assignment->setExpiresOn(api_get_utc_datetime($expiryDate, true, true));
+    }
+
+    if (!empty($endDate)) {
+        $assignment->setEndsOn(api_get_utc_datetime($endDate, true, true));
+    }
+    $em->persist($assignment);
+    $em->flush();
 
     if (!empty($params['category_id'])) {
         $link_info = GradebookUtils::isResourceInCourseGradebook(
@@ -4794,23 +5265,22 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 /**
  * Delete all work by student.
  *
- * @param int   $userId
- * @param array $courseInfo
- *
  * @return array return deleted items
  */
-function deleteAllWorkPerUser($userId, $courseInfo)
+function deleteAllWorkPerUser(User $user, Course $course)
 {
     $deletedItems = [];
-    $workPerUser = getWorkPerUser($userId);
-    if (!empty($workPerUser)) {
-        foreach ($workPerUser as $work) {
-            $work = $work['work'];
-            foreach ($work->user_results as $userResult) {
-                $result = deleteWorkItem($userResult['iid'], $courseInfo);
-                if ($result) {
-                    $deletedItems[] = $userResult;
-                }
+    //$workPerUser = getWorkPerUser($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $works = $repo->getStudentPublicationByUser($user, $course);
+
+    foreach ($works as $workData) {
+        /** @var CStudentPublication[] $results */
+        $results = $workData['results'];
+        foreach ($results as $userResult) {
+            $result = deleteWorkItem($userResult->getIid(), $course);
+            if ($result) {
+                $deletedItems[] = $userResult;
             }
         }
     }
@@ -4819,16 +5289,16 @@ function deleteAllWorkPerUser($userId, $courseInfo)
 }
 
 /**
- * @param int   $item_id
- * @param array $courseInfo course info
+ * @param int    $item_id
+ * @param Course $course  course info
  *
  * @return bool
  */
-function deleteWorkItem($item_id, $courseInfo)
+function deleteWorkItem($item_id, Course $course)
 {
     $item_id = (int) $item_id;
 
-    if (empty($item_id) || empty($courseInfo)) {
+    if (empty($item_id) || null === $course) {
         return false;
     }
 
@@ -4838,7 +5308,7 @@ function deleteWorkItem($item_id, $courseInfo)
     $is_author = user_is_author($item_id);
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
-    $course_id = $courseInfo['real_id'];
+    $course_id = $course->getId();
 
     if (($is_allowed_to_edit && false == $locked) ||
         (
@@ -4849,9 +5319,9 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file, user_id, session_id, parent_id
+        $sql = "SELECT contains_file, user_id, parent_id
                 FROM $work_table
-                WHERE c_id = $course_id AND id = $item_id";
+                WHERE iid = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $count = Database::num_rows($result);
@@ -4887,7 +5357,7 @@ function deleteWorkItem($item_id, $courseInfo)
                         $field = $field['value'];
 
                         if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                            $workingTime = $field->getValue();
+                            $workingTime = $field->getFieldValue();
                         }
                     }
                     // If no time was defined, or a time of "0" was set, do nothing
@@ -4906,21 +5376,22 @@ function deleteWorkItem($item_id, $courseInfo)
                 }
             } // end of considered_working_time check section
 
+            $em = Database::getManager();
             $repo = Container::getStudentPublicationRepository();
             /** @var CStudentPublication $work */
             $work = $repo->find($item_id);
             $work->setActive(2);
-            $repo->getEntityManager()->persist($work);
+            $repo->update($work);
 
-            $repo = Container::getStudentPublicationAssignmentRepository();
+            /*$repo = Container::getStudentPublicationAssignmentRepository();
             $params = ['cId' => $course_id, 'publicationId' => $item_id];
 
-            $items = $repo->getRepository()->findBy($params);
+            $items = $repo->findBy($params);
             foreach ($items as $item) {
-                $repo->remove($item);
-            }
+                $repo->delete($item);
+            }*/
 
-            $repo->getEntityManager()->flush();
+            $em->flush();
 
             /*$sql = "DELETE FROM $TSTDPUBASG
                     WHERE c_id = $course_id AND publication_id = $item_id";
@@ -5009,7 +5480,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
     }
 
     // ScoreOfAssignment
-    $form->addElement('text', 'qualification', get_lang('ScoreNumeric'));
+    $form->addText('qualification', get_lang('ScoreNumeric'), false);
 
     if (0 != $sessionId && Gradebook::is_active() || 0 == $sessionId) {
         $form->addElement(
@@ -5024,7 +5495,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
         );
     } else {
         // QualificationOfAssignment
-        $form->addElement('hidden', 'make_calification', false);
+        $form->addHidden('make_calification', false);
     }
 
     if (!empty($defaults) && isset($defaults['category_id'])) {
@@ -5039,7 +5510,12 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $form->addElement('text', 'weight', get_lang('Weight inside assessment'));
     $form->addHtml('</div>');
 
-    $form->addElement('checkbox', 'enableExpiryDate', null, get_lang('Enable handing over deadline (visible to learners)'), 'id="expiry_date"');
+    $form->addCheckBox(
+        'enableExpiryDate',
+        null,
+        get_lang('Enable handing over deadline (visible to learners)'),
+        ['id' => 'expiry_date']
+    );
     if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate']) {
         $form->addHtml('<div id="option2" style="display: block;">');
     } else {
@@ -5055,7 +5531,12 @@ function getFormWork($form, $defaults = [], $workId = 0)
 
     $form->addElement('date_time_picker', 'expires_on', get_lang('Posted sending deadline'));
     $form->addHtml('</div>');
-    $form->addElement('checkbox', 'enableEndDate', null, get_lang('Enable final acceptance date (invisible to learners)'), 'id="end_date"');
+    $form->addCheckBox(
+        'enableEndDate',
+        null,
+        get_lang('Enable final acceptance date (invisible to learners)'),
+        ['id' => 'end_date']
+    );
 
     if (!isset($defaults['ends_on'])) {
         $nextDay = substr(api_get_local_time($timeNextWeek + 86400), 0, 10);
@@ -5071,8 +5552,8 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $form->addElement('date_time_picker', 'ends_on', get_lang('Ends at (completely closed)'));
     $form->addHtml('</div>');
 
-    $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
-    $form->addElement('select', 'allow_text_assignment', get_lang('Document type'), getUploadDocumentType());
+    $form->addCheckBox('add_to_calendar', null, get_lang('Add to calendar'));
+    $form->addSelect('allow_text_assignment', get_lang('Document type'), getUploadDocumentType());
 
     // Extra fields
     $extraField = new ExtraField('work');
@@ -5087,7 +5568,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
 
     $form->addHtml('</div>');
 
-    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
+    $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
 
     if (!empty($defaults)) {
         $defaults['skills'] = array_keys($skillList);
@@ -5127,8 +5608,7 @@ function makeVisible($itemId, $course_info)
     $studentPublication = $repo->find($itemId);
     if ($studentPublication) {
         $studentPublication->setAccepted(1);
-        $repo->getEntityManager()->persist($studentPublication);
-        $repo->getEntityManager()->flush();
+        $repo->update($studentPublication);
     }
     /*
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -5160,8 +5640,7 @@ function makeInvisible($itemId, $course_info)
     $studentPublication = $repo->find($itemId);
     if ($studentPublication) {
         $studentPublication->setAccepted(0);
-        $repo->getEntityManager()->persist($studentPublication);
-        $repo->getEntityManager()->flush();
+        $repo->update($studentPublication);
     }
 
     /*api_item_property_update(
@@ -5310,7 +5789,7 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
 
         if (!empty($sidx) && !empty($sord)) {
             if (in_array($sidx, ['firstname', 'lastname'])) {
-                $orderBy = "ORDER BY $sidx $sord";
+                $orderBy = "ORDER BY `$sidx` $sord";
             }
         }
 
@@ -5511,7 +5990,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
 
     $isAllow = allowOnlySubscribedUser(
         api_get_user_id(),
-        $studentPublication->getParentId(),
+        $studentPublication->getPublicationParent()->getIid(),
         $courseInfo['real_id'],
         $forceAccessForCourseAdmins
     );
@@ -5560,28 +6039,28 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         ($doc_visible_for_all && $work_is_visible)
     ) {
         $title = $studentPublication->getTitle();
-        if ($correction) {
-            $title = $studentPublication->getTitleCorrection();
+        $titleCorrection = '';
+        if ($correction && $studentPublication->getCorrection()) {
+            $title = $titleCorrection = $studentPublication->getCorrection()->getTitle();
         }
         if ($hasFile) {
             $title = $studentPublication->getResourceNode()->getResourceFile()->getName();
         }
 
         $title = str_replace(' ', '_', $title);
-
         if (false == $correction) {
-            $userInfo = api_get_user_info($studentPublication->getUserId());
+            $userInfo = $studentPublication->getUser();
             if ($userInfo) {
                 $date = api_get_local_time($studentPublication->getSentDate()->format('Y-m-d H:i:s'));
                 $date = str_replace([':', '-', ' '], '_', $date);
-                $title = $date.'_'.$userInfo['username'].'_'.$title;
+                $title = $date.'_'.$studentPublication->getUser()->getUsername().'_'.$title;
             }
         }
 
         return [
             //'path' => $full_file_name,
             'title' => $title,
-            'title_correction' => $studentPublication->getTitleCorrection(),
+            'title_correction' => $titleCorrection,
             'entity' => $studentPublication,
         ];
     }
@@ -5590,35 +6069,29 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
 }
 
 /**
- * @param int    $userId
- * @param array  $courseInfo
- * @param string $format
- *
  * @return bool
  */
-function exportAllWork($userId, $courseInfo, $format = 'pdf')
+function exportAllWork(User $user, Course $course, $format = 'pdf')
 {
-    $userInfo = api_get_user_info($userId);
-    if (empty($userInfo) || empty($courseInfo)) {
-        return false;
-    }
-
-    $workPerUser = getWorkPerUser($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $works = $repo->getStudentPublicationByUser($user, $course, null);
 
     switch ($format) {
         case 'pdf':
-            if (!empty($workPerUser)) {
+            if (!empty($works)) {
                 $pdf = new PDF();
-
                 $content = null;
-                foreach ($workPerUser as $work) {
-                    $work = $work['work'];
-                    foreach ($work->user_results as $userResult) {
-                        $content .= $userResult['title'];
+                foreach ($works as $workData) {
+                    /** @var CStudentPublication $work */
+                    $work = $workData['work'];
+                    /** @var CStudentPublication[] $results */
+                    $results = $workData['results'];
+                    foreach ($results as $userResult) {
+                        $content .= $userResult->getTitle();
                         // No need to use api_get_local_time()
-                        $content .= $userResult['sent_date'];
-                        $content .= $userResult['qualification'];
-                        $content .= $userResult['description'];
+                        $content .= $userResult->getSentDate()->format('Y-m-d H:i:s');
+                        $content .= $userResult->getQualification();
+                        $content .= $userResult->getDescription();
                     }
                 }
 
@@ -5626,8 +6099,8 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                     $pdf->content_to_pdf(
                         $content,
                         null,
-                        api_replace_dangerous_char($userInfo['complete_name']),
-                        $courseInfo['code']
+                        api_replace_dangerous_char(UserManager::formatUserFullName($user)),
+                        $course->getCode()
                     );
                 }
             }
@@ -5660,12 +6133,9 @@ function exportAllStudentWorkFromPublication(
     }
 
     $assignment = get_work_assignment_by_id($workId);
-
     $courseCode = $courseInfo['code'];
     $header = get_lang('Course').': '.$courseInfo['title'];
-    $teachers = CourseManager::getTeacherListFromCourseCodeToString(
-        $courseCode
-    );
+    $teachers = CourseManager::getTeacherListFromCourseCodeToString($courseCode);
 
     if (!empty($sessionId)) {
         $sessionInfo = api_get_session_info($sessionId);
@@ -5685,9 +6155,10 @@ function exportAllStudentWorkFromPublication(
 
     $content = null;
     $expiresOn = null;
-
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>'.get_lang('Posted deadline for sending the work (Visible to the learner)').'</strong>: '.api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>'.
+            get_lang('Posted deadline for sending the work (Visible to the learner)').'</strong>: '.
+            api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 
@@ -5718,13 +6189,12 @@ function exportAllStudentWorkFromPublication(
                 }
 
                 $row = 1;
-
                 //$pdf->set_custom_header($header);
+                /** @var array $work */
                 foreach ($workList as $work) {
                     $content .= '<hr />';
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
-
                     //$content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
                     $score = null;
                     if (!empty($work['qualification_only'])) {
@@ -5732,13 +6202,11 @@ function exportAllStudentWorkFromPublication(
                     }
 
                     $comments = getWorkComments($work);
-
                     $feedback = null;
                     if (!empty($comments)) {
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
-                            $feedback .= get_lang('User').': '.$comment['complete_name'].
-                                '<br />';
+                            $feedback .= get_lang('User').': '.$comment['complete_name'].'<br />';
                             $feedback .= $comment['comment'].'<br />';
                         }
                     }
@@ -5749,12 +6217,10 @@ function exportAllStudentWorkFromPublication(
                     $table->setCellContents($row, 4, strip_tags($work['title']));
                     $table->setCellContents($row, 5, $score);
                     $table->setCellContents($row, 6, $feedback);
-
                     $row++;
                 }
 
                 $content = $table->toHtml();
-
                 if (!empty($content)) {
                     $params = [
                         'filename' => $workData['title'].'_'.api_get_local_time(),
@@ -5928,13 +6394,11 @@ function protectWork($courseInfo, $workId)
     if (empty($isAllow)) {
         api_not_allowed(true);
     }
-
-    $groupInfo = GroupManager::get_group_properties($groupId);
-
     if (!empty($groupId)) {
-        $showWork = GroupManager::user_has_access(
+        $group = api_get_group_entity($groupId);
+        $showWork = GroupManager::userHasAccess(
             $userId,
-            $groupInfo['iid'],
+            $group,
             GroupManager::GROUP_TOOL_WORK
         );
         if (!$showWork) {
@@ -5943,29 +6407,14 @@ function protectWork($courseInfo, $workId)
     }
 }
 
-/**
- * @param array $courseInfo
- * @param array $work
- */
-function deleteCorrection($courseInfo, $work)
+function deleteCorrection(CStudentPublication $work)
 {
-    throw new Exception('deleteCorrection');
-    /*
-    if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
-        $id = $work['iid'];
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sql = "UPDATE $table SET
-                    url_correction = '',
-                    title_correction = ''
-                WHERE iid = $id";
-        Database::query($sql);
-        $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-        if (file_exists($coursePath.$work['url_correction'])) {
-            if (Security::check_abs_path($coursePath.$work['url_correction'], $coursePath)) {
-                unlink($coursePath.$work['url_correction']);
-            }
-        }
-    }*/
+    $correctionNode = $work->getCorrection();
+    if (null !== $correctionNode) {
+        $em = Database::getManager();
+        $em->remove($correctionNode);
+        $em->flush();
+    }
 }
 
 /**

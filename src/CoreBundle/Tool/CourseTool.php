@@ -1,12 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Tool;
 
-/**
- * Class CourseTool.
- */
-class CourseTool extends AbstractTool
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
+
+class CourseTool extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'course_tool';
+    }
+
+    public function getLink(): string
+    {
+        return '/resources/course_tool/links';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-file-link';
+    }
+
+    public function getCategory(): string
+    {
+        return 'admin';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'links' => CTool::class,
+            'introductions' => CToolIntro::class,
+        ];
+    }
 }

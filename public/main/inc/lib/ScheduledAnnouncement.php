@@ -2,20 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+
 /**
- * Class ScheduledAnnouncement
- * Requires DB change:.
- *
- * CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
- *
  * Config setting:
- * $_configuration['allow_scheduled_announcements'] = true;
+ * $_configuration['allow_scheduled_announcements'] = true;.
  *
  * Setup linux cron file:
  * main/cron/scheduled_announcement.php
- *
- * Requires:
- * composer update
  */
 class ScheduledAnnouncement extends Model
 {
@@ -31,17 +26,12 @@ class ScheduledAnnouncement extends Model
         $this->table = 'scheduled_announcements';
     }
 
-    /**
-     * @param array $where_conditions
-     *
-     * @return array
-     */
-    public function get_all($where_conditions = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',
             $this->table,
-            ['where' => $where_conditions, 'order' => 'subject ASC']
+            ['where' => $options, 'order' => 'subject ASC']
         );
     }
 
@@ -124,7 +114,7 @@ class ScheduledAnnouncement extends Model
 
         $form->addCheckBox('sent', null, get_lang('Message Sent'));
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $form->addButtonUpdate(get_lang('Edit'));
         }
 
@@ -147,7 +137,7 @@ class ScheduledAnnouncement extends Model
         // Setting the form elements
         $header = get_lang('Add');
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $header = get_lang('Edit');
         }
 
@@ -158,10 +148,14 @@ class ScheduledAnnouncement extends Model
         );
 
         $form->addHeader($header);
-        if ('add' == $action) {
+        if ('add' === $action) {
             $form->addHtml(
                 Display::return_message(
-                    nl2br(get_lang('This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.')),
+                    nl2br(
+                        get_lang(
+                            'This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.'
+                        )
+                    ),
                     'normal',
                     false
                 )
@@ -190,7 +184,7 @@ class ScheduledAnnouncement extends Model
             get_lang('Type'),
             $typeOptions,
             [
-                'onchange' => "javascript: 
+                'onchange' => "javascript:
                     if (this.options[this.selectedIndex].value == 'base_date') {
                         document.getElementById('options').style.display = 'block';
                         document.getElementById('specific_date').style.display = 'none';
@@ -243,10 +237,9 @@ class ScheduledAnnouncement extends Model
         $extra = $extraField->addElements($form);
         $js = $extra['jquery_ready_content'];
         $form->addHtml("<script> $(function() { $js }); </script> ");
-
         $this->setTagsInForm($form);
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
@@ -264,9 +257,9 @@ class ScheduledAnnouncement extends Model
     {
         $file = $this->getAttachment($id);
         if (!empty($file) && !empty($file['value'])) {
-            $url = api_get_path(WEB_UPLOAD_PATH).$file['value'];
+            $url = $file['url'];
 
-            return get_lang('Attachment').': '.Display::url(basename($file['value']), $url, ['target' => '_blank']);
+            return get_lang('Attachment').': '.Display::url(basename($file['url']), $url, ['target' => '_blank']);
         }
 
         return '';
@@ -280,9 +273,8 @@ class ScheduledAnnouncement extends Model
     public function getAttachment($id)
     {
         $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
-        $attachment = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'attachment');
 
-        return $attachment;
+        return $extraFieldValue->get_values_by_handler_and_field_variable($id, 'attachment');
     }
 
     /**
@@ -306,21 +298,23 @@ class ScheduledAnnouncement extends Model
                 if (!empty($result['date']) && $result['date'] < $now) {
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
+                    $session = api_get_session_entity($sessionId);
                     if (empty($sessionInfo)) {
                         continue;
                     }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        0,
+                        Session::STUDENT,
                         false,
                         $urlId
                     );
+                    $generalCoaches = $session->getGeneralCoaches();
 
-                    $coachId = $sessionInfo['id_coach'];
-
-                    if (empty($users) || empty($coachId)) {
+                    if (empty($users) || 0 === $generalCoaches->count()) {
                         continue;
                     }
+
+                    $coachId = $generalCoaches->first()->getId();
 
                     $coachList = [];
                     if ($users) {
@@ -385,21 +379,19 @@ class ScheduledAnnouncement extends Model
                                 true
                             );
 
-                            $generalCoach = '';
-                            $generalCoachEmail = '';
-                            if (!empty($sessionInfo['id_coach'])) {
-                                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
-                                if (!empty($coachInfo)) {
-                                    $generalCoach = $coachInfo['complete_name'];
-                                    $generalCoachEmail = $coachInfo['email'];
-                                }
+                            $generalCoachName = [];
+                            $generalCoachEmail = [];
+                            /** @var User $generalCoach */
+                            foreach ($generalCoaches as $generalCoach) {
+                                $generalCoachName[] = $generalCoach->getFullname();
+                                $generalCoachEmail[] = $generalCoach->getEmail();
                             }
 
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((session_start_date))' => $startTime,
-                                '((general_coach))' => $generalCoach,
-                                '((general_coach_email))' => $generalCoachEmail,
+                                '((general_coach))' => implode(' - ', $generalCoachName),
+                                '((general_coach_email))' => implode(' - ', $generalCoachEmail),
                                 '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_firstname))' => $userInfo['firstname'],
@@ -420,7 +412,8 @@ class ScheduledAnnouncement extends Model
                             );
                         }
 
-                        $message = get_lang('You\'re receiving a copy because, you\'re a course coach').'<br /><br />'.$message;
+                        $message = get_lang('You\'re receiving a copy because, you\'re a course coach').
+                            '<br /><br />'.$message;
 
                         foreach ($coachList as $courseCoachId) {
                             MessageManager::send_message_simple(
@@ -431,7 +424,6 @@ class ScheduledAnnouncement extends Model
                             );
                         }
                     }
-
                     $messagesSent++;
                 }
             }
@@ -445,7 +437,7 @@ class ScheduledAnnouncement extends Model
      */
     public function getTags()
     {
-        $tags = [
+        return [
             '((session_name))',
             '((session_start_date))',
             '((session_end_date))',
@@ -456,8 +448,6 @@ class ScheduledAnnouncement extends Model
             '((user_last_name))',
             '((lp_progress))',
         ];
-
-        return $tags;
     }
 
     /**
@@ -468,10 +458,7 @@ class ScheduledAnnouncement extends Model
         return api_get_configuration_value('allow_scheduled_announcements');
     }
 
-    /**
-     * @param FormValidator $form
-     */
-    private function setTagsInForm(&$form)
+    private function setTagsInForm(FormValidator $form)
     {
         $form->addLabel(
             get_lang('Tags'),

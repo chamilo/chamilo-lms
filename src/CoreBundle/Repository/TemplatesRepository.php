@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -11,14 +13,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * TemplatesRepository class.
- */
 class TemplatesRepository extends ServiceEntityRepository
 {
-    /**
-     * TemplatesRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Templates::class);
@@ -38,13 +34,13 @@ class TemplatesRepository extends ServiceEntityRepository
                 'ChamiloCoreBundle:Course',
                 'c',
                 Join::WITH,
-                $qb->expr()->eq('t.id', 'c.id')
+                't.id = c.id'
             )
             ->innerJoin(
                 'ChamiloCourseBundle:CDocument',
                 'd',
                 Join::WITH,
-                $qb->expr()->eq('c.id', 'd.course')
+                'c.id = d.course'
             )
             ->where(
                 $qb->expr()->eq('d.iid', 't.refDoc')
@@ -54,7 +50,8 @@ class TemplatesRepository extends ServiceEntityRepository
             )
             ->andWhere(
                 $qb->expr()->eq('t.userId', $user->getId())
-            );
+            )
+        ;
 
         return $qb->getQuery()->getResult();
     }

@@ -104,7 +104,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $line = '<tr>
         <th ></th>';
     $lineHeaderExport = [null, null];
-    $lineHeaderExport2 = [null, ull];
+    $lineHeaderExport2 = [null, null];
     while ($rowe = Database::fetch_assoc($resultHeader)) {
         $lineHeaderExport[] = utf8_decode('Work'.$rowe['week_id']);
         $lineHeaderExport[] = utf8_decode('Forum'.$rowe['week_id']);
@@ -143,7 +143,7 @@ function showResults($courseInfo, $weeksCount, $page)
     if (14 == $weeksCount) {
         $html .= '<span style="float:right;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
     }
-    $html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
+    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';
@@ -154,10 +154,19 @@ function showResults($courseInfo, $weeksCount, $page)
     }
     $html .= '</tr>';
     $html .= $line;
-    $sql = "SELECT u.username , u.user_id , CONCAT(u.lastname,' ', u.firstname ) as fullname , rs.week_id , sr.work_ok ,sr.thread_ok , sr.quiz_ok , sr.pc_ok , rs.course_code
+    $sql = "SELECT
+                u.username,
+                u.id as user_id,
+                CONCAT(u.lastname,' ', u.firstname ) as fullname ,
+                rs.week_id , sr.work_ok ,
+                sr.thread_ok ,
+                sr.quiz_ok ,
+                sr.pc_ok ,
+                rs.course_code
             FROM $tableStudentsReport sr
             JOIN $tableWeeklyReport rs ON sr.week_report_id = rs.id
-            JOIN $tableUser u ON u.user_id = sr.user_id
+            JOIN $tableUser u
+            ON u.id = sr.user_id
             WHERE rs.course_code = '$course_code'
             ORDER BY u.lastname , u.username , rs.week_id
     ";

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,32 +17,28 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRuleMethod
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="method_order", type="integer")
      */
-    protected $methodOrder;
+    protected string $methodOrder;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRule")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
-    protected $rule;
+    protected ?SequenceRule $rule = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceMethod")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    protected $method;
+    protected ?SequenceMethod $method = null;
 
     /**
      * Get id.
@@ -60,31 +58,34 @@ class SequenceRuleMethod
         return $this->methodOrder;
     }
 
-    /**
-     * @param string $methodOrder
-     */
-    public function setMethodOrder($methodOrder)
+    public function setMethodOrder(string $methodOrder): self
     {
         $this->methodOrder = $methodOrder;
+
+        return $this;
     }
 
-    public function getRule()
+    public function getRule(): ?SequenceRule
     {
         return $this->rule;
     }
 
-    public function setRule($rule)
+    public function setRule(SequenceRule $rule): self
     {
         $this->rule = $rule;
+
+        return $this;
     }
 
-    public function getMethod()
+    public function getMethod(): SequenceMethod
     {
         return $this->method;
     }
 
-    public function setMethod($method)
+    public function setMethod(SequenceMethod $method): self
     {
         $this->method = $method;
+
+        return $this;
     }
 }

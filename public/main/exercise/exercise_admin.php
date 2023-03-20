@@ -125,13 +125,13 @@ $(function() {
 
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
-$exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 //INIT FORM
 if (!empty($exerciseId)) {
     $form = new FormValidator(
         'exercise_admin',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&id='.$exerciseId
+        api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId
     );
     $objExercise->read($exerciseId, false);
     $form->addElement('hidden', 'edit', 'true');
@@ -146,7 +146,6 @@ if (!empty($exerciseId)) {
 
 $objExercise->createForm($form);
 
-// VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ('true' === $form->getSubmitValue('edit')) {
@@ -160,7 +159,7 @@ if ($form->validate()) {
     }
     $exercise_id = $objExercise->getId();
     Session::erase('objExercise');
-    header('Location:admin.php?id='.$exercise_id.'&'.api_get_cidreq());
+    header('Location:admin.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
 } else {
     if (api_is_in_gradebook()) {
@@ -175,37 +174,43 @@ if ($form->validate()) {
         'name' => get_lang('Tests'),
     ];
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->getId().'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 
     Display::display_header($nameTools, get_lang('Test'));
 
-    echo '<div class="actions">';
+    $actions = '';
     if (0 != $objExercise->getId()) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&id='.$objExercise->getId().'">'.
+        $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
                 $lp_id = $_POST['lp_id'];
-            //TODO:this remains to be implemented after press the first post
             } else {
+                //TODO:this remains to be implemented after press the first post
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo '<a href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
+            $actions .= '<a
+                href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
                 Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
-            echo '<a href="exercise.php?'.api_get_cidreq().'">'.
+            $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('Back to test list'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('toolbar', [$actions]);
 
     if (in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-        echo Display::return_message(get_lang('The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'));
+        echo Display::return_message(
+            get_lang(
+                'The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'
+            )
+        );
     }
 
     if ('true' === api_get_setting('search_enabled') &&

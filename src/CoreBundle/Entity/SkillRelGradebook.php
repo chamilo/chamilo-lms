@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,99 +9,41 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelGradebook.
- *
  * @ORM\Table(name="skill_rel_gradebook")
  * @ORM\Entity
  */
 class SkillRelGradebook
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="gradebook_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="gradeBookCategories")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $gradebookId;
+    protected Skill $skill;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="skills")
+     * @ORM\JoinColumn(name="gradebook_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $skillId;
+    protected GradebookCategory $gradeBookCategory;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
-    /**
-     * Set gradebookId.
-     *
-     * @param int $gradebookId
-     *
-     * @return SkillRelGradebook
-     */
-    public function setGradebookId($gradebookId)
+    public function __construct()
     {
-        $this->gradebookId = $gradebookId;
-
-        return $this;
+        $this->type = '';
     }
 
-    /**
-     * Get gradebookId.
-     *
-     * @return int
-     */
-    public function getGradebookId()
-    {
-        return $this->gradebookId;
-    }
-
-    /**
-     * Set skillId.
-     *
-     * @param int $skillId
-     *
-     * @return SkillRelGradebook
-     */
-    public function setSkillId($skillId)
-    {
-        $this->skillId = $skillId;
-
-        return $this;
-    }
-
-    /**
-     * Get skillId.
-     *
-     * @return int
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
-    }
-
-    /**
-     * Set type.
-     *
-     * @param string $type
-     *
-     * @return SkillRelGradebook
-     */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -124,5 +68,29 @@ class SkillRelGradebook
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): self
+    {
+        $this->skill = $skill;
+
+        return $this;
+    }
+
+    public function getGradeBookCategory(): GradebookCategory
+    {
+        return $this->gradeBookCategory;
+    }
+
+    public function setGradeBookCategory(GradebookCategory $gradeBookCategory): self
+    {
+        $this->gradeBookCategory = $gradeBookCategory;
+
+        return $this;
     }
 }

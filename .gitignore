@@ -24,7 +24,6 @@ var/upload/*
 
 # Chamilo configuration
 /config/configuration.php
-
 /main/inc/conf/configuration.php
 
 # Home
@@ -63,13 +62,9 @@ symfony.lock
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> friendsofphp/php-cs-fixer ###
-.php_cs.cache
-###< friendsofphp/php-cs-fixer ###
-
 ###> symfony/phpunit-bridge ###
 .phpunit
+.phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 ###> symfony/webpack-encore-bundle ###
@@ -80,8 +75,18 @@ symfony.lock
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+.yarn/*
+.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-/phpcs.xml
-###< squizlabs/php_codesniffer ###
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

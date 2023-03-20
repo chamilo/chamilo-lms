@@ -1,15 +1,62 @@
+//@import 'variables';
+//@import 'base_theme';
+//
+//// Tools
+//@import 'inbox';
+//@import 'install';
 
-@import 'variables';
-@import "media";
-@import 'inbox';
-@import 'sidebar';
+@layer base {
+  hr {
+    @apply text-gray-30 my-6;
+  }
+}
+
+@import "settings/typography";
+
+@import "atoms/avatar";
+@import "atoms/buttons";
+@import "atoms/checkbox";
+@import "atoms/dropdown";
+@import "atoms/form";
+@import "atoms/fieldset";
+@import "atoms/inline_message";
+@import "atoms/input_switch";
+@import "atoms/input_text";
+@import "atoms/messages";
+@import "atoms/overlay";
+@import "atoms/password";
+@import "atoms/progressbar";
+@import "atoms/radio";
+@import "atoms/skeleton";
+@import "atoms/tags";
+
+@import "molecules/course_tool";
+@import "molecules/datepicker";
+@import "molecules/empty_state";
+@import "molecules/teacher_bar";
+@import "molecules/toolbar";
+
+@import "organisms/cards";
+@import "organisms/course_card";
+@import "organisms/datatable";
+@import "organisms/modals";
+@import "organisms/menu";
+@import "organisms/sidebar";
+@import "organisms/tables";
+@import "organisms/install";
+
+@import "components/badges";
+//@import 'announcement';
+
+@import "layout/topbar";
+@import "layout/breadcrumb";
+@import 'layout/main_container';
+
 @import 'login';
-@import 'install';
-@import "forms";
-@import 'base';
-@import 'announcement';
-@import 'exercise';
-@import "jqueryui";
 
-/*
-@import "spinner";*/
+@import 'forums';
+@import 'exercise';
+@import 'catalog_course';
+@import 'catalog_session';
+//@import 'jqueryui';
+@import 'lp';

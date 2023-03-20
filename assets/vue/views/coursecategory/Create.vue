@@ -9,9 +9,9 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import CourseCategoryForm from '../../components/coursecategory/Form';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import CourseCategoryForm from '../../components/coursecategory/Form.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
 
 const servicePrefix = 'CourseCategory';

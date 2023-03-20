@@ -1,165 +1,31 @@
-{# This file changes/format the symfony2 forms using the Bootstrap UI #}
-{% extends 'form_div_layout.html.twig' %}
+{# Uses the default Symfony Tailwind style in
+vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 
-{% block widget_attributes %}
-    {% if attr.class is defined %}
-        {% set class = attr.class ~ ' form-control' %}
-    {% else %}
-        {% set class = 'form-control' %}
-    {% endif %}
-    {% set attr = attr|merge({'class' : class}) %}
-    {{ parent () }}
-{% endblock widget_attributes %}
+{% use 'form_div_layout.html.twig' %}
 
-{% block choice_widget_expanded %}
-    {% apply spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {% for child in form %}
-                {{ form_widget(child) }}
-            {% endfor %}
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-float-label')) }) -%}
+
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div class="field">
+        <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_label(form) -}}
+            {{- form_errors(form) -}}
+            {{- form_help(form) -}}
         </div>
-    {% endapply %}
-{% endblock choice_widget_expanded %}
-
-{% block choice_widget_collapsed %}
-    {% set attr = attr|merge({'class' : 'form-control'}) %}
-    {{ parent() }}
-{% endblock %}
-
-{% block checkbox_widget %}
-    <div class="checkbox">
-        {% apply spaceless %}
-            {% if not compound %}
-                {% set label_attr = label_attr|merge({'for': id}) %}
-            {% endif %}
-            {% if required %}
-                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-            {% endif %}
-            {% if label is empty %}
-                {% set label = name|humanize %}
-            {% endif %}
-            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-            <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-            {% if label is not sameas(false) %}
-                {{ label|trans({}, translation_domain) }}
-            {% endif %}
-            </label>
-        {% endapply %}
     </div>
-{% endblock checkbox_widget %}
+{%- endblock form_row -%}
 
-{% block radio_widget %}
-    <div class="radio">
-        {% apply spaceless %}
-            {% if not compound %}
-                {% set label_attr = label_attr|merge({'for': id}) %}
-            {% endif %}
-            {% if required %}
-                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-            {% endif %}
-            {% if label is empty %}
-                {% set label = name|humanize %}
-            {% endif %}
-            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-            <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-            {% if label is not sameas(false) %}
-                {{ label|trans({}, translation_domain) }}
-            {% endif %}
-            </label>
-        {% endapply %}
-    </div>
-{% endblock radio_widget %}
+{%- block form_widget_simple -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-inputtext p-component p-filled') }) -%}
+    {{- parent() -}}
+{%- endblock form_widget_simple -%}
 
-{% block date_widget %}
-    {% if widget == 'single_text' %}
-        <div class="input-group">
-            <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-            </div>
-
-            {% if attr.class is defined %}
-                {% set class = attr.class ~ ' timepicker' %}
-            {% else %}
-                {% set class = ' timepicker' %}
-            {% endif %}
-            {% set attr = attr|merge({'class' : class, 'data-datepicker':'on'}) %}
-
-            {{ block('form_widget_simple') }}
-        </div>
-    {% else %}
-        {% set date_pattern = '<div class="row">' ~ date_pattern ~ '</div>'|raw %}
-        {{ date_pattern|replace({
-        '{{ year }}' : '<div class="col-xs-4">{{ year }}</div>',
-        '{{ month }}' : '<div class="col-xs-4">{{ month }}</div>',
-        '{{ day }}' : '<div class="col-xs-4">{{ day }}</div>',
-        })|raw|replace({
-        '{{ year }}':  form_widget(form.year),
-        '{{ month }}': form_widget(form.month),
-        '{{ day }}':   form_widget(form.day),
-        })|raw }}
-
-    {% endif %}
-{% endblock %}
-
-{% block time_widget %}
-    {% if widget == 'single_text' %}
-        <div class="bootstrap-timepicker">
-            <div class="input-group">
-                {% if attr.class is defined %}
-                    {% set class = attr.class ~ ' timepicker' %}
-                {% else %}
-                    {% set class = ' timepicker' %}
-                {% endif %}
-                {% set attr = attr|merge({'class' : class, 'data-timepicker':'on'}) %}
-                {{ block('form_widget_simple') }}
-                <div class="input-group-addon add-on">
-                    <i class="fa fa-clock-o"></i>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
-{% block form_row %}
-    {% set types = form.vars.block_prefixes %}
-    {% if 'checkbox' in types or 'radio' in types %}
-        <div class="form-group {{ errors|length > 0 ? 'has-error has-feedback'  : '' }}">
-            {{ form_widget(form) }}
-            {{ form_errors(form) }}
-        </div>
-    {% else %}
-        <div class="form-group {{ errors|length > 0 ? 'has-error has-feedback'  : '' }}">
-            {{ form_label(form) }}
-            {{ form_widget(form) }}
-            {{ form_errors(form) }}
-        </div>
-    {% endif %}
-{% endblock %}
-
-{% block form_label %}
-
-    {% if help is defined %}
-        &nbsp; <a href="#" data-toggle="tooltip" data-original-title="{{ help }}"><i class="fa fa-question-circle"></i></a>
-    {% endif %}
-
-    {{ parent() }}
-    {% if required %}
-        <span class="required" title="Dies ist ein Pflichtfeld">*</span>
-    {% endif %}
-
-{% endblock form_label %}
-
-{% block form_errors %}
-    {% apply spaceless %}
-        {% if errors|length > 0 %}
-            <ul class="list-unstyled">
-                {% for error in errors %}
-                    <li class="text-danger">{{ error.message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endapply %}
-{% endblock form_errors %}
-
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-dropdown p-component p-inputwrapper p-inputwrapper-filled') }) -%}
+    {{- parent() -}}
+{%- endblock -%}

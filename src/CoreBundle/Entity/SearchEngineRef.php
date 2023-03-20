@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,49 +20,37 @@ class SearchEngineRef
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected ?Course $course = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    protected $toolId;
+    protected string $toolId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id_high_level", type="integer", nullable=false)
      */
-    protected $refIdHighLevel;
+    protected int $refIdHighLevel;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id_second_level", type="integer", nullable=true)
      */
-    protected $refIdSecondLevel;
+    protected ?int $refIdSecondLevel = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="search_did", type="integer", nullable=false)
      */
-    protected $searchDid;
+    protected int $searchDid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * Set course.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
      *
      * @return \Chamilo\CoreBundle\Entity\SearchEngineRef
      */
@@ -74,7 +64,7 @@ class SearchEngineRef
     /**
      * Get course.
      *
-     * @return \Chamilo\CoreBundle\Entity\Course
+     * @return Course
      */
     public function getCourse()
     {
@@ -84,11 +74,9 @@ class SearchEngineRef
     /**
      * Set toolId.
      *
-     * @param string $toolId
-     *
      * @return SearchEngineRef
      */
-    public function setToolId($toolId)
+    public function setToolId(string $toolId)
     {
         $this->toolId = $toolId;
 
@@ -108,11 +96,9 @@ class SearchEngineRef
     /**
      * Set refIdHighLevel.
      *
-     * @param int $refIdHighLevel
-     *
      * @return SearchEngineRef
      */
-    public function setRefIdHighLevel($refIdHighLevel)
+    public function setRefIdHighLevel(int $refIdHighLevel)
     {
         $this->refIdHighLevel = $refIdHighLevel;
 
@@ -132,11 +118,9 @@ class SearchEngineRef
     /**
      * Set refIdSecondLevel.
      *
-     * @param int $refIdSecondLevel
-     *
      * @return SearchEngineRef
      */
-    public function setRefIdSecondLevel($refIdSecondLevel)
+    public function setRefIdSecondLevel(int $refIdSecondLevel)
     {
         $this->refIdSecondLevel = $refIdSecondLevel;
 
@@ -156,11 +140,9 @@ class SearchEngineRef
     /**
      * Set searchDid.
      *
-     * @param int $searchDid
-     *
      * @return SearchEngineRef
      */
-    public function setSearchDid($searchDid)
+    public function setSearchDid(int $searchDid)
     {
         $this->searchDid = $searchDid;
 

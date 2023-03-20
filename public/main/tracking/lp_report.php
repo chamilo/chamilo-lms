@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,9 +21,7 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-$lps = learnpath::getLpList($courseId);
-Session::write('lps', $lps);
+$action = $_GET['action'] ?? null;
 
 /**
  * Prepares the shared SQL query for the user table.
@@ -180,7 +180,7 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
+                    if (ExtraField::FIELD_TYPE_TAG == $info['value_type']) {
                         $result = $extraField->getAllUserPerTag(
                             $info['id'],
                             $value
@@ -267,13 +267,16 @@ function getCount()
  *
  * @see SortableTable#get_table_data($from)
  */
-function getData($from, $numberOfItems, $column, $direction)
+function getData($from, $numberOfItems, $column, $direction, $params)
 {
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $courseId = api_get_course_int_id();
+    $course = api_get_course_entity();
+    $session = api_get_session_entity();
 
-    $lps = Session::read('lps');
+    /** @var CLp[] $lps */
+    $lps = $params['lps'];
 
     if (empty($sessionId)) {
         // Registered students in a course outside session.
@@ -320,20 +323,20 @@ function getData($from, $numberOfItems, $column, $direction)
             $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
         }
         foreach ($lps as $lp) {
-            $lpId = $lp['id'];
+            $lpId = $lp->getIid();
             $progress = Tracking::get_avg_student_progress(
                 $userId,
-                $courseCode,
+                $course,
                 [$lpId],
-                $sessionId
+                $session
             );
 
             if ($useNewTable) {
-                $time = isset($lpTimeList[TOOL_LEARNPATH][$lpId]) ? $lpTimeList[TOOL_LEARNPATH][$lpId] : 0;
+                $time = $lpTimeList[TOOL_LEARNPATH][$lpId] ?? 0;
             } else {
                 $time = Tracking::get_time_spent_in_lp(
                     $userId,
-                    $courseCode,
+                    $course,
                     [$lpId],
                     $sessionId
                 );
@@ -347,10 +350,7 @@ function getData($from, $numberOfItems, $column, $direction)
                 $sessionId
             );
 
-            $first = api_convert_and_format_date(
-                $first,
-                DATE_TIME_FORMAT_LONG
-            );
+            $first = api_convert_and_format_date($first, DATE_TIME_FORMAT_LONG);
 
             $last = Tracking::get_last_connection_time_in_lp(
                 $userId,
@@ -358,10 +358,7 @@ function getData($from, $numberOfItems, $column, $direction)
                 $lpId,
                 $sessionId
             );
-            $last = api_convert_and_format_date(
-                $last,
-                DATE_TIME_FORMAT_LONG
-            );
+            $last = api_convert_and_format_date($last, DATE_TIME_FORMAT_LONG);
 
             $score = Tracking::getAverageStudentScore(
                 $userId,
@@ -392,6 +389,13 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tracking'),
 ];
 
+$course = api_get_course_entity();
+$session = api_get_session_entity();
+$lpRepo = Container::getLpRepository();
+$qb = $lpRepo->findAllByCourse($course, $session);
+/** @var CLp[] $lps */
+$lps = $qb->getQuery()->getResult();
+
 $tool_name = get_lang('CourseLPsGenericStats');
 
 $headers = [];
@@ -399,7 +403,7 @@ $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
 $headers[] = get_lang('Username');
 foreach ($lps as $lp) {
-    $lpName = $lp['name'];
+    $lpName = $lp->getName();
     $headers[] = get_lang('Progress').': '.$lpName;
     $headers[] = get_lang('FirstAccess').': '.$lpName;
     $headers[] = get_lang('LastAccess').': '.$lpName;
@@ -410,7 +414,7 @@ foreach ($lps as $lp) {
 if (!empty($action)) {
     switch ($action) {
         case 'export':
-            $data = getData(0, 100000, null, null);
+            $data = getData(0, 100000, null, null, null);
             $data = array_merge([$headers], $data);
             $name = api_get_course_id().'_'.get_lang('Learnpath').'_'.get_lang('Export');
             Export::arrayToXls($data, $name);
@@ -419,7 +423,7 @@ if (!empty($action)) {
     }
 }
 
-$actionsLeft = TrackingCourseLog::actionsLeft('lp');
+$actionsLeft = TrackingCourseLog::actionsLeft('lp', api_get_session_id(), false);
 $actionsCenter = '';
 $actionsRight = Display::url(
     Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), null, ICON_SIZE_MEDIUM),
@@ -437,19 +441,15 @@ $table = new SortableTable(
     'getCount',
     'getData'
 );
+$table->setDataFunctionParams(['lps' => $lps]);
 $table->set_additional_parameters($parameters);
 $column = 0;
 foreach ($headers as $header) {
-    $lpName = $lp['name'];
     $table->set_header($column++, $header, false);
 }
 
 $tableToString = $table->return_table();
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

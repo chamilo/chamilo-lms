@@ -1,223 +1,209 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class SessionRelCourseRelUser.
+ * User subscriptions to a session course.
  *
- * @ApiResource(
- *      shortName="SessionSubscription",
- *      normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
- * )
  * @ORM\Table(
- *      name="session_rel_course_rel_user",
- *      indexes={
- *          @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"user_id"}),
- *          @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
- *      }
+ *     name="session_rel_course_rel_user",
+ *     uniqueConstraints={
+ *        @ORM\UniqueConstraint(name="course_session_unique",
+ *            columns={"session_id", "c_id", "user_id", "status"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"user_id"}),
+ *         @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['user:read', 'session_rel_course_rel_user:read'],
+        'enable_max_depth' => true,
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => 'exact',
+    'session' => 'exact',
+    'course' => 'exact',
+    'user.username' => 'partial',
+])]
+#[ApiFilter(
+    DateFilter::class,
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
+)]
 class SessionRelCourseRelUser
 {
     use UserTrait;
 
-    public const STATUS_STUDENT = 0;
-    public const STATUS_COURSE_COACH = 2;
-
-    public $statusList = [
-        0 => 'student',
-        2 => 'course_coach',
+    /**
+     * @var string[]
+     */
+    public array $statusList = [
+        Session::STUDENT => 'student',
+        Session::COURSE_COACH => 'course_coach',
     ];
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
+    protected User $user;
 
     /**
-     * @var Session
-     * @Groups({"session_rel_course_rel_user:read"})
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
-    protected $session;
+    #[Groups(['session_rel_course_rel_user:read'])]
+    protected Session $session;
 
     /**
-     * @var Course
-     * @Groups({"session_rel_course_rel_user:read"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $course;
+    #[Groups(['session:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
+    #[MaxDepth(1)]
+    protected Course $course;
 
     /**
-     * @var int
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected int $status;
+
+    /**
+     * @ORM\Column(name="visibility", type="integer")
+     */
+    protected int $visibility;
+
+    /**
+     * @ORM\Column(name="legal_agreement", type="integer", nullable=false, unique=false)
+     */
+    protected int $legalAgreement;
+
+    /**
+     * @Assert\Range(
+     *     min = 0,
+     *     max = 100,
+     *     notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
+     * )
      *
-     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="progress", type="integer")
      */
-    protected $visibility;
+    protected int $progress;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
-     */
-    protected $status;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
-     */
-    protected $legalAgreement;
-
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->progress = 0;
         $this->visibility = 1;
+        $this->legalAgreement = 0;
+        $this->status = Session::STUDENT;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return $this
-     */
-    public function setSession($session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return $this
-     */
-    public function setCourse($course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set visibility.
-     *
-     * @param int $visibility
-     *
-     * @return SessionRelCourseRelUser
-     */
-    public function setVisibility($visibility)
+    public function setVisibility(int $visibility): self
     {
         $this->visibility = $visibility;
 
         return $this;
     }
 
-    /**
-     * Get visibility.
-     *
-     * @return int
-     */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return SessionRelCourseRelUser
-     */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * Get status.
-     *
-     * @return int
-     */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * Set legalAgreement.
-     *
-     * @param int $legalAgreement
-     *
-     * @return $this
-     */
-    public function setLegalAgreement($legalAgreement)
+    public function setLegalAgreement(int $legalAgreement): self
     {
         $this->legalAgreement = $legalAgreement;
 
         return $this;
     }
 
-    /**
-     * Get legalAgreement.
-     *
-     * @return int
-     */
-    public function getLegalAgreement()
+    public function getLegalAgreement(): int
     {
         return $this->legalAgreement;
+    }
+
+    public function getProgress(): int
+    {
+        return $this->progress;
+    }
+
+    public function setProgress(int $progress): self
+    {
+        $this->progress = $progress;
+
+        return $this;
     }
 }

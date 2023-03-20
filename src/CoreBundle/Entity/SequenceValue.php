@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,83 +21,63 @@ class SequenceValue
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sequenceValues")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
      */
-    protected $entity;
+    protected ?SequenceRowEntity $entity = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="advance", type="float")
      */
-    protected $advance;
+    protected int $advance;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="complete_items", type="integer")
      */
-    protected $completeItems;
+    protected int $completeItems;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_items", type="integer")
      */
-    protected $totalItems;
+    protected int $totalItems;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="success", type="boolean")
      */
-    protected $success;
+    protected int $success;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="success_date", type="datetime", nullable=true)
      */
-    protected $successDate;
+    protected ?DateTime $successDate = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="available", type="boolean")
      */
-    protected $available;
+    protected int $available;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
      */
-    protected $availableStartDate;
+    protected ?DateTime $availableStartDate = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
      */
-    protected $availableEndDate;
+    protected ?DateTime $availableEndDate = null;
 
     /**
      * Get id.
@@ -106,7 +89,7 @@ class SequenceValue
         return $this->id;
     }
 
-    public function getEntity()
+    public function getEntity(): ?SequenceRowEntity
     {
         return $this->entity;
     }
@@ -114,7 +97,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setEntity($entity)
+    public function setEntity(?SequenceRowEntity $entity): self
     {
         $this->entity = $entity;
 
@@ -130,11 +113,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $advance
-     *
      * @return SequenceValue
      */
-    public function setAdvance($advance)
+    public function setAdvance(int $advance)
     {
         $this->advance = $advance;
 
@@ -150,11 +131,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $completeItems
-     *
      * @return SequenceValue
      */
-    public function setCompleteItems($completeItems)
+    public function setCompleteItems(int $completeItems): self
     {
         $this->completeItems = $completeItems;
 
@@ -170,11 +149,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $totalItems
-     *
      * @return SequenceValue
      */
-    public function setTotalItems($totalItems)
+    public function setTotalItems(int $totalItems): self
     {
         $this->totalItems = $totalItems;
 
@@ -190,11 +167,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $success
-     *
      * @return SequenceValue
      */
-    public function setSuccess($success)
+    public function setSuccess(int $success): self
     {
         $this->success = $success;
 
@@ -202,7 +177,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSuccessDate()
     {
@@ -210,11 +185,9 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $successDate
-     *
      * @return SequenceValue
      */
-    public function setSuccessDate($successDate)
+    public function setSuccessDate(DateTime $successDate): self
     {
         $this->successDate = $successDate;
 
@@ -230,11 +203,9 @@ class SequenceValue
     }
 
     /**
-     * @param int $available
-     *
      * @return SequenceValue
      */
-    public function setAvailable($available)
+    public function setAvailable(int $available): self
     {
         $this->available = $available;
 
@@ -242,7 +213,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailableStartDate()
     {
@@ -250,11 +221,9 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $availableStartDate
-     *
      * @return SequenceValue
      */
-    public function setAvailableStartDate($availableStartDate)
+    public function setAvailableStartDate(DateTime $availableStartDate): self
     {
         $this->availableStartDate = $availableStartDate;
 
@@ -262,7 +231,7 @@ class SequenceValue
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAvailableEndDate()
     {
@@ -270,11 +239,9 @@ class SequenceValue
     }
 
     /**
-     * @param \DateTime $availableEndDate
-     *
      * @return SequenceValue
      */
-    public function setAvailableEndDate($availableEndDate)
+    public function setAvailableEndDate(DateTime $availableEndDate): self
     {
         $this->availableEndDate = $availableEndDate;
 

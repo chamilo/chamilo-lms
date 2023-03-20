@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -14,30 +16,26 @@ class ResourceRight
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRight")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRights")
      * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resourceLink;
+    protected ?ResourceLink $resourceLink = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
      */
-    protected $role;
+    protected string $role;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mask", type="integer", nullable=false)
      */
-    protected $mask;
+    protected int $mask;
 
     public function __toString(): string
     {
@@ -53,19 +51,14 @@ class ResourceRight
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getMask()
     {
         return $this->mask;
     }
 
-    /**
-     * @param string $mask
-     *
-     * @return $this
-     */
-    public function setMask($mask)
+    public function setMask(int $mask): self
     {
         $this->mask = $mask;
 

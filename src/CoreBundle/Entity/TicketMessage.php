@@ -1,91 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Message.
- *
  * @ORM\Table(name="ticket_message")
  * @ORM\Entity
  */
 class TicketMessage
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     * @ORM\Column(name="subject", type="string", length=255, nullable=false)
      */
-    protected $subject;
+    protected string $subject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected $message;
+    protected ?string $message = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", nullable=false)
      */
-    protected $status;
+    protected string $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="ip_address", type="string", nullable=false)
      */
-    protected $ipAddress;
+    protected string $ipAddress;
 
     /**
-     * @var Ticket
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $ticket;
+    protected Ticket $ticket;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
-     */
-    protected $insertDateTime;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
-     * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
+     */
+    protected DateTime $insertDateTime;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
     /**
      * @return int
@@ -96,18 +80,6 @@ class TicketMessage
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketMessage
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getSubject()
@@ -115,12 +87,7 @@ class TicketMessage
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     *
-     * @return TicketMessage
-     */
-    public function setSubject($subject)
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -135,12 +102,7 @@ class TicketMessage
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return TicketMessage
-     */
-    public function setMessage($message)
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -155,12 +117,7 @@ class TicketMessage
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     *
-     * @return TicketMessage
-     */
-    public function setStatus($status)
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -175,12 +132,7 @@ class TicketMessage
         return $this->ipAddress;
     }
 
-    /**
-     * @param string $ipAddress
-     *
-     * @return TicketMessage
-     */
-    public function setIpAddress($ipAddress)
+    public function setIpAddress(string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
 
@@ -195,12 +147,7 @@ class TicketMessage
         return $this->ticket;
     }
 
-    /**
-     * @param Ticket $ticket
-     *
-     * @return TicketMessage
-     */
-    public function setTicket($ticket)
+    public function setTicket(Ticket $ticket): self
     {
         $this->ticket = $ticket;
 
@@ -216,11 +163,9 @@ class TicketMessage
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketMessage
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -228,19 +173,14 @@ class TicketMessage
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
         return $this->insertDateTime;
     }
 
-    /**
-     * @param \DateTime $insertDateTime
-     *
-     * @return TicketMessage
-     */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -256,11 +196,9 @@ class TicketMessage
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketMessage
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -268,19 +206,14 @@ class TicketMessage
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @param \DateTime $lastEditDateTime
-     *
-     * @return TicketMessage
-     */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

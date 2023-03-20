@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\WhispeakAuth\Request;
 use Chamilo\UserBundle\Entity\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use WhispeakAuthPlugin;
 
 /**
  * Class ApiRequest.
@@ -13,7 +14,7 @@ use GuzzleHttp\Exception\RequestException;
 class ApiRequest
 {
     /**
-     * @var \WhispeakAuthPlugin
+     * @var WhispeakAuthPlugin
      */
     protected $plugin;
     /**
@@ -26,8 +27,8 @@ class ApiRequest
      */
     public function __construct()
     {
-        $this->plugin = \WhispeakAuthPlugin::create();
-        $this->apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
+        $this->plugin = WhispeakAuthPlugin::create();
+        $this->apiKey = $this->plugin->get(WhispeakAuthPlugin::SETTING_TOKEN);
     }
 
     /**
@@ -39,7 +40,7 @@ class ApiRequest
      */
     public function createEnrollmentSessionToken(User $user)
     {
-        $apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
+        $apiKey = $this->plugin->get(WhispeakAuthPlugin::SETTING_TOKEN);
         $langIso = api_get_language_isocode($user->getLanguage());
 
         return $this->sendRequest(
@@ -84,7 +85,7 @@ class ApiRequest
      */
     public function createAuthenticationSessionToken(User $user = null)
     {
-        $apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
+        $apiKey = $this->plugin->get(WhispeakAuthPlugin::SETTING_TOKEN);
 
         $langIso = api_get_language_isocode($user ? $user->getLanguage() : null);
 
@@ -106,7 +107,7 @@ class ApiRequest
      */
     public function performAuthentication($token, User $user, $audioFilePath)
     {
-        $wsid = \WhispeakAuthPlugin::getAuthUidValue($user->getId());
+        $wsid = WhispeakAuthPlugin::getAuthUidValue($user->getId());
 
         if (empty($wsid)) {
             throw new \Exception($this->plugin->get_lang('SpeechAuthNotEnrolled'));

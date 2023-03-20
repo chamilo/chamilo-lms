@@ -2,13 +2,20 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
-final class Version20201206111706 extends AbstractMigration
+final class Version20201206111706 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Change title format';
+    }
+
     public function up(Schema $schema): void
     {
         // From configuration.dist.php 1.11.x

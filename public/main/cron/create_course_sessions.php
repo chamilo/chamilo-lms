@@ -173,7 +173,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
             null,
             null,
             null,
-            $administratorId,
+            [$administratorId],
             0,
             SESSION_INVISIBLE
         );

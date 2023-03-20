@@ -1,80 +1,69 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLpCategory.
+ * Learning paths categories.
  *
  * @ORM\Table(
- *  name="c_lp_category",
+ *     name="c_lp_category",
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
 class CLpCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected ?int $iid = null;
 
     /**
-     * @Gedmo\SortableGroup
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="name", type="text")
      */
-    protected $cId;
-
-    /**
-     * @var Session
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected $session;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
      * @Gedmo\SortablePosition
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser", mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @var Collection|CLpCategoryUser[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
+     *     mappedBy="category",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
-    protected $users;
+    protected Collection $users;
 
     /**
-     * @var ArrayCollection|CLp[]
+     * @var Collection|CLp[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
      */
-    protected $lps;
+    protected Collection $lps;
 
-    /**
-     * CLpCategory constructor.
-     */
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -86,41 +75,12 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLpCategory
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * @param $name
-     *
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -129,20 +89,13 @@ class CLpCategory extends AbstractResource implements ResourceInterface
 
     /**
      * Get category name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
-    /**
-     * @param $position
-     *
-     * @return $this
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -158,7 +111,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CLp[]|ArrayCollection
+     * @return Collection|CLp[]
      */
     public function getLps()
     {
@@ -166,26 +119,22 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getUsers()
     {
         return $this->users;
     }
 
-    /**
-     * @param $users
-     */
-    public function setUsers($users)
+    public function setUsers(Collection $users): void
     {
         $this->users = new ArrayCollection();
-
         foreach ($users as $user) {
             $this->addUser($user);
         }
     }
 
-    public function addUser(CLpCategoryUser $categoryUser)
+    public function addUser(CLpCategoryUser $categoryUser): void
     {
         $categoryUser->setCategory($this);
 
@@ -194,12 +143,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUser(CLpCategoryUser $categoryUser)
+    public function hasUser(CLpCategoryUser $categoryUser): bool
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $categoryUser->getUser())
             )->andWhere(
@@ -214,14 +160,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function hasUserAdded($user)
+    public function hasUserAdded(User $user): bool
     {
-        if ($this->getUsers()->count()) {
+        if (0 !== $this->getUsers()->count()) {
             $categoryUser = new CLpCategoryUser();
             $categoryUser->setCategory($this);
             $categoryUser->setUser($user);
@@ -232,10 +173,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    /**
-     * @return $this
-     */
-    public function removeUsers(CLpCategoryUser $user)
+    public function removeUsers(CLpCategoryUser $user): self
     {
         $this->users->removeElement($user);
 

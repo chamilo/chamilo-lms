@@ -21,7 +21,7 @@ if (!$is_allowedToTrack) {
 $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [
-    "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
+    "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."my_space/index.php?".api_get_cidreq(),
     "name" => get_lang("Reporting"),
 ];
 
@@ -35,7 +35,7 @@ $userId = api_get_user_id();
 $sessions = $courses = $months = $students = [0 => get_lang('Select')];
 $userList = [];
 if (api_is_student_boss()) {
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $userList = $userGroup->getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Form\DataTransformer;
 
-//use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -10,15 +12,11 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierTransformer implements DataTransformerInterface
 {
-    private $repository;
+    private ObjectRepository $repository;
 
-    /** @var string */
-    private $identifier;
+    private string $identifier;
 
-    /**
-     * @param string $identifier
-     */
-    public function __construct($repository, ?string $identifier = null)
+    public function __construct(ObjectRepository $repository, ?string $identifier = null)
     {
         $this->repository = $repository;
         $this->identifier = $identifier ?? 'id';
@@ -42,7 +40,9 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
-        $resource = $this->repository->findOneBy([$this->identifier => $value]);
+        $resource = $this->repository->findOneBy([
+            $this->identifier => $value,
+        ]);
         if (null === $resource) {
             throw new TransformationFailedException(sprintf('Object "%s" with identifier "%s"="%s" does not exist.', $this->repository->getClassName(), $this->identifier, $value));
         }

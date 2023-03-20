@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeUnsupportedRequest.
- */
+use SimpleXMLElement;
+
 class OutcomeUnsupportedRequest extends OutcomeRequest
 {
     /**
@@ -14,20 +15,21 @@ class OutcomeUnsupportedRequest extends OutcomeRequest
      *
      * @param string $name
      */
-    public function __construct(\SimpleXMLElement $xml, $name)
+    public function __construct(SimpleXMLElement $xml, $name)
     {
         parent::__construct($xml);
 
         $this->responseType = $name;
     }
 
-    protected function processBody()
+    protected function processBody(): void
     {
         $this->statusInfo
             ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
             ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_UNSUPPORTED)
             ->setDescription(
                 $this->responseType.' is not supported'
-            );
+            )
+        ;
     }
 }

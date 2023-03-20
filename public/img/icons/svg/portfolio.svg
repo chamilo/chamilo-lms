@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="120"
+   height="120"
+   viewBox="0 0 120 120"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="portfolio.svg"
+   inkscape:export-filename="/var/www/chamilo111x/main/img/icons/22/portfolio.png"
+   inkscape:export-xdpi="17.6"
+   inkscape:export-ydpi="17.6">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4172">
+      <stop
+         style="stop-color:#70a9ad;stop-opacity:1"
+         offset="0"
+         id="stop4174" />
+      <stop
+         style="stop-color:#a3cad2;stop-opacity:1"
+         offset="1"
+         id="stop4176" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4162">
+      <stop
+         style="stop-color:#e6e6e6;stop-opacity:1"
+         offset="0"
+         id="stop4164" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop4166" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4162"
+       id="linearGradient4168"
+       x1="66.549683"
+       y1="1035.0137"
+       x2="66.549683"
+       y2="952.11566"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2476433,0,0,1.3432385,-13.329263,-338.80641)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4172"
+       id="linearGradient4178"
+       x1="35.476311"
+       y1="1001.0709"
+       x2="35.476311"
+       y2="970.58698"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1993158,0,0,1.1993158,-10.375607,-203.51155)" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4262">
+      <path
+         style="opacity:1;fill:url(#linearGradient4266);fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="m -185.92437,-46.449824 19.83975,0 c 1.64197,0 2.96386,1.321887 2.96386,2.963861 l 0,19.981329 c 0,1.641983 -1.32189,2.963902 -2.96386,2.963902 l -19.83975,0 c -1.64198,0 -2.96387,-1.321919 -2.96387,-2.963902 l 0,-19.981329 c 0,-1.641974 1.32189,-2.963861 2.96387,-2.963861 z"
+         id="path4264"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4172"
+       id="linearGradient4266"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.82759123,0,0,0.82759123,-206.83537,-848.95823)"
+       x1="35.476311"
+       y1="1001.0709"
+       x2="35.476311"
+       y2="970.58698" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.8454161"
+     inkscape:cx="41.006306"
+     inkscape:cy="61.736828"
+     inkscape:document-units="px"
+     inkscape:current-layer="g4250"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1860"
+     inkscape:window-height="1016"
+     inkscape:window-x="60"
+     inkscape:window-y="1107"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-932.36213)">
+    <g
+       id="g4250"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/16/vcard.png"
+       inkscape:export-xdpi="12"
+       inkscape:export-ydpi="12">
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="0"
+         y="932.36212"
+         x="0"
+         height="120"
+         width="120"
+         id="rect4287"
+         style="opacity:1;fill:#afdde9;fill-opacity:0;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         id="rect4136"
+         d="m 10.151631,947.26287 c -5.4037332,0 -9.75385755,4.84496 -9.75385755,10.86356 v 71.01247 c 0,6.018 4.35012435,10.8634 9.75385755,10.8634 36.083582,-0.091 79.640744,-0.012 99.867829,0 5.40376,0 9.75384,-4.8454 9.75384,-10.8634 v -71.01247 c 0,-6.0186 -4.35008,-10.86356 -9.75384,-10.86356 H 10.151625 Z"
+         style="opacity:1;fill:#3b72aa;fill-opacity:0.96078432;stroke:none;stroke-width:0.47739729;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cssccssscc" />
+      <path
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         id="path4158"
+         d="m 16.114036,954.44799 c -4.761472,0 -8.5939772,4.12732 -8.5939772,9.25357 v 60.48234 c 0,5.1261 3.8325052,9.2537 8.5939772,9.2537 44.136257,0 66.27113,0 87.998044,0 4.76143,0 8.59595,-4.1276 8.59595,-9.2537 v -60.48234 c 0,-5.12625 -3.83452,-9.25357 -8.59595,-9.25357 z"
+         style="opacity:1;fill:url(#linearGradient4168);fill-opacity:1;stroke:none;stroke-width:0.44478214;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="sssccssss" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="4.2951221"
+         y="959.45496"
+         x="15.632731"
+         height="37.546474"
+         width="37.341305"
+         id="rect4170"
+         style="opacity:1;fill:url(#linearGradient4178);fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="1.3338226"
+         y="962.01965"
+         x="61.854462"
+         height="8.8456783"
+         width="9.6932125"
+         id="rect4180"
+         style="opacity:1;fill:#526b79;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         style="opacity:1;fill:#526b79;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4182"
+         width="9.6932125"
+         height="8.8456783"
+         x="61.854462"
+         y="975.19238"
+         ry="1.3338226" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="1.3338226"
+         y="988.36511"
+         x="61.854462"
+         height="8.8456783"
+         width="9.6932125"
+         id="rect4184"
+         style="opacity:1;fill:#526b79;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         inkscape:connector-curvature="0"
+         id="rect4188"
+         d="m 76.231583,964.68094 h 30.375537 c 0.37748,0 0.68136,0.44518 0.68136,0.99819 v 1.30503 c 0,0.553 -0.30388,0.99819 -0.68136,0.99819 H 76.231583 c -0.377468,0 -0.681359,-0.44519 -0.681359,-0.99819 v -1.30503 c 0,-0.55301 0.303891,-0.99819 0.681359,-0.99819 z"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.34534928;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         clip-path="url(#clipPath4262)"
+         style="fill:#004455"
+         transform="matrix(1.4491642,0,0,1.4491642,289.36281,1026.7684)"
+         id="g4245">
+        <path
+           style="fill:#004455"
+           inkscape:connector-curvature="0"
+           d="m -162.671,-23.382 c -0.005,-1.228 -0.866,-1.256 -1.894,-1.668 l -4.801,-1.924 c -0.084,-0.033 -0.166,-0.068 -0.247,-0.104 v -0.002 c -0.853,-0.387 -1.606,-0.924 -1.883,-1.303 l -0.011,-0.012 -0.003,-0.006 c -0.016,-0.023 -0.033,-0.049 -0.047,-0.072 l -0.011,-0.021 -0.003,-0.005 -0.01,-0.012 v -0.002 c -0.128,-0.191 -0.257,-0.277 -0.366,-0.24 l -0.007,0.003 -0.003,0.001 -0.001,10e-4 -0.006,0.004 h -0.004 l -0.006,0.006 c -0.13,0.067 -0.104,-0.006 -0.157,-0.148 -0.13,-0.352 -0.344,-1.02 -0.377,-1.117 -0.05,-0.184 -0.184,0.289 -0.153,-0.221 l 0.056,-0.92 c 0.088,-0.096 0.159,-0.174 0.208,-0.228 0.313,-0.357 0.334,-1.303 0.49,-1.533 0.157,-0.23 0.472,-0.279 0.784,-1.354 0.314,-1.072 0.696,-2.605 0.293,-2.631 -0.099,-0.006 -0.211,0.059 -0.327,0.16 0.071,-0.394 0.221,-1.287 0.254,-1.947 0.046,-0.869 -0.099,-3.097 -0.593,-3.912 -0.309,-0.51 -0.932,-1.016 -1.553,-1.41 -0.372,-0.237 -0.743,-0.434 -1.047,-0.567 -0.905,-0.401 -3.757,-0.217 -4.724,0 -1.1,0.246 -1.871,0.937 -2.363,1.755 -0.492,0.817 -0.711,3.268 -0.668,4.137 0.021,0.39 0.254,1.047 0.313,1.449 0.034,0.209 0.065,0.211 0.091,0.36 -0.041,-0.017 -0.081,-0.024 -0.117,-0.022 -0.404,0.025 -0.022,1.558 0.291,2.631 0.313,1.072 0.627,1.123 0.783,1.354 0.157,0.23 0.18,1.176 0.493,1.533 0.05,0.058 0.125,0.139 0.219,0.238 l 0.061,0.752 0.105,0.418 c -0.048,-0.12 -0.144,-0.197 -0.188,-0.041 -0.135,0.41 -0.271,0.82 -0.405,1.23 -0.014,-0.021 -0.036,-0.033 -0.061,-0.035 -0.131,-0.115 -0.308,-0.016 -0.468,0.252 -0.236,0.396 -1.021,0.965 -1.932,1.375 l -0.013,0.049 -0.014,0.051 -0.005,0.021 c -0.071,0.03 -0.144,0.062 -0.217,0.09 l -4.8,1.924 c -1.027,0.41 -1.888,0.44 -1.895,1.668 l -0.795,4.181 h 28.801 l -1.07,-4.181 z"
+           id="path4247" />
+      </g>
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="1.0920637"
+         y="1004.7731"
+         x="16.120201"
+         height="3.7053933"
+         width="89.243469"
+         id="rect4334"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         inkscape:connector-curvature="0"
+         id="rect4188-0"
+         d="m 76.231583,977.79297 h 30.375537 c 0.37748,0 0.68136,0.4452 0.68136,0.9982 v 1.305 c 0,0.553 -0.30388,0.9982 -0.68136,0.9982 H 76.231583 c -0.377468,0 -0.681359,-0.4452 -0.681359,-0.9982 v -1.305 c 0,-0.553 0.303891,-0.9982 0.681359,-0.9982 z"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.34534928;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         inkscape:connector-curvature="0"
+         id="rect4188-0-4"
+         d="m 76.231583,990.90498 h 30.375537 c 0.37748,0 0.68136,0.4452 0.68136,0.9982 v 1.30502 c 0,0.553 -0.30388,0.9982 -0.68136,0.9982 H 76.231583 c -0.377468,0 -0.681359,-0.4452 -0.681359,-0.9982 v -1.30502 c 0,-0.553 0.303891,-0.9982 0.681359,-0.9982 z"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.34534928;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="1.0920637"
+         y="1015.3429"
+         x="16.120201"
+         height="3.7053933"
+         width="89.243469"
+         id="rect4334-8"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="24"
+         inkscape:export-xdpi="24"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/32/vcard.png"
+         ry="1.0920637"
+         y="1025.9127"
+         x="16.120201"
+         height="3.7053933"
+         width="89.243469"
+         id="rect4334-8-7"
+         style="opacity:1;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:0.41800001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

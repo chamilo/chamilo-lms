@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -8,11 +10,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CurriculumItemRelUserCollectionType.
- */
 class CurriculumItemRelUserCollectionType extends AbstractType
 {
+    /**
+     * @var null
+     */
     public $itemId;
 
     /**
@@ -25,7 +27,7 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         $this->itemId = $itemId;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'userItems',
@@ -44,10 +46,10 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         );
 
         // Save button per item
-        //$builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn-success', 'onclick' => 'save(this);')));
+        //$builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn--success', 'onclick' => 'save(this);')));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -56,7 +58,7 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'CurriculumItemRelUserCollection';
     }

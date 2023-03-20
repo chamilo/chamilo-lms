@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -22,70 +24,54 @@ class TrackEHotspot
     use CourseTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $hotspotId;
+    protected int $hotspotId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
-    protected $hotspotUserId;
+    protected int $hotspotUserId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEHotspots")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected ?Course $course = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_exe_id", type="integer", nullable=false)
      */
-    protected $hotspotExeId;
+    protected int $hotspotExeId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_question_id", type="integer", nullable=false)
      */
-    protected $hotspotQuestionId;
+    protected int $hotspotQuestionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hotspot_answer_id", type="integer", nullable=false)
      */
-    protected $hotspotAnswerId;
+    protected int $hotspotAnswerId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="hotspot_correct", type="boolean", nullable=false)
      */
-    protected $hotspotCorrect;
+    protected bool $hotspotCorrect;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_coordinate", type="text", nullable=false)
      */
-    protected $hotspotCoordinate;
+    protected string $hotspotCoordinate;
 
     /**
      * Set hotspotUserId.
      *
-     * @param int $hotspotUserId
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotUserId($hotspotUserId)
+    public function setHotspotUserId(int $hotspotUserId)
     {
         $this->hotspotUserId = $hotspotUserId;
 
@@ -105,11 +91,9 @@ class TrackEHotspot
     /**
      * Set hotspotExeId.
      *
-     * @param int $hotspotExeId
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotExeId($hotspotExeId)
+    public function setHotspotExeId(int $hotspotExeId)
     {
         $this->hotspotExeId = $hotspotExeId;
 
@@ -129,11 +113,9 @@ class TrackEHotspot
     /**
      * Set hotspotQuestionId.
      *
-     * @param int $hotspotQuestionId
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotQuestionId($hotspotQuestionId)
+    public function setHotspotQuestionId(int $hotspotQuestionId)
     {
         $this->hotspotQuestionId = $hotspotQuestionId;
 
@@ -153,11 +135,9 @@ class TrackEHotspot
     /**
      * Set hotspotAnswerId.
      *
-     * @param int $hotspotAnswerId
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotAnswerId($hotspotAnswerId)
+    public function setHotspotAnswerId(int $hotspotAnswerId)
     {
         $this->hotspotAnswerId = $hotspotAnswerId;
 
@@ -177,11 +157,9 @@ class TrackEHotspot
     /**
      * Set hotspotCorrect.
      *
-     * @param bool $hotspotCorrect
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotCorrect($hotspotCorrect)
+    public function setHotspotCorrect(bool $hotspotCorrect)
     {
         $this->hotspotCorrect = $hotspotCorrect;
 
@@ -201,11 +179,9 @@ class TrackEHotspot
     /**
      * Set hotspotCoordinate.
      *
-     * @param string $hotspotCoordinate
-     *
      * @return TrackEHotspot
      */
-    public function setHotspotCoordinate($hotspotCoordinate)
+    public function setHotspotCoordinate(string $hotspotCoordinate)
     {
         $this->hotspotCoordinate = $hotspotCoordinate;
 

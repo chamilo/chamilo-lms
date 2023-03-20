@@ -50,5 +50,5 @@ try {
     echo $plugin->get_lang('connectionok');
 } catch (Exception $e) {
     echo $plugin->get_lang('badconnection');
-    die();
+    exit();
 }

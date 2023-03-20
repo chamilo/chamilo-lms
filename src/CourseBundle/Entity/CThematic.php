@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,100 +9,75 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CThematic.
- *
  * @ORM\Table(
- *  name="c_thematic",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="active", columns={"active", "session_id"})
- *  }
+ *     name="c_thematic",
+ *     indexes={
+ *         @ORM\Index(name="active", columns={"active"})
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CThematicRepository")
  */
 class CThematic extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    protected $active;
+    protected bool $active;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var CThematicPlan[]
+     * @var Collection|CThematicPlan[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CourseBundle\Entity\CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $plans;
+    protected Collection $plans;
 
     /**
-     * @var CThematicAdvance[]
+     * @var Collection|CThematicAdvance[]
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
      * @ORM\OneToMany(
-     *     targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CourseBundle\Entity\CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $advances;
+    protected Collection $advances;
 
     public function __construct()
     {
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
+        $this->active = true;
+        $this->displayOrder = 0;
     }
 
     public function __toString(): string
@@ -108,12 +85,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -130,34 +102,19 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     */
-    public function setDisplayOrder($displayOrder): self
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -174,12 +131,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set active.
-     *
-     * @param bool $active
-     */
-    public function setActive($active): self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 
@@ -196,61 +148,13 @@ class CThematic extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CThematic
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CThematic
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
     }
 
     /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * @return CThematicPlan[]|ArrayCollection
+     * @return Collection|CThematicPlan[]
      */
     public function getPlans()
     {
@@ -258,16 +162,13 @@ class CThematic extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CThematicAdvance[]|ArrayCollection
+     * @return Collection|CThematicAdvance[]
      */
     public function getAdvances()
     {
         return $this->advances;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -3,30 +3,27 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\PsrCachedReader;
+use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-/**
- * Class Database.
- */
 class Database
 {
-    /**
-     * @var EntityManager
-     */
-    private static $em;
-    private static $connection;
+    private static EntityManager $em;
+    private static Connection $connection;
 
     /**
-     * Only used by the installer.
+     * Setup doctrine only for the installation.
      *
-     * @param array  $params
-     * @param string $entityRootPath
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function connect($params = [], $entityRootPath = '')
+    public function connect(array $params = [], string $entityRootPath = '')
     {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
@@ -34,22 +31,20 @@ class Database
             [
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]
         );
 
         $params['charset'] = 'utf8';
         $sysPath = api_get_path(SYMFONY_SYS_PATH);
 
-        $cache = new Doctrine\Common\Cache\ArrayCache();
         // standard annotation reader
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
-        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
-            $annotationReader, // use reader
-            $cache // and a cache driver
+        $cachedAnnotationReader = new PsrCachedReader(
+            $annotationReader,
+            new ArrayAdapter()
         );
 
-        $evm = new \Doctrine\Common\EventManager();
+        $evm = new EventManager();
         $timestampableListener = new Gedmo\Timestampable\TimestampableListener();
         $timestampableListener->setAnnotationReader($cachedAnnotationReader);
         $evm->addEventSubscriber($timestampableListener);
@@ -62,24 +57,70 @@ class Database
             $cachedAnnotationReader // our cached annotation reader
         );
 
+        AnnotationRegistry::registerLoader(
+            function ($class) use ($sysPath) {
+                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                $file = str_replace('Symfony/Component/Validator', '', $file);
+                $file = str_replace('Symfony\Component\Validator', '', $file);
+                $file = str_replace('Symfony/Component/Serializer', '', $file);
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+
+                $fileToInclude = $sysPath.'vendor/symfony/serializer/'.$file;
+
+                if (file_exists($fileToInclude)) {
+                    // file exists makes sure that the loader fails silently
+                    require_once $fileToInclude;
+
+                    return true;
+                }
+            }
+        );
+
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiResource.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiFilter.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiProperty.php'
+        );
+        AnnotationRegistry::registerFile(
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiSubresource.php'
+        );
+
         $entityManager = EntityManager::create($params, $config, $evm);
 
         if (false === Type::hasType('uuid')) {
-            Type::addType('uuid', \Symfony\Bridge\Doctrine\Types\UuidType::class);
+            Type::addType('uuid', UuidType::class);
         }
 
         $connection = $entityManager->getConnection();
         AnnotationRegistry::registerFile(
             $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'
         );
+
         $this->setConnection($connection);
         $this->setManager($entityManager);
     }
 
-    /**
-     * @param EntityManager $em
-     */
-    public static function setManager($em)
+    public static function setManager(EntityManager $em)
     {
         self::$em = $em;
     }
@@ -89,18 +130,12 @@ class Database
         self::$connection = $connection;
     }
 
-    /**
-     * @return Connection
-     */
-    public static function getConnection()
+    public static function getConnection(): Connection
     {
         return self::$connection;
     }
 
-    /**
-     * @return EntityManager
-     */
-    public static function getManager()
+    public static function getManager(): EntityManager
     {
         return self::$em;
     }
@@ -108,33 +143,25 @@ class Database
     /**
      * Returns the name of the main database.
      *
-     * @return string
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function get_main_database()
+    public static function get_main_database(): bool|string|null
     {
         return self::getManager()->getConnection()->getDatabase();
     }
 
     /**
      * Get main table.
-     *
-     * @param string $table
-     *
-     * @return string
      */
-    public static function get_main_table($table)
+    public static function get_main_table(string $table): string
     {
         return $table;
     }
 
     /**
      * Get course table.
-     *
-     * @param string $table
-     *
-     * @return string
      */
-    public static function get_course_table($table)
+    public static function get_course_table(string $table): string
     {
         return DB_COURSE_PREFIX.$table;
     }
@@ -142,37 +169,32 @@ class Database
     /**
      * Counts the number of rows in a table.
      *
-     * @param string $table The table of which the rows should be counted
-     *
-     * @return int the number of rows in the given table
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      *
      * @deprecated
      */
-    public static function count_rows($table)
+    public static function count_rows(string $table): int
     {
-        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
+        $result = self::query("SELECT COUNT(*) AS n FROM $table");
 
-        return $obj->n;
+        return (int) $result->fetchOne();
     }
 
     /**
      * Returns the number of affected rows in the last database operation.
      *
-     * @return int
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function affected_rows(Statement $result)
+    public static function affected_rows(\Doctrine\DBAL\Result $result): int
     {
         return $result->rowCount();
     }
 
     /**
      * Escapes a string to insert into the database as text.
-     *
-     * @param string $string
-     *
-     * @return string
      */
-    public static function escape_string($string)
+    public static function escape_string(mixed $string): string
     {
         $string = self::getManager()->getConnection()->quote($string);
         // The quote method from PDO also adds quotes around the string, which
@@ -186,74 +208,86 @@ class Database
     /**
      * Gets the array from a SQL result (as returned by Database::query).
      *
-     * @param string $option Optional: "ASSOC","NUM" or "BOTH"
-     *
-     * @return array|mixed
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_array(Statement $result, $option = 'BOTH')
+    public static function fetch_array(\Doctrine\DBAL\Result $result): mixed
     {
-        if (false === $result) {
+        $data = $result->fetchAssociative();
+
+        if (empty($data)) {
             return [];
         }
 
-        return $result->fetch(self::customOptionToDoctrineOption($option));
+        $return = $data;
+
+        foreach ($data as $value) {
+            $return[] = $value;
+        }
+
+        return $return;
     }
 
     /**
      * Gets an associative array from a SQL result (as returned by Database::query).
      *
-     * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_assoc(Statement $result)
+    public static function fetch_assoc(\Doctrine\DBAL\Result $result): array|bool
     {
-        return $result->fetch(PDO::FETCH_ASSOC);
+        return $result->fetchAssociative();
     }
 
     /**
      * Gets the next row of the result of the SQL query
      * (as returned by Database::query) in an object form.
      *
-     * @return mixed
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_object(Statement $result)
+    public static function fetch_object(\Doctrine\DBAL\Result $result): ?stdClass
     {
-        return $result->fetch(PDO::FETCH_OBJ);
+        $data = $result->fetchAssociative();
+
+        if (empty($data)) {
+            return null;
+        }
+
+        $object = new stdClass();
+
+        foreach ($data as $key => $value) {
+            $object->$key = $value;
+        }
+
+        return $object;
     }
 
     /**
      * Gets the array from a SQL result (as returned by Database::query)
-     * help achieving database independence.
+     * help to achieve database independence.
      *
-     * @return mixed
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_row(Statement $result)
+    public static function fetch_row(\Doctrine\DBAL\Result $result): array
     {
-        if (false === $result) {
-            return [];
-        }
+        $row = $result->fetchNumeric();
 
-        return $result->fetch(PDO::FETCH_NUM);
+        return empty($row) ? [] : $row;
     }
 
     /**
      * Gets the ID of the last item inserted into the database.
      *
-     * @return string
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function insert_id()
+    public static function insert_id(): int
     {
-        return self::getManager()->getConnection()->lastInsertId();
+        return (int) self::getManager()->getConnection()->lastInsertId();
     }
 
     /**
-     * @return int
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function num_rows(Statement $result)
+    public static function num_rows(\Doctrine\DBAL\Result $result): int
     {
-        if (false === $result) {
-            return 0;
-        }
-
         return $result->rowCount();
     }
 
@@ -261,28 +295,29 @@ class Database
      * Acts as the relative *_result() function of most DB drivers and fetches a
      * specific line and a field.
      *
-     * @param int    $row
-     * @param string $field
-     *
-     * @return mixed
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function result(Statement $resource, $row, $field = '')
+    public static function result(\Doctrine\DBAL\Result $resource, int $row, string $field): mixed
     {
         if ($resource->rowCount() > 0) {
-            $result = $resource->fetchAll(PDO::FETCH_BOTH);
+            $result = $resource->fetchAllAssociative();
 
-            return $result[$row][$field];
+            $resultRow = $result[$row];
+
+            foreach ($result[$row] as $value) {
+                $resultRow[] = $value;
+            }
+
+            return $resultRow[$field];
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * @param string $query
-     *
-     * @return Statement
+     * @throws Exception
      */
-    public static function query($query)
+    public static function query(string $query): ?\Doctrine\DBAL\Result
     {
         $connection = self::getManager()->getConnection();
         $result = null;
@@ -296,67 +331,40 @@ class Database
     }
 
     /**
-     * @param Exception $e
+     * @throws Exception
      */
-    public static function handleError($e)
+    public static function handleError(Exception $e)
     {
         $debug = 'test' === api_get_setting('server_type');
         if ($debug) {
             throw $e;
-            exit;
         } else {
             error_log($e->getMessage());
-            api_not_allowed(false, get_lang('An error has occured. Please contact your system administrator.'));
-            exit;
-        }
-    }
-
-    /**
-     * @param string $option
-     *
-     * @return int
-     */
-    public static function customOptionToDoctrineOption($option)
-    {
-        switch ($option) {
-            case 'ASSOC':
-                return PDO::FETCH_ASSOC;
-                break;
-            case 'NUM':
-                return PDO::FETCH_NUM;
-                break;
-            case 'BOTH':
-            default:
-                return PDO::FETCH_BOTH;
-                break;
+            api_not_allowed(false, get_lang('An error has occurred. Please contact your system administrator.'));
         }
     }
 
     /**
      * Stores a query result into an array.
      *
-     * @author Olivier Brouckaert
-     *
-     * @param Statement $result - the return value of the query
-     * @param string    $option BOTH, ASSOC, or NUM
-     *
-     * @return array - the value returned by the query
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function store_result(Statement $result, $option = 'BOTH')
+    public static function store_result(\Doctrine\DBAL\Result $result, $option = 'BOTH'): array
     {
-        return $result->fetchAll(self::customOptionToDoctrineOption($option));
+        if ('NUM' === $option) {
+            return $result->fetchAllNumeric();
+        }
+
+        return $result->fetchAllAssociative();
     }
 
     /**
      * Database insert.
      *
-     * @param string $table_name
-     * @param array  $attributes
-     * @param bool   $show_query
-     *
-     * @return false|int
+     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public static function insert($table_name, $attributes, $show_query = false)
+    public static function insert(string $table_name, array $attributes, bool $show_query = false): bool|int
     {
         if (empty($attributes) || empty($table_name)) {
             return false;
@@ -373,17 +381,18 @@ class Database
                 error_log($sql);
             }
 
-            $result = false;
             try {
-                $statement = self::getConnection()->prepare($sql);
-                $result = $statement->execute($attributes);
+                self::getConnection()
+                    ->prepare($sql)
+                    ->executeQuery($attributes)
+                ;
             } catch (Exception $e) {
                 self::handleError($e);
+
+                return false;
             }
 
-            if ($result) {
-                return (int) self::getManager()->getConnection()->lastInsertId();
-            }
+            return (int) self::getManager()->getConnection()->lastInsertId();
         }
 
         return false;
@@ -393,17 +402,19 @@ class Database
      * @param string $tableName       use Database::get_main_table
      * @param array  $attributes      Values to updates
      *                                Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param array  $whereConditions where conditions i.e array('id = ?' =>'4')
+     * @param array  $whereConditions where conditions i.e. array('id = ?' =>'4')
      * @param bool   $showQuery
+     *
+     * @throws Exception
      *
      * @return bool|int
      */
     public static function update(
-        $tableName,
-        $attributes,
-        $whereConditions = [],
-        $showQuery = false
-    ) {
+        string $tableName,
+        array $attributes,
+        array $whereConditions = [],
+        bool $showQuery = false
+    ): bool|int {
         if (!empty($tableName) && !empty($attributes)) {
             $updateSql = '';
             $count = 1;
@@ -426,9 +437,11 @@ class Database
 
                 try {
                     $statement = self::getManager()->getConnection()->prepare($sql);
-                    $result = $statement->execute($attributes);
+                    $result = $statement->executeQuery($attributes);
                 } catch (Exception $e) {
                     self::handleError($e);
+
+                    return false;
                 }
 
                 if ($showQuery) {
@@ -437,9 +450,7 @@ class Database
                     var_dump($whereConditions);
                 }
 
-                if ($result && $statement) {
-                    return $statement->rowCount();
-                }
+                return $result->rowCount();
             }
         }
 
@@ -449,52 +460,60 @@ class Database
     /**
      * Experimental useful database finder.
      *
-     * @todo lot of stuff to do here
-     * @todo known issues, it doesn't work when using LIKE conditions
+     * @throws Exception
      *
-     * @example array('where'=> array('course_code LIKE "?%"'))
-     * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
-     * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
+     * @todo    lot of stuff to do here
+     * @todo    known issues, it doesn't work when using LIKE conditions
      *
-     * @param array  $columns
-     * @param string $table_name
-     * @param array  $conditions
-     * @param string $type_result
-     * @param string $option
-     * @param bool   $debug
-     *
-     * @return array
+     * @example ['where'=> ['course_code LIKE "?%"']]
+     * @example ['where'=> ['type = ? AND category = ?' => ['setting', 'Plugins']]]
+     * @example ['where'=> ['name = "Julio" AND lastname = "montoya"']]
      */
     public static function select(
-        $columns,
-        $table_name,
-        $conditions = [],
-        $type_result = 'all',
-        $option = 'ASSOC',
-        $debug = false
-    ) {
+        string|array $columns,
+        string $table_name,
+        array $conditions = [],
+        string $type_result = 'all',
+        string $option = 'ASSOC',
+        bool $debug = false
+    ): int|array {
+        if ('count' === $type_result) {
+            $conditions['LIMIT'] = null;
+            $conditions['limit'] = null;
+        }
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);
         } else {
-            if ('*' == $columns) {
+            if ('*' === $columns) {
                 $clean_columns = '*';
             } else {
                 $clean_columns = (string) $columns;
             }
         }
 
+        if ('count' === $type_result) {
+            $clean_columns = ' count(*) count ';
+        }
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
         if ($debug) {
             var_dump($sql);
         }
         $result = self::query($sql);
+        if ('count' === $type_result) {
+            $row = self::fetch_array($result);
+            if ($row) {
+                return (int) $row['count'];
+            }
+
+            return 0;
+        }
         $array = [];
 
         if ('all' === $type_result) {
-            while ($row = self::fetch_array($result, $option)) {
+            while ($row = self::fetch_array($result)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
@@ -502,23 +521,19 @@ class Database
                 }
             }
         } else {
-            $array = self::fetch_array($result, $option);
+            $array = self::fetch_array($result);
         }
 
         return $array;
     }
 
     /**
-     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC').
+     * Parses WHERE/ORDER conditions i.e. array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC').
      *
      * @todo known issues, it doesn't work when using
      * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     *
-     * @param array $conditions
-     *
-     * @return string Partial SQL string to add to longer query
      */
-    public static function parse_conditions($conditions)
+    public static function parse_conditions(array $conditions): string
     {
         if (empty($conditions)) {
             return '';
@@ -540,7 +555,7 @@ class Database
                             }
                         } else {
                             $value_array = self::escape_string($value_array);
-                            $clean_values = $value_array;
+                            $clean_values = [$value_array];
                         }
 
                         if (!empty($condition) && '' != $clean_values) {
@@ -568,7 +583,7 @@ class Database
 
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
-                        $order_array = self::escape_string($order_array, null, false);
+                        $order_array = self::escape_string($order_array);
                         $new_order_array = explode(',', $order_array);
                         $temp_value = [];
 
@@ -583,10 +598,10 @@ class Database
                                 if (in_array($element[1], ['desc', 'asc'])) {
                                     $order = $element[1];
                                 }
-                                $temp_value[] = $element[0].' '.$order.' ';
+                                $temp_value[] = ' `'.$element[0].'` '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[] = $element[0].' DESC ';
+                                $temp_value[] = ' `'.$element[0].'` DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
@@ -610,48 +625,32 @@ class Database
         return $return_value;
     }
 
-    /**
-     * @param array $conditions
-     *
-     * @return string
-     */
-    public static function parse_where_conditions($conditions)
+    public static function parse_where_conditions(array $conditions): string
     {
         return self::parse_conditions(['where' => $conditions]);
     }
 
     /**
-     * @param string $table_name
-     * @param array  $where_conditions
-     * @param bool   $show_query
-     *
-     * @return int
+     * @throws Exception
      */
-    public static function delete($table_name, $where_conditions, $show_query = false)
+    public static function delete(string $tableName, array $where_conditions, bool $show_query = false): int
     {
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql = "DELETE FROM $table_name $where_return ";
+        $sql = "DELETE FROM $tableName $where_return ";
         if ($show_query) {
             echo $sql;
             echo '<br />';
         }
         $result = self::query($sql);
-        $affected_rows = self::affected_rows($result);
-        //@todo should return affected_rows for
-        return $affected_rows;
+
+        return self::affected_rows($result);
     }
 
     /**
      * Get Doctrine configuration.
-     *
-     * @param string $path
-     *
-     * @return Configuration
      */
-    public static function getDoctrineConfig($path)
+    public static function getDoctrineConfig(string $path): Configuration
     {
-        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
-        $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYMFONY_SYS_PATH);
 
@@ -664,30 +663,31 @@ class Database
 
         return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,
-            $isDevMode,
+            true, // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
             $proxyDir,
             $cache,
-            $isSimpleMode
+            false // related to annotations @Entity
         );
     }
 
     /**
-     * @param string $table
-     *
-     * @return bool
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function tableExists($table)
+    public static function tableExists(string $table): bool
     {
-        return self::getManager()->getConnection()->getSchemaManager()->tablesExist($table);
+        return self::getManager()->getConnection()->createSchemaManager()->tablesExist($table);
     }
 
     /**
-     * @param string $table
-     *
-     * @return \Doctrine\DBAL\Schema\Column[]
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function listTableColumns($table)
+    public static function listTableColumns(string $table): array
     {
-        return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
+        return self::getManager()->getConnection()->createSchemaManager()->listTableColumns($table);
+    }
+
+    public static function escapeField($field): string
+    {
+        return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
 }

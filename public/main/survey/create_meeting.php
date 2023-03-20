@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -8,11 +9,6 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
-
-$htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
-$htmlHeadXtra[] = api_get_asset('jt.timepicker/jquery.timepicker.js');
-$htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
-$htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
@@ -29,32 +25,19 @@ $form = new FormValidator(
     api_get_self().'?action=add&'.api_get_cidreq()
 );
 
-$form->addElement('header', $tool_name);
+$form->addHeader($tool_name);
 $form->addHidden('anonymous', 0);
 $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');
 $form->addHidden('survey_thanks', '');
 $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
+$text = $form->addText('survey_title', get_lang('Title'));
 
-$text = $form->addText(
-    'survey_title',
-    get_lang('Title')
-);
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-
-if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
-    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-} else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'date');
-    $form->addRule('end_date', get_lang('Invalid date'), 'date');
-}
+$startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+$endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->addRule(
     ['start_date', 'end_date'],
@@ -82,14 +65,14 @@ for ($i = 1; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;    
+    var number = 3;
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {            
+        if (number > 1) {
             $("#time_" + number + "_date_time_wrapper").hide();
             number--;
         }
@@ -99,12 +82,12 @@ $(function() {
 
 $form->addLabel(
     '',
-    Display::url(get_lang('Add'), 'javascript:void(0)', ['id' => 'add_button', 'class' => 'btn btn-default'])
+    Display::url(get_lang('Add'), 'javascript:void(0)', ['id' => 'add_button', 'class' => 'btn btn--plain'])
     .' '.
     Display::url(
         get_lang('Remove'),
         'javascript:void(0)',
-        ['id' => 'remove_button', 'class' => 'btn btn-danger']
+        ['id' => 'remove_button', 'class' => 'btn btn--danger']
     )
 );
 
@@ -127,15 +110,11 @@ if ($form->validate()) {
         if (isset($values[$name]) && !empty($values[$name])) {
             $date = $values[$name];
 
-            if (empty($date)) {
-                continue;
-            }
-
             $start = $name.'_time_range_start';
             $end = $name.'_time_range_end';
 
-            $start = $values[$start];
-            $end = $values[$end];
+            $start = $values[$start] ?? '';
+            $end = $values[$end] ?? '';
 
             $start = api_get_utc_datetime($values[$name].' '.$start, true);
             $end = api_get_utc_datetime($values[$name].' '.$end, true);
@@ -155,7 +134,6 @@ if ($form->validate()) {
     if (!empty($surveyData['id'])) {
         foreach ($dates as $date) {
             $params = [
-                'c_id' => api_get_course_int_id(),
                 'survey_id' => $surveyData['id'],
                 'survey_question' => $date['start'].'@@'.$date['end'],
                 'survey_question_comment' => '',
@@ -164,13 +142,11 @@ if ($form->validate()) {
                 'sort' => $counter,
                 'shared_question_id' => '0',
                 'max_value' => 0,
+                'survey_group_pri' => 0,
+                'survey_group_sec1'  => 0,
+                'survey_group_sec2'  => 0,
             ];
-            $questionId = Database::insert($questionTable, $params);
-            if ($questionId) {
-                $sql = "UPDATE $questionTable SET question_id = $questionId
-                        WHERE iid = $questionId";
-                Database::query($sql);
-            }
+            Database::insert($questionTable, $params);
             $counter++;
         }
     }

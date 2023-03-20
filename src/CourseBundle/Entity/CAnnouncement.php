@@ -1,81 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAnnouncement.
- *
  * @ORM\Table(name="c_announcement")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementRepository")
  */
 class CAnnouncement extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="title", type="text", nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="end_date", type="date", nullable=true)
      */
-    protected $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
-    protected $displayOrder;
+    protected int $displayOrder;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="email_sent", type="boolean", nullable=true)
      */
-    protected $emailSent;
+    protected ?bool $emailSent = null;
 
     /**
-     * @var ArrayCollection|CAnnouncementAttachment[]
+     * @var Collection<int, CAnnouncementAttachment>
      *
      * @ORM\OneToMany(
-     *     targetEntity="CAnnouncementAttachment",
+     *     targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment",
      *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     public function __construct()
     {
+        $this->content = '';
+        $this->displayOrder = 1;
         $this->attachments = new ArrayCollection();
     }
 
@@ -84,93 +75,55 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function getAttachments()
+    public function getAttachments(): Collection
     {
         return $this->attachments;
     }
 
-    /**
-     * @param CAnnouncementAttachment[] $attachments
-     */
-    public function setAttachments(array $attachments): self
+    public function setAttachments(Collection $attachments): self
     {
         $this->attachments = $attachments;
 
         return $this;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * Set endDate.
-     *
-     * @param \DateTime $endDate
-     */
-    public function setEndDate($endDate): self
+    public function setEndDate(?DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    /**
-     * Get endDate.
-     *
-     * @return \DateTime
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     */
-    public function setDisplayOrder($displayOrder): self
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -187,12 +140,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->displayOrder;
     }
 
-    /**
-     * Set emailSent.
-     *
-     * @param bool $emailSent
-     */
-    public function setEmailSent($emailSent): self
+    public function setEmailSent(bool $emailSent): self
     {
         $this->emailSent = $emailSent;
 
@@ -214,9 +162,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

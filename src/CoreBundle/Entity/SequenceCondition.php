@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceCondition
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mat_op", type="string")
      */
-    protected $mathOperation;
+    protected string $mathOperation;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="param", type="float")
      */
-    protected $param;
+    protected string $param;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_true", type="integer")
      */
-    protected $actTrue;
+    protected string $actTrue;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_false", type="string")
      */
-    protected $actFalse;
+    protected string $actFalse;
 
     /**
      * Get id.
@@ -77,11 +67,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceCondition
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -96,12 +84,7 @@ class SequenceCondition
         return $this->mathOperation;
     }
 
-    /**
-     * @param string $mathOperation
-     *
-     * @return SequenceCondition
-     */
-    public function setMathOperation($mathOperation)
+    public function setMathOperation(string $mathOperation): self
     {
         $this->mathOperation = $mathOperation;
 
@@ -117,11 +100,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $param
-     *
      * @return SequenceCondition
      */
-    public function setParam($param)
+    public function setParam(string $param): self
     {
         $this->param = $param;
 
@@ -137,11 +118,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $actTrue
-     *
      * @return SequenceCondition
      */
-    public function setActTrue($actTrue)
+    public function setActTrue(string $actTrue): self
     {
         $this->actTrue = $actTrue;
 
@@ -157,11 +136,9 @@ class SequenceCondition
     }
 
     /**
-     * @param string $actFalse
-     *
      * @return SequenceCondition
      */
-    public function setActFalse($actFalse)
+    public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;
 

@@ -5,7 +5,6 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'work.lib.php';
 
 if (false === api_get_configuration_value('allow_my_student_publication_page')) {
     api_not_allowed(true);

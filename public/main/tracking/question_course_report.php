@@ -59,15 +59,13 @@ foreach ($session_list as $sesion_item) {
 }
 
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement(
-    'select',
+$form->addSelect(
     'session_id',
     get_lang('Course sessions'),
     $my_session_list,
     ['id' => 'session_id', 'onchange' => 'load_courses();']
 );
-$form->addElement(
-    'select',
+$form->addSelect(
     'course_code',
     get_lang('Courses'),
     $course_select_list
@@ -173,7 +171,7 @@ $course_average = [];
 $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
                     Display::return_icon('info3.gif', get_lang('These questions have been taken from the learning paths'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
     $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('Average score').Display::return_icon('info3.gif', get_lang('All learners attempts are considered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';

@@ -1,0 +1,21 @@
+.p-inputswitch {
+  @apply align-middle h-4 w-8;
+
+  .p-inputswitch-slider {
+    @apply bg-gray-50 rounded-full transition-none
+      before:bg-white before:duration-200 before:h-3 before:left-0.5 before:-mt-1.5 before:rounded-full before:w-3;
+  }
+
+  &.p-inputswitch-checked {
+    .p-inputswitch-slider {
+      @apply bg-secondary
+        before:translate-x-4;
+    }
+  }
+
+  &.p-focus {
+    .p-inputswitch-slider {
+      @apply outline-none outline-offset-0;
+    }
+  }
+}

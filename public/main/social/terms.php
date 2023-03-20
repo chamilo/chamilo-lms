@@ -12,7 +12,7 @@ if ('true' !== api_get_setting('allow_terms_conditions')) {
 
 api_block_anonymous_users();
 
-$language = api_get_interface_language();
+$language = api_get_language_isocode();
 $language = api_get_language_id($language);
 $term = LegalManager::get_last_condition($language);
 
@@ -46,7 +46,7 @@ $allowSocial = 'true' === api_get_setting('allow_social_tool');
 
 if ($allowSocial) {
     // Block Social Menu
-    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
+    //$socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 $tpl = new Template(null);

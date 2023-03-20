@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo;
@@ -27,7 +29,7 @@ class Kernel extends BaseKernel
         return $this->getProjectDir().'/config/configuration.php';
     }
 
-    public function setApi(array $configuration)
+    public function setApi(array $configuration): void
     {
         new ChamiloApi($configuration);
     }
@@ -35,10 +37,8 @@ class Kernel extends BaseKernel
     /**
      * Check if system is installed
      * Checks the APP_INSTALLED env value.
-     *
-     * @return bool
      */
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         return !empty($this->getContainer()->getParameter('installed'));
     }

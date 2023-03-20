@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -10,141 +12,110 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CGroupCategory.
+ * Group categories inside a course.
  *
  * @ORM\Table(
- *  name="c_group_category",
- *  indexes={
- *  }
+ *     name="c_group_category",
+ *     indexes={
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGroupCategoryRepository")
  */
 class CGroupCategory extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
-    protected $docState;
+    protected bool $docState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
-    protected $calendarState;
+    protected bool $calendarState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
-    protected $workState;
+    protected bool $workState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
-    protected $announcementsState;
+    protected bool $announcementsState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
-    protected $forumState;
+    protected bool $forumState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
-    protected $wikiState;
+    protected bool $wikiState;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
-    protected $chatState;
+    protected bool $chatState;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
-    protected $maxStudent;
+    protected int $maxStudent;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="self_reg_allowed", type="boolean", nullable=false)
      */
-    protected $selfRegAllowed;
+    protected bool $selfRegAllowed;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="self_unreg_allowed", type="boolean", nullable=false)
      */
-    protected $selfUnregAllowed;
+    protected bool $selfUnregAllowed;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="groups_per_user", type="integer", nullable=false)
      */
-    protected $groupsPerUser;
+    protected int $groupsPerUser;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
-    protected $documentAccess;
+    protected int $documentAccess;
 
     public function __construct()
     {
         $this->maxStudent = 0;
         $this->description = '';
-        $this->selfRegAllowed = 0;
-        $this->selfUnregAllowed = 0;
+        $this->selfRegAllowed = false;
+        $this->selfUnregAllowed = false;
         $this->groupsPerUser = 0;
-        $this->announcementsState = 1;
-        $this->calendarState = 1;
-        $this->documentAccess = 1;
-        $this->chatState = 1;
-        $this->docState = 1;
-        $this->forumState = 1;
-        $this->wikiState = 1;
-        $this->workState = 1;
+        $this->announcementsState = true;
+        $this->calendarState = true;
+        $this->documentAccess = 0;
+        $this->chatState = true;
+        $this->docState = true;
+        $this->forumState = true;
+        $this->wikiState = true;
+        $this->workState = true;
     }
 
     public function __toString(): string
@@ -157,58 +128,31 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CGroupCategory
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set docState.
-     *
-     * @param bool $docState
-     *
-     * @return CGroupCategory
-     */
-    public function setDocState($docState)
+    public function setDocState(bool $docState): self
     {
         $this->docState = $docState;
 
@@ -225,14 +169,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->docState;
     }
 
-    /**
-     * Set calendarState.
-     *
-     * @param bool $calendarState
-     *
-     * @return CGroupCategory
-     */
-    public function setCalendarState($calendarState)
+    public function setCalendarState(bool $calendarState): self
     {
         $this->calendarState = $calendarState;
 
@@ -249,14 +186,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->calendarState;
     }
 
-    /**
-     * Set workState.
-     *
-     * @param bool $workState
-     *
-     * @return CGroupCategory
-     */
-    public function setWorkState($workState)
+    public function setWorkState(bool $workState): self
     {
         $this->workState = $workState;
 
@@ -273,14 +203,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->workState;
     }
 
-    /**
-     * Set announcementsState.
-     *
-     * @param bool $announcementsState
-     *
-     * @return CGroupCategory
-     */
-    public function setAnnouncementsState($announcementsState)
+    public function setAnnouncementsState(bool $announcementsState): self
     {
         $this->announcementsState = $announcementsState;
 
@@ -297,14 +220,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->announcementsState;
     }
 
-    /**
-     * Set forumState.
-     *
-     * @param bool $forumState
-     *
-     * @return CGroupCategory
-     */
-    public function setForumState($forumState)
+    public function setForumState(bool $forumState): self
     {
         $this->forumState = $forumState;
 
@@ -321,14 +237,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->forumState;
     }
 
-    /**
-     * Set wikiState.
-     *
-     * @param bool $wikiState
-     *
-     * @return CGroupCategory
-     */
-    public function setWikiState($wikiState)
+    public function setWikiState(bool $wikiState): self
     {
         $this->wikiState = $wikiState;
 
@@ -345,14 +254,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->wikiState;
     }
 
-    /**
-     * Set chatState.
-     *
-     * @param bool $chatState
-     *
-     * @return CGroupCategory
-     */
-    public function setChatState($chatState)
+    public function setChatState(bool $chatState): self
     {
         $this->chatState = $chatState;
 
@@ -369,14 +271,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->chatState;
     }
 
-    /**
-     * Set maxStudent.
-     *
-     * @param int $maxStudent
-     *
-     * @return CGroupCategory
-     */
-    public function setMaxStudent($maxStudent)
+    public function setMaxStudent(int $maxStudent): self
     {
         $this->maxStudent = $maxStudent;
 
@@ -393,14 +288,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->maxStudent;
     }
 
-    /**
-     * Set selfRegAllowed.
-     *
-     * @param bool $selfRegAllowed
-     *
-     * @return CGroupCategory
-     */
-    public function setSelfRegAllowed($selfRegAllowed)
+    public function setSelfRegAllowed(bool $selfRegAllowed): self
     {
         $this->selfRegAllowed = $selfRegAllowed;
 
@@ -417,14 +305,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->selfRegAllowed;
     }
 
-    /**
-     * Set selfUnregAllowed.
-     *
-     * @param bool $selfUnregAllowed
-     *
-     * @return CGroupCategory
-     */
-    public function setSelfUnregAllowed($selfUnregAllowed)
+    public function setSelfUnregAllowed(bool $selfUnregAllowed): self
     {
         $this->selfUnregAllowed = $selfUnregAllowed;
 
@@ -441,14 +322,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->selfUnregAllowed;
     }
 
-    /**
-     * Set groupsPerUser.
-     *
-     * @param int $groupsPerUser
-     *
-     * @return CGroupCategory
-     */
-    public function setGroupsPerUser($groupsPerUser)
+    public function setGroupsPerUser(int $groupsPerUser): self
     {
         $this->groupsPerUser = $groupsPerUser;
 

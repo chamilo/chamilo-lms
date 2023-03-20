@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
@@ -7,6 +11,11 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200505064121 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'reset_password_request';
+    }
+
     public function up(Schema $schema): void
     {
         if (false === $schema->hasTable('reset_password_request')) {

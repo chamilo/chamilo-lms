@@ -11,7 +11,7 @@ if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+//$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();

@@ -1,99 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CNotebook.
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CNotebookRepository")
  * @ORM\Table(
- *  name="c_notebook"
+ *     name="c_notebook"
  * )
  */
 class CNotebook extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $cId;
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="course", type="string", length=40, nullable=false)
-     */
-    protected $course;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    #[Assert\NotBlank]
+    protected string $description;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=false)
      */
-    protected $updateDate;
+    protected DateTime $updateDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected $status;
+    protected ?int $status;
 
     public function __construct()
     {
@@ -105,110 +78,31 @@ class CNotebook extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CNotebook
-     */
-    public function setUserId($userId)
+    public function getUser(): User
     {
-        $this->userId = $userId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set course.
-     *
-     * @param string $course
-     *
-     * @return CNotebook
-     */
-    public function setCourse($course)
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
-     * Get course.
-     *
-     * @return string
-     */
-    public function getCourse()
-    {
-        return $this->course;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CNotebook
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CNotebook
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CNotebook
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -225,14 +119,7 @@ class CNotebook extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set creationDate.
-     *
-     * @param \DateTime $creationDate
-     *
-     * @return CNotebook
-     */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate): self
     {
         $this->creationDate = $creationDate;
 
@@ -242,21 +129,14 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
         return $this->creationDate;
     }
 
-    /**
-     * Set updateDate.
-     *
-     * @param \DateTime $updateDate
-     *
-     * @return CNotebook
-     */
-    public function setUpdateDate($updateDate)
+    public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
 
@@ -266,21 +146,14 @@ class CNotebook extends AbstractResource implements ResourceInterface
     /**
      * Get updateDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdateDate()
     {
         return $this->updateDate;
     }
 
-    /**
-     * Set status.
-     *
-     * @param int $status
-     *
-     * @return CNotebook
-     */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -295,30 +168,6 @@ class CNotebook extends AbstractResource implements ResourceInterface
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CNotebook
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

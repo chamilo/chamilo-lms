@@ -32,6 +32,7 @@ class Notification extends Model
     const NOTIFICATION_TYPE_GROUP = 3;
     const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
     const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
+
     public $table;
     public $columns = [
         'id',
@@ -54,9 +55,6 @@ class Notification extends Model
     public $adminEmail;
     public $titlePrefix;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
@@ -65,8 +63,8 @@ class Notification extends Model
         $this->adminName = api_get_setting('siteName');
         $this->titlePrefix = '['.api_get_setting('siteName').'] ';
 
-        // If no-reply email doesn't exist use the admin name/email
-        if (empty($this->adminEmail)) {
+        // If no-reply email doesn't exist or is something '@example.com', use the admin name/email
+        if (empty($this->adminEmail) || substr($this->adminEmail, -12) === '@example.com') {
             $this->adminEmail = api_get_setting('emailAdministrator');
             $this->adminName = api_get_person_name(
                 api_get_setting('administratorName'),
@@ -124,10 +122,6 @@ class Notification extends Model
                     $this->adminName,
                     $this->adminEmail
                 );
-                if ($this->debug) {
-                    error_log('Sending message to: '.$item_to_send['dest_mail']);
-                }
-
                 // Updating
                 $item_to_send['sent_at'] = api_get_utc_datetime();
                 $this->update($item_to_send);
@@ -219,7 +213,6 @@ class Notification extends Model
      * @param string $content
      * @param array  $senderInfo                 result of api_get_user_info() or GroupPortalManager:get_group_data()
      * @param array  $attachments
-     * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      */
     public function saveNotification(
@@ -230,7 +223,6 @@ class Notification extends Model
         $content,
         $senderInfo = [],
         $attachments = [],
-        $smsParameters = [],
         $forceTitleWhenSendingEmail = false
     ) {
         $this->type = (int) $type;
@@ -319,8 +311,7 @@ class Notification extends Model
                                 $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
-                                false,
-                                $smsParameters
+                                false
                             );
                         }
                         $sendDate = api_get_utc_datetime();

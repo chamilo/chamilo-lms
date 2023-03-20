@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -62,11 +63,10 @@ function validate_courses_data($courses)
         if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                CourseCategory::addNode(
+                CourseCategory::add(
                     $course['CourseCategory'],
                     $course['CourseCategoryName'] ?: $course['CourseCategory'],
-                    'TRUE',
-                    null
+                    'TRUE'
                 );
             }
         } else {
@@ -124,22 +124,22 @@ function save_courses_data($courses)
         $params['course_category'] = $course['CourseCategory'];
         $params['course_language'] = $course_language;
         $params['user_id'] = $creatorId;
-        $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
+        $addMeAsTeacher = $_POST['add_me_as_teacher'] ?? false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
-        $courseInfo = CourseManager::create_course($params);
+        $course = CourseManager::create_course($params);
 
-        if (!empty($courseInfo)) {
+        if (null !== $course) {
             if (!empty($teacherList)) {
                 foreach ($teacherList as $teacher) {
                     CourseManager::subscribeUser(
                         $teacher['user_id'],
-                        $courseInfo['code'],
+                        $course->getId(),
                         COURSEMANAGER
                     );
                 }
             }
-            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/">
-                    '.$courseInfo['title'].'</a> '.get_lang('Created').'<br />';
+            $msg .= '<a href="'.api_get_course_url($course->getId()).'/">
+                    '.$course->getTitle().'</a> '.get_lang('Created').'<br />';
         }
     }
 
@@ -227,18 +227,17 @@ $form->addButtonImport(get_lang('Import'), 'save');
 $form->addElement('hidden', 'formSent', 1);
 $form->display();
 
-?>
+$content = '
 <div style="clear: both;"></div>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <b>bold</b> are mandatory.').') :</p>
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language
+<b>Code</b>;<b>Title</b>;<b>CourseCategory</b>;<b>CourseCategoryName</b>;Teacher;Language
 BIO0015;Biology;BIO;Science;teacher1;english
 BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
 BIO0017;Language;LANG;;;english
 </pre>
-</blockquote>
+</blockquote>';
+echo Display::prose($content);
 
-<?php
 Display::display_footer();

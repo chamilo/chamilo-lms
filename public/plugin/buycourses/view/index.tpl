@@ -28,7 +28,7 @@
             </a>
             <div class="caption">
                 <p class="text-center">
-                    <a class="btn btn-default btn-sm"
+                    <a class="btn btn--plain btn-sm"
                        href="src/course_catalog.php">{{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 </p>
             </div>
@@ -43,7 +43,7 @@
                 </a>
                 <div class="caption">
                     <p class="text-center">
-                        <a class="btn btn-default btn-sm"
+                        <a class="btn btn--plain btn-sm"
                            href="src/list.php">{{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </p>
                 </div>
@@ -56,7 +56,7 @@
                 </a>
                 <div class="caption">
                     <p class="text-center">
-                        <a class="btn btn-default btn-sm"
+                        <a class="btn btn--plain btn-sm"
                            href="src/paymentsetup.php">{{ 'PaymentsConfiguration'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </p>
                 </div>
@@ -69,7 +69,7 @@
                 </a>
                 <div class="caption">
                     <p class="text-center">
-                        <a class="btn btn-default btn-sm"
+                        <a class="btn btn--plain btn-sm"
                            href="src/sales_report.php"> {{ 'SalesReport'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </p>
                 </div>

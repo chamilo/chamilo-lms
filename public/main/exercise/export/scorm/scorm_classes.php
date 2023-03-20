@@ -22,14 +22,6 @@ class ScormAnswerFree extends Answer
         $type = $this->getQuestionType();
 
         if (ORAL_EXPRESSION == $type) {
-            /*
-            $template = new Template('');
-            $template->assign('directory', '/tmp/');
-            $template->assign('user_id', api_get_user_id());
-
-            $layout = $template->get_template('document/record_audio.tpl');
-            $html .= $template->fetch($layout);*/
-
             $html = '<tr><td colspan="2">'.get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.').'</td></tr>';
 
             return [$js, $html];

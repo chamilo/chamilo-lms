@@ -1,0 +1,74 @@
+$color_1: #3f3f46;
+$background-color_2: #fafafa;
+$border-color_1: #d4d4d8;
+
+.p-radiobutton {
+  @apply h-4 w-4;
+
+  .p-radiobutton-box {
+    @apply bg-white border border-solid border-gray-50 rounded-full h-4 w-4;
+    color: $color_1;
+
+    &:not(.p-disabled) {
+      &:not(.p-highlight) {
+        &:hover {
+          border-color: $border-color_1;
+        }
+      }
+    }
+
+    &:not(.p-disabled).p-focus {
+      @apply outline-none outline-offset-0 border-primary;
+    }
+
+    .p-radiobutton-icon {
+      width: 6px;
+      height: 6px;
+      @apply bg-white duration-200;
+    }
+
+    &.p-highlight {
+      @apply bg-primary border-primary;
+
+      &:not(.p-disabled) {
+        &:hover {
+          @apply bg-primary border-primary text-white;
+        }
+      }
+    }
+  }
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &.p-invalid {
+    > .p-radiobutton-box {
+      @apply border-error;
+    }
+  }
+}
+
+.p-input-filled {
+  .p-radiobutton {
+    .p-radiobutton-box {
+      background-color: $background-color_2;
+
+      &:not(.p-disabled) {
+        &:hover {
+          background-color: $background-color_2;
+        }
+      }
+
+      &.p-highlight {
+        @apply bg-primary;
+
+        &:not(.p-disabled) {
+          &:hover {
+            @apply bg-primary;
+          }
+        }
+      }
+    }
+  }
+}

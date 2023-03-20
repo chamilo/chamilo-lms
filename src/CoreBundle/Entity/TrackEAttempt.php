@@ -1,164 +1,157 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\CourseTrait;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * TrackEAttempt.
+ * Questions per quiz user attempts.
  *
  * @ORM\Table(
- *  name="track_e_attempt",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="exe_id", columns={"exe_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"}),
- *      @ORM\Index(name="question_id", columns={"question_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"}),
- *      @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
- *  }
+ *     name="track_e_attempt",
+ *     indexes={
+ *         @ORM\Index(name="exe_id", columns={"exe_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id"}),
+ *         @ORM\Index(name="question_id", columns={"question_id"}),
+ *         @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
+ *     }
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => 'is_granted("ROLE_USER")',
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => 'is_granted("VIEW", object)',
+        ],
+    ],
+    attributes: [
+        'security' => 'is_granted("ROLE_USER")',
+    ],
+    normalizationContext: [
+        'groups' => ['track_e_attempt:read'],
+    ],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'user' => 'exact',
+        'questionId' => 'exact',
+        'answer' => 'exact',
+        'marks' => 'exact',
+    ]
+)]
 class TrackEAttempt
 {
-    use CourseTrait;
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="exe_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercise", inversedBy="attempts")
+     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false, onDelete="CASCADE")
      */
-    protected $exeId;
+    #[Assert\NotNull]
+    protected TrackEExercise $trackExercise;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    #[Assert\NotNull]
+    #[Groups(['track_e_attempt:read'])]
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    #[Assert\NotBlank]
+    #[Groups(['track_e_attempt:read'])]
+    protected ?int $questionId = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    protected $answer;
+    #[Groups(['track_e_attempt:read'])]
+    protected string $answer;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    protected $teacherComment;
+    protected string $teacherComment;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $marks;
+    #[Groups(['track_e_attempt:read'])]
+    protected float $marks;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    protected $position;
+    protected ?int $position = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="tms", type="datetime", nullable=true)
+     * @ORM\Column(name="tms", type="datetime", nullable=false)
      */
-    protected $tms;
+    #[Assert\NotNull]
+    protected DateTime $tms;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    protected $filename;
+    protected ?string $filename = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\Column(name="seconds_spent", type="integer")
      */
-    protected $course;
+    protected int $secondsSpent;
 
     /**
-     * @var int
+     * @var Collection|AttemptFile[]
      *
-     * @ORM\Column(name="second_spent", type="integer")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFile", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $secondSpent;
+    protected Collection $attemptFiles;
+
+    /**
+     * @var Collection|AttemptFeedback[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFeedback", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected Collection $attemptFeedbacks;
 
     public function __construct()
     {
-        $this->secondSpent = 0;
+        $this->attemptFiles = new ArrayCollection();
+        $this->attemptFeedbacks = new ArrayCollection();
+        $this->teacherComment = '';
+        $this->secondsSpent = 0;
     }
 
-    /**
-     * Set exeId.
-     *
-     * @param int $exeId
-     *
-     * @return TrackEAttempt
-     */
-    public function setExeId($exeId)
-    {
-        $this->exeId = $exeId;
-
-        return $this;
-    }
-
-    /**
-     * Get exeId.
-     *
-     * @return int
-     */
-    public function getExeId()
-    {
-        return $this->exeId;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return TrackEAttempt
-     */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId): self
     {
         $this->questionId = $questionId;
 
@@ -175,14 +168,7 @@ class TrackEAttempt
         return $this->questionId;
     }
 
-    /**
-     * Set answer.
-     *
-     * @param string $answer
-     *
-     * @return TrackEAttempt
-     */
-    public function setAnswer($answer)
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
@@ -199,14 +185,7 @@ class TrackEAttempt
         return $this->answer;
     }
 
-    /**
-     * Set teacherComment.
-     *
-     * @param string $teacherComment
-     *
-     * @return TrackEAttempt
-     */
-    public function setTeacherComment($teacherComment)
+    public function setTeacherComment(string $teacherComment): self
     {
         $this->teacherComment = $teacherComment;
 
@@ -223,14 +202,7 @@ class TrackEAttempt
         return $this->teacherComment;
     }
 
-    /**
-     * Set marks.
-     *
-     * @param float $marks
-     *
-     * @return TrackEAttempt
-     */
-    public function setMarks($marks)
+    public function setMarks(float $marks): self
     {
         $this->marks = $marks;
 
@@ -247,14 +219,7 @@ class TrackEAttempt
         return $this->marks;
     }
 
-    /**
-     * Set position.
-     *
-     * @param int $position
-     *
-     * @return TrackEAttempt
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -271,14 +236,7 @@ class TrackEAttempt
         return $this->position;
     }
 
-    /**
-     * Set tms.
-     *
-     * @param \DateTime $tms
-     *
-     * @return TrackEAttempt
-     */
-    public function setTms($tms)
+    public function setTms(DateTime $tms): self
     {
         $this->tms = $tms;
 
@@ -288,7 +246,7 @@ class TrackEAttempt
     /**
      * Get tms.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTms()
     {
@@ -296,37 +254,11 @@ class TrackEAttempt
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return TrackEAttempt
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set filename.
      *
-     * @param string $filename
-     *
      * @return TrackEAttempt
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
 
@@ -351,5 +283,97 @@ class TrackEAttempt
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTrackEExercise(): TrackEExercise
+    {
+        return $this->trackExercise;
+    }
+
+    public function setTrackEExercise(TrackEExercise $trackExercise): self
+    {
+        $this->trackExercise = $trackExercise;
+
+        return $this;
+    }
+
+    public function getSecondsSpent(): int
+    {
+        return $this->secondsSpent;
+    }
+
+    public function setSecondsSpent(int $secondsSpent): self
+    {
+        $this->secondsSpent = $secondsSpent;
+
+        return $this;
+    }
+
+    /**
+     * @return AttemptFile[]|Collection
+     */
+    public function getAttemptFiles()
+    {
+        return $this->attemptFiles;
+    }
+
+    /**
+     * @param AttemptFile[]|Collection $attemptFiles
+     */
+    public function setAttemptFiles($attemptFiles): self
+    {
+        $this->attemptFiles = $attemptFiles;
+
+        return $this;
+    }
+
+    /**
+     * @return AttemptFeedback[]|Collection
+     */
+    public function getAttemptFeedbacks()
+    {
+        return $this->attemptFeedbacks;
+    }
+
+    /**
+     * @param AttemptFeedback[]|Collection $attemptFeedbacks
+     */
+    public function setAttemptFeedbacks($attemptFeedbacks): self
+    {
+        $this->attemptFeedbacks = $attemptFeedbacks;
+
+        return $this;
+    }
+
+    public function addAttemptFeedback(AttemptFeedback $attemptFeedback): self
+    {
+        if (!$this->attemptFeedbacks->contains($attemptFeedback)) {
+            $this->attemptFeedbacks[] = $attemptFeedback;
+            $attemptFeedback->setAttempt($this);
+        }
+
+        return $this;
+    }
+
+    public function addAttemptFile(AttemptFile $attemptFile): self
+    {
+        if (!$this->attemptFiles->contains($attemptFile)) {
+            $this->attemptFiles[] = $attemptFile;
+            $attemptFile->setAttempt($this);
+        }
+
+        return $this;
     }
 }

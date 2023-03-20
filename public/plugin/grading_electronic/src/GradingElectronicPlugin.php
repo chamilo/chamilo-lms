@@ -130,7 +130,7 @@ class GradingElectronicPlugin extends Plugin
         )) {
             $uExtraField->save([
                 'variable' => self::EXTRAFIELD_STUDENT_ID,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'display_text' => $this->get_lang('StudentId'),
                 'visible_to_self' => true,
                 'changeable' => true,
@@ -144,7 +144,7 @@ class GradingElectronicPlugin extends Plugin
         )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_PROVIDER_ID,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'display_text' => $this->get_lang('ProviderId'),
                 'visible_to_self' => true,
                 'changeable' => true,
@@ -156,7 +156,7 @@ class GradingElectronicPlugin extends Plugin
         )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_ID,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'display_text' => $this->get_lang('CourseId'),
                 'visible_to_self' => true,
                 'changeable' => true,
@@ -168,7 +168,7 @@ class GradingElectronicPlugin extends Plugin
         )) {
             $cExtraField->save([
                 'variable' => self::EXTRAFIELD_COURSE_HOURS,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'display_text' => $this->get_lang('CourseHours'),
                 'visible_to_self' => true,
                 'changeable' => true,

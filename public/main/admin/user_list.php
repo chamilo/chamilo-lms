@@ -16,7 +16,7 @@ api_protect_session_admin_list_users();
 $urlId = api_get_current_access_url_id();
 $currentUserId = api_get_user_id();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 
 // Login as can be used by different roles
 if (isset($_GET['user_id']) && 'login_as' === $action) {
@@ -41,10 +41,6 @@ if (isset($_GET['user_id']) && 'login_as' === $action) {
             Display::addFlash(Display::return_message($goTo, 'normal', false));
 
             api_location($url.'?_switch_user='.$oldUserInfo['username']);
-            /*Display::display_header(get_lang('User list'));
-            echo Display::return_message($message, 'normal', false);
-            echo Display::return_message($goTo, 'normal', false);
-            Display::display_footer();*/
             exit;
         } else {
             api_not_allowed(true);
@@ -76,38 +72,6 @@ if ($variables) {
 Session::write('variables_to_show', $variablesToShow);
 
 $htmlHeadXtra[] = '<script>
-function load_course_list (div_course,my_user_id) {
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(myObject) {
-            $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.$url.'",
-        data: "user_id="+my_user_id,
-        success: function(datos) {
-            $("div#"+div_course).html(datos);
-            $("div#div_"+my_user_id).attr("class","blackboard_show");
-            $("div#div_"+my_user_id).attr("style","");
-        }
-    });
-}
-
-function load_session_list(div_session, my_user_id) {
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(myObject) {
-            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.$urlSession.'",
-        data: "user_id="+my_user_id,
-        success: function(datos) {
-            $("div#"+div_session).html(datos);
-            $("div#div_s_"+my_user_id).attr("class","blackboard_show");
-            $("div#div_s_"+my_user_id).attr("style","");
-        }
-    });
-}
-
 function active_user(element_div) {
     id_image=$(element_div).attr("id");
     image_clicked=$(element_div).attr("src");
@@ -145,22 +109,13 @@ function active_user(element_div) {
     }
 }
 
-function clear_course_list(div_course) {
-    $("div#"+div_course).html("&nbsp;");
-    $("div#"+div_course).hide("");
-}
-function clear_session_list(div_session) {
-    $("div#"+div_session).html("&nbsp;");
-    $("div#"+div_session).hide("");
-}
-
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'\');
     }
 }
 
@@ -411,7 +366,7 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
+                    if (ExtraField::FIELD_TYPE_TAG == $info['value_type']) {
                         $result = $extraField->getAllUserPerTag($info['id'], $value);
                         $result = empty($result) ? [] : array_column($result, 'user_id');
                     } else {
@@ -489,13 +444,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
             USER_IMAGE_SIZE_SMALL
         );
         $photo = '<img
-            src="'.$userPicture.'" width="22" height="22"
+            src="'.$userPicture.'"
             alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
         if (1 == $user[7] && !empty($user['exp'])) {
             // check expiration date
-            $expiration_time = convert_sql_date($user['exp']);
+            $expiration_time = api_strtotime($user['exp']);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
                 $user[7] = '-1';
@@ -531,7 +486,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display::encrypted_mailto_link($email, cut($email, 26), 'small clickable_email_link');
+    return Display::getMdiIcon('email', null, null, null, $email).
+        ' '.
+        Display::encrypted_mailto_link($email, cut($email, 10), 'small clickable_email_link');
 }
 
 /**
@@ -575,37 +532,14 @@ function modify_filter($user_id, $url_params, $row)
         $user_is_anonymous = true;
     }
     $result = '';
-    if (!$user_is_anonymous) {
-        $icon = Display::return_icon(
-            'course.png',
-            get_lang('Courses'),
-            ['onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')']
-        );
-        $result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-                    '.$icon.'
-                    <div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
-                    </a>';
-
-        $icon = Display::return_icon(
-            'session.png',
-            get_lang('Course sessions'),
-            ['onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')']
-        );
-        $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
-                    '.$icon.'
-                    <div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
-                    </a>';
-    } else {
-        $result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
-        $result .= Display::return_icon('course_na.png', get_lang('Course sessions')).'&nbsp;&nbsp;';
-    }
 
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                        Display::return_icon('info2.png', get_lang('Information')).'</a>&nbsp;&nbsp;';
+                Display::getMdiIcon('information', 'ch-tool-icon', null, 22, get_lang('Information')).
+                '</a>';
         } else {
-            $result .= Display::return_icon('info2_na.png', get_lang('Information')).'&nbsp;&nbsp;';
+            $result .= Display::getMdiIcon('information', 'ch-tool-icon-disabled', null, 22, get_lang('Information'));
         }
     }
 
@@ -624,26 +558,34 @@ function modify_filter($user_id, $url_params, $row)
         if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-                    Display::return_icon('login_as.png', get_lang('Login as')).'</a>&nbsp;';
+                    Display::getMdiIcon('account-key', 'ch-tool-icon', null, 22, get_lang('Login as')).'</a>';
             } else {
-                $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
+                $result .= Display::getMdiIcon('account-key', 'ch-tool-icon-disabled', null, 22, get_lang('Login as'));
             }
         } else {
-            $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
+            $result .= Display::getMdiIcon('account-key', 'ch-tool-icon-disabled', null, 22, get_lang('Login as'));
         }
     } else {
-        $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
+        $result .= Display::getMdiIcon('account-key', 'ch-tool-icon-disabled', null, 22, get_lang('Login as'));
     }
 
     if ($current_user_status_label != $statusname[STUDENT]) {
-        $result .= Display::return_icon(
-            'statistics_na.png',
+        $result .= Display::getMdiIcon(
+            'chart-box',
+            'ch-tool-icon-disabled',
+            null,
+            22,
             get_lang('Reporting')
-        ).'&nbsp;';
+        );
     } else {
-        $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.
-            Display::return_icon('statistics.png', get_lang('Reporting')).
-            '</a>&nbsp;';
+        $result .= '<a href="../my_space/myStudents.php?student='.$user_id.'">'.
+            Display::getMdiIcon(
+                'chart-box',
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Reporting')
+            ).'</a>';
     }
 
     if (api_is_platform_admin(true)) {
@@ -652,20 +594,22 @@ function modify_filter($user_id, $url_params, $row)
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
             $result .= '<a href="'.$editProfileUrl.'">'.
-                Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit'),
-                    [],
-                    ICON_SIZE_SMALL
+                Display::getMdiIcon(
+                    'pencil',
+                    'ch-tool-icon',
+                    null,
+                    22,
+                    get_lang('Edit')
                 ).
-                '</a>&nbsp;';
+                '</a>';
         } else {
-            $result .= Display::return_icon(
-                'edit_na.png',
-                get_lang('Edit'),
-                [],
-                ICON_SIZE_SMALL
-            ).'</a>&nbsp;';
+            $result .= Display::getMdiIcon(
+                'pencil',
+                'ch-tool-icon-disabled',
+                null,
+                22,
+                get_lang('Edit')
+            ).'</a>';
         }
     }
 
@@ -673,70 +617,114 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($allowAssignSkill) {
         $result .= Display::url(
-            Display::return_icon(
-                'skill-badges.png',
-                get_lang('Assign skill'),
+            Display::getMdiIcon(
+                'shield-star',
+                'ch-tool-icon',
                 null,
-                ICON_SIZE_SMALL
+                22,
+                get_lang('Assign skill')
             ),
-            api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $user_id])
+            api_get_path(WEB_CODE_PATH).'skills/assign.php?'.http_build_query(['user' => $user_id])
         );
     }
 
     if ($is_admin) {
-        $result .= Display::return_icon(
-            'admin_star.png',
-            get_lang('Is administrator'),
-            ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
+        $result .= Display::getMdiIcon(
+            'star',
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang('Is administrator')
         );
     } else {
-        $result .= Display::return_icon(
-            'admin_star_na.png',
+        $result .= Display::getMdiIcon(
+            'star',
+            'ch-tool-icon-disabled',
+            null,
+            22,
             get_lang('Is not administrator')
         );
     }
 
-    // actions for assigning sessions, courses or users
-    if (!api_is_session_admin()) {
-        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+    if (api_is_platform_admin()) {
+        /* Temporarily disabled until improved
+        $result .= ' <a data-title="'.get_lang('Free/Busy calendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
+            Display::getMdiIcon(
+                'calendar-text',
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Free/Busy calendar')
+            ).
+            '</a>';
+        */
+        if ($user_id != $currentUserId &&
+            !$user_is_anonymous &&
+            api_global_admin_can_edit_admin($user_id)
+        ) {
+            $anonymizeUrl = "user_list.php?$url_params&"
+                .http_build_query(
+                    [
+                        'action' => 'anonymize',
+                        'user_id' => $user_id,
+                        'sec_token' => Security::getTokenFromSession(),
+                    ]
+                );
             $result .= Display::url(
-                Display::return_icon(
-                    'view_more_stats.gif',
-                    get_lang('AssignCourse sessions')
+                Display::getMdiIcon(
+                    'incognito',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Anonymize')
                 ),
-                "dashboard_add_sessions_to_user.php?user={$user_id}"
+                $anonymizeUrl,
+                [
+                    'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                    'class' => 'delete-swal',
+                    'title' => get_lang('Anonymize'),
+                ]
             );
-        } else {
-            if ($current_user_status_label == $statusname[DRH] ||
-                UserManager::is_admin($user_id) ||
-                $current_user_status_label == $statusname[STUDENT_BOSS]
+        }
+
+        $deleteAllowed = !api_get_configuration_value('deny_delete_users');
+        if ($deleteAllowed) {
+            if ($user_id != $currentUserId &&
+                !$user_is_anonymous &&
+                api_global_admin_can_edit_admin($user_id)
             ) {
+                // you cannot lock yourself out otherwise you could disable all the accounts
+                // including your own => everybody is locked out and nobody can change it anymore.
+                $deleteUrl = "user_list.php?$url_params&"
+                    .http_build_query(
+                        [
+                            'action' => 'delete_user',
+                            'user_id' => $user_id,
+                            'sec_token' => Security::getTokenFromSession(),
+                        ]
+                    );
                 $result .= Display::url(
-                    Display::return_icon(
-                        'user_subscribe_course.png',
-                        get_lang('Assign users'),
-                        '',
-                        ICON_SIZE_SMALL
+                    Display::getMdiIcon(
+                        'delete',
+                        'ch-tool-icon',
+                        null,
+                        22,
+                        get_lang('Delete')
                     ),
-                    "dashboard_add_users_to_user.php?user={$user_id}"
+                    $deleteUrl,
+                    [
+                        'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                        'title' => get_lang('Delete'),
+                        'class' => 'delete-swal',
+                    ]
                 );
-            }
-
-            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
-                $result .= Display::url(
-                    Display::return_icon(
-                        'add.png',
-                        get_lang('Assign courses')
-                    ),
-                    "dashboard_add_courses_to_user.php?user={$user_id}"
-                );
-
-                $result .= Display::url(
-                    Display::return_icon(
-                        'view_more_stats.gif',
-                        get_lang('AssignCourse sessions')
-                    ),
-                    "dashboard_add_sessions_to_user.php?user={$user_id}"
+            } else {
+                $result .= Display::getMdiIcon(
+                    'delete',
+                    'ch-tool-icon-disabled',
+                    null,
+                    22,
+                    get_lang('Delete')
                 );
             }
         }
@@ -750,62 +738,86 @@ function modify_filter($user_id, $url_params, $row)
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
             // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang('Please confirm your choice'))).'" class="delete-swal">'.
-                Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).
-                '</a>';
+            $deleteUrl = "user_list.php?$url_params&"
+                .http_build_query(
+                    [
+                        'action' => 'delete_user',
+                        'user_id' => $user_id,
+                        'sec_token' => Security::getTokenFromSession(),
+                    ]
+                );
+            $result .= Display::url(
+                Display::getMdiIcon(
+                    'delete',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Delete')
+                ),
+                $deleteUrl,
+                [
+                    'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                    'title' => get_lang('Delete'),
+                    'class' => 'delete-swal',
+                ]
+            );
         }
     }
-    if (api_is_platform_admin()) {
-        $result .= ' <a data-title="'.get_lang('Free/Busy calendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
-            Display::return_icon(
-                'calendar.png',
-                get_lang('Free/Busy calendar'),
-                [],
-                ICON_SIZE_SMALL
-            ).
-            '</a>';
 
-        if ($user_id != $currentUserId &&
-            !$user_is_anonymous &&
-            api_global_admin_can_edit_admin($user_id)
-        ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" >'.
-                Display::return_icon(
-                    'anonymous.png',
-                    get_lang('Anonymize'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).
-                '</a>';
-        }
-
-        $deleteAllowed = !api_get_configuration_value('deny_delete_users');
-        if ($deleteAllowed) {
-            if ($user_id != $currentUserId &&
-                !$user_is_anonymous &&
-                api_global_admin_can_edit_admin($user_id)
+    // actions for assigning sessions, courses or users
+    if (!api_is_session_admin()) {
+        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+            $result .= Display::url(
+                Display::getMdiIcon(
+                    'google-classroom',
+                    'ch-tool-icon',
+                    null,
+                    22,
+                    get_lang('Assign sessions')
+                ),
+                "dashboard_add_sessions_to_user.php?user={$user_id}"
+            );
+        } else {
+            if ($current_user_status_label == $statusname[DRH] ||
+                UserManager::is_admin($user_id) ||
+                $current_user_status_label == $statusname[STUDENT_BOSS]
             ) {
-                // you cannot lock yourself out otherwise you could disable all the accounts
-                // including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" class="delete-swal">'.
-                    Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete'),
-                        [],
-                        ICON_SIZE_SMALL
-                    ).
-                    '</a>';
-            } else {
-                $result .= Display::return_icon(
-                    'delete_na.png',
-                    get_lang('Delete'),
-                    [],
-                    ICON_SIZE_SMALL
+                $result .= Display::url(
+                    Display::getMdiIcon(
+                        'account-child',
+                        'ch-tool-icon',
+                        null,
+                        22,
+                        get_lang('Assign users')
+                    ),
+                    "dashboard_add_users_to_user.php?user={$user_id}",
+                    ['title' => get_lang('Assign users')]
+                );
+            }
+
+            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+                $result .= Display::url(
+                    Display::getMdiIcon(
+                        'book-open-page-variant',
+                        'ch-tool-icon',
+                        null,
+                        22,
+                        get_lang('Assign courses')
+                    ),
+                    "dashboard_add_courses_to_user.php?user={$user_id}",
+                    ['title' => get_lang('Assign courses')]
+                );
+
+                $result .= Display::url(
+                    Display::getMdiIcon(
+                        'google-classroom',
+                        'ch-tool-icon',
+                        null,
+                        22,
+                        get_lang('Assign sessions')
+                    ),
+                    "dashboard_add_sessions_to_user.php?user={$user_id}",
+                    ['title' => get_lang('Assign sessions')]
                 );
             }
         }
@@ -832,13 +844,13 @@ function active_filter($active, $params, $row)
 
     if ('1' == $active) {
         $action = 'Lock';
-        $image = 'accept';
+        $image = 'accept'; //mdi-check-circle
     } elseif ('-1' == $active) {
         $action = 'edit';
-        $image = 'warning';
+        $image = 'warning'; //mdi-alert-circle
     } elseif ('0' == $active) {
         $action = 'Unlock';
-        $image = 'error';
+        $image = 'error'; //mdi-minus-circle
     }
 
     $result = '';
@@ -1003,33 +1015,33 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', null, null, null, 'inline');
+$form = new FormValidator('search_simple', 'get', null, null, [], FormValidator::LAYOUT_BOX_SEARCH);
 $form->addText(
     'keyword',
-    get_lang('Search'),
+    null,
     false,
     [
-        'aria-label' => get_lang('Search users'),
+        'placeholder' => get_lang('Search users'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://"
-    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
+    class="btn btn--plain advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'
+    '.Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'
     </span>
 </a>';
 $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
-    $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-         Display::return_icon('new_user.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::getMdiIcon('account-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add a user')).'</a>';
 }
 
-$actionsLeft .= $form->returnForm();
+$actionsRight .= $form->returnForm();
 $actionsCenter .= $searchAdvanced;
 
 if (isset($_GET['keyword'])) {
@@ -1063,7 +1075,6 @@ $form = new FormValidator(
     FormValidator::LAYOUT_HORIZONTAL
 );
 
-$form->addElement('html', '<div id="advanced_search_form" style="display:none;">');
 $form->addElement('header', get_lang('Advanced search'));
 $form->addText('keyword_firstname', get_lang('First name'), false);
 $form->addText('keyword_lastname', get_lang('Last name'), false);
@@ -1074,7 +1085,7 @@ $form->addText('keyword_officialcode', get_lang('Code'), false);
 $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
 $options = [];
 if ($classId) {
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $groupInfo = $userGroup->get($classId);
     if ($groupInfo) {
         $options = [$classId => $groupInfo['name']];
@@ -1095,16 +1106,15 @@ $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'keyword_status',
     get_lang('Profile'),
     $status_options
 );
 
 $active_group = [];
-$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('active'));
-$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('inactive'));
+$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
+$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
 $form->addGroup($active_group, '', get_lang('activeAccount'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('Check passwords too easy to guess'));
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
@@ -1123,9 +1133,8 @@ $defaults = [];
 $defaults['keyword_active'] = 1;
 $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
-$form->addElement('html', '</div>');
 
-$form = $form->returnForm();
+$form = '<div id="advanced_search_form" style="display:none;">'.$form->returnForm().'</div>';
 
 $table = new SortableTable(
     'users',
@@ -1133,14 +1142,12 @@ $table = new SortableTable(
     'get_user_data',
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
     20,
-    'ASC',
-    null,
-    ['style' => 'font-size: 1.4rem;', 'class' => 'table table-hover table-striped table-bordered table-condensed']
+    'ASC'
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);
-$table->set_header(2, get_lang('Code'));
+$table->set_header(2, get_lang('Official code'));
 
 if (api_is_western_name_order()) {
     $table->set_header(3, get_lang('First name'));
@@ -1149,7 +1156,7 @@ if (api_is_western_name_order()) {
     $table->set_header(3, get_lang('Last name'));
     $table->set_header(4, get_lang('First name'));
 }
-$table->set_header(5, get_lang('Login'));
+$table->set_header(5, get_lang('Username'));
 $table->set_header(6, get_lang('e-mail'));
 $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('active'), true, 'width="15px"');
@@ -1248,11 +1255,7 @@ if (0 == $table->get_total_number_of_items()) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

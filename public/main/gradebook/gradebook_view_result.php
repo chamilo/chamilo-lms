@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
+require_once __DIR__.'/lib/fe/exportgradebook.php';
 
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -23,9 +23,11 @@ $interbreadcrumb[] = [
 //load the evaluation & category
 $select_eval = (int) $_GET['selecteval'];
 if (empty($select_eval)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
+$_course = api_get_course_info();
+$_user = api_get_user_info();
 $displayscore = ScoreDisplay::instance();
 $eval = Evaluation::load($select_eval);
 $overwritescore = 0;
@@ -360,7 +362,7 @@ if (isset($_GET['export'])) {
         $filename = 'export_results_'.gmdate('Y-m-d_H-i-s');
         $results = Result::load(null, null, $select_eval);
         $data = []; //when file type is csv, add a header to the output file
-        if ('csv' == $file_type) {
+        if ('csv' === $file_type) {
             $alldata[] = [
                 'username',
                 'official_code',
@@ -372,7 +374,7 @@ if (isset($_GET['export'])) {
         }
 
         // export results to pdf file
-        if ('pdf' == $file_type) {
+        if ('pdf' === $file_type) {
             $number_decimals = api_get_setting('gradebook_number_decimals');
             $datagen = new ResultsDataGenerator($eval[0], $allresults);
 

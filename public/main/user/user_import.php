@@ -105,7 +105,7 @@ if ($form->validate()) {
 
                 foreach ($clean_users as $userId) {
                     $userInfo = api_get_user_info($userId);
-                    CourseManager::subscribeUser($userId, $course_code, $userType, $session_id);
+                    CourseManager::subscribeUser($userId, $courseId, $userType, $session_id);
                     if (empty($session_id)) {
                         //just to make sure
                         if (CourseManager::is_user_subscribed_in_course($userId, $course_code)) {
@@ -152,22 +152,22 @@ if (!empty($message)) {
     }
 }
 
-$form->display();
-
-echo get_lang('The CSV file must look like this');
-echo '<blockquote><pre>
+$content = get_lang('The CSV file must look like this').
+'<blockquote><pre>
     username
     jdoe
     jmontoya
 </pre>
-</blockquote>';
-
-echo get_lang('or');
-echo '<blockquote><pre>
+</blockquote>'.
+get_lang('or').
+    '<blockquote><pre>
     id
     23
     1337
 </pre>
 </blockquote>';
+
+echo Display::prose($content);
+$form->display();
 
 Display::display_footer();

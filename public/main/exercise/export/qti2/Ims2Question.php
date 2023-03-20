@@ -17,15 +17,12 @@ class Ims2Question extends Question
     public function setAnswer()
     {
         switch ($this->type) {
+            case TF:
             case MCUA:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
                 return $answer;
             case MCMA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
-
-                return $answer;
-            case TF:
                 $answer = new ImsAnswerMultipleChoice($this->id);
 
                 return $answer;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,44 +13,38 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="hook_event",
- *     options={"row_format":"DYNAMIC"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})}
+ *     options={"row_format"="DYNAMIC"},
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="class_name", columns={"class_name"})
+ *     }
  * )
  * @ORM\Entity
  */
 class HookEvent
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
-     */
-    protected $className;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
+
+    /**
+     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
+     */
+    protected ?string $className = null;
+
+    /**
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    protected ?string $description = null;
 
     /**
      * Set className.
      *
-     * @param string $className
-     *
      * @return HookEvent
      */
-    public function setClassName($className)
+    public function setClassName(string $className)
     {
         $this->className = $className;
 
@@ -68,11 +64,9 @@ class HookEvent
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return HookEvent
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 

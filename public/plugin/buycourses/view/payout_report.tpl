@@ -40,7 +40,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
+                    <button type="button" class="btn btn--plain" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
+                    <button type="button" class="btn btn--plain" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
 </div>
 
 <div>
-    <button id="stats" type="button" class="btn btn-primary fa fa-line-chart" data-toggle="modal"
+    <button id="stats" type="button" class="btn btn--primary fa fa-line-chart" data-toggle="modal"
             data-target="#reportStats"> {{ 'Stats'|get_plugin_lang('BuyCoursesPlugin') }}
     </button>
 </div>

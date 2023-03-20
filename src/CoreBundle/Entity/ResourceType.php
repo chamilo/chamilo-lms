@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,48 +25,40 @@ class ResourceType
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column()
-     *
-     * @Assert\NotBlank()
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
-    protected $tool;
+    protected Tool $tool;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
+     *
+     * @var ResourceNode[]|Collection
      */
-    protected $resourceNodes;
+    protected Collection $resourceNodes;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->resourceNodes = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId($id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): string
@@ -77,29 +73,29 @@ class ResourceType
         return $this;
     }
 
-    /**
-     * @return Tool
-     */
-    public function getTool()
+    public function getTool(): Tool
     {
         return $this->tool;
     }
 
-    /**
-     * @param Tool $tool
-     */
-    public function setTool($tool): self
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
 
         return $this;
     }
 
+    /**
+     * @return ResourceNode[]|Collection
+     */
     public function getResourceNodes()
     {
         return $this->resourceNodes;
     }
 
+    /**
+     * @param ResourceNode[]|Collection $resourceNodes
+     */
     public function setResourceNodes($resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;

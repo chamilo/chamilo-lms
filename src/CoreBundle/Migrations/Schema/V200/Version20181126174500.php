@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -7,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * LTI.
- */
 class Version20181126174500 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Migrate plugin_ims_lti_tool';
+    }
+
     public function up(Schema $schema): void
     {
         if ($schema->hasTable('plugin_ims_lti_tool')) {

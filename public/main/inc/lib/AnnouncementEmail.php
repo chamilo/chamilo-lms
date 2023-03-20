@@ -45,19 +45,16 @@ class AnnouncementEmail
             $group_id = api_get_group_id();
             if (empty($group_id)) {
                 $userList = CourseManager::get_user_list_from_course_code($courseCode);
+                $userList = array_column($userList, 'user_id');
             } else {
                 $userList = GroupManager::get_users($group_id);
-                $new_user_list = [];
-                foreach ($userList as $user) {
-                    $new_user_list[] = ['user_id' => $user];
-                }
-                $userList = $new_user_list;
             }
         } else {
             $userList = CourseManager::get_user_list_from_course_code(
                 $courseCode,
                 $this->session_id
             );
+            $userList = array_column($userList, 'user_id');
         }
 
         return $userList;
@@ -73,17 +70,18 @@ class AnnouncementEmail
     public function sent_to()
     {
         $sent_to = $this->announcement->getUsersAndGroupSubscribedToResource();
-        $users = $sent_to['users'];
-        $users = $users ? $users : [];
-        $groups = $sent_to['groups'];
+        $users = $sent_to['users'] ?? [];
+        $groups = $sent_to['groups'] ?? [];
 
         if ($users) {
             $users = UserManager::get_user_list_by_ids($users, true);
+            $users = array_column($users, 'id');
         }
 
         if (!empty($groups)) {
             $groupUsers = GroupManager::get_groups_users($groups);
             $groupUsers = UserManager::get_user_list_by_ids($groupUsers, true);
+            $groupUsers = array_column($groupUsers, 'id');
 
             if (!empty($groupUsers)) {
                 $users = array_merge($users, $groupUsers);
@@ -97,15 +95,7 @@ class AnnouncementEmail
             $users = self::all_users();
         }
 
-        // Clean users just in case
-        $newListUsers = [];
-        if (!empty($users)) {
-            foreach ($users as $user) {
-                $newListUsers[$user['id']] = ['user_id' => $user['id']];
-            }
-        }
-
-        return $newListUsers;
+        return $users;
     }
 
     /**
@@ -248,19 +238,19 @@ class AnnouncementEmail
             $this->logger->addInfo('User list is empty. No emails will be sent.');
         }
         $messageSentTo = [];
-        foreach ($users as $user) {
-            $message = $this->message($user['user_id']);
-            $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
+        foreach ($users as $userId) {
+            $message = $this->message($userId);
+            $wasSent = MessageManager::messageWasAlreadySent($senderId, $userId, $subject, $message);
             if (false === $wasSent) {
                 if (!empty($this->logger)) {
                     $this->logger->addInfo(
-                        'Announcement: #'.$this->announcement->getIid().'. Send email to user: #'.$user['user_id']
+                        'Announcement: #'.$this->announcement->getIid().'. Send email to user: #'.$userId
                     );
                 }
 
-                $messageSentTo[] = $user['user_id'];
+                $messageSentTo[] = $userId;
                 MessageManager::send_message_simple(
-                    $user['user_id'],
+                    $userId,
                     $subject,
                     $message,
                     $senderId,
@@ -271,7 +261,7 @@ class AnnouncementEmail
                 if (!empty($this->logger)) {
                     $this->logger->addInfo(
                         'Message "'.$subject.'" was already sent. Announcement: #'.$this->announcement->getIid().'.
-                        User: #'.$user['user_id']
+                        User: #'.$userId
                     );
                 }
             }

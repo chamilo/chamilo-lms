@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,55 +17,41 @@ use Doctrine\ORM\Mapping as ORM;
 class Legal
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="date", type="integer", nullable=false)
      */
-    protected $date;
+    protected int $date;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
-    protected $type;
+    protected int $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="changes", type="text", nullable=false)
      */
-    protected $changes;
+    protected string $changes;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected $version;
+    protected ?int $version = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="language_id", type="integer")
      */
-    protected $languageId;
+    protected int $languageId;
 
     /**
      * @return int
@@ -73,26 +61,7 @@ class Legal
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Legal
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Set date.
-     *
-     * @param int $date
-     *
-     * @return Legal
-     */
-    public function setDate($date)
+    public function setDate(int $date): self
     {
         $this->date = $date;
 
@@ -109,14 +78,7 @@ class Legal
         return $this->date;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return Legal
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -133,14 +95,7 @@ class Legal
         return $this->content;
     }
 
-    /**
-     * Set type.
-     *
-     * @param int $type
-     *
-     * @return Legal
-     */
-    public function setType($type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -157,14 +112,7 @@ class Legal
         return $this->type;
     }
 
-    /**
-     * Set changes.
-     *
-     * @param string $changes
-     *
-     * @return Legal
-     */
-    public function setChanges($changes)
+    public function setChanges(string $changes): self
     {
         $this->changes = $changes;
 
@@ -181,14 +129,7 @@ class Legal
         return $this->changes;
     }
 
-    /**
-     * Set version.
-     *
-     * @param int $version
-     *
-     * @return Legal
-     */
-    public function setVersion($version)
+    public function setVersion(int $version): self
     {
         $this->version = $version;
 
@@ -205,14 +146,7 @@ class Legal
         return $this->version;
     }
 
-    /**
-     * Set languageId.
-     *
-     * @param int $languageId
-     *
-     * @return Legal
-     */
-    public function setLanguageId($languageId)
+    public function setLanguageId(int $languageId): self
     {
         $this->languageId = $languageId;
 

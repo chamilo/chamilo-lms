@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+exit;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 
@@ -58,10 +61,10 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
 
         Display::addFlash($message);
 
-        if (isset($_REQUEST['extra_field_type'])) {
+        if (isset($_REQUEST['item_type'])) {
             $redirectUrl = api_get_path(WEB_CODE_PATH).'admin/extra_fields.php';
 
-            switch ($_REQUEST['extra_field_type']) {
+            switch ($_REQUEST['item_type']) {
                 case ExtraField::USER_FIELD_TYPE:
                     header("Location: {$redirectUrl}?type=user");
                     exit;
@@ -75,7 +78,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         }
 
         if (isset($_REQUEST['skill'])) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
+            header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
             exit;
         }
     }

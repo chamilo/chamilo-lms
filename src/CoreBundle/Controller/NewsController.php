@@ -1,72 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class IndexController
- * author Julio Montoya <gugli100@gmail.com>.
- *
- * @Route("/news")
+ * @author Julio Montoya <gugli100@gmail.com>.
  */
+#[Route('/news')]
 class NewsController extends BaseController
 {
     use ControllerTrait;
 
-    /**
-     * @Route("/", name="news_index", methods={"GET"}, options={"expose"=true})
-     */
-    public function indexAction(): Response
+    #[Route('/list', name: 'news_index', methods: ['GET'])]
+    public function indexAction(SysAnnouncementRepository $sysAnnouncementRepository): Response
     {
-        $toolBar = '';
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $actionEdit = \Display::url(
-                \Display::return_icon('edit.png', $this->trans('EditSystemAnnouncement'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PATH).'main/admin/system_announcements.php'
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $list = [];
+        if (null !== $user) {
+            $list = $sysAnnouncementRepository->getAnnouncements(
+                $user,
+                $this->getAccessUrl(),
+                $this->getRequest()->getLocale()
             );
-            $toolBar = \Display::toolbarAction('toolbar', [$actionEdit]);
         }
 
-        return $this->render(
-            '@ChamiloCore/News/index.html.twig',
-            [
-                'toolbar' => $toolBar,
-            ]
-        );
-    }
-
-    /**
-     * @Route("/{id}", name="news", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @param int $id
-     */
-    public function newsAction($id = 0): Response
-    {
-        $visibility = \SystemAnnouncementManager::getCurrentUserVisibility();
-
-        if (empty($id)) {
-            $content = \SystemAnnouncementManager::getAnnouncements($visibility);
-
-            return $this->render(
-                '@ChamiloCore/News/slider.html.twig',
-                [
-                    'announcements' => $content,
-                ]
-            );
-        } else {
-            $content = \SystemAnnouncementManager::getAnnouncement($id, $visibility);
-
-            return $this->render(
-                '@ChamiloCore/News/view.html.twig',
-                [
-                    'announcement' => $content,
-                ]
-            );
-        }
+        return new JsonResponse($list);
     }
 }

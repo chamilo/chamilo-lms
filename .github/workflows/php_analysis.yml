@@ -1,0 +1,61 @@
+name: PHP static analysis ✨
+
+on: [push, pull_request]
+
+jobs:
+    build:
+        name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+        runs-on: ubuntu-20.04
+
+        strategy:
+            fail-fast: false
+            matrix:
+                operating-system: [ubuntu-latest]
+                php-versions: ['8.0']
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-versions }}
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
+
+#            - name: Composer validate
+#              id: composer-validate
+#              run: composer validate
+
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            - name: Cache composer dependencies
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  # Use composer.json for key, if composer.lock is not committed.
+                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
+
+            - name: Install dependencies with composer
+              run: composer install --no-progress
+
+            - name: Check Symfony requirements
+              run: vendor/bin/requirements-checker
+
+            - name: The PHP Security Checker
+              uses: symfonycorp/security-checker-action@v4
+
+            - name: Psalm
+              id: psalm
+              run: vendor/bin/psalm --show-info=false
+
+            - name: PhpStan
+              if: (${{ success() }} || ${{ steps.psalm.outcome }} == 'failure')
+              run: vendor/bin/phpstan analyse
+
+            - name: Doctrine Schema Validator
+              run: php bin/console doctrine:schema:validate --skip-sync

@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -21,13 +20,7 @@ api_protect_course_script();
 $learnPath = Session::read('oLP');
 
 /* Header and action code */
-$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
-$(function() {
-    CKEDITOR.on("instanceReady", function (e) {
-        showTemplates("content_lp");
-    });
-});
-</script>';
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -69,88 +62,36 @@ $interbreadcrumb[] = [
     'name' => get_lang('Add learning object or activity'),
 ];
 
-// Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
-Display::display_header(get_lang('Edit'), 'Path');
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
+$excludeExtraFields = [
+    'authors',
+    'authorlp',
+    'authorlpitem',
+    'price',
+];
+if (api_is_platform_admin()) {
+    // Only admins can edit this items
+    $excludeExtraFields = [];
 }
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-$(function() {
-    $('.scrollbar-inner').scrollbar();
-    expandColumnToogle('#hide_bar_template', {
-        selector: '#lp_sidebar'
-    }, {
-        selector: '#doc_form'
-    });
-
-    $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
-
-        if (!associate) {
-            e.preventDefault();
-        }
-    });
-
-    $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
-        if (!dissociate) {
-            e.preventDefault();
-        }
-    });
-});
-</script>
-<?php
-
-echo $learnPath->build_action_menu();
-
-echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-$documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
-$repo = Container::getDocumentRepository();
-$document = $repo->find($documentId);
-
-if ($document) {
-    echo $learnPath->return_new_tree();
-    // Show the template list
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
-} else {
-    echo $learnPath->return_new_tree();
-}
-echo '</div>';
-echo '<div id="doc_form" class="col-md-8">';
+$right = '';
 if (isset($is_success) && true === $is_success) {
-    $msg = '<div class="lp_message" style="margin-bottom:10px;">';
-    $msg .= 'The item has been edited.';
-    $msg .= '</div>';
-    echo $learnPath->display_item($lpItem, $msg);
+    $right = '<div class="lp_message" style="margin-bottom:10px;">';
+    $right .= 'The item has been edited.';
+    $right .= '</div>';
+    $right .= $learnPath->display_item($lpItem, $msg);
 } else {
-    echo $learnPath->display_edit_item($lpItem);
+    $right .= $learnPath->display_edit_item($lpItem, $excludeExtraFields);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
-        echo '<script>$("#frmModel").remove()</script>';
+        $right .= '<script>$("#frmModel").remove()</script>';
     }
     Session::erase('finalItem');
 }
 
-echo '</div>';
-echo '</div>';
-
-Display::display_footer();
+$tpl = new Template();
+$tpl->assign('actions', $learnPath->build_action_menu(true));
+$tpl->assign('left', $learnPath->showBuildSideBar());
+$tpl->assign('right', $right);
+$tpl->displayTwoColTemplate();

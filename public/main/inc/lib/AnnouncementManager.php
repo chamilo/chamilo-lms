@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
@@ -81,15 +83,20 @@ class AnnouncementManager
         $generalCoachEmail = '';
         $coaches = '';
         if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
+            $session = api_get_session_entity($sessionId);
+
             $coaches = CourseManager::get_coachs_from_course_to_string(
                 $sessionId,
                 $courseInfo['real_id']
             );
 
-            $generalCoach = api_get_user_info($sessionInfo['id_coach']);
-            $generalCoachName = $generalCoach['complete_name'];
-            $generalCoachEmail = $generalCoach['email'];
+            $session->getGeneralCoaches()
+                ->forAll(function (int $key, User $user) use (&$generalCoachName, &$generalCoachEmail) {
+                    $generalCoachName .= $user->getFullname().PHP_EOL;
+                    $generalCoachEmail .= $user->getEmail().PHP_EOL;
+
+                    return true;
+                });
         }
 
         $data = [];
@@ -107,7 +114,7 @@ class AnnouncementManager
         }
 
         $data['course_title'] = $courseInfo['name'];
-        $courseLink = api_get_course_url($courseCode, $sessionId);
+        $courseLink = api_get_course_url($courseInfo['real_id'], $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 
@@ -123,12 +130,12 @@ class AnnouncementManager
             if (!empty($readerInfo['extra'])) {
                 foreach ($readerInfo['extra'] as $extra) {
                     if (isset($extra['value'])) {
-                        /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+                        /** @var ExtraFieldValues $value */
                         $value = $extra['value'];
                         if ($value instanceof ExtraFieldValues) {
                             $field = $value->getField();
                             if ($field instanceof ExtraFieldEntity) {
-                                $data['extra_'.$field->getVariable()] = $value->getValue();
+                                $data['extra_'.$field->getVariable()] = $value->getFieldValue();
                             }
                         }
                     }
@@ -266,8 +273,9 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         $announcement = $repo->find($id);
         if ($announcement) {
-            $repo->getEntityManager()->remove($announcement);
-            $repo->getEntityManager()->flush();
+            $em = Database::getManager();
+            $em->remove($announcement);
+            $em->flush();
         }
 
         /*
@@ -292,10 +300,10 @@ class AnnouncementManager
             $courseInfo,
             api_get_session_id()
         );
-
+        $em = Database::getManager();
         if (!empty($announcements)) {
             foreach ($announcements as $announcement) {
-                $repo->getEntityManager()->remove($announcement);
+                $em->remove($announcement);
                 /*api_item_property_update(
                     $courseInfo,
                     TOOL_ANNOUNCEMENT,
@@ -305,7 +313,7 @@ class AnnouncementManager
                 );*/
             }
         }
-        $repo->getEntityManager()->flush();
+        $em->flush();
     }
 
     /**
@@ -372,7 +380,7 @@ class AnnouncementManager
         $groupId = (int) $groupId;
 
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $dql = "SELECT a, ip
                     FROM ChamiloCourseBundle:CAnnouncement a
@@ -462,7 +470,6 @@ class AnnouncementManager
 
         $stok = null;
         $html = '';
-
         $announcement = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
@@ -470,7 +477,7 @@ class AnnouncementManager
             api_get_group_id()
         );
 
-        if (empty($announcement)) {
+        if (null === $announcement) {
             return '';
         }
 
@@ -483,10 +490,11 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
 
+        $url = api_get_self()."?".api_get_cidreq();
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
-            $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$id."\">".
+            $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
 
             $image_visibility = 'invisible';
@@ -497,11 +505,14 @@ class AnnouncementManager
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
-            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
+            $modify_icons .= "<a
+                href=\"".$url."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
+                $modify_icons .= "<a
+                    href=\"".$url."&action=delete&id=".$id."&sec_token=".$stok."\"
+                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -530,11 +541,13 @@ class AnnouncementManager
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
         if ($allow && api_is_allowed_to_edit(false, true)) {
-            $sent_to = $announcement->getUsersAndGroupSubscribedToResource();
-            $sentToForm = self::sent_to_form($sent_to);
+            $sentTo = $announcement->getUsersAndGroupSubscribedToResource();
+            $sentToForm = self::sent_to_form($sentTo);
+            $createdBy = '<br />'.get_lang('Created by').': '.
+                UserManager::formatUserFullName($announcement->getResourceNode()->getCreator());
             $html .= Display::tag(
                 'td',
-                get_lang('Visible to').': '.$sentToForm,
+                get_lang('Visible to').': '.$sentToForm.$createdBy,
                 ['class' => 'announcements_datum']
             );
         }
@@ -542,18 +555,18 @@ class AnnouncementManager
         $attachments = $announcement->getAttachments();
         if (count($attachments) > 0) {
             $repo = Container::getAnnouncementAttachmentRepository();
+            $deleteUrl = api_get_self()."?".api_get_cidreq()."&action=delete_attachment";
             /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
-                $url = $repo->getResourceFileDownloadUrl($attachment);
-                $html .= "<tr><td>";
+                $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+                $html .= '<tr><td>';
                 $html .= '<br/>';
-                $html .= Display::returnFontAwesomeIcon('paperclip');
+                $html .= Display::getMdiIcon('paperclip');
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
                 $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {
-                    $url = api_get_self()."?".api_get_cidreq().
-                        "&action=delete_attachment&id_attach=".$attachmentId."&sec_token=".$stok;
+                    $url = $deleteUrl."&id_attach=".$attachmentId."&sec_token=".$stok;
                     $html .= Display::url(
                         Display::return_icon(
                             'delete.png',
@@ -584,10 +597,10 @@ class AnnouncementManager
         }
 
         if (!isset($courseInfo['real_id'])) {
-            return false;
+            return 0;
         }
 
-        return false;
+        return 0;
 
         $courseId = $courseInfo['real_id'];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -619,7 +632,7 @@ class AnnouncementManager
      * @param bool   $sendToUsersInSession Send announcements to users inside a session.
      * @param int    $authorId
      *
-     * @return int false on failure, ID of the announcement on success
+     * @return int|bool false on failure, ID of the announcement on success
      */
     public static function add_announcement(
         $courseInfo,
@@ -670,13 +683,13 @@ class AnnouncementManager
                 $group
             );
         } else {
-            $send_to = CourseManager::separateUsersGroups($sentTo);
+            $send_to = AbstractResource::separateUsersGroups($sentTo);
             // Storing the selected groups
             if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
                     $group = api_get_group_entity($group);
                     if ($group) {
-                        $announcement->addGroupLink($course, $session, $group);
+                        $announcement->addGroupLink($course, $group, $session);
                     }
                 }
             }
@@ -717,7 +730,7 @@ class AnnouncementManager
      * @param string $file_comment
      * @param bool   $sendToUsersInSession
      *
-     * @return bool|int
+     * @return bool|CAnnouncement
      */
     public static function addGroupAnnouncement(
         $title,
@@ -729,13 +742,15 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $courseInfo = api_get_course_info();
-
         $order = self::getLastAnnouncementOrder($courseInfo);
-
+        $em = Database::getManager();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
+
         $announcement = new CAnnouncement();
         $announcement
             ->setContent($newContent)
@@ -743,18 +758,56 @@ class AnnouncementManager
             ->setEndDate(new DateTime($now))
             ->setDisplayOrder($order)
             ->setParent($course)
-            ->addCourseLink(
+            ;
+
+        $em->persist($announcement);
+
+        $sendToUsers = AbstractResource::separateUsersGroups($to_users);
+        // if nothing was selected in the menu then send to all the group
+        $sentToAllGroup = false;
+        if (empty($sendToUsers['groups']) && empty($sendToUsers['users'])) {
+            $announcement->addCourseLink(
                 $course,
-                api_get_session_entity($sessionId),
-                api_get_group_entity()
+                $session,
+                $group
             );
+            $sentToAllGroup = true;
+        }
 
-        $repo = Container::getAnnouncementRepository();
-        $repo->getEntityManager()->flush();
-        $last_id = $announcement->getIid();
+        if (false === $sentToAllGroup) {
+            if (!empty($sendToUsers['groups'])) {
+                foreach ($sendToUsers['groups'] as $groupItemId) {
+                    $groupItem = api_get_group_entity($groupItemId);
+                    if (null !== $groupItem) {
+                        $announcement->addCourseLink(
+                            $course,
+                            $session,
+                            $groupItem
+                        );
+                    }
+                }
+            }
 
-        // Store the attach file
-        if ($last_id) {
+            if (!empty($sendToUsers['users'])) {
+                foreach ($sendToUsers['users'] as $user) {
+                    $userToAdd = api_get_user_entity($user);
+                    if (null !== $userToAdd) {
+                        $announcement->addUserLink(
+                            $userToAdd,
+                            $course,
+                            $session,
+                            $group
+                        );
+                    }
+                }
+            }
+        }
+
+        $em->persist($announcement);
+        $em->flush();
+
+        $id = $announcement->getIid();
+        if ($id) {
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $announcement,
@@ -763,60 +816,14 @@ class AnnouncementManager
                 );
             }
 
-            $send_to_users = CourseManager::separateUsersGroups($to_users);
-
-            // if nothing was selected in the menu then send to all the group
-            $sentToAllGroup = false;
-            if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                /*api_item_property_update(
-                    $courseInfo,
-                    TOOL_ANNOUNCEMENT,
-                    $last_id,
-                    'AnnouncementAdded',
-                    api_get_user_id(),
-                    $groupInfo
-                );*/
-                $sentToAllGroup = true;
-            }
-
-            if (false === $sentToAllGroup) {
-                if (!empty($send_to_users['groups'])) {
-                    foreach ($send_to_users['groups'] as $group) {
-                        $groupInfo = GroupManager::get_group_properties($group);
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo
-                        );*/
-                    }
-                }
-
-                $groupInfo = GroupManager::get_group_properties($groupId);
-                if (!empty($send_to_users['users'])) {
-                    foreach ($send_to_users['users'] as $user) {
-                        /*api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $last_id,
-                            'AnnouncementAdded',
-                            api_get_user_id(),
-                            $groupInfo,
-                            $user
-                        );*/
-                    }
-                }
-            }
-
             if ($sendToUsersInSession) {
                 self::addAnnouncementToAllUsersInSessions($announcement);
             }
+
+            return $announcement;
         }
 
-        return $last_id;
+        return null;
     }
 
     /**
@@ -878,12 +885,12 @@ class AnnouncementManager
 
         // store, first the groups, then the users
         if (!empty($to)) {
-            $send_to = CourseManager::separateUsersGroups($to);
+            $send_to = AbstractResource::separateUsersGroups($to);
 
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $groupId) {
-                    $announcement->addGroupLink($course, $session, api_get_group_entity($groupId));
+                    $announcement->addGroupLink($course, api_get_group_entity($groupId), $session);
                 }
             }
 
@@ -897,14 +904,15 @@ class AnnouncementManager
 
             // Send to everyone
             if (isset($to[0]) && 'everyone' === $to[0]) {
+                $announcement->setParent($course);
                 $announcement->addCourseLink($course, $session, $group);
             }
         } else {
+            $announcement->setParent($course);
             $announcement->addCourseLink($course, $session);
         }
 
-        $repo->getEntityManager()->persist($announcement);
-        $repo->getEntityManager()->flush();
+        $repo->update($announcement);
 
         return $announcement;
     }
@@ -1122,7 +1130,6 @@ class AnnouncementManager
                 $output[] = "&nbsp;".get_lang('All');
             }
         }
-
         if (!empty($output)) {
             $output = array_filter($output);
             if (count($output) > 0) {
@@ -1173,7 +1180,7 @@ class AnnouncementManager
     {
         $return = 0;
         $courseId = api_get_course_int_id();
-
+        $em = Database::getManager();
         if (is_array($file) && 0 == $file['error']) {
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
@@ -1190,8 +1197,7 @@ class AnnouncementManager
                 );
             } else {
                 $repo = Container::getAnnouncementAttachmentRepository();
-                $attachment = new CAnnouncementAttachment();
-                $attachment
+                $attachment = (new CAnnouncementAttachment())
                     ->setFilename($file_name)
                     ->setPath(uniqid('announce_', true))
                     ->setComment($file_comment)
@@ -1204,19 +1210,10 @@ class AnnouncementManager
                         api_get_group_entity()
                     )
                 ;
-                $repo->getEntityManager()->persist($attachment);
-                $repo->getEntityManager()->flush();
+                $em->persist($attachment);
+                $em->flush();
 
-                $request = Container::getRequest();
-                $file = $request->files->get('user_upload');
-
-                if (!empty($file)) {
-                    $repo->addFile($attachment, $file);
-                    $repo->getEntityManager()->persist($attachment);
-                    $repo->getEntityManager()->flush();
-
-                    return 1;
-                }
+                $repo->addFileFromFileRequest($attachment, 'user_upload');
 
                 $return = 1;
             }
@@ -1308,9 +1305,10 @@ class AnnouncementManager
     {
         $id = (int) $id;
         $repo = Container::getAnnouncementAttachmentRepository();
+        $em = Database::getManager();
         $attachment = $repo->find($id);
-        $repo->getEntityManager()->remove($attachment);
-        $repo->getEntityManager()->flush();
+        $em->remove($attachment);
+        $em->flush();
 
         return true;
     }
@@ -1394,264 +1392,14 @@ class AnnouncementManager
         if (api_is_allowed_to_edit(false, true)) {
             $qb = $repo->getResourcesByCourse($course, $session, $group);
         } else {
-            $qb = $repo->getResourcesByCourseLinkedToUser(api_get_user_entity(), $course, $session, $group);
+            $user = api_get_user_entity();
+            if (null === $user) {
+                return [];
+            }
+            $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
         }
 
         $announcements = $qb->getQuery()->getResult();
-
-        /*
-        $allowUserEditSetting = api_get_course_setting('allow_user_edit_announcement');
-
-        $select = ' DISTINCT
-                        announcement.*,
-                        ip.visibility,
-                        ip.to_group_id,
-                        ip.insert_user_id,
-                        ip.insert_date,
-                        ip.lastedit_date';
-        $groupBy = ' GROUP BY announcement.iid';
-        if ($getCount) {
-            $groupBy = '';
-            $select = ' COUNT(DISTINCT announcement.iid) count';
-        }
-
-        $searchCondition = '';
-        if (!empty($titleToSearch)) {
-            $titleToSearch = Database::escape_string($titleToSearch);
-            $searchCondition .= " AND (title LIKE '%$titleToSearch%')";
-        }
-
-        if (!empty($userIdToSearch)) {
-            $userIdToSearch = (int) $userIdToSearch;
-            $searchCondition .= " AND (ip.insert_user_id = $userIdToSearch)";
-        }
-
-        $allowOnlyGroup = api_get_configuration_value('hide_base_course_announcements_in_group');
-        $extraGroupCondition = '';
-        if ($allowOnlyGroup) {
-            $extraGroupCondition = " AND ip.to_group_id = $group_id ";
-        }
-
-        $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
-
-        if ($allowDrhAccess && api_is_drh()) {
-            // DRH only can see visible
-            $searchCondition .= ' AND (ip.visibility = 1)';
-        }
-
-        if (api_is_allowed_to_edit(false, true) ||
-            ($allowUserEditSetting && !api_is_anonymous()) ||
-            ($allowDrhAccess && api_is_drh())
-        ) {
-            // A.1. you are a course admin with a USER filter
-            // => see only the messages of this specific user + the messages of the group (s)he is member of.
-            //if (!empty($user_id)) {
-            if (0) {
-                if (is_array($group_memberships) &&
-                    count($group_memberships) > 0
-                ) {
-                    $sql = "SELECT $select
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
-                            WHERE
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND
-                                ip.tool = 'announcement' AND
-                                (
-                                    ip.to_user_id = $user_id OR
-                                    ip.to_group_id IS NULL OR
-                                    ip.to_group_id IN (0, ".implode(", ", $group_memberships).")
-                                ) AND
-                                ip.visibility IN ('1', '0')
-                                $condition_session
-                                $searchCondition
-                            ORDER BY display_order DESC";
-                } else {
-                    $sql = "SELECT $select
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
-                            WHERE
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND
-                                ip.tool ='announcement' AND
-                                (ip.to_user_id = $user_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL) AND
-                                ip.visibility IN ('1', '0')
-                            $condition_session
-                            $searchCondition
-                            ORDER BY display_order DESC";
-                }
-            } elseif ($group_id != 0) {
-                // A.2. you are a course admin with a GROUP filter
-                // => see only the messages of this specific group
-                $sql = "SELECT $select
-                        FROM $tbl_announcement announcement
-                        INNER JOIN $tbl_item_property ip
-                        ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                        WHERE
-                            ip.tool='announcement' AND
-                            announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND
-                            ip.visibility<>'2' AND
-                            (ip.to_group_id = $group_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
-                            $condition_session
-                            $searchCondition
-                            $extraGroupCondition
-                        $groupBy
-                        ORDER BY display_order DESC";
-            } else {
-                // A.3 you are a course admin without any group or user filter
-                // A.3.a you are a course admin without user or group filter but WITH studentview
-                // => see all the messages of all the users and groups without editing possibilities
-                if (isset($isStudentView) && $isStudentView == 'true') {
-                    $sql = "SELECT $select
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                            WHERE
-                                ip.tool='announcement' AND
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND
-                                ip.visibility='1'
-                                $condition_session
-                                $searchCondition
-                            $groupBy
-                            ORDER BY display_order DESC";
-                } else {
-                    // A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
-                    // => see all the messages of all the users and groups with editing possibilities
-                    $sql = "SELECT $select
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                            WHERE
-                                ip.tool = 'announcement' AND
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId  AND
-                                (ip.visibility='0' OR ip.visibility='1')
-                                $condition_session
-                                $searchCondition
-                            $groupBy
-                            ORDER BY display_order DESC";
-                }
-            }
-        } else {
-            // STUDENT
-            if (is_array($group_memberships) && count($group_memberships) > 0) {
-                if ($allowUserEditSetting && !api_is_anonymous()) {
-                    if ($group_id == 0) {
-                        // No group
-                        $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".$user_id."' OR (
-                                (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) OR
-                                (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
-                            )
-                        ) ";
-                    } else {
-                        $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".$user_id."' OR ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id.")
-                        )";
-                        $cond_user_id .= $extraGroupCondition;
-                    }
-                } else {
-                    if ($group_id == 0) {
-                        $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
-                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
-                        ) ";
-                    } else {
-                        $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
-                            (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
-                        )";
-                        $cond_user_id .= $extraGroupCondition;
-                    }
-                }
-
-                $sql = "SELECT $select
-                        FROM $tbl_announcement announcement INNER JOIN
-                        $tbl_item_property ip
-                        ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                        WHERE
-                            announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND
-                            ip.tool='announcement'
-                            $cond_user_id
-                            $condition_session
-                            $searchCondition AND
-                            ip.visibility='1'
-                            $groupBy
-                        ORDER BY display_order DESC";
-            } else {
-                if ($user_id) {
-                    if ($allowUserEditSetting && !api_is_anonymous()) {
-                        $cond_user_id = " AND (
-                                ip.lastedit_user_id = '".api_get_user_id()."' OR
-                                ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
-                                (ip.to_group_id='0' OR ip.to_group_id IS NULL)
-                            )
-                        ) ";
-                    } else {
-                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
-                        (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
-                    }
-
-                    $sql = "SELECT $select
-                        FROM $tbl_announcement announcement
-                        INNER JOIN $tbl_item_property ip
-                        ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                        WHERE
-                            announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND
-                            ip.tool='announcement'
-                            $cond_user_id
-                            $condition_session
-                            $searchCondition
-                            AND ip.visibility='1'
-                            AND announcement.session_id IN(0, ".$session_id.")
-                        $groupBy
-                        ORDER BY display_order DESC";
-                } else {
-                    if (($allowUserEditSetting && !api_is_anonymous())) {
-                        $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL
-                        )";
-                    } else {
-                        $cond_user_id = " AND ip.to_group_id='0' OR ip.to_group_id IS NULL ";
-                    }
-
-                    $sql = "SELECT $select
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                            WHERE
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND
-                                ip.tool='announcement'
-                                $cond_user_id
-                                $condition_session
-                                $searchCondition  AND
-                                ip.visibility='1' AND
-                                announcement.session_id IN ( 0,".api_get_session_id().")
-                                $groupBy
-                            ";
-                }
-            }
-        }
-
-        if (!is_null($start) && !is_null($limit)) {
-            $start = (int) $start;
-            $limit = (int) $limit;
-            $sql .= " LIMIT $start, $limit";
-        }
-
-        $result = Database::query($sql);
-        if ($getCount) {
-            $result = Database::fetch_array($result, 'ASSOC');
-
-            return $result['count'];
-        }*/
 
         $iterator = 1;
         $bottomAnnouncement = $announcement_number;
@@ -1688,7 +1436,7 @@ class AnnouncementManager
             ICON_SIZE_SMALL
         );
 
-        $isTutor = false;
+        /*$isTutor = false;
         if (!empty($group_id)) {
             $groupInfo = GroupManager::get_group_properties(api_get_group_id());
             //User has access in the group?
@@ -1696,7 +1444,7 @@ class AnnouncementManager
                 api_get_user_id(),
                 $groupInfo
             );
-        }
+        }*/
 
         $results = [];
         /** @var CAnnouncement $announcement */
@@ -1712,7 +1460,7 @@ class AnnouncementManager
                 $groupReference = '';
                 $disableEdit = false;
                 $to = [];
-                $separated = CourseManager::separateUsersGroups($to);
+                $separated = AbstractResource::separateUsersGroups($to);
                 if (!empty($group_id)) {
                     // If the announcement was sent to many groups, disable edition inside a group
                     if (isset($separated['groups']) && count($separated['groups']) > 1) {
@@ -1783,7 +1531,6 @@ class AnnouncementManager
                     $image_visibility = 'invisible';
                     $setNewStatus = 'visible';
                     $alt_visibility = get_lang('Visible');
-
                     if ($visibility) {
                         $image_visibility = 'visible';
                         $setNewStatus = 'invisible';

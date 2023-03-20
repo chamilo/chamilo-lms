@@ -1,22 +1,27 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
+$course = api_get_course_entity();
 $courseId = api_get_course_int_id();
+$courseCode = api_get_course_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 
 $isTutor = false;
 if (!empty($groupId)) {
     $groupInfo = GroupManager::get_group_properties($groupId);
-    $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
+    $groupEntity = api_get_group_entity($groupId);
+    $isTutor = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
     if ($isTutor) {
         $isAllowedToEdit = true;
     }
@@ -26,7 +31,7 @@ switch ($action) {
     case 'preview':
         $allowToEdit = (
             api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         );
 
         $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
@@ -35,15 +40,15 @@ switch ($action) {
         }
 
         if (false === $allowToEdit && !empty($groupId)) {
-            $groupProperties = GroupManager::get_group_properties($groupId);
+            $groupEntity = api_get_group_entity($groupId);
             // Check if user is tutor group
-            $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
+            $isTutor = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
             if ($isTutor) {
                 $allowToEdit = true;
             }
 
             // Last chance ... students can send announcements.
-            if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
+            if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupEntity->getAnnouncementsState()) {
                 $allowToEdit = true;
             }
         }
@@ -75,12 +80,12 @@ switch ($action) {
                     $previewUsers[] = $student['user_id'];
                 }
 
-                $groupList = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
+                $groupList = GroupManager::get_group_list(null, $course, null, $sessionId);
                 foreach ($groupList as $group) {
                     $previewGroups[] = $group['iid'];
                 }
             } else {
-                $send_to = CourseManager::separateUsersGroups($users);
+                $send_to = AbstractResource::separateUsersGroups($users);
                 // Storing the selected groups
                 if (is_array($send_to['groups']) &&
                     !empty($send_to['groups'])
@@ -100,7 +105,7 @@ switch ($action) {
                 }
             }
         } else {
-            $send_to_users = CourseManager::separateUsersGroups($users);
+            $send_to_users = AbstractResource::separateUsersGroups($users);
             $sentToAllGroup = false;
             if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
                 $previewGroups[] = $groupId;

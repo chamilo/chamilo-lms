@@ -7,6 +7,8 @@ $this_section = SECTION_COURSES;
 
 api_protect_admin_script(true, true);
 
+$encryption = api_get_configuration_value('password_encryption');
+
 $export = [];
 $export['file_type'] = isset($_REQUEST['file_type']) ? $_REQUEST['file_type'] : null;
 $export['course_code'] = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : null;
@@ -63,7 +65,7 @@ $sql = "SELECT
             u.firstname 	AS FirstName,
             u.email 		AS Email,
             u.username	AS UserName,
-            ".(('none' != $_configuration['password_encryption']) ? " " : "u.password AS Password, ")."
+            ".(('none' !== $encryption) ? " " : "u.password AS Password, ")."
             u.auth_source	AS AuthSource,
             u.status		AS Status,
             u.official_code	AS OfficialCode,
@@ -87,7 +89,7 @@ if (strlen($course_code) > 0) {
                 $extraUrlJoin
 					WHERE
 						scu.c_id = $courseSessionId AND
-						scu.session_id = $sessionId 
+						scu.session_id = $sessionId
                     $extraUrlCondition
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
@@ -97,7 +99,7 @@ if (strlen($course_code) > 0) {
                 ON (u.id = su.user_id)
                 $extraUrlJoin
 					WHERE
-						su.session_id = $sessionId 
+						su.session_id = $sessionId
                     $extraUrlCondition
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$sessionInfo['name'].'_'.api_get_local_time();
@@ -120,7 +122,7 @@ if (strlen($course_code) > 0) {
 $data = [];
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
 if ('1' == $export['addcsvheader'] && 'csv' === $export['file_type']) {
-    if ('none' !== $_configuration['password_encryption']) {
+    if ('none' !== $encryption) {
         $data[] = [
             'UserId',
             'LastName',

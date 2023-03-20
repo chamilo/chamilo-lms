@@ -52,7 +52,6 @@ class LearnpathList
             $courseInfo = api_get_course_info();
         }
 
-        $this->course_code = $courseInfo['code'];
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 
@@ -70,10 +69,10 @@ class LearnpathList
         $now = api_get_utc_datetime();
         if ($check_publication_dates) {
             $qb->andWhere(
-                " (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
-                  (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NULL) OR
-                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
-                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NULL) "
+                " (resource.publishedOn IS NOT NULL AND resource.publishedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publishedOn IS NOT NULL AND resource.publishedOn < '$now' AND resource.expiredOn IS NULL) OR
+                  (resource.publishedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publishedOn IS NULL AND resource.expiredOn IS NULL) "
             );
         }
 
@@ -99,7 +98,6 @@ class LearnpathList
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
         $learningPaths = $qb->getQuery()->getResult();
-
         $shortcutRepository = Container::getShortcutRepository();
 
         /** @var CLp $lp */
@@ -121,7 +119,7 @@ class LearnpathList
                 $lp->getId(),
                 $session_id
             );*/
-            $visibility = $lp->isVisible($course, $session);
+            $visibility = $lp->isVisible($course);
 
             // If option is not true then don't show invisible LP to user
             if (false === $ignoreLpVisibility) {
@@ -129,7 +127,7 @@ class LearnpathList
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $lp,
                         $user_id,
-                        $courseInfo
+                        $course
                     );
                     if (false === $lpVisibility) {
                         continue;
@@ -139,7 +137,7 @@ class LearnpathList
 
             $this->list[$lp->getIid()] = [
                 'lp_type' => $lp->getLpType(),
-                'lp_session' => $lp->getSessionId(),
+                'lp_session' => 0,
                 'lp_name' => stripslashes($lp->getName()),
                 'lp_desc' => stripslashes($lp->getDescription()),
                 'lp_path' => $lp->getPath(),
@@ -154,12 +152,10 @@ class LearnpathList
                 'seriousgame_mode' => $lp->getSeriousgameMode(),
                 'lp_scorm_debug' => $lp->getDebug(),
                 'lp_display_order' => $lp->getDisplayOrder(),
-                'lp_preview_image' => stripslashes($lp->getPreviewImage()),
                 'autolaunch' => $lp->getAutolaunch(),
-                'session_id' => $lp->getSessionId(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
                 'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,
-                'publicated_on' => $lp->getPublicatedOn() ? $lp->getPublicatedOn()->format('Y-m-d H:i:s') : null,
+                'published_on' => $lp->getPublishedOn() ? $lp->getPublishedOn()->format('Y-m-d H:i:s') : null,
                 'expired_on' => $lp->getExpiredOn() ? $lp->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $lp['category_id'],
                 'subscribe_users' => $lp->getSubscribeUsers(),

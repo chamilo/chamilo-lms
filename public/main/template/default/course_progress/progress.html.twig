@@ -78,7 +78,7 @@
                                 {% endif %}
                                 {{ item.content }}
                                 <div class="btn-group btn-group-sm">
-                                    {{ item.toolbar }}
+                                    {{ extra[item.iid]['toolbar'] }}
                                 </div>
                             </td>
                             <td>
@@ -87,8 +87,8 @@
                                         <div class="btn-group">
                                             <a title="{{ 'Edit thematic section' | trans }}"
                                                href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.iid }}&width=700&height=500"
-                                               class="btn btn-outline-secondary btn-sm">
-                                                <i class="fas fa-pencil-alt"></i>
+                                               class="btn btn--secondary-outline btn-sm">
+                                                {{ 'pencil' | mdi_icon }}
                                             </a>
                                         </div>
                                     {% endif %}
@@ -111,8 +111,8 @@
                                     <div class="btn-group">
                                         <a title="{{ 'New thematic advance' | trans }}"
                                            href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.iid }}"
-                                           class="btn btn-outline-secondary btn-sm">
-                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                           class="btn btn--secondary-outline btn-sm">
+                                            {{ 'plus-circle' | mdi_icon }}
                                         </a>
                                     </div>
                                 {% endif %}
@@ -123,24 +123,24 @@
                                             <td style="width: 90%"
                                                 class="thematic_advance_content"
                                                 id="thematic_advance_content_id_{{ advance.iid }}">
-                                                <div id="thematic_advance_{{ advance.id }}">
+                                                <div id="thematic_advance_{{ advance.iid }}">
                                                 <strong>{{ advance.startDate | format_date }}</strong>
                                                 {{ advance.content }}
                                                 </div>
                                                 {% if tutor %}
                                                     <div class="toolbar-actions">
-                                                        <div id="thematic_advance_tools_{{ advance.id }}" class="thematic_advance_actions">
+                                                        <div id="thematic_advance_tools_{{ advance.iid }}" class="thematic_advance_actions">
                                                             <div class="btn-group btn-group-sm">
-                                                                <a class="btn btn-default btn-sm"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                <a class="btn btn--plain btn-sm"
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Edit' |trans }}">
-                                                                    <i class="fa fa-pen" aria-hidden="true"></i>
+                                                                    {{ 'pencil' | mdi_icon }}
                                                                 </a>
-                                                                <a class="btn btn-default btn-sm"
+                                                                <a class="btn btn--plain btn-sm"
                                                                    onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Delete' |trans }}">
-                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                    {{ 'delete' | mdi_icon }}
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -148,7 +148,7 @@
                                                 {% endif %}
                                                 </div>
                                             </td>
-                                            {% if advance.done_advance == 1 %}
+                                            {% if advance.doneAdvance == 1 %}
                                                 {% set color = "background-color:#E5EDF9;" %}
                                             {% else %}
                                                 {% set color = "background-color:#FFFFFF;" %}
@@ -156,17 +156,17 @@
                                             {% if tutor %}
                                                 <td
                                                     style="width: 10%; {{ color }}"
-                                                    id="td_done_thematic_{{ advance.id }}">
+                                                    id="td_done_thematic_{{ advance.iid }}">
                                                     {% set check = ""  %}
-                                                    {% if item.last_done == advance.id %}
+                                                    {% if extra[item.iid]['last_done'] == advance.iid %}
                                                         {% set check = "checked"  %}
                                                     {% endif %}
                                                     <input
                                                         type="radio"
                                                         class="done_thematic"
-                                                       id="done_thematic_{{ advance.id }}"
+                                                       id="done_thematic_{{ advance.iid }}"
                                                        name="done_thematic"
-                                                       value="{{ advance.id }}" {{ check }}
+                                                       value="{{ advance.iid }}" {{ check }}
                                                        onclick="updateDoneThematicAdvance(this.value);"
                                                     />
                                             {% else %}
@@ -191,19 +191,10 @@
     </div>
 </div>
 {% else %}
-    <div class="alert alert-info" role="alert">{{ 'There is no thematic section' | trans }}</div>
     {% if is_allowed_to_edit %}
-        <div id="no-data-view" class="tool-view">
-            <h2>{{ "Educational programming"|trans }}</h2>
-            <img src="{{ "course_progress.png"|icon(64) }}" width="64" height="64">
-            <div class="controls">
-                <a
-                    href="{{ url('legacy_main', {name : 'course_progress/index.php'}) }}?{{ course_url_params ~ "&action=thematic_add" ~ token }}"
-                    class="btn btn-outline-primary">
-                    {{ "Add thematic"|trans }}
-                </a>
-            </div>
-        </div>
+        {{ no_data }}
+    {% else %}
+        <div class="alert alert-info" role="alert">{{ 'There is no thematic section' | trans }}</div>
     {% endif %}
 {% endif %}
 {% endautoescape %}

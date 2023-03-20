@@ -32,7 +32,7 @@ $this_section = SECTION_COURSES;
 
 $em = Database::getManager();
 /** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+$courseCategoriesRepo = $em->getRepository(CourseCategory::class);
 // Get all possible teachers.
 $accessUrlId = api_get_current_access_url_id();
 
@@ -54,11 +54,6 @@ $htmlHeadXtra[] = '<script>
         setFocus();
     });
 </script>';
-
-/*$interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'user_portal.php',
-    'name' => get_lang('My courses'),
-];*/
 
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('Create a course request') : get_lang('Add a new course');
@@ -311,7 +306,7 @@ if ($form->validate()) {
     $course_values = $form->exportValues();
 
     $wanted_code = $course_values['wanted_code'];
-    $category_code = isset($course_values['category_id']) ? (int) $course_values['category_id'] : '';
+    $category_code = isset($course_values['category_id']) ? (string) $course_values['category_id'] : '';
     $title = $course_values['title'];
     $course_language = $course_values['course_language'];
     $exemplary_content = !empty($course_values['exemplary_content']);
@@ -341,22 +336,21 @@ if ($form->validate()) {
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;
-            $params['course_id'] = $category_code;
+            //$params['course_id'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
-            $course_info = CourseManager::create_course($params);
+            $course = CourseManager::create_course($params);
 
-            if (!empty($course_info) && isset($course_info['real_id'])) {
+            if (null !== $course) {
                 $request = Container::getRequest();
 
                 if ($request->files->has('picture')) {
                     $uploadFile = $request->files->get('picture');
                     // @todo add in repository
-                    $courseEntity = api_get_course_entity($course_info['real_id']);
                     $file = Container::getIllustrationRepository()->addIllustration(
-                        $courseEntity,
+                        $course,
                         api_get_user_entity(api_get_user_id()),
                         $uploadFile
                     );
@@ -371,12 +365,12 @@ if ($form->validate()) {
                 if ('true' === $splash) {
                     $url = Container::getRouter()->generate(
                         'chamilo_core_course_welcome',
-                        ['cid' => $course_info['real_id']]
+                        ['cid' => $course->getId()]
                     );
                     header('Location: '.$url);
                     exit;
                 } else {
-                    $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
+                    $url = api_get_course_url($course->getId());
                     header('Location: '.$url);
                     exit;
                 }
@@ -416,7 +410,7 @@ if ($form->validate()) {
                     Display::url(
                         get_lang('Back to courses list'),
                         api_get_path(WEB_PATH).'user_portal.php',
-                        ['class' => 'btn btn-primary']
+                        ['class' => 'btn btn--primary']
                     ),
                     ['style' => 'float: left; margin:0px; padding: 0px;']
                 );
@@ -443,7 +437,7 @@ if ($form->validate()) {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.'));
         // If the donation feature is enabled, show a message with a donate button
-        if (api_get_configuration_value('course_creation_donate_message_show') == true) {
+        if (true == api_get_configuration_value('course_creation_donate_message_show')) {
             $button = api_get_configuration_value('course_creation_donate_link');
             if (!empty($button)) {
                 $message .= Display::return_message(get_lang('DonateToTheProject').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);

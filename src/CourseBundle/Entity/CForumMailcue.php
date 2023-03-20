@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,66 +9,52 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumMailcue.
- *
  * @ORM\Table(
- *  name="c_forum_mailcue",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="thread", columns={"thread_id"}),
- *      @ORM\Index(name="user", columns={"user_id"}),
- *      @ORM\Index(name="post", columns={"post_id"})
- *  }
+ *     name="c_forum_mailcue",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="thread", columns={"thread_id"}),
+ *         @ORM\Index(name="user", columns={"user_id"}),
+ *         @ORM\Index(name="post", columns={"post_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CForumMailcue
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer")
      */
-    protected $threadId;
+    protected int $threadId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer")
      */
-    protected $postId;
+    protected int $postId;
 
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumMailcue
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -86,11 +74,9 @@ class CForumMailcue
     /**
      * Set threadId.
      *
-     * @param int $threadId
-     *
      * @return CForumMailcue
      */
-    public function setThreadId($threadId)
+    public function setThreadId(int $threadId)
     {
         $this->threadId = $threadId;
 
@@ -110,11 +96,9 @@ class CForumMailcue
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CForumMailcue
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -134,11 +118,9 @@ class CForumMailcue
     /**
      * Set postId.
      *
-     * @param int $postId
-     *
      * @return CForumMailcue
      */
-    public function setPostId($postId)
+    public function setPostId(int $postId)
     {
         $this->postId = $postId;
 

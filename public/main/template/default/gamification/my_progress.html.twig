@@ -4,7 +4,7 @@
             <div class="panel-body">
                 <div class="profile-user">
                     {{ user_avatar }}
-                    <div class="username">{{ user|format_user_full_name }}</div>
+                    <div class="username">{{ user|user_complete_name }}</div>
                     <div class="star-progress">
                         <span class="float-right">{{ 'XPoints'|get_lang|format(gamification_points) }}</span>
 

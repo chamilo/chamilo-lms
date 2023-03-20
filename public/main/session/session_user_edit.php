@@ -9,8 +9,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
-SessionManager::protectSession($sessionId);
-
+$session = api_get_session_entity($sessionId);
+SessionManager::protectSession($session);
 $sessionInfo = api_get_session_info($sessionId);
 
 if (empty($sessionInfo)) {
@@ -51,6 +51,7 @@ if (0 == count($userAccess)) {
     $days = SessionManager::getDayLeftInSession($sessionInfo, $userId);
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
     $firstAccessString = api_convert_and_format_date($userAccess['login_course_date'], DATE_FORMAT_SHORT, 'UTC');
+    $duration = 0;
     if ($days > 0) {
         $userSubscription = SessionManager::getUserSession($userId, $sessionId);
         $duration = $sessionInfo['duration'];

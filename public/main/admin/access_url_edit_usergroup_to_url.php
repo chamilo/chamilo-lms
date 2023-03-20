@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction(['searchUserGroupAjax', 'UserGroup', 'searchUserGroupAjax']);
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -93,14 +93,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('Add group to URL'), ''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
+echo Display::toolbarAction(
+    'url',
+    [
+        Display::url(
+            Display::return_icon('view_more_stats.gif', get_lang('Add group to URL'), ''),
+            api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
+        ),
+    ]
 );
-echo '</div>';
 
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 $noUserGroupList = $userGroupList = [];
 $ajax_search = 'unique' === $add_type ? true : false;
@@ -229,19 +232,19 @@ $url_list = UrlManager::get_url_data();
                 <br><br><br><br>
                 <?php if ($ajax_search) {
             ?>
-                    <button class="btn btn-default" type="button"
+                    <button class="btn btn--plain" type="button"
                             onclick="remove_item(document.getElementById('destination_users'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
                 <?php
         } else {
             ?>
-                    <button class="btn btn-default" type="button"
+                    <button class="btn btn--plain" type="button"
                             onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
                     <br/><br/>
-                    <button class="btn btn-default" type="button"
+                    <button class="btn btn--plain" type="button"
                             onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
@@ -263,7 +266,7 @@ $url_list = UrlManager::get_url_data();
         </div>
         <div class="row">
             <div class="col-xs-12 text-center">
-                <button class="save btn btn-primary" onclick="valide()">
+                <button class="save btn btn--primary" onclick="valide()">
                     <span class="fa fa-save fa-fw" aria-hidden="true"></span>
                     <?php echo isset($_GET['add']) ? get_lang('Add group to URL') : get_lang('Edit groups for one URL'); ?>
                 </button>

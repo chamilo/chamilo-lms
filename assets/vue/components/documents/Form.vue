@@ -1,85 +1,81 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        cols="12"
-        sm="6"
-        md="6"
-      >
-        <b-form-input
-          v-model="item.title"
-          :error-messages="titleErrors"
-          :placeholder="$t('Title')"
-          required
-          @input="$v.item.title.$touch()"
-          @blur="$v.item.title.$touch()"
+  <div>
+    <div class="field">
+      <div class="p-float-label">
+        <InputText
+          id="item_title"
+          v-model="v$.item.title.$model"
+          :class="{ 'p-invalid': v$.item.title.$invalid }"
         />
-      </b-col>
-    </b-row>
-    <br>
-  </b-form>
+        <label
+          v-t="'Title'"
+          :class="{ 'p-error': v$.item.title.$invalid }"
+          for="item_title"
+        />
+      </div>
+      <small
+        v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
+        v-t="v$.item.title.required.$message"
+        class="p-error"
+      />
+    </div>
+
+    <slot />
+
+    <div class="text-right">
+      <Button
+        :disabled="v$.item.$invalid"
+        :label="t('Save')"
+        class="p-button-secondary"
+        icon="mdi mdi-content-save"
+        type="button"
+        @click="btnSaveOnClick"
+      />
+    </div>
+  </div>
 </template>
 
-<script>
-import has from 'lodash/has';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
-import { mapActions } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
+<script setup>
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { useI18n } from 'vue-i18n';
+import { computed, defineEmits, defineProps } from 'vue';
 
-export default {
-  name: 'DocumentsForm',
-  mixins: [validationMixin],
-  props: {
-    values: {
-      type: Object,
-      required: true
-    },
-    errors: {
-      type: Object,
-      default: () => {}
-    },
-    initialValues: {
-      type: Object,
-      default: () => {}
-    },
-  },
-  data() {
-    return {
-      title: null,
-      parentResourceNodeId: null,
-    };
-  },
-  computed: {
-    // eslint-disable-next-line
-    item() {
-      return this.initialValues || this.values;
-    },
-    titleErrors() {
-      const errors = [];
+const { t } = useI18n();
 
-      if (!this.$v.item.title.$dirty) return errors;
-      has(this.violations, 'title') && errors.push(this.violations.title);
-      !this.$v.item.title.required && errors.push(this.$t('Field is required'));
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => {},
+  }
+});
 
-      return errors;
-    },
-    violations() {
-      return this.errors || {};
-    }
-  },
-  created () {
-  },
-  methods: {
-  },
-  validations: {
+const emit = defineEmits([
+  'update:modelValue',
+  'submit',
+]);
+
+const v$ = useVuelidate(
+  {
     item: {
       title: {
         required,
       },
-      parentResourceNodeId: {
-      },
-    }
+      parentResourceNodeId: {},
+    },
+  },
+  {
+    item: computed(() => props.modelValue),
   }
-};
+);
+
+function btnSaveOnClick () {
+  const item = { ...props.modelValue, ...v$.value.item.$model };
+
+  emit('update:modelValue', item);
+
+  emit('submit', item);
+}
 </script>

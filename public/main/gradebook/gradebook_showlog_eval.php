@@ -18,23 +18,23 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
-    'name' => get_lang('AssessmentsQualifyLog'),
+    'name' => get_lang('Assessment history'),
 ];
 $this_section = SECTION_COURSES;
 Display::display_header('');
-echo Display::page_header(get_lang('AssessmentsQualifyLog'));
+echo Display::page_header(get_lang('Assessment history'));
 
 $t_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $visible_log = Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
-$sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at, us.user_id
+$sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at, us.id as user_id
         FROM $t_linkeval_log le
         INNER JOIN $t_user us
-        ON le.user_id_log = us.user_id
-        WHERE 
-            id_linkeval_log=".$evaledit[0]->get_id()." AND 
+        ON le.user_id_log = us.id
+        WHERE
+            id_linkeval_log=".$evaledit[0]->get_id()." AND
             type = 'evaluation'
         ";
 $result = Database::query($sql);

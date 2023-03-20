@@ -34,7 +34,7 @@ class SubscribeUserToSessionFromUsernameTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 

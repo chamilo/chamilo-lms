@@ -1,18 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import 'bootstrap.scss';
+.btn-blue {
+  @apply bg-primary text-white;
+}
+.btn-blue:hover {
+}
 
-@import "~@fortawesome/fontawesome-free/css/all.css";
 @import '~cropper/dist/cropper.css';
-@import '~flag-icon-css/sass/flag-icon.scss';
+//@import "~flag-icons/sass/flag-icons.scss";
 @import "~select2/dist/css/select2.css";
 @import "~bootstrap-daterangepicker/daterangepicker.css";
-//@import "~bootstrap-select/sass/bootstrap-select";
-//@import '~pretty-checkbox/src/pretty-checkbox.scss';
 //@import '~jquery-ui/themes/base/all.css';
+
+@layer components {
+  .card {
+    @apply rounded shadow-lg w-full;
+  }
+
+  // Buttons with icons.
+  .btn > .svg {
+    @apply -ml-1 mr-1 h-4 w-5 fill-current ;
+  }
+
+  // Forms.
+
+  .help-block {
+    @apply mt-2 text-caption;
+  }
+
+  .has-error .ch-form-label {
+    @apply h-8;
+  }
+
+  .has-error .help-block {
+    @apply italic text-caption;
+  }
+
+  .has-error .ch-form-control {
+  }
+
+  // List
+
+  .list-group {
+    @apply flex flex-col mr-4;
+  }
+
+  .list-group-item {
+    @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3;
+  }
+
+  // Alerts
+
+  .alert {
+    @apply px-6 py-4 border-0 rounded relative mb-4;
+  }
+
+  .alert-info {
+  }
+
+  .alert-warning {
+  }
+
+  .alert-success {
+  }
+
+  .alert-danger {
+  }
+
+  // Tabs
+
+  .tab_wrapper nav {
+    @apply card flex flex-row justify-between gap-4;
+  }
+
+  .tab_wrapper nav a {
+    @apply p-4;
+  }
+
+  // Calendar
+
+  #calendar .fc-toolbar-chunk {
+    @apply flex flex-row;
+  }
+
+  // Page header
+
+  .page-header {
+    @apply text-h3 flex flex-row gap-2;
+  }
+
+  #no-data-view {
+    @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased;
+  }
+
+  .pull-right {
+    @apply flex flex-row;
+  }
+
+  .header-border-bottom {
+    border-bottom: 1px solid #e4e9ed !important;
+  }
+
+  .ch-tool-icon {
+    @apply font-extrabold text-primary;
+  }
+  .ch-tool-icon-disabled {
+    @apply font-extrabold text-gray-50;
+  }
+  .ch-tool-icon-gradient {
+    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient;
+  }
+  .ch-tool-icon-button {
+    @apply font-extrabold bg-clip-text text-gray-90;
+  }
+
+  // Forms
+  input {
+    appearance: auto !important;
+    border-width: 1px !important;
+  }
+
+  .has-error input, .has-error select {
+    border-color: red !important;
+  }
+
+  // Special
+
+  // Progress bars
+  .progress {
+    @apply rounded-sm ring-1 text-center min-h-full ml-12 mr-4;
+  }
+  .progress .progress-bar {
+  }
+
+  // Pager
+  .pager-bar {
+  }
+  .pager-bar .pager-select {
+  }
+  .pager-bar .pager-counter {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper .btn-link {
+    @apply -mt-2 mx-2;
+  }
+
+  // free-jqGrid override
+  .ui-jqgrid-bootstrap.modal {
+    @apply bg-white;
+  }
+}
+
 @import "scss/index.scss";
 
+// tabs
+.tab-content {
+  > .tab-pane {
+    display: none;
+  }
+  > .active {
+    display: block;
+  }
+}
+
+.mdi {
+  @apply align-middle inline-flex leading-none;
+}
+
+//@import 'primevue-md-light-indigo/theme.css';
+//@import '~primevue/resources/primevue.min.css';
+//@import '~primeflex/primeflex.css';
+//@import "~primeicons/primeicons.css";
+
+@import 'primeflex/src/_variables.scss';
+@import 'primeflex/src/_formlayout.scss';
+
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
-//
-//@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
-//@import "~jquery-contextmenu/dist/jquery.contextMenu.css";
-//@import '~pretty-checkbox/src/pretty-checkbox.scss';
+@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
+@import "~timepicker/jquery.timepicker.min.css";
+@import "~qtip2/dist/jquery.qtip.min.css";

@@ -100,7 +100,7 @@ if (!empty($session_list)) {
         }
     }
 }
-$ajax_search = 'unique' == $add_type ? true : false;
+$ajax_search = 'unique' === $add_type ? true : false;
 
 // Checking for extra field with filter on
 
@@ -108,7 +108,7 @@ $xajax->processRequests();
 
 Display::display_header($tool_name);
 
-if ('multiple' == $add_type) {
+if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
 } else {
@@ -116,9 +116,12 @@ if ('multiple' == $add_type) {
     $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
-echo '<div class="actions">';
-echo '<a href="promotions.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction(
+    'url',
+    [
+        '<a href="promotions.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>',
+    ]
+);
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
@@ -209,17 +212,17 @@ if (!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
       ?>
-    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
+    <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
         <em class="fa fa-arrow-left"></em>
     </button>
   <?php
   } else {
       ?>
-    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
+    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
         <em class="fa fa-arrow-right"></em>
     </button>
     <br /><br />
-    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
+    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
         <em class="fa fa-arrow-left"></em>
     </button>
     <?php
@@ -243,7 +246,7 @@ if (!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe sessions to promotion').'</button>';
+        echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe sessions to promotion').'</button>';
         ?>
     </td>
 </tr>

@@ -100,6 +100,8 @@ class SortableTable extends HTML_Table
      */
     public $table_data;
     public $hideItemSelector;
+    // Hide table navigation, better to be use when exporting table to PDF.
+    public $hideNavigation = false;
 
     /**
      * @var array Columns to hide
@@ -143,6 +145,7 @@ class SortableTable extends HTML_Table
         if (empty($attributes)) {
             $attributes = [];
             $attributes['class'] = 'table table-hover table-striped table-bordered data_table';
+            //$attributes['class'] = 'q-table';
             $attributes['id'] = $table_id;
         }
 
@@ -165,7 +168,6 @@ class SortableTable extends HTML_Table
             $this->cleanUrlSessionParams();
         }
         // Allow to change paginate in multiples tabs
-        //Session::erase($this->param_prefix.'per_page');
         $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
 
         // If per page changed, then reset the page to 1
@@ -223,8 +225,6 @@ class SortableTable extends HTML_Table
                     $this->direction = 'DESC';
                 }
             }
-        } else {
-            $this->direction = 'ASC';
         }
 
         Session::write($this->param_prefix.'per_page', $this->per_page);
@@ -300,32 +300,17 @@ class SortableTable extends HTML_Table
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
-            $params['prevImg'] = Display:: return_icon(
-                'action_prev.png',
-                get_lang('Previous page'),
-                $icon_attributes
-            );
-            $params['nextImg'] = Display:: return_icon(
-                'action_next.png',
-                get_lang('Next page'),
-                $icon_attributes
-            );
-            $params['firstPageText'] = Display:: return_icon(
-                'action_first.png',
-                get_lang('First page'),
-                $icon_attributes
-            );
-            $params['lastPageText'] = Display:: return_icon(
-                'action_last.png',
-                get_lang('Last page'),
-                $icon_attributes
-            );
+            $params['prevImg'] = Display::getMdiIcon('step-backward');
+            $params['nextImg'] = Display::getMdiIcon('step-forward');
+            $params['firstPageText'] = Display::getMdiIcon('step-backward-2');
+            $params['lastPageText'] = Display::getMdiIcon('step-forward-2');
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';
             $params['lastPagePost'] = '';
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
+            $params['curPageLinkClassName'] = 'ch-pager';
             $query_vars = array_keys($_GET);
             $query_vars_needed = [
                 $this->param_prefix.'column',
@@ -380,97 +365,101 @@ class SortableTable extends HTML_Table
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
+
+        if ($empty_table) {
+            return '';
+        }
+
+        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+        $table_id = 'form_'.$this->table_name.'_id';
         $html = '';
-        if (!$empty_table) {
-            $table_id = 'form_'.$this->table_name.'_id';
-            $form = $this->get_page_select_form();
-            $nav = $this->get_navigation_html();
-
-            // Only show pagination info when there are items to paginate
-            if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html = '<div class="card-action">';
-                $html .= '<div class="row">';
-                $html .= '<div class="col-12 col-md-4">';
-                $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
+        $form = '';
+        $nav = '';
+        if (false === $this->hideNavigation) {
+            // Only show pagination if there are more than 1 page.
+            if ($this->get_pager()->numPages() > 1) {
+                $form = $this->get_page_select_form();
+                $nav = $this->get_navigation_html();
+                $html = '<div class="q-card">';
+                $html .= '<div class="flex flex-row justify-between pager-bar">';
+                $html .= '<div class="col">';
+                $html .= '<div class="pb-2 pt-2 pager-select">'.$form.'</div>';
                 $html .= '</div>';
-                $html .= '<div class="col-12 col-md-4">';
-                $html .= '<div class="page-number pb-2 pt-2">'.$this->get_table_title().'</div>';
+                $html .= '<div class="col">';
+                $html .= '<div class="row justify-center pager-counter">'.$this->get_table_title().'</div>';
                 $html .= '</div>';
-                $html .= '<div class="col-12 col-md-4">';
-                $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
+                $html .= '<div class="col">';
+                $html .= '<div class="row justify-end pager-jumper">'.$nav.'</div>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
-            }
-
-            if (count($this->form_actions) > 0) {
-                $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-                $html .= '<form id ="'.$table_id.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
             }
         }
 
-        $html .= '<div class="table-responsive">'.$content.'</div>';
+        if (count($this->form_actions) > 0) {
+            $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+            $html .= '<form
+                id ="'.$table_id.'"
+                class="form-search"
+                method="post"
+                action="'.api_get_self().'?'.$params.'"
+                name="form_'.$this->table_name.'">';
+        }
 
-        if (!$empty_table) {
-            if (!empty($this->additional_parameters)) {
-                foreach ($this->additional_parameters as $key => $value) {
-                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';
-                }
+        //$html .= '<div class="table-responsive">'.$content.'</div>';
+        $html .= '<div class="">';
+        $html .= $content.'</div>';
+
+        if (!empty($this->additional_parameters)) {
+            foreach ($this->additional_parameters as $key => $value) {
+                $html .= '<input type="hidden" name="'.Security::remove_XSS($key).'" value ="'
+                    .Security::remove_XSS($value).'" />';
             }
-            $html .= '<input type="hidden" name="action">';
-            $html .= '<div class="card-action">';
-            $html .= '<div class="row">';
+        }
+        $html .= '<input type="hidden" name="action">';
+        $html .= '<div class="q-card p-2 mb-4">';
+        $html .= '<div class="flex flex-row justify-between">';
+
+        if (count($this->form_actions) > 0) {
+            $html .= '<div class="flex flex-row justify-between" role="group">';
+            $html .= '<a
+                class="btn btn--primary"
+                href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
+                onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.
+                get_lang('Select all').'</a>';
+            $html .= '<a
+                class="btn btn--primary"
+                href="?'.$params.'"
+                onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.
+                get_lang('Deselect all').'</a> ';
+
+            $items = [];
+            foreach ($this->form_actions as $action => $label) {
+                $items[] = [
+                    'href' => 'javascript:void();',
+                    'onclick' => "javascript:action_click(this, '$table_id');",
+                    'title' => $label,
+                    'data-action' => $action,
+                ];
+            }
+            $html .= Display::groupButtonWithDropDown(get_lang('Detail'), $items);
+        } else {
+            $html .= $form;
+        }
+
+        $html .= '</div>';
+
+        // Pagination
+        if ($this->get_total_number_of_items() > $this->default_items_per_page) {
             $html .= '<div class="col-12 col-md-6">';
-            $html .= '<div class="page-action pb-2 pt-2">';
+            $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
+            $html .= '</div>';
+        }
 
-            if (count($this->form_actions) > 0) {
-                $html .= '<div class="btn-group" role="group">';
-                $html .= '<a
-                    class="btn btn-outline-primary"
-                    href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
-                    onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('Select all').'</a>';
-                $html .= '<a
-                    class="btn btn-outline-primary"
-                    href="?'.$params.'"
-                    onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
-                $html .= '<div class="btn-group" role="group">
-                            <button
-                                id="'.$table_id.'_actions"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                class="btn btn-outline-primary dropdown-toggle"
-                                onclick="javascript:return false;">'.
-                                get_lang('Detail').'
-                            </button>
-                          ';
-                $html .= '<div class="dropdown-menu" aria-labelledby="'.$table_id.'_actions" >';
-                foreach ($this->form_actions as $action => &$label) {
-                    $html .= '<a
-                        class="dropdown-item"
-                        data-action ="'.$action.'"
-                        href="#"
-                        onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>';
-                }
-                $html .= '</div>';
-                $html .= '</div>'; //btn-group
-                $html .= '</div>';
-            } else {
-                $html .= $form;
-            }
-
-            $html .= '</div>';
-            $html .= '</div>';
-            // Pagination
-            if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html .= '<div class="col-12 col-md-6">';
-                $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
-                $html .= '</div>';
-            }
-
-            $html .= '</div>';
-            $html .= '</div>';
-            if (count($this->form_actions) > 0) {
-                $html .= '</form>';
-            }
+        $html .= '</div>'; //btn-group
+        $html .= '</div>';
+        if (count($this->form_actions) > 0) {
+            $html .= '</form>';
         }
 
         return $html;
@@ -522,7 +511,8 @@ class SortableTable extends HTML_Table
             $html .= '<div class="clear"></div>';
             if (count($this->form_actions) > 0) {
                 $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-                $html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+                $html .= '<form method="post" action="'.api_get_self().'?'.$params
+                    .'" name="form_'.$this->table_name.'">';
             }
         }
         // Getting the items of the table
@@ -597,7 +587,8 @@ class SortableTable extends HTML_Table
             $html .= '<div class="clear"></div>';
             if (count($this->form_actions) > 0) {
                 $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-                $html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+                $html .= '<form method="post" action="'.api_get_self().'?'.$params
+                    .'" name="form_'.$this->table_name.'">';
             }
         }
 
@@ -633,8 +624,7 @@ class SortableTable extends HTML_Table
                 $i = 0;
                 $rows = '';
                 foreach ($row as &$element) {
-                    if ($filter ||
-                        isset($visibility_options[$i]) && $visibility_options[$i]
+                    if ($filter || isset($visibility_options[$i]) && $visibility_options[$i]
                     ) {
                         $rows .= '<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
                     }
@@ -671,11 +661,10 @@ class SortableTable extends HTML_Table
         $pager = $this->get_pager();
         $pager_links = $pager->getLinks();
         $nav = $pager_links['first'].' '.$pager_links['back'];
-        $nav .= '<div class="btn btn-outline-secondary">'.$pager->getCurrentPageId().' / '.$pager->numPages().' </div>';
+        $nav .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
         $nav .= $pager_links['next'].' '.$pager_links['last'];
-        $html = Display::tag('div', $nav, ['class' => 'btn-group btn-group-sm', 'role' => 'group']);
 
-        return $html;
+        return $nav;
     }
 
     /**
@@ -692,7 +681,6 @@ class SortableTable extends HTML_Table
             $count = 1;
             foreach ($table_data as &$row) {
                 $row = $this->filter_data($row);
-
                 $newRow = [];
                 if (!empty($this->columnsToHide)) {
                     $counter = 0;
@@ -763,7 +751,7 @@ class SortableTable extends HTML_Table
      * Get the HTML-code which represents a form to select how many items a page
      * should contain.
      */
-    public function get_page_select_form()
+    public function get_page_select_form(): string
     {
         $total_number_of_items = $this->get_total_number_of_items();
         if ($total_number_of_items <= $this->default_items_per_page) {
@@ -783,10 +771,11 @@ class SortableTable extends HTML_Table
             $param = array_merge($param, $this->additional_parameters);
         }
 
-        foreach ($param as $key => &$value) {
+        foreach ($param as $key => $value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
-        $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
+        $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
+            .'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
 
         $rowList = api_get_configuration_value('table_row_list');
@@ -798,19 +787,21 @@ class SortableTable extends HTML_Table
             if ($total_number_of_items <= $nr) {
                 break;
             }
-            $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
+            $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr
+                .'</option>';
         }
 
-        $result[] = '<option value="'.$total_number_of_items.'" '.($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
-        //}
+        $result[] = '<option value="'.$total_number_of_items.'" '
+            .($total_number_of_items == $this->per_page ? 'selected="selected"' : '')
+            .'>'.api_ucfirst(get_lang('All')).'</option>';
+
         $result[] = '</select>';
         $result[] = '<noscript>';
-        $result[] = '<button class="btn btn-success" type="submit">'.get_lang('Save').'</button>';
+        $result[] = '<button class="btn btn--success" type="submit">'.get_lang('Save').'</button>';
         $result[] = '</noscript>';
         $result[] = '</form>';
-        $result = implode("\n", $result);
 
-        return $result;
+        return implode("\n", $result);
     }
 
     /**
@@ -1107,7 +1098,7 @@ class SortableTable extends HTML_Table
      * function has the same parameters as defined here.
      *
      * @param int    $from      index of the first item to return
-     * @param int    $per_page  The number of items to return
+     * @param int    $perPage   The number of items to return
      * @param int    $column    The number of the column on which the data should be
      * @param bool   $sort      Whether to sort or not
      *                          sorted
@@ -1118,7 +1109,7 @@ class SortableTable extends HTML_Table
      */
     public function get_table_data(
         $from = null,
-        $per_page = null,
+        $perPage = null,
         $column = null,
         $direction = null,
         $sort = null

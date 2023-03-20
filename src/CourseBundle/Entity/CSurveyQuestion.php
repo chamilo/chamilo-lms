@@ -1,141 +1,134 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CSurveyQuestion.
- *
  * @ORM\Table(
- *  name="c_survey_question",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="idx_survey_q_qid", columns={"question_id"})
- *  }
+ *     name="c_survey_question",
+ *     indexes={
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyQuestionRepository")
  */
 class CSurveyQuestion
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
-    protected $cId;
+    protected ?CSurveyQuestion $parent = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="question_id", type="integer")
+     * @var Collection|CSurveyQuestion[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="parent")
      */
-    protected $questionId;
+    protected Collection $children;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
+     * @var Collection|CSurveyQuestionOption[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
      */
-    protected $surveyId;
+    protected Collection $options;
 
     /**
-     * @var string
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade={"remove"})
+     * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
+     */
+    protected ?CSurveyQuestionOption $parentOption = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="questions")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected CSurvey $survey;
+
+    /**
+     * @var Collection|CSurveyAnswer[]
      *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade={"remove"})
+     */
+    protected Collection $answers;
+
+    /**
      * @ORM\Column(name="survey_question", type="text", nullable=false)
      */
-    protected $surveyQuestion;
+    #[Assert\NotBlank]
+    protected string $surveyQuestion;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
      */
-    protected $surveyQuestionComment;
+    protected ?string $surveyQuestionComment = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=250, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="display", type="string", length=10, nullable=false)
      */
-    protected $display;
+    protected string $display;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
-    protected $sort;
+    protected int $sort;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
      */
-    protected $sharedQuestionId;
+    protected ?int $sharedQuestionId = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_value", type="integer", nullable=true)
      */
-    protected $maxValue;
+    protected ?int $maxValue = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
      */
-    protected $surveyGroupPri;
+    protected int $surveyGroupPri;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_sec1", type="integer", nullable=false)
      */
-    protected $surveyGroupSec1;
+    protected int $surveyGroupSec1;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
      */
-    protected $surveyGroupSec2;
+    protected int $surveyGroupSec2;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_required", type="boolean", options={"default": false})
      */
-    protected $isMandatory = false;
+    protected bool $isMandatory = false;
 
-    /**
-     * CSurveyQuestion constructor.
-     */
     public function __construct()
     {
-        $this->questionId = 0;
-        $this->surveyGroupPri = '';
-        $this->surveyGroupSec1 = '';
-        $this->surveyGroupSec2 = '';
+        $this->children = new ArrayCollection();
+        $this->answers = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->surveyGroupPri = 0;
+        $this->surveyGroupSec1 = 0;
+        $this->surveyGroupSec2 = 0;
     }
 
     public function getIid(): int
@@ -143,69 +136,19 @@ class CSurveyQuestion
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
-     * Set surveyQuestion.
-     *
-     * @param string $surveyQuestion
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyQuestion($surveyQuestion)
+    public function setSurveyQuestion(string $surveyQuestion): self
     {
         $this->surveyQuestion = $surveyQuestion;
 
         return $this;
     }
 
-    /**
-     * Get surveyQuestion.
-     *
-     * @return string
-     */
-    public function getSurveyQuestion()
+    public function getSurveyQuestion(): string
     {
         return $this->surveyQuestion;
     }
 
-    /**
-     * Set surveyQuestionComment.
-     *
-     * @param string $surveyQuestionComment
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSurveyQuestionComment($surveyQuestionComment)
+    public function setSurveyQuestionComment(string $surveyQuestionComment): self
     {
         $this->surveyQuestionComment = $surveyQuestionComment;
 
@@ -222,14 +165,7 @@ class CSurveyQuestion
         return $this->surveyQuestionComment;
     }
 
-    /**
-     * Set type.
-     *
-     * @param string $type
-     *
-     * @return CSurveyQuestion
-     */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -246,14 +182,7 @@ class CSurveyQuestion
         return $this->type;
     }
 
-    /**
-     * Set display.
-     *
-     * @param string $display
-     *
-     * @return CSurveyQuestion
-     */
-    public function setDisplay($display)
+    public function setDisplay(string $display): self
     {
         $this->display = $display;
 
@@ -270,14 +199,7 @@ class CSurveyQuestion
         return $this->display;
     }
 
-    /**
-     * Set sort.
-     *
-     * @param int $sort
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSort($sort)
+    public function setSort(int $sort): self
     {
         $this->sort = $sort;
 
@@ -294,16 +216,9 @@ class CSurveyQuestion
         return $this->sort;
     }
 
-    /**
-     * Set sharedQuestionId.
-     *
-     * @param int $sharedQuestionId
-     *
-     * @return CSurveyQuestion
-     */
-    public function setSharedQuestionId($sharedQuestionId)
+    public function setSharedQuestionId(int $sharedQuestionId): self
     {
-        $this->sharedQuestionId = (int) $sharedQuestionId;
+        $this->sharedQuestionId = $sharedQuestionId;
 
         return $this;
     }
@@ -318,14 +233,7 @@ class CSurveyQuestion
         return $this->sharedQuestionId;
     }
 
-    /**
-     * Set maxValue.
-     *
-     * @param int $maxValue
-     *
-     * @return CSurveyQuestion
-     */
-    public function setMaxValue($maxValue)
+    public function setMaxValue(int $maxValue): self
     {
         $this->maxValue = $maxValue;
 
@@ -345,11 +253,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupPri.
      *
-     * @param int $surveyGroupPri
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupPri($surveyGroupPri)
+    public function setSurveyGroupPri(int $surveyGroupPri)
     {
         $this->surveyGroupPri = $surveyGroupPri;
 
@@ -369,11 +275,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupSec1.
      *
-     * @param int $surveyGroupSec1
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec1($surveyGroupSec1)
+    public function setSurveyGroupSec1(int $surveyGroupSec1)
     {
         $this->surveyGroupSec1 = $surveyGroupSec1;
 
@@ -393,11 +297,9 @@ class CSurveyQuestion
     /**
      * Set surveyGroupSec2.
      *
-     * @param int $surveyGroupSec2
-     *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec2($surveyGroupSec2)
+    public function setSurveyGroupSec2(int $surveyGroupSec2)
     {
         $this->surveyGroupSec2 = $surveyGroupSec2;
 
@@ -414,68 +316,94 @@ class CSurveyQuestion
         return $this->surveyGroupSec2;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CSurveyQuestion
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CSurveyQuestion
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set isMandatory.
-     */
     public function isMandatory(): bool
     {
         return $this->isMandatory;
     }
 
-    /**
-     * Get isMandatory.
-     */
     public function setIsMandatory(bool $isMandatory): self
     {
         $this->isMandatory = $isMandatory;
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CSurveyQuestion[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param Collection|CSurveyQuestion[] $children
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    public function getParentOption(): ?CSurveyQuestionOption
+    {
+        return $this->parentOption;
+    }
+
+    public function setParentOption(CSurveyQuestionOption $parentOption): self
+    {
+        $this->parentOption = $parentOption;
+
+        return $this;
+    }
+
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurveyAnswer[]|Collection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @return CSurveyQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param CSurveyQuestionOption[]|Collection $options
+     */
+    public function setOptions($options): self
+    {
+        $this->options = $options;
 
         return $this;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,12 +11,9 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class SurveySettingsSchema.
- */
 class SurveySettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -22,7 +21,8 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                     'survey_email_sender_noreply' => 'coach',
                     'extend_rights_for_coach_on_survey' => 'true',
                 ]
-            );
+            )
+        ;
 //            ->setAllowedTypes(
 //                array(
 //                    //'survey_email_sender_noreply' => array('string'),
@@ -30,7 +30,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
 //            );
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add(
@@ -43,6 +43,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('extend_rights_for_coach_on_survey', YesNoType::class);
+            ->add('extend_rights_for_coach_on_survey', YesNoType::class)
+        ;
     }
 }

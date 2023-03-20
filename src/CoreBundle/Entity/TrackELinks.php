@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,64 +15,50 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_links", indexes={
  *     @ORM\Index(name="idx_tel_c_id", columns={"c_id"}),
  *     @ORM\Index(name="idx_tel_user_id", columns={"links_user_id"}),
- *     @ORM\Index(name="links_session_id", columns={"links_session_id"})
+ *     @ORM\Index(name="session_id", columns={"session_id"})
  * })
  * @ORM\Entity
  */
 class TrackELinks
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_user_id", type="integer", nullable=true)
      */
-    protected $linksUserId;
+    protected ?int $linksUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="links_date", type="datetime", nullable=false)
      */
-    protected $linksDate;
+    protected DateTime $linksDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_link_id", type="integer", nullable=false)
      */
-    protected $linksLinkId;
+    protected int $linksLinkId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="links_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $linksSessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="links_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $linksId;
+    protected int $linksId;
 
     /**
      * Set linksUserId.
      *
-     * @param int $linksUserId
-     *
      * @return TrackELinks
      */
-    public function setLinksUserId($linksUserId)
+    public function setLinksUserId(int $linksUserId)
     {
         $this->linksUserId = $linksUserId;
 
@@ -89,11 +78,9 @@ class TrackELinks
     /**
      * Set linksDate.
      *
-     * @param \DateTime $linksDate
-     *
      * @return TrackELinks
      */
-    public function setLinksDate($linksDate)
+    public function setLinksDate(DateTime $linksDate)
     {
         $this->linksDate = $linksDate;
 
@@ -103,7 +90,7 @@ class TrackELinks
     /**
      * Get linksDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLinksDate()
     {
@@ -113,11 +100,9 @@ class TrackELinks
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackELinks
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -137,11 +122,9 @@ class TrackELinks
     /**
      * Set linksLinkId.
      *
-     * @param int $linksLinkId
-     *
      * @return TrackELinks
      */
-    public function setLinksLinkId($linksLinkId)
+    public function setLinksLinkId(int $linksLinkId)
     {
         $this->linksLinkId = $linksLinkId;
 
@@ -159,27 +142,25 @@ class TrackELinks
     }
 
     /**
-     * Set linksSessionId.
-     *
-     * @param int $linksSessionId
+     * Set sessionId.
      *
      * @return TrackELinks
      */
-    public function setLinksSessionId($linksSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->linksSessionId = $linksSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get linksSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getLinksSessionId()
+    public function getSessionId()
     {
-        return $this->linksSessionId;
+        return $this->sessionId;
     }
 
     /**

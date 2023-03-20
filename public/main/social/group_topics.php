@@ -18,7 +18,7 @@ $group_id = intval($_GET['id']);
 $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
 $message_id = isset($_GET['msg_id']) ? intval($_GET['msg_id']) : null;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $is_member = false;
 
 //todo @this validation could be in a function in group_portal_manager
@@ -51,9 +51,7 @@ if (isset($_REQUEST['action']) && 'delete' == $_REQUEST['action']) {
 }
 
 // My friends
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id
-);
+$friend_html = SocialManager::listMyFriendsBlock(api_get_user_id());
 $content = null;
 $social_right_content = '';
 
@@ -63,11 +61,11 @@ if (isset($_POST['action'])) {
     $group_id = intval($_POST['group_id']);
     $parent_id = intval($_POST['parent_id']);
 
-    if ('reply_message_group' == $_POST['action']) {
+    if ('reply_message_group' === $_POST['action']) {
         $title = cut($content, 50);
     }
 
-    if ('edit_message_group' == $_POST['action']) {
+    if ('edit_message_group' === $_POST['action']) {
         $edit_message_id = intval($_POST['message_id']);
         $res = MessageManager::send_message(
             0,
@@ -78,11 +76,10 @@ if (isset($_POST['action'])) {
             $group_id,
             $parent_id,
             $edit_message_id,
-            0,
             $topic_id
         );
     } else {
-        if ('add_message_group' == $_POST['action'] && !$is_member) {
+        if ('add_message_group' === $_POST['action'] && !$is_member) {
             api_not_allowed(true);
         }
         $res = MessageManager::send_message(
@@ -103,7 +100,7 @@ if (isset($_POST['action'])) {
         Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
     }
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
-    if ('add_message_group' == $_POST['action']) {
+    if ('add_message_group' === $_POST['action']) {
         $topic_id = $res;
     }
     $message_id = $res;
@@ -184,7 +181,7 @@ $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name'])];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Discussions')];
 
-$social_left_content = SocialManager::show_social_menu('member_list', $group_id);
+$social_left_content = null; //SocialManager::show_social_menu('member_list', $group_id);
 $show_message = null;
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
@@ -196,13 +193,13 @@ $group_message = MessageManager::display_message_for_group(
     $message_id
 );
 
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
+//$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 
 $tpl = new Template(null);
 $tpl->setHelp('Groups');
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_menu_block', '');
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('group_message', $group_message);
 $tpl->assign('social_right_content', $social_right_content);

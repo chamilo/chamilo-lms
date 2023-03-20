@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Class PortfolioCategory.
  *
  * @ORM\Table(
- *  name="portfolio_category",
- *  indexes={
- *      @ORM\Index(name="user", columns={"user_id"})
- *  }
+ *     name="portfolio_category",
+ *     indexes={
+ *         @ORM\Index(name="user", columns={"user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
@@ -26,64 +27,46 @@ class PortfolioCategory
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="text", nullable=true)
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
+     * @ORM\Column(name="is_visible", type="boolean", options={"default":true})
      */
-    protected $isVisible = true;
+    protected bool $isVisible = true;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
      */
-    protected $items;
+    protected ArrayCollection $items;
 
-    /**
-     * PortfolioCategory constructor.
-     */
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
     /**
@@ -94,18 +77,6 @@ class PortfolioCategory
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return PortfolioCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -121,11 +92,9 @@ class PortfolioCategory
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return PortfolioCategory
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -135,7 +104,7 @@ class PortfolioCategory
     /**
      * Get description.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -145,23 +114,16 @@ class PortfolioCategory
     /**
      * Set description.
      *
-     * @param string|null $description
-     *
      * @return PortfolioCategory
      */
-    public function setDescription($description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get isVisible.
-     *
-     * @return bool
-     */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->isVisible;
     }
@@ -169,11 +131,9 @@ class PortfolioCategory
     /**
      * Set isVisible.
      *
-     * @param bool $isVisible
-     *
      * @return PortfolioCategory
      */
-    public function setIsVisible($isVisible)
+    public function setIsVisible(bool $isVisible)
     {
         $this->isVisible = $isVisible;
 
@@ -183,11 +143,9 @@ class PortfolioCategory
     /**
      * Get items.
      *
-     * @param bool $onlyVisibles
-     *
      * @return ArrayCollection
      */
-    public function getItems(Course $course = null, Session $session = null, $onlyVisibles = false)
+    public function getItems(Course $course = null, Session $session = null, bool $onlyVisibles = false)
     {
         $criteria = Criteria::create();
 
@@ -197,25 +155,21 @@ class PortfolioCategory
             );
         }
 
-        if ($course) {
+        if (null !== $course) {
             $criteria
                 ->andWhere(
                     Criteria::expr()->eq('course', $course)
                 )
                 ->andWhere(
                     Criteria::expr()->eq('session', $session)
-                );
+                )
+            ;
         }
 
         return $this->items->matching($criteria);
     }
 
-    /**
-     * Set items.
-     *
-     * @return PortfolioCategory
-     */
-    public function setItems(Collection $items)
+    public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 

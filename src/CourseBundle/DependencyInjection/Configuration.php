@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\DependencyInjection;
@@ -35,7 +37,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Adds `classes` section.
      */
-    private function addClassesSection(ArrayNodeDefinition $node)
+    private function addClassesSection(ArrayNodeDefinition $node): void
     {
         $node
             ->children()

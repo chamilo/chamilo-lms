@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,12 +10,9 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class CertificateSettingsSchema.
- */
 class CertificateSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -21,7 +20,8 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
                     'hide_my_certificate_link' => 'false',
                     'hide_header_footer' => 'false',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'hide_my_certificate_link' => ['string'],
@@ -29,7 +29,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('hide_my_certificate_link', YesNoType::class)

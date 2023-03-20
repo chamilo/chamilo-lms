@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Event;
@@ -9,16 +11,13 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-/**
- * Class SessionAccess.
- */
 class SessionAccess extends Event
 {
-    protected $user;
-    protected $course;
-    protected $session;
+    protected User $user;
+    protected Course $course;
+    protected Session $session;
 
-    public function __construct($user, $course, $session)
+    public function __construct(User $user, Course $course, Session $session)
     {
         $this->user = $user;
         $this->course = $course;

@@ -34,19 +34,20 @@ $user_id = isset($_GET['user']) ? (int) $_GET['user'] : 0;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+$userStatus = $user_info['status'];
 
-$userStatus = api_get_user_status($user_id);
-
-$firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+$user = api_get_user_entity($user_id);
+$isSessionAdmin = api_is_session_admin($user);
+$firstLetterUser = $_POST['firstLetterUser'] ?? null;
 
 // setting the name of the tool
 $isAdmin = UserManager::is_admin($user_id);
 if ($isAdmin) {
     $userStatus = PLATFORM_ADMIN;
-    $tool_name = get_lang('AssignUsersToAdministrationistrator');
-} elseif (SESSIONADMIN == $user_info['status']) {
+    $tool_name = get_lang('Assign users to the platform administrator');
+} elseif ($isSessionAdmin) {
     $tool_name = get_lang('Assign users to sessions administrator');
-} elseif (STUDENT_BOSS == $user_info['status']) {
+} elseif (api_is_student_boss($user)) {
     $tool_name = get_lang('Assign users to superior');
 } else {
     $tool_name = get_lang('Assign users to Human Resources manager');
@@ -292,15 +293,14 @@ if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
     switch ($userStatus) {
         case DRH:
         case PLATFORM_ADMIN:
-            $affected_rows = UserManager::subscribeUsersToHRManager($user_id, $user_list);
+            UserManager::subscribeUsersToHRManager($user_id, $user_list);
 
             break;
         case STUDENT_BOSS:
-            $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
+            UserManager::subscribeBossToUsers($user_id, $user_list);
 
             break;
         default:
-            $affected_rows = 0;
     }
 
     Display::addFlash(
@@ -331,7 +331,7 @@ if (STUDENT_BOSS != $userStatus) {
 $actionsRight = Display::url(
     '<em class="fa fa-search"></em> '.get_lang('Advanced search'),
     '#',
-    ['class' => 'btn btn-default advanced_options', 'id' => 'advanced_search']
+    ['class' => 'btn btn--plain advanced_options', 'id' => 'advanced_search']
 );
 
 $toolbar = Display::toolbarAction('toolbar-dashboard', [$actionsLeft, $actionsRight]);
@@ -344,7 +344,7 @@ echo '</div>';
 echo Display::page_header(
     sprintf(
         get_lang('Assign users to %s'),
-        api_get_person_name($user_info['firstname'], $user_info['lastname'])
+        UserManager::formatUserFullName($user)
     ),
     null,
     'h3'
@@ -458,18 +458,18 @@ $result = Database::query($sql);
         <?php if ($ajax_search) {
                             ?>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+                <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
             </div>
         <?php
                         } else {
                             ?>
             <div class="separate-action">
-                <button id="add_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button id="add_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
             </div>
             <div class="separate-action">
-                <button id="remove_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button id="remove_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
@@ -477,7 +477,7 @@ $result = Database::query($sql);
                         } ?>
             <div class="separate-action">
         <?php
-        echo '<button id="assign_user" class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+        echo '<button id="assign_user" class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
         ?>
             </div>
         </div>
@@ -485,12 +485,12 @@ $result = Database::query($sql);
     <div class="col-md-4">
     <?php
     if (UserManager::is_admin($user_id)) {
-        echo get_lang('AssignedUsersListToAdministrationistrator');
+        echo get_lang('Users assigned to the platform administrator');
     } else {
-        if (SESSIONADMIN == $user_info['status']) {
+        if ($isSessionAdmin) {
             echo get_lang('Assign a users list to the sessions administrator');
         } else {
-            if (STUDENT_BOSS == $user_info['status']) {
+            if (api_is_student_boss($user)) {
                 echo get_lang('Users assigned to their superior');
             } else {
                 echo get_lang('List of users assigned to Human Resources manager');

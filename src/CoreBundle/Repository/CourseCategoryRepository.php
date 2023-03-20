@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -8,31 +10,29 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CCourseCategoryRepository.
- */
 class CourseCategoryRepository extends ServiceEntityRepository
 {
-    /**
-     * CourseCategoryRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CourseCategory::class);
     }
 
+    public function update(CourseCategory $category): void
+    {
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * Get all course categories in an access url.
      *
-     * @param int  $accessUrl
-     * @param bool $allowBaseCategories
-     *
-     * @return array
+     * @return CourseCategory[]
      */
-    public function findAllInAccessUrl($accessUrl, $allowBaseCategories = false)
+    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false, int $parentId = 0)
     {
         $qb = $this->createQueryBuilder('c');
         $qb
@@ -43,11 +43,17 @@ class CourseCategoryRepository extends ServiceEntityRepository
                 'c = a.courseCategory'
             )
             ->where($qb->expr()->eq('a.url', $accessUrl))
-            ->orderBy('c.treePos', 'ASC')
+            ->orderBy('c.treePos', Criteria::ASC)
         ;
 
         if ($allowBaseCategories) {
             $qb->orWhere($qb->expr()->eq('a.url', 1));
+        }
+
+        if (!empty($parentId)) {
+            $qb->andWhere($qb->expr()->eq('c.parent', $parentId));
+        } else {
+            $qb->andWhere($qb->expr()->isNull('c.parent'));
         }
 
         $query = $qb->getQuery();
@@ -58,13 +64,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get all categories in an access url and course id.
      *
-     * @param int  $accessUrl
-     * @param int  $courseId
-     * @param bool $allowBaseCategories
-     *
      * @return array
      */
-    public function getCategoriesByCourseIdAndAccessUrlId($accessUrl, $courseId, $allowBaseCategories = false)
+    public function getCategoriesByCourseIdAndAccessUrlId(int $accessUrl, int $courseId, bool $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
         $qb
@@ -86,12 +88,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get the number of course categories in an access url.
      *
-     * @param int  $accessUrl
-     * @param bool $allowBaseCategories
-     *
      * @return int
      */
-    public function countAllInAccessUrl($accessUrl, $allowBaseCategories = false)
+    public function countAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('COUNT(c)')
@@ -103,7 +102,8 @@ class CourseCategoryRepository extends ServiceEntityRepository
             )
             ->where(
                 $qb->expr()->eq('a.url', $accessUrl)
-            );
+            )
+        ;
 
         if ($allowBaseCategories) {
             $qb->orWhere($qb->expr()->eq('a.url', 1));
@@ -114,7 +114,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
         return (int) $count;
     }
 
-    public function updateCourseRelCategoryByCourse(Course $course, $courseData)
+    public function updateCourseRelCategoryByCourse(Course $course, array $courseData): void
     {
         $em = $this->getEntityManager();
 
@@ -138,6 +138,31 @@ class CourseCategoryRepository extends ServiceEntityRepository
         $course->setCategories($courseCategories);
 
         $em->persist($course);
+        $em->flush();
+    }
+
+    public function deleteAsset(CourseCategory $category): void
+    {
+        $em = $this->getEntityManager();
+        if ($category->hasAsset()) {
+            $asset = $category->getAsset();
+            $em->remove($asset);
+            $em->flush();
+        }
+    }
+
+    public function delete(CourseCategory $category): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($category);
+        $this->deleteAsset($category);
+        $em->flush();
+    }
+
+    public function save(CourseCategory $category): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($category);
         $em->flush();
     }
 }

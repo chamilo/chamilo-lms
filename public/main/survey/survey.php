@@ -26,7 +26,7 @@ if ($isDrhOfCourse) {
     exit;
 }
 if (!api_is_allowed_to_edit(false, true) ||
-    (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs)
+    (api_is_session_general_coach() && 'false' === $extend_rights_for_coachs)
 ) {
     api_not_allowed(true);
     exit;
@@ -42,11 +42,11 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $survey_id = (int) $_GET['survey_id'];
 $course_id = api_get_course_int_id();
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 // Breadcrumbs
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),
 ];
 
@@ -72,55 +72,50 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $tool_name .= '...';
 }
 
-if ($is_survey_type_1 && ('addgroup' == $action || 'deletegroup' == $action)) {
+if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) {
     $_POST['name'] = trim($_POST['name']);
-    if ('addgroup' == $action) {
+    if ('addgroup' === $action) {
         if (!empty($_POST['group_id'])) {
             Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
-            $sendmsg = 'GroupUpdatedSuccessfully';
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
         } elseif (!empty($_POST['name'])) {
             Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.$survey_id.'\') ');
-            $sendmsg = 'GroupCreatedSuccessfully';
+            Display::addFlash(Display::return_message(get_lang('Item added')));
         } else {
-            $sendmsg = 'GroupNeedName';
+            Display::addFlash(Display::return_message(get_lang('Group need name'), 'warning'));
         }
     }
 
-    if ('deletegroup' == $action) {
-        $sql = 'DELETE FROM '.$table_survey_question_group.' 
+    if ('deletegroup' === $action) {
+        $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);
-        $sendmsg = 'GroupDeletedSuccessfully';
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
-    exit;
+
+    api_location(api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq());
 }
 
 $my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
 $my_survey_id_survey = (int) $_GET['survey_id'];
-$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 // Displaying the header
 if (!empty($action)) {
     switch ($action) {
         case 'copyquestion':
             $copied = SurveyManager::copyQuestion($_GET['question_id']);
             if (false !== $copied) {
-                $sendmsg = 'QuestionAdded';
+                Display::addFlash(Display::return_message(get_lang('The question has been added.')));
             } else {
-                $sendmsg = 'ErrorOccurred';
+                Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'warning'));
             }
             break;
         case 'delete':
-            $result = SurveyManager::delete_survey_question(
-            $my_survey_id_survey,
-            $my_question_id_survey,
-            $survey_data['is_shared']
-        );
+            $result = SurveyManager::deleteQuestion($my_question_id_survey);
             if (false == $result) {
-                $sendmsg = 'ErrorOccured';
+                Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'warning'));
             } else {
-                $sendmsg = 'Deleted';
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
             break;
         case 'moveup':
@@ -130,30 +125,14 @@ if (!empty($action)) {
                 $my_question_id_survey,
                 $my_survey_id_survey
             );
-            $sendmsg = 'SurveyQuestionMoved';
+            Display::addFlash(Display::return_message(get_lang('The question has been moved')));
             break;
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
-    exit;
+
+    api_location(api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq());
 }
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
-
-// Displaying the header
 Display::display_header($tool_name, 'Survey');
-
-// Show error/success messages, if any
-if (!$is_survey_type_1 && !empty($_GET['sendmsg'])) {
-    $messageType = 'confirmation';
-    if (in_array($_GET['sendmsg'], ['ErrorOccurred'])) {
-        $messageType = 'error';
-    }
-    echo Display::return_message(
-        get_lang($_GET['sendmsg']),
-        'confirmation',
-        false
-    );
-}
 
 if (!empty($survey_data['survey_version'])) {
     echo '<b>'.get_lang('Version').': '.$survey_data['survey_version'].'</b>';
@@ -169,7 +148,8 @@ if (3 != $survey_data['survey_type']) {
         ).'&action=edit&survey_id='.$survey_id.'">'.
         Display::return_icon('edit.png', get_lang('Edit survey'), '', ICON_SIZE_MEDIUM).'</a>';
 }
-$survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;">'.
+$survey_actions .= '<a
+    href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;">'.
     Display::return_icon('delete.png', get_lang('Delete survey'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (3 != $survey_data['survey_type']) {
@@ -190,59 +170,58 @@ if (3 != $survey_data['survey_type']) {
 }
 
 $survey_actions .= SurveyUtil::getAdditionalTeacherActions($survey_id, ICON_SIZE_MEDIUM);
-
-echo '<div class="actions">'.$survey_actions.'</div>';
+echo Display::toolbarAction('survey', [$survey_actions]);
 
 $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';
 if (0 == $survey_data['survey_type']) {
-    echo '<div class="well">';
-    echo Display::url(
+    $questions = Display::url(
         Display::return_icon('yesno.png', get_lang('Yes / No'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=yesno&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcua.png', get_lang('Multiple choice'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoice&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcma.png', get_lang('Multiple answers'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multipleresponse&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=open&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=dropdown&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=percentage&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('scorequestion.png', get_lang('Score'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=score&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcua.png', get_lang('SurveyMultipleAnswerWithOther'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
     );
     if (0 == $survey_data['one_question_per_page']) {
-        echo Display::url(
+        $questions .= Display::url(
             Display::return_icon('yesno.png', get_lang('SurveyQuestionSelectiveDisplay'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
         );
-        echo Display::url(
+        $questions .= Display::url(
             Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('questions', [$questions]);
 } else {
     if (3 != $survey_data['survey_type']) {
         echo '<div class="well">';
@@ -272,33 +251,33 @@ echo '</thead>';
 
 // Displaying the table contents with all the questions
 $question_counter = 1;
-$sql = "SELECT * FROM $table_survey_question_group
-        WHERE c_id = $course_id AND survey_id = $survey_id 
+/*$sql = "SELECT * FROM $table_survey_question_group
+        WHERE c_id = $course_id AND survey_id = $survey_id
         ORDER BY iid";
 $result = Database::query($sql);
 $groups = [];
 while ($row = Database::fetch_array($result)) {
     $groups[$row['iid']] = $row['name'];
-}
-$sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
+}*/
+$sql = "SELECT survey_question.*, count(survey_question_option.iid) as number_of_options
         FROM $table_survey_question survey_question
         LEFT JOIN $table_survey_question_option survey_question_option
-        ON 
-            survey_question.question_id = survey_question_option.question_id AND 
-            survey_question_option.c_id = $course_id
+        ON
+            survey_question.iid = survey_question_option.question_id
         WHERE
-            survey_question.survey_id 	= $survey_id AND
-            survey_question.c_id 		= $course_id
-        GROUP BY survey_question.question_id
+            survey_question.survey_id = $survey_id
+        GROUP BY survey_question.iid
         ORDER BY survey_question.sort ASC";
 
 $result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
 $questionsGroupClass = '';
 while ($row = Database::fetch_array($result, 'ASSOC')) {
+    $questionId = $row['iid'];
+
     $breakClass = '';
     // Visually impact questions between page breaks by changing the bg color
-    if ('pagebreak' == $row['type']) {
+    if ('pagebreak' === $row['type']) {
         $breakClass = ' highlight';
         if (empty($questionsGroupClass)) {
             $questionsGroupClass = 'row_even';
@@ -339,38 +318,47 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     echo '<td>'.$row['number_of_options'].'</td>';
     echo '<td>';
     if (3 != $survey_data['survey_type']) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=edit&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$row['question_id'].'">'.
-            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+        echo '<a
+            href="'.api_get_path(WEB_CODE_PATH).
+            'survey/question.php?'.api_get_cidreq().'&action=edit&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+            Display::return_icon('edit.png', get_lang('Edit')).'</a>';
     }
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.api_get_cidreq().'&action=copyquestion&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$row['question_id'].'">'.
+    echo '<a
+        href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
+        api_get_cidreq().'&action=copyquestion&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
         Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>';
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$row['question_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?', ENT_QUOTES, $charset)).'\')) return false;">'.
-        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+    echo '<a
+        href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
+        api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$questionId.'"
+        onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?', ENT_QUOTES)).'\')) return false;">'.
+        Display::return_icon('delete.png', get_lang('Delete')).'</a>';
     if (3 != $survey_data['survey_type']) {
         if ($question_counter > 1) {
-            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.api_get_cidreq(
-                ).'&action=moveup&survey_id='.$survey_id.'&question_id='.$row['question_id'].'">'.
-                Display::return_icon('up.png', get_lang('Move up'), '', ICON_SIZE_SMALL).'</a>';
+            echo '<a
+                href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
+                api_get_cidreq().'&action=moveup&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+                Display::return_icon('up.png', get_lang('Move up')).'</a>';
         } else {
-            Display::display_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+            echo Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
         }
         if ($question_counter < $question_counter_max) {
-            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.api_get_cidreq(
-                ).'&action=movedown&survey_id='.$survey_id.'&question_id='.$row['question_id'].'">'.
-                Display::return_icon('down.png', get_lang('Move down'), '', ICON_SIZE_SMALL).'</a>';
+            echo '<a
+                href="'.api_get_path(WEB_CODE_PATH).
+                'survey/survey.php?'.api_get_cidreq().'&action=movedown&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+                Display::return_icon('down.png', get_lang('Move down')).'</a>';
         } else {
-            Display::display_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+            echo Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
         }
     }
     echo '	</td>';
     $question_counter++;
 
-    if ($is_survey_type_1) {
+    /*if ($is_survey_type_1) {
         echo '<td>'.((0 == $row['survey_group_pri']) ? get_lang('Secondary') : get_lang('Primary')).'</td>';
         echo '<td>'.((0 == $row['survey_group_pri']) ? $groups[$row['survey_group_sec1']].'-'.$groups[$row['survey_group_sec2']] : $groups[$row['survey_group_pri']]).'</td>';
-    }
+    }*/
     echo '</tr>';
 }
 
@@ -397,24 +385,30 @@ if ($is_survey_type_1) {
             false
         );
     }
-    echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
-    echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
-    if ('editgroup' == $_GET['action']) {
-        $sql = 'SELECT name,description FROM '.$table_survey_question_group.' 
-                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.' limit 1';
+    echo '<table border="0">
+            <tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
+    echo '<form
+        action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
+    if ('editgroup' === $_GET['action']) {
+        $sql = 'SELECT name,description FROM '.$table_survey_question_group.'
+                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
+                LIMIT 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_array($rs, 'ASSOC');
         echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
         echo '<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';
         echo '<input type="hidden" name="group_id" value="'.Security::remove_XSS($_GET['gid']).'">';
-        echo '<input type="submit" value="'.get_lang('Save').'"'.'<input type="button" value="'.get_lang('Cancel').'" onclick="window.location.href = \'survey.php?survey_id='.Security::remove_XSS($survey_id).'\';" />';
+        echo '<input
+                type="submit"
+                value="'.get_lang('Save').'"'.'
+                <input type="button" value="'.get_lang('Cancel').'"
+                onclick="window.location.href = \'survey.php?survey_id='.Security::remove_XSS($survey_id).'\';" />';
     } else {
         echo '<input type="text" maxlength="20" name="name" value="" size="10">';
         echo '<input type="text" maxlength="250" name="description" value="" size="80">';
         echo '<input type="submit" value="'.get_lang('Create').'"';
     }
     echo '</form><br />';
-
     echo '<table class="data_table">';
     echo '	<tr class="row_odd">';
     echo '		<th width="200">'.get_lang('Name').'</th>';
@@ -422,19 +416,22 @@ if ($is_survey_type_1) {
     echo '		<th width="100">'.get_lang('Edit').'</th>';
     echo '	</tr>';
 
-    $sql = 'SELECT id,name,description 
+    $sql = 'SELECT id,name,description
             FROM '.$table_survey_question_group.'
-            WHERE 
-                c_id = '.$course_id.' AND 
-                survey_id = '.intval($survey_id).' 
+            WHERE
+                c_id = '.$course_id.' AND
+                survey_id = '.intval($survey_id).'
             ORDER BY name';
 
     $rs = Database::query($sql);
+    $grouplist = '';
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
         $grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
         '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a> '.
-        '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Delete surveyGroup'), $row['name']).'?', ENT_QUOTES)).'\')) return false;">'.
+        '<a
+            href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup"
+            onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Delete surveyGroup'), $row['name']).'?', ENT_QUOTES)).'\')) return false;">'.
         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
         '</td></tr>';
     }
@@ -442,5 +439,4 @@ if ($is_survey_type_1) {
 }
 
 Session::erase('answer_count');
-
 Display::display_footer();

@@ -9,3 +9,4 @@ stof_doctrine_extensions:
             timestampable: true
             sluggable: true
             sortable: true
+            translatable: true

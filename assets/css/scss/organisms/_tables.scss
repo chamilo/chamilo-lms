@@ -1,0 +1,27 @@
+@layer components {
+  .table-responsive {
+    @apply overflow-x-auto min-w-full;
+  }
+
+  table {
+    @apply w-full border-collapse border-spacing-0 table-auto;
+  }
+
+  th,
+  td {
+    @apply p-1;
+  }
+
+  th {
+    @apply text-body-2-bold;
+  }
+
+  td {
+    @apply text-body-2;
+
+    strong,
+    b {
+      @apply text-body-2-bold;
+    }
+  }
+}

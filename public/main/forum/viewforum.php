@@ -3,53 +3,83 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 
-/**
- * These files are a complete rework of the forum. The database structure is
- * based on phpBB but all the code is rewritten. A lot of new functionalities
- * are added:
- * - forum categories and forums can be sorted up or down, locked or made invisible
- * - consistent and integrated forum administration
- * - forum options:     are students allowed to edit their post?
- *                      moderation of posts (approval)
- *                      reply only forums (students cannot create new threads)
- *                      multiple forums per group
- * - sticky messages
- * - new view option: nested view
- * - quoting a message.
- *
- * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @Copyright Ghent University
- * @Copyright Patrick Cool
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
-
+api_protect_course_script(true);
 $nameTools = get_lang('Forums');
 $origin = api_get_origin();
 
-require_once 'forumfunction.inc.php';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
 
-$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
 
 $viewForumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
 $message = handleForum($viewForumUrl);
-
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
-$groupInfo = GroupManager::get_group_properties($groupId);
-$isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
+
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 $repo = Container::getForumRepository();
 
-/** @var CForumForum $forumEntity */
+/** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
+if (null === $forumEntity) {
+    api_not_allowed(true);
+}
+
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 $isForumOpenByDateAccess = api_is_date_in_date_range($forumEntity->getStartTime(), $forumEntity->getEndTime());
@@ -67,18 +97,17 @@ $category = $forumEntity->getForumCategory();
 $is_group_tutor = false;
 
 if (!empty($groupId)) {
-    //Group info & group category info
-    $group_properties = GroupManager::get_group_properties($groupId);
-    $is_group_tutor = GroupManager::is_tutor_of_group(
+    $groupEntity = api_get_group_entity($groupId);
+    $is_group_tutor = GroupManager::isTutorOfGroup(
         api_get_user_id(),
-        $group_properties
+        $groupEntity
     );
 
     // Course
     if (!api_is_allowed_to_edit(false, true) && //is a student
         (
             ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
-            false == $category->isVisible($courseEntity, $sessionEntity)
+            !$category->isVisible($courseEntity, $sessionEntity)
         )
     ) {
         api_not_allowed(true);
@@ -88,7 +117,7 @@ if (!empty($groupId)) {
     if (!api_is_allowed_to_edit(false, true) && //is a student
         (
             ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
-            false == $category->isVisible($courseEntity, $sessionEntity)
+            !$category->isVisible($courseEntity, $sessionEntity)
         )
     ) {
         api_not_allowed(true);
@@ -123,7 +152,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => '#',
@@ -134,9 +163,8 @@ if (!empty($groupId)) {
         'url' => $forumUrl.'index.php?'.api_get_cidreq(),
         'name' => get_lang('Forum Categories'),
     ];
-
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
+        'url' => $forumUrl.'index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
         'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [
@@ -145,13 +173,7 @@ if (!empty($groupId)) {
     ];
 }
 
-if ('learnpath' === $origin) {
-    Display::display_reduced_header();
-} else {
-    // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
-    Display::display_header();
-}
-
+$qualificationBlock = '';
 // Student list
 if ('liststd' === $my_action &&
     isset($_GET['content']) &&
@@ -159,7 +181,7 @@ if ('liststd' === $my_action &&
     (api_is_allowed_to_edit(null, true) || $is_group_tutor)
 ) {
     $active = null;
-    $listType = isset($_GET['list']) ? $_GET['list'] : null;
+    $listType = $_GET['list'] ?? null;
 
     switch ($listType) {
         case 'qualify':
@@ -182,7 +204,7 @@ if ('liststd' === $my_action &&
             break;
     }
 
-    $table_list = Display::page_subheader(get_lang('Users list of the thread').': '.get_name_thread_by_id($_GET['id']));
+    $qualificationBlock .= Display::page_subheader(get_lang('Users list of the thread').': '.get_name_thread_by_id($_GET['id']));
 
     if ($nrorow3 > 0 || -2 == $nrorow3) {
         $url = api_get_cidreq().'&forum='.$forumId.'&action='
@@ -202,38 +224,35 @@ if ('liststd' === $my_action &&
                 'url' => $forumUrl.'viewforum.php?'.$url.'&list=notqualify',
             ],
         ];
-        $table_list .= Display::tabsOnlyLink($tabs, $active);
+        $qualificationBlock .= Display::tabsOnlyLink($tabs, $active);
 
-        $icon_qualify = 'quiz.png';
-        $table_list .= '<center><br /><table class="data_table" style="width:50%">';
+        $qualificationBlock .= '<center><br /><table class="data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
-        $table_list .= '<tr >';
-        $table_list .= '<th height="24">'.get_lang('First names and last names').'</th>';
+        $qualificationBlock .= '<tr >';
+        $qualificationBlock .= '<th height="24">'.get_lang('First names and last names').'</th>';
 
         if ('qualify' === $listType) {
-            $table_list .= '<th>'.get_lang('Score').'</th>';
+            $qualificationBlock .= '<th>'.get_lang('Score').'</th>';
         }
         if (api_is_allowed_to_edit(null, true)) {
-            $table_list .= '<th>'.get_lang('Grade activity').'</th>';
+            $qualificationBlock .= '<th>'.get_lang('Grade activity').'</th>';
         }
-        $table_list .= '</tr>';
+        $qualificationBlock .= '</tr>';
         $max_qualify = showQualify('2', $userId, $_GET['id']);
-        $counter_stdlist = 0;
-
+        $counter = 0;
+        $icon = Display::return_icon('quiz.png', get_lang('Grade activity'));
         if (Database::num_rows($student_list) > 0) {
             while ($row_student_list = Database::fetch_array($student_list)) {
                 $userInfo = api_get_user_info($row_student_list['id']);
-                if (0 == $counter_stdlist % 2) {
+                $class_stdlist = 'row_even';
+                if (0 == $counter % 2) {
                     $class_stdlist = 'row_odd';
-                } else {
-                    $class_stdlist = 'row_even';
                 }
-                $table_list .= '<tr class="'.$class_stdlist.'"><td>';
-                $table_list .= UserManager::getUserProfileLink($userInfo);
-
-                $table_list .= '</td>';
-                if ('qualify' == $listType) {
-                    $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
+                $qualificationBlock .= '<tr class="'.$class_stdlist.'"><td>';
+                $qualificationBlock .= UserManager::getUserProfileLink($userInfo);
+                $qualificationBlock .= '</td>';
+                if ('qualify' === $listType) {
+                    $qualificationBlock .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
                 if (api_is_allowed_to_edit(null, true)) {
                     $current_qualify_thread = showQualify(
@@ -241,45 +260,41 @@ if ('liststd' === $my_action &&
                         $row_student_list['id'],
                         $_GET['id']
                     );
-                    $table_list .= '<td>
+                    $qualificationBlock .= '<td>
                         <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq()
-                        .'&forum='.(int) $forumId.'&thread='
+                        .'&forum='.$forumId.'&thread='
                         .(int) ($_GET['id']).'&user='.$row_student_list['id']
                         .'&user_id='.$row_student_list['id'].'&idtextqualify='
                         .$current_qualify_thread.'">'
-                        .Display::return_icon($icon_qualify, get_lang('Grade activity')).'</a></td></tr>';
+                        .$icon.'</a>
+                        </td></tr>';
                 }
-                $counter_stdlist++;
+                $counter++;
             }
         } else {
             if ('qualify' === $listType) {
-                $table_list .= '<tr><td colspan="2">'.get_lang('There are no qualified learners').'</td></tr>';
+                $qualificationBlock .= '<tr><td colspan="2">'.get_lang('There are no qualified learners').'</td></tr>';
             } else {
-                $table_list .= '<tr><td colspan="2">'.get_lang('There are no unqualified learners').'</td></tr>';
+                $qualificationBlock .= '<tr><td colspan="2">'.get_lang('There are no unqualified learners').'</td></tr>';
             }
         }
 
-        $table_list .= '</table></center>';
-        $table_list .= '<br />';
+        $qualificationBlock .= '</table></center>';
+        $qualificationBlock .= '<br />';
     } else {
-        $table_list .= Display::return_message(get_lang('There are no participants'), 'warning');
+        $qualificationBlock .= Display::return_message(get_lang('There are no participants'), 'warning');
     }
 }
 
-if ('learnpath' == $origin) {
-    echo '<div style="height:15px">&nbsp;</div>';
-}
-
-/* Action links */
-echo '<div class="actions">';
-if ('learnpath' != $origin) {
+$actions = '';
+if ('learnpath' !== $origin) {
     if (!empty($groupId)) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
+        $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('Back to')
             .' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<span style="float:right;">'.search_link().'</span>';
-        echo '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
+        $actions .= '<span style="float:right;">'.search_link().'</span>';
+        $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
             .Display::return_icon('back.png', get_lang('Back toForumOverview'), '', ICON_SIZE_MEDIUM)
             .'</a>';
     }
@@ -295,20 +310,14 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
-            echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
+            $actions .= '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
                 .$forumId.'">'
                 .Display::return_icon('new_thread.png', get_lang('Create thread'), '', ICON_SIZE_MEDIUM)
                 .'</a>';
         }
     } else {
-        echo get_lang('Forum blocked');
+        $actions .= get_lang('Forum blocked');
     }
-}
-echo '</div>';
-
-/* Display the action messages */
-if (!empty($message)) {
-    echo $message;
 }
 
 $descriptionForum = $forumEntity->getForumComment();
@@ -318,11 +327,11 @@ $iconForum = Display::return_icon(
     null,
     ICON_SIZE_MEDIUM
 );
-$html = '';
-$html .= '<div class="topic-forum">';
+
+$header = '';
 // The current forum
-if ('learnpath' != $origin) {
-    $html .= Display::tag(
+if ('learnpath' !== $origin) {
+    $header .= Display::tag(
         'h3',
         $iconForum.' '.$forumEntity->getForumTitle(),
         [
@@ -330,7 +339,7 @@ if ('learnpath' != $origin) {
     );
 
     if (!empty($descriptionForum)) {
-        $html .= Display::tag(
+        $header .= Display::tag(
             'p',
             Security::remove_XSS($descriptionForum),
             [
@@ -340,15 +349,12 @@ if ('learnpath' != $origin) {
     }
 }
 
-$html .= '</div>';
-echo $html;
-
 // Getting al the threads
 $threads = get_threads($forumId);
-//$whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 $course_id = api_get_course_int_id();
 
-echo '<div class="forum_display">';
+$threadList = [];
+
 if (is_array($threads)) {
     $html = '';
     $count = 1;
@@ -358,71 +364,37 @@ if (is_array($threads)) {
         if (api_is_allowed_to_edit(false, true) ||
             !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity, $sessionEntity))
         ) {
-            /*$my_whatsnew_post_info = null;
-            if (isset($whatsnew_post_info[$forumId][$thread['thread_id']])) {
-                $my_whatsnew_post_info = $whatsnew_post_info[$forumId][$thread['thread_id']];
-            }
-            $newPost = '';
-            if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
-                $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-            }*/
-
-            //$name = api_get_person_name($thread['firstname'], $thread['lastname']);
-
-            $linkPostForum = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
+            $title = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
                 .Security::remove_XSS(urlencode($my_search)).'">'
                 .$thread->getThreadTitle().'</a>';
-            $html = '';
-            $html .= '<div class="panel panel-default forum '.($thread->getThreadSticky() ? 'sticky' : '').'">';
-            $html .= '<div class="panel-body">';
-            $html .= '<div class="row">';
-            $html .= '<div class="col-md-6">';
-            $html .= '<div class="row">';
-            $html .= '<div class="col-md-2">';
 
             // display the author name
-            $tab_poster_info = api_get_user_info($thread->getThreadPosterId());
-            $poster_username = sprintf(get_lang('Login: %s'), $tab_poster_info['username']);
+            $author = $thread->getUser();
+            $completeName = UserManager::formatUserFullName($author);
+            $poster_username = sprintf(get_lang('Login: %s'), $thread->getUser()->getUsername());
             $authorName = '';
-
-            if ('learnpath' != $origin) {
-                $authorName = display_user_link(
-                    $thread->getThreadPosterId(),
-                    $tab_poster_info['complete_name'],
-                    '',
-                    $poster_username
-                );
+            if ('learnpath' !== $origin) {
+                $authorName = displayUserLink($author);
             } else {
                 $authorName = Display::tag(
                     'span',
-                    $tab_poster_info['complete_name'],
+                    $completeName,
                     [
                         'title' => api_htmlentities($poster_username, ENT_QUOTES),
                     ]
                 );
             }
 
-            $iconStatus = $tab_poster_info['icon_status'];
-            $last_post_info = get_last_post_by_thread(
-                $thread->getCId(),
-                $threadId,
-                $thread->getForum()->getIid(),
-                api_is_allowed_to_edit()
-            );
-            $last_post = null;
-            if ($last_post_info) {
-                $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = api_convert_and_format_date($last_post_info['post_date']);
-                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
-                    $last_post_info['poster_id'],
-                    $poster_info['complete_name'],
-                    '',
-                    $poster_info['username']
-                );
+            $iconStatus = $author->getIconStatus();
+            $last_post = '';
+            if ($thread->getThreadLastPost()) {
+                $post_date = api_convert_and_format_date($thread->getThreadLastPost()->getPostDate()->format('Y-m-d H:i:s'));
+                $last_post = $post_date.'<br>'.get_lang('By').' '.displayUserLink($thread->getThreadLastPost()->getUser());
             }
 
-            $html .= '<div class="thumbnail">'.display_user_image($thread->getThreadPosterId(), $poster_username, $origin).'</div>';
+            /*
+            $html .= displayUserImage($thread->getUser());
             $html .= '</div>';
             $html .= '<div class="col-md-10">';
             $html .= Display::tag(
@@ -431,15 +403,14 @@ if (is_array($threads)) {
                 [
                     'class' => 'title',
                 ]
-            );
-            $html .= '<p>'.get_lang('By').' '.$iconStatus.' '.$authorName.'</p>';
-
-            if ($last_post_info) {
-                $html .= '<p>'.Security::remove_XSS(cut($last_post_info['post_text'], 140)).'</p>';
+            );*/
+            $lastPostContent = '<p>'.get_lang('By').' <img src="'.$iconStatus.'" /> '.$authorName.'</p>';
+            if ($thread->getThreadLastPost()) {
+                $lastPostContent .= '<p>'.Security::remove_XSS(cut($thread->getThreadLastPost()->getPostText(), 140)).'</p>';
             }
 
-            $html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
-
+            //$html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
+            $waitingModeration = '';
             if (1 == $forumEntity->isModerated() && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
                     CForumPost::STATUS_WAITING_MODERATION,
@@ -447,20 +418,13 @@ if (is_array($threads)) {
                     $thread->getIid()
                 );
                 if (!empty($waitingCount)) {
-                    $html .= Display::label(
+                    $waitingModeration .= Display::label(
                         get_lang('Posts pending moderation').': '.$waitingCount,
                         'warning'
                     );
                 }
             }
 
-            $html .= '</div>';
-            $html .= '</div>';
-
-            $html .= '</div>';
-
-            $html .= '<div class="col-md-6">';
-            $html .= '<div class="row">';
             $html .= '<div class="col-md-4">'
                 .Display::return_icon('post-forum.png', null, null, ICON_SIZE_SMALL)
                 ." {$thread->getThreadReplies()} ".get_lang('Replies').'<br>';
@@ -471,35 +435,14 @@ if (is_array($threads)) {
                 ICON_SIZE_SMALL
             ).' '.$thread->getThreadReplies().' '.get_lang('Views').'<br>';
             $html .= '</div>';
-
-            $last_post_info = get_last_post_by_thread(
-                $thread->getCId(),
-                $threadId,
-                $thread->getForum()->getIid(),
-                api_is_allowed_to_edit()
-            );
             $last_post = null;
-
-            if ($last_post_info) {
-                $poster_info = api_get_user_info($last_post_info['poster_id']);
-                $post_date = Display::dateToStringAgoAndLongDate($last_post_info['post_date']);
-                $last_post = $post_date.'<br>'.get_lang('By').' '.display_user_link(
-                    $last_post_info['poster_id'],
-                    $poster_info['complete_name'],
-                    '',
-                    $poster_info['username']
+            if ($thread->getThreadLastPost()) {
+                $post_date = api_convert_and_format_date($thread->getThreadLastPost()->getPostDate()->format('Y-m-d H:i:s'));
+                $last_post = $post_date.'<br>'.get_lang('By').' '.displayUserLink(
+                    $thread->getThreadLastPost()->getUser()
                 );
             }
 
-            $html .= '<div class="col-md-5">'
-                .Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY)
-                .' '.$last_post;
-            $html .= '</div>';
-            $html .= '<div class="col-md-3">';
-            // Get attachment id.
-            /*if (isset($thread['post_id'])) {
-                $attachment_list = get_attachment($thread['post_id']);
-            }*/
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
             $iconsEdit = '';
             if ('learnpath' !== $origin) {
@@ -523,14 +466,14 @@ if (is_array($threads)) {
                             ICON_SIZE_SMALL
                         );
                     } else {
-                        $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete&content=thread&id='
+                        $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
                             .addslashes(api_htmlentities(get_lang('Delete complete thread?'), ENT_QUOTES))
                             ."')) return false;\">"
                             .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                     }
 
-                    $iconsEdit .= return_visible_invisible_icon(
+                    $iconsEdit .= returnVisibleInvisibleIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->isVisible($courseEntity, $sessionEntity),
@@ -539,7 +482,7 @@ if (is_array($threads)) {
                             'gid' => $groupId,
                         ]
                     );
-                    $iconsEdit .= return_lock_unlock_icon(
+                    $iconsEdit .= returnLockUnlockIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->getLocked(),
@@ -553,6 +496,7 @@ if (is_array($threads)) {
                         .'</a>';
                 }
             }
+
             $iconnotify = 'notification_mail_na.png';
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
@@ -574,21 +518,30 @@ if (is_array($threads)) {
                     .'</a>';
             }
             $html .= $iconsEdit;
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
 
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-
-            echo $html;
+            $threadData = [
+                'entity' => $thread,
+                'title' => $title,
+                'last_post_by' => $last_post,
+                'last_post_content' => $lastPostContent,
+                'waiting_moderation' => $waitingModeration,
+                'icon_edit' => $iconsEdit,
+            ];
+            $threadList[] = $threadData;
         }
-        $count++;
     }
 }
 
-echo '</div>';
-echo isset($table_list) ? $table_list : '';
+$isTeacher = api_is_allowed_to_edit(false, true);
+$tpl = new Template(get_lang('Forum'), true, true, 'learnpath' === $origin);
 
-Display::display_footer();
+$tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
+
+$tpl->assign('header', $header);
+$tpl->assign('qualification_block', $qualificationBlock);
+$tpl->assign('threads', $threadList);
+
+$tpl->assign('is_allowed_to_edit', $isTeacher);
+$layout = $tpl->get_template('forum/forum.tpl');
+
+$tpl->display($layout);

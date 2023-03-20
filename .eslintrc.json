@@ -1,9 +1,10 @@
 {
   "root": true,
+  "parser": "vue-eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "parser": "babel-eslint"
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+    //"parser": "babel-eslint"
   },
   "env": {
     "browser": true,
@@ -12,6 +13,6 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:vue/recommended"
+    "plugin:vue/vue3-recommended"
   ]
 }

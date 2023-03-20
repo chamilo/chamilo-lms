@@ -67,13 +67,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         foreach ($courses as $course) {
             $dataToExport['code'] = str_replace(';', ',', $course['code']);
             $dataToExport['title'] = str_replace(';', ',', $course['title']);
-            $dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
-            $categoryInfo = CourseCategory::getCategory($course['category_code']);
+            //$dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
+            /*$categoryInfo = CourseCategory::getCategory($course['category_code']);
             if ($categoryInfo) {
                 $dataToExport['category_name'] = str_replace(';', ',', $categoryInfo['name']);
             } else {
                 $dataToExport['category_name'] = '';
-            }
+            }*/
             $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
             $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
             $dataToExport['students'] = '';

@@ -1,148 +1,137 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendance.
- *
  * @ORM\Table(
- *  name="c_attendance",
- *  indexes={
- *      @ORM\Index(name="active", columns={"active"})
- *  }
+ *     name="c_attendance",
+ *     indexes={
+ *         @ORM\Index(name="active", columns={"active"})
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAttendanceRepository")
  */
 class CAttendance extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
-    protected $active;
+    #[Assert\NotBlank]
+    protected int $active;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="attendance_qualify_title", type="string", length=255, nullable=true)
      */
-    protected $attendanceQualifyTitle;
+    protected ?string $attendanceQualifyTitle = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="attendance_qualify_max", type="integer", nullable=false)
      */
-    protected $attendanceQualifyMax;
+    #[Assert\NotNull]
+    protected int $attendanceQualifyMax;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="attendance_weight", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $attendanceWeight;
+    #[Assert\NotNull]
+    protected float $attendanceWeight;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
-    protected $locked;
+    #[Assert\NotNull]
+    protected int $locked;
+
+    /**
+     * @var Collection|CAttendanceCalendar[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"})
+     */
+    protected Collection $calendars;
+
+    /**
+     * @var Collection|CAttendanceResult[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceResult", mappedBy="attendance", cascade={"persist", "remove"})
+     */
+    protected Collection $results;
+
+    /**
+     * @var Collection|CAttendanceSheetLog[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"})
+     */
+    protected Collection $logs;
 
     public function __construct()
     {
+        $this->description = '';
         $this->active = 1;
         $this->attendanceQualifyMax = 0;
         $this->locked = 0;
+        $this->calendars = new ArrayCollection();
+        $this->results = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return (string) $this->getIid();
+        return $this->getName();
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return CAttendance
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CAttendance
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set active.
-     */
     public function setActive(int $active): self
     {
         $this->active = $active;
@@ -150,44 +139,24 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get active.
-     */
     public function getActive(): int
     {
-        return (int) $this->active;
+        return $this->active;
     }
 
-    /**
-     * Set attendanceQualifyTitle.
-     *
-     * @param string $attendanceQualifyTitle
-     *
-     * @return CAttendance
-     */
-    public function setAttendanceQualifyTitle($attendanceQualifyTitle)
+    public function setAttendanceQualifyTitle(string $attendanceQualifyTitle): self
     {
         $this->attendanceQualifyTitle = $attendanceQualifyTitle;
 
         return $this;
     }
 
-    /**
-     * Get attendanceQualifyTitle.
-     *
-     * @return string
-     */
-    public function getAttendanceQualifyTitle()
+    public function getAttendanceQualifyTitle(): ?string
     {
         return $this->attendanceQualifyTitle;
     }
 
-    /**
-     * Set attendanceQualifyMax.
-     *
-     * @param int $attendanceQualifyMax
-     */
-    public function setAttendanceQualifyMax($attendanceQualifyMax): self
+    public function setAttendanceQualifyMax(int $attendanceQualifyMax): self
     {
         $this->attendanceQualifyMax = $attendanceQualifyMax;
 
@@ -204,12 +173,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->attendanceQualifyMax;
     }
 
-    /**
-     * Set attendanceWeight.
-     *
-     * @param float $attendanceWeight
-     */
-    public function setAttendanceWeight($attendanceWeight): self
+    public function setAttendanceWeight(float $attendanceWeight): self
     {
         $this->attendanceWeight = $attendanceWeight;
 
@@ -226,9 +190,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->attendanceWeight;
     }
 
-    /**
-     * Set locked.
-     */
     public function setLocked(int $locked): self
     {
         $this->locked = $locked;
@@ -251,9 +212,51 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function setCalendars(Collection $calendars): self
+    {
+        $this->calendars = $calendars;
+
+        return $this;
+    }
+
     /**
-     * Resource identifier.
+     * @return CAttendanceSheetLog[]|Collection
      */
+    public function getLogs()
+    {
+        return $this->logs;
+    }
+
+    /**
+     * @param CAttendanceSheetLog[]|Collection $logs
+     */
+    public function setLogs(Collection $logs): self
+    {
+        $this->logs = $logs;
+
+        return $this;
+    }
+
+    /**
+     * @return CAttendanceResult[]|Collection
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    public function setResults(Collection $results): self
+    {
+        $this->results = $results;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -108,15 +108,15 @@ class CalculatedAnswer extends Question
             }
 
             window.onload = updateBlanks;
-
         </script>';
 
         // answer
         $form->addElement('label', null, '<br /><br />'.get_lang('Please type your text below').', '.get_lang('and').' '.get_lang('use square brackets [...] to define one or more blanks'));
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'answer',
             Display::return_icon('fill_field.png'),
+            true,
+            false,
             [
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);',
@@ -129,16 +129,25 @@ class CalculatedAnswer extends Question
         );
 
         $form->addRule('answer', get_lang('Please type the text'), 'required');
-        $form->addRule('answer', get_lang('Please define at least one blank with square brackets [...]'), 'regex', '/\[.*\]/');
+        $form->addRule(
+            'answer',
+            get_lang('Please define at least one blank with square brackets [...]'),
+            'regex',
+            '/\[.*\]/'
+        );
 
-        $form->addElement('label', null, get_lang('If you want only integer values write both limits without decimals'));
-        $form->addElement('html', '<div id="blanks_weighting"></div>');
+        $form->addElement(
+            'label',
+            null,
+            get_lang('If you want only integer values write both limits without decimals')
+        );
+        $form->addHtml('<div id="blanks_weighting"></div>');
 
         $notationListButton = Display::url(
             get_lang('Formula notation'),
             api_get_path(WEB_CODE_PATH).'exercise/evalmathnotation.php',
             [
-                'class' => 'btn btn-info ajax',
+                'class' => 'btn btn--info ajax',
                 'data-title' => get_lang('Formula notation'),
                 '_target' => '_blank',
             ]
@@ -149,7 +158,12 @@ class CalculatedAnswer extends Question
             $notationListButton
         );
 
-        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )')], ['id' => 'formula']);
+        $form->addText(
+            'formula',
+            [get_lang('Formula'), get_lang('Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )')],
+            true,
+            ['id' => 'formula']
+        );
         $form->addRule('formula', get_lang('Please, write the formula'), 'required');
 
         $form->addElement('text', 'weighting', get_lang('Score'), ['id' => 'weighting']);
@@ -238,14 +252,14 @@ class CalculatedAnswer extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
                 $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '</tr>';
 
@@ -265,9 +279,8 @@ class CalculatedAnswer extends Question
             $table,
             [
                 'where' => [
-                    'question_id = ? AND c_id = ?' => [
+                    'question_id = ?' => [
                         $this->id,
-                        $this->course['real_id'],
                     ],
                 ],
             ]

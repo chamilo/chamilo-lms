@@ -24,11 +24,11 @@ if (empty($userInfo)) {
     api_not_allowed(true);
 }
 
-$skills = Skill::getSkillRelItemsPerCourse($courseId, $sessionId);
+$skills = SkillModel::getSkillRelItemsPerCourse($courseId, $sessionId);
 $uniqueSkills = [];
 $itemsPerSkill = [];
 $uniqueSkillsConclusion = [];
-$skillRelUser = new SkillRelUser();
+$skillRelUser = new SkillRelUserModel();
 $userSkills = $skillRelUser->getUserSkills($userId, api_get_course_int_id(), api_get_session_id());
 $userSkillsList = [];
 if (!empty($userSkills)) {
@@ -43,7 +43,7 @@ $codePath = api_get_path(WEB_CODE_PATH);
 foreach ($skills as $skill) {
     $skillId = $skill->getSkill()->getId();
     $uniqueSkills[$skillId] = $skill->getSkill();
-    $itemInfo = Skill::getItemInfo($skill->getItemId(), $skill->getItemType());
+    $itemInfo = SkillModel::getItemInfo($skill->getItemId(), $skill->getItemType());
 
     $criteria = [
         'user' => $userId,

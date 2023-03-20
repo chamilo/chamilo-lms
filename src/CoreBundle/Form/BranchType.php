@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\BranchSync;
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +20,7 @@ class BranchType extends AbstractType
      * For form type details see:
      * http://symfony.com/doc/current/reference/forms/types.html.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builderData = $builder->getData();
 
@@ -43,7 +47,10 @@ class BranchType extends AbstractType
             ->add(
                 'parent_id',
                 'text',
-                ['required' => false, 'disabled' => $parentIdDisabled]
+                [
+                    'required' => false,
+                    'disabled' => $parentIdDisabled,
+                ]
             )
             //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
@@ -55,12 +62,14 @@ class BranchType extends AbstractType
             ->add('delay', 'text')
             ->add('admin_mail', EmailType::class)
             ->add('admin_name', 'text')
-            ->add('admin_phone', 'text', ['required' => false])
+            ->add('admin_phone', 'text', [
+                'required' => false,
+            ])
             ->add(
                 'last_sync_trans_date',
                 'datetime',
                 [
-                    'data' => new \DateTime(),
+                    'data' => new DateTime(),
                 ]
             )
             ->add('last_sync_type', 'text')
@@ -68,19 +77,20 @@ class BranchType extends AbstractType
             ->add('ssl_pub_key', 'text')
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
-            ->add('submit', 'submit');
+            ->add('submit', 'submit')
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\BranchSync',
+                'data_class' => BranchSync::class,
             ]
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'branch';
     }

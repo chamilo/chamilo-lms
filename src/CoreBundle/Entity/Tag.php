@@ -1,117 +1,84 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Tag.
- *
  * @ORM\Table(name="tag")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TagRepository")
  */
 class Tag
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)
      */
-    protected $tag;
+    #[Assert\NotBlank]
+    protected string $tag;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="field_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="tags")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $fieldId;
+    protected ExtraField $field;
 
     /**
-     * @var int
-     *
+     * @var Collection<int, UserRelTag>|UserRelTag[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelTag", mappedBy="tag", cascade={"persist"})
+     */
+    protected Collection $userRelTags;
+
+    /**
+     * @var Collection<int, ExtraFieldRelTag>|ExtraFieldRelTag[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldRelTag", mappedBy="tag", cascade={"persist"})
+     */
+    protected Collection $extraFieldRelTags;
+
+    /**
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
-    protected $count;
+    protected int $count;
 
-    /**
-     * Set tag.
-     *
-     * @param string $tag
-     *
-     * @return Tag
-     */
-    public function setTag($tag)
+    public function __construct()
+    {
+        $this->userRelTags = new ArrayCollection();
+        $this->count = 0;
+    }
+
+    public function setTag(string $tag): self
     {
         $this->tag = $tag;
 
         return $this;
     }
 
-    /**
-     * Get tag.
-     *
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return $this->tag;
     }
 
-    /**
-     * Set fieldId.
-     *
-     * @param int $fieldId
-     *
-     * @return Tag
-     */
-    public function setFieldId($fieldId)
-    {
-        $this->fieldId = $fieldId;
-
-        return $this;
-    }
-
-    /**
-     * Get fieldId.
-     *
-     * @return int
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
-    }
-
-    /**
-     * Set count.
-     *
-     * @param int $count
-     *
-     * @return Tag
-     */
-    public function setCount($count)
+    public function setCount(int $count): self
     {
         $this->count = $count;
 
         return $this;
     }
 
-    /**
-     * Get count.
-     *
-     * @return int
-     */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }
@@ -124,5 +91,29 @@ class Tag
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getField(): ExtraField
+    {
+        return $this->field;
+    }
+
+    public function setField(ExtraField $field): self
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    public function getUserRelTags()
+    {
+        return $this->userRelTags;
+    }
+
+    public function setUserRelTags($userRelTags): self
+    {
+        $this->userRelTags = $userRelTags;
+
+        return $this;
     }
 }

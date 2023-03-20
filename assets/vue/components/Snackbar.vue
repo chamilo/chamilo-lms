@@ -1,7 +1,7 @@
 <template>
-<div>
-  <span v-html="message"></span>
-</div>
+  <div>
+    <span v-html="message"></span>
+  </div>
   <!--    <v-snackbar-->
   <!--      v-model="show"-->
   <!--      :color="color"-->
@@ -26,7 +26,6 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields';
-
 export default {
   props: {
     message: String,
@@ -35,11 +34,9 @@ export default {
     ...mapFields('notifications', ['color', 'show', 'subText', 'text', 'timeout'])
   },
   methods: {
-
     close() {
       this.show = false;
     }
   }*/
-
 };
 </script>

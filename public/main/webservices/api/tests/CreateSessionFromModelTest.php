@@ -32,7 +32,7 @@ class CreateSessionFromModelTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 
@@ -50,8 +50,8 @@ class CreateSessionFromModelTest extends V2TestCase
                 'endDate' => $endDate,
             ]
         );
-        //var_dump($newSessionId);exit;
 
+        // assert the session was created and given the returned session id
         $entityManager = Database::getManager();
         $repository = $entityManager->getRepository('ChamiloCoreBundle:Session');
         $newSession = $repository->find($newSessionId);
@@ -92,7 +92,7 @@ class CreateSessionFromModelTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 
@@ -142,7 +142,7 @@ class CreateSessionFromModelTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 
@@ -188,7 +188,7 @@ class CreateSessionFromModelTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 
@@ -198,7 +198,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $authorId = UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME);
         foreach ($courseCodes as $code) {
             $course = CourseManager::create_course(['code' => $code, 'title' => $code], $authorId);
-            $courseList[] = $course['real_id'];
+            $courseList[] = $course->getId();
         }
         SessionManager::add_courses_to_session($modelSessionId, $courseList);
 
@@ -242,7 +242,7 @@ class CreateSessionFromModelTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
 
@@ -254,7 +254,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $firstExtraFieldNameForNewSession = 'extra field value for new session';
         $firstExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $firstExtraFieldName,
                 'display_text' => $firstExtraFieldName,
                 'visible_to_self' => 1,
@@ -275,7 +275,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $secondExtraFieldValue = 'second extra field value';
         $secondExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $secondExtraFieldName,
                 'display_text' => $secondExtraFieldName,
                 'visible_to_self' => 1,

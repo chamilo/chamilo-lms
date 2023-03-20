@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -10,15 +12,13 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
+use CourseChatUtils;
 use Event;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ChatController.
- */
 class ChatController extends AbstractResourceController implements CourseControllerInterface
 {
     use ControllerTrait;
@@ -64,10 +64,12 @@ class ChatController extends AbstractResourceController implements CourseControl
         $userId = api_get_user_id();
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
-        $json = ['status' => false];
+        $json = [
+            'status' => false,
+        ];
         $parentResourceNode = $this->getParentResourceNode($request);
 
-        $courseChatUtils = new \CourseChatUtils(
+        $courseChatUtils = new CourseChatUtils(
             $courseId,
             $userId,
             $sessionId,
@@ -106,7 +108,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                         'oldFileSize' => false,
                         'history' => $courseChatUtils->readMessages(false, $friend),
                         'usersOnline' => $newUsersOnline,
-                        'userList' => $newUsersOnline != $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,
+                        'userList' => $newUsersOnline !== $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,
                         'currentFriend' => $friend,
                     ],
                 ];

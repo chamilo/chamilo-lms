@@ -1,21 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 /**
- * Class LegacyListener
  * Works as old global.inc.php
  * Setting old php requirements so pages inside main/* could work correctly.
  */
@@ -23,41 +30,60 @@ class LegacyListener
 {
     use ContainerAwareTrait;
 
-    private $twig;
+    private Environment $twig;
+    private TokenStorageInterface $tokenStorage;
+    private UserRepository $userRepository;
+    private AccessUrlRepository $accessUrlRepository;
+    private RouterInterface $router;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag)
     {
         $this->twig = $twig;
+        $this->tokenStorage = $tokenStorage;
+        $this->userRepository = $userRepository;
+        $this->accessUrlRepository = $accessUrlRepository;
+        $this->router = $router;
+        $this->parameterBag = $parameterBag;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
         $request = $event->getRequest();
         $session = $request->getSession();
+        $baseUrl = $request->getBaseUrl();
 
-        /** @var ContainerInterface $container */
         $container = $this->container;
+
+        // Fixes the router when loading in legacy mode (public/main)
+        if (!empty($baseUrl)) {
+            // We are inside main/
+            /** @var RouterInterface $router */
+            $router = $container->get('router');
+            $context = $router->getContext();
+            $context->setBaseUrl('');
+            $router->setContext($context);
+        }
 
         // Setting container
         Container::setRequest($request);
         Container::setContainer($container);
+        Container::$twig = $this->twig;
         Container::setLegacyServices($container);
 
         // Legacy way of detect current access_url
         $installed = $container->getParameter('installed');
 
-        $urlId = 1;
         if (empty($installed)) {
-            throw new \Exception('Chamilo is not installed');
+            throw new Exception('Chamilo is not installed');
         }
 
         $twig = $this->twig;
-        $token = $container->get('security.token_storage')->getToken();
-
+        $token = $this->tokenStorage->getToken();
         $userObject = null;
         if (null !== $token) {
             /** @var User $userObject */
@@ -67,15 +93,12 @@ class LegacyListener
         $userInfo = [];
         $isAdmin = false;
         $allowedCreateCourse = false;
-        $userStatus = null;
         if ($userObject instanceof UserInterface) {
             $userInfo = api_get_user_info_from_entity($userObject);
-            if ($userInfo) {
-                $userStatus = $userObject->getStatus();
-                $isAdmin = $userInfo['is_admin'];
-            }
-            $allowedCreateCourse = 1 === $userStatus;
+            $isAdmin = $userObject->isAdmin();
+            $allowedCreateCourse = $userObject->isTeacher();
         }
+        // @todo remove _user/is_platformAdmin/is_allowedCreateCourse
         $session->set('_user', $userInfo);
         $session->set('is_platformAdmin', $isAdmin);
         $session->set('is_allowedCreateCourse', $allowedCreateCourse);
@@ -114,19 +137,30 @@ class LegacyListener
 
         // We set cid_reset = true if we enter inside a main/admin url
         // CourseListener check this variable and deletes the course session
-        if (false !== strpos($request->get('name'), 'admin/')) {
+        if (str_contains((string) $request->get('name'), 'admin/')) {
             $session->set('cid_reset', true);
         } else {
             $session->set('cid_reset', false);
         }
+
+        $urlId = $this->accessUrlRepository->getFirstId();
+
+        if (1 === (int) $this->parameterBag->get('multiple_access_url')) {
+            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
+            if (null !== $accessUrl) {
+                $urlId = $accessUrl->getId();
+            }
+        }
+
         $session->set('access_url_id', $urlId);
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
     }
 
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
     }
 }

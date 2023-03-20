@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
+api_protect_webservices();
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
@@ -252,7 +253,7 @@ function WSCreateUsers($params)
     $results = [];
     $orig_user_id_value = [];
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     foreach ($users_params as $user_param) {
@@ -515,7 +516,7 @@ function WSCreateUser($params)
         $original_user_id_name
     );
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     if ($user_id > 0) {
@@ -650,7 +651,7 @@ function WSCreateUser($params)
         return 0;
     }
 
-    return  $userId;
+    return $userId;
 }
 
 /* Register WSCreateUsersPasswordCrypted function */
@@ -792,8 +793,8 @@ function WSCreateUsersPasswordCrypted($params)
         $active = 1;
         $hr_dept_id = 0;
         $extra = null;
-        $original_user_id_name = $user_param['original_user_id_name'];
-        $original_user_id_value = $user_param['original_user_id_value'];
+        $original_user_id_name = Database::escape_string($user_param['original_user_id_name']);
+        $original_user_id_value = Database::escape_string($user_param['original_user_id_value']);
         $orig_user_id_value[] = $user_param['original_user_id_value'];
         $extra_list = $user_param['extra'];
         $salt = '';
@@ -842,13 +843,13 @@ function WSCreateUsersPasswordCrypted($params)
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
 
         // Check whether x_user_id exists into user_field_values table.
-        $sql = "SELECT value as field_value,item_id as user_id
+        $sql = "SELECT field_value, item_id as user_id
                 FROM $t_uf uf, $t_ufv ufv
                 WHERE
-                    uf.extra_field_type = $extraFieldType
+                    uf.item_type = $extraFieldType AND
                     ufv.field_id=uf.id AND
                     variable='$original_user_id_name' AND
-                    value ='$original_user_id_value'";
+                    field_value ='$original_user_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         $count_row = Database::num_rows($res);
@@ -1604,7 +1605,7 @@ function WSEditUserCredentials($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $original_user_id_value = $params['original_user_id_value'];
@@ -1711,7 +1712,7 @@ function WSEditUsers($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -1898,7 +1899,7 @@ function WSEditUser($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -1991,7 +1992,7 @@ function WSEditUser($params)
         $user->setExpirationDate($expiration_date);
     }
     if (!empty($language)) {
-        $user->setLanguage($language);
+        $user->setLocale($language);
     }
 
     $user
@@ -1999,7 +2000,7 @@ function WSEditUser($params)
         ->setStatus($status)
         ->setOfficialCode($official_code)
         ->setPhone($phone)
-        ->setPictureUri($picture_uri)
+        //->setPictureUri($picture_uri)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true);
 
@@ -2022,7 +2023,7 @@ function WSEditUser($params)
         }
     }
 
-    return  $user_id;
+    return $user_id;
 }
 
 /* Register WSEditUserWithPicture function */
@@ -2065,11 +2066,18 @@ $server->register(
 // Define the method WSEditUserWithPicture
 function WSEditUserWithPicture($params)
 {
+    if (ini_get('allow_url_fopen')) {
+        return new soap_fault(
+            'Server',
+            '',
+            'WSEditUserWithPicture is disabled because allow_url_fopen is enabled in the server.'
+        );
+    }
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userManager = UserManager::getManager();
+    $userManager = UserManager::getRepository();
     $userRepository = UserManager::getRepository();
 
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -2105,24 +2113,15 @@ function WSEditUserWithPicture($params)
         $original_user_id_name
     );
 
-    // Get picture and generate uri.
-    $filename = basename($picture_url);
-    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
-    // Make sure the file download was OK by checking the HTTP headers for OK
-    if (strpos(get_headers($picture_url)[0], "OK")) {
-        file_put_contents($tempDir.$filename, file_get_contents($picture_url));
-        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
+    if (empty($user_id)) {
+        return 0;
     }
 
-    if (0 == $user_id) {
+    $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
+    $resu = Database::query($sql);
+    $r_check_user = Database::fetch_row($resu);
+    if (!empty($r_check_user[0])) {
         return 0;
-    } else {
-        $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
-        $resu = Database::query($sql);
-        $r_check_user = Database::fetch_row($resu);
-        if (!empty($r_check_user[0])) {
-            return 0;
-        }
     }
 
     // Check whether username already exits.
@@ -2133,6 +2132,19 @@ function WSEditUserWithPicture($params)
 
     if (!empty($r_username[0])) {
         return 0;
+    }
+
+    // Get picture and generate uri.
+    $filename = basename($picture_url);
+    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
+    // Make sure the file download was OK by checking the HTTP headers for OK
+    if (strpos(get_headers($picture_url)[0], "OK")) {
+        $tempFile = $tempDir.uniqid('user_image', true);
+        file_put_contents($tempFile, file_get_contents($picture_url));
+        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempFile);
+        if (file_exists($tempFile)) {
+            unlink($tempFile);
+        }
     }
 
     /** @var User $user */
@@ -2177,7 +2189,8 @@ function WSEditUserWithPicture($params)
         ->setExpirationDate($expiration_date)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true)
-        ->setPictureUri($pictureUri);
+        ->setPictureUri($pictureUri)
+    ;
 
     if (!is_null($creator_id)) {
         $user->setCreatorId($creator_id);
@@ -3024,10 +3037,10 @@ function WSCreateCourse($params)
             $params['unsubscribe'] = $unsubscribe;
         }
 
-        $course_info = CourseManager::create_course($params, $sessionAdminId);
+        $course = CourseManager::create_course($params, $sessionAdminId);
 
-        if (!empty($course_info)) {
-            $course_code = $course_info['code'];
+        if (null !== $course) {
+            $course_code = $course->getCode();
 
             // Save new field label into course_field table
             CourseManager::create_course_extra_field(
@@ -3235,9 +3248,9 @@ function WSCreateCourseByTitle($params)
             $params['tutor_name'] = $tutor_name;
             $params['course_language'] = $course_language;
             $params['user_id'] = $sessionAdminId;
-            $course_info = CourseManager::create_course($params, $sessionAdminId);
-            if (!empty($course_info)) {
-                $course_code = $course_info['code'];
+            $course = CourseManager::create_course($params, $sessionAdminId);
+            if (null !== $course) {
+                $course_code = $course->getCode();
 
                 // Save new fieldlabel into course_field table.
                 CourseManager::create_course_extra_field(
@@ -4091,7 +4104,7 @@ function WSCreateSession($params)
                     $date_end,
                     $coachStartDate,
                     $coachEndDate,
-                    $id_coach,
+                    [$id_coach],
                     0,
                     1,
                     false,
@@ -4628,9 +4641,9 @@ function WSSubscribeUserToCourse($params)
                 $original_course_id['original_course_id_name']
             );
 
-            $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
+            $courseId = isset($courseInfo['real_id']) ? $courseInfo['real_id'] : '';
 
-            if (empty($courseCode)) {
+            if (empty($courseId)) {
                 if ($debug) {
                     error_log('WSSubscribeUserToCourse course not found');
                 }
@@ -4638,9 +4651,9 @@ function WSSubscribeUserToCourse($params)
                 $resultValue = 0;
             } else {
                 if ($debug) {
-                    error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
+                    error_log('WSSubscribeUserToCourse $courseId: '.$courseId);
                 }
-                $result = CourseManager::subscribeUser($user_id, $courseCode, $status, 0, 0, false);
+                $result = CourseManager::subscribeUser($user_id, $courseId, $status, 0, 0, false);
                 if ($result) {
                     $resultValue = 1;
                     if ($debug) {
@@ -4754,7 +4767,7 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::subscribeUser($user_id, $course_data['code'], $status, 0, false, false)) {
+            if (!CourseManager::subscribeUser($user_id, $course_data['real_id'], $status, 0, false, false)) {
                 $result = 'User was not registered possible reasons: User already registered to the course,
                            Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
@@ -6811,7 +6824,7 @@ function WSCreateGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $params = [
         'name' => $params['name'],
     ];
@@ -6862,7 +6875,7 @@ function WSUpdateGroup($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
     $params['allow_member_group_to_leave'] = null;
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->update($params);
 }
@@ -6903,7 +6916,7 @@ function WSDeleteGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->delete($params['id']);
 }
@@ -6945,7 +6958,7 @@ function GroupBindToParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->setParentGroup($params['id'], $params['parent_id']);
 }
@@ -6986,7 +6999,7 @@ function GroupUnbindFromParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->setParentGroup($params['id'], 0);
 }
@@ -7030,7 +7043,7 @@ function WSAddUserToGroup($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->subscribe_users_to_usergroup(
         $params['group_id'],
@@ -7078,7 +7091,7 @@ function WSUpdateUserRoleInGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->update_user_role(
         $params['user_id'],
@@ -7124,7 +7137,7 @@ function WSDeleteUserFromGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->delete_user_rel_group(
         $params['user_id'],

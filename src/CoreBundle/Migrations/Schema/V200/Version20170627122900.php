@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -7,15 +9,20 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Settings changes.
- */
 class Version20170627122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'settings_current changes';
+    }
+
     public function up(Schema $schema): void
     {
-        $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
         $this->addSql('ALTER TABLE settings_current CHANGE access_url access_url INT DEFAULT NULL');
+        $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
+
+        // Use .env APP_ENV setting to change server type
+        //$this->addSql("DELETE FROM settings_current WHERE variable = 'server_type'");
 
         $table = $schema->getTable('settings_current');
         if (false === $table->hasForeignKey('FK_62F79C3B9436187B')) {
@@ -24,18 +31,18 @@ class Version20170627122900 extends AbstractMigrationChamilo
             );
         }
         $this->addSql(
-            'ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL, CHANGE selected_value selected_value LONGTEXT DEFAULT NULL;'
+            'ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL, CHANGE selected_value selected_value LONGTEXT DEFAULT NULL;'
         );
-        $this->addSql(
-            'ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE value value VARCHAR(190) DEFAULT NULL'
-        );
+
+        $this->addSql('ALTER TABLE settings_options CHANGE value value VARCHAR(190) DEFAULT NULL');
 
         $connection = $this->getEntityManager()->getConnection();
 
         $result = $connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'"
-            );
+            )
+        ;
         $count = $result->fetchNumeric()[0];
         if (empty($count)) {
             $this->addSql(
@@ -108,8 +115,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $oldSetting => $newSetting) {
-            $sql = "UPDATE settings_current SET variable = '$newSetting'
-                    WHERE variable = '$oldSetting'";
+            $sql = "UPDATE settings_current SET variable = '{$newSetting}'
+                    WHERE variable = '{$oldSetting}'";
             $this->addSql($sql);
         }
 
@@ -272,11 +279,12 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'timezone' => 'platform',
             'enable_profile_user_address_geolocalization' => 'profile',
             'theme' => 'platform',
+            'exercise_hide_label' => 'exercise',
         ];
 
         foreach ($settings as $variable => $category) {
-            $sql = "UPDATE settings_current SET category = '$category'
-                    WHERE variable = '$variable'";
+            $sql = "UPDATE settings_current SET category = '{$category}'
+                    WHERE variable = '{$variable}'";
             $this->addSql($sql);
         }
 
@@ -286,10 +294,13 @@ class Version20170627122900 extends AbstractMigrationChamilo
         ];
 
         foreach ($settings as $variable => $value) {
-            $sql = "UPDATE settings_current SET selected_value = '$value'
-                    WHERE variable = '$variable'";
+            $sql = "UPDATE settings_current SET selected_value = '{$value}'
+                    WHERE variable = '{$variable}'";
             $this->addSql($sql);
         }
+
+        $this->addSql("UPDATE settings_current SET selected_value = ''
+                           WHERE variable = 'platform_language' AND selected_value IS NULL");
 
         // Delete settings
         $settings = [
@@ -310,14 +321,45 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'sso_authentication_protocol',
             'sso_force_redirect',
             'activate_email_template',
+            'sso_authentication_subclass',
         ];
 
         foreach ($settings as $setting) {
-            $sql = "DELETE FROM settings_current WHERE variable = '$setting'";
+            $sql = "DELETE FROM settings_current WHERE variable = '{$setting}'";
             $this->addSql($sql);
         }
 
         $this->addSql('UPDATE settings_current SET category = LOWER(category)');
+
+        // ticket configuration
+        $ticketProjectUserRoles = $this->getConfigurationValue('ticket_project_user_roles');
+
+        if ($ticketProjectUserRoles && isset($ticketProjectUserRoles['permissions'])) {
+            $selectedValue = array_map(
+                fn ($projectId, $roles) => "$projectId:".implode(',', $roles),
+                array_keys($ticketProjectUserRoles['permissions']),
+                array_values($ticketProjectUserRoles['permissions'])
+            );
+
+            $selectedValue = implode(PHP_EOL, $selectedValue);
+
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'ticket_project_user_roles', 'Ticket', '$selectedValue', 'ticket_project_user_roles', 1, 1)"
+            );
+        }
+
+        // social configurations
+        if ($this->getConfigurationValue('social_enable_messages_feedback')) {
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'social_enable_messages_feedback', 'Social', 'true', 'social_enable_messages_feedback', 1, 1)"
+            );
+        }
+
+        if ($this->getConfigurationValue('disable_dislike_option')) {
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'disable_dislike_option', 'Social', 'true', 'disable_dislike_option', 1, 1)"
+            );
+        }
     }
 
     public function down(Schema $schema): void

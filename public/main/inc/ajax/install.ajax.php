@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use GuzzleHttp\Client;
@@ -6,7 +7,7 @@ use GuzzleHttp\Client;
 /**
  * Responses to AJAX calls for install.
  */
-require_once __DIR__.'/../../../vendor/autoload.php';
+require_once __DIR__.'/../../../../vendor/autoload.php';
 
 $action = $_GET['a'];
 
@@ -49,7 +50,7 @@ switch ($action) {
 
                 $urlValidated = false;
                 try {
-                    $client = new GuzzleHttp\Client();
+                    $client = new Client();
                     $res = $client->request('GET', $url, $options);
                     if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
                         $urlValidated = true;

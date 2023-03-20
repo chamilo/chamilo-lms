@@ -163,7 +163,7 @@ if (!$course_validation_feature) {
 }
 
 // Create a simple search-box.
-$form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
+$form = new FormValidator('search_simple', 'get', '', '', [], false);
 $renderer = $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('Keyword'));

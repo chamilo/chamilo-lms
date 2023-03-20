@@ -122,7 +122,7 @@ if ((isset($_POST['action']) && 'course_select_form' == $_POST['action']) ||
 
 if ($export && $name) {
     echo Display::return_message(get_lang('The backup has been created. The download of this file will start in a few moments. If your download does not start, click the following link'), 'confirm');
-    echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
+    echo '<br /><a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
 } else {
     // Display forms especial export
     if (isset($_POST['backup_option']) && 'select_items' == $_POST['backup_option']) {
@@ -266,7 +266,7 @@ function fullexportspecial()
             $query_session = Database::query($sql);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];
-                $sql_session_doc = "SELECT path 
+                $sql_session_doc = "SELECT path
                     FROM $tbl_document AS docs, $tbl_property AS props
                     WHERE props.tool='".TOOL_DOCUMENT."'
                         AND docs.id=props.ref

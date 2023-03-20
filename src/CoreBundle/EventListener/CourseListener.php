@@ -1,25 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
@@ -32,19 +36,26 @@ class CourseListener
 {
     use ContainerAwareTrait;
 
-    private $twig;
+    private Environment $twig;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private SettingsManager $settingsManager;
 
-    public function __construct(Environment $twig)
-    {
+    public function __construct(
+        Environment $twig,
+        AuthorizationCheckerInterface $authorizationChecker,
+        SettingsManager $settingsManager
+    ) {
         $this->twig = $twig;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->settingsManager = $settingsManager;
     }
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             // don't do anything if it's not the master request
             return;
         }
@@ -75,35 +86,38 @@ class CourseListener
 
         // Check if URL has cid value. Using Symfony request.
         $courseId = (int) $request->get('cid');
-        $checker = $container->get('security.authorization_checker');
+        $checker = $this->authorizationChecker;
 
+        /** @var EntityManager $em */
+        $em = $container->get('doctrine')->getManager();
+
+        //dump("cid value in request: $courseId");
         if (!empty($courseId)) {
+            $course = null;
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-                    //dump("Course loaded from Session $courseId");
+                    //dump("Course #$courseId loaded from Session ");
                 }
             }
-            $course = null;
-            if (null === $course) {
-                /** @var EntityManager $em */
-                $em = $container->get('doctrine')->getManager();
-                $course = $em->getRepository(Course::class)->find($courseId);
 
-                if (null === $course) {
-                    throw new NotFoundHttpException($translator->trans('Course does not exist'));
-                }
-
-                //dump("Course loaded from DB $courseId");
-                $courseInfo = api_get_course_info($course->getCode());
-            }
-
+            //$course = null; //force loading from database
+            //if (null === $course) {
+            $course = $em->getRepository(Course::class)->find($courseId);
             if (null === $course) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));
             }
+
+            //dump("Course loaded from DB #$courseId");
+            $courseInfo = api_get_course_info($course->getCode());
+            //}
+
+            /*if (null === $course) {
+                throw new NotFoundHttpException($translator->trans('Course does not exist'));
+            }*/
         }
 
         global $cidReset;
@@ -135,24 +149,22 @@ class CourseListener
                 // See CourseVoter.php
                 //dump("Checkisgranted");
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                    throw new AccessDeniedException($translator->trans('Unauthorised access to course!'));
+                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this course'));
                 }
             } else {
                 //dump("Load chamilo session from DB");
                 $session = $em->getRepository(Session::class)->find($sessionId);
-                if ($session) {
-                    if (false === $session->hasCourse($course)) {
+                if (null !== $session) {
+                    if (!$session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
                     }
-
                     //$course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedException($translator->trans('Unauthorised access to session!'));
+                        throw new AccessDeniedException($translator->trans('You\'re not allowed in this session'));
                     }
-
                     $sessionHandler->set('session_name', $session->getName());
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
@@ -172,12 +184,14 @@ class CourseListener
                 //dump('Load chamilo group from DB');
                 $group = $em->getRepository(CGroup::class)->find($groupId);
 
-                if (!$group) {
+                if (null === $group) {
                     throw new NotFoundHttpException($translator->trans('Group not found'));
                 }
 
+                $group->setParent($course);
+
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this group'));
                 }
 
                 $sessionHandler->set('gid', $groupId);
@@ -205,25 +219,23 @@ class CourseListener
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
     }
 
     /**
      * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
      */
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
         $controllerList = $event->getController();
 
-        if (!is_array($controllerList)) {
+        if (!\is_array($controllerList)) {
             return;
         }
 
         $request = $event->getRequest();
         $sessionHandler = $request->getSession();
-
-        /** @var ContainerInterface $container */
         //$container = $this->container;
 
         /*if ($course) {
@@ -241,15 +253,15 @@ class CourseListener
         //$sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
-        global $cidReset;
+        //global $cidReset;
         //$cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
-        if (is_array($controllerList) &&
+        if (\is_array($controllerList) &&
             (
-                $controllerList[0] instanceof CourseControllerInterface
+                $controllerList[0] instanceof CourseControllerInterface ||
+                $controllerList[0] instanceof EditorController
                 //$controllerList[0] instanceof ResourceController
-
                 //|| $controllerList[0] instanceof LegacyController
             )
         ) {
@@ -284,7 +296,7 @@ class CourseListener
         }
     }
 
-    public function removeCourseFromSession(Request $request)
+    public function removeCourseFromSession(Request $request): void
     {
         $sessionHandler = $request->getSession();
         $alreadyVisited = $sessionHandler->get('course_already_visited');
@@ -308,30 +320,26 @@ class CourseListener
         $sessionHandler->remove('origin');
 
         // Remove user temp roles
-        /** @var User $user */
         $token = $this->container->get('security.token_storage')->getToken();
         if (null !== $token) {
+            /** @var User $user */
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
+                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_TEACHER');
+                $user->removeRole('ROLE_CURRENT_COURSE_GROUP_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_STUDENT');
                 $user->removeRole('ROLE_CURRENT_COURSE_TEACHER');
-                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
-                $user->removeRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+                $user->removeRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
             }
         }
 
         //$request->setLocale($request->getPreferredLanguage());
     }
 
-    /**
-     * @param Course $course
-     * @param int    $sessionId
-     * @param int    $groupId
-     * @param string $origin
-     */
-    private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
+    private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string
     {
-        if ($course) {
+        if (null !== $course) {
             $cidReqURL = '&cid='.$course->getId();
             $cidReqURL .= '&sid='.$sessionId;
             $cidReqURL .= '&gid='.$groupId;

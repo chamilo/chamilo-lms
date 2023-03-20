@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,52 +9,45 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ExtraFieldOptionRelFieldOption.
- *
  * @ORM\Table(
  *     name="extra_field_option_rel_field_option",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx", columns={"field_id", "role_id", "field_option_id", "related_field_option_id"})}
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="idx", columns={"field_id", "role_id", "field_option_id", "related_field_option_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class ExtraFieldOptionRelFieldOption
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="field_option_id", type="integer", nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions")
+     * @ORM\JoinColumn(name="field_option_id", referencedColumnName="id")
      */
-    protected $fieldOptionId;
+    protected ExtraFieldOptions $extraFieldOption;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="related_field_option_id", type="integer", nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions")
+     * @ORM\JoinColumn(name="related_field_option_id", referencedColumnName="id")
      */
-    protected $relatedFieldOptionId;
+    protected ExtraFieldOptions $relatedFieldOption;
 
     /**
-     * @var int
-     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     */
+    protected ExtraField $field;
+
+    /**
      * @ORM\Column(name="role_id", type="integer", nullable=true, unique=false)
      */
-    protected $roleId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="field_id", type="integer", nullable=true, unique=false)
-     */
-    protected $fieldId;
+    protected ?int $roleId = null;
 
     /**
      * Get id.
@@ -65,85 +60,11 @@ class ExtraFieldOptionRelFieldOption
     }
 
     /**
-     * Set fieldId.
-     *
-     * @param int $fieldId
-     *
-     * @return ExtraFieldOptionRelFieldOption
-     */
-    public function setFieldId($fieldId)
-    {
-        $this->fieldId = $fieldId;
-
-        return $this;
-    }
-
-    /**
-     * Get fieldId.
-     *
-     * @return int
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
-    }
-
-    /**
-     * Set fieldOptionId.
-     *
-     * @param int $fieldOptionId
-     *
-     * @return ExtraFieldOptionRelFieldOption
-     */
-    public function setFieldOptionId($fieldOptionId)
-    {
-        $this->fieldOptionId = $fieldOptionId;
-
-        return $this;
-    }
-
-    /**
-     * Get fieldOptionId.
-     *
-     * @return int
-     */
-    public function getFieldOptionId()
-    {
-        return $this->fieldOptionId;
-    }
-
-    /**
-     * Set relatedFieldOptionId.
-     *
-     * @param int $relatedFieldOptionId
-     *
-     * @return ExtraFieldOptionRelFieldOption
-     */
-    public function setRelatedFieldOptionId($relatedFieldOptionId)
-    {
-        $this->relatedFieldOptionId = $relatedFieldOptionId;
-
-        return $this;
-    }
-
-    /**
-     * Get relatedFieldOptionId.
-     *
-     * @return int
-     */
-    public function getRelatedFieldOptionId()
-    {
-        return $this->relatedFieldOptionId;
-    }
-
-    /**
      * Set roleId.
      *
-     * @param int $roleId
-     *
      * @return ExtraFieldOptionRelFieldOption
      */
-    public function setRoleId($roleId)
+    public function setRoleId(int $roleId)
     {
         $this->roleId = $roleId;
 
@@ -158,5 +79,41 @@ class ExtraFieldOptionRelFieldOption
     public function getRoleId()
     {
         return $this->roleId;
+    }
+
+    public function getExtraFieldOption(): ExtraFieldOptions
+    {
+        return $this->extraFieldOption;
+    }
+
+    public function setExtraFieldOption(ExtraFieldOptions $extraFieldOption): self
+    {
+        $this->extraFieldOption = $extraFieldOption;
+
+        return $this;
+    }
+
+    public function getRelatedFieldOption(): ExtraFieldOptions
+    {
+        return $this->relatedFieldOption;
+    }
+
+    public function setRelatedFieldOption(ExtraFieldOptions $relatedFieldOption): self
+    {
+        $this->relatedFieldOption = $relatedFieldOption;
+
+        return $this;
+    }
+
+    public function getField(): ExtraField
+    {
+        return $this->field;
+    }
+
+    public function setField(ExtraField $field): self
+    {
+        $this->field = $field;
+
+        return $this;
     }
 }

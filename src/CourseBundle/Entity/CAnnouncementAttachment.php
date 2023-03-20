@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -12,68 +14,54 @@ use Doctrine\ORM\Mapping as ORM;
  * CAnnouncementAttachment.
  *
  * @ORM\Table(name="c_announcement_attachment")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository")
  */
 class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var CAnnouncement
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", cascade={"persist"})
-     * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE" )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", inversedBy="attachments", cascade={"persist"})
+     * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $announcement;
+    protected CAnnouncement $announcement;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
+
+    public function __construct()
+    {
+        $this->comment = '';
+    }
 
     public function __toString(): string
     {
         return $this->getFilename();
     }
 
-    /**
-     * Set path.
-     *
-     * @param string $path
-     *
-     * @return CAnnouncementAttachment
-     */
-    public function setPath($path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -90,12 +78,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->path;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -112,12 +95,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->comment;
     }
 
-    /**
-     * Set size.
-     *
-     * @param int $size
-     */
-    public function setSize($size): self
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -139,12 +117,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->iid;
     }
 
-    /**
-     * Set filename.
-     *
-     * @param string $filename
-     */
-    public function setFilename($filename): self
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -173,9 +146,6 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

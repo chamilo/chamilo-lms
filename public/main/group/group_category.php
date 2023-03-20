@@ -6,12 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
-// Notice for unauthorized people.
 api_protect_course_script(true);
-
-if ('false' == api_get_setting('allow_group_categories')) {
-    api_not_allowed(true);
-}
 
 $sessionId = api_get_session_id();
 
@@ -170,9 +165,13 @@ $group = [
         'self_reg_allowed',
         get_lang('Registration'),
         get_lang('Learners are allowed to self-register in groups'),
-        1
     ),
-    $form->createElement('checkbox', 'self_unreg_allowed', null, get_lang('Learners are allowed to unregister themselves from groups'), 1),
+    $form->createElement(
+        'checkbox',
+        'self_unreg_allowed',
+        null,
+        get_lang('Learners are allowed to unregister themselves from groups')
+    ),
 ];
 $form->addGroup(
     $group,
@@ -182,7 +181,6 @@ $form->addGroup(
     false
 );
 $form->addElement('html', '</div>');
-
 $form->addElement('hidden', 'action');
 
 $form->addElement('html', '<div class="col-md-12">');
@@ -297,6 +295,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('Announcements'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup(
     $group,
@@ -383,13 +382,13 @@ if ($form->validate()) {
         $max_member = $values['max_member'];
     }
 
-    $self_reg_allowed = isset($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
-    $self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
+    $self_reg_allowed = $values['self_reg_allowed'] ?? 0;
+    $self_unreg_allowed = $values['self_unreg_allowed'] ?? 0;
 
     switch ($values['action']) {
         case 'update_settings':
             GroupManager::update_category(
-                $values['id'],
+                $_GET['id'],
                 $values['title'],
                 $values['description'],
                 $values['doc_state'],
@@ -403,7 +402,7 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                isset($values['document_access']) ? $values['document_access'] : 0
+                $values['document_access'] ?? 0
             );
             Display::addFlash(Display::return_message(get_lang('Group settings have been modified')));
             header('Location: '.$currentUrl.'&category='.$values['id']);
@@ -423,7 +422,7 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                isset($values['document_access']) ? $values['document_access'] : 0
+                $values['document_access'] ?? 0
             );
             Display::addFlash(Display::return_message(get_lang('Category created')));
             header('Location: '.$currentUrl);
@@ -436,11 +435,9 @@ if ($form->validate()) {
 // Else display the form
 Display::display_header($nameTools, 'Group');
 
-// actions bar
-echo '<div class="actions">';
-echo '<a href="group.php">'.
+$actions = '<a href="group.php">'.
     Display::return_icon('back.png', get_lang('Back to Groups list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $defaults = $category;
 $defaults['action'] = $action;

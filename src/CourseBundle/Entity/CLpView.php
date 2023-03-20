@@ -1,141 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CLpView.
  *
  * @ORM\Table(
- *  name="c_lp_view",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="lp_id", columns={"lp_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="c_lp_view",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="lp_id", columns={"lp_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CLpView
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $cId;
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="lp_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $lpId;
+    protected CLp $lp;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected Course $course;
 
     /**
-     * @var int
-     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?Session $session = null;
+
+    /**
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    protected $viewCount;
+    protected int $viewCount;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="last_item", type="integer", nullable=false)
      */
-    protected $lastItem;
+    protected int $lastItem;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="progress", type="integer", nullable=true)
      */
-    protected $progress;
+    protected ?int $progress = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * Set lpId.
-     *
-     * @param int $lpId
-     *
-     * @return CLpView
-     */
-    public function setLpId($lpId)
-    {
-        $this->lpId = $lpId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpId()
-    {
-        return $this->lpId;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CLpView
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set viewCount.
-     *
-     * @param int $viewCount
-     *
-     * @return CLpView
-     */
-    public function setViewCount($viewCount)
+    public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
 
@@ -152,14 +89,7 @@ class CLpView
         return $this->viewCount;
     }
 
-    /**
-     * Set lastItem.
-     *
-     * @param int $lastItem
-     *
-     * @return CLpView
-     */
-    public function setLastItem($lastItem)
+    public function setLastItem(int $lastItem): self
     {
         $this->lastItem = $lastItem;
 
@@ -176,14 +106,7 @@ class CLpView
         return $this->lastItem;
     }
 
-    /**
-     * Set progress.
-     *
-     * @param int $progress
-     *
-     * @return CLpView
-     */
-    public function setProgress($progress)
+    public function setProgress(int $progress): self
     {
         $this->progress = $progress;
 
@@ -200,51 +123,51 @@ class CLpView
         return $this->progress;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CLpView
-     */
-    public function setSessionId($sessionId)
+    public function getLp(): CLp
     {
-        $this->sessionId = $sessionId;
+        return $this->lp;
+    }
+
+    public function setLp(CLp $lp): self
+    {
+        $this->lp = $lp;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getCourse(): Course
     {
-        return $this->sessionId;
+        return $this->course;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLpView
-     */
-    public function setCId($cId)
+    public function setCourse(Course $course): self
     {
-        $this->cId = $cId;
+        $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getSession(): ?Session
     {
-        return $this->cId;
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

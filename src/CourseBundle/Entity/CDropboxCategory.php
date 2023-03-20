@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -11,84 +13,66 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CDropboxCategory.
  *
  * @ORM\Table(
- *  name="c_dropbox_category",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="c_dropbox_category",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CDropboxCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer")
      */
-    protected $catId;
+    protected int $catId;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_name", type="text", nullable=false)
      */
-    protected $catName;
+    protected string $catName;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="received", type="boolean", nullable=false)
      */
-    protected $received;
+    protected bool $received;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="sent", type="boolean", nullable=false)
      */
-    protected $sent;
+    protected bool $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
      * Set catName.
      *
-     * @param string $catName
-     *
      * @return CDropboxCategory
      */
-    public function setCatName($catName)
+    public function setCatName(string $catName)
     {
         $this->catName = $catName;
 
@@ -108,11 +92,9 @@ class CDropboxCategory
     /**
      * Set received.
      *
-     * @param bool $received
-     *
      * @return CDropboxCategory
      */
-    public function setReceived($received)
+    public function setReceived(bool $received)
     {
         $this->received = $received;
 
@@ -132,11 +114,9 @@ class CDropboxCategory
     /**
      * Set sent.
      *
-     * @param bool $sent
-     *
      * @return CDropboxCategory
      */
-    public function setSent($sent)
+    public function setSent(bool $sent)
     {
         $this->sent = $sent;
 
@@ -156,11 +136,9 @@ class CDropboxCategory
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CDropboxCategory
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -180,11 +158,9 @@ class CDropboxCategory
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CDropboxCategory
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -204,11 +180,9 @@ class CDropboxCategory
     /**
      * Set catId.
      *
-     * @param int $catId
-     *
      * @return CDropboxCategory
      */
-    public function setCatId($catId)
+    public function setCatId(int $catId)
     {
         $this->catId = $catId;
 
@@ -228,11 +202,9 @@ class CDropboxCategory
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxCategory
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

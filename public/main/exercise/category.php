@@ -5,7 +5,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (false === api_get_configuration_value('allow_exercise_categories')) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 api_protect_course_script();
@@ -97,10 +97,9 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         } else {
-            $content = '<div class="actions">';
-            $content .= '<a href="'.$url.'">'.
+            $actions = '<a href="'.$url.'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
@@ -122,10 +121,9 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         } else {
-            $content = '<div class="actions">';
-            $content .= '<a href="'.$url.'">'.
+            $actions = '<a href="'.$url.'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();

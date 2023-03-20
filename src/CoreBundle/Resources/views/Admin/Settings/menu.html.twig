@@ -1,9 +1,9 @@
-<div class="list-group">
+<div class="list-group q-card ">
 {% set current_namespace = app.request.get('namespace') %}
 {% for namespace in schemas|keys %}
     {% set namespace = namespace | replace({'chamilo_core.settings.' : ''}) %}
     <a
-        class = "list-group-item list-group-item-action {% if (current_namespace ==  namespace)  %} active {% endif %} "
+        class = "list-group-item {% if (current_namespace ==  namespace)  %} active {% endif %} "
         href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}"
     >
         <img src="{{ asset('img/icons/32/' ~ namespace ~'.png') }}" />

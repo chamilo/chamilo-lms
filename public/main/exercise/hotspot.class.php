@@ -16,9 +16,6 @@ class HotSpot extends Question
     public $typePicture = 'hotspot.png';
     public $explanationLangVar = 'Image zones';
 
-    /**
-     * HotSpot constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -42,12 +39,11 @@ class HotSpot extends Question
                 false,
                 true
             );
-            $form->addElement(
-                'file',
+            $form->addFile(
                 'imageUpload',
+                get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
                 [
-                    '<img src="'.$icon.'" />',
-                    get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
+                    //'<img src="'.$icon.'" />',
                 ]
             );
 
@@ -97,5 +93,28 @@ class HotSpot extends Question
     {
         return parent::return_header($exercise, $counter, $score)
             .'<table><tr><td><table class="table">';
+    }
+
+    public static function getLangVariables()
+    {
+        return [
+            'Square' => get_lang('Square'),
+            'Ellipse' => get_lang('Ellipse'),
+            'Polygon' => get_lang('Polygon'),
+            'HotspotStatus1' => get_lang('Draw a hotspot'),
+            'HotspotStatus2Polygon' => get_lang('Use right-click to close the polygon'),
+            'HotspotStatus2Other' => get_lang('Release the mousebutton to save the hotspot'),
+            'HotspotStatus3' => get_lang('Hotspot saved'),
+            'HotspotShowUserPoints' => get_lang('Show/Hide userclicks'),
+            'ShowHotspots' => get_lang('Show / Hide hotspots'),
+            'Triesleft' => get_lang('Attempts left'),
+            'HotspotExerciseFinished' => get_lang('Now click on the button below to validate your answers'),
+            'NextAnswer' => get_lang('Now click on:'),
+            'Delineation' => get_lang('Delineation'),
+            'CloseDelineation' => get_lang('Close delineation'),
+            'Oar' => get_lang('Area to avoid'),
+            'ClosePolygon' => get_lang('Close polygon'),
+            'DelineationStatus1' => get_lang('Use right-click to close the delineation'),
+        ];
     }
 }

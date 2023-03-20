@@ -77,7 +77,7 @@ class SearchCourseWidget
         $url = self::server('REQUEST_URI');
         $url = explode('?', $url);
         $url = reset($url);
-        $url = self::server('SERVER_NAME').$url;
+        $url = self::server('HTTP_HOST').$url;
 
         $root = api_get_path('WEB_PATH');
         $root = str_replace('https://', '', $root);
@@ -194,7 +194,7 @@ EOT;
             <input type="hidden" name="sec_token" value="$stok" />
             <input type="hidden" name="search_course" value="1" />
             <input type="text" name="search_term" class="span2" value="$search_term" />
-            &nbsp;<input class="btn btn-default" type="submit" value="$search_label" />
+            &nbsp;<input class="btn btn--plain" type="submit" value="$search_label" />
         </form>
 EOT;
         echo $form;
@@ -231,7 +231,7 @@ EOT;
             echo '<tr><td><b><a href="'.$href.'">'."$title</a></b><br/>$details</td><td>";
             if (!api_is_anonymous()) {
                 if ($course['registration_code']) {
-                    Display::display_icon(
+                    echo Display::return_icon(
                         'passwordprotected.png',
                         '',
                         ['style' => 'float:left;']

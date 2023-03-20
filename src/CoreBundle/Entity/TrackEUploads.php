@@ -1,78 +1,67 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEUploads.
  *
  * @ORM\Table(
- *  name="track_e_uploads",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *      @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
- *  }
+ *     name="track_e_uploads",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class TrackEUploads
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $uploadId;
+    protected int $uploadId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
      */
-    protected $uploadUserId;
+    protected ?int $uploadUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="upload_date", type="datetime", nullable=false)
      */
-    protected $uploadDate;
+    protected DateTime $uploadDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
-    protected $cId;
+    protected ?int $cId = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
      */
-    protected $uploadWorkId;
+    protected int $uploadWorkId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $uploadSessionId;
+    protected int $sessionId;
 
     /**
      * Set uploadUserId.
      *
-     * @param int $uploadUserId
-     *
      * @return TrackEUploads
      */
-    public function setUploadUserId($uploadUserId)
+    public function setUploadUserId(int $uploadUserId)
     {
         $this->uploadUserId = $uploadUserId;
 
@@ -92,11 +81,9 @@ class TrackEUploads
     /**
      * Set uploadDate.
      *
-     * @param \DateTime $uploadDate
-     *
      * @return TrackEUploads
      */
-    public function setUploadDate($uploadDate)
+    public function setUploadDate(DateTime $uploadDate)
     {
         $this->uploadDate = $uploadDate;
 
@@ -106,7 +93,7 @@ class TrackEUploads
     /**
      * Get uploadDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUploadDate()
     {
@@ -116,11 +103,9 @@ class TrackEUploads
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEUploads
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -140,11 +125,9 @@ class TrackEUploads
     /**
      * Set uploadWorkId.
      *
-     * @param int $uploadWorkId
-     *
      * @return TrackEUploads
      */
-    public function setUploadWorkId($uploadWorkId)
+    public function setUploadWorkId(int $uploadWorkId)
     {
         $this->uploadWorkId = $uploadWorkId;
 
@@ -162,27 +145,25 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadSessionId.
-     *
-     * @param int $uploadSessionId
+     * Set sessionId.
      *
      * @return TrackEUploads
      */
-    public function setUploadSessionId($uploadSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->uploadSessionId = $uploadSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get uploadSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getUploadSessionId()
+    public function getSessionId()
     {
-        return $this->uploadSessionId;
+        return $this->sessionId;
     }
 
     /**

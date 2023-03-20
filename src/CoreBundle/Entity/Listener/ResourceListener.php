@@ -1,42 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
+use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
-use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * Class ResourceListener.
- */
 class ResourceListener
 {
-    protected $slugify;
-    protected $request;
-    protected $accessUrl;
+    use AccessUrlListenerTrait;
 
-    /**
-     * ResourceListener constructor.
-     */
+    protected SlugifyInterface $slugify;
+    protected Security $security;
+    protected ToolChain $toolChain;
+    protected RequestStack $request;
+
     public function __construct(
         SlugifyInterface $slugify,
         ToolChain $toolChain,
@@ -47,266 +51,236 @@ class ResourceListener
         $this->security = $security;
         $this->toolChain = $toolChain;
         $this->request = $request;
-        $this->accessUrl = null;
     }
 
-    public function getAccessUrl($em)
+    /**
+     * Only in creation.
+     *
+     * @throws Exception
+     */
+    public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
-        if (null === $this->accessUrl) {
-            $request = $this->request->getCurrentRequest();
-            if (null === $request) {
-                throw new \Exception('An Request is needed');
-            }
-            $sessionRequest = $request->getSession();
-
-            if (null === $sessionRequest) {
-                throw new \Exception('An Session request is needed');
-            }
-
-            $id = $sessionRequest->get('access_url_id');
-            $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
-
-            if ($url) {
-                $this->accessUrl = $url;
-
-                return $url;
-            }
-        }
-
-        if (null === $this->accessUrl) {
-            throw new \Exception('An AccessUrl is needed');
-        }
-
-        return $this->accessUrl;
-    }
-
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
-    {
-        error_log('resource listener prePersist for obj: '.get_class($resource));
-        $em = $event->getEntityManager();
+        $em = $eventArgs->getObjectManager();
         $request = $this->request;
 
-        $url = null;
-        if ($resource instanceof ResourceWithUrlInterface) {
-            $url = $this->getAccessUrl($em);
-            $resource->addUrl($url);
-        }
-
-        if ($resource->hasResourceNode()) {
-            // This will attach the resource to the main resource node root (For example a Course).
-            if ($resource instanceof ResourceToRootInterface) {
-                $url = $this->getAccessUrl($em);
-                $resource->getResourceNode()->setParent($url->getResourceNode());
+        // 1. Set AccessUrl.
+        if ($resource instanceof ResourceWithAccessUrlInterface) {
+            // Checking if this resource is connected with a AccessUrl.
+            if (0 === $resource->getUrls()->count()) {
+                // The AccessUrl was not added using $resource->addAccessUrl(),
+                // Try getting the URL from the session bag if possible.
+                $accessUrl = $this->getAccessUrl($em, $request);
+                if (null === $accessUrl) {
+                    throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
+                }
+                $resource->addAccessUrl($accessUrl);
             }
-            error_log('resource has already a resource node. Do nothing');
-            // Do not override resource node, it's already added.
-            return true;
         }
 
-        // Add resource node
-        $creator = $this->security->getUser();
+        // This will attach the resource to the main resource node root (For example a Course).
+        if ($resource instanceof ResourceToRootInterface) {
+            $accessUrl = $this->getAccessUrl($em, $request);
+            $resource->setParent($accessUrl);
+        }
+
+        // 2. Set creator.
+        // Check if creator was set with $resource->setCreator()
+        $creator = $resource->getResourceNodeCreator();
+
+        $currentUser = null;
+        if (null === $creator) {
+            // Get the creator from the current request.
+            /** @var User|null $currentUser */
+            $currentUser = $this->security->getUser();
+            if (null !== $currentUser) {
+                $creator = $currentUser;
+            }
+
+            // Check if user has a resource node.
+            if ($resource->hasResourceNode() && null !== $resource->getCreator()) {
+                $creator = $resource->getCreator();
+            }
+        }
 
         if (null === $creator) {
-            throw new \InvalidArgumentException('User creator not found');
+            throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
         }
 
-        $resourceNode = new ResourceNode();
-        $resource->setResourceNode($resourceNode);
-        $this->updateResourceName($resource);
-        $resourceName = $resource->getResourceName();
-
+        // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
-        $repo = $em->getRepository(ResourceType::class);
-        $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
-        $class .= 'Repository';
-        $name = $this->toolChain->getResourceTypeNameFromRepository($class);
-        $resourceType = $repo->findOneBy(['name' => $name]);
+        $resourceTypeRepo = $em->getRepository(ResourceType::class);
+        $entityClass = \get_class($eventArgs->getObject());
+
+        $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
+
+        $resourceType = $resourceTypeRepo->findOneBy([
+            'name' => $name,
+        ]);
 
         if (null === $resourceType) {
-            throw new \InvalidArgumentException('ResourceType not found');
+            throw new InvalidArgumentException(sprintf('ResourceType: "%s" not found for entity "%s"', $name, $entityClass));
         }
 
-        $resourceNode
-            ->setCreator($creator)
-            ->setResourceType($resourceType)
-        ;
+        // 4. Set ResourceNode parent.
+        // Add resource directly to the resource node root (Example: a Course resource).
+        $parentNode = null;
+        if ($resource instanceof ResourceWithAccessUrlInterface) {
+            $parentUrl = null;
+            if ($resource->getUrls()->count() > 0) {
+                $urlRelResource = $resource->getUrls()->first();
+                if (!$urlRelResource instanceof EntityAccessUrlInterface) {
+                    $msg = '$resource->getUrls() must return a Collection that implements EntityAccessUrlInterface';
 
-        // Add resource directly to the resource node root (Example: for a course resource).
-        if ($resource instanceof ResourceToRootInterface) {
-            $url = $this->getAccessUrl($em);
-            $resourceNode->setParent($url->getResourceNode());
+                    throw new InvalidArgumentException($msg);
+                }
+                if (!$urlRelResource->getUrl()->hasResourceNode()) {
+                    $msg = 'An item from the Collection $resource->getUrls() must implement EntityAccessUrlInterface.';
+
+                    throw new InvalidArgumentException($msg);
+                }
+                $parentUrl = $urlRelResource->getUrl()->getResourceNode();
+            }
+
+            if (null === $parentUrl) {
+                throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
+            }
+            $parentNode = $parentUrl;
         }
 
+        // Reads the parentResourceNodeId parameter set in BaseResourceFileAction.php
         if ($resource->hasParentResourceNode()) {
             $nodeRepo = $em->getRepository(ResourceNode::class);
             $parent = $nodeRepo->find($resource->getParentResourceNode());
-            $resourceNode->setParent($parent);
+            if (null !== $parent) {
+                $parentNode = $parent;
+            }
         }
 
-        if ($resource->hasUploadFile()) {
-            // @todo check CreateResourceNodeFileAction
-            /** @var File $uploadedFile */
-            $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
-
-            if (empty($uploadedFile)) {
-                $content = $request->getCurrentRequest()->get('contentFile');
-                $title = $resourceName.'.html';
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                $meta = stream_get_meta_data($handle);
-                $uploadedFile = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+        if (null === $parentNode) {
+            // Try getting the parent node from the resource.
+            if (null !== $resource->getParent()) {
+                $parentNode = $resource->getParent()->getResourceNode();
             }
+        }
 
-            // File upload
+        // Last chance check parentResourceNodeId from request.
+        if (null !== $request && null === $parentNode) {
+            $currentRequest = $request->getCurrentRequest();
+            if (null !== $currentRequest) {
+                $resourceNodeIdFromRequest = $currentRequest->get('parentResourceNodeId');
+                if (empty($resourceNodeIdFromRequest)) {
+                    $contentData = $request->getCurrentRequest()->getContent();
+                    $contentData = json_decode($contentData, true);
+                    $resourceNodeIdFromRequest = $contentData['parentResourceNodeId'] ?? '';
+                }
+
+                if (!empty($resourceNodeIdFromRequest)) {
+                    $nodeRepo = $em->getRepository(ResourceNode::class);
+                    $parent = $nodeRepo->find($resourceNodeIdFromRequest);
+                    if (null !== $parent) {
+                        $parentNode = $parent;
+                    }
+                }
+            }
+        }
+
+        if (null === $parentNode && !$resource instanceof AccessUrl) {
+            $msg = sprintf('Resource %s needs a parent', $resource->getResourceName());
+
+            throw new InvalidArgumentException($msg);
+        }
+
+        if ($resource instanceof PersonalFile) {
+            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername() ||
+                     $parentNode->getId() === $currentUser->getResourceNode()->getId();
+
+            if (!$valid) {
+                $msg = sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
+
+                throw new InvalidArgumentException($msg);
+            }
+        }
+
+        // 4. Create ResourceNode for the Resource
+        $resourceNode = (new ResourceNode())
+            ->setCreator($creator)
+            ->setResourceType($resourceType)
+            ->setParent($parentNode)
+        ;
+        $resource->setResourceNode($resourceNode);
+
+        // Update resourceNode title from Resource.
+        $this->updateResourceName($resource);
+
+        BaseResourceFileAction::setLinks($resource, $em);
+
+        // Upload File was set in BaseResourceFileAction.php
+        if ($resource->hasUploadFile()) {
+            $uploadedFile = $resource->getUploadFile();
+
+            // File upload.
             if ($uploadedFile instanceof UploadedFile) {
-                $resourceFile = new ResourceFile();
-                $resourceFile->setName($uploadedFile->getFilename());
-                $resourceFile->setOriginalName($uploadedFile->getFilename());
-                $resourceFile->setFile($uploadedFile);
+                $resourceFile = (new ResourceFile())
+                    ->setName($uploadedFile->getFilename())
+                    ->setOriginalName($uploadedFile->getFilename())
+                    ->setFile($uploadedFile)
+                ;
                 $em->persist($resourceFile);
                 $resourceNode->setResourceFile($resourceFile);
             }
         }
 
-        // Use by api platform
-        $links = $resource->getResourceLinkArray();
-        if ($links) {
-            $courseRepo = $em->getRepository(Course::class);
-            $sessionRepo = $em->getRepository(Session::class);
-
-            foreach ($links as $link) {
-                $resourceLink = new ResourceLink();
-                if (isset($link['c_id']) && !empty($link['c_id'])) {
-                    $course = $courseRepo->find($link['c_id']);
-                    if ($course) {
-                        $resourceLink->setCourse($course);
-                    } else {
-                        throw new \InvalidArgumentException(sprintf('Course #%s does not exists', $link['c_id']));
-                    }
-                }
-
-                if (isset($link['session_id']) && !empty($link['session_id'])) {
-                    $session = $sessionRepo->find($link['session_id']);
-                    if ($session) {
-                        $resourceLink->setSession($session);
-                    } else {
-                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['session_id']));
-                    }
-                }
-
-                if (isset($link['visibility'])) {
-                    $resourceLink->setVisibility((int) $link['visibility']);
-                } else {
-                    throw new \InvalidArgumentException('Link needs a visibility key');
-                }
-
-                $resourceLink->setResourceNode($resourceNode);
-                $em->persist($resourceLink);
-            }
-        }
-
-        // Use by Chamilo.
-        $this->setLinks($resourceNode, $resource, $em);
-
-        if (null !== $resource->getParent()) {
-            $resourceNode->setParent($resource->getParent()->getResourceNode());
-        }
-
-        error_log('Listener end, adding resource node');
         $resource->setResourceNode($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
-        if (!($resource instanceof AccessUrl)) {
-            if (null == $resourceNode->getParent()) {
-                throw new \InvalidArgumentException('Resource Node should have a parent');
-            }
+        if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
+            $message = sprintf(
+                'ResourceListener: Resource %s, has a resource node, but this resource node must have a parent',
+                $resource->getResourceName()
+            );
+
+            throw new InvalidArgumentException($message);
         }
     }
 
     /**
      * When updating a Resource.
      */
-    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
-        error_log('Resource listener preUpdate');
+        $resourceNode = $resource->getResourceNode();
+        $parentResourceNode = $resource->getParent()?->resourceNode;
 
-        $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
-
-        if ($resource->hasUploadFile()) {
-            $uploadedFile = $resource->getUploadFile();
-
-            // File upload
-            if ($uploadedFile instanceof UploadedFile) {
-                /*$resourceFile = new ResourceFile();
-                $resourceFile->setName($uploadedFile->getFilename());
-                $resourceFile->setOriginalName($uploadedFile->getFilename());
-                $resourceFile->setFile($uploadedFile);
-                $em->persist($resourceFile);*/
-                //$resourceNode->setResourceFile($uploadedFile);
-            }
+        if ($parentResourceNode) {
+            $resourceNode->setParent($parentResourceNode);
         }
+
+        //error_log('Resource listener preUpdate');
+        //$this->setLinks($resource, $eventArgs->getEntityManager());
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)
+    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
         //error_log('resource listener postUpdate');
-        //$em = $event->getEntityManager();
+        //$em = $eventArgs->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
-    public function updateResourceName(AbstractResource $resource)
+    public function updateResourceName(AbstractResource $resource): void
     {
         $resourceName = $resource->getResourceName();
 
         if (empty($resourceName)) {
-            throw new \InvalidArgumentException('Resource needs a name');
+            throw new InvalidArgumentException('Resource needs a name');
         }
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             //$slug = $this->slugify->slugify($resourceName);
-        } else {
-            /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-            $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         }
-
+        /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+        $originalBasename = \basename($resourceName, $originalExtension);
+        $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         $resource->getResourceNode()->setTitle($resourceName);
-    }
-
-    public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em)
-    {
-        error_log('Resource listener setLinks');
-        $links = $resource->getResourceLinkEntityList();
-        if ($links) {
-            foreach ($links as $link) {
-                error_log('Adding resource links');
-                $rights = [];
-                switch ($link->getVisibility()) {
-                    case ResourceLink::VISIBILITY_PENDING:
-                    case ResourceLink::VISIBILITY_DRAFT:
-                        $editorMask = ResourceNodeVoter::getEditorMask();
-                        $resourceRight = new ResourceRight();
-                        $resourceRight
-                            ->setMask($editorMask)
-                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ;
-                        $rights[] = $resourceRight;
-
-                        break;
-                }
-
-                if (!empty($rights)) {
-                    foreach ($rights as $right) {
-                        $link->addResourceRight($right);
-                    }
-                }
-                //error_log('link adding to node: '.$resource->getResourceNode()->getId());
-                //error_log('link with user : '.$link->getUser()->getUsername());
-                $resource->getResourceNode()->addResourceLink($link);
-
-                $em->persist($link);
-            }
-        }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,12 +11,9 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class SessionSettingsSchema.
- */
 class SessionSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -45,6 +44,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'hide_tab_list' => '',
                     'session_admins_edit_courses_content' => 'false',
                     'allow_session_admin_login_as_teacher' => 'false',
+                    'allow_search_diagnostic' => 'false',
                 ]
             )
         ;
@@ -55,7 +55,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add(
@@ -82,7 +82,8 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextType::class,
                 [
                     'label' => 'SessionCourseOrderingTitle',
-                    'help' => 'SessionCourseOrderingComment', ]
+                    'help' => 'SessionCourseOrderingComment',
+                ]
             )
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)
@@ -97,6 +98,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('hide_tab_list')
             ->add('session_admins_edit_courses_content', YesNoType::class)
             ->add('allow_session_admin_login_as_teacher', YesNoType::class)
+            ->add('allow_search_diagnostic', YesNoType::class)
         ;
     }
 }

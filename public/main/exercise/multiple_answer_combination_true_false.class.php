@@ -16,9 +16,6 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
     public $explanationLangVar = 'Combination true/false/don\'t-know';
     public $options;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();

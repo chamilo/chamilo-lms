@@ -2,15 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * This script displays an area where teachers can edit the group properties and member list.
- * Groups are also often called "teams" in the Dokeos code.
- *
- * @author various contributors
- * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *
- * @todo course admin functionality to create groups based on who is in which course (or class).
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -20,12 +11,13 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+$groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
 
-$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
+$is_group_member = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -112,7 +104,7 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 $form->addElement('hidden', 'action');
-$form->addElement('hidden', 'max_student', $current_group['max_student']);
+$form->addElement('hidden', 'max_student', $groupEntity->getMaxStudent());
 
 $complete_user_list = CourseManager::get_user_list_from_course_code(
     api_get_course_id(),
@@ -126,7 +118,7 @@ if ($subscribedTutors) {
 
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 $possible_users = [];
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
@@ -158,7 +150,7 @@ if (!empty($complete_user_list)) {
 }
 
 // Group members
-$group_member_list = GroupManager::get_subscribed_users($current_group);
+$group_member_list = GroupManager::get_subscribed_users($groupEntity);
 
 $selected_users = [];
 if (!empty($group_member_list)) {
@@ -167,8 +159,7 @@ if (!empty($group_member_list)) {
     }
 }
 
-$group_members_element = $form->addElement(
-    'advmultiselect',
+$group_members_element = $form->addMultiSelect(
     'group_members',
     get_lang('Group members'),
     $possible_users
@@ -182,21 +173,21 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the users (we first remove all users and then add only those who were selected)
-    GroupManager::unsubscribe_all_users($current_group);
+    GroupManager::unsubscribeAllUsers($groupEntity->getIid());
     if (isset($_POST['group_members']) && count($_POST['group_members']) > 0) {
-        GroupManager::subscribe_users(
+        GroupManager::subscribeUsers(
             $values['group_members'],
-            $current_group
+            $groupEntity
         );
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    $cat = GroupManager::get_category_from_group($current_group['iid']);
+    $cat = GroupManager::get_category_from_group($group_id);
     $categoryId = 0;
     if ($cat) {
         $categoryId = $cat['iid'];
     }
-    $max_member = $current_group['max_student'];
+    $max_member = $groupEntity->getMaxStudent();
 
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
@@ -215,7 +206,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'empty':
         if (api_is_allowed_to_edit(false, true)) {
-            GroupManager:: unsubscribe_all_users($current_group);
+            GroupManager::unsubscribeAllUsers($group_id);
             echo Display::return_message(get_lang('The group is now empty'), 'confirm');
         }
 

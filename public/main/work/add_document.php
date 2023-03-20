@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
+
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'work.lib.php';
 
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -31,8 +33,6 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$courseInfo = api_get_course_info();
-
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('Assignments'),
@@ -55,6 +55,7 @@ switch ($action) {
 
         break;
 }
+$docRepo = Container::getDocumentRepository();
 
 if (empty($docId)) {
     Display::display_header(null);
@@ -65,18 +66,19 @@ if (empty($docId)) {
         $urlDocument = api_get_path(WEB_CODE_PATH).'work/add_document.php';
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
-            $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
+            /** @var CDocument $docData */
+            $docData = $docRepo->find($documentId);
             if ($docData) {
                 $url = $urlDocument.'?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
-                $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn-danger']);
-                echo $docData['title'].' '.$link.'<br />';
+                $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn--danger']);
+                echo $docData->getTitle().' '.$link.'<br />';
             }
         }
         echo '</div>';
     }
 
     $documentTree = DocumentManager::get_document_preview(
-        $courseInfo,
+        api_get_course_entity(),
         false,
         null,
         api_get_session_id(),
@@ -93,14 +95,15 @@ if (empty($docId)) {
     echo '<hr /><div class="clear"></div>';
     Display::display_footer();
 } else {
-    $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
+    /** @var CDocument $documentInfo */
+    $documentInfo = $docRepo->find($docId);
     $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
     $form = new FormValidator('add_doc', 'post', $url);
     $form->addElement('header', get_lang('Add document'));
     $form->addElement('hidden', 'add_doc', '1');
     $form->addElement('hidden', 'id', $workId);
     $form->addElement('hidden', 'document_id', $docId);
-    $form->addElement('label', get_lang('File'), $documentInfo['title']);
+    $form->addElement('label', get_lang('File'), $documentInfo->getTitle());
     $form->addButtonCreate(get_lang('Add'));
     if ($form->validate()) {
         $values = $form->exportValues();

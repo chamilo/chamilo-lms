@@ -25,7 +25,6 @@ $this_section = SECTION_COURSES;
 /* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
 
-
 $origin = api_get_origin();
 
 /** @var Exercise $objExercise */
@@ -41,14 +40,11 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header('Location: overview.php?id='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
+        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
         exit;
     }
     api_not_allowed(true);
 }
-
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -58,27 +54,22 @@ if (api_is_in_gradebook()) {
 }
 
 $nameTools = get_lang('Tests');
+$currentUserId = api_get_user_id();
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
-if (!empty($objExercise->getResultAccess())) {
-    /*$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');*/
-}
-
 $showHeader = false;
 $showFooter = false;
+$showLearnPath = true;
 $pageActions = '';
 $pageTop = '';
 $pageBottom = '';
@@ -88,6 +79,7 @@ $courseInfo = api_get_course_info();
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
     $showHeader = true;
+    $showLearnPath = false;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -100,21 +92,20 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32),
+                Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]
     );
 }
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-$learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
-$learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
-$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
-    ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+$learnpath_id = $exercise_stat_info['orig_lp_id'] ?? 0;
+$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'] ?? 0;
+$learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'] ?? 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
-    'tool_id' => $objExercise->id,
+    'tool_id' => $objExercise->iId,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
@@ -125,7 +116,7 @@ if ($allowSignature) {
     $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
 }
 
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     $pageTop .= '
         <form method="GET" action="exercise.php?'.api_get_cidreq().'">
             <input type="hidden" name="origin" value='.$origin.'/>
@@ -135,7 +126,7 @@ if ($origin === 'learnpath') {
     ';
 }
 
-$i = $total_score = $max_score = 0;
+$i = $total_score = $maxScore = 0;
 $remainingMessage = '';
 $attemptButton = '';
 
@@ -148,7 +139,7 @@ if ('embeddable' !== $origin) {
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpath_item_view_id,
         ]),
-        'pencil-square-o',
+        'pencil',
         'info'
     );
 }
@@ -161,7 +152,7 @@ $attempt_count = Event::get_attempt_count(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
-	
+
 if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display::addFlash(
@@ -197,7 +188,7 @@ if (!empty($exercise_stat_info)) {
     $total_score = $exercise_stat_info['score'];
 }
 
-$max_score = $objExercise->get_max_score();
+$maxScore = $objExercise->getMaxScore();
 
 if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
@@ -211,7 +202,6 @@ $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
 
 ob_start();
-// Display and save questions
 $stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exeId,
@@ -224,7 +214,29 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
 $pageContent .= ob_get_contents();
 ob_end_clean();
 
-//Unset session for clock time
+// Change settings for teacher access.
+$oldResultDisabled = $objExercise->results_disabled;
+$objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+$objExercise->forceShowExpectedChoiceColumn = true;
+$objExercise->disableHideCorrectAnsweredQuestions = true;
+ob_start();
+$statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+    $objExercise,
+    $exeId,
+    false,
+    $remainingMessage,
+    $allowSignature,
+    api_get_configuration_value('quiz_results_answers_report'),
+    false
+);
+ob_end_clean();
+
+// Restore settings.
+$objExercise->results_disabled = $oldResultDisabled;
+$objExercise->forceShowExpectedChoiceColumn = false;
+$objExercise->disableHideCorrectAnsweredQuestions = false;
+
+// Save here LP status
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
     Exercise::saveExerciseInLp($learnpath_item_id, $exeId);
@@ -236,12 +248,13 @@ ExerciseLib::sendNotification(
     $exercise_stat_info,
     $courseInfo,
     $attempt_count++,
-    $stats
+    $stats,
+    $statsTeacher
 );
 
-$hookQuizEnd = HookQuizEnd::create();
+/*$hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
-$hookQuizEnd->notifyQuizEnd();
+$hookQuizEnd->notifyQuizEnd();*/
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
@@ -256,7 +269,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $pageBottom .= Display::url(
         get_lang('Return to Course Homepage'),
         api_get_course_url(),
-        ['class' => 'btn btn-primary']
+        ['class' => 'btn btn--primary']
     );
     $pageBottom .= '</div>';
 
@@ -285,13 +298,13 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     Session::write('attempt_remaining', $remainingMessage);
 
     // Record the results in the learning path, using the SCORM interface (API)
-    $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
+    $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$maxScore', 0, 'completed');</script>";
     $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
 
     $showFooter = false;
 }
 
-$template = new Template($nameTools, $showHeader, $showFooter);
+$template = new Template($nameTools, $showHeader, $showFooter, $showLearnPath);
 $template->assign('page_top', $pageTop);
 $template->assign('page_content', $pageContent);
 $template->assign('page_bottom', $pageBottom);

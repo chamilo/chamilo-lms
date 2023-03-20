@@ -1,76 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CCalendarEventRepeat.
  *
  * @ORM\Table(
- *  name="c_calendar_event_repeat",
- *  indexes={
- *  }
+ *     name="c_calendar_event_repeat",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
 class CCalendarEventRepeat
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var CCalendarEvent
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
      * @ORM\JoinColumn(name="cal_id", referencedColumnName="iid")
      */
-    protected $event;
+    protected CCalendarEvent $event;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
      */
-    protected $calType;
+    #[Assert\NotBlank]
+    protected ?string $calType = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
-    protected $calEnd;
+    protected ?int $calEnd = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
-    protected $calFrequency;
+    protected ?int $calFrequency = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
      */
-    protected $calDays;
+    protected ?string $calDays = null;
 
-    /**
-     * Set calType.
-     *
-     * @param string $calType
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCalType($calType)
+    public function setCalType(string $calType): self
     {
         $this->calType = $calType;
 
@@ -87,14 +72,7 @@ class CCalendarEventRepeat
         return $this->calType;
     }
 
-    /**
-     * Set calEnd.
-     *
-     * @param int $calEnd
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCalEnd($calEnd)
+    public function setCalEnd(int $calEnd): self
     {
         $this->calEnd = $calEnd;
 
@@ -111,14 +89,7 @@ class CCalendarEventRepeat
         return $this->calEnd;
     }
 
-    /**
-     * Set calFrequency.
-     *
-     * @param int $calFrequency
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCalFrequency($calFrequency)
+    public function setCalFrequency(int $calFrequency): self
     {
         $this->calFrequency = $calFrequency;
 
@@ -135,14 +106,7 @@ class CCalendarEventRepeat
         return $this->calFrequency;
     }
 
-    /**
-     * Set calDays.
-     *
-     * @param string $calDays
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCalDays($calDays)
+    public function setCalDays(string $calDays): self
     {
         $this->calDays = $calDays;
 
@@ -157,5 +121,10 @@ class CCalendarEventRepeat
     public function getCalDays()
     {
         return $this->calDays;
+    }
+
+    public function getEvent(): CCalendarEvent
+    {
+        return $this->event;
     }
 }

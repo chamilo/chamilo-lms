@@ -1,105 +1,114 @@
 <template>
   <div>
     <Toolbar
+      v-if="item && isCurrentTeacher"
       :handle-edit="editHandler"
       :handle-delete="del"
     >
-      <template slot="left">
-<!--        <v-toolbar-title v-if="item">-->
-<!--          {{-->
-<!--            `${$options.servicePrefix} ${item['@id']}`-->
-<!--          }}-->
-<!--        </v-toolbar-title>-->
-      </template>
     </Toolbar>
-    <br>
-    <div
-      v-if="item"
-      class="table-documents-show"
-    >
-      <div v-if="item['resourceLinkList']">
-        <ul>
-          <li
-            v-for="link in item['resourceLinkList']"
-          >
-            Status: {{ link.visibilityName }}
-            <div v-if="link['course']">
-              Course: {{ link.course.resourceNode.title }}
-            </div>
-            <div v-if="link['session']">
-              Session: {{ link.session.resourceNode.title }}
-            </div>
-          </li>
-        </ul>
+
+    <div v-if="item" class="flex flex-row">
+      <div class="w-1/2">
+        <p class="text-lg">
+          {{ item['title'] }}
+        </p>
+
+        <div v-if="item['resourceNode']['resourceFile']" class="flex justify-center">
+
+          <div class="w-4/5">
+            <q-img
+                spinner-color="primary"
+                v-if="item['resourceNode']['resourceFile']['image']"
+                :src="item['contentUrl'] + '&w=300'"
+            />
+
+            <span v-else-if="item['resourceNode']['resourceFile']['video']">
+              <video controls>
+                <source :src="item['contentUrl']"/>
+              </video>
+            </span>
+
+            <span v-if="'text/html' === item['resourceNode']['resourceFile']['mimeType']">
+                <iframe
+                    border="0"
+                    height="100%"
+                    width="100%"
+                    :src="item['contentUrl']"
+                />
+            </span>
+
+            <!--            <span v-else>-->
+            <!--                <q-btn-->
+            <!--                    class="btn btn--primary"-->
+            <!--                    :to="item['downloadUrl']"-->
+            <!--                >-->
+            <!--                  <v-icon icon="mdi-file-download"/>-->
+            <!--                  {{ $t('Download file') }}-->
+            <!--                </q-btn>-->
+            <!--              </span>-->
+          </div>
+        </div>
+        <div v-else class="flex justify-center">
+          <v-icon icon="mdi-folder"/>
+        </div>
       </div>
 
-      <h2>
-        {{ item['title'] }}
-      </h2>
-
-      <b-table-simple>
-        <template slot="default">
+      <span class="w-1/2">
+        <q-markup-table>
           <tbody>
-            <tr>
-              <td><strong>{{ $t('Author') }}</strong></td>
-              <td>
-                {{ item['resourceNode'].creator.username }}
-              </td>
-              <td><strong /></td>
-              <td />
-            </tr>
-            <tr>
-              <td><strong>{{ $t('Comment') }}</strong></td>
-              <td>
-                {{ item['comment'] }}
-              </td>
-            </tr>
-
-            <tr>
-              <td><strong>{{ $t('Created at') }}</strong></td>
-              <td>
-                {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
-              </td>
-              <td />
-            </tr>
-
-            <tr>
-              <td><strong>{{ $t('Updated at') }}</strong></td>
-              <td>
-                {{ item['resourceNode'] && item['resourceNode'].updatedAt | moment("from", "now") }}
-              </td>
-              <td />
-            </tr>
-
-            <tr v-if="item['resourceNode']['resourceFile']">
-              <td><strong>{{ $t('File') }}</strong></td>
-              <td>
-                <div>
-                  <b-img
-                    v-if="item['resourceNode']['resourceFile']['image']"
-                    :src="item['contentUrl'] + '?w=300'"
-                  />
-                  <span v-else-if="item['resourceNode']['resourceFile']['video']">
-                    <video controls>
-                      <source :src="item['contentUrl']" />
-                    </video>
-                  </span>
-                  <span v-else>
-                    <b-btn
-                      variant="primary"
-                      :href="item['downloadUrl']"
-                    >
-                      {{ $t('Download file') }}
-                    </b-btn>
-                  </span>
-                </div>
-              </td>
-              <td />
-            </tr>
+          <tr>
+            <td><strong>{{ $t('Author') }}</strong></td>
+            <td>
+              {{ item['resourceNode'].creator.username }}
+            </td>
+            <td></td>
+            <td/>
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Comment') }}</strong></td>
+            <td>
+              {{ item['comment'] }}
+            </td>
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Created at') }}</strong></td>
+            <td>
+              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].createdAt) : '' }}
+            </td>
+            <td/>
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Updated at') }}</strong></td>
+            <td>
+              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].updatedAt) : '' }}
+            </td>
+            <td/>
+          </tr>
+          <tr v-if="item['resourceNode']['resourceFile']">
+            <td><strong>{{ $t('File') }}</strong></td>
+            <td>
+              <div>
+                <a
+                    class="btn btn--primary"
+                    :href="item['downloadUrl']"
+                >
+                  <v-icon icon="mdi-file-download"/>
+                  {{ $t('Download file') }}
+                </a>
+              </div>
+            </td>
+            <td/>
+          </tr>
           </tbody>
-        </template>
-      </b-table-simple>
+        </q-markup-table>
+
+        <hr/>
+
+        <ShowLinks :item="item"/>
+
+      </span>
     </div>
+
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -107,18 +116,19 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import Loading from '../../components/Loading';
+import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from '../../components/Toolbar.vue';
 
+import ShowLinks from "../../components/resource_links/ShowLinks.vue";
 const servicePrefix = 'Documents';
 
 export default {
   name: 'DocumentsShow',
-  servicePrefix,
   components: {
       Loading,
-      Toolbar
+      Toolbar,
+      ShowLinks
   },
   mixins: [ShowMixin],
   computed: {
@@ -126,13 +136,19 @@ export default {
       isLoading: 'isLoading'
     }),
     ...mapGetters('documents', ['find']),
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'isAdmin': 'security/isAdmin',
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
   methods: {
     ...mapActions('documents', {
       deleteItem: 'del',
       reset: 'resetShow',
-      retrieve: 'load'
+      retrieve: 'loadWithQuery'
     }),
-  }
+  },
+  servicePrefix
 };
 </script>

@@ -1,85 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEOnline.
  *
  * @ORM\Table(
- *  name="track_e_online",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="login_user_id", columns={"login_user_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="track_e_online",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="login_user_id", columns={"login_user_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class TrackEOnline
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
-     */
-    protected $loginUserId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="login_date", type="datetime", nullable=false)
-     */
-    protected $loginDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
-     */
-    protected $userIp;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
-    protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
-     */
-    protected $accessUrlId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="login_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $loginId;
+    protected int $loginId;
+
+    /**
+     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
+     */
+    protected int $loginUserId;
+
+    /**
+     * @ORM\Column(name="login_date", type="datetime", nullable=false)
+     */
+    protected DateTime $loginDate;
+
+    /**
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
+     */
+    protected string $userIp;
+
+    /**
+     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     */
+    protected int $cId;
+
+    /**
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     */
+    protected int $sessionId;
+
+    /**
+     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
+     */
+    protected int $accessUrlId;
 
     /**
      * Set loginUserId.
      *
-     * @param int $loginUserId
-     *
      * @return TrackEOnline
      */
-    public function setLoginUserId($loginUserId)
+    public function setLoginUserId(int $loginUserId)
     {
         $this->loginUserId = $loginUserId;
 
@@ -99,11 +86,9 @@ class TrackEOnline
     /**
      * Set loginDate.
      *
-     * @param \DateTime $loginDate
-     *
      * @return TrackEOnline
      */
-    public function setLoginDate($loginDate)
+    public function setLoginDate(DateTime $loginDate)
     {
         $this->loginDate = $loginDate;
 
@@ -113,7 +98,7 @@ class TrackEOnline
     /**
      * Get loginDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLoginDate()
     {
@@ -123,11 +108,9 @@ class TrackEOnline
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackEOnline
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 
@@ -147,11 +130,9 @@ class TrackEOnline
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEOnline
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -171,11 +152,9 @@ class TrackEOnline
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEOnline
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -195,11 +174,9 @@ class TrackEOnline
     /**
      * Set accessUrlId.
      *
-     * @param int $accessUrlId
-     *
      * @return TrackEOnline
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setAccessUrlId(int $accessUrlId)
     {
         $this->accessUrlId = $accessUrlId;
 

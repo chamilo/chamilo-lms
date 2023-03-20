@@ -20,7 +20,7 @@
                             <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}"
                                    class="form-control" value="{{ search_date }}" readonly>
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn--plain" type="submit">
                                     <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
                                 </button>
                             </span>
@@ -35,7 +35,7 @@
                         <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
                                value="{{ search_tag }}"/>
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
+                            <button class="btn btn--plain" type="submit">
                                 <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
                             </button>
                         </span>
@@ -65,14 +65,16 @@
                         </h5>
                     </div>
 
-                    {% if show_tutor and item.coach_id %}
-                    <div class="card-author mb-2">
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                            <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
-                                {{ item.coach_name }}
-                            </a>
-                            <p>{{ 'SessionGeneralCoach'|get_lang }}</p>
-                    </div>
+                    {% if show_tutor and item.coaches %}
+                        {% for coach in item.coaches %}
+                            <div class="card-author mb-2">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                <a href="{{ coach.url }}" class="ajax" data-title="{{ coach.name }}">
+                                    {{ coach.name }}
+                                </a>
+                                <p>{{ 'SessionGeneralCoach'|get_lang }}</p>
+                            </div>
+                        {% endfor %}
                     {% endif %}
 
                     <div class="card-info">
@@ -102,7 +104,7 @@
                             <div class="col-sm-8">
                                 <div class="btn-group btn-group-sm" role="group">
                                     {% if not item.sequences is empty %}
-                                        <a class="btn btn-primary btn-sm" role="button"
+                                        <a class="btn btn--primary btn-sm" role="button"
                                            title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
                                            id="session-{{ item.id }}-sequences">
                                             <i class="fas fa-sitemap"></i>

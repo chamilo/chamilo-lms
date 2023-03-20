@@ -5,11 +5,11 @@
         {% endif %}
 
         {% if not azure_active_directory.signin_url is empty %}
-            <a href="{{ azure_active_directory.signin_url }}" class="btn btn-default">{{ 'SignIn'|get_lang }}</a>
+            <a href="{{ azure_active_directory.signin_url }}" class="btn btn--plain">{{ 'SignIn'|get_lang }}</a>
         {% endif %}
 
         {% if not azure_active_directory.signout_url is empty %}
-            <a href="{{ azure_active_directory.signout_url }}" class="btn btn-danger">{{ 'Logout'|get_lang }}</a>
+            <a href="{{ azure_active_directory.signout_url }}" class="btn btn--danger">{{ 'Logout'|get_lang }}</a>
         {% endif %}
 
         {% if azure_active_directory.management_login_enabled %}

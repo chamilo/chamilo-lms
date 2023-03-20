@@ -3,6 +3,7 @@ import SecurityAPI from "../api/security";
 const AUTHENTICATING = "AUTHENTICATING",
     AUTHENTICATING_SUCCESS = "AUTHENTICATING_SUCCESS",
     AUTHENTICATING_ERROR = "AUTHENTICATING_ERROR",
+    AUTHENTICATING_LOGOUT = "AUTHENTICATING_LOGOUT",
     PROVIDING_DATA_ON_REFRESH_SUCCESS = "PROVIDING_DATA_ON_REFRESH_SUCCESS";
 
 export default {
@@ -29,6 +30,23 @@ export default {
         isAdmin(state, getters) {
             return getters.isAuthenticated && (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN'));
         },
+        isCurrentTeacher(state, getters) {
+            if (!getters.isAuthenticated) {
+                return false;
+            }
+
+            if (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN')) {
+                return true
+            }
+
+            return getters.hasRole('ROLE_CURRENT_COURSE_TEACHER');
+        },
+        isBoss(state, getters) {
+            return getters.hasRole('ROLE_STUDENT_BOSS');
+        },
+        isStudent(state, getters) {
+            return getters.hasRole('ROLE_STUDENT');
+        },
         getUser(state) {
             return state.user;
         },
@@ -50,12 +68,19 @@ export default {
             state.user = null;
         },
         [AUTHENTICATING_SUCCESS](state, user) {
-            state.isLoading = false;
+            state.isLoading = true;
             state.error = null;
             state.isAuthenticated = true;
             state.user = user;
         },
         [AUTHENTICATING_ERROR](state, error) {
+            state.isLoading = false;
+            state.error = error;
+            state.isAuthenticated = false;
+            state.user = null;
+        },
+        [AUTHENTICATING_LOGOUT](state, error) {
+            console.log('AUTHENTICATING_LOGOUT');
             state.isLoading = false;
             state.error = error;
             state.isAuthenticated = false;
@@ -73,6 +98,16 @@ export default {
             commit(AUTHENTICATING);
             await SecurityAPI.login(payload.login, payload.password).then(response => {
                 commit(AUTHENTICATING_SUCCESS, response.data);
+                return response.data;
+            }).catch(error => {
+                commit(AUTHENTICATING_ERROR, error);
+            });
+        },
+
+        async logout({commit}) {
+            console.log('logout store/security');
+            await SecurityAPI.logout().then(response => {
+                commit(AUTHENTICATING_LOGOUT);
                 return response.data;
             }).catch(error => {
                 commit(AUTHENTICATING_ERROR, error);

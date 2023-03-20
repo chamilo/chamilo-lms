@@ -18,17 +18,12 @@ class GradeModel extends Model
         $this->table = Database::get_main_table(TABLE_GRADE_MODEL);
     }
 
-    /**
-     * @param array $where_conditions
-     *
-     * @return array
-     */
-    public function get_all($where_conditions = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',
             $this->table,
-            ['where' => $where_conditions, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'name ASC']
         );
     }
 
@@ -282,7 +277,7 @@ class GradeModel extends Model
                     $grade_model_options[$item['id']] = $item['name'];
                 }
             }
-            $form->addElement('select', $name, get_lang('Grading model'), $grade_model_options);
+            $form->addSelect($name, get_lang('Grading model'), $grade_model_options);
             $default_platform_setting = api_get_setting('gradebook_default_grade_model_id');
             $default = -1;
 

@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
@@ -38,7 +38,59 @@ $nameTools = get_lang('Forums');
 // Unset the formElements in session before the includes function works
 unset($_SESSION['formelements']);
 
-require_once 'forumfunction.inc.php';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if (document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+// The next javascript script is to manage ajax upload file
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
+// The next javascript script is to delete file by ajax
+$htmlHeadXtra[] = '<script>
+$(function () {
+    $(document).on("click", ".deleteLink", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var l = $(this);
+        var id = l.closest("tr").attr("id");
+        var filename = l.closest("tr").find(".attachFilename").html();
+        if (confirm("'.get_lang('Are you sure to delete').'", filename)) {
+            $.ajax({
+                type: "POST",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                dataType: "json",
+                success: function(data) {
+                    if (data.error == false) {
+                        l.closest("tr").remove();
+                        if ($(".files td").length < 1) {
+                            $(".files").closest(".control-group").hide();
+                        }
+                    }
+                }
+            })
+        }
+    });
+});
+</script>';
 
 // Are we in a lp ?
 $origin = api_get_origin();
@@ -54,7 +106,7 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $userId = api_get_user_id();
 
 $repo = Container::getForumRepository();
-/** @var CForumForum $forum */
+/** @var CForum $forum */
 $forum = $repo->find($forumId);
 
 $repoThread = Container::getForumThreadRepository();
@@ -90,9 +142,11 @@ if (api_is_in_gradebook()) {
         'name' => get_lang('Assessments'),
     ];
 }
+$group_id = api_get_group_id();
+$groupEntity = null;
+if ('group' === $origin && $group_id) {
+    $groupEntity = api_get_group_entity($group_id);
 
-$group_properties = GroupManager::get_group_properties(api_get_group_id());
-if ('group' === $origin) {
     $_clean['toolgroup'] = api_get_group_id();
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -100,7 +154,7 @@ if ('group' === $origin) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
@@ -113,7 +167,7 @@ if ('group' === $origin) {
         'name' => $nameTools,
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
         'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [
@@ -181,7 +235,7 @@ $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
     0 == $forum->getAllowEdit() &&
-    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
+    !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)
 ) {
     api_not_allowed(true);
 }
@@ -194,10 +248,10 @@ if ('learnpath' === $origin) {
 
 // Action links
 if ('learnpath' !== $origin) {
-    echo '<div class="actions">';
-    echo '<span style="float:right;">'.search_link().'</span>';
+    $actions = '';
+    //$actions .= '<span style="float:right;">'.search_link().'</span>';
     if ('group' === $origin) {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
+        $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back to').' '.get_lang('Groups'),
@@ -206,7 +260,7 @@ if ('learnpath' !== $origin) {
             ).
             '</a>';
     } else {
-        echo '<a href="index.php?'.api_get_cidreq().'">'.
+        $actions .= '<a href="index.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back toForumOverview'),
@@ -215,7 +269,7 @@ if ('learnpath' !== $origin) {
             ).
             '</a>';
     }
-    echo '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
+    $actions .= '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
         Display::return_icon(
             'forum.png',
             get_lang('Back toForum'),
@@ -223,7 +277,7 @@ if ('learnpath' !== $origin) {
             ICON_SIZE_MEDIUM
         ).
         '</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 /* Display Forum Category and the Forum information */

@@ -590,11 +590,11 @@ class ZoomPlugin extends Plugin
         if (empty($courseInfo)) {
             throw new Exception('This meeting is not linked to a valid course');
         }
-        $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
+        /*$path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
             throw new Exception(get_lang(DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'));
-        }
+        }*/
     }
 
     /**
@@ -651,7 +651,8 @@ class ZoomPlugin extends Plugin
             $groupId = $group->getIid();
         }
 
-        $newPath = handle_uploaded_document(
+        $newPath = null;
+        /*$newPath = handle_uploaded_document(
             $courseInfo,
             [
                 'name' => $name,
@@ -673,7 +674,7 @@ class ZoomPlugin extends Plugin
             null,
             $sessionId,
             true
-        );
+        );*/
 
         fclose($tmpFile);
         if (false === $newPath) {
@@ -968,8 +969,7 @@ class ZoomPlugin extends Plugin
 
                     if ($isSubscribed) {
                         if ($meeting->isCourseGroupMeeting()) {
-                            $groupInfo = GroupManager::get_group_properties($meeting->getGroup()->getIid(), true);
-                            $isInGroup = GroupManager::is_user_in_group($userId, $groupInfo);
+                            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
                             if (false === $isInGroup) {
                                 throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                             }

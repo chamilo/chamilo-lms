@@ -58,6 +58,8 @@ class Security
             return false;
         }
 
+        // Clean $abs_path.
+        $abs_path = str_replace(['//', '../'], ['/', ''], $abs_path);
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
 
@@ -296,7 +298,7 @@ class Security
      * @param int The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @param bool $filter_terms
      *
-     * @return mixed Filtered string or array
+     * @return string|array Filtered string or array
      */
     public static function remove_XSS($var, $user_status = null, $filter_terms = false)
     {
@@ -457,7 +459,7 @@ class Security
                 if (!empty($list)) {
                     foreach ($list as $term) {
                         $term = str_replace(["\r\n", "\r", "\n", "\t"], '', $term);
-                        $html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
+                        $html_entities_value = api_htmlentities($term, ENT_QUOTES);
                         $bad_terms[] = $term;
                         if ($term != $html_entities_value) {
                             $bad_terms[] = $html_entities_value;

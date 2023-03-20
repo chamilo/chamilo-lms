@@ -227,7 +227,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
         if (1 == $user[7] && !empty($user[10])) {
             // check expiration date
-            $expiration_time = convert_sql_date($user[10]);
+            $expiration_time = api_strtotime($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
                 $user[7] = '-1';
@@ -574,8 +574,7 @@ $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Sessions administrator');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'keyword_status',
     get_lang('Profile'),
     $status_options
@@ -637,11 +636,7 @@ $table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight]);
 
 $noticeMessage = sprintf(
     get_lang("You can find more information about the user's right to be forgotten through the following page: %s"),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,12 +10,9 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class MessageSettingsSchema.
- */
 class MessageSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -22,7 +21,8 @@ class MessageSettingsSchema extends AbstractSettingsSchema
                     'allow_send_message_to_all_platform_users' => 'false',
                     'message_max_upload_filesize' => '20971520',
                 ]
-            );
+            )
+        ;
         $allowedTypes = [
             'allow_message_tool' => ['string'],
             'message_max_upload_filesize' => ['string'],
@@ -30,11 +30,12 @@ class MessageSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('allow_message_tool', YesNoType::class)
             ->add('allow_send_message_to_all_platform_users', YesNoType::class)
-            ->add('message_max_upload_filesize');
+            ->add('message_max_upload_filesize')
+        ;
     }
 }

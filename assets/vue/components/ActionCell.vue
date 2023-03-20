@@ -1,49 +1,53 @@
 <template>
-  <div>
-    <b-button-toolbar>
-      <b-button
-        v-if="handleShow"
-        variant="info"
-        size="sm"
-        class="mr-2"
-        @click="handleShow"
-      >
-        Info
-      </b-button>
-      <b-button
-        v-if="handleEdit"
-        size="sm"
-        class="mr-2"
-        @click="handleEdit"
-      >
-        Edit
-      </b-button>
-      <b-button
-        v-if="handleDelete"
-        variant="danger"
-        size="sm"
-        @click="confirmDelete = true"
-      >
-        Delete
-      </b-button>
-    </b-button-toolbar>
-
-    <ConfirmDelete
-      v-if="handleDelete"
-      :visible="confirmDelete"
-      :handle-delete="handleDelete"
-      @close="confirmDelete = false"
-    />
-  </div>
+<!--  auto-width-->
+  <q-td slot="body-cell-action" >
+    <div class="p-4 flex flex-row gap-1">
+      <q-btn
+          v-if="handleShow"
+          no-caps
+          dense
+          color="secondary"
+          @click="handleShow"
+          label="Show"
+      />
+      <q-btn
+          v-if="handleEdit"
+          no-caps
+             dense
+             color="secondary"
+             @click="handleEdit"
+          label="Edit"
+      />
+      <q-btn
+          v-if="handleDelete"
+          no-caps
+          label="Delete"
+          dense
+          color="red"
+          @click="confirmDeleteClick = true"
+      />
+      <ConfirmDelete
+          v-if="handleDelete"
+          :show="confirmDeleteClick"
+          :handle-delete="handleDelete"
+          :handle-cancel="() => (confirmDeleteClick = false)"
+      />
+    </div>
+  </q-td>
 </template>
 
 <script>
-import ConfirmDelete from './ConfirmDelete';
+import ConfirmDelete from './ConfirmDelete.vue';
 
 export default {
   name: 'ActionCell',
   components: {
     ConfirmDelete
+  },
+  data() {
+    return {
+      confirmDeleteClick: false
+    };
   },
   props: {
     handleShow: {
@@ -58,11 +62,6 @@ export default {
       type: Function,
       required: false
     }
-  },
-  data() {
-    return {
-      confirmDelete: false
-    };
   }
 };
 </script>

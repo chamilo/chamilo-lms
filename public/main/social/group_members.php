@@ -16,7 +16,7 @@ if ('true' != api_get_setting('allow_social_tool')) {
 
 $this_section = SECTION_SOCIAL;
 $group_id = intval($_GET['id']);
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 $user_role = '';
 
 //todo @this validation could be in a function in group_portal_manager
@@ -50,7 +50,7 @@ $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Members list')];
 
 //if i'm a moderator
-if (isset($_GET['action']) && 'add' == $_GET['action']) {
+if (isset($_GET['action']) && 'add' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -60,7 +60,7 @@ if (isset($_GET['action']) && 'add' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'delete' == $_GET['action']) {
+if (isset($_GET['action']) && 'delete' === $_GET['action']) {
     // we add a user only if is a open group
     $user_join = intval($_GET['u']);
     //if i'm a moderator
@@ -70,7 +70,7 @@ if (isset($_GET['action']) && 'delete' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'set_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //if i'm the admin
@@ -84,7 +84,7 @@ if (isset($_GET['action']) && 'set_moderator' == $_GET['action']) {
     }
 }
 
-if (isset($_GET['action']) && 'delete_moderator' == $_GET['action']) {
+if (isset($_GET['action']) && 'delete_moderator' === $_GET['action']) {
     // we add a user only if is a open group
     $user_moderator = intval($_GET['u']);
     //only group admins can do that
@@ -115,7 +115,7 @@ $social_avatar_block = SocialManager::show_social_avatar_block(
     'member_list',
     $group_id
 );
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
+//$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 
 foreach ($users as $user) {
@@ -189,7 +189,7 @@ if (count($new_member_list) > 0) {
 $tpl = new Template(null);
 $tpl->setHelp('Groups');
 $tpl->assign('social_avatar_block', $social_avatar_block);
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_menu_block', '');
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('social/home.tpl');

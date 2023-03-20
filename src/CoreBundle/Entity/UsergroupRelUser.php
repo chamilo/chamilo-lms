@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class UsergroupRelUser.
- *
  * @ORM\Table(
  *     name="usergroup_rel_user",
  *     indexes={
- *          @ORM\Index(name="IDX_739515A9A76ED395", columns={"user_id"}),
- *          @ORM\Index(name="IDX_739515A9D2112630", columns={"usergroup_id"})
+ *         @ORM\Index(name="IDX_739515A9A76ED395", columns={"user_id"}),
+ *         @ORM\Index(name="IDX_739515A9D2112630", columns={"usergroup_id"})
  *     }
  * )
  * @ORM\Entity
@@ -24,36 +25,29 @@ class UsergroupRelUser
     use UserTrait;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="classes", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var Usergroup
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $usergroup;
+    protected Usergroup $usergroup;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    #[Assert\NotBlank]
+    protected int $relationType;
 
     /**
      * Get id.
@@ -65,12 +59,7 @@ class UsergroupRelUser
         return $this->id;
     }
 
-    /**
-     * Set usergroup.
-     *
-     * @return UsergroupRelUser
-     */
-    public function setUsergroup(Usergroup $usergroup)
+    public function setUsergroup(Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
 
@@ -87,14 +76,7 @@ class UsergroupRelUser
         return $this->usergroup;
     }
 
-    /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return $this
-     */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 

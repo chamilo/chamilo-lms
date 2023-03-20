@@ -1,19 +1,21 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
+$fieldId = isset($_REQUEST['field_id']) ? (int) $_REQUEST['field_id'] : 0;
 
 switch ($action) {
     case 'delete_file':
         api_protect_admin_script();
 
-        $itemId = isset($_REQUEST['item_id']) ? $_REQUEST['item_id'] : null;
+        $itemId = $_REQUEST['item_id'] ?? null;
         $extraFieldValue = new ExtraFieldValue($type);
         $data = $extraFieldValue->get_values_by_handler_and_field_id($itemId, $fieldId);
         if (!empty($data) && isset($data['id']) && !empty($data['value'])) {
@@ -33,32 +35,47 @@ switch ($action) {
             );
         }
         break;
-    case 'search_tags':
+    case 'delete_tag':
         header('Content-Type: application/json');
-        $tag = isset($_REQUEST['q']) ? $_REQUEST['q'] : null;
-        $result = [];
+        $tagId = $_REQUEST['tag_id'] ?? 0;
+        $tagRepo = Container::getTagRepository();
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        $tag = $tagRepo->find($tagId);
 
         if (empty($tag)) {
-            echo json_encode(['items' => $result]);
+            echo json_encode(['items' => []]);
             exit;
         }
 
-        $extraFieldOption = new ExtraFieldOption($type);
+        $user = api_get_user_entity();
+        $tagRepo = Container::getTagRepository();
+        $deleted = $tagRepo->deleteTagFromUser($user, $tag);
+        if ($deleted) {
+            echo json_encode(['ok' => 1]);
+            exit;
+        } else {
+            echo json_encode(['error' => 1]);
+            exit;
+        }
+        break;
+    case 'search_tags':
+        header('Content-Type: application/json');
+        $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
 
-        $tags = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Tag')
-            ->createQueryBuilder('t')
-            ->where("t.tag LIKE :tag")
-            ->andWhere('t.fieldId = :field')
-            ->setParameter('field', $fieldId)
-            ->setParameter('tag', "$tag%")
-            ->getQuery()
-            ->getResult();
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        $field = $extraFieldRepo->find($fieldId);
 
-        /** @var Tag $tag */
+        if (empty($tag || null === $field)) {
+            echo json_encode(['items' => []]);
+            exit;
+        }
+
+        $tagRepo = Container::getTagRepository();
+        $tags = $tagRepo->findTagsByField($tag, $field);
+        $result = [];
         foreach ($tags as $tag) {
             $result[] = [
-                'id' => $tag->getTag(),
+                'id' => $tag->getId(),
                 'text' => $tag->getTag(),
             ];
         }
@@ -116,10 +133,10 @@ switch ($action) {
             'field' => $extraFieldInfo['id'],
         ];
 
-        $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+        $extraFieldSavedSearch = $em->getRepository(ExtraFieldSavedSearch::class)->findOneBy($search);
 
         if ($save) {
-            $extraField = new \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch('session');
+            $extraField = new ExtraFieldSavedSearch('session');
             if ($extraFieldSavedSearch) {
                 $extraFieldSavedSearch->setValue($values);
                 $em->persist($extraFieldSavedSearch);
@@ -128,8 +145,8 @@ switch ($action) {
         }
 
         if ($extraFieldInfo) {
-            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch $options */
-            $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+            /** @var ExtraFieldSavedSearch $extraFieldSavedSearch */
+            $extraFieldSavedSearch = $em->getRepository(ExtraFieldSavedSearch::class)->findOneBy($search);
             $values = $extraFieldSavedSearch->getValue();
             $url = api_get_self().'?a=order&save=1&field_variable='.$variable;
 
@@ -151,7 +168,6 @@ switch ($action) {
                             dataType: "json",
                             data: "values="+save,
                             success: function(data) {
-                                console.log(data);
                             }
                         });
 
@@ -172,7 +188,7 @@ switch ($action) {
                 $html .= '</li>';
             }
             $html .= '</ul>';
-            $html .= Display::url(get_lang('Save'), '#', ['id' => 'link_'.$variable, 'class' => 'btn btn-primary']);
+            $html .= Display::url(get_lang('Save'), '#', ['id' => 'link_'.$variable, 'class' => 'btn btn--primary']);
             echo $html;
         }
         break;

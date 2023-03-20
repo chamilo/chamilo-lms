@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use ChamiloSession as Session;
 
 /**
@@ -10,9 +11,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy, principal author
  * @author Bart Mollet
  * @author Roan Embrechts, cleaning and bugfixing
- */
-
-/**
  * Insert a login reference for the current user into the track_e_online stats
  * table. This table keeps trace of the last login. Nothing else matters (we
  * don't keep traces of anything older).
@@ -287,10 +285,11 @@ function who_is_online(
         }
     }
 
+    $direction = strtolower($direction);
     if (empty($direction)) {
         $direction = 'DESC';
     } else {
-        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        if (!in_array($direction, ['asc', 'desc'])) {
             $direction = 'DESC';
         }
     }
@@ -309,16 +308,16 @@ function who_is_online(
                   WHERE
                     login_date >= '".$current_date."' AND
                     friend_user_id <> '".api_get_user_id()."' AND
-                    relation_type='".USER_RELATION_TYPE_FRIEND."' AND
+                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
                     user_id = '".api_get_user_id()."'
-                  ORDER BY $column $direction
+                  ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
     } else {
         $query = "SELECT DISTINCT login_user_id, login_date
                     FROM ".$track_online_table." e
                     INNER JOIN ".$table_user." u ON (u.id = e.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
-                  ORDER BY $column $direction
+                  ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
     }
 
@@ -333,8 +332,8 @@ function who_is_online(
                             WHERE   track.access_url_id =  $access_url_id AND
                                     login_date >= '".$current_date."' AND
                                     friend_user_id <> '".api_get_user_id()."' AND
-                                    relation_type='".USER_RELATION_TYPE_FRIEND."'
-                            ORDER BY $column $direction
+                                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'
+                            ORDER BY `$column` $direction
                             LIMIT $from, $number_of_items";
             } else {
                 // all users online
@@ -344,7 +343,7 @@ function who_is_online(
                           ON (u.id=track.login_user_id)
                           WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
                                 login_date >= '".$current_date."'
-                          ORDER BY $column $direction
+                          ORDER BY `$column` $direction
                           LIMIT $from, $number_of_items";
             }
         }
@@ -394,7 +393,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 				  WHERE
 				        login_date >= '$current_date' AND
 				        friend_user_id <> '".api_get_user_id()."' AND
-				        relation_type='".USER_RELATION_TYPE_FRIEND."' AND
+				        relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
 				        user_id = '".api_get_user_id()."' ";
     } else {
         // All users online
@@ -416,7 +415,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 							    track.access_url_id = $access_url_id AND
 							    login_date >= '".$current_date."' AND
 							    friend_user_id <> '".api_get_user_id()."' AND
-							    relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
+							    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'  ";
             } else {
                 // all users online
                 $query = "SELECT count(login_id) as count FROM $track_online_table  track

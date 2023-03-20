@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class ExtraFieldOptionsRepository.
- */
 class ExtraFieldOptionsRepository extends ServiceEntityRepository
 {
-    /**
-     * ExtraFieldOptionsRepository constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ExtraFieldOptions::class);
@@ -36,10 +33,12 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
             ->andWhere(
                 $qb->expr()->eq('so.value', $option->getId())
             )
-            ->orderBy('so.displayText', 'ASC');
+            ->orderBy('so.displayText', Criteria::ASC)
+        ;
 
         return $qb
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

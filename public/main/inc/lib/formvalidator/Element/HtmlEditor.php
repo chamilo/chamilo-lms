@@ -1,6 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -8,7 +10,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class HtmlEditor extends HTML_QuickForm_textarea
 {
-    /** @var \Chamilo\CoreBundle\Component\Editor\Editor */
+    /** @var Editor */
     public $editor;
 
     /**
@@ -17,8 +19,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public $fullPage;
 
     /**
-     * Class Constructor.
-     *
      * @param string       $name
      * @param string|array $label      HTML editor  label
      * @param array        $attributes Attributes for the textarea
@@ -82,28 +82,20 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
     /**
      * Returns the html area content in HTML.
-     *
-     * @return string
      */
-    public function getFrozenHtml()
+    public function getFrozenHtml(): string
     {
         return Security::remove_XSS($this->getValue());
     }
 
-    /**
-     * @param bool $style
-     *
-     * @return string
-     */
-    public function buildEditor($style = false)
+    public function buildEditor(bool $style = false): string
     {
         $result = '';
         if ($this->editor) {
             $value = $this->getCleanValue();
-
             $this->editor->setName($this->getName());
             $this->editor->setTextareaId($this->getAttribute('id'));
-            if (true === $style) {
+            if ($style) {
                 $result = $this->editor->createHtmlStyle($value);
             } else {
                 $result = $this->editor->createHtml($value);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -8,56 +10,41 @@ use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupRelTutor.
- *
  * @ORM\Table(
- *  name="c_group_rel_tutor",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_group_rel_tutor",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CGroupRelTutor
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsTutor")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var CGroup
-     *
-     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="tutors")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup", inversedBy="tutors")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
-    protected $group;
+    protected CGroup $group;
 
-    /**
-     * Set userId.
-     *
-     * @return CGroupRelTutor
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -74,12 +61,7 @@ class CGroupRelTutor
         return $this->user;
     }
 
-    /**
-     * Set group.
-     *
-     * @return CGroupRelTutor
-     */
-    public function setGroup(CGroup $group)
+    public function setGroup(CGroup $group): self
     {
         $this->group = $group;
 
@@ -99,11 +81,9 @@ class CGroupRelTutor
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CGroupRelTutor
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

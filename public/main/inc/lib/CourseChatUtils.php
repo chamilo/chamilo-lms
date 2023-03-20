@@ -37,7 +37,7 @@ class CourseChatUtils
      * @param int $sessionId
      * @param int $groupId
      */
-    public function __construct($courseId, $userId, $sessionId = 0, $groupId = 0, ResourceNode $resourceNode, ResourceRepository $repository)
+    public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {
         $this->courseId = (int) $courseId;
         $this->userId = (int) $userId;
@@ -430,11 +430,8 @@ class CourseChatUtils
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $date_now = date('Y-m-d');
         $isMaster = (bool) api_is_course_admin();
-        //$basepath_chat = '/chat_files';
-        //$document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         if ($this->groupId) {
             $group_info = GroupManager:: get_group_properties($this->groupId);
-            //$basepath_chat = $group_info['directory'].'/chat_files';
         }
 
         //$chat_path = $document_path.$basepath_chat.'/';
@@ -525,7 +522,7 @@ class CourseChatUtils
         if ($isMaster || $GLOBALS['is_session_general_coach']) {
             $history .= '
                 <div id="clear-chat">
-                    <button type="button" id="chat-reset" class="btn btn-danger btn-sm">
+                    <button type="button" id="chat-reset" class="btn btn--danger btn-sm">
                         '.get_lang('Clear the chat').'
                     </button>
                 </div>
@@ -668,7 +665,7 @@ class CourseChatUtils
                     );
                 } else {
                     $criteria->andWhere(
-                        Criteria::expr()->eq('status', Session::COACH)
+                        Criteria::expr()->eq('status', Session::COURSE_COACH)
                     );
                 }
             }

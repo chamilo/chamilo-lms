@@ -21,7 +21,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$submit = $_POST['submit_button'] ?? null;
 
 /* MAIN CODE */
 if (!$is_allowed_to_edit || $isStudentView) {
@@ -55,44 +55,17 @@ $interbreadcrumb[] = [
     'name' => get_lang('Add learning object or activity'),
 ];
 
-Display::display_header(get_lang('Prerequisites'), 'Path');
-
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-    function stripslashes(str) {
-        str=str.replace(/\\'/g,'\'');
-        str=str.replace(/\\"/g,'"');
-        str=str.replace(/\\\\/g,'\\');
-        str=str.replace(/\\0/g,'\0');
-        return str;
-    }
-    function confirmation(name) {
-        name=stripslashes(name);
-        if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-</script>
-<?php
-
-/* DISPLAY SECTION */
-echo $lp->build_action_menu();
-echo '<div class="row">';
-echo '<div class="col-md-3">';
-echo $lp->return_new_tree();
-echo '</div>';
-echo '<div class="col-md-9">';
-echo '<div class="prerequisites">';
+$right = '';
 if (isset($is_success) && true == $is_success) {
-    echo $lp->displayItemMenu($lpItem);
-    echo Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
+    $right .= $lp->displayItemMenu($lpItem);
+    $right .= Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {
-    echo $lp->displayItemMenu($lpItem);
-    echo $lp->display_item_prerequisites_form($lpItem);
+    $right .= $lp->displayItemMenu($lpItem);
+    $right .= $lp->displayItemPrerequisitesForm($lpItem);
 }
-echo '</div>';
-echo '</div>';
-Display::display_footer();
+
+$tpl = new Template(get_lang('Prerequisites'));
+$tpl->assign('actions', $lp->build_action_menu(true));
+$tpl->assign('left', $lp->showBuildSideBar());
+$tpl->assign('right', $right);
+$tpl->displayTwoColTemplate();

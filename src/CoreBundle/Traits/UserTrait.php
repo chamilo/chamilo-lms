@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -8,10 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 
 trait UserTrait
 {
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

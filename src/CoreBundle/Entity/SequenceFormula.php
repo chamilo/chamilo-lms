@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,25 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceFormula
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceMethod")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
-    protected $method;
+    protected ?SequenceMethod $method = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceVariable")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
      */
-    protected $variable;
+    protected ?SequenceVariable $variable = null;
 
     /**
      * Get id.
@@ -45,30 +45,24 @@ class SequenceFormula
         return $this->id;
     }
 
-    public function getMethod()
+    public function getMethod(): ?SequenceMethod
     {
         return $this->method;
     }
 
-    /**
-     * @return SequenceFormula
-     */
-    public function setMethod($method)
+    public function setMethod(?SequenceMethod $method): self
     {
         $this->method = $method;
 
         return $this;
     }
 
-    public function getVariable()
+    public function getVariable(): ?SequenceVariable
     {
         return $this->variable;
     }
 
-    /**
-     * @return SequenceFormula
-     */
-    public function setVariable($variable)
+    public function setVariable(?SequenceVariable $variable): self
     {
         $this->variable = $variable;
 

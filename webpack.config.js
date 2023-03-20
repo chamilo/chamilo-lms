@@ -1,4 +1,14 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
+
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
+
+const PurgeCssPlugin = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
+const path = require('path');
+
+const { VuetifyLoaderPlugin } = require('vuetify-loader')
 const CopyPlugin = require('copy-webpack-plugin');
 
 Encore
@@ -10,13 +20,17 @@ Encore
     .enableBuildNotifications()
 
     .addEntry('app', './assets/js/app.js')
-    .addEntry('bootstrap', './assets/js/bootstrap.js')
+    //.addEntry('bootstrap', './assets/js/bootstrap.js')
     .addEntry('exercise', './assets/js/exercise.js')
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
+    .addEntry('lp', './assets/js/lp.js')
     .addEntry('vue', './assets/vue/main.js')
+    .addEntry('vue_installer', './assets/vue/main_installer.js')
+    .addEntry('translatehtml', './assets/js/translatehtml.js')
+    .addEntry('document', './assets/js/document.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
-    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
+    //.addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')
@@ -24,42 +38,38 @@ Encore
     .addStyleEntry('css/markdown', './assets/css/markdown.css')
     .addStyleEntry('css/print', './assets/css/print.css')
     .addStyleEntry('css/responsive', './assets/css/responsive.css')
-    .addStyleEntry('css/scorm', './assets/css/scorm.css')
+    .addStyleEntry('css/scorm', './assets/css/scorm.scss')
 
     .enableSingleRuntimeChunk()
     .enableIntegrityHashes()
-
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     //.enableVersioning(Encore.isProduction())
 
     // enables @babel/preset-env polyfills
-    .configureBabel((babelConfig) => {
-        babelConfig.plugins.push('@babel/plugin-transform-runtime');
-    }, {
-        useBuiltIns: 'usage',
-        corejs: 3
+    .configureBabel(() => {})
+    .configureBabelPresetEnv(config => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
     })
 
     .enableSassLoader()
-    .enableVueLoader(function (options) {}, {runtimeCompilerBuild: false})
+    .enableTypeScriptLoader(function(tsConfig) {
+        tsConfig.transpileOnly = true;
+        //tsConfig.configFile = './tsconfig.json';
+        //tsConfig.exclude = ['/node_modules(?!\\/vuex-composition-helpers)/'];
+    })
+    .enableVueLoader(() => {}, { version: 3, runtimeCompilerBuild: false})
     .autoProvidejQuery()
-    /*.enablePostCssLoader(function (options) {
-        options.config = {
-            path: 'postcss.config.js'
+    .enablePostCssLoader(options => {
+        options.postcssOptions = {
+            plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+            }
         }
-    })*/
+    })
     .copyFiles([
-        {
-            from: './node_modules/fullcalendar/',
-            pattern: /(main.js)$/,
-            to: 'libs/fullcalendar/main.js'
-        },
-        {
-            from: './node_modules/fullcalendar/',
-            pattern: /(main.css)$/,
-            to: 'libs/fullcalendar/main.css'
-        },
         {
             from: './node_modules/multiselect-two-sides/dist/js',
             pattern: /(multiselect.js)$/,
@@ -80,11 +90,11 @@ Encore
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
         },
-        {from: './node_modules/ckeditor/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
-        {from: './node_modules/ckeditor/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        //{from: './node_modules/ckeditor4/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
         /*,
         {
             from: './node_modules/mathjax/',
@@ -93,12 +103,12 @@ Encore
         },*/
     ])
     // define the environment variables
-    .configureDefinePlugin(options => {
-        /*const env = dotEnv.config({ path: '.env.local' });
+    /*.configureDefinePlugin(options => {
+        const env = dotEnv.config({ path: '.env.local' });
         if (env.parsed) {
             options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
-        }*/
-    })
+        }
+    })*/
     // enable ESLint
     // .addLoader({
     //     enforce: 'pre',
@@ -112,8 +122,40 @@ Encore
     //
     //     },
     // })
+    /*.addLoader({
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+            appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules(?!\/vuex-composition-helpers)/,
+    })*/
+    /*.addLoader({
+        test: /\.vue$/,
+        loader: 'vue-loader'
+    })
+    .addLoader({
+        test: /\.ts?/,
+        loader: 'ts-loader',
+        options: {
+            appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules(?!\/vuex-composition-helpers)/,
+    })
+    .addLoader({
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+    })*/
+    /*.addLoader({
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        exclude: /node_modules/,
+    })*/
 ;
 
+//Encore.addPlugin(new VueLoaderPlugin);
+Encore.addPlugin(new VuetifyLoaderPlugin());
 Encore.addPlugin(new CopyPlugin({
         patterns: [
             {
@@ -141,20 +183,18 @@ Encore.addPlugin(new CopyPlugin({
     }
 ));
 
-
 // Encore.addPlugin(new CopyPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',
 //     to: 'css/themes/' + theme + '/images'
 // };
 
-var themes = [
+const themes = [
     'chamilo'
 ];
 
 // Add Chamilo themes
 themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
-
     // Copy images from themes into public/build
     Encore.addPlugin(new CopyPlugin({
         patterns: [{
@@ -180,15 +220,25 @@ themes.forEach(function (theme) {
 //     }
 // }));
 
-//module.exports = Encore.getWebpackConfig();
+/*Encore.configureLoaderRule('ts', rule => {
+    rule.exclude = '/node_modules(?!/vuex-composition-helpers)/'
+});*/
 
 const config = Encore.getWebpackConfig();
 
-config.resolve.alias =  {
+/*config.resolve =  {
+    extensions: [ '.ts', '.js' ],
+    extensions: ['.ts', '.js', '.vue', '.json'],
+    alias: {
+        'vue': '@vue/runtime-dom'
+    },
+};*/
+
+/*config.resolve.alias =  {
     // If using the runtime only build
     vue$: 'vue/dist/vue.runtime.esm.js' // 'vue/dist/vue.runtime.common.js' for webpack 1
     // Or if using full build of Vue (runtime + compiler)
     // vue$: 'vue/dist/vue.esm.js'      // 'vue/dist/vue.common.js' for webpack 1
-};
+};*/
 
 module.exports = config;

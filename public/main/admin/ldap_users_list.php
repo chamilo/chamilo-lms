@@ -28,7 +28,7 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 $tool_name = get_lang('Search for LDAP users');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
-//api_display_tool_title($tool_name);
+//Display::page_subheader2($tool_name);
 
 if (isset($_GET['action'])) {
     $check = Security::check_token('get');
@@ -155,7 +155,7 @@ $type["all"] = get_lang('All');
 $type["employee"] = get_lang('Trainer');
 $type["student"] = get_lang('Learner');
 
-$form->addElement('select', 'keyword_type', get_lang('Status'), $type);
+$form->addSelect('keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
 $form->addElement('submit', 'submit', get_lang('Validate'));
 //$defaults['keyword_active'] = 1;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -17,25 +19,54 @@ class TestQuestionDescription extends Basic
     public function getConfig()
     {
         $config['toolbarGroups'] = [
-            ['name' => 'document', 'groups' => ['document', 'doctools']],
-            ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
-            ['name' => 'editing', 'groups' => ['clipboard', 'undo']],
+            [
+                'name' => 'document',
+                'groups' => ['document', 'doctools'],
+            ],
+            [
+                'name' => 'clipboard',
+                'groups' => ['clipboard', 'undo'],
+            ],
+            [
+                'name' => 'editing',
+                'groups' => ['clipboard', 'undo'],
+            ],
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
-            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
-            ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
-            ['name' => 'links'],
-            ['name' => 'insert'],
+            [
+                'name' => 'basicstyles',
+                'groups' => ['basicstyles', 'cleanup'],
+            ],
+            [
+                'name' => 'paragraph',
+                'groups' => ['list', 'indent', 'blocks', 'align'],
+            ],
+            [
+                'name' => 'links',
+            ],
+            [
+                'name' => 'insert',
+            ],
             '/',
-            ['name' => 'styles'],
-            ['name' => 'colors'],
-            ['name' => 'tools'],
-            ['name' => 'others'],
-            ['name' => 'mode'],
+            [
+                'name' => 'styles',
+            ],
+            [
+                'name' => 'colors',
+            ],
+            [
+                'name' => 'tools',
+            ],
+            [
+                'name' => 'others',
+            ],
+            [
+                'name' => 'mode',
+            ],
         ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
-        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
+        if ('true' !== api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -99,9 +130,9 @@ class TestQuestionDescription extends Basic
                 '-',
                 'TextColor',
                 'BGColor',
-                api_get_configuration_value('translate_html') ? 'Language' : '',
+                'true' === api_get_setting('editor.translate_html') ? 'translatehtml' : '',
             ],
-            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
+            ['true' === api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch', 'Source'],
@@ -130,7 +161,7 @@ class TestQuestionDescription extends Basic
                 'TextColor',
                 'BGColor',
                 '-',
-                api_get_configuration_value('translate_html') ? 'Language' : '',
+                'true' === api_get_setting('editor.translate_html') ? 'translatehtml' : '',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
@@ -163,7 +194,7 @@ class TestQuestionDescription extends Basic
                 'Underline',
                 'TextColor',
                 'BGColor',
-                api_get_configuration_value('translate_html') ? 'Language' : '',
+                'true' === api_get_setting('editor.translate_html') ? 'translatehtml' : '',
             ],
             ['Toolbarswitch', 'Source'],
         ];

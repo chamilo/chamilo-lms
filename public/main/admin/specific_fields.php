@@ -18,8 +18,6 @@ $interbreadcrumb[] = ['url' => 'settings.php?category=Search', 'name' => get_lan
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-include_once $libpath.'specific_fields_manager.lib.php';
-
 // Create an add-field box
 $form = new FormValidator('add_field', 'post', '', '', null, false);
 $renderer = &$form->defaultRenderer();
@@ -56,7 +54,7 @@ function edit_filter($id, $url_params, $row)
     global $charset;
     $return = '<a href="specific_fields_add.php?action=edit&field_id='.$row[0].'">'.
         Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;">'.
+    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."'".')) return false;">'.
         Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 
     return $return;

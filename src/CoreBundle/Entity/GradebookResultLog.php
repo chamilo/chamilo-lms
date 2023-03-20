@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -19,83 +22,47 @@ class GradebookResultLog
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="result_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult")
+     * @ORM\JoinColumn(name="result_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resultId;
+    protected GradebookResult $result;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
+     * @ORM\JoinColumn(name="evaluation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $evaluationId;
+    protected GradebookEvaluation $evaluation;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    protected $score;
+    protected ?float $score = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookResultLogs")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
-
-    /**
-     * Set evaluationId.
-     *
-     * @param int $evaluationId
-     *
-     * @return GradebookResultLog
-     */
-    public function setEvaluationId($evaluationId)
-    {
-        $this->evaluationId = $evaluationId;
-
-        return $this;
-    }
-
-    /**
-     * Get evaluationId.
-     *
-     * @return int
-     */
-    public function getEvaluationId()
-    {
-        return $this->evaluationId;
-    }
+    protected User $user;
 
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
-     *
      * @return GradebookResultLog
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -105,7 +72,7 @@ class GradebookResultLog
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -115,11 +82,9 @@ class GradebookResultLog
     /**
      * Set score.
      *
-     * @param float $score
-     *
      * @return GradebookResultLog
      */
-    public function setScore($score)
+    public function setScore(float $score)
     {
         $this->score = $score;
 
@@ -144,17 +109,5 @@ class GradebookResultLog
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getResultId(): int
-    {
-        return $this->resultId;
-    }
-
-    public function setResultId(int $resultId): self
-    {
-        $this->resultId = $resultId;
-
-        return $this;
     }
 }

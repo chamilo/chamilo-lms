@@ -36,8 +36,8 @@
             </td>
 
             <td>
-                <a href="{{ web_self }}?{{web_cid_query}}&action=download&id={{ file.id }}" class="btn btn-default">{{ 'Download' | get_lang }}</a>
-                <a href="{{ web_self }}?{{web_cid_query}}&action=delete&id={{ file.id }}" class="btn btn-danger">{{ 'Delete' | get_lang }}</a>
+                <a href="{{ web_self }}?{{web_cid_query}}&action=download&id={{ file.id }}" class="btn btn--plain">{{ 'Download' | get_lang }}</a>
+                <a href="{{ web_self }}?{{web_cid_query}}&action=delete&id={{ file.id }}" class="btn btn--danger">{{ 'Delete' | get_lang }}</a>
             </td>
         </tr>
     {% endfor %}

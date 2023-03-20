@@ -1,14 +1,6 @@
-{% extends "::layout.html.twig" %}
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
-{% block page_title %}
-    {{ 'Plugins' | trans }}
-{% endblock %}
-
-{% block page_subtitle %}
-{% endblock %}
-
-{% block page_content %}
-
+{% block content %}
 <a href="{{ url('chamilo_core_admin_plugins_pluginsadd') }}">
     Add
 </a>

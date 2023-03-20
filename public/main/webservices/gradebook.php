@@ -2,10 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
-use Skill as SkillManager;
+use Chamilo\CoreBundle\Entity\Skill;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
 ini_set('memory_limit', -1);
 
 /*
@@ -46,7 +47,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        [$ip1] = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug) {
@@ -457,10 +458,10 @@ function WSAssignSkill($params)
     }
 
     $em = Database::getManager();
-    $skillManager = new SkillManager();
+    $skillManager = new SkillModel();
 
     $skillId = isset($params['skill_id']) ? $params['skill_id'] : 0;
-    $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+    $skillRepo = $em->getRepository(Skill::class);
     $skill = $skillRepo->find($skillId);
 
     if (empty($skill)) {
@@ -499,11 +500,11 @@ function WSAssignSkill($params)
         $authorInfo['id']
     );
 
-    if (!empty($skillUser)) {
-        return 1;
+    if (null === $skillUser) {
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Use the request to (try to) invoke the service

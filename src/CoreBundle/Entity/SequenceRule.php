@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,20 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceRule
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
      * Get id.
@@ -49,11 +47,9 @@ class SequenceRule
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceRule
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

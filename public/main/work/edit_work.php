@@ -8,9 +8,6 @@ api_protect_course_script(true);
 
 $lib_path = api_get_path(LIBRARY_PATH);
 
-/* Libraries */
-require_once 'work.lib.php';
-
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 
@@ -129,12 +126,17 @@ if ($form->validate()) {
         updateWork($workData['iid'], $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
-        Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $workData['iid']);
+        SkillModel::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $workData['iid']);
         Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         header('Location: '.$currentUrl);
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('The operation is impossible, a file with this name already exists.'), 'warning'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('The operation is impossible, a file with this name already exists.'),
+                'warning'
+            )
+        );
     }
 }
 

@@ -128,7 +128,7 @@ class LearningCalendarPlugin extends Plugin
             'visible_to_self' => 1,
             'changeable' => 1,
             'visible_to_others' => 1,
-            'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
         ];
 
         $extraField->save($params);
@@ -140,7 +140,7 @@ class LearningCalendarPlugin extends Plugin
             'visible_to_self' => 1,
             'changeable' => 1,
             'visible_to_others' => 1,
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'value_type' => ExtraField::FIELD_TYPE_TEXT,
         ];
 
         $extraField->save($params);
@@ -288,7 +288,7 @@ class LearningCalendarPlugin extends Plugin
             $select = 'count(id) count ';
         }
 
-        $sql = "SELECT $select FROM learning_calendar_events 
+        $sql = "SELECT $select FROM learning_calendar_events
                 WHERE calendar_id = $calendarId $startCondition $endCondition $typeCondition";
         $result = Database::query($sql);
 
@@ -324,7 +324,7 @@ class LearningCalendarPlugin extends Plugin
             $typeCondition = " AND type = $type ";
         }*/
 
-        $sql = "SELECT start_date FROM learning_calendar_events 
+        $sql = "SELECT start_date FROM learning_calendar_events
                 WHERE calendar_id = $calendarId ORDER BY start_date LIMIT 1";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -357,7 +357,7 @@ class LearningCalendarPlugin extends Plugin
     public function getUsersPerCalendar($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $sql = "SELECT * FROM learning_calendar_user 
+        $sql = "SELECT * FROM learning_calendar_user
                 WHERE calendar_id = $calendarId";
         $result = Database::query($sql);
         $list = [];
@@ -378,7 +378,7 @@ class LearningCalendarPlugin extends Plugin
     public function getUsersPerCalendarCount($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $sql = "SELECT count(id) as count FROM learning_calendar_user 
+        $sql = "SELECT count(id) as count FROM learning_calendar_user
                 WHERE calendar_id = $calendarId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -557,7 +557,7 @@ class LearningCalendarPlugin extends Plugin
     {
         $calendarId = (int) $calendarId;
         $userId = (int) $userId;
-        $sql = "DELETE FROM learning_calendar_user 
+        $sql = "DELETE FROM learning_calendar_user
                 WHERE user_id = $userId AND calendar_id = $calendarId";
         Database::query($sql);
 
@@ -698,16 +698,16 @@ class LearningCalendarPlugin extends Plugin
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = "SELECT DISTINCT e.name, e.id
-                FROM $tableEvaluation e 
+                FROM $tableEvaluation e
                 INNER JOIN $tableCourse c
                 ON (course_code = c.code)
                 INNER JOIN $tableResult r
                 ON (r.evaluation_id = e.id)
-                WHERE 
+                WHERE
                   e.type = 'evaluation' AND
                   r.score >= 2 AND
-                  r.user_id = $userId   
-                  $courseSessionConditionToString                  
+                  r.user_id = $userId
+                  $courseSessionConditionToString
         ";
         $result = Database::query($sql);
         $list = [];
@@ -758,9 +758,9 @@ class LearningCalendarPlugin extends Plugin
                 $courseAndSessionCondition[] =
                     " ((l.session_id = 0 OR l.session_id is NULL) AND i.c_id IN ('$courseListToString'))";
             } else {
-                $courseAndSessionCondition[] = " 
+                $courseAndSessionCondition[] = "
                     (
-                        ((l.session_id = 0 OR l.session_id is NULL) OR l.session_id = $sessionId) AND 
+                        ((l.session_id = 0 OR l.session_id is NULL) OR l.session_id = $sessionId) AND
                         i.c_id IN ('$courseListToString')
                     )";
             }
@@ -771,18 +771,18 @@ class LearningCalendarPlugin extends Plugin
         }
 
         $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
-        $sql = "SELECT count(*) as count 
+        $sql = "SELECT count(*) as count
                 FROM $tableItem i INNER JOIN $tableLp l
-                ON (i.c_id = l.c_id AND i.lp_id = l.iid) 
+                ON (i.c_id = l.c_id AND i.lp_id = l.iid)
                 INNER JOIN $tableLpItemView iv
-                ON (iv.c_id = l.c_id AND i.iid = iv.lp_item_id) 
+                ON (iv.c_id = l.c_id AND i.iid = iv.lp_item_id)
                 INNER JOIN $tableLpView v
                 ON (v.c_id = l.c_id AND v.lp_id = l.iid AND iv.lp_view_id = v.iid)
-                INNER JOIN extra_field_values e 
+                INNER JOIN extra_field_values e
                 ON (e.item_id = i.iid AND value = 1 AND field_id = ".$fieldInfo['id'].")
-                WHERE                 
-                    v.user_id = $userId AND 
-                    status = 'completed' 
+                WHERE
+                    v.user_id = $userId AND
+                    status = 'completed'
                     $courseSessionConditionToString
                 GROUP BY iv.view_count
                ";
@@ -840,8 +840,8 @@ class LearningCalendarPlugin extends Plugin
             $html .= '<script>
                 $(document).ready(function(){
                     var cosPoints = '.$listToString.';
-                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
-                        //animate: !$.jqplot.use_excanvas,                      
+                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {
+                        //animate: !$.jqplot.use_excanvas,
                         series:[{
                             showMarker:true,
                             pointLabels: { show:true },
@@ -851,12 +851,12 @@ class LearningCalendarPlugin extends Plugin
                                 label: "'.$date.'",
                                 renderer: $.jqplot.DateAxisRenderer,
                                 tickOptions:{formatString: "%Y-%m-%d"},
-                                tickInterval: \'30 day\',                                
+                                tickInterval: \'30 day\',
                             },
                             yaxis:{
                                 label: "'.$controlPoint.'",
                                 max: 20,
-                                min: -20,    
+                                min: -20,
                             }
                         },
                         canvasOverlay: {
@@ -870,7 +870,7 @@ class LearningCalendarPlugin extends Plugin
                                     shadow: false
                                 }
                             }]
-                        },                     
+                        },
                   });
                 });
             </script>';
@@ -985,7 +985,7 @@ class LearningCalendarPlugin extends Plugin
         // Remove the free type to loop correctly when toogle days.
         unset($eventTypeList[self::EVENT_TYPE_FREE]);
 
-        $sql = "SELECT * FROM learning_calendar_events 
+        $sql = "SELECT * FROM learning_calendar_events
                 WHERE start_date = '$startDate' AND calendar_id = $calendarId ";
         $result = Database::query($sql);
 
@@ -1030,7 +1030,7 @@ class LearningCalendarPlugin extends Plugin
         $calendarId = (int) $calendarId;
         $eventTypeList = $this->getEventTypeColorList();
 
-        $sql = "SELECT * FROM learning_calendar_events 
+        $sql = "SELECT * FROM learning_calendar_events
                 WHERE calendar_id = $calendarId ";
         $result = Database::query($sql);
 
@@ -1071,9 +1071,9 @@ class LearningCalendarPlugin extends Plugin
     public function getControlPoints($userId)
     {
         $userId = (int) $userId;
-        $sql = "SELECT control_date, control_value 
-                FROM learning_calendar_control_point 
-                WHERE user_id = $userId 
+        $sql = "SELECT control_date, control_value
+                FROM learning_calendar_control_point
+                WHERE user_id = $userId
                 ORDER BY control_date";
         $result = Database::query($sql);
 
@@ -1107,8 +1107,8 @@ class LearningCalendarPlugin extends Plugin
         $local = api_get_local_time();
         $date = substr($local, 0, 10);
 
-        $sql = "SELECT id 
-                FROM learning_calendar_control_point 
+        $sql = "SELECT id
+                FROM learning_calendar_control_point
                 WHERE user_id = $userId AND control_date = '$date'";
         $result = Database::query($sql);
 

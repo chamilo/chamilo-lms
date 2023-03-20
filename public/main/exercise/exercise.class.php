@@ -4,26 +4,19 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
-use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Exercise.
- *
- * Allows to instantiate an object of type Exercise
- *
- * @todo use getters and setters correctly
- *
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
- * Modified by Hubert Borderiou #294
+ * @author Hubert Borderiou #294
  */
 class Exercise
 {
@@ -94,18 +87,17 @@ class Exercise
     public $autolaunch;
     public $exerciseCategoryId;
     public $pageResultConfiguration;
+    public $hideQuestionNumber;
     public $preventBackwards;
     public $currentQuestion;
     public $hideComment;
     public $hideNoAnswer;
     public $hideExpectedAnswer;
+    public $forceShowExpectedChoiceColumn;
+    public $disableHideCorrectAnsweredQuestions;
 
     /**
-     * Constructor of the class.
-     *
      * @param int $courseId
-     *
-     * @author Olivier Brouckaert
      */
     public function __construct($courseId = 0)
     {
@@ -138,11 +130,13 @@ class Exercise
         $this->globalCategoryId = null;
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
-        $this->pageResultConfiguration;
+        $this->pageResultConfiguration = null;
+        $this->hideQuestionNumber = 0;
         $this->preventBackwards = 0;
         $this->hideComment = false;
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
+        $this->disableHideCorrectAnsweredQuestions = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -161,8 +155,6 @@ class Exercise
     /**
      * Reads exercise information from the data base.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int  $id                - exercise Id
      * @param bool $parseQuestionList
      *
@@ -173,7 +165,7 @@ class Exercise
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = (int) $id;
-        if (empty($this->course_id)) {
+        if (empty($this->course_id) || empty($id)) {
             return false;
         }
 
@@ -183,7 +175,7 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
-            $this->id = $this->iId = $object->iid;
+            $this->id = $this->iId = (int) $object->iid;
             $this->exercise = $object->title;
             $this->name = $object->title;
             $this->title = $object->title;
@@ -199,7 +191,7 @@ class Exercise
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
-            $this->sessionId = $object->session_id;
+            //$this->sessionId = $object->session_id;
             $this->propagate_neg = $object->propagate_neg;
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
@@ -222,8 +214,10 @@ class Exercise
             }
 
             if (!empty($object->page_result_configuration)) {
-                $this->pageResultConfiguration = $object->page_result_configuration;
+                //$this->pageResultConfiguration = $object->page_result_configuration;
             }
+
+            $this->hideQuestionNumber = 1 == $object->hide_question_number;
 
             if (isset($object->show_previous_button)) {
                 $this->showPreviousButton = 1 == $object->show_previous_button ? true : false;
@@ -269,34 +263,18 @@ class Exercise
             ) {
                 $this->questionList = $questionList;
             }*/
+
             return true;
         }
 
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public function getCutTitle()
+    public function getCutTitle(): string
     {
         $title = $this->getUnformattedTitle();
 
         return cut($title, EXERCISE_MAX_NAME_SIZE);
-    }
-
-    /**
-     * returns the exercise ID.
-     *
-     * @deprecated
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return int - exercise ID
-     */
-    public function selectId()
-    {
-        return $this->iId;
     }
 
     public function getId()
@@ -306,8 +284,6 @@ class Exercise
 
     /**
      * returns the exercise title.
-     *
-     * @author Olivier Brouckaert
      *
      * @param bool $unformattedText Optional. Get the title without HTML tags
      *
@@ -356,8 +332,6 @@ class Exercise
     /**
      * returns the exercise description.
      *
-     * @author Olivier Brouckaert
-     *
      * @return string - exercise description
      */
     public function selectDescription()
@@ -367,12 +341,8 @@ class Exercise
 
     /**
      * returns the exercise sound file.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return string - exercise description
      */
-    public function selectSound()
+    public function getSound()
     {
         return $this->sound;
     }
@@ -380,9 +350,9 @@ class Exercise
     /**
      * returns the exercise type.
      *
-     * @author Olivier Brouckaert
-     *
      * @return int - exercise type
+     *
+     * @author Olivier Brouckaert
      */
     public function selectType()
     {
@@ -406,9 +376,9 @@ class Exercise
     }
 
     /**
-     * @author hubert borderiou 30-11-11
-     *
      * @return int : do we display the question category name for students
+     *
+     * @author hubert borderiou 30-11-11
      */
     public function selectDisplayCategoryName()
     {
@@ -426,9 +396,9 @@ class Exercise
     /**
      * Modify object to update the switch display_category_name.
      *
-     * @author hubert borderiou 30-11-11
-     *
      * @param int $value is an integer 0 or 1
+     *
+     * @author hubert borderiou 30-11-11
      */
     public function updateDisplayCategoryName($value)
     {
@@ -436,9 +406,9 @@ class Exercise
     }
 
     /**
-     * @author hubert borderiou 28-11-11
-     *
      * @return string html text : the text to display ay the end of the test
+     *
+     * @author hubert borderiou 28-11-11
      */
     public function getTextWhenFinished()
     {
@@ -458,9 +428,9 @@ class Exercise
     /**
      * return 1 or 2 if randomByCat.
      *
-     * @author hubert borderiou
-     *
      * @return int - quiz random by category
+     *
+     * @author hubert borderiou
      */
     public function getRandomByCategory()
     {
@@ -472,9 +442,9 @@ class Exercise
      * return 1 if random by cat, categories shuffled
      * return 2 if random by cat, categories sorted by alphabetic order.
      *
-     * @author hubert borderiou
-     *
      * @return int - quiz random by category
+     *
+     * @author hubert borderiou
      */
     public function isRandomByCat()
     {
@@ -514,9 +484,9 @@ class Exercise
     /**
      * Tells if questions are selected randomly, and if so returns the draws.
      *
-     * @author Carlos Vargas
-     *
      * @return int - results disabled exercise
+     *
+     * @author Carlos Vargas
      */
     public function selectResultsDisabled()
     {
@@ -526,9 +496,9 @@ class Exercise
     /**
      * tells if questions are selected randomly, and if so returns the draws.
      *
-     * @author Olivier Brouckaert
-     *
      * @return bool
+     *
+     * @author Olivier Brouckaert
      */
     public function isRandom()
     {
@@ -564,9 +534,9 @@ class Exercise
     /**
      * returns the exercise status (1 = enabled ; 0 = disabled).
      *
-     * @author Olivier Brouckaert
-     *
      * @return int - 1 if enabled, otherwise 0
+     *
+     * @author Olivier Brouckaert
      */
     public function selectStatus()
     {
@@ -639,7 +609,7 @@ class Exercise
     /**
      * @param int    $start
      * @param int    $limit
-     * @param int    $sidx
+     * @param string $sidx
      * @param string $sord
      * @param array  $whereCondition
      * @param array  $extraFields
@@ -665,15 +635,15 @@ class Exercise
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
-					WHERE e.exercice_id	= '".$this->id."' ";
+                    ON (e.question_id = q.iid)
+					WHERE e.quiz_id	= '".$this->id."' ";
 
             $orderCondition = ' ORDER BY question_order ';
 
             if (!empty($sidx) && !empty($sord)) {
                 if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.$sidx $sord";
+                        $orderCondition = " ORDER BY `q.$sidx` $sord";
                     }
                 }
             }
@@ -695,10 +665,12 @@ class Exercise
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
-                    $category_labels = TestCategory::return_category_labels(
+                    $category_labels = '';
+                    // @todo not implemented in 1.11.x
+                    /*$category_labels = TestCategory::return_category_labels(
                         $objQuestionTmp->category_list,
                         $category_list
-                    );
+                    );*/
 
                     if (empty($category_labels)) {
                         $category_labels = '-';
@@ -710,8 +682,9 @@ class Exercise
 
                     $question_media = null;
                     if (!empty($objQuestionTmp->parent_id)) {
-                        $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
-                        $question_media = Question::getMediaLabel($objQuestionMedia->question);
+                        // @todo not implemented in 1.11.x
+                        //$objQuestionMedia = Question::read($objQuestionTmp->parent_id);
+                        //$question_media = Question::getMediaLabel($objQuestionMedia->question);
                     }
 
                     $questionType = Display::tag(
@@ -764,10 +737,9 @@ class Exercise
         $sql = "SELECT count(q.iid) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = ".$this->getId();
+                    e.quiz_id = ".$this->getId();
         $result = Database::query($sql);
 
         $count = 0;
@@ -795,10 +767,9 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $exerciseQuestionTable e
                 INNER JOIN $questionTable q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->getId()."'
+                    e.quiz_id = '".$this->getId()."'
                 ORDER BY q.question";
         $result = Database::query($sql);
         $list = [];
@@ -813,13 +784,13 @@ class Exercise
      * Selecting question list depending in the exercise-category
      * relationship (category table in exercise settings).
      *
-     * @param array $question_list
+     * @param array $questionList
      * @param int   $questionSelectionType
      *
      * @return array
      */
     public function getQuestionListWithCategoryListFilteredByCategorySettings(
-        $question_list,
+        $questionList,
         $questionSelectionType
     ) {
         $result = [
@@ -839,22 +810,21 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED: // 3
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -864,20 +834,19 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -886,14 +855,13 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM: // 5
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
                 $questionsByCategoryMandatory = [];
@@ -902,15 +870,15 @@ class Exercise
                 ) {
                     $questionsByCategoryMandatory = TestCategory::getQuestionsByCat(
                         $this->id,
-                        $question_list,
+                        $questionList,
                         $categoriesAddedInExercise,
                         true
                     );
                 }
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true,
                     $questionsByCategoryMandatory
@@ -921,48 +889,42 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED:
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
 
                 break;
-            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
-                break;
-            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
-                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root ASC, lft ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -971,20 +933,19 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root, lft ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
@@ -992,16 +953,16 @@ class Exercise
                 break;
         }
 
-        $result['question_list'] = isset($question_list) ? $question_list : [];
-        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
+        $result['question_list'] = $questionList ?? [];
+        $result['category_with_questions_list'] = $questionsByCategory ?? [];
         $parentsLoaded = [];
         // Adding category info in the category list with question list:
-        if (!empty($questions_by_category)) {
+        if (!empty($questionsByCategory)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository(CQuizCategory::class);
+            $repo = $em->getRepository(CQuizRelQuestionCategory::class);
 
-            foreach ($questions_by_category as $categoryId => $questionList) {
+            foreach ($questionsByCategory as $categoryId => $questionList) {
                 $category = new TestCategory();
                 $cat = (array) $category->getCategory($categoryId);
                 if ($cat) {
@@ -1011,9 +972,9 @@ class Exercise
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
-                    /** @var CQuizCategory $categoryEntity */
+                    /** @var CQuizRelQuestionCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find(CQuizCategory::class, $cat['parent_id']);
+                        $categoryEntity = $em->find(CQuizRelQuestionCategory::class, $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -1025,8 +986,8 @@ class Exercise
                         //$index = 1;
                     }
 
-                    /** @var CQuizCategory $categoryParent */
-                    // @todo check code
+                    /** @var CQuizRelQuestionCategory $categoryParent */
+                    // @todo not implemented in 1.11.x
                     /*foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
                         if (0 == $visibility) {
@@ -1070,14 +1031,14 @@ class Exercise
      * @param bool $adminView    Whether we should return all questions (admin view) or
      *                           just a list limited by the max number of random questions
      *
-     * @author Olivier Brouckaert
-     *
      * @return array - question ID list
      */
     public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
+        //var_dump($this->getId());exit;
         if ($fromDatabase && !empty($this->getId())) {
             $nbQuestions = $this->getQuestionCount();
+
             $questionSelectionType = $this->getQuestionSelectionType();
 
             switch ($questionSelectionType) {
@@ -1115,8 +1076,6 @@ class Exercise
     /**
      * returns the number of questions in this exercise.
      *
-     * @author Olivier Brouckaert
-     *
      * @return int - number of questions
      */
     public function selectNbrQuestions()
@@ -1143,14 +1102,14 @@ class Exercise
     /**
      * Selects questions randomly in the question list.
      *
-     * @author Olivier Brouckaert
-     * @author Hubert Borderiou 15 nov 2011
-     *
      * @param bool $adminView Whether we should return all
      *                        questions (admin view) or just a list limited by the max number of random questions
      *
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *               without randomizing, otherwise, returns the list with questions selected randomly
+     *
+     * @author Olivier Brouckaert
+     * @author Hubert Borderiou 15 nov 2011
      */
     public function getRandomList($adminView = false)
     {
@@ -1175,10 +1134,9 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id= q.iid AND e.c_id = q.c_id)
+                ON (e.question_id= q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->getId()."'
+                    e.quiz_id = '".$this->getId()."'
                     $randomLimit ";
         $result = Database::query($sql);
         $questionList = [];
@@ -1192,11 +1150,11 @@ class Exercise
     /**
      * returns 'true' if the question ID is in the question list.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int $questionId - question ID
      *
      * @return bool - true if in the list, otherwise false
+     *
+     * @author Olivier Brouckaert
      */
     public function isInList($questionId)
     {
@@ -1224,11 +1182,10 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.iid = $questionId AND
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = ".$this->getId();
+                    e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
 
@@ -1241,20 +1198,18 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.id
+        $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.type = $type AND
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = ".$this->id;
+                    e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
     }
-
 
     public function hasQuestionWithTypeNotInList(array $questionTypeList)
     {
@@ -1269,11 +1224,11 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
                     q.type NOT IN ('$questionTypeToString')  AND
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = ".$this->getId();
+
+                    e.quiz_id = ".$this->getId();
 
         $result = Database::query($sql);
 
@@ -1283,9 +1238,9 @@ class Exercise
     /**
      * changes the exercise title.
      *
-     * @author Olivier Brouckaert
-     *
      * @param string $title - exercise title
+     *
+     * @author Olivier Brouckaert
      */
     public function updateTitle($title)
     {
@@ -1315,9 +1270,9 @@ class Exercise
     /**
      * changes the exercise description.
      *
-     * @author Olivier Brouckaert
-     *
      * @param string $description - exercise description
+     *
+     * @author Olivier Brouckaert
      */
     public function updateDescription($description)
     {
@@ -1327,9 +1282,9 @@ class Exercise
     /**
      * changes the exercise expired_time.
      *
-     * @author Isaac flores
-     *
      * @param int $expired_time The expired time of the quiz
+     *
+     * @author Isaac flores
      */
     public function updateExpiredTime($expired_time)
     {
@@ -1454,10 +1409,10 @@ class Exercise
     /**
      * changes the exercise sound file.
      *
-     * @author Olivier Brouckaert
-     *
      * @param string $sound  - exercise sound file
      * @param string $delete - ask to delete the file
+     *
+     * @author Olivier Brouckaert
      */
     public function updateSound($sound, $delete)
     {
@@ -1494,9 +1449,9 @@ class Exercise
     /**
      * changes the exercise type.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int $type - exercise type
+     *
+     * @author Olivier Brouckaert
      */
     public function updateType($type)
     {
@@ -1507,9 +1462,9 @@ class Exercise
      * sets to 0 if questions are not selected randomly
      * if questions are selected randomly, sets the draws.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int $random - 0 if not random, otherwise the draws
+     *
+     * @author Olivier Brouckaert
      */
     public function setRandom($random)
     {
@@ -1520,9 +1475,9 @@ class Exercise
      * sets to 0 if answers are not selected randomly
      * if answers are selected randomly.
      *
-     * @author Juan Carlos Rana
-     *
      * @param int $random_answers - random answers
+     *
+     * @author Juan Carlos Rana
      */
     public function updateRandomAnswers($random_answers)
     {
@@ -1585,8 +1540,8 @@ class Exercise
         $description = $this->description;
         $sound = $this->sound;
         $type = $this->type;
-        $attempts = isset($this->attempts) ? $this->attempts : 0;
-        $feedback_type = isset($this->feedback_type) ? $this->feedback_type : 0;
+        $attempts = isset($this->attempts) ? (int) $this->attempts : 0;
+        $feedback_type = isset($this->feedback_type) ? (int) $this->feedback_type : 0;
         $random = $this->random;
         $random_answers = $this->random_answers;
         $active = $this->active;
@@ -1597,7 +1552,6 @@ class Exercise
         $text_when_finished = $this->text_when_finished;
         $display_category_name = (int) $this->display_category_name;
         $pass_percentage = (int) $this->pass_percentage;
-        $session_id = $this->sessionId;
 
         // If direct we do not show results
         $results_disabled = (int) $this->results_disabled;
@@ -1606,7 +1560,6 @@ class Exercise
         }
         $expired_time = (int) $this->expired_time;
 
-        $em = Database::getManager();
         $repo = Container::getQuizRepository();
         $repoCategory = Container::getExerciseCategoryRepository();
 
@@ -1636,9 +1589,9 @@ class Exercise
             ->setDescription($description)
             ->setSound($sound)
             ->setType($type)
-            ->setRandom($random)
-            ->setRandomAnswers($random_answers)
-            ->setActive($active)
+            ->setRandom((int) $random)
+            ->setRandomAnswers((bool) $random_answers)
+            ->setActive((int) $active)
             ->setResultsDisabled($results_disabled)
             ->setMaxAttempt($attempts)
             ->setFeedbackType($feedback_type)
@@ -1650,20 +1603,17 @@ class Exercise
             ->setPassPercentage($pass_percentage)
             ->setSaveCorrectAnswers($saveCorrectAnswers)
             ->setPropagateNeg($propagate_neg)
-            ->setHideQuestionTitle($this->getHideQuestionTitle())
+            ->setHideQuestionTitle(1 === (int) $this->getHideQuestionTitle())
             ->setQuestionSelectionType($this->getQuestionSelectionType())
+            ->setHideQuestionNumber((int) $this->hideQuestionNumber)
         ;
 
         $allow = api_get_configuration_value('allow_exercise_categories');
-        if (true === $allow) {
-            if (!empty($this->getExerciseCategoryId())) {
-                $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
-            }
+        if (true === $allow && !empty($this->getExerciseCategoryId())) {
+            $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
         }
 
-        if (api_get_configuration_value('quiz_prevent_backwards_move')) {
-            $exercise->setPreventBackwards($this->getPreventBackwards());
-        }
+        $exercise->setPreventBackwards($this->getPreventBackwards());
 
         $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
         if (true === $allow) {
@@ -1683,6 +1633,8 @@ class Exercise
             $exercise->setPageResultConfiguration($this->pageResultConfiguration);
         }
 
+        $em = Database::getManager();
+
         if ($id) {
             $repo->updateNodeForResource($exercise);
 
@@ -1695,11 +1647,8 @@ class Exercise
             // Creates a new exercise
             $courseEntity = api_get_course_entity($this->course_id);
             $exercise
-                ->setSessionId(api_get_session_id())
-                ->setCId($courseEntity->getId())
                 ->setParent($courseEntity)
-                ->addCourseLink($courseEntity, api_get_session_entity())
-            ;
+                ->addCourseLink($courseEntity, api_get_session_entity());
             $em->persist($exercise);
             $em->flush();
             $id = $exercise->getIid();
@@ -1711,7 +1660,7 @@ class Exercise
             }
         }
 
-        $this->save_categories_in_exercise($this->categories);
+        $this->saveCategoriesInExercise($this->categories);
 
         return $id;
     }
@@ -1736,11 +1685,10 @@ class Exercise
                 $position = (int) $position;
                 $questionId = (int) $questionId;
                 $sql = "UPDATE $table SET
-                            question_order ='".$position."'
+                            question_order = $position
                         WHERE
-                            c_id = ".$this->course_id.' AND
-                            question_id = '.$questionId.' AND
-                            exercice_id='.$this->getId();
+                            question_id = $questionId AND
+                            quiz_id= ".$this->getId();
                 Database::query($sql);
             }
         }
@@ -1751,11 +1699,11 @@ class Exercise
     /**
      * Adds a question into the question list.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int $questionId - question ID
      *
      * @return bool - true if the question has been added, otherwise false
+     *
+     * @author Olivier Brouckaert
      */
     public function addToList($questionId)
     {
@@ -1780,11 +1728,11 @@ class Exercise
     /**
      * removes a question from the question list.
      *
-     * @author Olivier Brouckaert
-     *
      * @param int $questionId - question ID
      *
      * @return bool - true if the question has been removed, otherwise false
+     *
+     * @author Olivier Brouckaert
      */
     public function removeFromList($questionId)
     {
@@ -1843,12 +1791,12 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id.' AND iid = '.$exerciseId;
+                WHERE iid = $exerciseId";
         Database::query($sql);
 
         $repo->softDelete($exercise);
 
-        Skill::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
+        SkillModel::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
 
         if ('true' === api_get_setting('search_enabled') &&
             extension_loaded('xapian')
@@ -1984,13 +1932,19 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('Questions per page'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if (0 === $this->getQuestionCount()) {
+                if (empty($this->iId) || 0 === $this->getQuestionCount()) {
                     $this->setResultFeedbackGroup($form);
                     $this->setResultDisabledGroup($form);
 
                     // Type of questions disposition on page
                     $radios = [];
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('All questions on one page'), '1');
+                    $radios[] = $form->createElement(
+                        'radio',
+                        'exerciseType',
+                        null,
+                        get_lang('All questions on one page'),
+                        '1'
+                    );
                     $radios[] = $form->createElement(
                         'radio',
                         'exerciseType',
@@ -2044,13 +1998,21 @@ class Exercise
                 // 1-10, All
                 'per_categories' => '--------'.get_lang('Using categories').'----------',
                 // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
-                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang('Ordered categories alphabetically with questions ordered'),
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang(
+                    'Ordered categories alphabetically with questions ordered'
+                ),
                 // A 123 B 456 C 78 (0, 1, all)
-                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang('Random categories with questions ordered'),
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang(
+                    'Random categories with questions ordered'
+                ),
                 // C 78 B 456 A 123
-                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('Ordered categories alphabetically with random questions'),
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang(
+                    'Ordered categories alphabetically with random questions'
+                ),
                 // A 321 B 654 C 87
-                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('Random categories with random questions'),
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang(
+                    'Random categories with random questions'
+                ),
                 // C 87 B 654 A 321
                 //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
                 /*    B 456 C 78 A 123
@@ -2069,8 +2031,7 @@ class Exercise
                 //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
             ];
 
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'question_selection_type',
                 [get_lang('Question selection type')],
                 $option,
@@ -2099,8 +2060,26 @@ class Exercise
                     null,
                     get_lang('Hide question score')
                 ),
+                $form->createElement(
+                    'checkbox',
+                    'hide_category_table',
+                    null,
+                    get_lang('Hide category table')
+                ),
+                $form->createElement(
+                    'checkbox',
+                    'hide_correct_answered_questions',
+                    null,
+                    get_lang('Hide correct answered questions')
+                ),
             ];
-            $form->addGroup($group, null, get_lang('Results and feedback and feedback and feedback and feedback and feedback and feedback page configuration'));
+            $form->addGroup($group, null, get_lang('Results and feedback page configuration'));
+
+            $group = [
+                $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
+            ];
+            $form->addGroup($group, null, get_lang('HideQuestionNumber'));
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2116,17 +2095,13 @@ class Exercise
                     break;
             }
 
-            $form->addElement(
-                'html',
-                '<div id="hidden_random" style="display:'.$displayRandom.'">'
-            );
+            $form->addHtml('<div id="hidden_random" style="display:'.$displayRandom.'">');
             // Number of random question.
             $max = $this->getId() > 0 ? $this->getQuestionCount() : 10;
             $option = range(0, $max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('All');
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'randomQuestions',
                 [
                     get_lang('Random questions'),
@@ -2135,12 +2110,8 @@ class Exercise
                 $option,
                 ['id' => 'randomQuestions']
             );
-            $form->addElement('html', '</div>');
-
-            $form->addElement(
-                'html',
-                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-            );
+            $form->addHtml('</div>');
+            $form->addHtml('<div id="hidden_matrix" style="display:'.$displayMatrix.'">');
 
             // Category selection.
             $cat = new TestCategory();
@@ -2149,7 +2120,7 @@ class Exercise
                 $cat_form = '<span class="label label-warning">'.get_lang('No categories defined').'</span>';
             }
             $form->addElement('label', null, $cat_form);
-            $form->addElement('html', '</div>');
+            $form->addHtml('</div>');
 
             // Random answers.
             $radios_random_answers = [
@@ -2229,9 +2200,9 @@ class Exercise
             );
 
             if (!empty($this->end_time)) {
-                $form->addElement('html', '<div id="end_date_div" style="display:block;">');
+                $form->addHtml('<div id="end_date_div" style="display:block;">');
             } else {
-                $form->addElement('html', '<div id="end_date_div" style="display:none;">');
+                $form->addHtml('<div id="end_date_div" style="display:none;">');
             }
 
             $form->addElement('date_time_picker', 'end_time');
@@ -2257,7 +2228,7 @@ class Exercise
             );
 
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
-            $form->addElement('checkbox', 'review_answers', null, get_lang('Review my answers'));
+            $form->addCheckBox('review_answers', null, get_lang('Review my answers'));
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Timer control
@@ -2290,15 +2261,7 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
-
-            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
-                $form->addCheckBox(
-                    'prevent_backwards',
-                    null,
-                    get_lang('QuizPreventBackwards')
-                );
-            }
-
+            $form->addCheckBox('prevent_backwards', null, get_lang('QuizPreventBackwards'));
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2306,7 +2269,7 @@ class Exercise
                 ['id' => 'pass_percentage']
             );
 
-            $form->addRule('pass_percentage', get_lang('Numericalal'), 'numeric');
+            $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
             $form->addRule('pass_percentage', get_lang('Value is too small.'), 'min_numeric_length', 0);
             $form->addRule('pass_percentage', get_lang('Value is too big.'), 'max_numeric_length', 100);
 
@@ -2335,16 +2298,11 @@ class Exercise
                 $form->addGroup($group, '', [get_lang('E-mail notifications')]);
             }
 
-            $form->addCheckBox(
-                'update_title_in_lps',
-                null,
-                get_lang('Update this title in learning paths')
-            );
+            $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));
 
             $defaults = [];
             if ('true' === api_get_setting('search_enabled')) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-                $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
+                $form->addCheckBox('index_document', '', get_lang('Index document text?'));
                 $form->addSelectLanguage('language', get_lang('Document language for indexation'));
                 $specific_fields = get_specific_field_list();
 
@@ -2367,7 +2325,7 @@ class Exercise
                 }
             }
 
-            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
+            $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $extraField = new ExtraField('exercise');
             $extraField->addElements(
@@ -2434,6 +2392,7 @@ class Exercise
                 $defaults['show_previous_button'] = $this->showPreviousButton();
                 $defaults['exercise_category_id'] = $this->getExerciseCategoryId();
                 $defaults['prevent_backwards'] = $this->getPreventBackwards();
+                $defaults['hide_question_number'] = $this->getHideQuestionNumber();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
@@ -2442,8 +2401,13 @@ class Exercise
                     $defaults['activate_end_date_check'] = 1;
                 }
 
-                $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time'] = !empty($this->end_time) ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time() + 84600);
+                $defaults['start_time'] = !empty($this->start_time) ? api_get_local_time($this->start_time) : date(
+                    'Y-m-d 12:00:00'
+                );
+                $defaults['end_time'] = !empty($this->end_time) ? api_get_local_time($this->end_time) : date(
+                    'Y-m-d 12:00:00',
+                    time() + 84600
+                );
 
                 // Get expired time
                 if ('0' != $this->expired_time) {
@@ -2510,6 +2474,11 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('ShowResultsToStudents'),
+            get_lang('ShowScoreAndRightAnswer')
+        );
         $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
@@ -2518,7 +2487,8 @@ class Exercise
             EXERCISE_FEEDBACK_TYPE_END,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
-                'onclick' => 'check_feedback()',
+                //'onclick' => 'if confirm() check_feedback()',
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_feedback(); } else { return false;} ',
             ]
         );
 
@@ -2546,19 +2516,19 @@ class Exercise
                 }
             } else {
                 $freeze = false;
-        }
-        // Can't convert a question from one feedback to another
-        $direct = $form->createElement(
-            'radio',
-            'exerciseFeedbackType',
-            null,
-            get_lang('Adaptative test with immediate feedback'),
-            EXERCISE_FEEDBACK_TYPE_DIRECT,
-            [
-                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
-                'onclick' => 'check_direct_feedback()',
-            ]
-        );
+            }
+            // Can't convert a question from one feedback to another
+            $direct = $form->createElement(
+                'radio',
+                'exerciseFeedbackType',
+                null,
+                get_lang('Adaptative test with immediate feedback'),
+                EXERCISE_FEEDBACK_TYPE_DIRECT,
+                [
+                    'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
+                    'onclick' => 'check_direct_feedback()',
+                ]
+            );
 
             $directPopUp = $form->createElement(
                 'radio',
@@ -2568,8 +2538,8 @@ class Exercise
                 EXERCISE_FEEDBACK_TYPE_POPUP,
                 ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
             );
-        if ($freeze) {
-            $direct->freeze();
+            if ($freeze) {
+                $direct->freeze();
                 $directPopUp->freeze();
             }
 
@@ -2577,12 +2547,12 @@ class Exercise
             $hasDelineation = $this->hasQuestionWithType(HOT_SPOT_DELINEATION);
             if ($hasDelineation) {
                 $endTest->freeze();
-            $noFeedBack->freeze();
+                $noFeedBack->freeze();
                 $direct->freeze();
                 $directPopUp->freeze();
-        }
+            }
 
-        $feedback[] = $direct;
+            $feedback[] = $direct;
             $feedback[] = $directPopUp;
         }
 
@@ -2591,10 +2561,11 @@ class Exercise
             null,
             [
                 get_lang('Feedback'),
-                get_lang('How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.'),
+                get_lang(
+                    'How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.'
+                ),
             ]
         );
-
     }
 
     /**
@@ -2646,6 +2617,7 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
+        $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
@@ -2675,11 +2647,9 @@ class Exercise
 
         // Update title in all LPs that have this quiz added
         if (1 == $form->getSubmitValue('update_title_in_lps')) {
-            $courseId = api_get_course_int_id();
             $table = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE
-                        c_id = $courseId AND
                         item_type = 'quiz' AND
                         path = '".$this->getId()."'
                     ";
@@ -2688,8 +2658,9 @@ class Exercise
             if (!empty($items)) {
                 foreach ($items as $item) {
                     $itemId = $item['iid'];
-                    $sql = "UPDATE $table SET title = '".$this->title."'
-                            WHERE iid = $itemId AND c_id = $courseId ";
+                    $sql = "UPDATE $table
+                            SET title = '".$this->title."'
+                            WHERE iid = $itemId ";
                     Database::query($sql);
                 }
             }
@@ -2702,7 +2673,7 @@ class Exercise
             $extraFieldValue = new ExtraFieldValue('exercise');
             $extraFieldValue->saveFieldValues($values);
 
-            Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
+            SkillModel::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }
     }
 
@@ -2712,9 +2683,6 @@ class Exercise
             return;
         }
         $course_id = api_get_course_id();
-
-        require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
         $specific_fields = get_specific_field_list();
         $ic_slide = new IndexableChunk();
 
@@ -2779,8 +2747,6 @@ class Exercise
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $se_ref = Database::fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -2794,7 +2760,13 @@ class Exercise
                         $sterms = explode(',', $sterms);
                         foreach ($sterms as $sterm) {
                             $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                            add_specific_field_value($specific_field['id'], $course_id, TOOL_QUIZ, $this->getId(), $sterm);
+                            add_specific_field_value(
+                                $specific_field['id'],
+                                $course_id,
+                                TOOL_QUIZ,
+                                $this->getId(),
+                                $sterm
+                            );
                         }
                     }
                 }
@@ -2874,7 +2846,6 @@ class Exercise
             Database::query($sql);
 
             // remove terms from db
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_QUIZ, $this->getId());
         }
     }
@@ -2911,7 +2882,6 @@ class Exercise
 
         // if we want to delete attempts before date $cleanResultBeforeDate
         // $cleanResultBeforeDate must be a valid UTC-0 date yyyy-mm-dd
-
         if (!empty($cleanResultBeforeDate)) {
             $cleanResultBeforeDate = Database::escape_string($cleanResultBeforeDate);
             if (api_is_valid_date($cleanResultBeforeDate)) {
@@ -2921,13 +2891,14 @@ class Exercise
             }
         }
 
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT exe_id
-            FROM $table_track_e_exercises
-            WHERE
-                c_id = ".api_get_course_int_id().' AND
-                exe_exo_id = '.$this->getId().' AND
-                session_id = '.$sessionId.' '.
-                $sql_where;
+                FROM $table_track_e_exercises
+                WHERE
+                    c_id = ".api_get_course_int_id().' AND
+                    exe_exo_id = '.$this->getId()."
+                    $sessionCondition
+                    $sql_where";
 
         $result = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -2948,8 +2919,7 @@ class Exercise
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE
                   c_id = ".api_get_course_int_id().' AND
-                  exe_exo_id = '.$this->getId()." $sql_where AND
-                  session_id = ".$sessionId;
+                  exe_exo_id = '.$this->getId()." $sql_where $sessionCondition";
         Database::query($sql);
 
         $this->generateStats($this->getId(), api_get_course_info(), $sessionId);
@@ -2981,7 +2951,7 @@ class Exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
         // Hides the new exercise
         $exerciseObject->updateStatus(false);
-        $exerciseObject->updateId(0);
+        $exerciseObject->iId = 0;
         $exerciseObject->sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
         $exerciseObject->save();
@@ -3001,7 +2971,7 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
+                        $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, quiz_id, question_order)
                                 VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
                         Database::query($sql);
                         $count++;
@@ -3024,7 +2994,7 @@ class Exercise
                 foreach ($categories as $category) {
                     $newCategoryList[$category['category_id']] = $category['count_questions'];
                 }
-                $exerciseObject->save_categories_in_exercise($newCategoryList);
+                $exerciseObject->saveCategoriesInExercise($newCategoryList);
             }
         }
     }
@@ -3054,25 +3024,21 @@ class Exercise
         $status = 'incomplete'
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        if (empty($lp_id)) {
-            $lp_id = 0;
-        }
-        if (empty($lp_item_id)) {
-            $lp_item_id = 0;
-        }
-        if (empty($lp_item_view_id)) {
-            $lp_item_view_id = 0;
-        }
-        $condition = ' WHERE exe_exo_id 	= '."'".$this->getId()."'".' AND
-					   exe_user_id 			= '."'".api_get_user_id()."'".' AND
-					   c_id                 = '.api_get_course_int_id().' AND
-					   status 				= '."'".Database::escape_string($status)."'".' AND
-					   orig_lp_id 			= '."'".$lp_id."'".' AND
-					   orig_lp_item_id 		= '."'".$lp_item_id."'".' AND
-                       orig_lp_item_view_id = '."'".$lp_item_view_id."'".' AND
-					   session_id 			= '."'".api_get_session_id()."' LIMIT 1"; //Adding limit 1 just in case
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
+        $lp_item_view_id = (int) $lp_item_view_id;
 
-        $sql_track = 'SELECT * FROM '.$track_exercises.$condition;
+        $sessionCondition = api_get_session_condition(api_get_session_id());
+        $condition = " WHERE exe_exo_id 	= ".$this->getId()." AND
+					   exe_user_id 			= '".api_get_user_id()."' AND
+					   c_id                 = ".api_get_course_int_id()." AND
+					   status 				= '".Database::escape_string($status)."' AND
+					   orig_lp_id 			= $lp_id AND
+					   orig_lp_item_id 		= $lp_item_id AND
+                       orig_lp_item_view_id =  $lp_item_view_id
+					   ";
+
+        $sql_track = " SELECT * FROM  $track_exercises $condition $sessionCondition LIMIT 1 ";
 
         $result = Database::query($sql_track);
         $new_array = [];
@@ -3088,23 +3054,26 @@ class Exercise
      * Saves a test attempt.
      *
      * @param int   $clock_expired_time   clock_expired_time
-     * @param int  int lp id
-     * @param int  int lp item id
-     * @param int  int lp item_view id
+     * @param int   $safe_lp_id           lp id
+     * @param int   $safe_lp_item_id      lp item id
+     * @param int   $safe_lp_item_view_id lp item_view id
      * @param array $questionList
      * @param float $weight
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return int
      */
     public function save_stat_track_exercise_info(
-        $clock_expired_time = 0,
+        $clock_expired_time,
         $safe_lp_id = 0,
         $safe_lp_item_id = 0,
         $safe_lp_item_view_id = 0,
         $questionList = [],
         $weight = 0
     ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = (int) $safe_lp_id;
         $safe_lp_item_id = (int) $safe_lp_item_id;
         $safe_lp_item_view_id = (int) $safe_lp_item_view_id;
@@ -3114,29 +3083,27 @@ class Exercise
         }
 
         $questionList = array_map('intval', $questionList);
+        $em = Database::getManager();
 
-        $params = [
-            'exe_exo_id' => $this->getId(),
-            'exe_user_id' => api_get_user_id(),
-            'c_id' => api_get_course_int_id(),
-            'status' => 'incomplete',
-            'session_id' => api_get_session_id(),
-            'data_tracking' => implode(',', $questionList),
-            'start_date' => api_get_utc_datetime(),
-            'orig_lp_id' => $safe_lp_id,
-            'orig_lp_item_id' => $safe_lp_item_id,
-            'orig_lp_item_view_id' => $safe_lp_item_view_id,
-            'max_score' => $weight,
-            'user_ip' => Database::escape_string(api_get_real_ip()),
-            'exe_date' => api_get_utc_datetime(),
-            'score' => 0,
-            'steps_counter' => 0,
-            'exe_duration' => 0,
-            'expired_time_control' => $clock_expired_time,
-            'questions_to_check' => '',
-        ];
+        $quiz = $em->find(CQuiz::class, $this->getId());
 
-        return Database::insert($track_exercises, $params);
+        $trackExercise = (new TrackEExercise())
+            ->setSession(api_get_session_entity())
+            ->setCourse(api_get_course_entity())
+            ->setMaxScore($weight)
+            ->setDataTracking(implode(',', $questionList))
+            ->setUser(api_get_user_entity())
+            ->setUserIp(api_get_real_ip())
+            ->setOrigLpId($safe_lp_id)
+            ->setOrigLpItemId($safe_lp_item_id)
+            ->setOrigLpItemViewId($safe_lp_item_view_id)
+            ->setExpiredTimeControl($clock_expired_time)
+            ->setQuiz($quiz)
+        ;
+        $em->persist($trackExercise);
+        $em->flush();
+
+        return $trackExercise->getExeId();
     }
 
     /**
@@ -3172,21 +3139,23 @@ class Exercise
             }
 
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
-            $url .= '&'.http_build_query([
-                'learnpath_id' => $safe_lp_id,
-                'learnpath_item_id' => $safe_lp_item_id,
-                'learnpath_item_view_id' => $safe_lp_item_view_id,
-                'hotspot' => $hotspotGet,
-                'nbrQuestions' => $nbrQuestions,
-                'num' => $questionNum,
-                'exerciseType' => $this->type,
-                'exerciseId' => $this->getId(),
-                'reminder' => empty($myRemindList) ? null : 2,
-                'tryagain' => isset($_REQUEST['tryagain']) && 1 === (int) $_REQUEST['tryagain'] ? 1 : 0,
-            ]);
+            $url .= '&'.http_build_query(
+                    [
+                        'learnpath_id' => $safe_lp_id,
+                        'learnpath_item_id' => $safe_lp_item_id,
+                        'learnpath_item_view_id' => $safe_lp_item_view_id,
+                        'hotspot' => $hotspotGet,
+                        'nbrQuestions' => $nbrQuestions,
+                        'num' => $questionNum,
+                        'exerciseType' => $this->type,
+                        'exerciseId' => $this->getId(),
+                        'reminder' => empty($myRemindList) ? null : 2,
+                        'tryagain' => isset($_REQUEST['tryagain']) && 1 === (int) $_REQUEST['tryagain'] ? 1 : 0,
+                    ]
+                );
 
             $params = [
-                'class' => 'ajax btn btn-default no-close-button',
+                'class' => 'ajax btn btn--plain no-close-button',
                 'data-title' => Security::remove_XSS(get_lang('Comment')),
                 'data-size' => 'md',
                 'id' => "button_$question_id",
@@ -3200,7 +3169,7 @@ class Exercise
 
             $html .= Display::url($urlTitle, $url, $params);
             $html .= '<br />';
-            // User
+
             return $html;
         }
 
@@ -3218,17 +3187,19 @@ class Exercise
                 $endReminderValue = true;
             }
         }
+        $endTest = false;
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
-                $class = 'btn btn-success';
+                $class = 'btn btn--success';
             } else {
-                $label = get_lang('End test');
-                $class = 'btn btn-warning';
+                $endTest = true;
+                $label = get_lang('End Test');
+                $class = 'btn btn--warning';
             }
         } else {
             $label = get_lang('Next question');
-            $class = 'btn btn-primary';
+            $class = 'btn btn--primary';
         }
         // used to select it with jquery
         $class .= ' question-validate-btn';
@@ -3266,7 +3237,7 @@ class Exercise
                         get_lang('Previous question'),
                         [
                             'type' => 'button',
-                            'class' => 'btn btn-default',
+                            'class' => 'btn btn--plain',
                             'data-prev' => $prev_question,
                             'data-question' => $question_id,
                         ]
@@ -3286,10 +3257,15 @@ class Exercise
                     ]
                 );
             } else {
+                $attributes = ['type' => 'button', 'class' => $class, 'data-question' => $question_id];
+                $name = 'save_now';
+                if ($endTest && api_get_configuration_value('quiz_check_all_answers_before_end_test')) {
+                    $name = 'check_answers';
+                }
                 $buttonList[] = Display::button(
-                    'save_now',
+                    $name,
                     $label,
-                    ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                    $attributes
                 );
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
@@ -3301,10 +3277,10 @@ class Exercise
 
         if ($this->review_answers) {
             $all_label = get_lang('Review selected questions');
-            $class = 'btn btn-success';
+            $class = 'btn btn--success';
         } else {
             $all_label = get_lang('End test');
-            $class = 'btn btn-warning';
+            $class = 'btn btn--warning';
         }
         // used to select it with jquery
         $class .= ' question-validate-btn';
@@ -3383,11 +3359,12 @@ class Exercise
     /**
      * So the time control will work.
      *
-     * @param int $timeLeft
+     * @param int    $timeLeft
+     * @param string $redirectToUrl
      *
      * @return string
      */
-    public function showTimeControlJS($timeLeft)
+    public function showTimeControlJS($timeLeft, $redirectToUrl = '')
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
@@ -3396,6 +3373,11 @@ class Exercise
         } elseif (ONE_PER_PAGE == $this->type) {
             $script = 'window.quizTimeEnding = true;
                 $(\'[name="save_now"]\').trigger(\'click\');';
+        }
+
+        $exerciseSubmitRedirect = '';
+        if (!empty($redirectToUrl)) {
+            $exerciseSubmitRedirect = "window.location = '$redirectToUrl'";
         }
 
         return "<script>
@@ -3430,6 +3412,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $script
                 } else {
+                    $exerciseSubmitRedirect
                     // In exercise_reminder.php
                     final_submit();
                 }
@@ -3479,9 +3462,9 @@ class Exercise
      * @param bool   $showHotSpotDelineationTable
      * @param int    $questionDuration                          seconds
      *
-     * @todo    reduce parameters of this function
-     *
      * @return string html code
+     *
+     * @todo    reduce parameters of this function
      */
     public function manage_answer(
         $exeId,
@@ -3512,7 +3495,7 @@ class Exercise
             error_log('<------ manage_answer ------> ');
             error_log('exe_id: '.$exeId);
             error_log('$from:  '.$from);
-            error_log('$saved_results: '.(int) $saved_results);
+            error_log('$save_results: '.(int) $save_results);
             error_log('$from_database: '.(int) $from_database);
             error_log('$show_result: '.(int) $show_result);
             error_log('$propagate_neg: '.$propagate_neg);
@@ -3556,7 +3539,7 @@ class Exercise
         $questionName = $objQuestionTmp->selectTitle();
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
-        $quesId = $objQuestionTmp->selectId();
+        $quesId = $objQuestionTmp->getId();
         $extra = $objQuestionTmp->extra;
         $next = 1; //not for now
         $totalWeighting = 0;
@@ -3564,8 +3547,8 @@ class Exercise
 
         // Extra information of the question
         if ((
-            MULTIPLE_ANSWER_TRUE_FALSE == $answerType ||
-            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType
+                MULTIPLE_ANSWER_TRUE_FALSE == $answerType ||
+                MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType
             )
             && !empty($extra)
         ) {
@@ -3599,30 +3582,11 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $generatedFile = '';
-        if (ORAL_EXPRESSION == $answerType) {
-            $exe_info = Event::get_exercise_results_by_attempt($exeId);
-            $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-
-            $objQuestionTmp->initFile(
-                api_get_session_id(),
-                isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
-                isset($exe_info['exe_exo_id']) ? $exe_info['exe_exo_id'] : $this->getId(),
-                isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
-            );
-
-            // Probably this attempt came in an exercise all question by page
-            if (0 == $feedback_type) {
-                $objQuestionTmp->replaceWithRealExe($exeId);
-            }
-            $generatedFile = $objQuestionTmp->getFileUrl();
-        }
-
         $user_answer = '';
         // Get answer list for matching
         $sql = "SELECT iid, answer
                 FROM $table_ans
-                WHERE c_id = $course_id AND question_id = $questionId";
+                WHERE question_id = $questionId";
         $res_answer = Database::query($sql);
 
         $answerMatching = [];
@@ -3632,12 +3596,12 @@ class Exercise
 
         // Get first answer needed for global question, no matter the answer shuffle option;
         $firstAnswer = [];
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
-            $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        if (MULTIPLE_ANSWER_COMBINATION == $answerType ||
+            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType
         ) {
             $sql = "SELECT *
                     FROM $table_ans
-                    WHERE c_id = $course_id AND question_id = $questionId
+                    WHERE question_id = $questionId
                     ORDER BY position
                     LIMIT 1";
             $result = Database::query($sql);
@@ -3765,17 +3729,16 @@ class Exercise
                         $choice = [];
                         $choiceDegreeCertainty = [];
                         $sql = "SELECT answer
-                            FROM $TBL_TRACK_ATTEMPT
-                            WHERE
-                            exe_id = $exeId AND question_id = $questionId";
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE exe_id = $exeId AND question_id = $questionId";
 
                         $result = Database::query($sql);
                         while ($row = Database::fetch_array($result)) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
-                            $myAnswerId = $values[0];
-                            $option = $values[1];
-                            $percent = $values[2];
+                            $myAnswerId = $values[0] ?? null;
+                            $option = $values[1] ?? null;
+                            $percent = $values[2] ?? null;
                             $choice[$myAnswerId] = $option;
                             $choiceDegreeCertainty[$myAnswerId] = $percent;
                         }
@@ -3918,7 +3881,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
@@ -4161,7 +4124,7 @@ class Exercise
                                 $studentAnswerToShow = $studentAnswer;
 
                                 if (empty($studentAnswer)) {
-                                    continue;
+                                    break;
                                 }
 
                                 if ($debug) {
@@ -4355,13 +4318,14 @@ class Exercise
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
                         $choice = '';
+                        $questionScore = 0;
                         if ($data) {
                             $choice = $data['answer'];
+                            $questionScore = $data['marks'];
                         }
 
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = $data['marks'];
 
                         if (-1 == $questionScore) {
                             $totalScore += 0;
@@ -4393,10 +4357,16 @@ class Exercise
                                  ";
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
-                        $choice = $row['answer'];
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-                        $questionScore = $row['marks'];
+                        $choice = '';
+                        $questionScore = 0;
+
+                        if (is_array($row)) {
+                            $choice = $row['answer'];
+                            $choice = str_replace('\r\n', '', $choice);
+                            $choice = stripslashes($choice);
+                            $questionScore = $row['marks'];
+                        }
+
                         if (-1 == $questionScore) {
                             $totalScore += 0;
                         } else {
@@ -4418,10 +4388,9 @@ class Exercise
                 case MATCHING_DRAGGABLE:
                 case MATCHING:
                     if ($from_database) {
-                        $sql = "SELECT id, answer, id_auto
+                        $sql = "SELECT iid, answer
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct = 0
                                 ";
@@ -4429,29 +4398,35 @@ class Exercise
                         // Getting the real answer
                         $real_list = [];
                         while ($realAnswer = Database::fetch_array($result)) {
-                            $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
+                            $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
-                        $sql = "SELECT id, answer, correct, id_auto, ponderation
+                        $orderBy = ' ORDER BY iid ';
+                        if (DRAGGABLE == $answerType) {
+                            $orderBy = ' ORDER BY correct ';
+                        }
+
+                        $sql = "SELECT iid, answer, correct, ponderation
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct <> 0
-                                ORDER BY id_auto";
+                                $orderBy";
                         $result = Database::query($sql);
                         $options = [];
+                        $correctAnswers = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             $options[] = $row;
+                            $correctAnswers[$row['correct']] = $row['answer'];
                         }
 
                         $questionScore = 0;
                         $counterAnswer = 1;
                         foreach ($options as $a_answers) {
-                            $i_answer_id = $a_answers['id']; //3
+                            $i_answer_id = $a_answers['iid']; //3
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
-                            $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
+                            $i_answer_id_auto = $a_answers['iid']; // 3 - 4
 
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
@@ -4474,15 +4449,16 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
-                                        if ($this->showExpectedChoice()) {
+                                        if ($this->showExpectedChoice() && !empty($i_answer_id_auto)) {
                                             $user_answer = $answerMatching[$i_answer_id_auto];
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
                                         $user_answer = Display::label(get_lang('Incorrect'), 'danger');
-                                        if ($this->showExpectedChoice()) {
-                                            $data = $options[$real_list[$s_user_answer] - 1];
-                                            $user_answer = $data['answer'];
+                                        if ($this->showExpectedChoice() && !empty($s_user_answer)) {
+                                            /*$data = $options[$real_list[$s_user_answer] - 1];
+                                            $user_answer = $data['answer'];*/
+                                            $user_answer = $correctAnswers[$s_user_answer] ?? '';
                                         }
                                     }
                                 } else {
@@ -4551,6 +4527,11 @@ class Exercise
                                 switch ($answerType) {
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
+                                        if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
+                                                break;
+                                            }
+                                        }
                                         echo '<tr>';
                                         if (!in_array(
                                             $this->results_disabled,
@@ -4580,7 +4561,7 @@ class Exercise
                                                 }
                                                 echo '</td>';
                                             }
-                                            echo '<td>'.$status.'</td>';
+                                            echo '<td class="text-center">'.$status.'</td>';
                                         } else {
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -4604,19 +4585,27 @@ class Exercise
                                         if (false == $showTotalScoreAndUserChoicesInLastAttempt) {
                                             $s_answer_label = '';
                                         }
+                                        if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
+                                            if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
+                                                break;
+                                            }
+                                        }
                                         echo '<tr>';
                                         if ($this->showExpectedChoice()) {
-                                            if (!in_array($this->results_disabled, [
-                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                                                //RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                                            ])
+                                            if (!in_array(
+                                                $this->results_disabled,
+                                                [
+                                                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                                                    //RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                                                ]
+                                            )
                                             ) {
                                                 echo '<td>'.$user_answer.'</td>';
                                             } else {
                                                 $status = Display::label(get_lang('Correct'), 'success');
                                             }
                                             echo '<td>'.$s_answer_label.'</td>';
-                                            echo '<td>'.$status.'</td>';
+                                            echo '<td class="text-center">'.$status.'</td>';
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
@@ -4819,7 +4808,7 @@ class Exercise
                         $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
-                            list($x, $y) = explode(';', $coord);
+                            [$x, $y] = explode(';', $coord);
                             $user_array .= round($x).';'.round($y).'/';
                         }
                         $user_array = substr($user_array, 0, -1) ?: '';
@@ -4978,11 +4967,11 @@ class Exercise
                             ExerciseShowFunctions::display_oral_expression_answer(
                                 $feedback_type,
                                 $choice,
-                                0,
-                                0,
-                                $objQuestionTmp->getFileUrl(true),
+                                $exeId,
+                                $questionId,
                                 $results_disabled,
-                                $questionScore
+                                $questionScore,
+                                true
                             );
                         } elseif (HOT_SPOT == $answerType) {
                             $correctAnswerId = 0;
@@ -4998,22 +4987,22 @@ class Exercise
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $this,
                                 $feedback_type,
-                                ++$correctAnswerId,
+                                $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $correctAnswerId,
+                                $answerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                         } elseif (HOT_SPOT_ORDER == $answerType) {
-                            ExerciseShowFunctions::display_hotspot_order_answer(
+                            /*ExerciseShowFunctions::display_hotspot_order_answer(
                                 $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment
-                            );
+                            );*/
                         } elseif (HOT_SPOT_DELINEATION == $answerType) {
                             $user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
@@ -5075,7 +5064,9 @@ class Exercise
                                     }
                                     // the final excess area is the percentage of the initial polygon's size
                                     // that is covered by the user's polygon outside of the initial polygon
-                                    $final_excess = round((((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100);
+                                    $final_excess = round(
+                                        (((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100
+                                    );
                                     if ($debug > 1) {
                                         error_log(__LINE__.' - Final excess is '.$final_excess, 0);
                                     }
@@ -5369,6 +5360,7 @@ class Exercise
 
                             break;
                         case ORAL_EXPRESSION:
+                            /** @var OralExpression $objQuestionTmp */
                             echo '<tr>
                                 <td valign="top">'.
                                 ExerciseShowFunctions::display_oral_expression_answer(
@@ -5376,7 +5368,6 @@ class Exercise
                                     $choice,
                                     $exeId,
                                     $questionId,
-                                    $objQuestionTmp->getFileUrl(),
                                     $results_disabled,
                                     $questionScore
                                 ).'</td>
@@ -5394,12 +5385,12 @@ class Exercise
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $this,
                                 $feedback_type,
-                                ++$correctAnswerId,
+                                $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $correctAnswerId,
+                                $answerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
 
@@ -5443,7 +5434,9 @@ class Exercise
                                     $final_missing = 100 - $final_overlap;
                                     // the final excess area is the percentage of the initial polygon's size that is
                                     // covered by the user's polygon outside of the initial polygon
-                                    $final_excess = round((((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100);
+                                    $final_excess = round(
+                                        (((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100
+                                    );
 
                                     if ($debug > 1) {
                                         error_log(__LINE__.' - Final overlap is '.$final_overlap);
@@ -5533,13 +5526,13 @@ class Exercise
 
                             break;
                         case HOT_SPOT_ORDER:
-                            ExerciseShowFunctions::display_hotspot_order_answer(
+                            /*ExerciseShowFunctions::display_hotspot_order_answer(
                                 $feedback_type,
                                 $answerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment
-                            );
+                            );*/
 
                             break;
                         case DRAGGABLE:
@@ -5636,6 +5629,21 @@ class Exercise
                             $final_overlap = 100;
                         }
 
+                        $overlap = 0;
+                        if ($final_overlap > 0) {
+                            $overlap = (int) $final_overlap;
+                        }
+
+                        $excess = 0;
+                        if ($final_excess > 0) {
+                            $excess = (int) $final_excess;
+                        }
+
+                        $missing = 0;
+                        if ($final_missing > 0) {
+                            $missing = (int) $final_missing;
+                        }
+
                         $table_resume = '<table class="table table-hover table-striped data_table">
                                 <tr class="row_odd" >
                                     <td></td>
@@ -5644,24 +5652,24 @@ class Exercise
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlapping areaping area').'</b></td>
-                                    <td>'.get_lang('Minimumimum').' '.$threadhold1.'</td>
-                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-danger').'">'
-                            .$final_overlap < 0 ? 0 : (int) $final_overlap.'</td>
+                                    <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
+                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-error').'">'
+                                    .$overlap.'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excessive areaive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
-                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-danger').'">'
-                            .$final_excess < 0 ? 0 : (int) $final_excess.'</td>
+                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-error').'">'
+                                    .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing area area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
-                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-danger').'">'
-                            .$final_missing < 0 ? 0 : (int) $final_missing.'</td>
+                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-error').'">'
+                                    .$missing.'</td>
                                 </tr>
                             </table>';
-                        if ($next == 0) {
+                        if (0 == $next) {
                         } else {
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
@@ -5678,8 +5686,8 @@ class Exercise
                         $message .= '<p>'.$comment.'</p>';
                         echo $message;
 
-                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][0] = $message;
-                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
+                        $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][0] = $message;
+                        $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
                     } else {
                         echo $hotspot_delineation_result[0];
                     }
@@ -5687,48 +5695,63 @@ class Exercise
                     // Save the score attempts
                     if (1) {
                         //getting the answer 1 or 0 comes from exercise_submit_modal.php
-                        $final_answer = isset($hotspot_delineation_result[1]) ? $hotspot_delineation_result[1] : '';
+                        $final_answer = $hotspot_delineation_result[1] ?? '';
                         if (0 == $final_answer) {
                             $questionScore = 0;
                         }
                         // we always insert the answer_id 1 = delineation
-                        Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0);
+                        Event::saveQuestionAttempt($this, $questionScore, 1, $quesId, $exeId, 0);
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
                         $hotspotValue = isset($hotspot_delineation_result[1]) ? 1 === (int) $hotspot_delineation_result[1] ? 1 : 0 : 0;
                         Event::saveExerciseAttemptHotspot(
+                            $this,
                             $exeId,
                             $quesId,
                             1,
                             $hotspotValue,
-                            $exerciseResultCoordinates[$quesId]
+                            $exerciseResultCoordinates[$quesId],
+                            false,
+                            0,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     } else {
                         if (0 == $final_answer) {
                             $questionScore = 0;
                             $answer = 0;
-                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($this, $questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     Event::saveExerciseAttemptHotspot(
+                                        $this,
                                         $exeId,
                                         $quesId,
                                         $idx,
                                         0,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
                         } else {
-                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($this, $questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
                                     $hotspotValue = 1 === (int) $choice[$idx] ? 1 : 0;
                                     Event::saveExerciseAttemptHotspot(
+                                        $this,
                                         $exeId,
                                         $quesId,
                                         $idx,
                                         $hotspotValue,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
@@ -5821,6 +5844,7 @@ class Exercise
                                 $answerDegreeCertainty = isset($replyDegreeCertainty[$i]) ? $replyDegreeCertainty[$i] : '';
                                 $answerValue = isset($choiceDegreeCertainty[$answerDegreeCertainty]) ? $choiceDegreeCertainty[$answerDegreeCertainty] : '';
                                 Event::saveQuestionAttempt(
+                                    $this,
                                     $questionScore,
                                     $chosenAnswer.':'.$choice[$chosenAnswer].':'.$answerValue,
                                     $quesId,
@@ -5833,6 +5857,7 @@ class Exercise
                             }
                         } else {
                             Event::saveQuestionAttempt(
+                                $this,
                                 $questionScore,
                                 $chosenAnswer.':'.$choice[$chosenAnswer],
                                 $quesId,
@@ -5849,6 +5874,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5865,6 +5891,7 @@ class Exercise
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $ans,
                             $quesId,
@@ -5877,6 +5904,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5893,6 +5921,7 @@ class Exercise
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $ans,
                             $quesId,
@@ -5905,6 +5934,7 @@ class Exercise
                     }
                 } else {
                     Event::saveQuestionAttempt(
+                        $this,
                         $questionScore,
                         0,
                         $quesId,
@@ -5919,6 +5949,7 @@ class Exercise
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt(
+                            $this,
                             $questionScore,
                             $val,
                             $quesId,
@@ -5933,6 +5964,7 @@ class Exercise
             } elseif (FREE_ANSWER == $answerType) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -5944,7 +5976,9 @@ class Exercise
                 );
             } elseif (ORAL_EXPRESSION == $answerType) {
                 $answer = $choice;
-                Event::saveQuestionAttempt(
+                /** @var OralExpression $objQuestionTmp */
+                $questionAttemptId = Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -5952,18 +5986,31 @@ class Exercise
                     0,
                     $this->id,
                     false,
-                    $questionDuration,
-                    $objQuestionTmp->getAbsoluteFilePath()
+                    $questionDuration
                 );
+
+                if (false !== $questionAttemptId) {
+                    OralExpression::saveAssetInQuestionAttempt($questionAttemptId);
+                }
             } elseif (
-                in_array(
-                    $answerType,
-                    [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION]
-                )
+            in_array(
+                $answerType,
+                [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION]
+            )
             ) {
                 $answer = $choice;
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, false, $questionDuration);
-            } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
+                Event::saveQuestionAttempt(
+                    $this,
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $questionDuration
+                );
+            } elseif (HOT_SPOT == $answerType || ANNOTATION == $answerType) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     if ($debug) {
@@ -5987,13 +6034,16 @@ class Exercise
                             error_log('Hotspot value: '.$hotspotValue);
                         }
                         Event::saveExerciseAttemptHotspot(
+                            $this,
                             $exeId,
                             $quesId,
                             $idx,
                             $hotspotValue,
                             $val,
                             false,
-                            $this->id
+                            $this->id,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     }
                 } else {
@@ -6002,6 +6052,7 @@ class Exercise
                     }
                 }
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     implode('|', $answer),
                     $quesId,
@@ -6013,6 +6064,7 @@ class Exercise
                 );
             } else {
                 Event::saveQuestionAttempt(
+                    $this,
                     $questionScore,
                     $answer,
                     $quesId,
@@ -6044,12 +6096,11 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
-            'generated_oral_file' => $generatedFile,
+            'generated_oral_file' => '',
             'user_answered' => $userAnsweredQuestion,
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,
         ];
-
     }
 
     /**
@@ -6065,7 +6116,7 @@ class Exercise
      * @return bool
      */
     public function send_mail_notification_for_exam(
-        $type = 'end',
+        $type,
         $question_list_answers,
         $origin,
         $exe_id,
@@ -6237,7 +6288,9 @@ class Exercise
         ];
 
         if ($sendEnd) {
-            $msg .= '<br /><a href="#url#">'.get_lang('Click this link to check the answer and/or give feedback').'</a>';
+            $msg .= '<br /><a href="#url#">'.get_lang(
+                    'Click this link to check the answer and/or give feedback'
+                ).'</a>';
             $variables['#url#'] = $url;
         }
 
@@ -6281,7 +6334,6 @@ class Exercise
         }
 
         $start_date = null;
-
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
         }
@@ -6315,17 +6367,10 @@ class Exercise
             $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
         }
         */
-        if (!empty($start_date)) {
-            $data['start_date'] = $start_date;
-        }
 
-        if (!empty($duration)) {
-            $data['duration'] = $duration;
-        }
-
-        if (!empty($ip)) {
-            $data['ip'] = $ip;
-        }
+        $data['start_date'] = $start_date;
+        $data['duration'] = $duration;
+        $data['ip'] = $ip;
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');
@@ -6382,7 +6427,10 @@ class Exercise
         $tpl->assign('allow_signature', $allowSignature);
         $tpl->assign('signature', $signature);
         $tpl->assign('allow_export_pdf', $allowExportPdf);
-        $tpl->assign('export_url', api_get_path(WEB_CODE_PATH).'exercise/result.php?action=export&id='.$exeId.'&'.api_get_cidreq());
+        $tpl->assign(
+            'export_url',
+            api_get_path(WEB_CODE_PATH).'exercise/result.php?action=export&id='.$exeId.'&'.api_get_cidreq()
+        );
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
 
         return $tpl->fetch($layoutTemplate);
@@ -6391,7 +6439,7 @@ class Exercise
     /**
      * Returns the exercise result.
      *
-     * @param 	int		attempt id
+     * @param int        attempt id
      *
      * @return array
      */
@@ -6486,7 +6534,8 @@ class Exercise
             return [];
         }
 
-        $link = $exercise->getFirstResourceLinkFromCourseSession(api_get_course_entity($this->course_id));
+        $course = api_get_course_entity($this->course_id);
+        $link = $exercise->getFirstResourceLinkFromCourseSession($course);
 
         if ($link->isDraft()) {
             $this->active = 0;
@@ -6510,7 +6559,7 @@ class Exercise
             $lp = Container::getLpRepository()->find($lpId);
             // 2.1 LP is loaded
             if ($lp && 0 == $this->active &&
-                !learnpath::is_lp_visible_for_student($lp, api_get_user_id())
+                !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
             ) {
                 return [
                     'value' => false,
@@ -6702,7 +6751,6 @@ class Exercise
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT max_score FROM $TBL_LP_ITEM
                 WHERE
-                    c_id = {$this->course_id} AND
                     item_type = '".TOOL_QUIZ."' AND
                     path = '{$this->getId()}'";
         $result = Database::query($sql);
@@ -6715,6 +6763,8 @@ class Exercise
 
     /**
      * Returns an array with this form.
+     *
+     * @return array
      *
      * @example
      * <code>
@@ -6734,8 +6784,6 @@ class Exercise
      * </code>
      * The array inside the key 999 means the question list that belongs to the media id = 999,
      * this case is special because 999 means "no media".
-     *
-     * @return array
      */
     public function getMediaList()
     {
@@ -6780,17 +6828,17 @@ class Exercise
     /**
      * Question list with medias compressed like this.
      *
+     * @return array
+     *
      * @example
-     * <code>
-     * array(
+     *      <code>
+     *      array(
      *      question_id_1,
      *      question_id_2,
      *      media_id, <- this media id contains question ids
      *      question_id_3,
-     * )
-     * </code>
-     *
-     * @return array
+     *      )
+     *      </code>
      */
     public function getQuestionListWithMediasCompressed()
     {
@@ -6800,18 +6848,18 @@ class Exercise
     /**
      * Question list with medias uncompressed like this.
      *
-     * @example
-     * <code>
-     * array(
-     *      question_id,
-     *      question_id,
-     *      question_id, <- belongs to a media id
-     *      question_id, <- belongs to a media id
-     *      question_id,
-     * )
-     * </code>
-     *
      * @return array
+     *
+     * @example
+     *      <code>
+     *      array(
+     *      question_id,
+     *      question_id,
+     *      question_id, <- belongs to a media id
+     *      question_id, <- belongs to a media id
+     *      question_id,
+     *      )
+     *      </code>
      */
     public function getQuestionListWithMediasUncompressed()
     {
@@ -6924,7 +6972,7 @@ class Exercise
              * between brackets at the beginning of the category title
             */
             // If test option is Grouped By Categories
-            if ($isRandomByCategory == 2) {
+            if (2 == $isRandomByCategory) {
                 $categoryQuestions = TestCategory::sortTabByBracketLabel($categoryQuestions);
             }
             foreach ($categoryQuestions as $question) {
@@ -7090,7 +7138,7 @@ class Exercise
         $exeId = (int) $exeId;
 
         if ($exercise_info) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             if (empty($exercise_info['questions_to_check'])) {
                 if ('add' == $action) {
                     $sql = "UPDATE $track_exercises
@@ -7101,7 +7149,7 @@ class Exercise
             } else {
                 $remind_list = explode(',', $exercise_info['questions_to_check']);
                 $remind_list_string = '';
-                if ($action === 'add') {
+                if ('add' === $action) {
                     if (!in_array($questionId, $remind_list)) {
                         $newRemindList = [];
                         $remind_list[] = $questionId;
@@ -7196,7 +7244,7 @@ class Exercise
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
         $html .= '</div>';
-        $icon = Display::returnFontAwesomeIcon('clock-o');
+        $icon = Display::getMdiIcon('clock-outline');
         $html .= '<div class="count_down">
                     '.get_lang('RemainingTimeToFinishExercise').'
                     '.$icon.'<span id="exercise_clock_warning"></span>
@@ -7215,7 +7263,7 @@ class Exercise
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
             $sql = "SELECT * FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id} ";
+                    WHERE exercise_id = {$this->getId()} ";
             $result = Database::query($sql);
             $list = [];
             if (Database::num_rows($result)) {
@@ -7241,7 +7289,7 @@ class Exercise
         if (!empty($this->getId())) {
             $sql = "SELECT SUM(count_questions) count_questions
                     FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -7254,21 +7302,20 @@ class Exercise
     }
 
     /**
-     * Save categories in the TABLE_QUIZ_REL_CATEGORY table.
+     * Save categories in the TABLE_QUIZ_REL_CATEGORY table
      *
      * @param array $categories
      */
-    public function save_categories_in_exercise($categories)
+    public function saveCategoriesInExercise($categories)
     {
         if (!empty($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             Database::query($sql);
-            if (!empty($categories)) {
-                foreach ($categories as $categoryId => $countQuestions) {
+            foreach ($categories as $categoryId => $countQuestions) {
+                if ($categoryId !== 0) {
                     $params = [
-                        'c_id' => $this->course_id,
                         'exercise_id' => $this->getId(),
                         'category_id' => $categoryId,
                         'count_questions' => $countQuestions,
@@ -7605,6 +7652,8 @@ class Exercise
     }
 
     /**
+     * Not implemented in 1.11.x.
+     *
      * @param int   $questionId
      * @param array $attemptList
      * @param array $remindList
@@ -7623,10 +7672,9 @@ class Exercise
         $current_question,
         $questions_in_media = [],
         $last_question_in_media = false,
-        $realQuestionList,
+        $realQuestionList = [],
         $generateJS = true
     ) {
-
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
         //$this->loadQuestionAJAX = true;
@@ -7669,9 +7717,10 @@ class Exercise
             // see #4542 no_remind_highlight class hide with jquery
             if (ALL_ON_ONE_PAGE == $this->type && isset($_GET['reminder']) && 2 == $_GET['reminder']) {
                 $remind_highlight = 'no_remind_highlight';
-                if (in_array($question_obj->type, Question::question_type_no_review())) {
+                // @todo not implemented in 1.11.x
+                /*if (in_array($question_obj->type, Question::question_type_no_review())) {
                     return null;
-                }
+                }*/
             }
 
             $attributes = ['id' => 'remind_list['.$questionId.']'];
@@ -7683,7 +7732,8 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = 1 == $this->getHideQuestionTitle() ? false : true;
-            echo $this->showQuestion(
+            // @todo not implemented in 1.11.x
+            /*echo $this->showQuestion(
                 $question_obj,
                 false,
                 $origin,
@@ -7696,7 +7746,7 @@ class Exercise
                 false,
                 $this->getModelType(),
                 $this->categoryMinusOne
-            );
+            );*/
 
             // Button save and continue
             switch ($this->type) {
@@ -7715,7 +7765,7 @@ class Exercise
                             Display::button(
                                 'save_now',
                                 get_lang('Save and continue'),
-                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                                ['type' => 'button', 'class' => 'btn btn--primary', 'data-question' => $questionId]
                             ),
                             '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
                         ];
@@ -7735,7 +7785,7 @@ class Exercise
                         Display::button(
                             'save_now',
                             get_lang('Save and continue'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ['type' => 'button', 'class' => 'btn btn--primary', 'data-question' => $questionId]
                         ),
                         '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
                     ];
@@ -7750,7 +7800,7 @@ class Exercise
                 }
             }
 
-            // Checkbox review answers
+            // Checkbox review answers. Not implemented.
             /*if ($this->review_answers &&
                 !in_array($question_obj->type, Question::question_type_no_review())
             ) {
@@ -7813,13 +7863,13 @@ class Exercise
         $sql = "SELECT DISTINCT cat.*
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 INNER JOIN $categoryRelTable catRel
                 ON (catRel.question_id = e.question_id)
                 INNER JOIN $categoryTable cat
                 ON (cat.iid = catRel.category_id)
                 WHERE
-                  e.exercice_id	= ".(int) ($this->getId());
+                  e.quiz_id	= ".(int) ($this->getId());
 
         $result = Database::query($sql);
         $categoriesInExercise = [];
@@ -7833,60 +7883,47 @@ class Exercise
     /**
      * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option.
      */
-    public function get_max_score()
+    public function getMaxScore()
     {
-        $out_max_score = 0;
+        $outMaxScore = 0;
         // list of question's id !!! the array key start at 1 !!!
         $questionList = $this->selectQuestionList(true);
 
-        // test is randomQuestions - see field random of test
-        if ($this->random > 0 && 0 == $this->randomByCat) {
-            $numberRandomQuestions = $this->random;
-            $questionScoreList = [];
-            foreach ($questionList as $questionId) {
-                $tmpobj_question = Question::read($questionId);
-                if (is_object($tmpobj_question)) {
-                    $questionScoreList[] = $tmpobj_question->weighting;
-                }
-            }
-
-            rsort($questionScoreList);
-            // add the first $numberRandomQuestions value of score array to get max_score
-            for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
-                $out_max_score += $questionScoreList[$i];
-            }
-        } elseif ($this->random > 0 && $this->randomByCat > 0) {
+        if ($this->random > 0 && $this->randomByCat > 0) {
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
             $numberRandomQuestions = $this->random;
-            $tab_categories_scores = [];
+            $tabCategoriesScores = [];
             foreach ($questionList as $questionId) {
-                $question_category_id = TestCategory::getCategoryForQuestion($questionId);
-                if (!is_array($tab_categories_scores[$question_category_id])) {
-                    $tab_categories_scores[$question_category_id] = [];
+                $questionCategoryId = TestCategory::getCategoryForQuestion($questionId);
+                if (!is_array($tabCategoriesScores[$questionCategoryId])) {
+                    $tabCategoriesScores[$questionCategoryId] = [];
                 }
-                $tmpobj_question = Question::read($questionId);
-                if (is_object($tmpobj_question)) {
-                    $tab_categories_scores[$question_category_id][] = $tmpobj_question->weighting;
+                $tmpObjQuestion = Question::read($questionId);
+                if (is_object($tmpObjQuestion)) {
+                    $tabCategoriesScores[$questionCategoryId][] = $tmpObjQuestion->weighting;
                 }
             }
 
             // here we've got an array with first key, the category_id, second key, score of question for this cat
-            foreach ($tab_categories_scores as $tab_scores) {
-                rsort($tab_scores);
-                for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
-                    $out_max_score += $tab_scores[$i];
+            foreach ($tabCategoriesScores as $tabScores) {
+                rsort($tabScores);
+                $tabScoresCount = count($tabScores);
+                for ($i = 0; $i < min($numberRandomQuestions, $tabScoresCount); $i++) {
+                    $outMaxScore += $tabScores[$i];
                 }
             }
-        } else {
-            // standard test, just add each question score
-            foreach ($questionList as $questionId) {
-                $question = Question::read($questionId, $this->course);
-                $out_max_score += $question->weighting;
-            }
+
+            return $outMaxScore;
         }
 
-        return $out_max_score;
+        // standard test, just add each question score
+        foreach ($questionList as $questionId) {
+            $question = Question::read($questionId, $this->course);
+            $outMaxScore += $question->weighting;
+        }
+
+        return $outMaxScore;
     }
 
     /**
@@ -7945,7 +7982,7 @@ class Exercise
                     cq.c_id = %s AND
                     (cq.session_id = %s OR cq.session_id = 0) AND
                     cq.active = 0
-                ORDER BY cq.id";
+                ORDER BY cq.iid";
         $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);
@@ -8215,11 +8252,6 @@ class Exercise
 
     public function getPreventBackwards()
     {
-        $allow = api_get_configuration_value('quiz_prevent_backwards_move');
-        if (false === $allow) {
-            return 0;
-        }
-
         return (int) $this->preventBackwards;
     }
 
@@ -8246,21 +8278,37 @@ class Exercise
     }
 
     /**
-     * @param array $values
+     * Set the value to 1 to hide the question number.
+     *
+     * @param int $value
      */
-    public function setPageResultConfiguration($values)
+    public function setHideQuestionNumber($value = 0)
+    {
+        $this->hideQuestionNumber = (int) $value;
+    }
+
+    /**
+     * Gets the value to hide or show the question number. If it does not exist, it is set to 0.
+     *
+     * @return int 1 if the question number must be hidden
+     */
+    public function getHideQuestionNumber()
+    {
+        return (int) $this->hideQuestionNumber;
+    }
+
+    public function setPageResultConfiguration(array $values)
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
             $params = [
-                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
-                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
-                'hide_category_table' => isset($values['hide_category_table']) ? $values['hide_category_table'] : '',
+                'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
+                'hide_question_score' => $values['hide_question_score'] ?? '',
+                'hide_total_score' => $values['hide_total_score'] ?? '',
+                'hide_category_table' => $values['hide_category_table'] ?? '',
+                'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
             ];
-            $type = Type::getType('array');
-            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-            $this->pageResultConfiguration = $type->convertToDatabaseValue($params, $platform);
+            $this->pageResultConfiguration = $params;
         }
     }
 
@@ -8282,10 +8330,7 @@ class Exercise
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
         if ($pageConfig) {
-            $type = Type::getType('array');
-            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-
-            return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
+            return $this->pageResultConfiguration;
         }
 
         return [];
@@ -8301,7 +8346,7 @@ class Exercise
         $result = $this->getPageResultConfiguration();
 
         if (!empty($result)) {
-            return isset($result[$attribute]) ? $result[$attribute] : null;
+            return $result[$attribute] ?? null;
         }
 
         return null;
@@ -8348,12 +8393,18 @@ class Exercise
      */
     public function showExpectedChoiceColumn()
     {
+        if (true === $this->forceShowExpectedChoiceColumn) {
+            return true;
+        }
         if ($this->hideExpectedAnswer) {
             return false;
         }
-        if (!in_array($this->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-        ])
+        if (!in_array(
+            $this->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+            ]
+        )
         ) {
             $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
             if (1 === $hide) {
@@ -8366,65 +8417,45 @@ class Exercise
         return false;
     }
 
-    /**
-     * @param string $class
-     * @param string $scoreLabel
-     * @param string $result
-     * @param array
-     *
-     * @return string
-     */
-    public function getQuestionRibbon($class, $scoreLabel, $result, $array)
+    public function getQuestionRibbon(string $class, string $scoreLabel, ?string $result, array $array): string
     {
         $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
         if (1 === $hide) {
             return '';
         }
 
+        $ribbon = '<div class="question-answer-result__header-ribbon-title question-answer-result__header-ribbon-title--'.$class.'">'.$scoreLabel.'</div>';
+        if (!empty($result)) {
+            $ribbon .= '<div class="question-answer-result__header-ribbon-detail">'
+                .get_lang('Score').': '.$result
+                .'</div>';
+        }
+
+        $ribbonClassModifier = '';
+
         if ($this->showExpectedChoice()) {
-            $html = null;
             $hideLabel = api_get_configuration_value('exercise_hide_label');
-            $label = '<div class="rib rib-'.$class.'">
-                        <h3>'.$scoreLabel.'</h3>
-                      </div>';
-            if (!empty($result)) {
-                $label .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
-            }
             if (true === $hideLabel) {
+                $ribbonClassModifier = 'question-answer-result__header-ribbon--no-ribbon';
+                $html = '';
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
                 for ($i = 1; $i <= $answerUsed; $i++) {
-                    $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-check.png', null, null, ICON_SIZE_SMALL).
-                        '</span>';
+                    $html .= Display::return_icon('attempt-check.png');
                 }
                 for ($i = 1; $i <= $answerMissing; $i++) {
-                    $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-nocheck.png', null, null, ICON_SIZE_SMALL).
-                        '</span>';
+                    $html .= Display::return_icon('attempt-nocheck.png');
                 }
-                $label = '<div class="score-title">'.get_lang('Correct answers').': '.$result.'</div>';
-                $label .= '<div class="score-limits">';
-                $label .= $html;
-                $label .= '</div>';
+                $ribbon = '<div class="question-answer-result__header-ribbon-title">'
+                    .get_lang('Correct answers').': '.$result.'</div>'
+                    .'<div class="question-answer-result__header-ribbon-detail">'.$html.'</div>';
             }
-
-            return '<div class="ribbon">
-                '.$label.'
-                </div>'
-                ;
-        } else {
-            $html = '<div class="ribbon">
-                        <div class="rib rib-'.$class.'">
-                            <h3>'.$scoreLabel.'</h3>
-                        </div>';
-            if (!empty($result)) {
-                $html .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
-            }
-            $html .= '</div>';
-
-            return $html;
         }
+
+        return Display::div(
+            $ribbon,
+            ['class' => "question-answer-result__header-ribbon $ribbonClassModifier"]
+        );
     }
 
     /**
@@ -8492,10 +8523,10 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->getId()."'
+
+                    e.quiz_id = '".$this->getId()."'
                 ORDER BY question_order
                 LIMIT $start, $length
             ";
@@ -8512,8 +8543,6 @@ class Exercise
      * @param int   $exerciseId
      * @param array $courseInfo
      * @param int   $sessionId
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return bool
      */
@@ -8562,6 +8591,7 @@ class Exercise
             $studentIdList = array_column($studentList, 'user_id');
         }
 
+        $sessionCondition = api_get_session_condition($sessionId);
         if (false == $this->exercise_was_added_in_lp) {
             $sql = "SELECT * FROM $tblStats
                         WHERE
@@ -8569,8 +8599,8 @@ class Exercise
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
-                            session_id = $sessionId AND
                             c_id = $courseId
+                            $sessionCondition
                         ";
         } else {
             $lpId = null;
@@ -8606,12 +8636,12 @@ class Exercise
             }
 
             if (!isset($students[$data['exe_user_id']])) {
-                if (0 != $data['exe_weighting']) {
-                    $students[$data['exe_user_id']] = $data['exe_result'];
-                    if ($data['exe_result'] > $bestResult) {
-                        $bestResult = $data['exe_result'];
+                if (0 != $data['max_score']) {
+                    $students[$data['exe_user_id']] = $data['score'];
+                    if ($data['score'] > $bestResult) {
+                        $bestResult = $data['score'];
                     }
-                    $sumResult += $data['exe_result'];
+                    $sumResult += $data['score'];
                 }
             }
         }
@@ -8648,7 +8678,7 @@ class Exercise
                         ->setUserScoreList($students)
                         ->setBestScore($bestResult)
                         ->setAverageScore($average)
-                        ->setScoreWeight($this->get_max_score());
+                        ->setScoreWeight($this->getMaxScore());
                     $em->persist($exerciseLink);
                     $em->flush();
                 }
@@ -8686,9 +8716,15 @@ class Exercise
         $myActions = null,
         $returnTable = false
     ) {
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+        $courseId = $courseId ? (int) $courseId : api_get_course_int_id();
+        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
 
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
+
+        $userId = $userId ? (int) $userId : api_get_user_id();
+        $user = api_get_user_entity($userId);
 
         $repo = Container::getQuizRepository();
 
@@ -8701,23 +8737,15 @@ class Exercise
             $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
         }
 
-        /*$editAccess = Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-        return Container::$container->get('twig')->render(
-            '@ChamiloCore/Resource/grid.html.twig',
-            ['grid' => $grid]
-        );*/
-
         $allowDelete = self::allowAction('delete');
         $allowClean = self::allowAction('clean_results');
 
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
         $categoryId = (int) $categoryId;
         $keyword = Database::escape_string($keyword);
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
-
         $autoLaunchAvailable = false;
         if (1 == api_get_course_setting('enable_exercise_auto_launch') &&
             api_get_configuration_value('allow_exercise_auto_launch')
@@ -8725,21 +8753,13 @@ class Exercise
             $autoLaunchAvailable = true;
         }
 
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
-        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
-        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
-        $courseId = $courseInfo['real_id'];
+        $courseId = $course->getId();
         $tableRows = [];
         $origin = api_get_origin();
-        $userInfo = $userId ? api_get_user_info($userId) : api_get_user_info();
         $charset = 'utf-8';
         $token = Security::get_token();
-        $userId = $userId ? (int) $userId : api_get_user_id();
-        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, ['real_id' => $courseId]);
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
-        // Condition for the session
-        $condition_session = api_get_session_condition($sessionId, true, true, 'e.session_id');
         $content = '';
         $column = 0;
         if ($is_allowedToEdit) {
@@ -8750,7 +8770,7 @@ class Exercise
             [],
             $column,
             self::PAGINATION_ITEMS_PER_PAGE,
-            'exercises_cat_'.$categoryId
+            'exercises_cat_'.$categoryId.'_'.api_get_course_int_id().'_'.api_get_session_id()
         );
 
         $limit = $table->per_page;
@@ -8766,13 +8786,10 @@ class Exercise
             }
         }
 
-        $keywordCondition = '';
         if (!empty($keyword)) {
-            $qb->andWhere($qb->expr()->eq('resource.title', $keyword));
+            $qb->andWhere($qb->expr()->eq('resource.title', ':keyword'));
+            $qb->setParameter('keyword', $keyword);
         }
-
-        $qb->setFirstResult($from);
-        $qb->setMaxResults($limit);
 
         // Only for administrators
         if ($is_allowedToEdit) {
@@ -8781,20 +8798,37 @@ class Exercise
             $qb->andWhere($qb->expr()->eq('resource.active', 1));
         }
 
-        $exerciseList = $qb->getQuery()->getResult();
-        $total = $qb->select('count(resource.iid)')->setMaxResults(1)->getQuery()->getScalarResult();
+        $qb->setFirstResult($from);
+        $qb->setMaxResults($limit);
 
+        $filterByResultDisabledCondition = '';
+        $filterByResultDisabled = (int) $filterByResultDisabled;
+        if (!empty($filterByResultDisabled)) {
+            $filterByResultDisabledCondition = ' AND e.results_disabled = '.$filterByResultDisabled;
+        }
+        $filterByAttemptCondition = '';
+        $filterByAttempt = (int) $filterByAttempt;
+        if (!empty($filterByAttempt)) {
+            $filterByAttemptCondition = ' AND e.max_attempt = '.$filterByAttempt;
+        }
+
+        $exerciseList = $qb->getQuery()->getResult();
+
+        $total = $repo->getCount($qb);
+
+        $webPath = api_get_path(WEB_CODE_PATH);
         if (!empty($exerciseList)) {
             $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
             //avoid sending empty parameters
             $mylpid = empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id;
             $mylpitemid = empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id;
+
             /** @var CQuiz $exerciseEntity */
             foreach ($exerciseList as $exerciseEntity) {
                 $currentRow = [];
                 $exerciseId = $exerciseEntity->getIid();
-                $attempt_text = '';
                 $actions = '';
+                $attempt_text = '';
                 $exercise = new Exercise($courseId);
                 $exercise->read($exerciseId, false);
 
@@ -8802,10 +8836,41 @@ class Exercise
                     continue;
                 }
 
-                $locked = $exercise->is_gradebook_locked;
+                $allowToEditBaseCourse = true;
+                $visibility = $visibilityInCourse = $exerciseEntity->isVisible($course);
+                $visibilityInSession = false;
+                if (!empty($sessionId)) {
+                    // If we are in a session, the test is invisible
+                    // in the base course, it is included in a LP
+                    // *and* the setting to show it is *not*
+                    // specifically set to true, then hide it.
+                    if (false === $visibility) {
+                        if (!$visibilitySetting) {
+                            if ($exercise->exercise_was_added_in_lp) {
+                                continue;
+                            }
+                        }
+                    }
+
+                    $visibility = $visibilityInSession = $exerciseEntity->isVisible($course, $session);
+                }
+
                 // Validation when belongs to a session
-                $session_img = null;
-                //$session_img = api_get_session_image($row['session_id'], $userInfo['status']);
+                $isBaseCourseExercise = true;
+                if (!($visibilityInCourse && $visibilityInSession)) {
+                    $isBaseCourseExercise = false;
+                }
+
+                if (!empty($sessionId) && $isBaseCourseExercise) {
+                    $allowToEditBaseCourse = false;
+                }
+
+                $sessionStar = null;
+                if (!$isBaseCourseExercise) {
+                    $sessionStar = api_get_session_image($sessionId, $user);
+                }
+
+                $locked = $exercise->is_gradebook_locked;
 
                 $startTime = $exerciseEntity->getStartTime();
                 $endTime = $exerciseEntity->getEndTime();
@@ -8864,79 +8929,57 @@ class Exercise
                     $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
                 }
 
-                // Teacher only
+                // Teacher only.
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
                     if (true == $exercise->exercise_was_added_in_lp) {
                         $lp_blocked = Display::div(
-                            get_lang('AddedToLPCannotBeAccessed'),
+                            get_lang(
+                                'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'
+                            ),
                             ['class' => 'lp_content_type_label']
                         );
                     }
 
-                    $visibility = $exerciseEntity->isVisible($course, null);
-                    // Get visibility in base course
-                    /*$visibility = api_get_item_visibility(
-                        $courseInfo,
-                        TOOL_QUIZ,
-                        $exerciseId,
-                        0
-                    );*/
-
-                    if (!empty($sessionId)) {
-                        // If we are in a session, the test is invisible
-                        // in the base course, it is included in a LP
-                        // *and* the setting to show it is *not*
-                        // specifically set to true, then hide it.
-                        if (false === $visibility) {
-                            if (!$visibilitySetting) {
-                                if (true == $exercise->exercise_was_added_in_lp) {
-                                    continue;
-                                }
-                            }
-                        }
-
-                        $visibility = $exerciseEntity->isVisible($course, $session);
+                    $style = '';
+                    if (0 === $exerciseEntity->getActive() || false === $visibility) {
+                        $style = 'color:grey';
+                        //$title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
                     }
 
-                    if (0 == $exerciseEntity->getActive() || false === $visibility) {
-                        $title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
-                    } else {
-                        $title = $cut_title;
-                    }
+                    $title = $cut_title;
 
-                    $move = null;
-                    $class_tip = '';
-                    $url = $move.'<a
-                        '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$exerciseId.'"
-                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&id='.$exerciseId.'">
-                         '.Display::return_icon('quiz.png', $title).'
-                         '.$title.' </a>'.PHP_EOL;
+                    $url = '<a
+                        '.$alt_title.'
+                        id="tooltip_'.$exerciseId.'"
+                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'"
+                        style = "'.$style.'"
+                        >
+                         '.Display::return_icon('quiz.png', $title).$title.
+                        '</a>';
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
-                        $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));
+                        $embeddableIcon = Display::return_icon(
+                            'om_integration.png',
+                            get_lang('ThisQuizCanBeEmbeddable')
+                        );
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
-                    $currentRow['title'] = $url.' '.$session_img.$lp_blocked;
+                    $currentRow['title'] = $url.' '.$sessionStar.$lp_blocked;
+                    $rowi = $exerciseEntity->getQuestions()->count();
 
-                    // Count number exercise - teacher
-                    $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
-                            WHERE c_id = $courseId AND exercice_id = $exerciseId";
-                    $sqlresult = Database::query($sql);
-                    $rowi = (int) Database::result($sqlresult, 0, 0);
-
-                    if ($sessionId == $exerciseEntity->getSessionId()) {
+                    if ($repo->isGranted('EDIT', $exerciseEntity) && $allowToEditBaseCourse) {
                         // Questions list
                         $actions = Display::url(
-                            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
-                            'admin.php?'.api_get_cidreq().'&id='.$exerciseId
+                            Display::return_icon('edit.png', get_lang('Edit')),
+                            'admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         // Test settings
                         $settings = Display::url(
-                            Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
-                            'exercise_admin.php?'.api_get_cidreq().'&id='.$exerciseId
+                            Display::return_icon('settings.png', get_lang('Configure')),
+                            'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -8945,8 +8988,8 @@ class Exercise
                         $actions .= $settings;
 
                         // Exercise results
-                        $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                        $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
+                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
 
                         if ($limitTeacherAccess) {
                             if (api_is_platform_admin()) {
@@ -8964,65 +9007,62 @@ class Exercise
                                 $actions .= Display::url(
                                     Display::return_icon(
                                         'launch_na.png',
-                                        get_lang('Enable'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Enable')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 $actions .= Display::url(
                                     Display::return_icon(
                                         'launch.png',
-                                        get_lang('Disable'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Disable')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
 
                         // Export
                         $actions .= Display::url(
-                            Display::return_icon('cd.png', get_lang('CopyExercise')),
+                            Display::return_icon('cd.png', get_lang('Copy this exercise as a new one')),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($title)."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&id='.$exerciseId,
+                                'onclick' => "javascript:if(!confirm('".addslashes(
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES)
+                                    )." ".addslashes($title)."?"."')) return false;",
+                                'href' => 'exercise.php?'.api_get_cidreq(
+                                    ).'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
 
                         // Clean exercise
                         $clean = '';
                         if (true === $allowClean) {
-                            if (false == $locked) {
+                            if (!$locked) {
                                 $clean = Display::url(
                                     Display::return_icon(
                                         'clean.png',
-                                        get_lang('CleanStudentResults'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('CleanStudentResults')
                                     ),
                                     '',
                                     [
-                                        'onclick' => "javascript:if(!confirm('".addslashes(
+                                        'onclick' => "javascript:if(!confirm('".
+                                            addslashes(
                                                 api_htmlentities(
-                                                    get_lang('AreYouSureToDeleteResults'),
-                                                    ENT_QUOTES,
-                                                    $charset
+                                                    get_lang('Are you sure to delete results'),
+                                                    ENT_QUOTES
                                                 )
                                             )." ".addslashes($title)."?"."')) return false;",
                                         'href' => 'exercise.php?'.api_get_cidreq(
-                                            ).'&choice=clean_results&sec_token='.$token.'&id='.$exerciseId,
+                                            ).'&action=clean_results&sec_token='.$token.'&exerciseId='.$exerciseId,
                                     ]
                                 );
                             } else {
                                 $clean = Display::return_icon(
                                     'clean_na.png',
-                                    get_lang('ResourceLockedByGradebook'),
-                                    '',
-                                    ICON_SIZE_SMALL
+                                    get_lang('ResourceLockedByGradebook')
                                 );
                             }
                         }
@@ -9030,34 +9070,30 @@ class Exercise
                         $actions .= $clean;
                         // Visible / invisible
                         // Check if this exercise was added in a LP
-                        if (true == $exercise->exercise_was_added_in_lp) {
+                        if ($exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
-                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
+                            if (0 === $exerciseEntity->getActive()) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
-                                        get_lang('Activate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Activate')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'visible.png',
-                                        get_lang('Deactivate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Deactivate')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9072,11 +9108,9 @@ class Exercise
                         $export = Display::url(
                             Display::return_icon(
                                 'export_qti2.png',
-                                'IMS/QTI',
-                                '',
-                                ICON_SIZE_SMALL
+                                'IMS/QTI'
                             ),
-                            'exercise.php?action=exportqti2&id='.$exerciseId.'&'.api_get_cidreq()
+                            'exercise.php?action=exportqti2&exerciseId='.$exerciseId.'&'.api_get_cidreq()
                         );
 
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -9092,34 +9126,30 @@ class Exercise
                         );
 
                         // Check if this exercise was added in a LP
-                        if (true == $exercise->exercise_was_added_in_lp) {
+                        if ($exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
-                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
+                            if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
-                                        get_lang('Activate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Activate')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'visible.png',
-                                        get_lang('Deactivate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Deactivate')
                                     ),
-                                    'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&id='.$exerciseId
+                                    'exercise.php?'.api_get_cidreq(
+                                    ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9129,41 +9159,45 @@ class Exercise
                         }
 
                         $actions .= $visibility;
-                        $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
+                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
                         $actions .= Display::url(
-                            Display::return_icon('cd.gif', get_lang('CopyExercise')),
+                            Display::return_icon('cd.gif', get_lang('Copy this exercise as a new one')),
                             '',
                             [
-                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($title)."?"."')) return false;",
-                                'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&id='.$exerciseId,
+                                'onclick' => "javascript:if(!confirm('".addslashes(
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES)
+                                    )." ".addslashes($title)."?"."')) return false;",
+                                'href' => 'exercise.php?'.api_get_cidreq(
+                                    ).'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
                     }
 
                     // Delete
                     $delete = '';
-                    if ($sessionId == $exerciseEntity->getSessionId()) {
-                        if (false == $locked) {
+                    if ($repo->isGranted('DELETE', $exerciseEntity) && $allowToEditBaseCourse) {
+                        if (!$locked) {
+                            $deleteUrl = 'exercise.php?'.api_get_cidreq().'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId;
                             $delete = Display::url(
                                 Display::return_icon(
                                     'delete.png',
-                                    get_lang('Delete'),
-                                    '',
-                                    ICON_SIZE_SMALL
+                                    get_lang('Delete')
                                 ),
                                 '',
                                 [
-                                    'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&id='.$exerciseId,
+                                    'onclick' => "javascript:if(!confirm('".
+                                        addslashes(api_htmlentities(get_lang('Are you sure to delete?')))." ".
+                                        addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
+                                    'href' => $deleteUrl,
                                 ]
                             );
                         } else {
                             $delete = Display::return_icon(
                                 'delete_na.png',
-                                get_lang('ResourceLockedByGradebook'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang(
+                                    'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+                                )
                             );
                         }
                     }
@@ -9172,10 +9206,15 @@ class Exercise
                         $delete = '';
                     }
 
+                    if (!empty($minCategoriesInExercise)) {
+                        $cats = TestCategory::getListOfCategoriesForTest($exercise);
+                        if (!(count($cats) >= $minCategoriesInExercise)) {
+                            continue;
+                        }
+                    }
                     $actions .= $delete;
 
-                    // Number of questions
-                    $random_label = null;
+                    // Number of questions.
                     $random = $exerciseEntity->getRandom();
                     if ($random > 0 || -1 == $random) {
                         // if random == -1 means use random questions with all questions
@@ -9189,10 +9228,13 @@ class Exercise
                                 $random_number_of_question
                             );
                             $number_of_questions = $nbQuestionsTotal.' ';
-                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('QuestionsLowerCase') : get_lang('QuestionLowerCase');
+                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('QuestionsLowerCase') : get_lang(
+                                'QuestionLowerCase'
+                            );
                             $number_of_questions .= ' - ';
                             $number_of_questions .= min(
-                                    TestCategory::getNumberMaxQuestionByCat($exerciseId), $random_number_of_question
+                                    TestCategory::getNumberMaxQuestionByCat($exerciseId),
+                                    $random_number_of_question
                                 ).' '.get_lang('QuestionByCategory');
                         } else {
                             $random_label = ' ('.get_lang('Random').') ';
@@ -9210,17 +9252,26 @@ class Exercise
                 } else {
                     // Student only.
                     $visibility = $exerciseEntity->isVisible($course, null);
+                    if (false === $visibility && !empty($sessionId)) {
+                        $visibility = $exerciseEntity->isVisible($course, $session);
+                    }
 
                     if (false === $visibility) {
                         continue;
                     }
 
-                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&id='.$exerciseId.'">'.
+                    $url = '<a '.$alt_title.'
+                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">'.
                         $cut_title.'</a>';
 
                     // Link of the exercise.
-                    $currentRow['title'] = $url.' '.$session_img;
+                    $currentRow['title'] = $url.' '.$sessionStar;
                     // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                    if ($returnData) {
+                        $currentRow['title'] = $exercise->getUnformattedTitle();
+                    }
+
+                    $sessionCondition = api_get_session_condition(api_get_session_id());
                     // Don't remove this marker: note-query-exe-results
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                             WHERE
@@ -9229,12 +9280,12 @@ class Exercise
                                 c_id = ".api_get_course_int_id()." AND
                                 status <> 'incomplete' AND
                                 orig_lp_id = 0 AND
-                                orig_lp_item_id = 0 AND
-                                session_id =  '".api_get_session_id()."'
+                                orig_lp_item_id = 0
+                                $sessionCondition
                             ORDER BY exe_id DESC";
 
                     $qryres = Database::query($sql);
-                    $num = Database :: num_rows($qryres);
+                    $num = Database:: num_rows($qryres);
 
                     // Hide the results.
                     $my_result_disabled = $exerciseEntity->getResultsDisabled();
@@ -9257,11 +9308,11 @@ class Exercise
                             ) {
                                 // More than one attempt
                                 if ($num > 0) {
-                                    $row_track = Database :: fetch_array($qryres);
+                                    $row_track = Database:: fetch_array($qryres);
                                     $attempt_text = get_lang('Latest attempt').' : ';
                                     $attempt_text .= ExerciseLib::show_score(
-                                        $row_track['exe_result'],
-                                        $row_track['exe_weighting']
+                                        $row_track['score'],
+                                        $row_track['max_score']
                                     );
                                 } else {
                                     //No attempts
@@ -9316,20 +9367,24 @@ class Exercise
                                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                                 RESULT_DISABLE_RANKING,
+                                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                             ]
                         )
                         ) {
                             if ($num > 0) {
-                                $row_track = Database :: fetch_array($qryres);
-                                $attempt_text = get_lang('LatestAttempt').' : ';
+                                $row_track = Database::fetch_array($qryres);
+                                $attempt_text = get_lang('Latest attempt').' : ';
                                 $attempt_text .= ExerciseLib::show_score(
-                                    $row_track['exe_result'],
-                                    $row_track['exe_weighting']
+                                    $row_track['score'],
+                                    $row_track['max_score']
                                 );
                             } else {
                                 $attempt_text = get_lang('Not attempted');
                             }
                         }
+                    }
+                    if ($returnData) {
+                        $attempt_text = $num;
                     }
                 }
 
@@ -9342,6 +9397,9 @@ class Exercise
                         $actions .= $additionalActions.PHP_EOL;
                     }
 
+                    if (!empty($myActions) && is_callable($myActions)) {
+                        $actions = $myActions($row);
+                    }
                     $currentRow = [
                         $exerciseId,
                         $currentRow['title'],
@@ -9355,8 +9413,17 @@ class Exercise
                     ];
 
                     if ($isDrhOfCourse) {
-                        $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                        $currentRow[] = '<a
+                            href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
+                            Display::return_icon('test_results.png', get_lang('Results')).
+                            '</a>';
+                    }
+                    if ($returnData) {
+                        $currentRow['id'] = $exercise->id;
+                        $currentRow['url'] = $webPath.'exercise/overview.php?'
+                            .api_get_cidreq_params($courseId, $sessionId).'&'
+                            ."$mylpid$mylpitemid&exerciseId={$exercise->id}";
+                        $currentRow['name'] = $currentRow[0];
                     }
                 }
                 $tableRows[] = $currentRow;
@@ -9365,17 +9432,12 @@ class Exercise
 
         if (empty($tableRows) && empty($categoryId)) {
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
-                $content .= '<div id="no-data-view">';
-                $content .= '<h3>'.get_lang('Quiz').'</h3>';
-                $content .= Display::return_icon('quiz.png', '', [], 64);
-                $content .= '<div class="controls">';
-                $content .= Display::url(
-                    '<em class="fa fa-plus"></em> '.get_lang('Create a new test'),
-                    'exercise_admin.php?'.api_get_cidreq(),
-                    ['class' => 'btn btn-primary']
+                $content .= Display::noDataView(
+                    get_lang('Quiz'),
+                    Display::return_icon('quiz.png', '', [], 64),
+                    get_lang('Create a new test'),
+                    'exercise_admin.php?'.api_get_cidreq()
                 );
-                $content .= '</div>';
-                $content .= '</div>';
             }
         } else {
             if (empty($tableRows)) {
@@ -9383,11 +9445,13 @@ class Exercise
             }
             $table->setTableData($tableRows);
             $table->setTotalNumberOfItems($total);
-            $table->set_additional_parameters([
-                'cid' => api_get_course_int_id(),
-                'sid' => api_get_session_id(),
-                'category_id' => $categoryId,
-            ]);
+            $table->set_additional_parameters(
+                [
+                    'cid' => api_get_course_int_id(),
+                    'sid' => api_get_session_id(),
+                    'category_id' => $categoryId,
+                ]
+            );
 
             if ($is_allowedToEdit) {
                 $formActions = [];
@@ -9405,14 +9469,17 @@ class Exercise
 
             if ($is_allowedToEdit) {
                 $table->set_header($i++, get_lang('Questions'), false);
-                $table->set_header($i++, get_lang('Actions'), false);
+                $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
             } else {
                 $table->set_header($i++, get_lang('Status'), false);
                 if ($isDrhOfCourse) {
-                    $table->set_header($i++, get_lang('Actions'), false);
+                    $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
                 }
             }
 
+            if ($returnTable) {
+                return $table;
+            }
             $content .= $table->return_table();
         }
 
@@ -9581,42 +9648,28 @@ class Exercise
                     </table>
                 ';
 
-            /*$answerType = $objQuestionTmp->selectType();
-            if ($answerType != HOT_SPOT_DELINEATION) {
-                $item_list = explode('@@', $destination);
-                $try = $item_list[0];
-                $lp = $item_list[1];
-                $destinationid = $item_list[2];
-                $url = $item_list[3];
-                $table_resume = '';
+            $answerType = $objQuestionTmp->selectType();
+            /*if ($next == 0) {
+                $try = $try_hotspot;
+                $lp = $lp_hotspot;
+                $destinationid = $select_question_hotspot;
+                $url = $url_hotspot;
             } else {
-                if ($next == 0) {
-                    $try = $try_hotspot;
-                    $lp = $lp_hotspot;
-                    $destinationid = $select_question_hotspot;
-                    $url = $url_hotspot;
-                } else {
-                    //show if no error
-                    $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
-                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
-                }
+                //show if no error
+                $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
+                $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
             }
-
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-            if ($answerType == HOT_SPOT_DELINEATION) {
-                if ($organs_at_risk_hit > 0) {
-                    $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-                } else {
-                    $message = '<p>'.get_lang('YourDelineation').'</p>';
-                    $message .= $table_resume;
-                    $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                }
-                $message .= '<p>'.$comment.'</p>';
-                echo $message;
+            if ($organs_at_risk_hit > 0) {
+                $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
             } else {
-                echo '<p>'.$comment.'</p>';
-            }*/
+                $message = '<p>'.get_lang('YourDelineation').'</p>';
+                $message .= $table_resume;
+                $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+            }
+            $message .= '<p>'.$comment.'</p>';
+            echo $message;*/
 
             // Showing the score
             /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
@@ -9722,7 +9775,7 @@ class Exercise
         $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
 
-        $sql = "SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
+        $sql = "SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
                 FROM $TBL_TRACK_EXERCICES
                 WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
         $res = Database::query($sql);
@@ -9733,20 +9786,19 @@ class Exercise
         }
 
         $duration = (int) $row_dates['exe_duration'];
-        $score = (float) $row_dates['exe_result'];
-        $max_score = (float) $row_dates['exe_weighting'];
+        $score = (float) $row_dates['score'];
+        $max_score = (float) $row_dates['max_score'];
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
                 WHERE iid = $safe_item_id";
         Database::query($sql);
 
-        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+        $sql = "SELECT iid FROM $TBL_LP_ITEM_VIEW
                 WHERE
-                    c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
                     lp_view_id = $viewId
-                ORDER BY id DESC
+                ORDER BY iid DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
 
@@ -9772,13 +9824,13 @@ class Exercise
 
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
                         status = '$status',
-                        score = $score,
-                        total_time = $duration
+                        score = '$score',
+                        total_time = '$duration'
                     WHERE iid = $lp_item_view_id";
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = $lp_item_view_id
+                        orig_lp_item_view_id = '$lp_item_view_id'
                     WHERE exe_id = ".$safe_exe_id;
             Database::query($sql);
         }
@@ -9806,7 +9858,7 @@ class Exercise
                         case FILL_IN_BLANKS:
                             $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
                             break;
-                        }
+                    }
                 }
 
                 if (!empty($option['answer'])) {
@@ -9883,13 +9935,11 @@ class Exercise
         $sql = "SELECT
                     lp.name,
                     lpi.lp_id,
-                    lpi.max_score,
-                    lp.session_id
+                    lpi.max_score
                 FROM $tableLpItem lpi
                 INNER JOIN $tblLp lp
-                ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+                ON (lpi.lp_id = lp.iid)
                 WHERE
-                    lpi.c_id = $courseId AND
                     lpi.item_type = '".TOOL_QUIZ."' AND
                     lpi.path = '$exerciseId'";
         $result = Database::query($sql);
@@ -9901,11 +9951,12 @@ class Exercise
         return $lpList;
     }
 
-    public function getReminderTable($questionList, $exercise_stat_info)
+    public function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
     {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
         $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+        $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 
         if (empty($exercise_stat_info)) {
             return '';
@@ -9926,7 +9977,11 @@ class Exercise
         foreach ($questionList as $questionId) {
             $objQuestionTmp = Question::read($questionId);
             $check_id = 'remind_list['.$questionId.']';
-            $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
+            $attributes = [
+                'id' => $check_id,
+                'onclick' => "save_remind_item(this, '$questionId');",
+                'data-question-id' => $questionId,
+            ];
             if (in_array($questionId, $remindList)) {
                 $attributes['checked'] = 1;
             }
@@ -9950,12 +10005,14 @@ class Exercise
 
             $label_attributes = [];
             $label_attributes['for'] = $check_id;
-            $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            if (false === $disableCheckBoxes) {
+                $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            }
             $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
         }
 
         $content .= Display::div('', ['id' => 'message']).
-                    Display::div($table, ['class' => 'question-check-test']);
+            Display::div($table, ['class' => 'question-check-test']);
 
         $content .= '<script>
         var lp_data = $.param({
@@ -9969,6 +10026,20 @@ class Exercise
             window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
         }
 
+        function selectAll() {
+            $("input[type=checkbox]").each(function () {
+                $(this).prop("checked", 1);
+                var question_id = $(this).data("question-id");
+                var action = "add";
+                $.ajax({
+                    url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+                    data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
+                    success: function(returnValue) {
+                    }
+                });
+            });
+        }
+
         function changeOptionStatus(status)
         {
             $("input[type=checkbox]").each(function () {
@@ -9976,19 +10047,19 @@ class Exercise
             });
 
             var action = "";
-            var extraOption = "remove_all";
+            var option = "remove_all";
             if (status == 1) {
-                extraOption = "add_all";
+                option = "add_all";
             }
             $.ajax({
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                data: "option="+extraOption+"&exe_id='.$exeId.'&action="+action,
+                data: "option="+option+"&exe_id='.$exeId.'&action="+action,
                 success: function(returnValue) {
                 }
             });
         }
 
-        function review_questions() {
+        function reviewQuestions() {
             var isChecked = 1;
             $("input[type=checkbox]").each(function () {
                 if ($(this).prop("checked")) {
@@ -10001,7 +10072,7 @@ class Exercise
                 $("#message").addClass("warning-message");
                 $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
             } else {
-                window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
+                window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
             }
         }
 
@@ -10068,7 +10139,7 @@ class Exercise
                             $tempResult[] = round($category_item['score'] / $category_item['total'] * 10);
                         } else {
                             $tempResult[] = 0;
-                    }
+                        }
                     }
                     $dataSet[] = $tempResult;
                 }
@@ -10162,7 +10233,6 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
         $colorList = ChamiloApi::getColorPalette(true, true);
 
         $dataSetToJson = [];
@@ -10175,7 +10245,6 @@ class Exercise
             $dataSetToJson[] = [
                 'fill' => false,
                 'label' => $label,
-                //'label' =>  '".get_lang('Categories')."',
                 'backgroundColor' => $background,
                 'borderColor' => $color,
                 'pointBackgroundColor' => $color,
@@ -10241,25 +10310,44 @@ class Exercise
     }
 
     /**
-     * Get number of questions in exercise by user attempt.
-     *
-     * @return int
+     * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.
      */
-    private function countQuestionsInExercise()
+    public function isBlockedByPercentage(array $attempt = []): bool
     {
-        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
-        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
-        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+        if (empty($attempt)) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'blocking_percentage'
+        );
 
-        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
-
-        if (!empty($trackInfo)) {
-            $questionIds = explode(',', $trackInfo['data_tracking']);
-
-            return count($questionIds);
+        if (empty($blockExercise['value'])) {
+            return false;
         }
 
-        return $this->getQuestionCount();
+        $blockPercentage = (int) $blockExercise['value'];
+
+        if (0 === $blockPercentage) {
+            return false;
+        }
+
+        $resultPercentage = 0;
+
+        if (isset($attempt['score']) && isset($attempt['max_score'])) {
+            $weight = (int) $attempt['max_score'];
+            $weight = (0 == $weight) ? 1 : $weight;
+            $resultPercentage = float_format(
+                ($attempt['score'] / $weight) * 100,
+                1
+            );
+        }
+        if ($resultPercentage <= $blockPercentage) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -10269,7 +10357,7 @@ class Exercise
      *
      * @return array
      */
-    private function getQuestionOrderedList($adminView = false)
+    public function getQuestionOrderedList($adminView = false)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -10279,10 +10367,9 @@ class Exercise
         $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                  e.c_id = {$this->course_id} AND
-                  e.exercice_id	= ".$this->getId();
+                  e.quiz_id	= ".$this->getId();
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -10292,10 +10379,10 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid AND e.c_id = q.c_id)
+                ON (e.question_id = q.iid)
                 WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->getId()."'
+
+                    e.quiz_id = '".$this->getId()."'
                 ORDER BY question_order";
         $result = Database::query($sql);
 
@@ -10326,6 +10413,28 @@ class Exercise
         }
 
         return $questionList;
+    }
+
+    /**
+     * Get number of questions in exercise by user attempt.
+     *
+     * @return int
+     */
+    private function countQuestionsInExercise()
+    {
+        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
+
+        if (!empty($trackInfo)) {
+            $questionIds = explode(',', $trackInfo['data_tracking']);
+
+            return count($questionIds);
+        }
+
+        return $this->getQuestionCount();
     }
 
     /**
@@ -10386,7 +10495,7 @@ class Exercise
                     $mandatoryQuestions = [];
                     if (isset($questionsByCategoryMandatory[$category_id])) {
                         $mandatoryQuestions = $questionsByCategoryMandatory[$category_id];
-                }
+                    }
 
                     $elements = TestCategory::getNElementsFromArray(
                         $categoryQuestionList,
@@ -10411,16 +10520,6 @@ class Exercise
         }
 
         return $question_list;
-    }
-
-    /**
-     * Changes the exercise id.
-     *
-     * @param int $id - exercise id
-     */
-    private function updateId($id)
-    {
-        $this->iId = $id;
     }
 
     /**
@@ -10484,14 +10583,14 @@ class Exercise
 
             if (!empty($question) && !empty($answer) && FREE_ANSWER == $answer_type) {
                 $open_question_list .=
-                    '<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr>';
+                    '<tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                    <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                    <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                    </tr>';
             }
         }
 
@@ -10511,8 +10610,10 @@ class Exercise
                 $msg
             );
 
-            if ('learnpath' != $origin) {
-                $msg .= '<br /><a href="#url#">'.get_lang('Click this link to check the answer and/or give feedback').'</a>';
+            if ('learnpath' !== $origin) {
+                $msg .= '<br /><a href="#url#">'.get_lang(
+                        'Click this link to check the answer and/or give feedback'
+                    ).'</a>';
             }
             $msg = str_replace('#url#', $url_email, $msg);
             $subject = get_lang('A learner has answered an open question');
@@ -10597,7 +10698,10 @@ class Exercise
                             <td>&nbsp;#mail#</td>
                         </tr>
                     </table>';
-            $msg .= '<br />'.sprintf(get_lang('A learner has attempted one or more oral questionAreX'), $oral_question_list).'<br />';
+            $msg .= '<br />'.sprintf(
+                    get_lang('A learner has attempted one or more oral questionAreX'),
+                    $oral_question_list
+                ).'<br />';
             $msg1 = str_replace('#exercise#', $this->exercise, $msg);
             $msg = str_replace('#firstName#', $user_info['firstname'], $msg1);
             $msg1 = str_replace('#lastName#', $user_info['lastname'], $msg);
@@ -10605,7 +10709,9 @@ class Exercise
             $msg = str_replace('#course#', $courseInfo['name'], $msg1);
 
             if (!in_array($origin, ['learnpath', 'embeddable'])) {
-                $msg .= '<br /><a href="#url#">'.get_lang('Click this link to check the answer and/or give feedback').'</a>';
+                $msg .= '<br /><a href="#url#">'.get_lang(
+                        'Click this link to check the answer and/or give feedback'
+                    ).'</a>';
             }
             $msg1 = str_replace('#url#', $url_email, $msg);
             $mail_content = $msg1;
@@ -10674,17 +10780,26 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Auto-evaluation mode: show score and expected answers'),
-            '0',
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
             ['id' => 'result_disabled_0']
         );
 
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('FeedbackType'),
+            get_lang('NoFeedback')
+        );
         $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
             get_lang('Exam mode: Do not show score nor answers'),
-            '1',
-            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
+            RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS,
+            [
+                'id' => 'result_disabled_1',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(
@@ -10692,15 +10807,21 @@ class Exercise
             'results_disabled',
             null,
             get_lang('Practice mode: Show score only, by category if at least one is used'),
-            '2',
-            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
+            RESULT_DISABLE_SHOW_SCORE_ONLY,
+            [
+                'id' => 'result_disabled_2',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         if (in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
             return $form->addGroup(
                 $resultDisabledGroup,
                 null,
-                get_lang('ShowResults and feedback and feedback and feedback and feedback and feedback and feedbackToStudents')
+                get_lang(
+                    'Show score to learner'
+                )
             );
         }
 
@@ -10708,8 +10829,10 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)'),
-            '4',
+            get_lang(
+                'Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)'
+            ),
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
             ['id' => 'result_disabled_4']
         );
 
@@ -10717,16 +10840,24 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('Do not show the score (only when user finishes all attempts) but show feedback for each attempt.'),
-            '5',
-            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
+            get_lang(
+                'Do not show the score (only when user finishes all attempts) but show feedback for each attempt.'
+            ),
+            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            [
+                'id' => 'result_disabled_5',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
-            get_lang('Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.'),
+            get_lang(
+                'Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.'
+            ),
             RESULT_DISABLE_RANKING,
             ['id' => 'result_disabled_6']
         );
@@ -10735,7 +10866,9 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all'),
+            get_lang(
+                'Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all'
+            ),
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ['id' => 'result_disabled_7']
         );
@@ -10757,6 +10890,16 @@ class Exercise
             RESULT_DISABLE_RADAR,
             ['id' => 'result_disabled_9']
         );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('Show the result to the learner: Show the score, the learner\'s choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.'),
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
+            ['id' => 'result_disabled_10']
+        );
+
         return $form->addGroup(
             $resultDisabledGroup,
             null,

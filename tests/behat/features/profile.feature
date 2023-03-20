@@ -6,19 +6,19 @@ Feature: Profile page
 
   Scenario: Change user first name with Andrew then restore to Andrea
     Given I am on "/account/home"
-    Then I should see "Profile"
-    Then I follow "Edit profile"
-    Then I fill in the following:
+    And I press "Edit profile"
+    And I wait for the page to be loaded
+    And I fill in the following:
       | profile_firstname | Andrew |
-    And wait for the page to be loaded
+      | profile_lastname  | Doe    |
     And I press "update_profile"
-    And wait for the page to be loaded
-    Then I should see "Updated"
-    And I should see "Andrew"
-    Then I follow "Edit profile"
-    Then I fill in the following:
+    And I wait for the page to be loaded
+    Then I should see "Andrew Doe"
+    And I press "Edit profile"
+    And I wait for the page to be loaded
+    And I fill in the following:
       | profile_firstname | Andrea |
+      | profile_lastname  | Costea |
     And I press "update_profile"
     And wait for the page to be loaded
-    Then I should see "Updated"
-    And I should see "Andrea"
+    Then I should see "Andrea Costea"

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -53,9 +54,6 @@ class aicc extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) {
-            error_log('In aicc::aicc()');
-        }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
         }
@@ -528,13 +526,13 @@ class aicc extends learnpath
             return false;
         }
 
-        if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
+        /*if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
             Display::addFlash(
                 Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
             );
 
             return false;
-        }
+        }*/
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
         if ('/' != $new_dir[0]) {
@@ -573,131 +571,6 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the proximity setting in the database.
-     *
-     * @param string $proxy Proximity setting
-     *
-     * @return bool
-     */
-    public function set_proximity($proxy = '')
-    {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_proximity('.$proxy.') method', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." id = ".$lp;
-            Database::query($sql);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Sets the theme setting in the database.
-     *
-     * @param    string    Theme setting
-     *
-     * @return bool
-     */
-    public function set_theme($theme = '')
-    {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_theme('.$theme.') method', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$course_id." id = ".$lp;
-            $res = Database::query($sql);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Sets the image LP in the database.
-     *
-     * @param string $preview_image Theme setting
-     *
-     * @return bool
-     */
-    public function set_preview_image($preview_image = '')
-    {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_preview_image('.$preview_image.') method', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
-                    WHERE c_id = ".$course_id." id = ".$lp;
-            Database::query($sql);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Sets the Author LP in the database.
-     *
-     * @param string $author
-     *
-     * @return true
-     */
-    public function set_author($author = '')
-    {
-        $course_id = api_get_course_int_id();
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author'
-                    WHERE c_id = ".$course_id." id = ".$lp;
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Sets the content maker setting in the database.
-     *
-     * @param string $maker
-     *
-     * @return bool
-     */
-    public function set_maker($maker = '')
-    {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_maker method('.$maker.')', 0);
-        }
-        $lp = $this->get_id();
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
-                    WHERE c_id = ".$course_id." id = ".$lp;
-            Database::query($sql);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath().
      *
      * @param    int    Learnpath ID (optional, taken from object context if not defined)
@@ -733,8 +606,6 @@ class aicc extends learnpath
         $LPname = $row['path'];
         $list = explode('/', $LPname);
         $LPnamesafe = $list[0];
-        //$zipfoldername = '/tmp';
-        //$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;
         $zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/temp/'.$LPnamesafe;
         $scormfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$LPnamesafe;
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
@@ -743,16 +614,13 @@ class aicc extends learnpath
         removeDir($zipfoldername); //make sure the temp dir is cleared
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
 
+        // @todo use ZipFile
         // Create zipfile of given directory.
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //this file sending implies removing the default mime-type from php.ini
         DocumentManager::file_send_for_download($zipfilename, true);
-
-        // Delete the temporary zip file and directory in fileManage.lib.php
-        my_delete($zipfilename);
-        my_delete($zipfoldername);
 
         return true;
     }

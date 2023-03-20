@@ -1,43 +1,47 @@
 <template>
-  <div class="course-list">
-      {{ status }}
-      <SessionCard :sessions="sessions"></SessionCard>
-  </div>
+  <StickyCourses/>
+  <SessionTabs/>
+
+  <!-- All sessions -->
+  <!--  <SessionListWrapper :sessions="sessionList"/>-->
+
+  <SessionCategoryView :result-sessions="resultSessions"/>
 </template>
 
 <script>
-import SessionCard from './SessionCard';
-import ListMixin from '../../../mixins/ListMixin';
-import { ENTRYPOINT } from '../../../config/entrypoint';
-import axios from "axios";
+
+import {computed, ref} from "vue";
+import {useStore} from 'vuex';
+import {useQuery, useResult} from '@vue/apollo-composable'
+import {GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser.js";
+import SessionTabs from '../../../components/session/Tabs';
+import StickyCourses from '../../../views/user/courses/StickyCourses.vue';
+import SessionCategoryView from "../../../components/session/SessionCategoryView";
 
 export default {
   name: 'SessionList',
-  servicePrefix: 'Course',
-  mixins: [ListMixin],
   components: {
-      SessionCard
+    SessionCategoryView,
+    StickyCourses,
+    SessionTabs,
   },
-  data() {
-    return {
-      status: null,
-        sessions:null
-    };
-  },
-  created: function () {
-    this.load();
-  },
-  methods: {
-    load: function() {
-        this.status = 'Loading';
-        let user = this.$store.getters['security/getUser'];
-        axios.get(ENTRYPOINT + 'users/' + user.id + '/session_course_subscriptions.json').then(response => {
-            this.status = '';
-            this.sessions = response.data;
-        }).catch(function (error) {
-            this.status = error;
-        });
+  setup() {
+    const store = useStore();
+    let user = computed(() => store.getters['security/getUser']);
+
+    if (user.value) {
+      let userId = user.value.id;
+
+      const {result: resultSessions, loading} = useQuery(GET_SESSION_REL_USER_CURRENT, {
+        user: "/api/users/" + userId,
+      });
+
+      return {
+        resultSessions,
+        loading
+      }
     }
   }
-};
+}
+
 </script>

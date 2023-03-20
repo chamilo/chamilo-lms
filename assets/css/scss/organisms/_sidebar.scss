@@ -1,0 +1,166 @@
+.app-sidebar {
+  @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full text-gray-50 z-10
+    sm:bg-gray-15 sm:border-r sm:border-solid sm:border-gray-25 sm:w-60;
+  height: calc(100vh - 4.5rem - 1px);
+  top: calc(4.5rem + 1px);
+
+  &__container {
+    @apply flex flex-col h-full;
+  }
+
+  &__top {
+    @apply sm:hidden font-bold pt-14 px-9 text-gray-90 text-[32px];
+  }
+
+  &__panel {
+    @apply py-6 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none;
+  }
+
+  &__bottom {
+    @apply border-b border-solid border-gray-25 p-6 text-tiny-bold;
+  }
+
+  &__logout-link {
+    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
+
+    .pi {
+      @apply leading-normal text-body-2;
+    }
+
+    .logout-text {
+      @apply ml-2 text-body-2;
+    }
+
+    &:hover {
+      @apply bg-primary text-white rounded-md;
+    }
+  }
+
+  &__button {
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary p-3
+      sm:inline-flex;
+    z-index: 11;
+
+    &:hover,
+    &:active {
+      @apply border-primary;
+    }
+
+    &.p-button.p-button-icon-only {
+      @apply h-8 p-0 w-8;
+    }
+
+    .p-button-label {
+      @apply hidden;
+    }
+  }
+
+  .p-panelmenu {
+    @apply min-w-[15rem];
+
+    .p-panelmenu-header {
+      > .p-panelmenu-header-content a {
+        @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
+
+        .p-submenu-icon {
+          @apply order-3 rotate-90 text-body-2-bold;
+        }
+
+        .p-menuitem-icon {
+          @apply order-1 text-body-2-bold;
+        }
+
+        .p-menuitem-text {
+          @apply order-2 grow text-body-2-bold whitespace-nowrap;
+        }
+
+        &.router-link-active,
+        &[aria-expanded="true"],
+        &:hover{
+          @apply bg-support-1 border-l-4 border-primary border-solid pl-7 text-primary;
+        }
+
+        &[aria-expanded="true"] {
+          .p-submenu-icon {
+            @apply rotate-180;
+          }
+        }
+      }
+    }
+
+    .p-panelmenu-content {
+      .p-menuitem {
+        .p-menuitem-link {
+          @apply pl-8 py-3 pr-6;
+
+          .p-menuitem-text {
+            @apply text-body-2;
+          }
+
+          &.router-link-active-exact,
+          &:hover {
+            @apply text-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.app-sidebar__topbar-button {
+  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center
+    sm:hidden;
+}
+
+#app {
+  .app-main {
+     @apply overflow-hidden;
+  }
+
+  &.app--sidebar-inactive {
+    .app-sidebar {
+      @apply hidden
+        sm:block sm:w-[88px];
+
+      .p-panelmenu-header {
+        > .p-panelmenu-header-content a {
+          .p-submenu-icon {
+            @apply sm:hidden;
+          }
+
+          .p-menuitem-text {
+            @apply sm:hidden;
+          }
+        }
+      }
+
+      &__bottom {
+        @apply p-0;
+
+        * {
+          @apply hidden;
+        }
+      }
+
+      &__logout-link {
+        @apply md:mx-5 md:my-3 md:py-3 md:px-3 text-center;
+
+        .logout-text {
+          @apply sm:hidden sm:mr-0;
+        }
+      }
+    }
+
+    .app-sidebar__topbar-button {
+      .pi.pi-times {
+        &::before {
+          content: "\e91d";
+        }
+      }
+    }
+
+    .app-main {
+      @apply overflow-auto;
+    }
+  }
+}

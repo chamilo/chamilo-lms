@@ -16,8 +16,6 @@ if ($blockEdition && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-require_once 'work.lib.php';
-
 $this_section = SECTION_COURSES;
 
 $work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
@@ -62,7 +60,7 @@ $is_author = false;
 $repo = Container::getStudentPublicationRepository();
 /** @var CStudentPublication $studentPublication */
 $studentPublication = $repo->find($item_id);
-if (empty($studentPublication)) {
+if (null === $studentPublication) {
     api_not_allowed(true);
 }
 
@@ -81,11 +79,10 @@ if (!api_is_allowed_to_edit()) {
 }
 
 if (!empty($my_folder_data)) {
-    $homework = get_work_assignment_by_id($my_folder_data['id']);
+    $homework = get_work_assignment_by_id($my_folder_data['iid']);
 
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
-
         if (!empty($homework['expires_on']) &&
             !empty($homework['expires_on'])
         ) {
@@ -145,21 +142,14 @@ $show_progress_bar = false;
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addText('title', get_lang('Title'), true, ['id' => 'file_upload']);
-if ($is_allowed_to_edit && !empty($item_id)) {
-    $sql = "SELECT contains_file, url
-            FROM $work_table
-            WHERE c_id = $course_id AND id ='$item_id' ";
-    $result = Database::query($sql);
-    if (false !== $result && Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-        if ($row['contains_file'] || !empty($row['url'])) {
-            $form->addLabel(
-                get_lang('Download'),
-                '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('save.png', get_lang('Save'), [], ICON_SIZE_MEDIUM).'
-                </a>'
-            );
-        }
+if ($is_allowed_to_edit) {
+    if ($studentPublication->getContainsFile()) {
+        $form->addLabel(
+            get_lang('Download'),
+            '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                Display::return_icon('save.png', get_lang('Save'), [], ICON_SIZE_MEDIUM).'
+            </a>'
+        );
     }
 }
 $form->addHtmlEditor(
@@ -193,7 +183,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     );
 
     // Check if user to qualify has some DRHs
-    $drhList = UserManager::getDrhListFromUser($studentPublication->getUserId());
+    $drhList = UserManager::getDrhListFromUser($studentPublication->getUser()->getId());
     if (!empty($drhList)) {
         $form->addCheckBox(
             'send_to_drh_users',
@@ -242,11 +232,18 @@ if ($form->validate()) {
 
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
-                    $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $studentPublication->getTitle());
-                    $message = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $studentPublication->getTitle(), $url);
+                    $subject = sprintf(
+                        get_lang('There\'s a new feedback in work: %s'),
+                        $studentPublication->getTitle()
+                    );
+                    $message = sprintf(
+                        get_lang('There\'s a new feedback in work: %sInWorkXHere'),
+                        $studentPublication->getTitle(),
+                        $url
+                    );
 
                     MessageManager::send_message_simple(
-                        $studentPublication->getUserId(),
+                        $studentPublication->getUser()->getId(),
                         $subject,
                         $message,
                         api_get_user_id(),
@@ -266,8 +263,7 @@ if ($form->validate()) {
                     ->setDescription($description)
                     ->setTitle($title)
                 ;
-                $repo->getEntityManager()->persist($studentPublication);
-                $repo->getEntityManager()->flush();
+                $repo->update($studentPublication);
             }
 
             /*api_item_property_update(

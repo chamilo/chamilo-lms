@@ -1,72 +1,108 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    encoders:
+    enable_authenticator_manager: true
+
+    password_hashers:
+        legacy_md5:
+            algorithm: md5
+            encode_as_base64: false
+            iterations: 1
+
+        legacy_sha1:
+            algorithm: sha1
+            encode_as_base64: false
+            iterations: 1
+
+        legacy_bcrypt:
+            algorithm: bcrypt
+            encode_as_base64: false
+            cost: 4
+
         Chamilo\CoreBundle\Entity\User:
             algorithm: auto
-            cost: 14
+            migrate_from:
+                - bcrypt
+                - legacy_sha1
+                - legacy_bcrypt
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        users:
+        app_user_provider:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
-                property: 'username'
-
-    access_control:
-        - {path: ^/administrator, role: ROLE_ADMIN}
-        - {path: ^/efconnect, role: ROLE_USER}
-        - {path: ^/elfinder, role: ROLE_USER}
-        - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-
+                property: username
     role_hierarchy:
+        ROLE_STUDENT: [ROLE_USER]
         ROLE_ADMIN:
-            - ROLE_SUPER_ADMIN
+            - ROLE_USER
+            - ROLE_STUDENT
+            - ROLE_TEACHER
             - ROLE_QUESTION_MANAGER
             - ROLE_SESSION_MANAGER
-            - ROLE_TEACHER
-            - ROLE_DIRECTOR
-            - ROLE_JURY_PRESIDENT
             - ROLE_CURRENT_COURSE_TEACHER
-            - ROLE_CURRENT_SESSION_COURSE_TEACHER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_GLOBAL_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_RRHH: [ROLE_TEACHER, ROLE_ALLOWED_TO_SWITCH]
+            - ROLE_CURRENT_COURSE_SESSION_TEACHER
+            - ROLE_CURRENT_COURSE_GROUP_TEACHER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH] # Admin that can log in as another user.
+        ROLE_GLOBAL_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH] # The user that installed the platform.
         ROLE_TEACHER: [ROLE_STUDENT]
-        ROLE_QUESTION_MANAGER: [ROLE_STUDENT, ROLE_QUESTION_MANAGER]
-        ROLE_SESSION_MANAGER: [ROLE_STUDENT, ROLE_SESSION_MANAGER, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_STUDENT: [ROLE_STUDENT]
+        ROLE_RRHH: [ROLE_TEACHER, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_QUESTION_MANAGER: [ROLE_STUDENT]
+        ROLE_SESSION_MANAGER: [ROLE_STUDENT, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_STUDENT_BOSS: [ROLE_STUDENT]
+        ROLE_INVITEE: [ROLE_STUDENT]
+
         ROLE_CURRENT_COURSE_STUDENT: [ROLE_CURRENT_COURSE_STUDENT] # Set in the CourseListener
         ROLE_CURRENT_COURSE_TEACHER: [ROLE_CURRENT_COURSE_TEACHER, ROLE_CURRENT_COURSE_STUDENT] # Set in the course listener
-        ROLE_CURRENT_SESSION_COURSE_STUDENT: [ROLE_CURRENT_SESSION_COURSE_STUDENT]
-        ROLE_CURRENT_SESSION_COURSE_TEACHER: [ROLE_CURRENT_SESSION_COURSE_STUDENT, ROLE_CURRENT_SESSION_COURSE_TEACHER]
+        ROLE_CURRENT_COURSE_GROUP_STUDENT: [ROLE_CURRENT_COURSE_GROUP_STUDENT] # Set in the CourseListener
+        ROLE_CURRENT_COURSE_GROUP_TEACHER: [ROLE_CURRENT_COURSE_GROUP_TEACHER, ROLE_CURRENT_COURSE_GROUP_STUDENT]
+        ROLE_CURRENT_COURSE_SESSION_STUDENT: [ROLE_CURRENT_COURSE_SESSION_STUDENT]
+        ROLE_CURRENT_COURSE_SESSION_TEACHER: [ROLE_CURRENT_COURSE_SESSION_STUDENT, ROLE_CURRENT_COURSE_SESSION_TEACHER]
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
-    #access_decision_manager:
+    access_decision_manager:
         # strategy can be: affirmative, unanimous or consensus
         # only grant access if none of the voters has denied access
-        #strategy: unanimous
+        strategy: unanimous
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
             anonymous: true
-        admin:
+
+        # Use to connect via a JWT token
+        api:
+            pattern: ^/api
+#            stateless: true
+            jwt: ~
+            context: main
+            provider: app_user_provider
+            json_login:
+                check_path: authentication_token
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#            guard:
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
+
+        # Default login via json
+        main:
             pattern: ^/
-            context: admin
-            anonymous: true
-            form_login:
-                csrf_token_generator: security.csrf.token_manager
-                login_path: /login
-                use_forward: false
-                check_path: /login
-                failure_path: null
-            guard:
-                authenticators:
-                    - Chamilo\CoreBundle\Security\LoginFormAuthenticator
-                    - Chamilo\CoreBundle\Security\TokenAuthenticator
-
+            context: main
+            provider: app_user_provider
+#            login_throttling:
+#                max_attempts: 5
+            #            form_login:
+            #                csrf_token_generator: security.csrf.token_manager
+            #                login_path: /login
+            #                use_forward: false
+            #                check_path: /login
+            #                failure_path: null
+#            guard:
+#                authenticators:
+#                    - Chamilo\CoreBundle\Security\LoginFormAuthenticator
+#                    - Chamilo\CoreBundle\Security\TokenAuthenticator
             entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
-
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds
@@ -75,8 +111,11 @@ security:
                 path: /logout
                 target: /
             switch_user: true
-#            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json
-#                username_path: security.credentials.login
-#                password_path: security.credentials.password
+                # username_path: security.credentials.login
+                # password_path: security.credentials.password
+
+    access_control:
+        - {path: ^/login, roles: PUBLIC_ACCESS}
+        - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}

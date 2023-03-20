@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -13,7 +16,10 @@ $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
 $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
+$survey = null;
+$repo = Container::getSurveyRepository();
+$questionRepo = Container::getSurveyQuestionRepository();
 
 if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -29,83 +35,71 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     }
 
     $survey_invitation = Database::fetch_array($result, 'ASSOC');
-    $sql = "SELECT * FROM $table_survey
-            WHERE
-                c_id = $courseId AND
-                code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-    $sql .= api_get_session_condition($sessionId);
-    $result = Database::query($sql);
-    $result = Database::fetch_array($result, 'ASSOC');
-    $surveyId = $result['iid'];
+    if ($survey_invitation) {
+        $surveyId = (int) $survey_invitation['survey_id'];
+    }
 }
 
-$surveyData = SurveyManager::get_survey($surveyId);
+/** @var CSurvey|null $survey */
+$survey = $repo->find($surveyId);
 
-if (empty($surveyData)) {
+if (null === $survey) {
     api_not_allowed(true);
 }
 
-SurveyManager::checkTimeAvailability($surveyData);
+$surveyId = $survey->getIid();
 
-$invitations = SurveyUtil::get_invited_users($surveyData['code']);
-$students = isset($invitations['course_users']) ? $invitations['course_users'] : [];
+SurveyManager::checkTimeAvailability($survey);
+$invitations = SurveyUtil::get_invited_users($survey);
+$students = $invitations['course_users'] ?? [];
 
-$content = Display::page_header($surveyData['title']);
+$content = Display::page_header($survey->getTitle());
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId,
     'name' => get_lang('Survey list'),
 ];
 
-$questions = SurveyManager::get_questions($surveyData['iid']);
-
 $url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.$invitationcode.'&'.api_get_cidreq();
 $urlEdit = $url.'&action=edit';
+
+$questions = $survey->getQuestions();
 
 if (isset($_POST) && !empty($_POST)) {
     $options = isset($_POST['options']) ? array_keys($_POST['options']) : [];
 
     foreach ($questions as $item) {
-        $questionId = $item['question_id'];
-        SurveyUtil::remove_answer(
-            $userId,
-            $surveyId,
-            $questionId,
-            $courseId
-        );
+        $questionId = $item->getIid();
+        SurveyUtil::remove_answer($userId, $surveyId, $questionId);
     }
 
     $status = 1;
     if (!empty($options)) {
         foreach ($options as $selectedQuestionId) {
-            SurveyUtil::store_answer(
+            $question = $questionRepo->find($selectedQuestionId);
+            SurveyUtil::saveAnswer(
                 $userId,
-                $surveyId,
-                $selectedQuestionId,
+                $survey,
+                $question,
                 1,
-                $status,
-                $surveyData
+                $status
             );
         }
     } else {
         foreach ($questions as $item) {
             $questionId = $item['question_id'];
-            SurveyUtil::store_answer(
+            $question = $questionRepo->find($questionId);
+            SurveyUtil::saveAnswer(
                 $userId,
-                $surveyId,
-                $questionId,
+                $survey,
+                $question,
                 1,
-                0,
-                $surveyData
+                0
             );
         }
     }
 
-    SurveyManager::update_survey_answered(
-        $surveyData,
-        $survey_invitation['user'],
-        $survey_invitation['survey_code']
-    );
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id'] ?? api_get_user_id());
 
     Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$url);
@@ -115,19 +109,19 @@ if (isset($_POST) && !empty($_POST)) {
 $template = new Template();
 
 $table = new HTML_Table(['class' => 'table']);
-
 $row = 0;
 $column = 1;
 $answerList = [];
 foreach ($questions as $item) {
-    $answers = SurveyUtil::get_answers_of_question_by_user($surveyId, $item['question_id']);
+    $questionId = $item->getIid();
+    $answers = SurveyUtil::get_answers_of_question_by_user($surveyId, $questionId);
     foreach ($answers as $tempUserId => &$value) {
         $value = $value[0];
         $value = explode('*', $value);
-        $value = isset($value[1]) ? $value[1] : 0;
+        $value = $value[1] ?? 0;
     }
-    $answerList[$item['question_id']] = $answers;
-    $parts = explode('@@', $item['question']);
+    $answerList[$questionId] = $answers;
+    $parts = explode('@@', $item->getSurveyQuestion());
     $startDateTime = api_get_local_time($parts[0]);
     $endDateTime = api_get_local_time($parts[1]);
 
@@ -161,8 +155,8 @@ $table->setHeaderContents(
 );
 
 foreach ($questions as $item) {
-    $questionId = $item['question_id'];
-    $count = 0;
+    $questionId = $item->getIid();
+    $count = '';
     $questionsWithAnswer = 0;
     if (isset($answerList[$questionId])) {
         foreach ($answerList[$questionId] as $userAnswer) {
@@ -173,7 +167,7 @@ foreach ($questions as $item) {
         $count = '<p style="color:cornflowerblue" >
                   <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
     }
-    $table->setHeaderContents(
+    $table->setCellContents(
         $row,
         ++$column,
         $count
@@ -197,16 +191,17 @@ foreach ($students as $studentId) {
         }
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
             $html = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
                 if ('edit' === $action) {
                     $checked = '';
-                    if (1 == $answerList[$item['question_id']][$studentId]) {
+                    if (1 == $answerList[$questionId][$studentId]) {
                         $checked = 'checked';
                     }
                 }
@@ -214,8 +209,8 @@ foreach ($students as $studentId) {
 
             if ('edit' === $action) {
                 $html = '<div class="alert alert-info"><input
-                    id="'.$item['question_id'].'"
-                    name="options['.$item['question_id'].']"
+                    id="'.$questionId.'"
+                    name="options['.$questionId.']"
                     class="question" '.$checked.'
                     type="checkbox"
                 /></div>';
@@ -233,10 +228,11 @@ foreach ($students as $studentId) {
     } else {
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
             }
@@ -260,7 +256,7 @@ $content .= $table->toHtml();
 
 if ('edit' === $action) {
     $content .= '<div class="pull-right">
-        <button name="submit" type="submit" class="btn btn-primary btn-lg">'.get_lang('Save').'</button></div>';
+        <button name="submit" type="submit" class="btn btn--primary btn-lg">'.get_lang('Save').'</button></div>';
     $content .= '</form>';
 }
 

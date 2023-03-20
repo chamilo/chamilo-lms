@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -15,9 +18,9 @@ if ('true' !== api_get_setting('allow_social_tool')) {
 
 $this_section = SECTION_SOCIAL;
 
-$group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
+$group_id = isset($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 $tool_name = get_lang('Edit group');
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $group_data = $usergroup->get($group_id);
 
 if (empty($group_data)) {
@@ -36,8 +39,9 @@ if (!$usergroup->is_group_admin($group_id)) {
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
-$usergroup->setGroupType($usergroup::SOCIAL_CLASS);
-$usergroup->setForm($form, 'edit', $group_data);
+$usergroup->setGroupType(Usergroup::SOCIAL_CLASS);
+$repo = Container::getUsergroupRepository();
+$usergroup->setForm($form, 'edit', $repo->find($group_id));
 
 // Set default values
 $form->setDefaults($group_data);
@@ -46,14 +50,14 @@ $form->setDefaults($group_data);
 if ($form->validate()) {
     $group = $form->exportValues();
     $group['id'] = $group_id;
-    $group['group_type'] = $usergroup::SOCIAL_CLASS;
+    $group['group_type'] = Usergroup::SOCIAL_CLASS;
     $usergroup->update($group);
     Display::addFlash(Display::return_message(get_lang('Class updated.')));
     header('Location: group_view.php?id='.$group_id);
     exit();
 }
 
-$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
+//$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));
@@ -61,7 +65,7 @@ $tpl = new Template(get_lang('Edit'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_menu_block', $social_left_content);
+//$tpl->assign('social_menu_block', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('social/add_groups.tpl');

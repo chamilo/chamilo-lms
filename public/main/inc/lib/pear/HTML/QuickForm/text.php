@@ -1,10 +1,6 @@
 <?php
 
 /**
- * HTML class for a text field
- *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
@@ -18,24 +14,13 @@
  * @copyright   2001-2009 The PHP Group
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: text.php,v 1.7 2009/04/04 21:34:04 avb Exp $
- * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * HTML class for a text field
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @link        http://pear.php.net/package/HTML_QuickForm *
  * @version     Release: 3.2.11
  * @since       1.0
  */
 class HTML_QuickForm_text extends HTML_QuickForm_input
 {
     /**
-     * Class constructor
-     *
      * @param string $elementName    (optional)Input field name attribute
      * @param string $elementLabel   (optional)Input field label
      * @param mixed  $attributes     (optional)Either a typical HTML attribute string
@@ -44,30 +29,24 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    public function __construct(
-        $elementName = null,
-        $elementLabel = null,
-        $attributes = []
-    ) {
+    public function __construct($elementName = null, $elementLabel = null, $attributes = [])
+    {
         if (is_string($attributes) && empty($attributes)) {
             $attributes = [];
         }
-        if (is_array($attributes) || empty($attributes)) {
-            $classFromAttributes = isset($attributes['class']) ? $attributes['class'] : '';
-            $attributes['class'] = $classFromAttributes.' form-control';
-        }
-        $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
-        $this->setInputSize($inputSize);
-        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
-        $this->setColumnsSize($columnsSize);
-        $icon = isset($attributes['icon']) ? $attributes['icon'] : null;
-        $this->setIcon($icon);
 
-        if (!empty($inputSize)) {
+        if (!empty($attributes['input-size'])) {
+            $this->setInputSize($attributes['input-size']);
             unset($attributes['input-size']);
         }
 
-        if (!empty($icon)) {
+        if (!empty($attributes['cols-size'])) {
+            $this->setColumnsSize($attributes['cols-size']);
+            unset($attributes['cols-size']);
+        }
+
+        if (!empty($attributes['icon'])) {
+            $this->setIcon($attributes['icon']);
             unset($attributes['icon']);
         }
 
@@ -91,80 +70,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         return '<div class="input-group-addon">
                 <em class="fa fa-'.$icon.'"></em>
                 </div>';
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->calculateSize();
-        $attributes = $this->getAttributes();
-
-        $template = '<label {label-for}>{label}</label>
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                        </div>';
-
-        switch ($layout) {
-            case FormValidator::LAYOUT_GRID:
-            case FormValidator::LAYOUT_INLINE:
-                $template = '
-                <div class="form-group {error_class}">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    {element}
-                </div>';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                $template = '
-                <div class="row form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                if (isset($attributes['custom']) && $attributes['custom'] == true) {
-                    $template = '
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
-                                    <em class="fa fa-search"></em>
-                                </button>
-                            </div>
-                        </div>
-                    ';
-                }
-                break;
-        }
-
-        return $template;
     }
 
     /**
@@ -193,13 +98,46 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $this->updateAttributes(array('maxlength' => $maxlength));
     }
 
-    /**
-     * @return string
-     */
+    public function getTemplate(string $layout): string
+    {
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '
+                <div class="field">
+                    <div class="p-float-label">
+                        {element}
+                        {icon}
+                        <label {label-for}>
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                    </div>
+                    <!-- BEGIN label_2 -->
+                        <small>{label_2}</small>
+                    <!-- END label_2 -->
+
+                     <!-- BEGIN label_3 -->
+                        <small>{label_3}</small>
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN error -->
+                        <small class="p-error">{error}</small>
+                    <!-- END error -->
+                </div>';
+        }
+
+        return parent::getTemplate($layout);
+    }
+
     public function toHtml()
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
+        }
+
+        $this->_attributes['class'] = ($attributes['class'] ?? '').' p-inputtext p-component ';
+
+        if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
+            $this->_attributes['class'] .= 'p-filled ';
         }
 
         return '<input '.$this->_getAttrString($this->_attributes).' />';

@@ -1,0 +1,8 @@
+{{ 'Dear'|trans }} ((user_firstname)) <br />
+
+<p>{{ 'WelcomeToPortalXInCourseSessionXCoursePartOfCareerX'|trans|format(_s.institution, course_title, career_name) }}</p>
+<p>{{ 'YourNextModule'|trans }}</p>
+<strong>{{ 'Module' | trans }}: {{ course_title }}</strong><br />
+{{ 'FirstLesson' | trans }}: {{ first_lesson }} <br />
+{{ 'Location' | trans }}: {{ location }}<br />
+{{ 'Group' | trans }}: {{ course_title }}<br />

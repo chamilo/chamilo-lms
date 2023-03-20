@@ -9,18 +9,14 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if ('true' != api_get_setting('allow_social_tool')) {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
 $tok = Security::get_token();
 
 if (isset($_REQUEST['user_friend'])) {
-    $info_user_friend = [];
-    $info_path_friend = [];
-    $userfriend_id = intval($_REQUEST['user_friend']);
-    $info_user_friend = api_get_user_info($userfriend_id);
-    $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id, 'web');
+    $userfriend_id = (int) $_REQUEST['user_friend'];
 }
 
 $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
@@ -31,7 +27,7 @@ $allowed_action = isset($_GET['action']) && in_array($_GET['action'], $actions) 
 $to_group = '';
 $subject = '';
 $message = '';
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 if (!empty($group_id) && $allowed_action) {
     $group_info = $usergroup->get($group_id);
     $is_member = $usergroup->is_group_member($group_id);
@@ -42,13 +38,13 @@ if (!empty($group_id) && $allowed_action) {
 
     $to_group = $group_info['name'];
     if (!empty($message_id)) {
-        $message_info = MessageManager::get_message_by_id($message_id);
-        if ('reply_message_group' == $allowed_action) {
+        /*$message_info = MessageManager::get_message_by_id($message_id);
+        if ('reply_message_group' === $allowed_action) {
             $subject = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
         } else {
             $subject = api_xml_http_response_encode($message_info['title']);
             $message = api_xml_http_response_encode($message_info['content']);
-        }
+        }*/
     }
 }
 
@@ -92,7 +88,7 @@ if ('true' === api_get_setting('allow_message_tool')) {
         'label',
         get_lang('Attachments'),
         '<div id="link-more-attach">
-            <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
+            <a class="btn btn--plain" href="javascript://" onclick="return add_image_form()">
                 '.get_lang('Add one more file').'
             </a>
         </div>'
@@ -108,7 +104,6 @@ if ('true' === api_get_setting('allow_message_tool')) {
         )
     );
     $form->addButtonSend(get_lang('Send message'));
-
     $form->setDefaults(['content' => $message, 'title' => $subject]);
     $tpl->assign('content', $form->returnForm());
 }

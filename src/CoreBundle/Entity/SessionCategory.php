@@ -1,81 +1,90 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SessionCategory.
- *
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"session_category:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"session_category:write"}},
- * )
- *
  * @ORM\Table(name="session_category")
  * @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_USER')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['session_category:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['session_category:write'],
+    ],
+)]
 class SessionCategory
 {
     /**
-     * @var int
-     * @Groups({"session_category:read"})
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    #[Groups(['session_category:read', 'session_rel_user:read'])]
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
-    protected $session;
+    protected Collection $sessions;
 
     /**
-     * @var string
-     * @Assert\NotBlank
-     * @Groups({"session_category:read", "session_category:write"})
-     * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=false)
      */
-    protected $name;
+    #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
      */
-    protected $dateStart;
+    protected ?DateTime $dateStart = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
-    protected $dateEnd;
+    protected ?DateTime $dateEnd = null;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __construct()
     {
-        return (string) $this->name;
+        $this->sessions = new ArrayCollection();
     }
 
-    /**
-     * Set url.
-     */
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
@@ -98,34 +107,19 @@ class SessionCategory
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set dateStart.
-     *
-     * @param \DateTime $dateStart
-     */
-    public function setDateStart($dateStart): self
+    public function setDateStart(DateTime $dateStart): self
     {
         $this->dateStart = $dateStart;
 
@@ -135,21 +129,14 @@ class SessionCategory
     /**
      * Get dateStart.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateStart()
     {
         return $this->dateStart;
     }
 
-    /**
-     * Set dateEnd.
-     *
-     * @param \DateTime $dateEnd
-     *
-     * @return SessionCategory
-     */
-    public function setDateEnd($dateEnd)
+    public function setDateEnd(DateTime $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
 
@@ -159,7 +146,7 @@ class SessionCategory
     /**
      * Get dateEnd.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateEnd()
     {

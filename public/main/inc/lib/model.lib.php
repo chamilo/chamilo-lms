@@ -11,36 +11,27 @@ class Model
 {
     public $table;
     public $columns;
-    public $required;
+    public array $required;
     public $is_course_model = false;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
 
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function.
-     *
-     * @param string $type
-     * @param array  $options
-     *
-     * @return array
      */
-    public function find($type, $options = null)
+    public function find(string|int $type, array $options = []): array
     {
-        switch ($type) {
-            case 'all':
-                return self::get_all($options);
-                break;
-            default:
-                if (is_numeric($type)) {
-                    return self::get($type);
-                }
-                break;
+        if ('all' === $type) {
+            return self::get_all($options);
         }
+
+        if (is_numeric($type)) {
+            return self::get((int) $type);
+        }
+
+        return [];
     }
 
     /**
@@ -89,27 +80,21 @@ class Model
         if (empty($id)) {
             return [];
         }
-        $params = ['id = ?' => intval($id)];
+        $params = ['id = ?' => (int) $id];
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
             $params = ['id = ? AND c_id = ?' => [$id, $course_id]];
         }
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $this->table,
             ['where' => $params],
             'first'
         );
-
-        return $result;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = null)
+    public function get_all(array $options = []): array
     {
         return Database::select('*', $this->table, $options);
     }

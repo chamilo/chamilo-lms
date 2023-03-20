@@ -1,3 +1,5 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+
 {% autoescape false %}
 <script>
     /* Skill search input in the left menu */
@@ -12,7 +14,7 @@
                     async: false,
                     success: function (return_value) {
                         if (return_value == 0) {
-                            alert("{{ 'SkillDoesNotExist'|get_lang }}");
+                            alert("{{ 'There is no such skill'|trans }}");
 
                             //Deleting select option tag
                             //$("#skill_id option[value="+skill_id+"]").remove();
@@ -62,11 +64,11 @@
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
                     <div class="btn-group btn-group-sm" data-toggle="buttons">\n\
-                        <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|get_lang }}" title="{{ 'SelectToSearch'|get_lang }}">\n\
+                        <label class="btn btn--plain ' + activeCondition + '" aria-label="{{ 'Select'|trans }}" title="{{ 'Select to search'|trans }}">\n\
                             <input id="skill_to_select_id_' + skill_id + '" data-id="' + skill_id + '" name="' + skill_name + '" class="skill_to_select" type="checkbox" autocomplete="off" ' + checked_condition + '>\n\
                             <span class="' + iconClassCondition + '" aria-hidden="true"></span>\n\
                         </label>\n\
-                        <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|get_lang }}" title="{{ 'PlaceOnTheWheel'|get_lang }}" data-id="' + skill_id + '">\n\
+                        <button class="btn btn--plain load_wheel" aria-label="{{ 'Search'|trans }}" title="{{ 'Place on the wheel'|trans }}" data-id="' + skill_id + '">\n\
                             <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
                         </button>\n\
                     </div>\n\
@@ -85,7 +87,7 @@
                     data: "skill_id=" + skill_id,
                     success: function (return_value) {
                         if (return_value == 0) {
-                            alert("{{ 'SkillDoesNotExist'|get_lang }}");
+                            alert("{{ 'SkillDoesNotExist'|trans }}");
 
                             //Deleting select option tag
                             $("#parent_id").find('option').remove();
@@ -128,7 +130,7 @@
                     data: "gradebook_id=" + gradebook_id,
                     success: function (return_value) {
                         if (return_value == 0) {
-                            alert("{{ 'GradebookDoesNotExist'|get_lang }}");
+                            alert("{{ 'GradebookDoesNotExist'|trans }}");
                             //Deleting select option tag
                             $("#gradebook_id option[value=" + gradebook_id + "]").remove();
                             //Deleting holder
@@ -377,7 +379,7 @@
                 }
             },
             cache: false,
-            placeholder: '{{ 'EnterTheSkillNameToSearch'|get_lang }}'
+            placeholder: '{{ 'Enter the skill name to search'|trans }}'
         }).on('change', function () {
             check_skills_sidebar();
         });
@@ -424,7 +426,8 @@
                 return;
             }
 
-            window.location.href = "{{ _p.web_main }}admin/skill_edit.php?id=" + SkillWheel.currentSkill.id;
+
+            window.location.href = "{{ url('legacy_main', {'name': 'skills/skill_edit.php?id=' }) }}" + SkillWheel.currentSkill.id;
         });
 
         $('#form-button-create-child').on('click', function (e) {
@@ -434,7 +437,7 @@
                 return;
             }
 
-            window.location.href = "{{ _p.web_main }}admin/skill_create.php?parent=" + SkillWheel.currentSkill.id;
+            window.location.href = "{{ url('legacy_main', {'name': 'skills/skill_create.php?parent=' }) }}" + SkillWheel.currentSkill.id;
         });
 
         $('#form-button-add-to-profile').on('click', function (e) {
@@ -473,9 +476,9 @@
                 if (parseInt(response) === 1) {
                     update_my_saved_profiles();
 
-                    alert("{{ "Saved" | get_lang }}");
+                    alert("{{ "Saved" | trans }}");
                 } else {
-                    alert("{{ "Error" | get_lang }}");
+                    alert("{{ "Error" | trans }}");
                 }
 
                 $('#frm-save-profile').modal('hide');
@@ -491,14 +494,14 @@
         <div class="row">
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
-                    <a class="btn btn-large btn-block btn-primary" href="{{ _p.web }}user_portal.php">
-                        <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
+                    <a class="btn btn-large btn-block btn--primary" href="{{ url('courses') }}">
+                        <em class="fa fa-home"></em> {{ "Return to the course list"|trans }}
                     </a>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <div id="saved_profiles"></div>
-                        <h4 class="page-header">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</h4>
+                        <h4 class="page-header">{{ 'What skills are you looking for?'|trans }}</h4>
                         <div class="search-skill">
                             <form id="skill_search" class="form-search">
                                 <select id="skill_id" name="skill_id" style="width: 100%;" multiple></select>
@@ -508,21 +511,21 @@
                         <div class="search-profile-skill">
                             <ul id="profile_search" class="holder holder_simple hide"></ul>
                             <form id="search_profile_form" class="form-search">
-                                <button class="btn btn-default btn-block" type="submit">
-                                    <em class="fa fa-search"></em> {{ "SearchProfileMatches"|get_lang }}
+                                <button class="btn btn--plain btn-block" type="submit">
+                                    <em class="fa fa-search"></em> {{ "Search profile matches"|trans }}
                                 </button>
                             </form>
-                            <h4 class="page-header">{{ 'IsThisWhatYouWereLookingFor'|get_lang }}</h4>
+                            <h4 class="page-header">{{ 'Is this what you were looking for?'|trans }}</h4>
                             <form id="save_profile_form_button" class="form-search">
-                                <button class="btn btn-default btn-block" type="submit">
-                                    <em class="fa fa-floppy-o"></em> {{ "SaveThisSearch"|get_lang }}
+                                <button class="btn btn--plain btn-block" type="submit">
+                                    <em class="fa fa-floppy-o"></em> {{ "Save this search"|trans }}
                                 </button>
                             </form>
                         </div>
                         <hr>
                         <p>
-                            <a class="btn btn-block btn-primary load_root" rel="0" href="#">
-                                <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|get_lang }}
+                            <a class="btn btn-block btn--primary load_root" rel="0" href="#">
+                                <em class="fa fa-eye"></em> {{ "View skills wheel"|trans }}
                             </a>
                         </p>
                     </div>
@@ -531,8 +534,9 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="wheel-legend-heading">
                             <h4 class="card-title">
-                                <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
-                                    {{ "Legend"|get_lang }}
+                                <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion"
+                                   href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
+                                    {{ "Legend"|trans }}
                                 </a>
                             </h4>
                         </div>
@@ -540,13 +544,13 @@
                             <div class="card-body">
                                 <ul class="fa-ul">
                                     <li>
-                                        <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "Basic skills"|trans }}
                                     </li>
                                     <li>
-                                        <em class="fa fa-li fa-square skill-legend-add"></em> {{ "SkillsYouCanLearn"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-add"></em> {{ "Skills you can learn"|trans }}
                                     </li>
                                     <li>
-                                        <em class="fa fa-li fa-square skill-legend-search"></em> {{ "SkillsSearchedFor"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-search"></em> {{ "Skills searched for"|trans }}
                                     </li>
                                 </ul>
                             </div>
@@ -555,20 +559,21 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="wheel-display-heading">
                             <h4 class="card-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
-                                    {{ 'DisplayOptions' | get_lang }}
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion"
+                                   href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
+                                    {{ 'Display options' | trans }}
                                 </a>
                             </h4>
                         </div>
                         <div id="wheel-display-collapse" class="collapse" role="tabpanel" aria-labelledby="wheel-display-heading">
                             <div class="card-body">
-                                <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
+                                <p>{{ 'Choose a background color' | trans }}</p>
                                 <ul class="list-unstyled" id="skill-change-background-options">
-                                    <li><a href="#" data-color="#FFFFFF">{{ 'White' | get_lang }}</a></li>
-                                    <li><a href="#" data-color="#000000">{{ 'Black' | get_lang }}</a></li>
-                                    <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue' }}</a></li>
-                                    <li><a href="#" data-color="#848484">{{ 'Gray' | get_lang }}</a></li>
-                                    <li><a href="#" data-color="#F7F8E0">{{ 'Corn' | get_lang }}</a></li>
+                                    <li><a href="#" data-color="#FFFFFF">{{ 'White' | trans }}</a></li>
+                                    <li><a href="#" data-color="#000000">{{ 'Black' | trans }}</a></li>
+                                    <li><a href="#" data-color="#A9E2F3">{{ 'Light blue' }}</a></li>
+                                    <li><a href="#" data-color="#848484">{{ 'Gray' | trans }}</a></li>
+                                    <li><a href="#" data-color="#F7F8E0">{{ 'Corn' | trans }}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -588,26 +593,26 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | trans }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="form-skill-title">{{ "Skill" | get_lang }}</h4>
+                <h4 class="modal-title" id="form-skill-title">{{ "Skill" | trans }}</h4>
             </div>
             <div class="modal-body">
                 {{ dialogForm }}
             </div>
             <div class="modal-footer">
-                <button id="form-button-edit" class="btn btn-primary">
-                    <em class="fa fa-edit"></em> {{ "Edit" | get_lang }}
+                <button id="form-button-edit" class="btn btn--primary">
+                    <em class="fa fa-edit"></em> {{ "Edit" | trans }}
                 </button>
-                <button id="form-button-create-child" class="btn btn-primary">
-                    <em class="fa fa-plus"></em> {{ "CreateChildSkill" | get_lang }}
+                <button id="form-button-create-child" class="btn btn--primary">
+                    <em class="fa fa-plus"></em> {{ "Create child skill" | trans }}
                 </button>
-                <button id="form-button-add-to-profile" class="btn btn-primary">
-                    <em class="fa fa-check"></em> {{ "AddSkillToProfileSearch" | get_lang }}
+                <button id="form-button-add-to-profile" class="btn btn--primary">
+                    <em class="fa fa-check"></em> {{ "Add skill to profile search" | trans }}
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <em class="fa fa-close"></em> {{ "Close" | get_lang }}
+                <button type="button" class="btn btn--primary" data-dismiss="modal">
+                    <em class="fa fa-close"></em> {{ "Close" | trans }}
                 </button>
             </div>
         </div>
@@ -618,20 +623,22 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | trans }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="form-save-profile-title">{{ "SkillProfile" | get_lang }}</h4>
+                <h4 class="modal-title" id="form-save-profile-title">
+                    {{ "Skill profile" | trans }}
+                </h4>
             </div>
             <div class="modal-body">
                 {{ save_profile_form }}
             </div>
             <div class="modal-footer">
-                <button id="form-button-save-profile" class="btn btn-primary">
-                    <em class="fa fa-save"></em> {{ "Save" | get_lang }}
+                <button id="form-button-save-profile" class="btn btn--primary">
+                    <em class="fa fa-save"></em> {{ "Save" | trans }}
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <em class="fa fa-close"></em> {{ "Close" | get_lang }}
+                <button type="button" class="btn btn--primary" data-dismiss="modal">
+                    <em class="fa fa-close"></em> {{ "Close" | trans }}
                 </button>
             </div>
         </div>

@@ -41,7 +41,7 @@ class HTML_QuickForm_Renderer
     */
     public function __construct()
     {
-    } // end constructor
+    }
 
    /**
     * Called when visiting a form, before processing any form elements
@@ -54,7 +54,7 @@ class HTML_QuickForm_Renderer
     function startForm(&$form)
     {
         return;
-    } // end func startForm
+    }
 
    /**
     * Called when visiting a form, after processing all form elements
@@ -95,7 +95,7 @@ class HTML_QuickForm_Renderer
     function renderElement(&$element, $required, $error)
     {
         return;
-    } // end func renderElement
+    }
 
    /**
     * Called when visiting a hidden element
@@ -108,7 +108,7 @@ class HTML_QuickForm_Renderer
     function renderHidden(&$element)
     {
         return;
-    } // end func renderHidden
+    }
 
    /**
     * Called when visiting a raw HTML/text pseudo-element

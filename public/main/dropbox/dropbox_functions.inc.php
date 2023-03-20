@@ -209,7 +209,7 @@ function display_move_form(
     foreach ($target as $category) {
         $options[$category['cat_id']] = $category['cat_name'];
     }
-    $form->addElement('select', 'move_target', get_lang('Move file to'), $options);
+    $form->addSelect('move_target', get_lang('Move file to'), $options);
     $form->addButtonMove(get_lang('Move the file'), 'do_move');
     $form->display();
 }
@@ -386,7 +386,7 @@ function store_addcategory()
             ];
             $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid 
+                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid
                         WHERE iid = $id";
                 Database::query($sql);
             }
@@ -509,6 +509,7 @@ function display_addcategory_form($category_name = '', $id = 0, $action = '')
 function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id = 0)
 {
     $course_info = api_get_course_info();
+    $course = api_get_course_entity();
     $_user = api_get_user_info();
     $is_courseAdmin = api_is_course_admin();
     $is_courseTutor = api_is_course_tutor();
@@ -651,7 +652,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $current_user_id = '';
     $allowStudentToStudent = api_get_setting('dropbox_allow_student_to_student');
     $options = [];
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     foreach ($complete_user_list_for_dropbox as $current_user) {
         if ((
             $dropbox_person->isCourseTutor
@@ -685,14 +686,14 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     */
     $allowGroups = api_get_setting('dropbox_allow_group');
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
-        && 'true' == $allowGroups || 'true' == $allowStudentToStudent
+        && 'true' == $allowGroups || 'true' === $allowStudentToStudent
     ) {
-        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
+        $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course);
 
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {
                 if ($current_group['number_of_members'] > 0) {
-                    $options['group_'.$current_group['id']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
+                    $options['group_'.$current_group['iid']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
                 }
             }
         }
@@ -816,7 +817,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result))) {
-        die(get_lang('An error has occured. Please contact your system administrator.').' (code 901)');
+        exit(get_lang('An error has occured. Please contact your system administrator.').' (code 901)');
     }
     if (0 == $owner) {
         return $res['uploader_id'];
@@ -824,7 +825,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     if ($res['uploader_id'] == $owner) {
         return true;
     }
-    die(get_lang('An error has occured. Please contact your system administrator.').' (code '.$or_die.')');
+    exit(get_lang('An error has occured. Please contact your system administrator.').' (code '.$or_die.')');
 }
 
 /**
@@ -1044,8 +1045,8 @@ function store_add_dropbox($file = [], $work = null)
             if (0 === strpos($rec, 'user_')) {
                 $new_work_recipients[] = substr($rec, strlen('user_'));
             } elseif (0 === strpos($rec, 'group_')) {
-                $groupInfo = GroupManager::get_group_properties(substr($rec, strlen('group_')));
-                $userList = GroupManager::get_subscribed_users($groupInfo);
+                $group = api_get_group_entity(substr($rec, strlen('group_')));
+                $userList = GroupManager::get_subscribed_users($group);
                 foreach ($userList as $usr) {
                     if (!in_array($usr['user_id'], $new_work_recipients) && $usr['user_id'] != $_user['user_id']) {
                         $new_work_recipients[] = $usr['user_id'];
@@ -1065,12 +1066,6 @@ function store_add_dropbox($file = [], $work = null)
     if ($b_send_mail && empty($work)) {
         foreach ($new_work_recipients as $recipient_id) {
             $recipent_temp = api_get_user_info($recipient_id);
-            $additionalParameters = [
-                'smsType' => SmsPlugin::NEW_FILE_SHARED_COURSE_BY,
-                'userId' => $recipient_id,
-                'courseTitle' => $_course['title'],
-                'userUsername' => $recipent_temp['username'],
-            ];
             api_mail_html(
                 api_get_person_name(
                     $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
@@ -1093,11 +1088,7 @@ function store_add_dropbox($file = [], $work = null)
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 ),
-                $_user['mail'],
-                null,
-                null,
-                null,
-                $additionalParameters
+                $_user['mail']
             );
         }
     }
@@ -1198,8 +1189,8 @@ function feedback_form($url)
         $return .= '<textarea name="feedback" class="form-control" rows="4"></textarea>';
         $return .= '</div>';
         $return .= '<div class="col-sm-3">';
-        $return .= '<div class="pull-right"><a class="btn btn-default btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
-        $return .= '<button type="submit" class="btn btn-primary btn-sm" name="store_feedback" value="'.get_lang('Validate').'"
+        $return .= '<div class="pull-right"><a class="btn btn--plain btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
+        $return .= '<button type="submit" class="btn btn--primary btn-sm" name="store_feedback" value="'.get_lang('Validate').'"
                     onclick="javascript: document.form_dropbox.attributes.action.value = document.location;">'.get_lang('Add/Edit a comment to').'</button>';
         $return .= '</div>';
         $return .= '</div>';
@@ -1217,13 +1208,13 @@ function user_can_download_file($id, $user_id)
     $id = (int) $id;
     $user_id = (int) $user_id;
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1239,13 +1230,13 @@ function check_if_file_exist($id)
 {
     $id = (int) $id;
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1449,7 +1440,7 @@ function get_total_number_feedback()
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-            WHERE c_id = $course_id 
+            WHERE c_id = $course_id
             GROUP BY file_id";
     $result = Database::query($sql);
     $return = [];

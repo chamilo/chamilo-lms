@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,48 +21,36 @@ use Doctrine\ORM\Mapping as ORM;
 class Chat
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="from_user", type="integer", nullable=true)
      */
-    protected $fromUser;
+    protected ?int $fromUser = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="to_user", type="integer", nullable=true)
      */
-    protected $toUser;
+    protected ?int $toUser = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", nullable=false)
      */
-    protected $message;
+    protected string $message;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sent", type="datetime", nullable=false)
      */
-    protected $sent;
+    protected DateTime $sent;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="recd", type="integer", nullable=false)
      */
-    protected $recd;
+    protected int $recd;
 
     /**
      * Get id.
@@ -74,11 +65,9 @@ class Chat
     /**
      * Set fromUser.
      *
-     * @param int $fromUser
-     *
      * @return Chat
      */
-    public function setFromUser($fromUser)
+    public function setFromUser(int $fromUser)
     {
         $this->fromUser = $fromUser;
 
@@ -98,11 +87,9 @@ class Chat
     /**
      * Set toUser.
      *
-     * @param int $toUser
-     *
      * @return Chat
      */
-    public function setToUser($toUser)
+    public function setToUser(int $toUser)
     {
         $this->toUser = $toUser;
 
@@ -122,11 +109,9 @@ class Chat
     /**
      * Set message.
      *
-     * @param string $message
-     *
      * @return Chat
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
 
@@ -146,11 +131,9 @@ class Chat
     /**
      * Set sent.
      *
-     * @param \DateTime $sent
-     *
      * @return Chat
      */
-    public function setSent($sent)
+    public function setSent(DateTime $sent)
     {
         $this->sent = $sent;
 
@@ -160,7 +143,7 @@ class Chat
     /**
      * Get sent.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSent()
     {
@@ -170,11 +153,9 @@ class Chat
     /**
      * Set recd.
      *
-     * @param int $recd
-     *
      * @return Chat
      */
-    public function setRecd($recd)
+    public function setRecd(int $recd)
     {
         $this->recd = $recd;
 

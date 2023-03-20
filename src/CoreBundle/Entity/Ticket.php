@@ -1,173 +1,144 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Ticket.
- *
  * @ORM\Table(name="ticket_ticket")
  * @ORM\Entity
  */
 class Ticket
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="subject", type="string", length=255, nullable=false)
      */
-    protected $subject;
+    protected string $subject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected $message;
+    protected ?string $message = null;
 
     /**
-     * @var TicketProject
-     *
-     * @ORM\ManyToOne(targetEntity="TicketProject")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
-    protected $project;
+    protected TicketProject $project;
 
     /**
-     * @var TicketProject
-     *
-     * @ORM\ManyToOne(targetEntity="TicketCategory")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected $category;
+    protected TicketCategory $category;
 
     /**
-     * @var TicketPriority
-     *
-     * @ORM\ManyToOne(targetEntity="TicketPriority")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketPriority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
      */
-    protected $priority;
+    protected TicketPriority $priority;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $session;
+    protected Session $session;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="personal_email", type="string", length=255, nullable=false)
      */
-    protected $personalEmail;
+    #[Assert\NotBlank]
+    protected string $personalEmail;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="assigned_last_user", type="integer", nullable=true)
      */
-    protected $assignedLastUser;
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?User $assignedLastUser = null;
 
     /**
-     * @var TicketStatus
-     *
-     * @ORM\ManyToOne(targetEntity="TicketStatus")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    protected $status;
+    protected TicketStatus $status;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_messages", type="integer", nullable=false)
      */
-    protected $totalMessages;
+    protected int $totalMessages;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="keyword", type="string", length=255, nullable=true)
      */
-    protected $keyword;
+    protected ?string $keyword = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
-    protected $source;
+    protected ?string $source = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="start_date", type="datetime", nullable=true, unique=false)
      */
-    protected $startDate;
+    protected ?DateTime $startDate = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="end_date", type="datetime", nullable=true, unique=false)
      */
-    protected $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected int $lastEditUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected DateTime $lastEditDateTime;
+
+    public function __construct()
+    {
+        $this->totalMessages = 0;
+        $this->insertDateTime = new DateTime();
+    }
 
     /**
      * @return int
@@ -178,18 +149,6 @@ class Ticket
     }
 
     /**
-     * @param int $id
-     *
-     * @return Ticket
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCode()
@@ -197,12 +156,7 @@ class Ticket
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return Ticket
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -217,12 +171,7 @@ class Ticket
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     *
-     * @return Ticket
-     */
-    public function setSubject($subject)
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -237,14 +186,57 @@ class Ticket
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return Ticket
-     */
-    public function setMessage($message)
+    public function setMessage(string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getAssignedLastUser(): ?User
+    {
+        return $this->assignedLastUser;
+    }
+
+    public function setAssignedLastUser(?User $assignedLastUser): self
+    {
+        $this->assignedLastUser = $assignedLastUser;
+
+        return $this;
+    }
+
+    public function getPersonalEmail(): string
+    {
+        return $this->personalEmail;
+    }
+
+    public function setPersonalEmail(string $personalEmail): self
+    {
+        $this->personalEmail = $personalEmail;
+
+        return $this;
+    }
+
+    public function getTotalMessages(): int
+    {
+        return $this->totalMessages;
+    }
+
+    public function setTotalMessages(int $totalMessages): self
+    {
+        $this->totalMessages = $totalMessages;
+
+        return $this;
+    }
+
+    public function getInsertUserId(): int
+    {
+        return $this->insertUserId;
+    }
+
+    public function setInsertUserId(int $insertUserId): self
+    {
+        $this->insertUserId = $insertUserId;
 
         return $this;
     }

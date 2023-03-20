@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * GradebookLinkevalLog.
- *
  * @ORM\Table(name="gradebook_linkeval_log")
  * @ORM\Entity
  */
@@ -19,80 +20,60 @@ class GradebookLinkevalLog
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
      */
-    protected $idLinkevalLog;
+    protected int $idLinkevalLog;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="text", nullable=true)
+     * @ORM\Column(name="name", type="text")
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="weight", type="smallint", nullable=true)
      */
-    protected $weight;
+    protected ?int $weight = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
-    protected $visible;
+    protected ?bool $visible = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=20, nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
      * @ORM\JoinColumn(name="user_id_log", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * Set idLinkevalLog.
      *
-     * @param int $idLinkevalLog
-     *
      * @return GradebookLinkevalLog
      */
-    public function setIdLinkevalLog($idLinkevalLog)
+    public function setIdLinkevalLog(int $idLinkevalLog)
     {
         $this->idLinkevalLog = $idLinkevalLog;
 
@@ -109,14 +90,7 @@ class GradebookLinkevalLog
         return $this->idLinkevalLog;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -133,14 +107,7 @@ class GradebookLinkevalLog
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -160,11 +127,9 @@ class GradebookLinkevalLog
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
-     *
      * @return GradebookLinkevalLog
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -174,7 +139,7 @@ class GradebookLinkevalLog
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -184,11 +149,9 @@ class GradebookLinkevalLog
     /**
      * Set weight.
      *
-     * @param int $weight
-     *
      * @return GradebookLinkevalLog
      */
-    public function setWeight($weight)
+    public function setWeight(int $weight)
     {
         $this->weight = $weight;
 
@@ -208,11 +171,9 @@ class GradebookLinkevalLog
     /**
      * Set visible.
      *
-     * @param bool $visible
-     *
      * @return GradebookLinkevalLog
      */
-    public function setVisible($visible)
+    public function setVisible(bool $visible)
     {
         $this->visible = $visible;
 
@@ -232,11 +193,9 @@ class GradebookLinkevalLog
     /**
      * Set type.
      *
-     * @param string $type
-     *
      * @return GradebookLinkevalLog
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 

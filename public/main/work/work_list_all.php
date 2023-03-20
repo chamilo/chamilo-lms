@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
-
-// Including necessary files
-require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
@@ -22,9 +22,10 @@ $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);
 }
-
+$course = api_get_course_entity();
 $work_data = get_work_assignment_by_id($workId);
 
+$repo = Container::getStudentPublicationRepository();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
@@ -41,14 +42,14 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $user_id = api_get_user_id();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager::get_group_properties($group_id);
+    $group_properties = api_get_group_entity($group_id);
     if (api_is_allowed_to_edit(false, true)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access(
+        $show_work = GroupManager::userHasAccess(
             $user_id,
-            $group_properties['iid'],
+            $group_properties,
             GroupManager::GROUP_TOOL_WORK
         );
     }
@@ -64,7 +65,7 @@ if (!empty($group_id)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties->getName(),
     ];
 }
 
@@ -95,7 +96,7 @@ switch ($action) {
     case 'delete':
         /*	Delete document */
         if ($itemId) {
-            $fileDeleted = deleteWorkItem($itemId, $courseInfo);
+            $fileDeleted = deleteWorkItem($itemId, $course);
             if (!$fileDeleted) {
                 Display::addFlash(
                     Display::return_message(get_lang('You are not allowed to delete this document'), 'error')
@@ -113,8 +114,11 @@ switch ($action) {
         $result = get_work_user_list(null, null, null, null, $workId);
         if ($result) {
             foreach ($result as $item) {
-                $workToDelete = get_work_data_by_id($item['id']);
-                deleteCorrection($courseInfo, $workToDelete);
+                /** @var CStudentPublication $work */
+                $work = $repo->find($item['id']);
+                if ($work) {
+                    deleteCorrection($work);
+                }
             }
             Display::addFlash(
                 Display::return_message(get_lang('Deleted'), 'confirmation')
@@ -172,19 +176,22 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     $blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
-
     if (!$blockAddDocuments) {
-        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
+        $actionsLeft .= '<a
+            href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
         $actionsLeft .= Display::return_icon('new_document.png', get_lang('Add document'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
     $actionsLeft .= Display::return_icon('addworkuser.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
+    $actionsLeft .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
     $actionsLeft .= Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
+    $displayOutput = '<a
+        href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
     Display::return_icon('exercice_uncheck.png', get_lang('View missing assignments'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $editLink = '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
@@ -198,15 +205,33 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
     $count = get_count_work($workId);
     if ($count > 0) {
-        $display_output .= '<a class="btn-toolbar" href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('save_pack.png', get_lang('Download assignments package'), null, ICON_SIZE_MEDIUM).' '.get_lang('Download assignments package').'</a>';
+        $router = Container::getRouter();
+        /** @var CStudentPublication $studentPublication */
+        $studentPublication = $repo->find($workId);
+        $downloadUrl = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
+        $displayOutput .= '<a class="btn-toolbar" href="'.$downloadUrl.'?'.api_get_cidreq().'">'.
+            Display::return_icon(
+                'save_pack.png',
+                get_lang('Download assignments package'),
+                null,
+                ICON_SIZE_MEDIUM
+            ).' '.get_lang('Download assignments package').'</a>';
     }
-    $actionsLeft .= $display_output;
-    $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
+    $actionsLeft .= $displayOutput;
+
+    // @todo fix upload corrections.
+    /*$url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
-        Display::return_icon('upload_package.png', get_lang('Upload corrections package'), '', ICON_SIZE_MEDIUM).' '.get_lang('Upload corrections package').'</a>';
-    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
-    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'remove', 'danger');
+        Display::return_icon(
+            'upload_package.png',
+            get_lang('Upload corrections package'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).' '.get_lang('Upload corrections package').'</a>';
+    */
+    $url = api_get_path(WEB_CODE_PATH).
+        'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
+    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'delete', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
@@ -493,12 +518,12 @@ if ($allowAntiPlagiarism) {
     $html .= '<td>';
     $html .= '<div class="btn-toolbar">';
     $html .= '<div class="btn-group">';
-    $html .= '<a class="btn btn-default" href="?'
+    $html .= '<a class="btn btn--plain" href="?'
         .'&amp;'.'gbox_results'.'&amp;'.'selectall=1" onclick="javascript: setCheckbox(true, \''
         .'gbox_results'.'\'); return false;">'
         .get_lang('Select all')
         .'</a>';
-    $html .= '<a class="btn btn-default" href="?'
+    $html .= '<a class="btn btn--plain" href="?'
         .'" onclick="javascript: setCheckbox(false, \''
         .'gbox_results'
         .'\'); return false;">'
@@ -506,10 +531,10 @@ if ($allowAntiPlagiarism) {
         .'</a> ';
     $html .= '</div>';
     $html .= '<div class="btn-group">
-        <button class="btn btn-default" onclick="javascript:return false;">'
+        <button class="btn btn--plain" onclick="javascript:return false;">'
         .get_lang('Detail')
         .'</button>'
-        .'<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'
+        .'<button class="btn btn--plain dropdown-toggle" data-toggle="dropdown">'
         .'<span class="caret"></span>'
         .'</button>';
 

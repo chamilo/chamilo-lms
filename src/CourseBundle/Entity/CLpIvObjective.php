@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -10,89 +12,69 @@ use Doctrine\ORM\Mapping as ORM;
  * CLpIvObjective.
  *
  * @ORM\Table(
- *  name="c_lp_iv_objective",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
- *  }
+ *     name="c_lp_iv_objective",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CLpIvObjective
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    protected $lpIvId;
+    protected int $lpIvId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    protected $orderId;
+    protected int $orderId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="objective_id", type="string", length=255, nullable=false)
      */
-    protected $objectiveId;
+    protected string $objectiveId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_raw", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreRaw;
+    protected float $scoreRaw;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_max", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreMax;
+    protected float $scoreMax;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_min", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreMin;
+    protected float $scoreMin;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", length=32, nullable=false)
      */
-    protected $status;
+    protected string $status;
 
     /**
      * Set lpIvId.
      *
-     * @param int $lpIvId
-     *
      * @return CLpIvObjective
      */
-    public function setLpIvId($lpIvId)
+    public function setLpIvId(int $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -112,11 +94,9 @@ class CLpIvObjective
     /**
      * Set orderId.
      *
-     * @param int $orderId
-     *
      * @return CLpIvObjective
      */
-    public function setOrderId($orderId)
+    public function setOrderId(int $orderId)
     {
         $this->orderId = $orderId;
 
@@ -136,11 +116,9 @@ class CLpIvObjective
     /**
      * Set objectiveId.
      *
-     * @param string $objectiveId
-     *
      * @return CLpIvObjective
      */
-    public function setObjectiveId($objectiveId)
+    public function setObjectiveId(string $objectiveId)
     {
         $this->objectiveId = $objectiveId;
 
@@ -160,11 +138,9 @@ class CLpIvObjective
     /**
      * Set scoreRaw.
      *
-     * @param float $scoreRaw
-     *
      * @return CLpIvObjective
      */
-    public function setScoreRaw($scoreRaw)
+    public function setScoreRaw(float $scoreRaw)
     {
         $this->scoreRaw = $scoreRaw;
 
@@ -184,11 +160,9 @@ class CLpIvObjective
     /**
      * Set scoreMax.
      *
-     * @param float $scoreMax
-     *
      * @return CLpIvObjective
      */
-    public function setScoreMax($scoreMax)
+    public function setScoreMax(float $scoreMax)
     {
         $this->scoreMax = $scoreMax;
 
@@ -208,11 +182,9 @@ class CLpIvObjective
     /**
      * Set scoreMin.
      *
-     * @param float $scoreMin
-     *
      * @return CLpIvObjective
      */
-    public function setScoreMin($scoreMin)
+    public function setScoreMin(float $scoreMin)
     {
         $this->scoreMin = $scoreMin;
 
@@ -232,11 +204,9 @@ class CLpIvObjective
     /**
      * Set status.
      *
-     * @param string $status
-     *
      * @return CLpIvObjective
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -256,11 +226,9 @@ class CLpIvObjective
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpIvObjective
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

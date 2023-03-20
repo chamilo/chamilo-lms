@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Print a learning path finish page with details.
@@ -66,7 +69,8 @@ $badgeLink = '';
 $finalItemTemplate = '';
 
 // Check prerequisites and total completion of the learning path
-$lp = new Learnpath($courseCode, $lpId, $userId);
+$lpEntity = api_get_lp_entity($lpId);
+$lp = new Learnpath($lpEntity, [], $userId);
 $count = $lp->getTotalItemsCountWithoutDirs();
 $completed = $lp->get_complete_items_count(true);
 $currentItemId = $lp->get_current_item_id();
@@ -92,7 +96,9 @@ unset($currentItem);
 // show a prerequisites warning
 if (false == $accessGranted) {
     echo Display::return_message(
-        get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'),
+        get_lang(
+            'This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'
+        ),
         'warning'
     );
     $finalItemTemplate = '';
@@ -131,14 +137,12 @@ if (false == $accessGranted) {
 
         if ($link) {
             $cat = new Category();
-            $catCourseCode = CourseManager::get_course_by_category($categoryId);
-            $show_message = $cat->show_message_resource_delete($catCourseCode);
+            $show_message = Category::show_message_resource_delete($courseId);
+            $repo = Container::getGradeBookCategoryRepository();
+            $category = $repo->find($categoryId);
 
             if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                $certificate = Category::generateUserCertificate(
-                    $categoryId,
-                    $userId
-                );
+                $certificate = Category::generateUserCertificate($category, $userId);
 
                 if (!empty($certificate['pdf_url']) ||
                     !empty($certificate['badge_link'])
@@ -147,9 +151,7 @@ if (false == $accessGranted) {
                         $downloadCertificateLink = Category::getDownloadCertificateBlock($certificate);
                     }
 
-                    if (is_array($certificate) &&
-                        isset($certificate['badge_link'])
-                    ) {
+                    if (is_array($certificate) && isset($certificate['badge_link'])) {
                         $courseId = api_get_course_int_id();
                         $badgeLink = generateLPFinalItemTemplateBadgeLinks(
                             $userId,
@@ -159,16 +161,8 @@ if (false == $accessGranted) {
                     }
                 }
 
-                $currentScore = Category::getCurrentScore(
-                    $userId,
-                    $category,
-                    true
-                );
-                Category::registerCurrentScore(
-                    $currentScore,
-                    $userId,
-                    $categoryId
-                );
+                $currentScore = Category::getCurrentScore($userId, $category, true);
+                Category::registerCurrentScore($currentScore, $userId, $categoryId);
             }
         }
 
@@ -211,14 +205,9 @@ function generateLPFinalItemTemplate(
     $downloadCertificateLink = '',
     $badgeLink = ''
 ) {
-    $documentInfo = DocumentManager::get_document_data_by_id(
-        $lpItemId,
-        $courseCode,
-        true,
-        $sessionId
-    );
+    $document = Container::getDocumentRepository()->find($lpItemId);
+    $finalItemTemplate = Container::getDocumentRepository()->getResourceFileContent($document);
 
-    $finalItemTemplate = file_get_contents($documentInfo['absolute_path']);
     $finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
     $finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
 
@@ -237,7 +226,7 @@ function generateLPFinalItemTemplate(
 function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 0)
 {
     $em = Database::getManager();
-    $skillRelUser = new SkillRelUser();
+    $skillRelUser = new SkillRelUserModel();
     $userSkills = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
     $skillList = '';
     $badgeLink = '';
@@ -252,7 +241,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                 <div class='row'>
                     <div class='col-md-2 col-xs-4'>
                         <div class='thumbnail'>
-                          <img class='skill-badge-img' src='".Skill::getWebIconPath($skill)."' >
+                          <img class='skill-badge-img' src='".SkillModel::getWebIconPath($skill)."' >
                         </div>
                     </div>
                     <div class='col-md-8 col-xs-8'>

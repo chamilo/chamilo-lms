@@ -1,13 +1,10 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <b-form-input
-        v-model="item.title"
-        :placeholder="$t('title')"
-        type="text"
-      />
-    </b-col>
-  </b-row>
+    <q-input
+      id="search_filter"
+      v-model="item.title"
+      :placeholder="$t('title')"
+      type="text"
+    />
 </template>
 
 <script>

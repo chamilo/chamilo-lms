@@ -49,8 +49,8 @@ class ChamiloSession implements \ArrayAccess
     }
 
     /**
-     * @param string $variable
-     * @param null   $default
+     * @param string     $variable
+     * @param mixed|null $default
      *
      * @return mixed|null
      */

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 
 /**
@@ -372,13 +373,11 @@ abstract class AbstractLink implements GradebookItem
     public function add()
     {
         $this->add_linked_data();
-        if (isset($this->type) &&
-            isset($this->ref_id) &&
-            isset($this->user_id) &&
-            isset($this->course_code) &&
-            isset($this->category) &&
-            isset($this->weight) &&
-            isset($this->visible)
+        if (!empty($this->type) &&
+            !empty($this->ref_id) &&
+            !empty($this->user_id) &&
+            !empty($this->course_code) &&
+            !empty($this->category)
         ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
             $sql = "SELECT count(*) count FROM $table
@@ -393,6 +392,11 @@ abstract class AbstractLink implements GradebookItem
 
             if (0 == $row['count']) {
                 $em = Database::getManager();
+                $category = null;
+                if (!empty($this->get_category_id())) {
+                    $category = $em->getRepository(GradebookCategory::class)->find($this->get_category_id());
+                }
+
                 $link = new GradebookLink();
                 $link
                     ->setType($this->get_type())
@@ -400,9 +404,9 @@ abstract class AbstractLink implements GradebookItem
                     ->setWeight(api_float_val($this->get_weight()))
                     ->setUser(api_get_user_entity($this->get_user_id()))
                     ->setRefId($this->get_ref_id())
-                    ->setCategoryId($this->get_category_id())
+                    ->setCategory($category)
                     ->setCourse(api_get_course_entity())
-                    ->setCategoryId($this->get_category_id());
+                ;
                 $em->persist($link);
                 $em->flush();
 
@@ -430,14 +434,21 @@ abstract class AbstractLink implements GradebookItem
         self::add_link_log($this->id);
         $this->save_linked_data();
         $course = api_get_course_entity($this->getCourseId());
+
+        $category = null;
+        if (!empty($this->get_category_id())) {
+            $category = $em->getRepository(GradebookCategory::class)->find($this->get_category_id());
+        }
+
         $link
             ->setType($this->get_type())
             ->setRefId($this->get_ref_id())
             ->setUser(api_get_user_entity($this->get_user_id()))
             ->setCourse($course)
-            ->setCategoryId($this->get_category_id())
+            ->setCategory($category)
             ->setWeight($this->get_weight())
-            ->setVisible($this->is_visible());
+            ->setVisible($this->is_visible())
+        ;
 
         $em->persist($link);
         $em->flush();
@@ -692,7 +703,7 @@ abstract class AbstractLink implements GradebookItem
                 break;
         }
 
-        $skillToString = Skill::getSkillRelItemsToString($toolType, $this->get_ref_id());
+        $skillToString = SkillModel::getSkillRelItemsToString($toolType, $this->get_ref_id());
 
         return $skillToString;
     }

@@ -10,6 +10,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+api_block_inactive_user();
 
 $logInfo = [
     'tool' => 'MyCertificates',
@@ -53,7 +54,7 @@ if ('true' === api_get_setting('allow_public_certificates')) {
         Display::toolbarButton(
             get_lang('Search certificates'),
             api_get_path(WEB_CODE_PATH).'gradebook/search.php',
-            'search',
+            'magnify',
             'info'
         )
     );

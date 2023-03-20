@@ -58,13 +58,12 @@ class NotebookManager
         $notebook
             ->setTitle($values['note_title'])
             ->setDescription($values['note_comment'])
-            ->setUserId($userId)
+            ->setUser(api_get_user_entity($userId))
             ->addCourseLink($course, $session)
         ;
 
         $repo = Container::getNotebookRepository();
-        $repo->getEntityManager()->persist($notebook);
-        $repo->getEntityManager()->flush();
+        $repo->create($notebook);
 
         return $notebook->getIid();
     }
@@ -121,8 +120,7 @@ class NotebookManager
             ->setDescription($values['note_comment'])
         ;
 
-        $repo->getEntityManager()->persist($notebook);
-        $repo->getEntityManager()->flush();
+        $repo->update($notebook);
 
         return true;
     }
@@ -173,7 +171,8 @@ class NotebookManager
     public static function display_notes()
     {
         $sessionId = api_get_session_id();
-        $_user = api_get_user_info();
+        $user = api_get_user_entity();
+
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
@@ -218,7 +217,7 @@ class NotebookManager
 
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $order_by = ' ORDER BY '.$notebookView." $sort_direction ";
+        $order_by = " ORDER BY `$notebookView` $sort_direction ";
 
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
@@ -236,7 +235,7 @@ class NotebookManager
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // Validation when belongs to a session
-            $session_img = api_get_session_image($row['session_id'], $_user['status']);
+            $session_img = api_get_session_image($row['session_id'], $user);
             $updateValue = '';
             if ($row['update_date'] != $row['creation_date']) {
                 $updateValue = ', '.get_lang('Updated').': '.Display::dateToStringAgoAndLongDate($row['update_date']);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,50 +17,38 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgendaRepeat
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
-     */
-    protected $calType;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cal_end", type="integer", nullable=true)
-     */
-    protected $calEnd;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
-     */
-    protected $calFrequency;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
-     */
-    protected $calDays;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="cal_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $calId;
+    protected int $calId;
+
+    /**
+     * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
+     */
+    protected ?string $calType = null;
+
+    /**
+     * @ORM\Column(name="cal_end", type="integer", nullable=true)
+     */
+    protected ?int $calEnd = null;
+
+    /**
+     * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
+     */
+    protected ?int $calFrequency = null;
+
+    /**
+     * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
+     */
+    protected ?string $calDays = null;
 
     /**
      * Set calType.
      *
-     * @param string $calType
-     *
      * @return PersonalAgendaRepeat
      */
-    public function setCalType($calType)
+    public function setCalType(string $calType)
     {
         $this->calType = $calType;
 
@@ -78,11 +68,9 @@ class PersonalAgendaRepeat
     /**
      * Set calEnd.
      *
-     * @param int $calEnd
-     *
      * @return PersonalAgendaRepeat
      */
-    public function setCalEnd($calEnd)
+    public function setCalEnd(int $calEnd)
     {
         $this->calEnd = $calEnd;
 
@@ -102,11 +90,9 @@ class PersonalAgendaRepeat
     /**
      * Set calFrequency.
      *
-     * @param int $calFrequency
-     *
      * @return PersonalAgendaRepeat
      */
-    public function setCalFrequency($calFrequency)
+    public function setCalFrequency(int $calFrequency)
     {
         $this->calFrequency = $calFrequency;
 
@@ -126,11 +112,9 @@ class PersonalAgendaRepeat
     /**
      * Set calDays.
      *
-     * @param string $calDays
-     *
      * @return PersonalAgendaRepeat
      */
-    public function setCalDays($calDays)
+    public function setCalDays(string $calDays)
     {
         $this->calDays = $calDays;
 

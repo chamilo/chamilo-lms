@@ -36,7 +36,7 @@ if ($data = $form->get_data()) {
         case 'addinstance':
         case 'registerinstance':
             Virtual::addInstance($data);
-            echo '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
+            echo '<a class="btn btn--primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
             exit;
 
             break;

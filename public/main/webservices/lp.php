@@ -2,7 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
 
 ini_set('memory_limit', -1);
 /*
@@ -43,7 +47,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        [$ip1] = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug) {
@@ -218,16 +222,20 @@ function WSImportLP($params)
     $manifestData = $oScorm->parse_manifest($manifest);
 
     if (!empty($manifestData)) {
+        $entity = $oScorm->getEntity();
         $oScorm->import_manifest(
             $courseInfo['code'],
             $maxScore,
             $sessionId,
             $userId
         );
-        $oScorm->set_name($lpName);
-        $oScorm->set_proximity($proximity, $courseId);
-        $oScorm->set_maker($maker, $courseId);
-        //$oScorm->set_jslib('scorm_api.php');
+        $entity
+            ->setName($lpName)
+            ->setContentLocal($proximity)
+            ->setContentMaker($maker)
+        ;
+        Database::getManager()->persist($entity);
+        Database::getManager()->flush();
 
         if ($debug) {
             error_log('scorm was added');
@@ -453,26 +461,22 @@ function WSDeleteLp($params)
     }
     */
 
-    $lp = new learnpath($courseCode, $lpId, null);
+    $lp = Container::getLpRepository()->find($lpId);
+    $lp = new learnpath($lp, $lpId, null);
     if ($lp) {
         if ($debug) {
             error_log("LP deleted $lpId");
         }
-
-        $course_dir = $courseInfo['directory'].'/document';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path.$course_dir;
-
-        $items = $lp->get_flat_ordered_items_list($lpId, 0, $courseId);
+        $base_work_dir = null;
+        $items = $lp->get_flat_ordered_items_list($lp, 0, $courseId);
 
         if (!empty($items)) {
             /** @var $item learnpathItem */
             foreach ($items as $itemId) {
-                $item = new learnpathItem($itemId, null, $courseId);
+                $item = new learnpathItem($itemId);
 
                 if ($item) {
                     $documentId = $item->get_path();
-
                     if ($debug) {
                         error_log("lp item id found #$itemId");
                     }
@@ -645,7 +649,7 @@ function WSCreateLp($params)
     if ($debug) {
         error_log('add_lp');
     }
-    $lpId = learnpath::add_lp(
+    $lp = learnpath::add_lp(
         $courseCode,
         $lpName,
         '',
@@ -657,6 +661,8 @@ function WSCreateLp($params)
         0,
         $userId
     );
+
+    $lpId = $lp->getIid();
 
     if ($lpId) {
         if ($debug) {

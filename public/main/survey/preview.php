@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 /**
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
@@ -20,10 +23,10 @@ if (empty($surveyId)) {
     api_not_allowed(true);
 }
 
-// Getting the survey information
-$survey_data = SurveyManager::get_survey($surveyId);
-
-if (empty($survey_data)) {
+$repo = Container::getSurveyRepository();
+/** @var CSurvey $survey */
+$survey = $repo->find($surveyId);
+if (null === $survey) {
     api_not_allowed(true);
 }
 
@@ -42,10 +45,10 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
-    'name' => strip_tags($survey_data['title'], '<span>'),
+    'name' => strip_tags($survey->getTitle(), '<span>'),
 ];
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
 $show = 0;
@@ -55,22 +58,22 @@ Display::display_header(get_lang('Survey preview'));
 SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
-echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
-if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+echo '<div class="page-header"><h2>'.Security::remove_XSS($survey->getTitle()).'</h2></div>';
+if (!empty($survey->getSubtitle())) {
+    echo '<div id="survey_subtitle">'.Security::remove_XSS($survey->getSubtitle()).'</div>';
 }
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
-    if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+    if (!empty($survey->getIntro())) {
+        echo '<div class="survey_content">'.Security::remove_XSS($survey->getIntro()).'</div>';
     }
 }
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey->getSurveythanks());
     Display::display_footer();
     exit;
 }
@@ -85,26 +88,25 @@ if (isset($_GET['show'])) {
     $counter = 0;
     $sql = "SELECT * FROM $table_survey_question
             WHERE
-              survey_question NOT LIKE '%{{%' AND 
-              c_id = $course_id AND
+              survey_question NOT LIKE '%{{%' AND
               survey_id = $surveyId
             ORDER BY sort ASC";
     $result = Database::query($sql);
     $questions_exists = true;
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
-            if (1 == $survey_data['one_question_per_page']) {
-                if ('pagebreak' != $row['type']) {
-                    $paged_questions[$counter][] = $row['question_id'];
+            if (1 == $survey->getOneQuestionPerPage()) {
+                if ('pagebreak' !== $row['type']) {
+                    $paged_questions[$counter][] = $row['iid'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ('pagebreak' == $row['type']) {
+                if ('pagebreak' === $row['type']) {
                     $counter++;
                     $pageBreakText[$counter] = $row['survey_question'];
                 } else {
-                    $paged_questions[$counter][] = $row['question_id'];
+                    $paged_questions[$counter][] = $row['iid'];
                 }
             }
         }
@@ -118,14 +120,14 @@ if (isset($_GET['show'])) {
             $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
         }
         $sql = "SELECT
-                    survey_question.question_id,
+                    survey_question.iid question_id,
                     survey_question.survey_id,
                     survey_question.survey_question,
                     survey_question.display,
                     survey_question.sort,
                     survey_question.type,
                     survey_question.max_value,
-                    survey_question_option.question_option_id,
+                    survey_question_option.iid as question_option_id,
                     survey_question_option.option_text,
                     $select
                     survey_question_option.sort as option_sort
@@ -133,26 +135,24 @@ if (isset($_GET['show'])) {
                 FROM $table_survey_question survey_question
                 LEFT JOIN $table_survey_question_option survey_question_option
                 ON
-                    survey_question.question_id = survey_question_option.question_id AND
-                    survey_question_option.c_id = survey_question.c_id
+                    survey_question.iid = survey_question_option.question_id
                 WHERE
                     survey_question.survey_id = '".$surveyId."' AND
-                    survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
-                    survey_question.c_id = $course_id AND
-                    survey_question NOT LIKE '%{{%'                        
+                    survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
+                    survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // If the type is not a pagebreak we store it in the $questions array
-            if ('pagebreak' != $row['type']) {
+            if ('pagebreak' !== $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
-                $questions[$sort]['survey_question'] = $row['survey_question'];
+                $questions[$sort]['survey_question'] = Security::remove_XSS($row['survey_question']);
                 $questions[$sort]['display'] = $row['display'];
                 $questions[$sort]['type'] = $row['type'];
-                $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
+                $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 $questions[$sort]['maximum_score'] = $row['max_value'];
                 $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
                 $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
@@ -162,8 +162,7 @@ if (isset($_GET['show'])) {
     }
 }
 
-$numberOfPages = SurveyManager::getCountPages($survey_data);
-
+$numberOfPages = SurveyManager::getCountPages($survey);
 // Displaying the form with the questions
 if (isset($_GET['show'])) {
     $show = (int) $_GET['show'] + 1;
@@ -194,12 +193,11 @@ if (is_array($questions) && count($questions) > 0) {
     }
 
     $showNumber = true;
-    if (SurveyManager::hasDependency($survey_data)) {
+    if (SurveyManager::hasDependency($survey)) {
         $showNumber = false;
     }
 
     $js = '';
-
     if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
         // Only show page-break texts if there is something there, apart from
         // HTML tags
@@ -233,7 +231,7 @@ if (is_array($questions) && count($questions) > 0) {
         if ($showNumber && $survey_data['display_question_number']) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
         }
-        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
         $display->render($form, $question);
         $form->addHtml('</div>');
         $counter++;
@@ -279,8 +277,8 @@ $form->display();
 
 echo Display::toolbarButton(
     get_lang('Return to Course Homepage'),
-    api_get_course_url($courseInfo['code']),
-    'home'
+    api_get_course_url($courseInfo['real_id']),
+    'home-outline'
 );
 
 Display::display_footer();

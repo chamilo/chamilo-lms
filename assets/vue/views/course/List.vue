@@ -24,7 +24,7 @@
             :items="items"
             :items-per-page.sync="options.itemsPerPage"
             :loading="isLoading"
-            :loading-text="$t('Loading...')"
+            :loading-text="$t('Loading')"
             :options.sync="options"
             :server-items-length="totalItems"
             class="elevation-1"
@@ -32,17 +32,6 @@
             show-select
             @update:options="onUpdateOptions"
           >
-            <template slot="item.category" slot-scope="{ item }">
-              <div v-if="item['category']">
-                <router-link :to="{ name: 'CourseCategoryUpdate', params: {id: item['category']['@id']}}">
-                  {{ item['category'].name }}
-                </router-link>
-              </div>
-              <div v-else>
-                -
-              </div>
-            </template>
-
             <template slot="item.visibility" slot-scope="{ item }">
               {{ $n(item['visibility']) }}
             </template>
@@ -69,10 +58,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
-import ActionCell from '../../components/ActionCell';
-import CourseFilterForm from '../../components/course/Filter';
-import DataFilter from '../../components/DataFilter';
-import Toolbar from '../../components/Toolbar';
+import ActionCell from '../../components/ActionCell.vue';
+import CourseFilterForm from '../../components/course/Filter.vue';
+import DataFilter from '../../components/DataFilter.vue';
+import Toolbar from '../../components/Toolbar.vue';
 
 export default {
   name: 'CourseList',
@@ -90,7 +79,6 @@ export default {
         { text: 'title', value: 'title' },
         { text: 'code', value: 'code' },
         { text: 'courseLanguage', value: 'Language' },
-        { text: 'category', value: 'category' },
         { text: 'visibility', value: 'visibility' },
         {
           text: 'Actions',

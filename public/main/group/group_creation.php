@@ -116,7 +116,7 @@ if (isset($_POST['number_of_groups'])) {
             disabled = element.disabled;
             $(id).prop('disabled', disabled);
             $(id).prop('value', ref.value);
-            $(id).selectpicker('refresh');
+            //$(id).selectpicker('refresh');
         }
         if (disabled) {
             ref.addEventListener("change", copy, false);
@@ -303,7 +303,7 @@ EOT;
      * Show form to generate groups from classes subscribed to the course
      */
     $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
-    $obj = new UserGroup();
+    $obj = new UserGroupModel();
     $classes = $obj->getUserGroupInCourse($options);
     if (count($classes) > 0) {
         $description = '<p>'.get_lang('Using this option, you can create groups based on the classes subscribed to your course.').'</p>';
@@ -327,7 +327,7 @@ EOT;
         $classForm->addHtml($description);
         $classForm->addElement('hidden', 'action');
         if ($allowGroupCategories) {
-            $classForm->addElement('select', 'group_category', null, $categories);
+            $classForm->addSelect('group_category', null, $categories);
         } else {
             $classForm->addElement('hidden', 'group_category');
         }

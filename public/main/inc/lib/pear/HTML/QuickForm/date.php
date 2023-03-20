@@ -35,15 +35,13 @@
  */
 class HTML_QuickForm_date extends HTML_QuickForm_group
 {
-    // {{{ properties
-
-   /**
+    /**
     * Various options to control the element's display.
     *
     * @access   private
     * @var      array
     */
-    var $_options = array(
+    public $_options = array(
         'language'         => 'en',
         'format'           => 'dMY',
         'minYear'          => 2001,
@@ -59,7 +57,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     * @access   private
     * @var      array
     */
-    var $_wrap = array('', '');
+    public $_wrap = array('', '');
 
    /**
     * Options in different languages
@@ -70,7 +68,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     * @access   private
     * @var      array
     */
-    var $_locale = array(
+    public $_locale = array(
         'en' => array (
             'weekdays_short'=> array ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'),
             'weekdays_long' => array ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
@@ -228,9 +226,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             'months_long'   => array ('Janeiro', 'Fevereiro', 'Mar&ccedil;o', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
         )
     );
-
-    // }}}
-    // {{{ constructor
 
    /**
     * Class constructor
@@ -459,7 +454,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 $value = strtotime($value);
             }
             // might be a unix epoch, then we fill all possible values
-            $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));
+            $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int) $value));
             $value = array(
                 'D' => $arr[0],
                 'l' => $arr[0],

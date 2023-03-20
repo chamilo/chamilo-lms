@@ -16,7 +16,7 @@ $lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_allowed_to_edit(null, true) &&
-    !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id(), api_get_course_info())
+    !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id(), api_get_course_entity())
 ) {
     api_not_allowed();
 }

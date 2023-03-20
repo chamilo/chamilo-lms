@@ -10,6 +10,7 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
 $form_style = '<style>
 .row {
     width: 200px;
@@ -37,7 +38,6 @@ if (isset($_POST['convert'])) {
             if (isset($o_doc) && 0 != $first_item_id) {
                 // Search-related section
                 if ('true' == api_get_setting('search_enabled')) {
-                    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                     $specific_fields = get_specific_field_list();
 
                     foreach ($specific_fields as $specific_field) {
@@ -175,7 +175,8 @@ if ('true' === api_get_setting('search_enabled')) {
  * $form -> addElement ('radio', 'split_steps',null, get_lang('A section, a learning object'),'per_chapter');
  */
 $form->addElement('hidden', 'split_steps', 'per_page');
-$form->addElement('submit', 'convert', get_lang('Convert to course'), 'class="convert_button"');
+//$form->addElement('submit', 'convert', get_lang('Convert to course'), 'class="convert_button"');
+$this->addButtonSave(get_lang('Convert to course'), 'convert');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
 $defaults = ['split_steps' => 'per_page', 'index_document' => 'checked="checked"'];

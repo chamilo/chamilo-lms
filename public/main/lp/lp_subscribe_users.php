@@ -5,14 +5,15 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp']) {
     api_not_allowed(true);
 }
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
@@ -29,8 +30,10 @@ if (empty($lpId)) {
 
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
 $currentUser = api_get_user_entity(api_get_user_id());
-
-$oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+$repo = Container::getLpRepository();
+/** @var CLp $entity */
+$entity = $repo->find($lpId);
+$oLP = new learnpath($entity, api_get_course_info(), api_get_user_id());
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
@@ -47,10 +50,8 @@ $courseCode = api_get_course_id();
 $sessionId = api_get_session_id();
 
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
-$lp = new learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+$courseRepo = Container::getCourseRepository();
 
 /** @var Session $session */
 $session = null;
@@ -67,7 +68,7 @@ if (!$session) {
         ->getQuery()
         ->getResult();
 } else {
-    $list = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+    $list = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
     if ($list) {
         /** @var SessionRelCourseRelUser $sessionCourseUser */
         foreach ($list as $sessionCourseUser) {
@@ -100,8 +101,7 @@ foreach ($subscribedUsersInLp as $itemProperty) {
 $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 
-$userMultiSelect = $formUsers->addElement(
-    'advmultiselect',
+$userMultiSelect = $formUsers->addMultiSelect(
     'users',
     get_lang('Users'),
     $choices
@@ -142,8 +142,7 @@ foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
 }
 
-$groupMultiSelect = $form->addElement(
-    'advmultiselect',
+$groupMultiSelect = $form->addMultiSelect(
     'groups',
     get_lang('Groups'),
     $groupChoices
@@ -155,7 +154,7 @@ if ($allowUserGroups) {
     $formUserGroup = new FormValidator('usergroup_form', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $conditions = [];
     $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
     $groups = $userGroup->getUserGroupInCourse($conditions);
@@ -171,8 +170,7 @@ if ($allowUserGroups) {
         }
     }
 
-    $userGroupMultiSelect = $formUserGroup->addElement(
-        'advmultiselect',
+    $userGroupMultiSelect = $formUserGroup->addMultiSelect(
         'usergroups',
         get_lang('Classes'),
         $allOptions

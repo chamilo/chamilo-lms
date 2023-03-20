@@ -48,7 +48,7 @@ if (Database::num_rows($result)) {
                 Display::url(
                     get_lang('Recover'),
                     api_get_self().'?recover_id='.$file['id'],
-                    ['class' => 'btn btn-default']
+                    ['class' => 'btn btn--plain']
                 ),
             ];
         }

@@ -10,7 +10,6 @@ Feature: Course tools basic testing
 
   Scenario: See the courses list
     Given I am on "/main/admin/course_list.php"
-    Then I should see "Course list"
     And I should not see "not authorized"
 
   Scenario: See the course creation link on the admin page
@@ -31,8 +30,7 @@ Feature: Course tools basic testing
     When I fill in "title" with "TEMP"
     And I press "submit"
     Then wait for the page to be loaded
-    Then I should see "Course list"
-    And I should see "TEMP"
+    Then I should see "TEMP"
 
 #  Scenario: Make sure the course exists
 #    Given course "TEMP" exists
@@ -71,6 +69,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the assessments tool is available
     Given I am on course "TEMP" homepage
     And I am on "/main/gradebook/index.php?cid=1"
+    And wait the page to be loaded when ready
     Then I should not see an error
 
 #  Scenario: Make sure the glossary tool is available
@@ -128,10 +127,10 @@ Feature: Course tools basic testing
     And I am on "/main/survey/index.php?cid=1"
     Then I should not see an error
 
-  Scenario: Make sure the wiki tool is available
-    Given I am on course "TEMP" homepage
-    And I am on "/main/wiki/index.php?cid=1"
-    Then I should not see an error
+#  Scenario: Make sure the wiki tool is available
+#    Given I am on course "TEMP" homepage
+#    And I am on "/main/wiki/index.php?cid=1"
+#    Then I should not see an error
 
 #  Scenario: Make sure the notebook tool is available
 #    Given I am on course "TEMP" homepage

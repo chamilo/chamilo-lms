@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,34 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketStatus
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
      * @return int
@@ -53,18 +47,6 @@ class TicketStatus
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketStatus
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCode()
@@ -72,12 +54,7 @@ class TicketStatus
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return TicketStatus
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -92,12 +69,7 @@ class TicketStatus
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return TicketStatus
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -112,12 +84,7 @@ class TicketStatus
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return TicketStatus
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

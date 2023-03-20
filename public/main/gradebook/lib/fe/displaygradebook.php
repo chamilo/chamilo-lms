@@ -11,45 +11,44 @@ class DisplayGradebook
      * Displays the header for the result page containing the navigation tree and links.
      *
      * @param Evaluation $evalobj
-     * @param $selectcat
+     * @param int        $selectcat
+     * @param string     $page
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {
-        $header = null;
+        $links = [];
         if (api_is_allowed_to_edit(null, true)) {
-            $header = '<div class="actions">';
             if ('statistics' !== $page) {
-                $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
+                $links[] = '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
                     Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
                 if ((null != $evalobj->get_course_code()) && !$evalobj->has_results()) {
-                    $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
+                    $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				'.Display::return_icon('evaluation_rate.png', get_lang('Grade learners'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
                 if (api_is_platform_admin() || false == $evalobj->is_locked()) {
-                    $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
+                    $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
                         Display::return_icon('import_evaluation.png', get_lang('Import marks'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
                 if ($evalobj->has_results()) {
-                    $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&export=">'.
+                    $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&export=">'.
                         Display::return_icon('export_evaluation.png', get_lang('PDF Report'), '', ICON_SIZE_MEDIUM).'</a>';
 
                     if (api_is_platform_admin() || false == $evalobj->is_locked()) {
-                        $header .= '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'">'.
+                        $links[] = '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'">'.
                             Display::return_icon('edit.png', get_lang('Grade learners'), '', ICON_SIZE_MEDIUM).'</a>';
-                        $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
+                        $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
                             Display::return_icon('delete.png', get_lang('Delete marks'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
                 }
-                $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
+                $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
                     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                $header .= '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
+                $links[] = '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
                     Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM).'</a>';
             }
-            $header .= '</div>';
         }
 
         $scoredisplay = ScoreDisplay::instance();
@@ -93,8 +92,7 @@ class DisplayGradebook
             $course = CourseManager::getCourseNameFromCode($evalobj->get_course_code());
         }
 
-        $evalinfo = '<table width="100%" border="0"><tr><td>';
-        $evalinfo .= '<h2>'.$evalobj->get_name().'</h2><hr>';
+        $evalinfo = '<h2>'.$evalobj->get_name().'</h2><hr>';
         $evalinfo .= $description;
         $evalinfo .= get_lang('Course').' :<b> '.$course.'</b><br />';
         if (empty($model)) {
@@ -108,10 +106,9 @@ class DisplayGradebook
         if (!$evalobj->has_results()) {
             $evalinfo .= '<br /><i>'.get_lang('No results in evaluation for now').'</i>';
         }
-
         if ('statistics' != $page) {
             if (api_is_allowed_to_edit(null, true)) {
-                $evalinfo .= '<br /><a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
+                $links[] = '<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
                     Display::return_icon(
                         'statistics.png',
                         get_lang('Graphical view'),
@@ -120,15 +117,9 @@ class DisplayGradebook
                     ).'</a>';
             }
         }
-        $evalinfo .= '</td><td>'.
-            Display::return_icon(
-                'tutorial.gif',
-                '',
-                ['style' => 'float:right; position:relative;']
-            )
-            .'</td></table>';
+
+        echo Display::toolbarAction('grade', $links);
         echo $evalinfo;
-        echo $header;
     }
 
     /**
@@ -151,8 +142,8 @@ class DisplayGradebook
         $header .= '<a href="'.$url.'?'.api_get_cidreq().'&selectcat='.$select_cat.'">'.
             Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
-        $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
+        $pageNum = isset($_GET['flatviewlist_page_nr']) ? (int) $_GET['flatviewlist_page_nr'] : null;
+        $perPage = isset($_GET['flatviewlist_per_page']) ? (int) $_GET['flatviewlist_per_page'] : null;
         $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
         $exportCsvUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -291,9 +282,8 @@ class DisplayGradebook
             );
         }
 
-        $objcat = new Category();
         $course_id = CourseManager::get_course_by_category($selectcat);
-        $message_resource = $objcat->show_message_resource_delete($course_id);
+        $message_resource = Category::show_message_resource_delete($course_id);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
         if (isset($catobj) && !empty($catobj)) {
@@ -473,7 +463,7 @@ class DisplayGradebook
                         $actionsLeft .= Display::url(
                             get_lang('Generate custom report'),
                             api_get_path(WEB_AJAX_PATH)."gradebook.ajax.php?$my_api_cidreq&a=generate_custom_report",
-                            ['class' => 'btn btn-default ajax']
+                            ['class' => 'btn btn--plain ajax']
                         );
                     }
 

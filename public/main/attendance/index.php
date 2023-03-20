@@ -180,7 +180,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
+        'url' => api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$student_id,
         'name' => $student_info['complete_name'],
     ];
 }
@@ -213,16 +213,15 @@ $content = '';
 switch ($action) {
     case 'attendance_list':
         if ($allowToEdit) {
-            $content .= '<div class="actions">';
-            $content .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">';
-            $content .= Display::return_icon(
+            $actions = '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">';
+            $actions .= Display::return_icon(
                 'new_attendance_list.png',
                 get_lang('Create a new attendance list'),
                 '',
                 ICON_SIZE_MEDIUM
             );
-            $content .= '</a>';
-            $content .= '</div>';
+            $actions .= '</a>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
         }
 
         if (0 === $attendance->getNumberOfAttendances()) {
@@ -291,7 +290,7 @@ switch ($action) {
             $attendanceId = $attendance->attendance_add($link_to_gradebook);
 
             if ($attendanceId) {
-                Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+                SkillModel::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
                 header('Location: '.$currentUrl.'&action=calendar_add&attendance_id='.$attendanceId);
                 exit;
             }
@@ -335,7 +334,7 @@ switch ($action) {
             }
             $attendance->attendance_edit($attendanceEntity, $link_to_gradebook);
 
-            Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+            SkillModel::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             Security::clear_token();
@@ -405,38 +404,7 @@ switch ($action) {
         if ('attendance_sheet_list_no_edit' === $action) {
             $edit = false;
         }
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
-        $users_in_course = $attendance->get_users_rel_course($attendanceId, $groupId);
-
-        $filter_type = 'today';
-        if (!empty($_REQUEST['filter'])) {
-            $filter_type = $_REQUEST['filter'];
-        }
-
-        if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
-            $my_calendar_id = null;
-            if (is_numeric($filter_type)) {
-                $my_calendar_id = $filter_type;
-                $filter_type = 'calendar_id';
-            }
-            $attendant_calendar = $attendance->get_attendance_calendar(
-                $attendanceId,
-                $filter_type,
-                $my_calendar_id,
-                $groupId
-            );
-            $attendant_calendar_all = $attendance->get_attendance_calendar(
-                $attendanceId,
-                'all',
-                null,
-                $groupId
-            );
-            $users_presence = $attendance->get_users_attendance_sheet($attendanceId, 0, $groupId);
-            $next_attendance_calendar_id = $attendance->get_next_attendance_calendar_id($attendanceId);
-            $next_attendance_calendar_datetime = $attendance->getNextAttendanceCalendarDatetime($attendanceId);
-        }
-        $content = $attendance->getCalendarSheet($edit, $attendanceId, $student_id);
-
+        $content = $attendance->getCalendarSheet($edit, $attendanceEntity, $student_id);
         $tpl->assign('table', $content);
         $content = $tpl->fetch('@ChamiloCore/Attendance/sheet.html.twig');
         break;
@@ -462,7 +430,7 @@ switch ($action) {
                 $attendance->attendance_sheet_add(
                     $cal_id,
                     $users_present,
-                    $attendanceId
+                    $attendanceEntity
                 );
             }
         }
@@ -548,7 +516,7 @@ switch ($action) {
             $groupList = GroupManager::get_group_list(null, null, 1);
             $groupIdList = ['--'];
             foreach ($groupList as $group) {
-                $groupIdList[$group['id']] = $group['name'];
+                $groupIdList[$group['iid']] = $group['name'];
             }
 
             // calendar add form
@@ -589,7 +557,7 @@ switch ($action) {
                 'weekly' => get_lang('Weekly'),
                 'monthlyByDate' => get_lang('Monthly, by date'),
             ];
-            $form->addElement('select', 'repeat_type', get_lang('Repeat type'), $a_repeat_type);
+            $form->addSelect('repeat_type', get_lang('Repeat type'), $a_repeat_type);
 
             $form->addDatePicker(
                 'end_date_time',
@@ -650,8 +618,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $attendance->attendance_calendar_delete(0, $attendanceId, true);
-
+        $attendance->attendance_calendar_delete(0, $attendanceEntity, true);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
 
         header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);
@@ -661,7 +628,7 @@ switch ($action) {
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
-        $attendance->attendance_calendar_delete($calendarId, $attendanceId);
+        $attendance->attendance_calendar_delete($calendarId, $attendanceEntity);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
 
         header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);
@@ -679,21 +646,21 @@ switch ($action) {
         $is_locked_attendance = $attendance->is_locked_attendance($attendanceId);
 
         if (!$is_locked_attendance || api_is_platform_admin()) {
-            $content .= '<div class="actions">';
+            $actions = '';
             if ('calendar_add' === $action) {
-                $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
+                $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                $content .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId.'">'.
+                $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance sheet'), '', ICON_SIZE_MEDIUM).'</a>';
                 if (api_is_allowed_to_edit()) {
-                    $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
                         Display::return_icon('add.png', get_lang('Add a date and time'), '', ICON_SIZE_MEDIUM).'</a>';
-                    $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
                         Display::return_icon('clean.png', get_lang('Clean the calendar of all lists'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
             }
-            $content .= '</div>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
         }
 
         $message_information = get_lang('The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.');
@@ -717,7 +684,7 @@ switch ($action) {
         $groupList = GroupManager::get_group_list();
         $groupIdList = ['--'];
         foreach ($groupList as $group) {
-            $groupIdList[$group['id']] = $group['name'];
+            $groupIdList[$group['iid']] = $group['name'];
         }
 
         $content .= Display::page_subheader(get_lang('Calendar list of attendances'));
@@ -768,10 +735,10 @@ switch ($action) {
     case 'calendar_logins':
         if (api_is_course_admin() || api_is_drh()) {
             $result = $attendance->getAttendanceBaseInLogin(false, true);
-            $content .= '<div class="actions">';
-            $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
-                Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $actions = '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
+                Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).
+                '</a>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $result['form'];
             $content .= $result['table'];
         }

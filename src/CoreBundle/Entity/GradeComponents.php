@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,50 +17,34 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeComponents
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="percentage", type="string", length=255, nullable=false)
      */
-    protected $percentage;
+    protected string $percentage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="acronym", type="string", length=255, nullable=false)
      */
-    protected $acronym;
+    protected string $acronym;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
+     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $gradeModelId;
+    protected GradeModel $gradeModel;
 
-    /**
-     * Set percentage.
-     *
-     * @param string $percentage
-     *
-     * @return GradeComponents
-     */
-    public function setPercentage($percentage)
+    public function setPercentage(string $percentage): self
     {
         $this->percentage = $percentage;
 
@@ -75,14 +61,7 @@ class GradeComponents
         return $this->percentage;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return GradeComponents
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -99,14 +78,7 @@ class GradeComponents
         return $this->title;
     }
 
-    /**
-     * Set acronym.
-     *
-     * @param string $acronym
-     *
-     * @return GradeComponents
-     */
-    public function setAcronym($acronym)
+    public function setAcronym(string $acronym): self
     {
         $this->acronym = $acronym;
 
@@ -124,30 +96,6 @@ class GradeComponents
     }
 
     /**
-     * Set gradeModelId.
-     *
-     * @param int $gradeModelId
-     *
-     * @return GradeComponents
-     */
-    public function setGradeModelId($gradeModelId)
-    {
-        $this->gradeModelId = $gradeModelId;
-
-        return $this;
-    }
-
-    /**
-     * Get gradeModelId.
-     *
-     * @return int
-     */
-    public function getGradeModelId()
-    {
-        return $this->gradeModelId;
-    }
-
-    /**
      * Get id.
      *
      * @return int
@@ -155,5 +103,17 @@ class GradeComponents
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getGradeModel(): GradeModel
+    {
+        return $this->gradeModel;
+    }
+
+    public function setGradeModel(GradeModel $gradeModel): self
+    {
+        $this->gradeModel = $gradeModel;
+
+        return $this;
     }
 }

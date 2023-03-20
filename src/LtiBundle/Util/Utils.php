@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Util;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use OAuthConsumer;
+use OAuthRequest;
+use OAuthSignatureMethod_HMAC_SHA1;
+use URLify;
+use UserManager;
 
-/**
- * Class Utils.
- */
 class Utils
 {
-    private $settingsManager;
+    private SettingsManager $settingsManager;
 
-    /**
-     * Utils constructor.
-     */
     public function __construct(SettingsManager $settingsManager)
     {
         $this->settingsManager = $settingsManager;
@@ -43,9 +44,9 @@ class Utils
         $siteName = $this->settingsManager->getSetting('platform.site_name');
         $institution = $this->settingsManager->getSetting('platform.institution');
 
-        $userString = "$siteName - $institution - $userId";
+        $userString = "{$siteName} - {$institution} - {$userId}";
 
-        return \URLify::filter($userString, 255, '', true, true, false, false, true);
+        return URLify::filter($userString, 255, '', true, true, false, false, true);
     }
 
     /**
@@ -61,7 +62,9 @@ class Utils
         //    return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
         //}
 
-        if ($user->hasRole('ROLE_CURRENT_COURSE_STUDENT') || $user->hasRole('ROLE_CURRENT_SESSION_COURSE_STUDENT')) {
+        if ($user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+        ) {
             return 'Learner';
         }
 
@@ -83,7 +86,7 @@ class Utils
             return '';
         }
 
-        $followedUsers = \UserManager::get_users_followed_by_drh($currentUser->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($currentUser->getId());
         $scope = [];
 
         foreach ($followedUsers as $userInfo) {
@@ -93,10 +96,10 @@ class Utils
         return implode(',', $scope);
     }
 
-    public static function trimParams(array &$params)
+    public static function trimParams(array &$params): void
     {
         foreach ($params as $key => $value) {
-            $newValue = preg_replace('/\s+/', ' ', $value);
+            $newValue = preg_replace('/\s+/', ' ', (string) $value);
 
             $params[$key] = trim($newValue);
         }
@@ -133,12 +136,12 @@ class Utils
      */
     public static function checkRequestSignature($url, $originConsumerKey, $originSignature, ExternalTool $tool)
     {
-        $consumer = new \OAuthConsumer(
+        $consumer = new OAuthConsumer(
             $originConsumerKey,
             $tool->getSharedSecret()
         );
-        $hmacMethod = new \OAuthSignatureMethod_HMAC_SHA1();
-        $oAuthRequest = \OAuthRequest::from_request('POST', $url);
+        $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
+        $oAuthRequest = OAuthRequest::from_request('POST', $url);
         $oAuthRequest->sign_request($hmacMethod, $consumer, '');
         $signature = $oAuthRequest->get_parameter('oauth_signature');
 

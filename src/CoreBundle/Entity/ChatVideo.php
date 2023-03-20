@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="chat_video",
- *     options={"row_format":"DYNAMIC"},
+ *     options={"row_format"="DYNAMIC"},
  *     indexes={
  *         @ORM\Index(name="idx_chat_video_to_user", columns={"to_user"}),
  *         @ORM\Index(name="idx_chat_video_from_user", columns={"from_user"}),
@@ -24,50 +27,38 @@ use Doctrine\ORM\Mapping as ORM;
 class ChatVideo
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="from_user", type="integer", nullable=false)
      */
-    protected $fromUser;
+    protected int $fromUser;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="to_user", type="integer", nullable=false)
      */
-    protected $toUser;
+    protected int $toUser;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="room_name", type="string", nullable=false)
      */
-    protected $roomName;
+    protected string $roomName;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="datetime", type="datetime", nullable=false)
      */
-    protected $datetime;
+    protected DateTime $datetime;
 
     /**
      * Set fromUser.
      *
-     * @param int $fromUser
-     *
      * @return ChatVideo
      */
-    public function setFromUser($fromUser)
+    public function setFromUser(int $fromUser)
     {
         $this->fromUser = $fromUser;
 
@@ -87,11 +78,9 @@ class ChatVideo
     /**
      * Set toUser.
      *
-     * @param int $toUser
-     *
      * @return ChatVideo
      */
-    public function setToUser($toUser)
+    public function setToUser(int $toUser)
     {
         $this->toUser = $toUser;
 
@@ -111,11 +100,9 @@ class ChatVideo
     /**
      * Set room_name.
      *
-     * @param string $roomName
-     *
      * @return ChatVideo
      */
-    public function setRoomName($roomName)
+    public function setRoomName(string $roomName)
     {
         $this->roomName = $roomName;
 
@@ -135,11 +122,9 @@ class ChatVideo
     /**
      * Set datetime.
      *
-     * @param \DateTime $datetime
-     *
      * @return ChatVideo
      */
-    public function setDatetime($datetime)
+    public function setDatetime(DateTime $datetime)
     {
         $this->datetime = $datetime;
 
@@ -149,7 +134,7 @@ class ChatVideo
     /**
      * Get datetime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDatetime()
     {

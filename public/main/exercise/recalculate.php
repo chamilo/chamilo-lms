@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -22,14 +22,14 @@ $studentId = (int) $_REQUEST['user'];
 $exerciseId = (int) $_REQUEST['exercise'];
 $exeId = (int) $_REQUEST['id'];
 
-/** @var TrackEExercises $trackedExercise */
+/** @var TrackEExercise $trackedExercise */
 $trackedExercise = ExerciseLib::recalculateResult(
     $_REQUEST['id'],
     $_REQUEST['user'],
     $_REQUEST['exercise']
 );
 
-$totalScore = $trackedExercise->getExeResult();
-$totalWeight = $trackedExercise->getExeWeighting();
+$totalScore = $trackedExercise->getScore();
+$totalWeight = $trackedExercise->getMaxScore();
 
 echo $totalScore.'/'.$totalWeight;

@@ -13,6 +13,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
+
 // Create the server instance
 $server = new soap_server();
 // Initialize WSDL support
@@ -93,7 +95,7 @@ function WSCourseList($username, $signature, $visibilities = 'public')
         return -1;
     }
 
-    $list = UserManager::get_api_keys($user_id, 'dokeos');
+    $list = UserManager::get_api_keys($user_id, 'default');
     $key = '';
     foreach ($list as $key) {
         break;

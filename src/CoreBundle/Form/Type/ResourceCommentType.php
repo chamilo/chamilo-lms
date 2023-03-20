@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form\Type;
@@ -13,17 +15,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ResourceCommentType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextareaType::class, ['label' => 'Comment'])
+            ->add('content', TextareaType::class, [
+                'label' => 'Comment',
+            ])
             ->add(
                 'save',
                 SubmitType::class
-            );
+            )
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -32,7 +37,7 @@ class ResourceCommentType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_resource_comment';
     }

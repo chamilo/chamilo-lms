@@ -21,11 +21,10 @@ $current_course_tool = TOOL_GROUP;
 api_protect_course_script(true);
 
 $nameTools = get_lang('Groups overview');
-$courseId = api_get_course_int_id();
-$courseInfo = api_get_course_info();
+$course = api_get_course_entity();
 
 $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+$keyword = $_GET['keyword'] ?? '';
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -49,8 +48,8 @@ if (isset($_GET['action'])) {
                         $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
                     }
                 }
-
-                if (!empty($exportList)) {
+                throw new Exception('export_surveys');
+                /*if (!empty($exportList)) {
                     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
                     $zip = new PclZip($tempZipFile);
                     foreach ($exportList as $file) {
@@ -64,7 +63,7 @@ if (isset($_GET['action'])) {
                     );
                     unlink($tempZipFile);
                     exit;
-                }
+                }*/
             }
 
             Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));
@@ -80,10 +79,10 @@ if (isset($_GET['action'])) {
 
             break;
         case 'export_pdf':
-            $content = GroupManager::getOverview($courseId, $keyword);
+            $content = GroupManager::getOverview($course, $keyword);
             $pdf = new PDF();
             $extra = '<div style="text-align:center"><h2>'.get_lang('Groups list').'</h2></div>';
-            $extra .= '<strong>'.get_lang('Course').': </strong>'.$courseInfo['title'].' ('.$courseInfo['code'].')';
+            $extra .= '<strong>'.get_lang('Course').': </strong>'.$course->getTitle().' ('.$course->getCode().')';
 
             $content = $extra.$content;
             $pdf->content_to_pdf($content, null, null, api_get_course_id());
@@ -112,7 +111,7 @@ if (isset($_GET['action'])) {
 
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     // So we are not in learnpath tool
     if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
@@ -157,8 +156,8 @@ Display::return_icon('user.png', get_lang('Go to').' '.get_lang('Users'), '', IC
 
 // Action links
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
-echo GroupManager::getOverview($courseId, $keyword);
+echo GroupManager::getOverview($course, $keyword);
 
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     Display::display_footer();
 }

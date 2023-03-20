@@ -84,7 +84,7 @@ $htmlHeadXtra[] = '<script>
                     success: function (response) {
                         window.location.reload();
                     }
-                }); 
+                });
             }
         });
 
@@ -172,6 +172,7 @@ if ($form->validate()) {
                 );
             }
 
+            throw new Exception('@todo custom certificate upload');
             if ($_FILES[$field]['size']) {
                 $newPicture = api_upload_file(
                     'certificates',
@@ -431,7 +432,7 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
         <div class="col-sm-10">
         <div class="radio" style="margin-top: -25px;">
             <span style="margin: 0 10px; font-style: italic;">'.get_lang('From').'</span>
-            <input 
+            <input
                 size="20"
                 autofocus="autofocus"
                 class="form-control-cert text-center datepicker"
@@ -895,15 +896,13 @@ while ($i < 298) {
     $marginOptions[$i] = $i.' mm';
     $i++;
 }
-$form->addElement(
-    'select',
+$form->addSelect(
     'margin_left',
     get_lang('MarginLeft'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
-$form->addElement(
-    'select',
+$form->addSelect(
     'margin_right',
     get_lang('MarginRight'),
     $marginOptions,

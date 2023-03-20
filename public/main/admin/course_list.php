@@ -39,6 +39,14 @@ function get_number_of_courses()
 function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
 
@@ -115,7 +123,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     if ($getCount) {
-        $sql .= "GROUP BY course.code";
+        $sql .= " GROUP BY course.code";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         if ($row) {
@@ -125,13 +133,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         return 0;
     }
 
-    $sql .= "GROUP BY course.code";
+    $sql .= " GROUP BY course.code";
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 
     $res = Database::query($sql);
     $courses = [];
-    $languages = api_get_languages_to_array();
+    $languages = api_get_languages();
 
     $path = api_get_path(WEB_CODE_PATH);
 
@@ -164,7 +172,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('info2.png', get_lang('Information')),
-            "course_information.php?code=$courseCode"
+            "course_information.php?id=$courseId"
         );
         $actions[] = Display::url(
             Display::return_icon('course_home.png', get_lang('Course home')),
@@ -180,7 +188,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         );
         $actions[] = Display::url(
             Display::return_icon('backup.png', get_lang('Create a backup')),
-            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseId)
+            $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
@@ -223,27 +231,33 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+
+    $session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
 
     $sql = "SELECT
                 c.code AS col0,
                 c.title AS col1,
                 c.code AS col2,
                 c.course_language AS col3,
-                course_category.code AS col4,
-                c.subscribe AS col5,
-                c.unsubscribe AS col6,
-                c.code AS col7,
-                c.visibility AS col8,
-                c.directory as col9,
+                c.subscribe AS col4,
+                c.unsubscribe AS col5,
+                c.code AS col6,
+                c.visibility AS col7,
+                c.directory as col8,
                 c.visual_code
             FROM $course_table c
             INNER JOIN $session_rel_course r
             ON c.id = r.c_id
             INNER JOIN $session s
             ON r.session_id = s.id
-            LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
@@ -435,7 +449,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         '',
         '',
         [],
-        FormValidator::LAYOUT_INLINE
+        FormValidator::LAYOUT_BOX_SEARCH
     );
     $form->addElement(
         'text',
@@ -444,7 +458,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['id' => 'course-search-keyword', 'aria-label' => get_lang('Search courses')]
     );
     $form->addButtonSearch(get_lang('Search courses'));
-    $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced">
+    $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced">
         <em class="fa fa-search"></em> '.
         get_lang('Advanced search').'</a>';
 
@@ -461,7 +475,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $sessionSelect = $sessionFilter->addSelectAjax(
         'session_name',
         get_lang('Search course by session'),
-        null,
+        [],
         ['id' => 'session_name', 'url' => $url]
     );
 
@@ -513,12 +527,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         });
     </script>';
 
-    $actions = Display::toolbarAction(
-        'toolbar',
-        [$actions1, $actions2, $actions3, $actions4],
-        [2, 4, 3, 3]
-    );
-
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions3.$actions4.$actions2]);
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session
         $table = new SortableTable(
@@ -563,7 +572,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header(3, get_lang('Language'), false, 'width="70px"');
     $table->set_header(4, get_lang('Categories'));
     $table->set_header(5, get_lang('Registr. allowed'), true, 'width="60px"');
-    $table->set_header(6, get_lang('UnsubscribeAllowed'), false, 'width="50px"');
+    $table->set_header(6, get_lang('Unreg. allowed'), false, 'width="50px"');
     $table->set_header(
         7,
         get_lang('Action'),

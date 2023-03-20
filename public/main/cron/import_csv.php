@@ -12,7 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 if (PHP_SAPI != 'cli') {
-    die('Run this script through the command line or comment this line in the code');
+    exit('Run this script through the command line or comment this line in the code');
 }
 
 if (file_exists('multiple_url_fix.php')) {
@@ -488,7 +488,7 @@ class ImportCsv
         $extraField = new ExtraField('calendar_event');
         $extraField->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
                 'display_text' => 'External calendar event id',
             ]
@@ -498,7 +498,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['career'],
                 'display_text' => 'External career id',
             ]
@@ -507,7 +507,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_diagram'],
                 'display_text' => 'Career diagram',
             ]
@@ -516,7 +516,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_urls'],
                 'display_text' => 'Career urls',
             ]
@@ -1135,7 +1135,8 @@ class ImportCsv
                             $teacher = current($teachers);
                             $teacherId = $teacher['user_id'];
                         } else {
-                            $teacherId = $sessionInfo['id_coach'];
+                            $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($sessionId);
+                            $teacherId = $generalCoachesId[0] ?? 0;
                         }
                     }
                 } else {
@@ -1666,7 +1667,7 @@ class ImportCsv
                     if (!empty($eventId)) {
                         $extraFieldValue->save(
                             [
-                                'value' => $externalEventId,
+                                'field_value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
                                 'item_id' => $eventId,
                             ]
@@ -1740,19 +1741,19 @@ class ImportCsv
                     $params['teachers'] = $row['teachers'];
                     $params['visibility'] = $row['visibility'];
 
-                    $courseInfo = CourseManager::create_course(
+                    $course = CourseManager::create_course(
                         $params,
                         $this->defaultAdminId
                     );
 
-                    if (!empty($courseInfo)) {
+                    if (null !== $course) {
                         CourseManager::update_course_extra_field_value(
-                            $courseInfo['code'],
+                            $course->getCode(),
                             'external_course_id',
                             $row['extra_'.$this->extraFieldIdNameList['course']]
                         );
 
-                        $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
+                        $this->logger->addInfo("Courses - Course created ".$course->getCode());
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
                     }
@@ -1805,7 +1806,7 @@ class ImportCsv
                         ) {
                             foreach ($groupBackup['tutor'][$teacherId][$courseInfo['code']] as $data) {
                                 $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                GroupManager::subscribe_tutors(
+                                GroupManager::subscribeTutors(
                                     [$teacherId],
                                     $groupInfo,
                                     $data['c_id']
@@ -1818,10 +1819,9 @@ class ImportCsv
                             !empty($groupBackup['user'][$teacherId][$courseInfo['code']])
                         ) {
                             foreach ($groupBackup['user'][$teacherId][$courseInfo['code']] as $data) {
-                                $groupInfo = GroupManager::get_group_properties($data['group_id']);
-                                GroupManager::subscribe_users(
+                                GroupManager::subscribeUsers(
                                     [$teacherId],
-                                    $groupInfo,
+                                    api_get_group_entity($data['group_id']),
                                     $data['c_id']
                                 );
                             }
@@ -2151,7 +2151,7 @@ class ImportCsv
                             $dateEnd,
                             $coachBefore,
                             $coachAfter,
-                            $coachId,
+                            [$coachId],
                             $categoryId,
                             $visibility
                         );
@@ -2509,7 +2509,7 @@ class ImportCsv
 
                 $result = CourseManager::subscribeUser(
                     $userId,
-                    $courseInfo['code'],
+                    $courseInfo['real_id'],
                     $status,
                     0,
                     $userCourseCategory
@@ -3107,18 +3107,16 @@ class ImportCsv
             Database::get_main_table(TABLE_PERSONAL_AGENDA),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
-            Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS),
-            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
-            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY),
             Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY),
             Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION),
             Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG),

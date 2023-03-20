@@ -1,8 +1,6 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * Script.
- */
 
 /**
  * Prints an HTML page with a table containing the gradebook data.

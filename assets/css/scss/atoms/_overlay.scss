@@ -1,0 +1,11 @@
+.p-component-overlay {
+  @apply bg-gray-30 duration-200;
+}
+
+.p-component-overlay-enter {
+  animation: p-component-overlay-enter-animation 150ms forwards;
+}
+
+.p-component-overlay-leave {
+  animation: p-component-overlay-leave-animation 150ms forwards;
+}

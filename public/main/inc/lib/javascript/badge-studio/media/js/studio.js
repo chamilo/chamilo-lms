@@ -86,7 +86,7 @@ function initGlyphSelector() {
     var glyphLog = [];
 
     $glyphSelectorButton = document.createElement('button');
-    $glyphSelectorButton.className = 'btn btn-default pull-right';
+    $glyphSelectorButton.className = 'btn btn--plain pull-right';
     $glyphSelectorButton.id = 'search-glyphs';
     $glyphSelectorButton.type = 'button';
     $glyphSelectorButton.innerHTML = '<em class="fa fa-search"></em> Search';
@@ -469,7 +469,9 @@ function setCustomColors() {
     for (var i = 0, l = colors.length; i < l; i++) {
         var colorName = colors[i];
         var colorValue = palette.color(colorName);
-        $custom.setAttribute('data-color-' + colorName, colorValue);
+        if ($custom) {
+            $custom.setAttribute('data-color-' + colorName, colorValue);
+        }
         var $input = document.getElementById('custom-color-picker-' + colorName);
         if ($input) {
             $input.value = colorValue;

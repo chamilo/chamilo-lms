@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,33 +9,29 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceRule.
- *
  * @ORM\Table(name="sequence_valid")
  * @ORM\Entity
  */
 class SequenceValid
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceVariable")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
      */
-    protected $variable;
+    protected ?SequenceVariable $variable = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceCondition")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
-    protected $condition;
+    protected ?SequenceCondition $condition = null;
 
     /**
      * Get id.
@@ -45,7 +43,7 @@ class SequenceValid
         return $this->id;
     }
 
-    public function getVariable()
+    public function getVariable(): ?SequenceVariable
     {
         return $this->variable;
     }
@@ -53,14 +51,14 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setVariable($variable)
+    public function setVariable(?SequenceVariable $variable): self
     {
         $this->variable = $variable;
 
         return $this;
     }
 
-    public function getCondition()
+    public function getCondition(): ?SequenceCondition
     {
         return $this->condition;
     }
@@ -68,7 +66,7 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setCondition($condition)
+    public function setCondition(?SequenceCondition $condition): self
     {
         $this->condition = $condition;
 

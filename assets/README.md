@@ -6,7 +6,7 @@ For this, we first need to install yarn.
 Yarn is a JavaScript dependencies manager similar to Bower (that we also used for development in Chamilo 1.11.x), 
 only that Bower is deprecated now.
 
-To install yarn, follow the installation instructions here https://yarnpkg.com/en/docs/install
+To install yarn v2, follow the installation instructions here https://yarnpkg.com/getting-started/install
 
 After the installation run this command in the Chamilo root:
 
@@ -14,17 +14,15 @@ After the installation run this command in the Chamilo root:
 
 yarn will read the dependencies in the **packages.json** file and save the dependencies in the 'node_modules' folder (which must **NOT** be committed** to the Chamilo repository).
 
+To upgrade packages:
+
+``yarn up``
+
 # Configuring Encore/Webpack
 
 Webpack takes CSS, JS and other files and generates tidy single-files to attach to your web package.
 
-The behaviour of how packages will be processed is describe here: "webpack.config.js".
-
-If the public/js/fos_js_routes.json file does not exist (or if you're in doubt about the version of your PHP libs), run:
-```
-composer update
-bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
-```
+The behaviour of how packages will be processed is described here: "webpack.config.js".
 
 Then, to create the public/build contents, run one of the following commands:
 To compile assets just once:

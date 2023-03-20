@@ -3,64 +3,68 @@
 {% block content %}
     {% autoescape false %}
         {% if not admin_chamilo_announcements_disable %}
-            <div class="alert alert-info alert-dismissible fade show d-none" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|trans }}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div id="chamilo-news-content"></div>
+            <div class="p-message p-component p-message-info" role="alert" style="display: none;">
+                <div class="p-message-wrapper">
+                    <span class="p-message-icon pi pi-info-circle"></span>
+                    <div class="p-message-text" id="chamilo-news-content"></div>
+                </div>
             </div>
         {% endif %}
 
-        <div id="settings" >
-            <div class="row">
+        <div id="settings" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
             {% for block_item in blocks_admin %}
-                <div id="tabs-{{ loop.index }}" class="col-4">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="card-title">{{ block_item.icon }} {{ block_item.label }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-search">
-                                {{ block_item.search_form }}
+                <section id="tabs-{{ loop.index }}" class="{{ block_item.class }}">
+                    <div class="p-card p-component">
+                        <div class="p-card-body">
+                            <div class="p-card-title">
+                                <h5>
+                                    {% if block_item.mdi_icon %}
+                                        <span class="mdi mdi-{{ block_item.mdi_icon }}" aria-hidden="true"></span>
+                                    {% endif %}
+                                    {{ block_item.label }}
+                                </h5>
                             </div>
-                            <div class="card-description mp-3 mb-3">
-                                {% if block_item.description is defined %}
-                                    {{ block_item.description }}
+
+                            {% if block_item.description is defined %}
+                                <div class="p-card-subtitle">{{ block_item.description }}</div>
+                            {% endif %}
+
+                            <div class="p-card-content flex flex-col gap-5">
+                                {{ block_item.search_form }}
+
+                                <div class="p-menu p-component p-ripple-disabled">
+                                    <ul class="p-menu-list p-reset" role="menu">
+                                        {% for url in block_item.items %}
+                                            {% if url.url is not empty %}
+                                                <li class="p-menuitem">
+                                                    <a class="p-menuitem-link" href="{{ url.url }}" role="menuitem">
+                                                        <span class="p-menuitem-text">{{ url.label }}</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                {% if block_item.extra is not null %}
+                                    <div>
+                                        {{ block_item.extra }}
+                                    </div>
                                 {% endif %}
                             </div>
-                            {% if block_item.items is not empty %}
-                                <ul class="list-group">
-                                    {% for url in block_item.items %}
-                                        {% if url.url is not empty %}
-                                            <li class="list-group-item">
-                                                <a href="{{ url.url }}">
-                                                    {{ url.label }}
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if block_item.extra is not null %}
-                                <div>
-                                    {{ block_item.extra }}
-                                </div>
-                            {% endif %}
                         </div>
                     </div>
-                </div>
+                </section>
             {% endfor %}
-            </div>
 
-            <div class="row">
-                {% for role in app.user.roles %}
-                    {% set role = role | lower | replace ({ 'role_' : ''}) %}
-                    {% if role in ['global_admin'] %}
-                        {% include '@ChamiloCore/Admin/' ~ role ~ '/role_index.html.twig' %}
-                    {% endif %}
-                {% endfor %}
-            </div>
+{#            <div class="row">#}
+{#                {% for role in app.user.roles %}#}
+{#                    {% set role = role | lower | replace ({ 'role_' : ''}) %}#}
+{#                    {% if role in ['global_admin'] %}#}
+{#                        {% include '@ChamiloCore/Admin/' ~ role ~ '/role_index.html.twig' %}#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            </div>#}
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}
@@ -80,10 +84,10 @@
                                 if (!response.length) {
                                     return;
                                 }
-
-                                $(this).parent().removeClass('d-none');
+                                $('#chamilo-news-content').parents('.p-message').show();
                             }
                         );
+
                     {% endif %}
                 });
             </script>

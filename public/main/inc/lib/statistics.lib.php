@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 
 /**
  * This class provides some functions for statistics.
@@ -50,8 +51,8 @@ class Statistics
         $categoryCondition = '';
 
         if (!empty($categoryCode)) {
-            $categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
-            $categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
+            //$categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
+            //$categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -132,8 +133,9 @@ class Statistics
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $urlId = api_get_current_access_url_id();
-        $active_filter = $onlyActive ? ' AND active=1' : '';
+        $active_filter = $onlyActive ? ' AND active = 1' : '';
         $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
 
         if (api_is_multiple_url_enabled()) {
@@ -141,31 +143,35 @@ class Statistics
                     FROM $user_table as u, $access_url_rel_user_table as url
                     WHERE
                         u.id = url.user_id AND
-                        access_url_id = '".$urlId."'
+                        access_url_id = $urlId
                         $status_filter $active_filter";
             if (isset($categoryCode)) {
+                $categoryCode = Database::escape_string($categoryCode);
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                        FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
-                        INNER JOIN $tblCourseCategory course_category ON c.category_id = course_category.id
+                        FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url, $tblCourseRelCategory crc, $tblCourseCategory cc
                         WHERE
                             c.id = cu.c_id AND
-                            course_category.code = '".Database::escape_string($categoryCode)."' AND
+                            cc.code = '$categoryCode' AND
+                            crc.course_category_id = cc.id AND
+                            crc.course_id = c.id AND
                             cu.user_id = url.user_id AND
-                            access_url_id='".$urlId."'
+                            access_url_id = $urlId
                             $status_filter $active_filter";
             }
         } else {
             $sql = "SELECT COUNT(DISTINCT(id)) AS number
                     FROM $user_table
-                    WHERE 1=1 $status_filter $active_filter";
+                    WHERE 1 = 1 $status_filter $active_filter";
             if (isset($categoryCode)) {
+                $categoryCode = Database::escape_string($categoryCode);
                 $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                        FROM $course_user_table cu, $course_table c
-                        INNER JOIN $tblCourseCategory course_category ON c.category_id = course_category.id
+                        FROM $course_user_table cu, $course_table c, $tblCourseRelCategory crc, $tblCourseCategory cc
                         WHERE
                             c.id = cu.c_id AND
-                            course_category.code = '".Database::escape_string($categoryCode)."'
+                            cc.code = '$categoryCode' AND
+                            crc.course_category_id = cc.id AND
+                            crc.course_id = c.id AND
                             $status_filter
                             $active_filter
                         ";
@@ -412,26 +418,6 @@ class Statistics
         }
 
         return $activities;
-    }
-
-    /**
-     * Get all course categories.
-     *
-     * @return array All course categories (code => name)
-     */
-    public static function getCourseCategories()
-    {
-        $categoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, name
-                FROM $categoryTable
-                ORDER BY tree_pos";
-        $res = Database::query($sql);
-        $categories = [];
-        while ($category = Database::fetch_object($res)) {
-            $categories[$category->code] = $category->name;
-        }
-
-        return $categories;
     }
 
     /**
@@ -991,7 +977,7 @@ class Statistics
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         }
-        $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
+        $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 
@@ -1098,7 +1084,7 @@ class Statistics
                     LEFT JOIN $user_table u
                     ON (uf.user_id = u.id)
                     WHERE
-                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
+                        uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
                         uf.user_id = url.user_id AND
                         access_url_id = '".$urlId."'
                     GROUP BY uf.user_id
@@ -1108,7 +1094,7 @@ class Statistics
                     FROM $user_friend_table uf
                     LEFT JOIN $user_table u
                     ON (uf.user_id = u.id)
-                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+                    WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                     GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         }

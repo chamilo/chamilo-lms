@@ -1,88 +1,63 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CWikiDiscuss.
  *
  * @ORM\Table(
- *  name="c_wiki_discuss",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_wiki_discuss",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CWikiDiscuss
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
-    protected $publicationId;
+    protected int $publicationId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="userc_id", type="integer", nullable=false)
      */
-    protected $usercId;
+    protected int $usercId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="p_score", type="string", length=255, nullable=true)
      */
-    protected $pScore;
+    protected ?string $pScore = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="dtime", type="datetime", nullable=false)
      */
-    protected $dtime;
-
-    /**
-     * Set publicationId.
-     *
-     * @param int $publicationId
-     *
-     * @return CWikiDiscuss
-     */
-    public function setPublicationId($publicationId)
-    {
-        $this->publicationId = $publicationId;
-
-        return $this;
-    }
+    protected DateTime $dtime;
 
     /**
      * Get publicationId.
@@ -95,15 +70,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set usercId.
-     *
-     * @param int $usercId
+     * Set publicationId.
      *
      * @return CWikiDiscuss
      */
-    public function setUsercId($usercId)
+    public function setPublicationId(int $publicationId)
     {
-        $this->usercId = $usercId;
+        $this->publicationId = $publicationId;
 
         return $this;
     }
@@ -119,15 +92,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set comment.
-     *
-     * @param string $comment
+     * Set usercId.
      *
      * @return CWikiDiscuss
      */
-    public function setComment($comment)
+    public function setUsercId(int $usercId)
     {
-        $this->comment = $comment;
+        $this->usercId = $usercId;
 
         return $this;
     }
@@ -143,15 +114,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set pScore.
-     *
-     * @param string $pScore
+     * Set comment.
      *
      * @return CWikiDiscuss
      */
-    public function setPScore($pScore)
+    public function setComment(string $comment)
     {
-        $this->pScore = $pScore;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -167,15 +136,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set dtime.
-     *
-     * @param \DateTime $dtime
+     * Set pScore.
      *
      * @return CWikiDiscuss
      */
-    public function setDtime($dtime)
+    public function setPScore(string $pScore)
     {
-        $this->dtime = $dtime;
+        $this->pScore = $pScore;
 
         return $this;
     }
@@ -183,7 +150,7 @@ class CWikiDiscuss
     /**
      * Get dtime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDtime()
     {
@@ -191,15 +158,13 @@ class CWikiDiscuss
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * Set dtime.
      *
      * @return CWikiDiscuss
      */
-    public function setCId($cId)
+    public function setDtime(DateTime $dtime)
     {
-        $this->cId = $cId;
+        $this->dtime = $dtime;
 
         return $this;
     }
@@ -212,5 +177,17 @@ class CWikiDiscuss
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set cId.
+     *
+     * @return CWikiDiscuss
+     */
+    public function setCId(int $cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
     }
 }

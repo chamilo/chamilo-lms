@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\WhispeakAuth\Controller;
 use Chamilo\UserBundle\Entity\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
+use WhispeakAuthPlugin;
 
 /**
  * Class BaseController.
@@ -13,7 +14,7 @@ use FFMpeg\Format\Audio\Wav;
 abstract class BaseController
 {
     /**
-     * @var \WhispeakAuthPlugin
+     * @var WhispeakAuthPlugin
      */
     protected $plugin;
 
@@ -22,7 +23,7 @@ abstract class BaseController
      */
     public function __construct()
     {
-        $this->plugin = \WhispeakAuthPlugin::create();
+        $this->plugin = WhispeakAuthPlugin::create();
     }
 
     /**
@@ -39,9 +40,10 @@ abstract class BaseController
      */
     protected function uploadAudioFile(User $user)
     {
+        throw new Exception('@todo uploadAudioFile');
         $pluginName = $this->plugin->get_name();
 
-        $path = api_upload_file($pluginName, $_FILES['audio'], $user->getId());
+        //$path = api_upload_file($pluginName, $_FILES['audio'], $user->getId());
 
         if (false === $path) {
             throw new \Exception(get_lang('UploadError'));

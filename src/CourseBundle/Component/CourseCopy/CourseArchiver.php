@@ -6,6 +6,8 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+use DateTime;
+use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -80,7 +82,7 @@ class CourseArchiver
         $course_info_file = $backup_dir.'course_info.dat';
 
         $user = api_get_user_info();
-        $date = new \DateTime(api_get_local_time());
+        $date = new DateTime(api_get_local_time());
         $zipFileName = $user['user_id'].'_'.$course->code.'_'.$date->format('Ymd-His').'.zip';
         $zipFilePath = $backupDirectory.$zipFileName;
 
@@ -194,7 +196,7 @@ class CourseArchiver
         }
 
         // Zip the course-contents
-        $zip = new \PclZip($zipFilePath);
+        $zip = new PclZip($zipFilePath);
         $zip->create($backup_dir, PCLZIP_OPT_REMOVE_PATH, $backup_dir);
 
         // Remove the temp-dir.
@@ -279,84 +281,5 @@ class CourseArchiver
      */
     public static function readCourse($filename, $delete = false)
     {
-        self::cleanBackupDir();
-        // Create a temp directory
-        $tmp_dir_name = 'CourseArchiver_'.uniqid('');
-        $unzip_dir = self::getBackupDir().$tmp_dir_name;
-        $filePath = self::getBackupDir().$filename;
-
-        @mkdir($unzip_dir, api_get_permissions_for_new_directories(), true);
-        @copy(
-            $filePath,
-            $unzip_dir.'/backup.zip'
-        );
-
-        // unzip the archive
-        $zip = new \PclZip($unzip_dir.'/backup.zip');
-        @chdir($unzip_dir);
-
-        $zip->extract(
-            PCLZIP_OPT_TEMP_FILE_ON,
-            PCLZIP_CB_PRE_EXTRACT,
-            'clean_up_files_in_zip'
-        );
-
-        // remove the archive-file
-        if ($delete) {
-            @unlink($filePath);
-        }
-
-        // read the course
-        if (!is_file('course_info.dat')) {
-            return new Course();
-        }
-
-        $fp = @fopen('course_info.dat', 'r');
-        $contents = @fread($fp, filesize('course_info.dat'));
-        @fclose($fp);
-
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Course', 'Course');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement', 'Announcement');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance', 'Attendance');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent', 'CalendarEvent');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath', 'CourseCopyLearnpath');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory', 'CourseCopyTestCategory');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription', 'CourseDescription');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession', 'CourseSession');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Document', 'Document');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum', 'Forum');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory', 'ForumCategory');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost', 'ForumPost');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic', 'ForumTopic');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary', 'Glossary');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup', 'GradeBookBackup');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Link', 'Link');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory', 'LinkCategory');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz', 'Quiz');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion', 'QuizQuestion');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption', 'QuizQuestionOption');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument', 'ScormDocument');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey', 'Survey');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation', 'SurveyInvitation');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion', 'SurveyQuestion');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic', 'Thematic');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro', 'ToolIntro');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki', 'Wiki');
-        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
-
-        /** @var Course $course */
-        $course = \UnserializeApi::unserialize('course', base64_decode($contents));
-
-        if (!in_array(
-            get_class($course),
-            ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course']
-        )
-        ) {
-            return new Course();
-        }
-
-        $course->backup_path = $unzip_dir;
-
-        return $course;
     }
 }

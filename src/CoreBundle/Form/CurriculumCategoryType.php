@@ -1,26 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CurriculumCategoryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $entity = $builder->getData();
 
-        $builder->add('title', 'text');
-        $builder->add('max_score', 'text');
-        $builder->add('min_chars', 'text');
-        $builder->add('min_chars', 'text');
+        $builder->add('title', TextType::class);
+        $builder->add('max_score', TextType::class);
+        $builder->add('min_chars', TextType::class);
+        $builder->add('min_chars', TextType::class);
 
-        $builder->add('c_id', 'hidden');
-        $builder->add('session_id', 'hidden');
+        $builder->add('c_id', HiddenType::class);
+        $builder->add('session_id', HiddenType::class);
 
         $course = $entity->getCourse();
         $session = $entity->getSession();
@@ -30,13 +35,17 @@ class CurriculumCategoryType extends AbstractType
             'entity',
             [
                 'class' => 'Entity\CurriculumCategory',
-                'query_builder' => function ($repository) use ($course,
+                'query_builder' => function ($repository) use (
+                    $course,
                     $session
                 ) {
                     $qb = $repository->createQueryBuilder('c')
                         ->where('c.cId = :id')
-                        ->orderBy('c.title', 'ASC');
-                    $parameters = ['id' => $course->getId()];
+                        ->orderBy('c.title', 'ASC')
+                    ;
+                    $parameters = [
+                        'id' => $course->getId(),
+                    ];
 
                     if (!empty($session)) {
                         $qb->andWhere('c.sessionId = :session_id');
@@ -51,10 +60,10 @@ class CurriculumCategoryType extends AbstractType
             ]
         );
 
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -63,7 +72,7 @@ class CurriculumCategoryType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'curriculumCategory';
     }

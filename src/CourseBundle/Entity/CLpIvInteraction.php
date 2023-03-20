@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -10,110 +12,84 @@ use Doctrine\ORM\Mapping as ORM;
  * CLpIvInteraction.
  *
  * @ORM\Table(
- *  name="c_lp_iv_interaction",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
- *  }
+ *     name="c_lp_iv_interaction",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CLpIvInteraction
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
-    protected $orderId;
+    protected int $orderId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
      */
-    protected $lpIvId;
+    protected int $lpIvId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="interaction_id", type="string", length=255, nullable=false)
      */
-    protected $interactionId;
+    protected string $interactionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="interaction_type", type="string", length=255, nullable=false)
      */
-    protected $interactionType;
+    protected string $interactionType;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="weighting", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $weighting;
+    protected float $weighting;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="completion_time", type="string", length=16, nullable=false)
      */
-    protected $completionTime;
+    protected string $completionTime;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="correct_responses", type="text", nullable=false)
      */
-    protected $correctResponses;
+    protected string $correctResponses;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="student_response", type="text", nullable=false)
      */
-    protected $studentResponse;
+    protected string $studentResponse;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="result", type="string", length=255, nullable=false)
      */
-    protected $result;
+    protected string $result;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="latency", type="string", length=16, nullable=false)
      */
-    protected $latency;
+    protected string $latency;
 
     /**
      * Set orderId.
      *
-     * @param int $orderId
-     *
      * @return CLpIvInteraction
      */
-    public function setOrderId($orderId)
+    public function setOrderId(int $orderId)
     {
         $this->orderId = $orderId;
 
@@ -133,11 +109,9 @@ class CLpIvInteraction
     /**
      * Set lpIvId.
      *
-     * @param int $lpIvId
-     *
      * @return CLpIvInteraction
      */
-    public function setLpIvId($lpIvId)
+    public function setLpIvId(int $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -157,11 +131,9 @@ class CLpIvInteraction
     /**
      * Set interactionId.
      *
-     * @param string $interactionId
-     *
      * @return CLpIvInteraction
      */
-    public function setInteractionId($interactionId)
+    public function setInteractionId(string $interactionId)
     {
         $this->interactionId = $interactionId;
 
@@ -181,11 +153,9 @@ class CLpIvInteraction
     /**
      * Set interactionType.
      *
-     * @param string $interactionType
-     *
      * @return CLpIvInteraction
      */
-    public function setInteractionType($interactionType)
+    public function setInteractionType(string $interactionType)
     {
         $this->interactionType = $interactionType;
 
@@ -205,11 +175,9 @@ class CLpIvInteraction
     /**
      * Set weighting.
      *
-     * @param float $weighting
-     *
      * @return CLpIvInteraction
      */
-    public function setWeighting($weighting)
+    public function setWeighting(float $weighting)
     {
         $this->weighting = $weighting;
 
@@ -229,11 +197,9 @@ class CLpIvInteraction
     /**
      * Set completionTime.
      *
-     * @param string $completionTime
-     *
      * @return CLpIvInteraction
      */
-    public function setCompletionTime($completionTime)
+    public function setCompletionTime(string $completionTime)
     {
         $this->completionTime = $completionTime;
 
@@ -253,11 +219,9 @@ class CLpIvInteraction
     /**
      * Set correctResponses.
      *
-     * @param string $correctResponses
-     *
      * @return CLpIvInteraction
      */
-    public function setCorrectResponses($correctResponses)
+    public function setCorrectResponses(string $correctResponses)
     {
         $this->correctResponses = $correctResponses;
 
@@ -277,11 +241,9 @@ class CLpIvInteraction
     /**
      * Set studentResponse.
      *
-     * @param string $studentResponse
-     *
      * @return CLpIvInteraction
      */
-    public function setStudentResponse($studentResponse)
+    public function setStudentResponse(string $studentResponse)
     {
         $this->studentResponse = $studentResponse;
 
@@ -301,11 +263,9 @@ class CLpIvInteraction
     /**
      * Set result.
      *
-     * @param string $result
-     *
      * @return CLpIvInteraction
      */
-    public function setResult($result)
+    public function setResult(string $result)
     {
         $this->result = $result;
 
@@ -325,11 +285,9 @@ class CLpIvInteraction
     /**
      * Set latency.
      *
-     * @param string $latency
-     *
      * @return CLpIvInteraction
      */
-    public function setLatency($latency)
+    public function setLatency(string $latency)
     {
         $this->latency = $latency;
 
@@ -349,11 +307,9 @@ class CLpIvInteraction
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CLpIvInteraction
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

@@ -3,7 +3,6 @@ services:
         autowire: true
         public: true
 
-    # Platform settings
     chamilo_core.settings.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:
@@ -42,8 +41,8 @@ services:
     chamilo_core.settings.course:
         class: Chamilo\CoreBundle\Settings\CourseSettingsSchema
         calls:
-            - [setToolChain, ['@Chamilo\CoreBundle\ToolChain']]
-#            - [setRepository, ['@Chamilo\CoreBundle\Repository\CourseRepository']]
+            - [setToolChain, ['@Chamilo\CoreBundle\Tool\ToolChain']]
+#            - [setRepository, ['@Chamilo\CoreBundle\Repository\Node\CourseRepository']]
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course}
 

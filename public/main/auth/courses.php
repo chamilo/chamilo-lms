@@ -106,12 +106,11 @@ switch ($action) {
         exit;
         break;
     case 'subscribe_course':
+        $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (api_is_anonymous()) {
-            //header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
             header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
             exit;
         }
-        $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (Security::check_token('get')) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
@@ -514,15 +513,15 @@ switch ($action) {
                     // if user registered as student
                     if ($userRegisteredInCourse) {
                         $course['already_registered_formatted'] = Display::url(
-                            Display::returnFontAwesomeIcon('external-link').'&nbsp;'.
+                            Display::getMdiIcon('external-link', 'mdi-tool-icon-button').'&nbsp;'.
                             get_lang('GoToCourse'),
                             $courseUrl.$course['directory'].'/index.php?id_session=0',
-                            ['class' => 'btn btn-primary']
+                            ['class' => 'btn btn--primary']
                         );
                         if (!$courseClosed && $course_unsubscribe_allowed &&
                             false === $userRegisteredInCourseAsTeacher
                         ) {
-                                $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
+                            $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
                                     $course,
                                     $stok,
                                     $searchTerm,

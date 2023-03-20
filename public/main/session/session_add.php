@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,10 +21,6 @@ api_protect_limit_for_session_admin();
 
 $formSent = 0;
 $errorMsg = '';
-
-// Crop picture plugin for session images
-//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
@@ -135,8 +134,6 @@ $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form);
 
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
-$urlUpload = api_get_path(WEB_UPLOAD_PATH);
-$sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
 $htmlHeadXtra[] = "
@@ -152,24 +149,27 @@ $(function() {
             url: '".$url."',
             data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
             success: function(data) {
-                if (data.session_category_id > 0) {
+                /*if (data.session_category_id > 0) {
                     $('#session_category').val(data.session_category_id);
                     $('#session_category').selectpicker('render');
                 } else {
                     $('#session_category').val(0);
                     $('#session_category').selectpicker('render');
-                }
+                }*/
 
-                CKEDITOR.instances.description.setData(data.description);
+                $('#session_category').val(data.session_category_id);
+                $('#session_category').trigger('change');
+
+                setContentFromEditor('description', data.description);
 
                 if (data.duration > 0) {
                     $('#access').val(0);
-                    $('#access').selectpicker('render');
+                    $('#access').trigger('change');
                     accessSwitcher(0);
                     $('#duration').val(parseInt(data.duration));
                 } else {
                     $('#access').val(1);
-                    $('#access').selectpicker('render');
+                    $('#access').trigger('change');
                     accessSwitcher(1);
 
                     var variables = [
@@ -183,13 +183,12 @@ $(function() {
                     variables.forEach(function(variable) {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
-                            var parsedDate = $.datepicker.parseDateTime(
-                                'yy-mm-dd',
-                                'hh:mm:ss',
-                                data[variableName]
-                            );
+                            console.log(data[variableName]);
+                            let parsedDate = data[variableName];
                             if (parsedDate) {
-                                $('#'+variable).datetimepicker('setDate', parsedDate);
+                                 var item = $('#'+variable);
+                                 flatpickr = item[0]._flatpickr;
+                                 flatpickr.setDate(parsedDate);
                             }
                         }
                     });
@@ -231,7 +230,7 @@ $(function() {
                     const FIELD_TYPE_ALPHANUMERIC = 21;
                     const FIELD_TYPE_LETTERS_SPACE = 22;
                     const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;*/
-                    switch (item.field_type) {
+                    switch (item.value_type) {
                         case '1': // text
                         case '6': // date
                         case '7': // datetime
@@ -242,7 +241,7 @@ $(function() {
                             $('input[name='+fieldName+']').val(item.value);
                             break;
                         case '2': // textarea
-                            CKEDITOR.instances[fieldName].setData(item.value);
+                            setContentFromEditor(fieldName, item.value);
                             break;
                         case '3': // radio
                             var radio = fieldName+'['+fieldName+']';
@@ -325,12 +324,8 @@ $(function() {
                             }
                             break;
                         case '16':
-                            if (item.value) {
-                                //    $('input[name='+fieldName+']').val(item.value);
-                                var url = '".$urlUpload."';
-
-                                url = url + item.value;
-
+                            if (item.url) {
+                                var url = item.url;
                                 var divFormGroup = fieldName + '-form-group';
                                 var divWrapper = fieldName + '_crop_image';
                                 var divPreview = fieldName + '_preview_image';
@@ -357,9 +352,7 @@ $form->addButtonNext(get_lang('Next step'));
 
 if (!$formSent) {
     $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
-    $formDefaults['coach_username'] = api_get_user_id();
-} else {
-    $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES);
+    $formDefaults['coach_username'] = [api_get_user_id()];
 }
 
 $form->setDefaults($formDefaults);
@@ -376,7 +369,7 @@ if ($form->validate()) {
         $coachStartDate = $displayStartDate;
     }
     $coachEndDate = $params['coach_access_end_date'];
-    $coach_username = intval($params['coach_username']);
+    $coachUsername = $params['coach_username'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
@@ -411,12 +404,13 @@ if ($form->validate()) {
             $extraFieldInfo['id']
         );
 
-        if ($extraFieldValueData && file_exists($sysUploadPath.$extraFieldValueData['value'])) {
-            $extraFields['extra_image']['name'] = basename($extraFieldValueData['value']);
-            $extraFields['extra_image']['tmp_name'] = $sysUploadPath.$extraFieldValueData['value'];
-            $extraFields['extra_image']['type'] = 'image/png';
-            $extraFields['extra_image']['error'] = 0;
-            $extraFields['extra_image']['size'] = filesize($sysUploadPath.$extraFieldValueData['value']);
+        if ($extraFieldValueData) {
+            $repo = Container::getAssetRepository();
+            /** @var Asset $asset */
+            $asset = $repo->find($extraFieldValueData);
+            if ($asset) {
+                $extraFields['extra_image']['id'] = $extraFieldValueData;
+            }
         }
     }
 
@@ -428,7 +422,7 @@ if ($form->validate()) {
         $displayEndDate,
         $coachStartDate,
         $coachEndDate,
-        $coach_username,
+        $coachUsername,
         $id_session_category,
         $id_visibility,
         false,
@@ -455,11 +449,9 @@ if (!empty($return)) {
     echo Display::return_message($return, 'error', false);
 }
 
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
+$actions = '<a href="../session/session_list.php">'.
     Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+echo Display::toolbarAction('session', [$actions]);
 $form->display();
 
 Display::display_footer();

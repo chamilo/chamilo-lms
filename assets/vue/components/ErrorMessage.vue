@@ -1,7 +1,7 @@
 <template>
     <div
-            class="alert alert-danger"
-            role="alert"
+      class="alert alert-danger"
+      role="alert"
     >
         {{ error.response.data.error }}
         {{ error.response.data.message }}
@@ -9,13 +9,13 @@
 </template>
 
 <script>
-    export default {
-        name: "ErrorMessage",
-        props: {
-            error: {
-                type: Error,
-                required: true
-            }
-        },
+export default {
+  name: "ErrorMessage",
+  props: {
+    error: {
+      type: Error,
+      required: true
     }
+  },
+}
 </script>

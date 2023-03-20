@@ -23,7 +23,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Careers and promotions'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
@@ -76,7 +76,9 @@ $extra_params['height'] = 'auto';
 $diagramLink = '';
 $allow = api_get_configuration_value('allow_career_diagram');
 if ($allow) {
-    $diagramLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
+    $diagramLink = '<a
+        href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.
+        get_lang('Diagram').'</a>';
 }
 
 // With this function we can add actions to the jgrid (edit, delete, etc)
@@ -114,14 +116,12 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $res = $career->save($values);
-                if ($res) {
-                    Display::addFlash(
-                        Display::return_message(get_lang('Item added'), 'confirmation')
-                    );
-                }
+            $values = $form->exportValues();
+            $res = $career->save($values);
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Item added'), 'confirmation')
+                );
             }
             header('Location: '.$listUrl);
             exit;
@@ -130,8 +130,7 @@ switch ($action) {
             $content .= '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
 
@@ -149,37 +148,35 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
-                $old_status = $career->get_status($values['id']);
-                $res = $career->update($values);
+            $values = $form->exportValues();
+            $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
+            $old_status = $career->get_status($values['id']);
+            $res = $career->update($values);
 
-                $values['item_id'] = $values['id'];
-                $sessionFieldValue = new ExtraFieldValue('career');
-                $sessionFieldValue->saveFieldValues($values);
+            $values['item_id'] = $values['id'];
+            $sessionFieldValue = new ExtraFieldValue('career');
+            $sessionFieldValue->saveFieldValues($values);
 
-                if ($res) {
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Career updated successfully'), 'confirmation')
+                );
+                if ($values['status'] && !$old_status) {
                     Display::addFlash(
-                        Display::return_message(get_lang('Career updated successfully'), 'confirmation')
+                        Display::return_message(
+                            sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
+                            'confirmation',
+                            false
+                        )
                     );
-                    if ($values['status'] && !$old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    } elseif (!$values['status'] && $old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    }
+                } elseif (!$values['status'] && $old_status) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
+                            'confirmation',
+                            false
+                        )
+                    );
                 }
             }
             header('Location: '.$listUrl);
@@ -188,8 +185,7 @@ switch ($action) {
             $content .= '<div class="actions">';
             $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
 
@@ -256,5 +252,4 @@ Display::display_header($tool_name);
 <?php
 
 echo $content;
-
 Display::display_footer();

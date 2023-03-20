@@ -150,10 +150,10 @@ $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::returnFontAwesomeIcon('file-excel-o').
+    Display::getMdiIcon('file-excel-outline').
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'buycourses/src/export_report.php',
-    ['class' => 'btn btn-primary']
+    ['class' => 'btn btn--primary']
 );
 
 if ('true' === $paypalEnable && 'true' === $commissionsEnable) {

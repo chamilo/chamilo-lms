@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -12,31 +14,26 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="access_url_rel_usergroup")
  * @ORM\Entity
  */
-class AccessUrlRelUserGroup
+class AccessUrlRelUserGroup implements EntityAccessUrlInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var AccessUrl
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected AccessUrl $url;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="usergroup_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="urls", cascade={"persist"})
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userGroupId;
+    protected Usergroup $userGroup;
 
     /**
      * @return int
@@ -44,38 +41,6 @@ class AccessUrlRelUserGroup
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return AccessUrlRelUserGroup
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserGroupId()
-    {
-        return $this->userGroupId;
-    }
-
-    /**
-     * @param int $userGroupId
-     *
-     * @return AccessUrlRelUserGroup
-     */
-    public function setUserGroupId($userGroupId)
-    {
-        $this->userGroupId = $userGroupId;
-
-        return $this;
     }
 
     public function getUrl(): AccessUrl
@@ -86,6 +51,18 @@ class AccessUrlRelUserGroup
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUserGroup(): Usergroup
+    {
+        return $this->userGroup;
+    }
+
+    public function setUserGroup(Usergroup $userGroup): self
+    {
+        $this->userGroup = $userGroup;
 
         return $this;
     }

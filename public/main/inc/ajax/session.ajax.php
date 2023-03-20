@@ -28,19 +28,16 @@ switch ($action) {
         break;
     case 'order':
         api_protect_admin_script();
-        $allowOrder = api_get_configuration_value('session_list_order');
-        if ($allowOrder) {
-            $order = isset($_GET['order']) ? $_GET['order'] : [];
-            $order = json_decode($order);
-            if (!empty($order)) {
-                $table = Database::get_main_table(TABLE_MAIN_SESSION);
-                foreach ($order as $data) {
-                    if (isset($data->order) && isset($data->id)) {
-                        $orderId = (int) $data->order;
-                        $sessionId = (int) $data->id;
-                        $sql = "UPDATE $table SET position = $orderId WHERE id = $sessionId ";
-                        Database::query($sql);
-                    }
+        $order = isset($_GET['order']) ? $_GET['order'] : [];
+        $order = json_decode($order);
+        if (!empty($order)) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            foreach ($order as $data) {
+                if (isset($data->order) && isset($data->id)) {
+                    $orderId = (int) $data->order;
+                    $sessionId = (int) $data->id;
+                    $sql = "UPDATE $table SET position = $orderId WHERE id = $sessionId ";
+                    Database::query($sql);
                 }
             }
         }
@@ -136,13 +133,13 @@ switch ($action) {
         }
         break;
     case 'session_info':
-        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        $sessionId = $_GET['session_id'] ?? '';
         $sessionInfo = api_get_session_info($sessionId);
 
         $extraFieldValues = new ExtraFieldValue('session');
         $extraField = new ExtraField('session');
         $values = $extraFieldValues->getAllValuesByItem($sessionId);
-        $load = isset($_GET['load_empty_extra_fields']) ? true : false;
+        $load = isset($_GET['load_empty_extra_fields']);
 
         if ($load) {
             $allExtraFields = $extraField->get_all();
@@ -153,14 +150,12 @@ switch ($action) {
                         'id' => $extra['id'],
                         'variable' => $extra['variable'],
                         'value' => '',
-                        'field_type' => $extra['field_type'],
+                        'value_type' => $extra['value_type'],
                     ];
                 }
             }
         }
-
         $sessionInfo['extra_fields'] = $values;
-
         if (!empty($sessionInfo)) {
             echo json_encode($sessionInfo);
         }
@@ -188,7 +183,7 @@ switch ($action) {
         ];
 
         $usersRepo = UserManager::getRepository();
-        $users = $usersRepo->findByStatus($_GET['q'], COURSEMANAGER, api_get_current_access_url_id());
+        $users = $usersRepo->findByRole('ROLE_TEACHER', $_GET['q'], api_get_current_access_url_id());
         /** @var User $user */
         foreach ($users as $user) {
             $list['items'][] = [
@@ -248,7 +243,7 @@ switch ($action) {
     case 'get_basic_course_documents_form':
         $courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
         $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
-        $currentUserId = api_get_user_id();
+        $currentUser = api_get_user_entity();
 
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
@@ -258,7 +253,7 @@ switch ($action) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || !$session->hasUserAsSessionAdmin($currentUser)) {
             break;
         }
 
@@ -274,7 +269,7 @@ switch ($action) {
 
                 $newFolderData = create_unexisting_directory(
                     $courseInfo,
-                    $currentUserId,
+                    $currentUser->getId(),
                     $session->getId(),
                     0,
                     0,
@@ -284,14 +279,14 @@ switch ($action) {
                     1
                 );
 
-                $id = (int) $newFolderData['iid'];
+                $id = $newFolderData->getIid();
             } else {
                 $id = DocumentManager::get_document_id($courseInfo, $folderName, $session->getId());
             }
 
             $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 
-            $documentAndFolders = DocumentManager::getAllDocumentData(
+            /*$documentAndFolders = DocumentManager::getAllDocumentData(
                 $courseInfo,
                 $folderName,
                 0,
@@ -299,7 +294,8 @@ switch ($action) {
                 false,
                 false,
                 $session->getId()
-            );
+            );*/
+            $documentAndFolders = [];
 
             $documentAndFolders = array_filter(
                 $documentAndFolders,
@@ -308,7 +304,7 @@ switch ($action) {
                 }
             );
             $documentAndFolders = array_map(
-                function (array $documentData) use ($course, $session, $courseInfo, $currentUserId, $http_www, $folderName, $id) {
+                function (array $documentData) use ($course, $session, $folderName) {
                     $downloadUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'
                         .api_get_cidreq_params($course->getId(), $session->getId()).'&'
                         .http_build_query(['action' => 'download', 'id' => $documentData['id']]);
@@ -387,13 +383,13 @@ switch ($action) {
 
         $courseInfo = api_get_course_info_by_id($courseId);
         $session = api_get_session_entity($sessionId);
-        $currentUserId = api_get_user_id();
+        $currentUser = api_get_user_entity();
 
         if (empty($courseInfo) || !$session) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || !$session->hasUserAsSessionAdmin($currentUser)) {
             break;
         }
 
@@ -421,10 +417,10 @@ switch ($action) {
                 $docId
             );
         } else {
-            $deletedDocument = DocumentManager::deleteCloudLink(
+            /*$deletedDocument = DocumentManager::deleteCloudLink(
                 $courseInfo,
                 $docId
-            );
+            );*/
         }
 
         if (!$deletedDocument) {

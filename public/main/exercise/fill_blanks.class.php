@@ -85,7 +85,7 @@ class FillBlanks extends Question
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = CKEDITOR.instances["answer"].getData();
+                    answer = getContentFromEditor("answer");
                 }
 
                 // disable the save button, if not blanks have been created
@@ -136,8 +136,8 @@ class FillBlanks extends Question
                         fields += "<td>"+blanksWithColor+"</td>";
                         fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
                         fields += "<td>";
-                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
-                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
                         fields += "&nbsp;&nbsp;<input class=\"sample\" id=\"samplesize["+i+"]\" data-btoa=\""+btoaValue+"\"   type=\"text\" value=\""+textValue+"\" style=\"width:"+inputSize+"px\" disabled=disabled />";
                         fields += "<input id=\"sizeofinput["+i+"]\" type=\"hidden\" value=\""+inputSize+"\" name=\"sizeofinput["+i+"]\"  />";
                         fields += "</td>";
@@ -220,7 +220,7 @@ class FillBlanks extends Question
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = CKEDITOR.instances["answer"].getData();
+                    answer = getContentFromEditor("answer");
                 }
 
                 var blanks = answer.match(eval(blanksRegexp));
@@ -250,6 +250,10 @@ class FillBlanks extends Question
 
             function changeBlankSeparator()
             {
+                var definedSeparator = $("[name=select_separator] option:selected").text();
+                $("[name=select_separator] option").each(function (index, value) {
+                    $("#defineoneblank").html($("#defineoneblank").html().replace($(value).html(), definedSeparator))
+                });
                 var separatorNumber = $("#select_separator").val();
                 var tabSeparator = getSeparatorFromNumber(separatorNumber);
                 blankSeparatorStart = tabSeparator[0];
@@ -319,29 +323,36 @@ class FillBlanks extends Question
         // answer
         $form->addLabel(
             null,
-            get_lang('Please type your text below').', '.get_lang('and').' '.get_lang('use square brackets [...] to define one or more blanks')
+            get_lang('Please type your text below').', '.
+            get_lang('and').' '.
+            get_lang('use square brackets [...] to define one or more blanks')
         );
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'answer',
             Display::return_icon('fill_field.png'),
+            true,
+            false,
+            ['ToolbarSet' => 'TestQuestionDescription'],
             ['id' => 'answer'],
-            ['ToolbarSet' => 'TestQuestionDescription']
         );
         $form->addRule('answer', get_lang('Please type the text'), 'required');
 
         //added multiple answers
-        $form->addElement('checkbox', 'multiple_answer', '', get_lang('Allow answers order switches'));
-        $form->addElement(
-            'select',
+        $form->addCheckBox('multiple_answer', '', get_lang('Allow answers order switches'));
+        $form->addSelect(
             'select_separator',
             get_lang('Select a blanks marker'),
             self::getAllowedSeparatorForSelect(),
-            ' id="select_separator" style="width:150px" class="selectpicker" onchange="changeBlankSeparator()" '
+            [
+                'id' => 'select_separator',
+                'style' => 'width:150px',
+                'class' => 'form-control',
+                'onchange' => 'changeBlankSeparator()',
+            ]
         );
         $form->addLabel(
             null,
-            '<input type="button" onclick="updateBlanks()" value="'.get_lang('Refresh terms').'" class="btn btn-default" />'
+            '<input type="button" onclick="updateBlanks()" value="'.get_lang('Refresh terms').'" class="btn btn--plain" />'
         );
 
         $form->addHtml('<div id="blanks_weighting"></div>');
@@ -477,7 +488,7 @@ class FillBlanks extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
+        $header .= '<table class="'.$this->questionTableClass.'">
             <tr>
                 <th>'.get_lang('Answer').'</th>
             </tr>';
@@ -549,7 +560,7 @@ class FillBlanks extends Question
                     $resultOptions,
                     $selected,
                     [
-                        'class' => 'selectpicker',
+                        'class' => 'form-control',
                         'data-width' => $width,
                         'id' => $labelId,
                     ],
@@ -775,7 +786,7 @@ class FillBlanks extends Question
         $blankCharEnd = self::getEndSeparator($blankSeparatorNumber);
         $blankCharStartForRegexp = self::escapeForRegexp($blankCharStart);
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
-
+        $listWords = [];
         // Get all blanks words
         $listAnswerResults['words_count'] = api_preg_match_all(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
@@ -885,7 +896,6 @@ class FillBlanks extends Question
                 LEFT JOIN '.$tblTrackEExercise.' tee
                 ON
                     tee.exe_id = tea.exe_id AND
-                    tea.c_id = '.$courseId.' AND
                     exe_exo_id = '.$testId.'
                WHERE
                     tee.c_id = '.$courseId.' AND
@@ -1127,18 +1137,6 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        /*if (in_array($resultsDisabled, [
-            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ]
-        )
-        ) {
-            $resultsDisabled = true;
-            if ($showTotalScoreAndUserChoices) {
-                $resultsDisabled = false;
-            }
-        }*/
-
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
         for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); $i++) {
@@ -1163,6 +1161,11 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
+            if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $resultsDisabled) {
+                if (empty($listStudentAnswerInfo['student_answer'][$i])) {
+                    continue;
+                }
+            }
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
             $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
             $result .= $studentLabel;
@@ -1209,6 +1212,7 @@ class FillBlanks extends Question
 
                 break;
             case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
                 $hideExpectedAnswer = true;
                 if ($showTotalScoreAndUserChoices) {
@@ -1318,6 +1322,10 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
+        if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $resultsDisabled) {
+            return '';
+        }
+
         return self::getHtmlAnswer(
             $answer,
             $correct,

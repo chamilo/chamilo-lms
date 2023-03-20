@@ -1,23 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Tool;
 
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * Class AbstractTool.
- */
-abstract class AbstractTool implements ToolInterface
+abstract class AbstractTool
 {
-    protected $name;
-    protected $category;
-    protected $link;
-    protected $image;
-    protected $admin;
-    protected $settings;
-    protected $resourceTypes;
+    /**
+     * @Groups({"ctool:read"})
+     */
+    protected string $name;
+
+    /**
+     * @Groups({"ctool:read"})
+     */
+    protected string $nameToShow = '';
+
+    /**
+     * @Groups({"ctool:read"})
+     */
+    protected string $icon = '';
+    protected string $category = '';
+    protected string $link;
+    protected string $image;
+    protected string $admin;
+    protected ?SchemaInterface $settings = null;
+    protected array $resourceTypes = [];
 
     /**
      * @var string
@@ -27,71 +40,94 @@ abstract class AbstractTool implements ToolInterface
      *  10 global tool
      *  11 global or course or both
      */
-    protected $scope;
+    protected string $scope;
 
-    /**
-     * @param string          $name
-     * @param string          $category
-     * @param string          $link
-     * @param SchemaInterface $settings
-     * @param array           $resourceTypes
-     */
-    public function __construct($name, $category, $link, $settings = null, $resourceTypes = null)
-    {
+    abstract public function getCategory(): string;
+    abstract public function getLink(): string;
+
+    /*public function __construct(
+        string $name,
+        string $category,
+        string $link,
+        ?SchemaInterface $settings = null,
+        ?array $resourceTypes = []
+    ) {
         $this->name = $name;
+        $this->nameToShow = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $name.'.png';
         $this->settings = $settings;
         $this->resourceTypes = $resourceTypes;
-    }
+        $this->icon = 'mdi-crop-square';
+    }*/
 
-    public function isCourseTool()
+    public function isCourseTool(): bool
     {
         return false;
     }
 
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return true;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getLink()
-    {
-        return $this->link ?: '';
-    }
-
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    public function getTarget()
+    public function getTarget(): string
     {
         return '_self';
     }
 
-    public function getImage()
+    public function getImage(): string
     {
         return $this->image;
     }
 
-    /**
-     * @return array
-     */
-    public function getResourceTypes()
+    public function getEntityByResourceType(string $type): ?string
+    {
+        return $this->getResourceTypes()[$type] ?? null;
+    }
+
+    public function getTypeNameByEntity(string $entityClass): ?string
+    {
+        if (empty($this->getResourceTypes())) {
+            return null;
+        }
+
+        $list = array_flip($this->getResourceTypes());
+
+        if (isset($list[$entityClass])) {
+            return $list[$entityClass];
+        }
+
+        return null;
+    }
+
+    public function getResourceTypes(): ?array
     {
         return $this->resourceTypes;
     }
 
-    public function setResourceTypes(array $resourceTypes): self
+    public function setResourceTypes(?array $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
+
+        return $this;
+    }
+
+    public function getNameToShow(): string
+    {
+        //return $this->getName();
+        return ucfirst(str_replace('_', ' ', $this->getName()));
+    }
+
+    public function setNameToShow(string $nameToShow): self
+    {
+        $this->nameToShow = $nameToShow;
 
         return $this;
     }

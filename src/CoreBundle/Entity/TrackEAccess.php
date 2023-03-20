@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,72 +15,56 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_access", indexes={
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
  *     @ORM\Index(name="access_c_id", columns={"c_id"}),
- *     @ORM\Index(name="access_session_id", columns={"access_session_id"}),
- *     @ORM\Index(name="user_course_session_date", columns={"access_user_id","c_id","access_session_id", "access_date"})
+ *     @ORM\Index(name="session_id", columns={"session_id"}),
+ *     @ORM\Index(name="user_course_session_date", columns={"access_user_id", "c_id", "session_id", "access_date"})
  * })
  * @ORM\Entity
  */
 class TrackEAccess
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $accessId;
+    protected int $accessId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="access_user_id", type="integer", nullable=true)
      */
-    protected $accessUserId;
+    protected ?int $accessUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="access_date", type="datetime", nullable=false)
      */
-    protected $accessDate;
+    protected DateTime $accessDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
      */
-    protected $accessTool;
+    protected ?string $accessTool = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="access_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $accessSessionId;
+    protected int $sessionId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
      * Set accessUserId.
      *
-     * @param int $accessUserId
-     *
      * @return TrackEAccess
      */
-    public function setAccessUserId($accessUserId)
+    public function setAccessUserId(int $accessUserId)
     {
         $this->accessUserId = $accessUserId;
 
@@ -97,11 +84,9 @@ class TrackEAccess
     /**
      * Set accessDate.
      *
-     * @param \DateTime $accessDate
-     *
      * @return TrackEAccess
      */
-    public function setAccessDate($accessDate)
+    public function setAccessDate(DateTime $accessDate)
     {
         $this->accessDate = $accessDate;
 
@@ -111,7 +96,7 @@ class TrackEAccess
     /**
      * Get accessDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAccessDate()
     {
@@ -121,11 +106,9 @@ class TrackEAccess
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEAccess
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -145,11 +128,9 @@ class TrackEAccess
     /**
      * Set accessTool.
      *
-     * @param string $accessTool
-     *
      * @return TrackEAccess
      */
-    public function setAccessTool($accessTool)
+    public function setAccessTool(string $accessTool)
     {
         $this->accessTool = $accessTool;
 
@@ -167,37 +148,33 @@ class TrackEAccess
     }
 
     /**
-     * Set accessSessionId.
-     *
-     * @param int $accessSessionId
+     * Set sessionId.
      *
      * @return TrackEAccess
      */
-    public function setAccessSessionId($accessSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->accessSessionId = $accessSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get accessSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getAccessSessionId()
+    public function getSessionId()
     {
-        return $this->accessSessionId;
+        return $this->sessionId;
     }
 
     /**
      * Set userIp.
      *
-     * @param string $userIp
-     *
      * @return TrackEAccess
      */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp)
     {
         $this->userIp = $userIp;
 

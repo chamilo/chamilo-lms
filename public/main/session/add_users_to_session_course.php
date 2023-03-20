@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 // including some necessary files
@@ -21,8 +23,8 @@ if (empty($id_session) || empty($courseId)) {
 
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
-SessionManager::protectSession($id_session);
-
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 $courseInfo = api_get_course_info_by_id($courseId);
 
 // setting breadcrumbs
@@ -78,7 +80,8 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $id_session, $courseId;
+    $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+    $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -115,17 +118,16 @@ function search_users($needle, $type)
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
-                $id_session = (int) $id_session;
                 // check id_user from session_rel_user table
                 $sql = "
-                    SELECT su.user_id 
-                    FROM $tbl_session_rel_user  su 
+                    SELECT su.user_id
+                    FROM $tbl_session_rel_user  su
                     INNER JOIN $tableRelSessionCourseUser sc
                     ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                    WHERE 
+                    WHERE
                         sc.c_id = $courseId AND
-                        su.session_id = $id_session AND 
-                        relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                        su.session_id = $id_session AND
+                        su.relation_type = ".Session::STUDENT;
                 $res = Database::query($sql);
                 $user_ids = [];
                 if (Database::num_rows($res) > 0) {
@@ -150,10 +152,10 @@ function search_users($needle, $type)
                             username LIKE '$needle%'
                             OR lastname LIKE '$needle%'
                             OR firstname LIKE '$needle%'
-                        ) AND 
-                      user.status <> 6 AND 
+                        ) AND
+                      user.status <> 6 AND
                       user.status <> ".DRH."
-                    $order_clause 
+                    $order_clause
                     LIMIT 11
                 ";
                 break;
@@ -162,8 +164,8 @@ function search_users($needle, $type)
                     SELECT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
                     WHERE
-                        lastname LIKE '$needle%' AND 
-                        user.status <> ".DRH." AND 
+                        lastname LIKE '$needle%' AND
+                        user.status <> ".DRH." AND
                         user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -172,11 +174,11 @@ function search_users($needle, $type)
                 $sql = "
                     SELECT DISTINCT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
-                    LEFT OUTER JOIN $tbl_session_rel_user s 
+                    LEFT OUTER JOIN $tbl_session_rel_user s
                     ON (s.user_id = user.id)
                     WHERE
-                        s.user_id IS NULL AND 
-                        user.status <> ".DRH." AND 
+                        s.user_id IS NULL AND
+                        user.status <> ".DRH." AND
                         user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -385,17 +387,17 @@ if ('true' === $orderListByOfficialCode) {
 
 if ($ajax_search) {
     $sql = "
-        SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code        
+        SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
         FROM $tbl_session_rel_user su
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         INNER JOIN $tbl_user u
         ON su.user_id = u.id
-        WHERE 
+        WHERE
             su.session_id = ".intval($id_session)." AND
-            su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+            su.relation_type = ".Session::STUDENT." AND
             sc.c_id = $courseId AND
-            u.status<>".DRH." AND 
+            u.status<>".DRH." AND
             u.status <> 6
         $order_clause
     ";
@@ -408,18 +410,18 @@ if ($ajax_search) {
                 SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
-                ON 
-                    su.user_id = u.id AND 
-                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND 
+                ON
+                    su.user_id = u.id AND
+                    su.relation_type = ".Session::STUDENT." AND
                     su.session_id = ".intval($id_session)."
-                INNER JOIN $tbl_user_rel_access_url url_user 
+                INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE 
-                    access_url_id = $access_url_id AND 
-                    sc.c_id = $courseId AND 
-                    u.status <> ".DRH." AND 
+                WHERE
+                    access_url_id = $access_url_id AND
+                    sc.c_id = $courseId AND
+                    u.status <> ".DRH." AND
                     u.status <> 6
                 $order_clause
             ";
@@ -435,7 +437,7 @@ if ($ajax_search) {
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
-        if (0 != $sessionUser['status_in_session']) {
+        if (Session::STUDENT != $sessionUser['status_in_session']) {
             continue;
         }
 
@@ -516,7 +518,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type = ".Session::STUDENT."
             INNER JOIN $tableRelSessionCourseUser sc
             ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
             $where_filter
@@ -532,9 +534,9 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            WHERE 
-                u.status <> ".DRH." AND 
+                AND su.relation_type = ".Session::STUDENT."
+            WHERE
+                u.status <> ".DRH." AND
                 u.status <> 6
             $order_clause
         ";
@@ -549,12 +551,12 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
                     AND su.session_id = $id_session
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.relation_type = ".Session::STUDENT."
                 INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)   
-               
+                ON (url_user.user_id = u.id)
+
                 WHERE
-                    access_url_id = $access_url_id 
+                    access_url_id = $access_url_id
                     $where_filter
                     AND u.status <> ".DRH."
                     AND u.status<>6
@@ -585,12 +587,12 @@ if ($ajax_search) {
         LEFT JOIN $tbl_session_rel_user su
         ON su.user_id = u.id
         AND su.session_id = $id_session
-        AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+        AND su.relation_type = ".Session::STUDENT."
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         WHERE
-            sc.c_id = $courseId AND 
-            u.status <> ".DRH." AND u.status <> 6 
+            sc.c_id = $courseId AND
+            u.status <> ".DRH." AND u.status <> 6
         $order_clause
     ";
 
@@ -604,15 +606,15 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                INNER JOIN $tbl_user_rel_access_url url_user 
+                AND su.relation_type = ".Session::STUDENT."
+                INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE 
+                WHERE
                     sc.c_id = $courseId AND
-                    access_url_id = $access_url_id AND 
-                    u.status <> ".DRH." AND 
+                    access_url_id = $access_url_id AND
+                    u.status <> ".DRH." AND
                     u.status <> 6
                 $order_clause
             ";
@@ -644,270 +646,266 @@ if ('multiple' == $add_type) {
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
         .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
+
+echo Display::toolbarAction('users_to_session', [$link_add_type_unique.$link_add_type_multiple]);
+echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseInfo['title']);
 ?>
-    <div class="actions">
-        <?php
-        echo $link_add_type_unique;
-        echo $link_add_type_multiple;
-        ?>
-    </div>
-    <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&course_id=<?php echo $courseId; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
-            echo '&add=true';
-        } ?>" <?php if ($ajax_search) {
-            echo ' onsubmit="valide();"';
-        } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') - '.$courseInfo['title'].' </legend>'; ?>
-        <?php
-        if ('multiple' == $add_type) {
-            if (is_array($extra_field_list)) {
-                if (is_array($new_field_list) && count($new_field_list) > 0) {
-                    echo '<h3>'.get_lang('Filter users').'</h3>';
-                    foreach ($new_field_list as $new_field) {
-                        echo $new_field['name'];
-                        $varname = 'field_'.$new_field['variable'];
-                        $fieldtype = $new_field['type'];
-                        echo '&nbsp;<select name="'.$varname.'">';
-                        echo '<option value="0">--'.get_lang('Select').'--</option>';
-                        foreach ($new_field['data'] as $option) {
-                            $checked = '';
-                            if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
-                                if (isset($_POST[$varname])) {
-                                    if ($_POST[$varname] == $option['tag']) {
-                                        $checked = 'selected="true"';
-                                    }
+<form name="formulaire" method="post"
+      action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&course_id=<?php echo $courseId; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+    echo '&add=true';
+} ?>" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+} ?>>
+    <?php
+    if ('multiple' === $add_type) {
+        if (is_array($extra_field_list)) {
+            if (is_array($new_field_list) && count($new_field_list) > 0) {
+                echo '<h3>'.get_lang('Filter users').'</h3>';
+                foreach ($new_field_list as $new_field) {
+                    echo $new_field['name'];
+                    $varname = 'field_'.$new_field['variable'];
+                    $fieldtype = $new_field['type'];
+                    echo '&nbsp;<select name="'.$varname.'">';
+                    echo '<option value="0">--'.get_lang('Select').'--</option>';
+                    foreach ($new_field['data'] as $option) {
+                        $checked = '';
+                        if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
+                            if (isset($_POST[$varname])) {
+                                if ($_POST[$varname] == $option['tag']) {
+                                    $checked = 'selected="true"';
                                 }
-                                echo '<option value="'.$option['tag'].'" '.$checked.'>'.$option['tag'].'</option>';
-                            } else {
-                                if (isset($_POST[$varname])) {
-                                    if ($_POST[$varname] == $option[1]) {
-                                        $checked = 'selected="true"';
-                                    }
-                                }
-                                echo '<option value="'.$option[1].'" '.$checked.'>'.$option[2].'</option>';
                             }
+                            echo '<option value="'.$option['tag'].'" '.$checked.'>'.$option['tag'].'</option>';
+                        } else {
+                            if (isset($_POST[$varname])) {
+                                if ($_POST[$varname] == $option[1]) {
+                                    $checked = 'selected="true"';
+                                }
+                            }
+                            echo '<option value="'.$option[1].'" '.$checked.'>'.$option[2].'</option>';
                         }
-                        echo '</select>';
-                        $extraHidden =
-                            ExtraField::FIELD_TYPE_TAG == $fieldtype ? '<input type="hidden" name="field_id" value="'
-                                .$option['field_id'].'" />' : '';
-                        echo $extraHidden;
-                        echo '&nbsp;&nbsp;';
                     }
-                    echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-                    echo '<br /><br />';
+                    echo '</select>';
+                    $extraHidden =
+                        ExtraField::FIELD_TYPE_TAG == $fieldtype ? '<input type="hidden" name="field_id" value="'
+                            .$option['field_id'].'" />' : '';
+                    echo $extraHidden;
+                    echo '&nbsp;&nbsp;';
                 }
+                echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
+                echo '<br /><br />';
             }
         }
-        ?>
-        <input type="hidden" name="form_sent" value="1"/>
-        <input type="hidden" name="add_type"/>
+    }
+    ?>
+    <input type="hidden" name="form_sent" value="1"/>
+    <input type="hidden" name="add_type"/>
 
-        <?php
-        if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg); //main API
-        }
-        ?>
-        <div id="multiple-add-session" class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label><?php echo get_lang('Portal users list'); ?> </label>
-                    <?php
-                    if (!('multiple' == $add_type)) {
-                        ?>
-                        <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
-                               class="form-control"/>
-                        <div id="ajax_list_users_single" class="select-list-ajax"></div>
-                        <?php
-                    } else {
-                        ?>
-                        <div id="ajax_list_users_multiple">
-                            <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15"
-                                    class="form-control">
-                                <?php
-                                foreach ($nosessionUsersList as $uid => $enreg) {
-                                    ?>
-                                    <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) {
-                                        echo 'selected="selected"';
-                                    } ?>>
-                                        <?php
-                                        $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '
-                                            .$enreg['official_code'];
-                                    if ($showOfficialCode) {
-                                        $officialCode =
-                                                !empty($enreg['official_code']) ? $enreg['official_code'].' - '
-                                                    : '? - ';
-                                        $personName =
-                                                $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
-                                    }
-                                    echo $personName; ?>
-                                    </option>
-                                    <?php
-                                } ?>
-                            </select>
-                        </div>
-                        <?php
-                    }
-                    unset($nosessionUsersList);
-                    ?>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <?php if ('multiple' == $add_type) {
-                        ?>
-                    <?php echo get_lang('First letter (last name)'); ?> :
-                    <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
-                        <option value="%">--</option>
-                        <?php
-                        echo Display:: get_alphabet_options(); ?>
-                    </select>
-                    <br/>
-                    <br/>
+    <?php
+    if (!empty($errorMsg)) {
+        echo Display::return_message($errorMsg); //main API
+    }
+    ?>
+    <div id="multiple-add-session" class="grid grid-cols-3">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label><?php echo get_lang('Portal users list'); ?> </label>
                 <?php
-                    } ?>
-                <div class="control-course">
-                    <?php
-                    if ($ajax_search) {
-                        ?>
-                        <div class="separate-action">
-                            <button name="remove_user" class="btn btn-primary" type="button"
-                                    onclick="remove_item(document.getElementById('destination_users'))">
-                                <em class="fa fa-chevron-left"></em>
-                            </button>
-                        </div>
-                        <?php
-                    } else {
-                        ?>
-                        <div class="separate-action">
-                            <button name="add_user" class="btn btn-primary" type="button"
-                                    onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
-                                    onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
-                                <em class="fa fa-chevron-right"></em>
-                            </button>
-                        </div>
-                        <div class="separate-action">
-                            <button name="remove_user" class="btn btn-primary" type="button"
-                                    onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
-                                    onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
-                                <em class="fa fa-chevron-left"></em>
-                            </button>
-                        </div>
-
-                        <?php
-                    }
-                    if (!empty($addProcess)) {
-                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('Finish session creation').'</button>';
-                    } else {
-                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('Subscribe users to this session').'</button>';
-                    }
+                if (!('multiple' == $add_type)) {
                     ?>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <label><?php echo get_lang('List of users registered in this session'); ?> :</label>
-                <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
-                        class="form-control">
+                    <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
+                           class="form-control"/>
+                    <div id="ajax_list_users_single" class="select-list-ajax"></div>
                     <?php
-                    foreach ($sessionUsersList as $enreg) {
-                        ?>
-                        <option value="<?php echo $enreg['id']; ?>">
+                } else {
+                    ?>
+                    <div id="ajax_list_users_multiple">
+                        <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15"
+                                class="form-control">
                             <?php
-                            $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '
-                                .$enreg['official_code'];
-                        if ($showOfficialCode) {
-                            $officialCode =
-                                    !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
-                            $personName =
-                                    $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username']
-                                    .')';
-                        }
-                        echo $personName; ?>
-                        </option>
-                        <?php
-                    }
-                    unset($sessionUsersList);
-                    ?>
-                </select>
+                            foreach ($nosessionUsersList as $uid => $enreg) {
+                                ?>
+                                <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) {
+                                    echo 'selected="selected"';
+                                } ?>>
+                                    <?php
+                                    $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '
+                                        .$enreg['official_code'];
+                                if ($showOfficialCode) {
+                                    $officialCode =
+                                            !empty($enreg['official_code']) ? $enreg['official_code'].' - '
+                                                : '? - ';
+                                    $personName =
+                                            $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
+                                }
+                                echo $personName; ?>
+                                </option>
+                                <?php
+                            } ?>
+                        </select>
+                    </div>
+                    <?php
+                }
+                unset($nosessionUsersList);
+                ?>
             </div>
         </div>
-    </form>
-    <script>
-        function moveItem(origin, destination) {
-            for (var i = 0; i < origin.options.length; i++) {
-                if (origin.options[i].selected) {
-                    destination.options[destination.length] = new Option(origin.options[i].text, origin.options[i].value);
-                    origin.options[i] = null;
-                    i = i - 1;
+
+        <div class="col-md-4">
+            <?php if ('multiple' == $add_type) {
+                    ?>
+                <?php echo get_lang('First letter (last name)'); ?> :
+                <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
+                    <option value="%">--</option>
+                    <?php
+                    echo Display:: get_alphabet_options(); ?>
+                </select>
+                <br/>
+                <br/>
+            <?php
+                } ?>
+            <div class="control-course">
+                <?php
+                if ($ajax_search) {
+                    ?>
+                    <div class="separate-action">
+                        <button name="remove_user" class="btn btn--primary" type="button"
+                                onclick="remove_item(document.getElementById('destination_users'))">
+                            <em class="fa fa-chevron-left"></em>
+                        </button>
+                    </div>
+                    <?php
+                } else {
+                    ?>
+                    <div class="separate-action">
+                        <button name="add_user" class="btn btn--primary" type="button"
+                                onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
+                                onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                            <em class="fa fa-chevron-right"></em>
+                        </button>
+                    </div>
+                    <div class="separate-action">
+                        <button name="remove_user" class="btn btn--primary" type="button"
+                                onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
+                                onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                            <em class="fa fa-chevron-left"></em>
+                        </button>
+                    </div>
+
+                    <?php
                 }
-            }
-            destination.selectedIndex = -1;
-            sortOptions(destination.options);
-        }
-
-        function sortOptions(options) {
-            newOptions = new Array();
-            for (i = 0; i < options.length; i++)
-                newOptions[i] = options[i];
-
-            newOptions = newOptions.sort(mysort);
-            options.length = 0;
-            for (i = 0; i < newOptions.length; i++)
-                options[i] = newOptions[i];
-        }
-
-        function mysort(a, b) {
-            if (a.text.toLowerCase() > b.text.toLowerCase()) {
-                return 1;
-            }
-            if (a.text.toLowerCase() < b.text.toLowerCase()) {
-                return -1;
-            }
-            return 0;
-        }
-
-        function valide() {
-            var options = document.getElementById('destination_users').options;
-            for (i = 0; i < options.length; i++)
-                options[i].selected = true;
-            document.forms.formulaire.submit();
-        }
-
-        function loadUsersInSelect(select) {
-            var xhr_object = null;
-            if (window.XMLHttpRequest) // Firefox
-                xhr_object = new XMLHttpRequest();
-            else if (window.ActiveXObject) // Internet Explorer
-                xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-            else  // XMLHttpRequest non supporté par le navigateur
-                alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
-
-            xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-            xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            nosessionUsers = makepost(document.getElementById('origin_users'));
-            sessionUsers = makepost(document.getElementById('destination_users'));
-            nosessionClasses = makepost(document.getElementById('origin_classes'));
-            sessionClasses = makepost(document.getElementById('destination_classes'));
-            xhr_object.send("nosessionusers=" + nosessionUsers + "&sessionusers=" + sessionUsers + "&nosessionclasses=" + nosessionClasses + "&sessionclasses=" + sessionClasses);
-
-            xhr_object.onreadystatechange = function () {
-                if (xhr_object.readyState == 4) {
-                    document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
+                if (!empty($addProcess)) {
+                    echo '<button name="next" class="btn btn--success" type="button" value="" onclick="valide()" >'
+                        .get_lang('Finish session creation').'</button>';
+                } else {
+                    echo '<button name="next" class="btn btn--success" type="button" value="" onclick="valide()" >'
+                        .get_lang('Subscribe users to this session').'</button>';
                 }
+                ?>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label><?php echo get_lang('List of users registered in this session'); ?> :</label>
+            <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
+                    class="form-control">
+                <?php
+                foreach ($sessionUsersList as $enreg) {
+                    ?>
+                    <option value="<?php echo $enreg['id']; ?>">
+                        <?php
+                        $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '
+                            .$enreg['official_code'];
+                    if ($showOfficialCode) {
+                        $officialCode =
+                                !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
+                        $personName =
+                                $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username']
+                                .')';
+                    }
+                    echo $personName; ?>
+                    </option>
+                    <?php
+                }
+                unset($sessionUsersList);
+                ?>
+            </select>
+        </div>
+    </div>
+</form>
+<script>
+    function moveItem(origin, destination) {
+        for (var i = 0; i < origin.options.length; i++) {
+            if (origin.options[i].selected) {
+                destination.options[destination.length] = new Option(origin.options[i].text, origin.options[i].value);
+                origin.options[i] = null;
+                i = i - 1;
             }
         }
+        destination.selectedIndex = -1;
+        sortOptions(destination.options);
+    }
 
-        function makepost(select) {
-            var options = select.options;
-            var ret = "";
-            for (i = 0; i < options.length; i++)
-                ret = ret + options[i].value + '::' + options[i].text + ";;";
-            return ret;
+    function sortOptions(options) {
+        newOptions = new Array();
+        for (i = 0; i < options.length; i++)
+            newOptions[i] = options[i];
+
+        newOptions = newOptions.sort(mysort);
+        options.length = 0;
+        for (i = 0; i < newOptions.length; i++)
+            options[i] = newOptions[i];
+    }
+
+    function mysort(a, b) {
+        if (a.text.toLowerCase() > b.text.toLowerCase()) {
+            return 1;
         }
-    </script>
+        if (a.text.toLowerCase() < b.text.toLowerCase()) {
+            return -1;
+        }
+        return 0;
+    }
+
+    function valide() {
+        var options = document.getElementById('destination_users').options;
+        for (i = 0; i < options.length; i++)
+            options[i].selected = true;
+        document.forms.formulaire.submit();
+    }
+
+    function loadUsersInSelect(select) {
+        var xhr_object = null;
+        if (window.XMLHttpRequest) // Firefox
+            xhr_object = new XMLHttpRequest();
+        else if (window.ActiveXObject) // Internet Explorer
+            xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
+        else  // XMLHttpRequest non supporté par le navigateur
+            alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+
+        xhr_object.open("POST", "loadUsersInSelect.ajax.php");
+        xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        nosessionUsers = makepost(document.getElementById('origin_users'));
+        sessionUsers = makepost(document.getElementById('destination_users'));
+        nosessionClasses = makepost(document.getElementById('origin_classes'));
+        sessionClasses = makepost(document.getElementById('destination_classes'));
+        xhr_object.send("nosessionusers=" + nosessionUsers + "&sessionusers=" + sessionUsers + "&nosessionclasses=" + nosessionClasses + "&sessionclasses=" + sessionClasses);
+
+        xhr_object.onreadystatechange = function () {
+            if (xhr_object.readyState == 4) {
+                document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
+            }
+        }
+    }
+
+    function makepost(select) {
+        var options = select.options;
+        var ret = "";
+        for (i = 0; i < options.length; i++)
+            ret = ret + options[i].value + '::' + options[i].text + ";;";
+        return ret;
+    }
+</script>
 <?php
 
 Display::display_footer();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,48 +17,36 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceMethod
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="formula", type="text")
      */
-    protected $formula;
+    protected string $formula;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="assign", type="integer")
      */
-    protected $assign;
+    protected string $assign;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="met_type", type="string")
      */
-    protected $metType;
+    protected string $metType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="act_false", type="string")
      */
-    protected $actFalse;
+    protected string $actFalse;
 
     /**
      * Get id.
@@ -77,11 +67,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $description
-     *
      * @return SequenceMethod
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -97,11 +85,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $formula
-     *
      * @return SequenceMethod
      */
-    public function setFormula($formula)
+    public function setFormula(string $formula): self
     {
         $this->formula = $formula;
 
@@ -117,11 +103,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $assign
-     *
      * @return SequenceMethod
      */
-    public function setAssign($assign)
+    public function setAssign(string $assign): self
     {
         $this->assign = $assign;
 
@@ -137,11 +121,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $metType
-     *
      * @return SequenceMethod
      */
-    public function setMetType($metType)
+    public function setMetType(string $metType): self
     {
         $this->metType = $metType;
 
@@ -157,11 +139,9 @@ class SequenceMethod
     }
 
     /**
-     * @param string $actFalse
-     *
      * @return SequenceMethod
      */
-    public function setActFalse($actFalse)
+    public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;
 

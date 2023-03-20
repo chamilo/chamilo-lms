@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -7,6 +9,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Psr\Container\ContainerInterface;
 
 /**
  * Trait CourseControllerTrait.
@@ -14,8 +17,13 @@ use Chamilo\CourseBundle\Entity\CGroup;
  */
 trait CourseControllerTrait
 {
-    protected $course;
-    protected $session;
+    protected ?Course $course = null;
+    protected ?Session $session = null;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Gets the current Chamilo course based in the "_real_cid" session variable.
@@ -67,10 +75,10 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find(Session::class, $sessionId);
+        return $this->container->get('doctrine')->getManager()->find(Session::class, $sessionId);
     }
 
-    public function getGroup()
+    public function getGroup(): ?CGroup
     {
         $request = $this->getRequest();
 
@@ -82,7 +90,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find(CGroup::class, $groupId);
+        return $this->container->get('doctrine')->getManager()->find(CGroup::class, $groupId);
     }
 
     public function getCourseUrlQuery(): string
@@ -128,15 +136,12 @@ trait CourseControllerTrait
         return $url;
     }
 
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): void
     {
         $this->course = $course;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
@@ -146,24 +151,18 @@ trait CourseControllerTrait
         return null !== $this->course;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    public function setSession(Session $session)
+    public function setSession(Session $session = null): void
     {
         $this->session = $session;
     }
 
-    /**
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): int
     {
-        return $this->session ? $this->getSession()->getId() : 0;
+        return null !== $this->session ? $this->getSession()->getId() : 0;
     }
 }

@@ -1,35 +1,30 @@
 <template>
-  <div>
-    <DocumentsForm
-      v-if="item"
-      ref="updateForm"
-      :values="item"
-      :errors="violations"
-    />
+    <div v-if="!isLoading && item && isCurrentTeacher">
+      <!--    :handle-delete="del"-->
+      <Toolbar
+          :handle-submit="onSendFormData"
+          :handle-reset="resetForm"
+      />
+      <DocumentsForm
+          ref="updateForm"
+          :values="item"
+          :errors="violations"
+      >
+        <EditLinks :item="item" links-type="users" :show-share-with-user="false" />
+      </DocumentsForm>
 
-    <ResourceLinkForm
-      v-if="item"
-      ref="resourceLinkForm"
-      :values="item"
-    />
-
-    <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
-      :handle-delete="del"
-    />
-    <Loading :visible="isLoading || deleteLoading" />
-  </div>
+      <Loading :visible="isLoading || deleteLoading" />
+    </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument';
-import ResourceLinkForm from '../../components/documents/ResourceLinkForm';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import DocumentsForm from '../../components/documents/FormNewDocument.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
+import EditLinks from "../../components/resource_links/EditLinks.vue";
 
 const servicePrefix = 'Documents';
 
@@ -37,16 +32,12 @@ export default {
   name: 'DocumentsUpdate',
   servicePrefix,
   components: {
+    EditLinks,
     Loading,
     Toolbar,
     DocumentsForm,
-    ResourceLinkForm
   },
   mixins: [UpdateMixin],
-  data() {
-    return {
-    };
-  },
   computed: {
     ...mapFields('documents', {
       deleteLoading: 'isLoading',
@@ -55,16 +46,18 @@ export default {
       updated: 'updated',
       violations: 'violations'
     }),
-    ...mapGetters('documents', ['find'])
+    ...mapGetters('documents', ['find']),
+    ...mapGetters({
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
-
   methods: {
     ...mapActions('documents', {
       createReset: 'resetCreate',
       deleteItem: 'del',
       delReset: 'resetDelete',
       retrieve: 'load',
-      update: 'update',
+      updateWithFormData: 'updateWithFormData',
       updateReset: 'resetUpdate'
     })
   }

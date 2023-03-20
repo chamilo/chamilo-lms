@@ -24,7 +24,7 @@ if ($isEnrollment) {
             $exception->getMessage()
         );
     }
-    die;
+    exit;
 }
 
 if ($isAuthentify) {

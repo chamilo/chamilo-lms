@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,83 +9,29 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelProfile.
- *
  * @ORM\Table(name="skill_rel_profile")
  * @ORM\Entity
  */
 class SkillRelProfile
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", cascade={"persist"})
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $skillId;
+    protected Skill $skill;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="profile_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillProfile", cascade={"persist"})
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $profileId;
-
-    /**
-     * Set skillId.
-     *
-     * @param int $skillId
-     *
-     * @return SkillRelProfile
-     */
-    public function setSkillId($skillId)
-    {
-        $this->skillId = $skillId;
-
-        return $this;
-    }
-
-    /**
-     * Get skillId.
-     *
-     * @return int
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
-    }
-
-    /**
-     * Set profileId.
-     *
-     * @param int $profileId
-     *
-     * @return SkillRelProfile
-     */
-    public function setProfileId($profileId)
-    {
-        $this->profileId = $profileId;
-
-        return $this;
-    }
-
-    /**
-     * Get profileId.
-     *
-     * @return int
-     */
-    public function getProfileId()
-    {
-        return $this->profileId;
-    }
+    protected SkillProfile $profile;
 
     /**
      * Get id.
@@ -93,5 +41,29 @@ class SkillRelProfile
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): self
+    {
+        $this->skill = $skill;
+
+        return $this;
+    }
+
+    public function getProfile(): SkillProfile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(SkillProfile $profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
     }
 }

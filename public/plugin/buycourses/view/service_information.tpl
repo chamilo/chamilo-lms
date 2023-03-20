@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <a href="{{ _p.web_plugin ~ 'buycourses/src/service_process.php?t=4&i=' ~ service.id }}"
-                                       class="btn btn-success btn-lg btn-block">
+                                       class="btn btn--success btn-lg btn-block">
                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </a>
                                 </div>

@@ -11,7 +11,7 @@ use Doctrine\DBAL\Schema\Schema;
  * Check if script can be called.
  */
 if (!function_exists('api_get_path')) {
-    die('This script must be loaded through the Chamilo plugin installer sequence');
+    exit('This script must be loaded through the Chamilo plugin installer sequence');
 }
 
 $entityManager = Database::getManager();
@@ -418,8 +418,8 @@ if (!$paypalExtraField) {
     Database::insert(
         $extraFieldTable,
         [
-            'extra_field_type' => 1,
-            'field_type' => 1,
+            'item_type' => 1,
+            'value_type' => 1,
             'variable' => 'paypal',
             'display_text' => 'Paypal',
             'default_value' => '',

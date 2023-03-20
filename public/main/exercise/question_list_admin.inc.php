@@ -33,42 +33,9 @@ if ($deleteQuestion) {
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.(int) $exerciseId;
 ?>
-<div id="dialog-confirm"
-     title="<?php echo get_lang('Please confirm your choice'); ?>"
-     style="display:none;">
-    <p>
-        <?php echo get_lang('Are you sure you want to delete'); ?>
-    </p>
-</div>
 <script>
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
-        $("#dialog-confirm").dialog({
-            autoOpen: false,
-            show: "blind",
-            resizable: false,
-            height: 150,
-            modal: false
-        });
-
-        $(".opener").click(function () {
-            var targetUrl = $(this).attr("href");
-            $("#dialog-confirm").dialog({
-                modal: true,
-                buttons: {
-                    "<?php echo get_lang('Yes'); ?>": function () {
-                        location.href = targetUrl;
-                        $(this).dialog("close");
-
-                    },
-                    "<?php echo get_lang('No'); ?>": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-            $("#dialog-confirm").dialog("open");
-            return false;
-        });
 
         var stop = false;
         $("#question_list h3").click(function (event) {
@@ -161,6 +128,7 @@ if (!$inATest) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
 
+        $originalQuestionSelectType = $objExercise->questionSelectionType;
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
@@ -195,9 +163,10 @@ if (!$inATest) {
             // Classic order
             $questionList = $objExercise->selectQuestionList(true, true);
         }
+        $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
-            <div class="row hidden-xs">
+            <div class="row gt-xs my-4">
                 <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
                 <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
                 <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
@@ -231,7 +200,7 @@ if (!$inATest) {
                         ICON_SIZE_TINY
                     ),
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
-                    ['class' => 'btn btn-default btn-sm']
+                    ['class' => 'btn btn--plain btn-sm']
                 );
 
                 $edit_link = CALCULATED_ANSWER == $objQuestionTmp->selectType() && $objQuestionTmp->isAnswered()
@@ -242,7 +211,7 @@ if (!$inATest) {
                             [],
                             ICON_SIZE_TINY
                         ),
-                        ['class' => 'btn btn-default btn-sm']
+                        ['class' => 'btn btn--plain btn-sm']
                     )
                     : Display::url(
                         Display::return_icon(
@@ -257,7 +226,7 @@ if (!$inATest) {
                                 'editQuestion' => $id,
                                 'page' => $page,
                             ]),
-                        ['class' => 'btn btn-default btn-sm']
+                        ['class' => 'btn btn--plain btn-sm']
                     );
                 $delete_link = null;
                 if (true == $objExercise->edit_exercise_in_lp) {
@@ -276,7 +245,9 @@ if (!$inATest) {
                             ]),
                         [
                             'id' => "delete_$id",
-                            'class' => 'opener btn btn-default btn-sm',
+                            'class' => 'delete-swal btn btn--plain btn-sm',
+                            'data-title' => get_lang('Are you sure you want to delete'),
+                            'title' => get_lang('Delete'),
                         ]
                     );
                 }
@@ -285,7 +256,7 @@ if (!$inATest) {
                     $delete_link = '';
                 }
 
-                $btnDetail = implode(
+                $btnActions = implode(
                     PHP_EOL,
                     [$edit_link, $clone_link, $delete_link]
                 );
@@ -294,7 +265,7 @@ if (!$inATest) {
                 $title = strip_tags($title);
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
-                    $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
+                    $move = Display::getMdiIcon('cursor-move');
                 }
 
                 // Question name
@@ -305,12 +276,13 @@ if (!$inATest) {
 
                 $questionType = Display::return_icon(
                     $objQuestionTmp->getTypePicture(),
-                    $objQuestionTmp->getExplanation()
+                    $objQuestionTmp->getExplanation(),
+                    ['class' => 'm-auto']
                 );
 
                 // Question category
                 $questionCategory = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->getId())
                 );
                 if (empty($questionCategory)) {
                     $questionCategory = '-';
@@ -327,30 +299,30 @@ if (!$inATest) {
                 $questionScore = $objQuestionTmp->selectWeighting();
 
                 echo '<div id="question_id_list_'.$id.'">
-                        <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
+                        <div class="header_operations" data-exercise="'.$objExercise->getId().'"
                             data-question="'.$id.'">
                             <div class="row">
                                 <div class="question col-sm-5 col-xs-12">'
                                     .$questionName.'
                                 </div>
                                 <div class="type text-center col-sm-1 col-xs-12">
-                                    <span class="visible-xs-inline">'.get_lang('Type').' </span>'
+                                    <span class="xs">'.get_lang('Type').' </span>'
                                     .$questionType.'
                                 </div>
                                 <div class="category col-sm-2 col-xs-12" title="'.$questionCategory.'">
-                                    <span class="visible-xs-inline">'.get_lang('Category').' </span>'
+                                    <span class="xs">'.get_lang('Category').' </span>'
                                     .cut($questionCategory, 42).'
                                 </div>
                                 <div class="level text-right col-sm-1 col-xs-6">
-                                    <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'
+                                    <span class="xs">'.get_lang('Difficulty').' </span>'
                                     .$questionLevel.'
                                 </div>
                                 <div class="score text-right col-sm-1 col-xs-6">
-                                    <span class="visible-xs-inline">'.get_lang('Score').' </span>'
+                                    <span class="xs">'.get_lang('Score').' </span>'
                                     .$questionScore.'
                                 </div>
                                 <div class="btn-actions text-right col-sm-2 col-xs-6">
-                                    <div class="edition">'.$btnDetail.'</div>
+                                    <div class="edition">'.$btnActions.'</div>
                                 </div>
                             </div>
                         </div>

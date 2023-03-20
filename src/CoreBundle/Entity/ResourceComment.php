@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Tree\Traits\NestedSetEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
+ * ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"comment:read"}}
- * )
+ * ).
  *
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
@@ -26,90 +30,85 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceComment
 {
-    use TimestampableEntity;
+    use TimestampableTypedEntity;
     use TimestampableAgoTrait;
     use NestedSetEntity;
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"comment:read"})
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
-     * @var User
-     *
      * @Groups({"comment:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $author;
+    protected User $author;
 
     /**
-     * @var string
-     *
      * @Groups({"comment:read"})
-     * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="string", nullable=false)
      */
-    protected $content;
+    #[Assert\NotBlank]
+    protected string $content;
 
     /**
      * @Gedmo\TreeParent
      *
      * @ORM\ManyToOne(
-     *     targetEntity="ResourceComment",
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
      *     inversedBy="children"
      * )
-     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
-    protected $parent;
+    protected ?ResourceComment $parent = null;
 
     /**
-     * @var \DateTime
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var \DateTime
-     *
      * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    protected $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
-     * @var ResourceComment[]
+     * @var Collection|ResourceComment[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="ResourceComment",
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
      *     mappedBy="parent"
      * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id"="ASC"})
      */
-    protected $children;
+    protected Collection $children;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTime();
         $this->content = '';
         $this->children = new ArrayCollection();
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -126,12 +125,12 @@ class ResourceComment
         return $this;
     }
 
-    public function getResourceNode()
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
 
-    public function setResourceNode($resourceNode): self
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -150,12 +149,12 @@ class ResourceComment
         return $this;
     }
 
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent($parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
@@ -163,7 +162,7 @@ class ResourceComment
     }
 
     /**
-     * @return ResourceComment[]
+     * @return ResourceComment[]|Collection
      */
     public function getChildren()
     {
@@ -171,9 +170,9 @@ class ResourceComment
     }
 
     /**
-     * @param ResourceComment[] $children
+     * @param ResourceComment[]|Collection $children
      */
-    public function setChildren(array $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

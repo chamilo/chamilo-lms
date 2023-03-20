@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use ChamiloSession as Session;
 
@@ -116,6 +117,11 @@ class Evaluation implements GradebookItem
     public function setSessionId($sessionId)
     {
         $this->sessionId = (int) $sessionId;
+    }
+
+    public function set_session_id($sessionId)
+    {
+        $this->setSessionId($sessionId);
     }
 
     public function get_date()
@@ -314,15 +320,25 @@ class Evaluation implements GradebookItem
             }
             $em = Database::getManager();
 
+            $category = null;
+            if (!empty($this->get_category_id())) {
+                $category = $em->getRepository(GradebookCategory::class)->find($this->get_category_id());
+            }
+
+            $courseId = 0;
+            if (!empty($this->course_code)) {
+                $courseId = api_get_course_int_id($this->course_code);
+            }
+
             $evaluation = new GradebookEvaluation();
             $evaluation
                 ->setDescription($this->description)
-                ->setCourse(api_get_course_entity())
+                ->setCourse(api_get_course_entity($courseId))
                 ->setName($this->get_name())
-                ->setCategoryId($this->get_category_id())
+                ->setCategory($category)
                 ->setUser(api_get_user_entity($this->get_user_id()))
                 ->setWeight(api_float_val($this->get_weight()))
-                ->setMax($this->get_max())
+                ->setMax(api_float_val($this->get_max()))
                 ->setVisible($this->is_visible())
                 ->setType($this->type)
             ;
@@ -388,7 +404,7 @@ class Evaluation implements GradebookItem
             $sql .= 'null';
         }
         $sql .= ', category_id = ';
-        if (isset($this->category)) {
+        if (!empty($this->category)) {
             $sql .= intval($this->get_category_id());
         } else {
             $sql .= 'null';
@@ -522,6 +538,7 @@ class Evaluation implements GradebookItem
     public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
         if ($allowStats) {
             $evaluation = $this->entity;
             if (!empty($evaluation)) {
@@ -588,10 +605,12 @@ class Evaluation implements GradebookItem
                 Session::write('calc_score', [$key => $results]);
             }
 
-            $score = 0;
-            /** @var Result $res */
-            foreach ($results as $res) {
-                $score = $res->get_score();
+            $score = null;
+            if (!empty($results)) {
+                /** @var Result $res */
+                foreach ($results as $res) {
+                    $score = $res->get_score();
+                }
             }
 
             return [$score, $this->get_max()];

@@ -1,52 +1,57 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Profile.
- *
  * @ORM\Table(name="skill_level_profile")
  * @ORM\Entity
  */
 class Profile
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
+     *
+     * @var Skill[]|Collection
      */
-    protected $skills;
+    protected Collection $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position"="ASC"})
+     *
+     * @var Level[]|Collection
      */
-    protected $levels;
+    protected Collection $levels;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __construct()
     {
-        return (string) $this->getName();
+        $this->skills = new ArrayCollection();
+        $this->levels = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -57,62 +62,48 @@ class Profile
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Profile
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Profile
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
+    /**
+     * @return Skill[]|Collection
+     */
     public function getSkills()
     {
         return $this->skills;
     }
 
     /**
-     * @return Profile
+     * @param Skill[]|Collection $skills
      */
-    public function setSkills($skills)
+    public function setSkills($skills): self
     {
         $this->skills = $skills;
 
         return $this;
     }
 
+    /**
+     * @return Level[]|Collection
+     */
     public function getLevels()
     {
         return $this->levels;
     }
 
     /**
-     * @return Profile
+     * @param Collection $levels
      */
-    public function setLevels($levels)
+    public function setLevels($levels): self
     {
         $this->levels = $levels;
 

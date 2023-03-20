@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SysAnnouncement.
+ * Portal announcements.
  *
  * @ORM\Table(name="sys_announcement")
  * @ORM\Entity
@@ -16,139 +19,82 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SysAnnouncement
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
      */
-    protected $dateStart;
+    protected DateTime $dateStart;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_end", type="datetime", nullable=false)
      */
-    protected $dateEnd;
+    protected DateTime $dateEnd;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
-     */
-    protected $visibleTeacher;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_student", type="boolean", nullable=false)
-     */
-    protected $visibleStudent;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
-     */
-    protected $visibleGuest;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
-     */
-    protected $visibleDrh;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_session_admin", type="boolean", nullable=false)
-     */
-    protected $visibleSessionAdmin;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible_boss", type="boolean", nullable=false)
-     */
-    protected $visibleBoss;
-
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    #[Assert\NotBlank]
+    protected string $content;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lang", type="string", length=70, nullable=true)
      */
-    protected $lang;
+    protected ?string $lang = null;
 
     /**
-     * @var int
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected AccessUrl $url;
+
+    /**
+     * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
-     */
-    protected $accessUrlId;
-
-    /**
-     * @var int
+     * @ORM\Column(type="array")
      *
-     * @ORM\Column(name="career_id", type="integer", nullable=true)
+     * @var string[]
      */
-    protected $careerId;
+    protected array $roles = [];
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="promotion_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
+     * @ORM\JoinColumn(name="career_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $promotionId;
+    protected ?Career $career = null;
 
     /**
-     * SysAnnouncement constructor.
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion", inversedBy="announcements")
+     * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    protected ?Promotion $promotion = null;
+
     public function __construct()
     {
-        $this->visibleBoss = 0;
-        $this->visibleDrh = 0;
-        $this->visibleGuest = 0;
-        $this->visibleSessionAdmin = 0;
-        $this->visibleStudent = 0;
-        $this->visibleTeacher = 0;
-        $this->careerId = 0;
-        $this->promotionId = 0;
+        $this->roles = [];
     }
 
     /**
-     * Set dateStart.
+     * Get dateStart.
      *
-     * @param \DateTime $dateStart
-     *
-     * @return SysAnnouncement
+     * @return DateTime
      */
-    public function setDateStart($dateStart)
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    public function setDateStart(DateTime $dateStart): self
     {
         $this->dateStart = $dateStart;
 
@@ -156,121 +102,18 @@ class SysAnnouncement
     }
 
     /**
-     * Get dateStart.
-     *
-     * @return \DateTime
-     */
-    public function getDateStart()
-    {
-        return $this->dateStart;
-    }
-
-    /**
-     * Set dateEnd.
-     *
-     * @param \DateTime $dateEnd
-     *
-     * @return SysAnnouncement
-     */
-    public function setDateEnd($dateEnd)
-    {
-        $this->dateEnd = $dateEnd;
-
-        return $this;
-    }
-
-    /**
      * Get dateEnd.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDateEnd()
     {
         return $this->dateEnd;
     }
 
-    /**
-     * Set visibleTeacher.
-     *
-     * @param bool $visibleTeacher
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleTeacher($visibleTeacher)
+    public function setDateEnd(DateTime $dateEnd): self
     {
-        $this->visibleTeacher = $visibleTeacher;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleTeacher.
-     *
-     * @return bool
-     */
-    public function getVisibleTeacher()
-    {
-        return $this->visibleTeacher;
-    }
-
-    /**
-     * Set visibleStudent.
-     *
-     * @param bool $visibleStudent
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleStudent($visibleStudent)
-    {
-        $this->visibleStudent = $visibleStudent;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleStudent.
-     *
-     * @return bool
-     */
-    public function getVisibleStudent()
-    {
-        return $this->visibleStudent;
-    }
-
-    /**
-     * Set visibleGuest.
-     *
-     * @param bool $visibleGuest
-     *
-     * @return SysAnnouncement
-     */
-    public function setVisibleGuest($visibleGuest)
-    {
-        $this->visibleGuest = $visibleGuest;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleGuest.
-     *
-     * @return bool
-     */
-    public function getVisibleGuest()
-    {
-        return $this->visibleGuest;
-    }
-
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return SysAnnouncement
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }
@@ -285,16 +128,9 @@ class SysAnnouncement
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return SysAnnouncement
-     */
-    public function setContent($content)
+    public function setTitle(string $title): self
     {
-        $this->content = $content;
+        $this->title = $title;
 
         return $this;
     }
@@ -309,16 +145,9 @@ class SysAnnouncement
         return $this->content;
     }
 
-    /**
-     * Set lang.
-     *
-     * @param string $lang
-     *
-     * @return SysAnnouncement
-     */
-    public function setLang($lang)
+    public function setContent(string $content): self
     {
-        $this->lang = $lang;
+        $this->content = $content;
 
         return $this;
     }
@@ -333,28 +162,11 @@ class SysAnnouncement
         return $this->lang;
     }
 
-    /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return SysAnnouncement
-     */
-    public function setAccessUrlId($accessUrlId)
+    public function setLang(string $lang): self
     {
-        $this->accessUrlId = $accessUrlId;
+        $this->lang = $lang;
 
         return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
     }
 
     /**
@@ -367,40 +179,82 @@ class SysAnnouncement
         return $this->id;
     }
 
-    public function isVisibleDrh(): bool
+    public function getUrl(): AccessUrl
     {
-        return $this->visibleDrh;
+        return $this->url;
     }
 
-    public function setVisibleDrh(bool $visibleDrh): self
+    public function setUrl(AccessUrl $url): self
     {
-        $this->visibleDrh = $visibleDrh;
+        $this->url = $url;
 
         return $this;
     }
 
-    public function isVisibleSessionAdmin(): bool
+    public function hasCareer(): bool
     {
-        return $this->visibleSessionAdmin;
+        return null !== $this->career;
     }
 
-    public function setVisibleSessionAdmin(
-        bool $visibleSessionAdmin
-    ): self {
-        $this->visibleSessionAdmin = $visibleSessionAdmin;
+    public function getCareer(): ?Career
+    {
+        return $this->career;
+    }
+
+    public function setCareer(?Career $career): self
+    {
+        $this->career = $career;
 
         return $this;
     }
 
-    public function isVisibleBoss(): bool
+    public function hasPromotion(): bool
     {
-        return $this->visibleBoss;
+        return null !== $this->promotion;
     }
 
-    public function setVisibleBoss(bool $visibleBoss): self
+    public function getPromotion(): ?Promotion
     {
-        $this->visibleBoss = $visibleBoss;
+        return $this->promotion;
+    }
+
+    public function setPromotion(?Promotion $promotion): self
+    {
+        $this->promotion = $promotion;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = [];
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        $role = strtoupper($role);
+
+        if (!\in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function isVisible(): bool
+    {
+        $now = new DateTime();
+
+        return $this->getDateStart() <= $now && $now <= $this->getDateEnd();
     }
 }

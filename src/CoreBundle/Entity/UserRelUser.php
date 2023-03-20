@@ -1,134 +1,167 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * UserRelUser.
+ * Associations between users.
  *
- * @ORM\Table(name="user_rel_user", indexes={
- *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
- *     @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
- *     @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
- * })
+ * @ORM\Table(name="user_rel_user",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(
+ *             name="user_friend_relation",
+ *             columns={"user_id", "friend_user_id", "relation_type"}
+ *         )
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
+ *       @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
+ *       @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
+ *    }
+ * )
  * @ORM\Entity
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserRelUserListener"})
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            //'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security_post_denormalize' => "is_granted('CREATE', object)",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            //'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
+    attributes: [
+        'security' => 'is_granted("ROLE_USER")',
+    ],
+    denormalizationContext: [
+        'groups' => ['user_rel_user:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['user_rel_user:read', 'timestampable_created:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => 'exact',
+    'friend' => 'exact',
+    'relationType' => 'exact',
+    'friend.username' => 'partial',
+])]
+#[UniqueEntity(
+    fields: ['user', 'friend', 'relationType'],
+    errorPath: 'User',
+    message: 'User-friend relation already exists',
+)]
 class UserRelUser
 {
     use UserTrait;
+    use TimestampableTypedEntity;
+
+    public const USER_UNKNOWN = 0;
+    //public const USER_RELATION_TYPE_UNKNOWN = 1;
+    //public const USER_RELATION_TYPE_PARENT = 2;
+    public const USER_RELATION_TYPE_FRIEND = 3;
+    public const USER_RELATION_TYPE_GOODFRIEND = 4; // should be deprecated is useless
+    //public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
+    public const USER_RELATION_TYPE_DELETED = 6;
+    public const USER_RELATION_TYPE_RRHH = 7;
+    public const USER_RELATION_TYPE_BOSS = 8;
+    public const USER_RELATION_TYPE_HRM_REQUEST = 9;
+    public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelUsers")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    protected $user;
+    #[Assert\NotNull]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    protected User $user;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
+     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    protected $friendUserId;
+    #[Assert\NotNull]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    protected User $friend;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    #[Assert\NotBlank]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    protected int $relationType;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_edit", type="datetime", nullable=true)
-     */
-    protected $lastEdit;
-
-    /**
-     * Set friendUserId.
-     *
-     * @param int $friendUserId
-     *
-     * @return UserRelUser
-     */
-    public function setFriendUserId($friendUserId)
+    public function __construct()
     {
-        $this->friendUserId = $friendUserId;
+        $this->relationType = self::USER_RELATION_TYPE_FRIEND;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get friendUserId.
-     *
-     * @return int
-     */
-    public function getFriendUserId()
+    public function getFriend(): User
     {
-        return $this->friendUserId;
+        return $this->friend;
     }
 
-    /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return UserRelUser
-     */
-    public function setRelationType($relationType)
+    public function setFriend(User $friend): self
+    {
+        $this->friend = $friend;
+
+        return $this;
+    }
+
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
         return $this;
     }
 
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): ?int
     {
         return $this->relationType;
-    }
-
-    /**
-     * Set lastEdit.
-     *
-     * @param \DateTime $lastEdit
-     *
-     * @return UserRelUser
-     */
-    public function setLastEdit($lastEdit)
-    {
-        $this->lastEdit = $lastEdit;
-
-        return $this;
-    }
-
-    /**
-     * Get lastEdit.
-     *
-     * @return \DateTime
-     */
-    public function getLastEdit()
-    {
-        return $this->lastEdit;
     }
 
     /**

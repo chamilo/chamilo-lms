@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
@@ -31,12 +32,12 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-    if ('true' == api_get_setting('registration', 'email') || $checkUniqueEmail) {
+    if ('true' === api_get_setting('registration', 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
 
     $classExistList = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     foreach ($users as &$user) {
         $user['has_error'] = false;
         $user['message'] = '';
@@ -81,7 +82,10 @@ function validate_data($users, $checkUniqueEmail = false)
         if (isset($user['Email'])) {
             $result = api_valid_email($user['Email']);
             if (false === $result) {
-                $user['message'] .= Display::return_message(get_lang('Please enter a valid e-mail address !'), 'warning');
+                $user['message'] .= Display::return_message(
+                    get_lang('Please enter a valid e-mail address !'),
+                    'warning'
+                );
                 $user['has_error'] = true;
             }
         }
@@ -212,7 +216,7 @@ function save_data($users, $sendMail = false)
         $inserted_in_course = [];
     }
 
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     if (is_array($users)) {
         $efo = new ExtraFieldOption('user');
 
@@ -260,9 +264,10 @@ function save_data($users, $sendMail = false)
                 if (isset($user['Courses']) && is_array($user['Courses'])) {
                     foreach ($user['Courses'] as $course) {
                         if (CourseManager::course_exists($course)) {
-                            $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                            $course_info = api_get_course_info($course);
+
+                            $result = CourseManager::subscribeUser($user_id, $course_info['real_id'], $user['Status']);
                             if ($result) {
-                                $course_info = api_get_course_info($course);
                                 $inserted_in_course[$course] = $course_info['title'];
                             }
                         }
@@ -716,13 +721,13 @@ if ($formContinue) {
 
 if ($reloadImport) {
     echo '<script>
-        
+
         $(function() {
             function reload() {
-                $("#user_import_continue").submit();                
+                $("#user_import_continue").submit();
             }
             setTimeout(reload, 3000);
-        });        
+        });
     </script>';
 }
 
@@ -749,19 +754,28 @@ if (api_get_configuration_value('plugin_redirection_enabled')) {
     $list_reponse[] = api_get_path(WEB_PATH);
 }
 
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
+$content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;language;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
-    echo implode(';', $list).';';
-} ?></span>Courses;Sessions;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;english/spanish/(other);xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
-    echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;language;PhoneNumber;Status;ExpiryDate;<span style="color:red;">';
+
+if (count($list) > 0) {
+    $content .= implode(';', $list).';';
+}
+$content .= '</span>Courses;Sessions;ClassId;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;'.implode(
+        '/',
+        $defined_auth_sources
+    ).';xxx;english/spanish/(other);xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;">';
+
+if (count($list_reponse) > 0) {
+    $content .= implode(';', $list_reponse).';';
+}
+$content .= '
+</span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
 </pre>
 </blockquote>
-<p><?php echo get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
+<p>'.get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
@@ -771,21 +785,27 @@ if (api_get_configuration_value('plugin_redirection_enabled')) {
         <b>&lt;FirstName&gt;xxx&lt;/FirstName&gt;</b>
         &lt;UserName&gt;xxx&lt;/UserName&gt;
         &lt;Password&gt;xxx&lt;/Password&gt;
-        &lt;AuthSource&gt;<?php echo implode('/', $defined_auth_sources); ?>&lt;/AuthSource&gt;
+        &lt;AuthSource&gt;'.implode(' / ', $defined_auth_sources).'&lt;/AuthSource&gt;
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;language&gt;english/spanish/(other)&lt;/language&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;<?php if ('' != $result_xml) {
-    echo '<br /><span style="color:red;">', $result_xml;
-    echo '</span><br />';
-} ?>
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;';
+
+if ('' != $result_xml) {
+    $content .= ' <br /><span style="color:red;">'.$result_xml;
+    $content .= ' </span><br />';
+}
+
+$content .= '
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Sessions&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
     &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>
-</blockquote>
-<?php
+</blockquote>';
+
+echo Display::prose($content);
+
 Display::display_footer();

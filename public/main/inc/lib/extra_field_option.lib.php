@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
- * Class ExtraFieldOption
  * Handles the extra fields for various objects (users, sessions, courses).
  */
 class ExtraFieldOption extends Model
@@ -62,7 +62,7 @@ class ExtraFieldOption extends Model
         if (empty($fieldId)) {
             return false;
         }
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
         $fieldId = (int) $fieldId;
 
         $sql = "SELECT count(*) as count
@@ -71,7 +71,7 @@ class ExtraFieldOption extends Model
                 ON o.field_id = e.id
                 WHERE
                     o.field_id = $fieldId AND
-                    e.extra_field_type = $extraFieldType ";
+                    e.item_type = $extraFieldType ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -167,7 +167,7 @@ class ExtraFieldOption extends Model
         }
 
         $parseOptions = in_array(
-            $params['field_type'],
+            $params['value_type'],
             [
                 ExtraField::FIELD_TYPE_RADIO,
                 ExtraField::FIELD_TYPE_SELECT,
@@ -182,7 +182,7 @@ class ExtraFieldOption extends Model
             return true;
         }
 
-        switch ($params['field_type']) {
+        switch ($params['value_type']) {
             case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
             case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
@@ -203,7 +203,7 @@ class ExtraFieldOption extends Model
                         'option_order' => 0,
                     ];
                     // Looking if option already exists:
-                    $option_info = self::get_field_option_by_field_id_and_option_display_text(
+                    $option_info = $this->get_field_option_by_field_id_and_option_display_text(
                         $field_id,
                         $option['label']
                     );
@@ -216,7 +216,7 @@ class ExtraFieldOption extends Model
                         parent::update($new_params, $showQuery);
                     }
 
-                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['field_type']) {
+                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['value_type']) {
                         continue;
                     }
 
@@ -231,7 +231,7 @@ class ExtraFieldOption extends Model
                             'display_text' => $sub_option,
                             'option_order' => 0,
                         ];
-                        $option_info = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                        $option_info = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
                             $sub_option,
                             $sub_id
@@ -263,7 +263,7 @@ class ExtraFieldOption extends Model
                         'display_text' => $level1['label'],
                         'option_order' => 0,
                     ];
-                    $optionInfo = self::get_field_option_by_field_id_and_option_display_text(
+                    $optionInfo = $this->get_field_option_by_field_id_and_option_display_text(
                         $field_id,
                         $level1['label']
                     );
@@ -283,7 +283,7 @@ class ExtraFieldOption extends Model
                             'display_text' => $level2['label'],
                             'display_order' => 0,
                         ];
-                        $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                        $optionInfo = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
                             $level2['label'],
                             $level1Id
@@ -305,7 +305,7 @@ class ExtraFieldOption extends Model
                                     'display_text' => $item,
                                     'display_order' => 0,
                                 ];
-                                $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
+                                $optionInfo = $this->getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                                     $field_id,
                                     $item,
                                     $level2Id
@@ -410,7 +410,7 @@ class ExtraFieldOption extends Model
     {
         $field_id = (int) $field_id;
         $option_value = Database::escape_string($option_value);
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->tableExtraField} sf
@@ -418,7 +418,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     option_value = '".$option_value."' AND
-                    sf.extra_field_type = $extraFieldType
+                    sf.item_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -441,7 +441,7 @@ class ExtraFieldOption extends Model
     {
         $field_id = (int) $field_id;
         $option_display_text = Database::escape_string($option_display_text);
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->tableExtraField} sf
@@ -449,7 +449,7 @@ class ExtraFieldOption extends Model
                 WHERE
                     field_id = $field_id AND
                     s.display_text = '".$option_display_text."' AND
-                    sf.extra_field_type = $extraFieldType
+                    sf.item_type = $extraFieldType
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -477,7 +477,7 @@ class ExtraFieldOption extends Model
         $field_id = (int) $field_id;
         $option_display_text = Database::escape_string($option_display_text);
         $option_value = Database::escape_string($option_value);
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->tableExtraField} sf
@@ -486,7 +486,7 @@ class ExtraFieldOption extends Model
                     field_id = $field_id AND
                     sf.display_text = '".$option_display_text."' AND
                     option_value = '$option_value' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.item_type = ".$extraFieldType."
                 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -515,7 +515,7 @@ class ExtraFieldOption extends Model
                 $orderBy = ['id' => 'ASC'];
                 break;
             case 'field_id':
-                $orderBy = ['fieldId' => 'ASC'];
+                $orderBy = ['field' => 'ASC'];
                 break;
             case 'option_value':
                 $orderBy = ['optionValue' => 'ASC'];
@@ -534,9 +534,8 @@ class ExtraFieldOption extends Model
                 break;
         }
 
-        $result = Database::getManager()
-            ->getRepository(ExtraFieldOptions::class)
-            ->findBy(['field' => $field_id], $orderBy);
+        $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+        $result = $extraFieldOptionsRepo->findBy(['field' => $field_id], $orderBy);
 
         if (!$result) {
             return false;
@@ -549,7 +548,7 @@ class ExtraFieldOption extends Model
                 'id' => $row->getId(),
                 'field_id' => $row->getField()->getId(),
                 'option_value' => $row->getValue(),
-                'display_text' => self::translateDisplayName($row->getDisplayText()),
+                'display_text' => $row->getDisplayText(),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
                 'option_order' => $row->getOptionOrder(),
@@ -575,16 +574,16 @@ class ExtraFieldOption extends Model
      */
     public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
-        $em = Database::getManager();
-        $option = $em->find(ExtraFieldOptions::class, $option_value_id);
+        $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+        $option = $extraFieldOptionsRepo->find($option_value_id);
 
         if (!$option) {
             return !$to_json ? [] : '{}';
         }
 
-        $subOptions = $em->getRepository(ExtraFieldOptions::class)->findSecondaryOptions($option);
-
+        $subOptions = $extraFieldOptionsRepo->findSecondaryOptions($option);
         $optionsInfo = [];
+
         /** @var ExtraFieldOptions $subOption */
         foreach ($subOptions as $subOption) {
             $optionsInfo[] = [
@@ -627,7 +626,7 @@ class ExtraFieldOption extends Model
         $options = self::get_field_options_by_field($field_id, false, $ordered_by);
         $elements = [];
         if (!empty($options)) {
-            switch ($field_info['field_type']) {
+            switch ($field_info['value_type']) {
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                     $html = ExtraField::extra_field_double_select_convert_array_to_string($options);
                     break;
@@ -694,7 +693,7 @@ class ExtraFieldOption extends Model
      */
     public function getPriorityOptions()
     {
-        return  [
+        return [
             '' => get_lang('Please select an option'),
             1 => get_lang('Success'),
             2 => get_lang('Information'),
@@ -749,10 +748,10 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ('edit' == $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
-                'extra_field_option' => $id,
-            ]);
+        if ('edit' === $action) {
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate_option.php?'.http_build_query(
+                ['id' => $id]
+            );
             $translateButton = Display::toolbarButton(
                 get_lang('Translate this term'),
                 $translateUrl,
@@ -770,12 +769,12 @@ class ExtraFieldOption extends Model
 
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
-        $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
+        $form->addSelect('priority', get_lang('Priority'), $this->getPriorityOptions());
         $form->addElement('textarea', 'priority_message', get_lang('Message type'));
 
         $defaults = [];
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');
@@ -786,7 +785,6 @@ class ExtraFieldOption extends Model
 
         $form->setDefaults($defaults);
 
-        // Setting the rules
         $form->addRule('display_text', get_lang('Required field'), 'required');
         $form->addRule('option_value', get_lang('Required field'), 'required');
 
@@ -860,52 +858,23 @@ class ExtraFieldOption extends Model
     {
         $info = parent::get($id);
 
-        if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['display_text']);
+        if ($info && $translateDisplayText) {
+            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+            $option = $extraFieldOptionsRepo->find($id);
+            $info['display_text'] = $option->getDisplayText();
         }
 
         return $info;
     }
 
-    /**
-     * Translate the display text for a extra field option.
-     *
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($defaultDisplayText)
-    {
-        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
-
-        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
-    }
-
-    /**
-     * @param $defaultDisplayText
-     *
-     * @return mixed|string
-     */
-    public static function getLanguageVariable($defaultDisplayText)
-    {
-        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
-        $variableLanguage = str_replace('-', '_', $variableLanguage);
-        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
-
-        return $variableLanguage;
-    }
-
-    /**
-     * @param null $options
-     *
-     * @return array
-     */
-    public function get_all($options = null)
+    public function get_all(array $options = []): array
     {
         $result = parent::get_all($options);
 
         foreach ($result as &$row) {
-            $row['display_text'] = self::translateDisplayName($row['display_text']);
+            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+            $option = $extraFieldOptionsRepo->find($row['id']);
+            $row['display_text'] = $option->getDisplayText();
         }
 
         return $result;
@@ -918,16 +887,16 @@ class ExtraFieldOption extends Model
      */
     public function getOptionsByFieldVariable($variable)
     {
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $dql = "SELECT o FROM ChamiloCoreBundle:ExtraFieldOptions o
             INNER JOIN ChamiloCoreBundle:ExtraField f WITH o.field = f.id
-            WHERE f.variable = :variable AND f.extraFieldType = :extra_field_type
+            WHERE f.variable = :variable AND f.itemType = :item_type
             ORDER BY o.value ASC";
 
         $result = Database::getManager()
             ->createQuery($dql)
-            ->setParameters(['variable' => $variable, 'extra_field_type' => $extraFieldType])
+            ->setParameters(['variable' => $variable, 'item_type' => $extraFieldType])
             ->getResult();
 
         return $result;

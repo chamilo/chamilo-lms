@@ -167,7 +167,7 @@ class BigBlueButtonBN
 
         if ($xml) {
             if ($xml->meetingID) {
-                return array(
+                return [
                     'returncode' => $xml->returncode->__toString(),
                     'message' => $xml->message->__toString(),
                     'messageKey' => $xml->messageKey->__toString(),
@@ -176,14 +176,14 @@ class BigBlueButtonBN
                     'moderatorPw' => $xml->moderatorPW->__toString(),
                     'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
                     'createTime' => $xml->createTime->__toString(),
-                    'internalMeetingID' => $xml->internalMeetingID->__toString()
-                );
+                    'internalMeetingID' => $xml->internalMeetingID->__toString(),
+                ];
             } else {
-                return array(
+                return [
                     'returncode' => $xml->returncode->__toString(),
                     'message' => $xml->message->__toString(),
                     'messageKey' => $xml->messageKey->__toString(),
-                );
+                ];
             }
         } else {
             return null;
@@ -279,7 +279,6 @@ class BigBlueButtonBN
 	-- getMeetings
 	-- getMeetingInfo
 	*/
-
 	public function getIsMeetingRunningUrl($meetingId) {
 		/* USAGE:
 		$meetingId = '1234'		-- REQUIRED - The unique id for the meeting
@@ -305,7 +304,6 @@ class BigBlueButtonBN
 		else {
 			return null;
 		}
-
 	}
 
 	public function getGetMeetingsUrl() {

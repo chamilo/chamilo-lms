@@ -1,91 +1,76 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CForumThreadQualifyLog.
  *
  * @ORM\Table(
- *  name="c_forum_thread_qualify_log",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id", "thread_id"})
- *  }
+ *     name="c_forum_thread_qualify_log",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id", "thread_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CForumThreadQualifyLog
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer", nullable=false)
      */
-    protected $threadId;
+    protected int $threadId;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
      */
-    protected $qualify;
+    protected float $qualify;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
-    protected $qualifyUserId;
+    protected ?int $qualifyUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
      */
-    protected $qualifyTime;
+    protected ?DateTime $qualifyTime = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId = null;
 
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -105,11 +90,9 @@ class CForumThreadQualifyLog
     /**
      * Set threadId.
      *
-     * @param int $threadId
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setThreadId($threadId)
+    public function setThreadId(int $threadId)
     {
         $this->threadId = $threadId;
 
@@ -129,11 +112,9 @@ class CForumThreadQualifyLog
     /**
      * Set qualify.
      *
-     * @param float $qualify
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setQualify($qualify)
+    public function setQualify(float $qualify)
     {
         $this->qualify = $qualify;
 
@@ -153,11 +134,9 @@ class CForumThreadQualifyLog
     /**
      * Set qualifyUserId.
      *
-     * @param int $qualifyUserId
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setQualifyUserId($qualifyUserId)
+    public function setQualifyUserId(int $qualifyUserId)
     {
         $this->qualifyUserId = $qualifyUserId;
 
@@ -177,11 +156,9 @@ class CForumThreadQualifyLog
     /**
      * Set qualifyTime.
      *
-     * @param \DateTime $qualifyTime
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setQualifyTime($qualifyTime)
+    public function setQualifyTime(DateTime $qualifyTime)
     {
         $this->qualifyTime = $qualifyTime;
 
@@ -191,7 +168,7 @@ class CForumThreadQualifyLog
     /**
      * Get qualifyTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getQualifyTime()
     {
@@ -201,11 +178,9 @@ class CForumThreadQualifyLog
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -225,11 +200,9 @@ class CForumThreadQualifyLog
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumThreadQualifyLog
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

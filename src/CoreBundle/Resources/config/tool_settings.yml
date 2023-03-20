@@ -128,19 +128,16 @@ services:
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.survey, namespace: survey}
 
-    # Course settings
     chamilo_course.settings.tracking:
         class: Chamilo\CourseBundle\Settings\TrackingCourseSettingsSchema
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.tracking, namespace: tracking}
 
-    # Course settings
     chamilo_course.settings.user:
         class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.user, namespace: user}
 
-    # Course settings
     chamilo_course.settings.wiki:
         class: Chamilo\CourseBundle\Settings\WikiCourseSettingsSchema
         tags:

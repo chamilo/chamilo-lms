@@ -51,7 +51,7 @@ $course = $_POST['course'];
 if (empty($annee) && empty($course)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    Display::display_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute'));
+    echo Display::return_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute'));
     echo get_lang('Select a filter to find a matching string at the end of the OU attribute');
     //echo '<em>'.get_lang('In order to do this, you must enter the year, the component and the component's step').'</em><br />';
     ///echo get_lang('Follow each of these steps, step by step').'<br />';
@@ -85,7 +85,7 @@ if (empty($annee) && empty($course)) {
     echo '<br />';
     echo '<h3>'.Display::return_icon('group.gif', get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
     //echo "Connection ...";
-    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAP Connection Error'));
+    $ds = ldap_connect($ldap_host, $ldap_port) or exit(get_lang('LDAP Connection Error'));
     ldap_set_version($ds);
 
     if ($ds) {
@@ -136,10 +136,11 @@ if (empty($annee) && empty($course)) {
         }
     }
     if (!empty($_POST['course'])) {
+        $courseInfo = api_get_course_info($_POST['course']);
         foreach ($UserList as $user_id) {
-            CourseManager::subscribeUser($user_id, $_POST['course']);
+            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
         }
-        header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
+        header('Location: course_information.php?id='.$courseInfo['real_id']);
         exit;
     } else {
         $message = get_lang('No user added');

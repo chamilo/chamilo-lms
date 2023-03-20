@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
+use UnserializeApi;
 
 /**
  * A course-object to use in Export/Import/Backup/Copy.
@@ -19,6 +20,7 @@ class Course
     public $destination_path;
     public $destination_db;
     public $encoding;
+    public $type;
 
     /**
      * Create a new Course-object.
@@ -35,7 +37,7 @@ class Course
     /**
      * Check if a resource links to the given resource.
      */
-    public function is_linked_resource(&$resource_to_check)
+    public function is_linked_resource(&$resource_to_check): bool
     {
         foreach ($this->resources as $type => $resources) {
             if (is_array($resources)) {
@@ -203,9 +205,9 @@ class Course
      */
     public function to_system_encoding()
     {
-        if (api_equal_encodings($this->encoding, api_get_system_encoding())) {
+        /*if (api_equal_encodings($this->encoding, api_get_system_encoding())) {
             return;
-        }
+        }*/
 
         foreach ($this->resources as $type => &$resources) {
             if (count($resources) > 0) {
@@ -353,7 +355,7 @@ class Course
         if (extension_loaded('igbinary')) {
             $unserialized = igbinary_unserialize($course);
         } else {
-            $unserialized = \UnserializeApi::unserialize(
+            $unserialized = UnserializeApi::unserialize(
                 'course',
                 $course
             );

@@ -12,6 +12,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $tool_name = get_lang('Ticket');
+$isAdmin = api_is_platform_admin();
+$user_id = api_get_user_id();
 
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $htmlHeadXtra[] = '<script>
@@ -42,10 +44,10 @@ $(function() {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-down-bold').' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-right-bold').' '.get_lang('Advanced search').'\');
     }
 }
 </script>';
@@ -129,9 +131,7 @@ if (empty($projectId)) {
 }
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
-$user_id = api_get_user_id();
-$isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
-$isAdmin = api_is_platform_admin();
+$isAllow = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
 $actionRight = '';
 
 Display::display_header(get_lang('My tickets'));
@@ -221,16 +221,16 @@ if (!empty($projectId)) {
 
     $advancedSearch = Display::url(
         '<span id="img_plus_and_minus">&nbsp;'.
-        Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search'),
+        Display::getMdiIcon('arrow-right-bold').' '.get_lang('Advanced search'),
         'javascript://',
         [
-            'class' => 'btn btn-default advanced-parameters',
+            'class' => 'btn btn--plain advanced-parameters',
             'onclick' => 'display_advanced_search_form();',
         ]
     );
 
     // Add link
-    if ('true' == api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
+    if ('true' === api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
         $actionRight = Display::url(
             Display::return_icon(
                 'add.png',
@@ -270,9 +270,9 @@ if (!empty($projectId)) {
     echo Display::toolbarAction(
         'toolbar-tickets',
         [
-            $form->returnForm(),
-            $advancedSearch,
             $actionRight,
+            $advancedSearch,
+            $form->returnForm(),
         ]
     );
 
@@ -309,12 +309,7 @@ if (!empty($projectId)) {
     );
 
     if ($isAllow) {
-        echo Display::toolbarAction(
-            'toolbar-options',
-            [
-                $options,
-            ]
-        );
+        echo Display::toolbarAction('toolbar-options', [$options]);
     }
 
     $advancedSearchForm = new FormValidator(
@@ -378,7 +373,11 @@ if ($isAdmin) {
 } else {
     if (false == $isAllow) {
         echo Display::page_subheader(get_lang('My tickets'));
-        echo Display::return_message(get_lang('Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'));
+        echo Display::return_message(
+            get_lang(
+                'Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'
+            )
+        );
     }
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);

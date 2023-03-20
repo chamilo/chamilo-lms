@@ -123,9 +123,9 @@ class FeatureContext extends MinkContext
         $this->visit('/login');
         $this->fillField('login', $username);
         $this->fillField('password', $username);
-        $this->pressButton('Login');
+        $this->pressButton('Sign in');
         $this->waitForThePageToBeLoaded();
-        $this->waitForThePageToBeLoaded();
+        //$this->waitForThePageToBeLoaded();
     }
 
     /**
@@ -268,7 +268,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
+     * @Then /^I fill in editor field "([^"]*)" with "([^"]*)"$/
      */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
@@ -285,7 +285,29 @@ class FeatureContext extends MinkContext
         }
 
         $this->getSession()->executeScript(
-            "CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");"
+            "setContentFromEditor(\"$fieldId\", \"$value\");"
+        );
+    }
+
+    /**
+     * @Then /^I fill in tinymce field "([^"]*)" with "([^"]*)"$/
+     */
+    public function iFillInTinyMceOnFieldWith($locator, $value)
+    {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
+        $el = $this->getSession()->getPage()->findField($locator);
+        $fieldId = $el->getAttribute('id');
+
+        if (empty($fieldId)) {
+            throw new Exception(
+                'Could not find an id for field with locator: '.$locator
+            );
+        }
+
+        $this->getSession()->executeScript(
+            "tinymce.get(\"$fieldId\").getBody().innerHTML = \"$value\";"
         );
     }
 
@@ -322,6 +344,17 @@ class FeatureContext extends MinkContext
     public function iFillInSelectInputWithAndSelect($field, $id, $value)
     {
         $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
+    }
+
+    /**
+     * @When /^(?:|I )fill in ajax select2 input "(?P<field>(?:[^"]|\\")*)" with id "(?P<id>(?:[^"]|\\")*)" and value "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInAjaxSelectInputWithAndSelect($field, $id, $value)
+    {
+        $this->getSession()->executeScript("
+            var newOption = new Option('$value', $id, true, true);
+            $('$field').append(newOption).trigger('change');
+        ");
     }
 
     /**
@@ -417,7 +450,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(3000);
+        $this->getSession()->wait(4000);
     }
 
     /**
@@ -426,7 +459,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(7000);
     }
 
     /**
@@ -434,7 +467,7 @@ class FeatureContext extends MinkContext
      */
     public function waitVeryLongForThePageToBeLoadedWhenReady()
     {
-        $this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(9000, "document.readyState === 'complete'");
     }
 
     /**
@@ -648,5 +681,16 @@ class FeatureContext extends MinkContext
 
             $i++;
         }
+    }
+
+    /**
+     * @Then I click the :selector element
+     */
+    public function iClickTheElement($selector)
+    {
+        $page = $this->getSession()->getPage();
+        $element = $page->find('css', $selector);
+
+        $element->click();
     }
 }

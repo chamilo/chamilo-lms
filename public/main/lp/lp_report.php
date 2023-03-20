@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
@@ -17,6 +19,7 @@ if (!$isAllowedToEdit) {
 }
 
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+$course = api_get_course_entity();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
@@ -37,7 +40,11 @@ if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
 $export = isset($_REQUEST['export']);
 $reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
 
-$lp = new learnpath($courseCode, $lpId, api_get_user_id());
+$repo = Container::getLpRepository();
+/** @var CLp $entity */
+$entity = $repo->find($lpId);
+
+$lp = new learnpath($entity, $courseInfo, api_get_user_id());
 if (empty($lp)) {
     api_not_allowed(true);
 }
@@ -45,12 +52,13 @@ if (empty($lp)) {
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
 $url = $urlBase.'&group_filter='.$groupFilter;
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+
+$course = api_get_course_entity($courseId);
+$session = api_get_session_entity($sessionId);
+
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    $course = api_get_course_entity($courseId);
-    $session = api_get_session_entity($sessionId);
-
     /** @var ItemPropertyRepository $itemRepo */
     $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
     $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
@@ -106,7 +114,7 @@ if ('1' === $lp->getSubscribeUsers()) {
     $users = [];
     if (!empty($categoryId)) {
         /** @var CLpCategory $category */
-        $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+        $category = $em->getRepository(CLpCategory::class)->find($categoryId);
         $subscribedUsersInCategory = $category->getUsers();
         if (!empty($subscribedUsersInCategory)) {
             foreach ($subscribedUsersInCategory as $item) {
@@ -139,24 +147,12 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 }
 
-$lpInfo = Database::select(
-    '*',
-    $lpTable,
-    [
-        'where' => [
-            'c_id = ? AND ' => $courseId,
-            'id = ?' => $lpId,
-        ],
-    ],
-    'first'
-);
-
-$groups = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
+$groups = GroupManager::get_group_list(null, $course, null, $sessionId);
 $label = get_lang('Groups');
 $classes = [];
 if ($allowUserGroups) {
     $label = get_lang('Groups').' / '.get_lang('Classes');
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $conditions = [];
     $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
     $classes = $userGroup->getUserGroupInCourse($conditions);
@@ -285,23 +281,23 @@ if (!empty($users)) {
         $userInfo = api_get_user_info($userId);
         $lpTime = Tracking::get_time_spent_in_lp(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
             $sessionId
         );
 
         $lpScore = Tracking::get_avg_student_score(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
-            $sessionId
+            $session
         );
 
         $lpProgress = Tracking::get_avg_student_progress(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
-            $sessionId
+            $session
         );
 
         $lpLastConnection = Tracking::get_last_connection_time_in_lp(
@@ -323,14 +319,14 @@ if (!empty($users)) {
             if (!empty($groupsByUser)) {
                 $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                 foreach ($groupsByUser as $group) {
-                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gidReq='.$group['iid']).'&nbsp;';
+                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gid='.$group['iid']).'&nbsp;';
                 }
             }
         }
 
         $classesToString = '';
         if ($allowUserGroups) {
-            $classes = $userGroup->getUserGroupListByUser($userId, UserGroup::NORMAL_CLASS);
+            $classes = $userGroup->getUserGroupListByUser($userId, Usergroup::NORMAL_CLASS);
             $icon = Display::return_icon('class.png', get_lang('Class'));
             if (!empty($classes)) {
                 $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);
@@ -342,7 +338,7 @@ if (!empty($users)) {
                 }
             }
         }
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true'.
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&'.
         api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
         $row = [];
         $row[] = Display::url($userInfo['firstname'], $trackingUrl);
@@ -454,9 +450,7 @@ $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
 $template->assign('url_base', $urlBase);
-
-$layout = $template->get_template('learnpath/report.tpl');
-$template->assign('header', $lpInfo['name']);
+$template->assign('header', $entity->getName());
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
 $template->assign('content', $result);

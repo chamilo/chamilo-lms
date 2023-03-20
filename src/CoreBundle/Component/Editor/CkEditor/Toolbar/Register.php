@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -9,7 +11,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Register extends Basic
 {
-    public $plugins = [];
+    public array $plugins = [];
 
     /**
      * Get the toolbar config.
@@ -18,7 +20,7 @@ class Register extends Basic
      */
     public function getConfig()
     {
-        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
+        if ('true' !== api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();

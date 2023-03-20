@@ -1,0 +1,47 @@
+.p-inline-message {
+  @apply py-3 px-4 m-0 rounded-md border border-solid flex gap-3.5 bg-white;
+
+  .p-inline-message-icon {
+  }
+
+  .p-inline-message-text {
+  }
+
+  &.p-inline-message-info {
+    @apply text-info;
+
+    .p-inline-message-icon {
+      @apply text-info;
+    }
+  }
+
+  &.p-inline-message-success {
+    @apply text-success;
+
+    .p-inline-message-icon {
+      @apply text-success;
+    }
+  }
+
+  &.p-inline-message-warn {
+    @apply text-warning;
+
+    .p-inline-message-icon {
+      @apply text-warning;
+    }
+  }
+
+  &.p-inline-message-error {
+    @apply text-error;
+
+    .p-inline-message-icon {
+      @apply text-error;
+    }
+  }
+
+  &.p-inline-message-icon-only {
+    .p-inline-message-icon {
+
+    }
+  }
+}

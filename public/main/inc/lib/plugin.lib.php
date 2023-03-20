@@ -271,10 +271,12 @@ class AppPlugin
             'vchamilo',
             'whispeakauth',
             'zoom',
+            'xapi',
         ];
 
         return $officialPlugins;
     }
+
     /**
      * @param string $pluginName
      * @param int    $urlId
@@ -409,7 +411,7 @@ class AppPlugin
      */
     public function load_plugin_lang_variables($plugin_name)
     {
-        $language_interface = api_get_interface_language();
+        $language_interface = api_get_language_isocode();
         $root = api_get_path(SYS_PLUGIN_PATH);
         $strings = null;
 
@@ -715,24 +717,25 @@ class AppPlugin
                 }
 
                 $form->addHtml('<div class="panel panel-default">');
-                $form->addHtml(
-                    '
+                $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$pluginName.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$pluginName.'-settings" aria-expanded="false" aria-controls="collapse-'.$pluginName.'-settings">
-                '
-                );
+                            <a class="collapsed"
+                                role="button" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapse-'.$pluginName.'-settings" aria-expanded="false"
+                                aria-controls="collapse-'.$pluginName.'-settings">
+                ');
                 $form->addHtml($icon.' '.$pluginTitle);
-                $form->addHtml(
-                    '
+                $form->addHtml('
                             </a>
                         </h4>
                     </div>
-                '
-                );
-                $form->addHtml(
-                    '
-                    <div id="collapse-'.$pluginName.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$pluginName.'-settings">
+                ');
+                $form->addHtml('
+                    <div
+                        id="collapse-'.$pluginName.'-settings"
+                        class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="heading-'.$pluginName.'-settings">
                         <div class="panel-body">
                 '
                 );
@@ -742,7 +745,7 @@ class AppPlugin
                     if (false === $obj->validateCourseSetting($setting['name'])) {
                         continue;
                     }
-                    if ('checkbox' != $setting['type']) {
+                    if ('checkbox' !== $setting['type']) {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
                         $element = &$form->createElement(
@@ -751,33 +754,39 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
+                        $courseSetting = api_get_course_setting($setting['name']);
+                        if (-1 === $courseSetting) {
+                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            if (!empty($defaultValue)) {
+                                if ('true' === $defaultValue) {
+                                    $element->setChecked(true);
+                                }
+                            }
+                        }
+
                         if (isset($setting['init_value']) && 1 == $setting['init_value']) {
                             $element->setChecked(true);
                         }
+                        $form->addElement($element);
+
+                        if (isset($setting['group'])) {
+                            $groups[$setting['group']][] = $element;
+                        }
                     }
                 }
-
-                if (isset($setting['init_value']) && $setting['init_value'] == 1) {
-                    $element->setChecked(true);
+                foreach ($groups as $k => $v) {
+                    $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
                 }
-                $form->addElement($element);
-
-                if (isset($setting['group'])) {
-                    $groups[$setting['group']][] = $element;
-                }
-            }
-        }
-        foreach ($groups as $k => $v) {
-            $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
-        }
-        $form->addButtonSave(get_lang('Save settings'));
-        $form->addHtml(
+                $form->addButtonSave(get_lang('Save settings'));
+                $form->addHtml(
             '
                         </div>
                     </div>
                 '
         );
-        $form->addHtml('</div>');
+                $form->addHtml('</div>');
+            }
+        }
     }
 
     /**
@@ -826,38 +835,6 @@ class AppPlugin
                 $obj->course_settings_updated($subValues);
             }
         }
-    }
-
-    /**
-     * Get first SMS plugin name.
-     *
-     * @return string|bool
-     */
-    public function getSMSPluginName()
-    {
-        $installedPluginsList = $this->getInstalledPluginListObject();
-        foreach ($installedPluginsList as $installedPlugin) {
-            if ($installedPlugin->isMailPlugin) {
-                return get_class($installedPlugin);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return SmsPluginLibraryInterface
-     */
-    public function getSMSPluginLibrary()
-    {
-        $className = $this->getSMSPluginName();
-        $className = str_replace('Plugin', '', $className);
-
-        if (class_exists($className)) {
-            return new $className();
-        }
-
-        return false;
     }
 
     /**

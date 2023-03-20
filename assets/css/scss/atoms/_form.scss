@@ -1,0 +1,73 @@
+@layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select {
+    @apply text-body-1 text-gray-90
+      placeholder:text-gray-90
+      focus:outline-none focus:outline-offset-0 focus:ring-0 focus:ring-offset-0;
+  }
+
+  label {
+    @apply text-body-2;
+
+    &:empty {
+      @apply hidden;
+    }
+  }
+
+  form {
+    small {
+      @apply text-caption;
+    }
+  }
+}
+
+@layer components {
+  .form {
+    &--search,
+    &--inline {
+      @apply flex-row gap-3 mb-1;
+    }
+
+    &--search {
+      button {
+        @apply flex-none;
+      }
+    }
+
+    &__group {
+      &--inline {
+        @apply flex gap-3;
+      }
+    }
+
+    &__field {
+      @apply flex flex-col gap-2;
+    }
+
+    &__radio-field {
+      @apply flex gap-2 items-center;
+    }
+  }
+}
+
+
+.p-error {
+  @apply text-error;
+}
+
+.p-disabled {
+  @apply opacity-60;
+}

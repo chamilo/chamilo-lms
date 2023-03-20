@@ -37,12 +37,9 @@ class Link extends Model
         'target',
         'session_id',
     ];
-    public $required = ['url', 'title'];
+    public array $required = ['url', 'title'];
     private $course;
 
-    /**
-     * Link constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_LINK);
@@ -112,7 +109,9 @@ class Link extends Model
         // If the URL is invalid, an error occurs.
         if (!api_valid_url($urllink, true)) {
             // A check against an absolute URL
-            Display::addFlash(Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error'));
+            Display::addFlash(
+                Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error')
+            );
 
             return false;
         } else {
@@ -129,7 +128,6 @@ class Link extends Model
                 ->setUrl($urllink)
                 ->setTitle($title)
                 ->setDescription($description)
-                ->setOnHomepage($onhomepage)
                 ->setTarget($target)
                 ->setCategory($category)
             ;
@@ -148,17 +146,13 @@ class Link extends Model
                 ;
             }
 
-            $repo->getEntityManager()->persist($link);
-            $repo->getEntityManager()->flush();
+            $repo->create($link);
             $link_id = $link->getIid();
 
             if (('true' === api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
-                $course_int_id = $_course['real_id'];
-                $courseCode = $_course['code'];
+                $courseCode = $course_info['code'];
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
 
@@ -195,7 +189,7 @@ class Link extends Model
                     SE_COURSE_ID => $courseCode,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $link_id,
+                        'link_id' => $link_id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];
@@ -212,8 +206,8 @@ class Link extends Model
                     $sql_cat = sprintf(
                         $sql_cat,
                         $table_link_category,
-                        (int) $categoryId,
-                        $course_int_id
+                        $categoryId,
+                        $course_id
                     );
                     $result = Database:: query($sql_cat);
                     if (1 == Database:: num_rows($result)) {
@@ -244,7 +238,7 @@ class Link extends Model
                     $sql = sprintf(
                         $sql,
                         $tbl_se_ref,
-                        $course_int_id,
+                        $course_id,
                         $courseCode,
                         TOOL_LINK,
                         $link_id,
@@ -280,14 +274,6 @@ class Link extends Model
         $tblLink = Database::get_course_table(TABLE_LINK);
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = (int) $linkId;
-        if (is_null($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = (int) $courseId;
-        if (is_null($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
-        $sessionId = (int) $sessionId;
         if ('' != $linkUrl) {
             $sql = "UPDATE $tblLink SET
                     url = '$linkUrl'
@@ -327,8 +313,7 @@ class Link extends Model
         $courseEntity = api_get_course_entity($course_id);
         $sessionEntity = api_get_session_entity($session_id);
 
-        $category = new CLinkCategory();
-        $category
+        $category = (new CLinkCategory())
             ->setCategoryTitle($category_title)
             ->setDescription($description)
          //   ->setDisplayOrder($order)
@@ -336,27 +321,11 @@ class Link extends Model
             ->addCourseLink($courseEntity, $sessionEntity)
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
-        $linkId = $category->getIid();
-
-        if ($linkId) {
-            // add link_category visibility
-            // course ID is taken from context in api_set_default_visibility
-            //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
-            /*api_item_property_update(
-                $_course,
-                TOOL_LINK_CATEGORY,
-                $linkId,
-                'LinkCategoryAdded',
-                api_get_user_id()
-            );
-            api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);*/
-        }
+        $repo->create($category);
 
         Display::addFlash(Display::return_message(get_lang('Category added')));
 
-        return $linkId;
+        return $category;
     }
 
     public static function deleteCategory($id)
@@ -386,43 +355,15 @@ class Link extends Model
         $repo = Container::getLinkRepository();
         $link = $repo->find($id);
         if ($link) {
-            $repo->getEntityManager()->remove($link);
-            $repo->getEntityManager()->flush();
+            $repo->delete($link);
             self::delete_link_from_search_engine(api_get_course_id(), $id);
-            Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
+            SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
             Display::addFlash(Display::return_message(get_lang('The link has been deleted')));
 
             return true;
         }
 
         return false;
-
-        $courseInfo = api_get_course_info();
-        $tbl_link = Database::get_course_table(TABLE_LINK);
-
-        $course_id = $courseInfo['real_id'];
-        $id = intval($id);
-
-        if (empty($id)) {
-            return false;
-        }
-
-        // -> Items are no longer physically deleted,
-        // but the visibility is set to 2 (in item_property).
-        // This will make a restore function possible for the platform administrator.
-        $sql = "UPDATE $tbl_link SET on_homepage='0'
-                WHERE c_id = $course_id AND iid='".$id."'";
-        Database:: query($sql);
-
-        /*api_item_property_update(
-            $courseInfo,
-            TOOL_LINK,
-            $id,
-            'delete',
-            api_get_user_id()
-        );*/
-
-        return true;
     }
 
     /**
@@ -451,7 +392,6 @@ class Link extends Model
             Database:: query($sql);
 
             // Remove terms from db.
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
         }
     }
@@ -490,7 +430,6 @@ class Link extends Model
      */
     public static function editLink($id, $values = [])
     {
-        $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
         $id = (int) $id;
@@ -550,19 +489,26 @@ class Link extends Model
             ->setUrl($values['url'])
             ->setTitle($values['title'])
             ->setDescription($values['description'])
-            ->setOnHomepage($values['on_homepage'])
             ->setTarget($values['target'])
         ;
 
-        if (!empty($values['category_id'])) {
+        $courseEntity = api_get_course_entity($course_id);
+
+        if ($categoryId) {
             $repoCategory = Container::getLinkCategoryRepository();
             /** @var CLinkCategory $category */
             $category = $repoCategory->find($categoryId);
-            $link->setCategory($category);
+            $link
+                ->setCategory($category)
+                ->setParent($category);
+        } else {
+            $link
+                ->setCategory(null)
+                ->setParent($courseEntity);
         }
 
-        $repo->getEntityManager()->persist($link);
-        $repo->getEntityManager()->flush();
+        $repo->updateNodeForResource($link);
+        $repo->update($link);
 
         // Update search enchine and its values table if enabled.
         if ('true' === api_get_setting('search_enabled')) {
@@ -588,8 +534,6 @@ class Link extends Model
             $res = Database:: query($sql);
 
             if (Database:: num_rows($res) > 0) {
-                require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $se_ref = Database:: fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -634,7 +578,7 @@ class Link extends Model
                     SE_COURSE_ID => $course_id,
                     SE_TOOL_ID => TOOL_LINK,
                     SE_DATA => [
-                        'link_id' => (int) $id,
+                        'link_id' => $id,
                     ],
                     SE_USER => (int) api_get_user_id(),
                 ];
@@ -721,8 +665,7 @@ class Link extends Model
             ->setDescription($values['description'])
         ;
 
-        $repo->getEntityManager()->persist($category);
-        $repo->getEntityManager()->flush();
+        $repo->update($category);
 
         Display::addFlash(Display::return_message(get_lang('The category has been modified.')));
 
@@ -806,7 +749,7 @@ class Link extends Model
         $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
 
         return $qb->getQuery()->getResult();
-
+        /*
         $tblLinkCategory = Database::get_course_table(TABLE_LINK_CATEGORY);
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
@@ -876,7 +819,7 @@ class Link extends Model
                 ";
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**
@@ -914,73 +857,6 @@ class Link extends Model
         }
 
         return null;
-
-        $tbl_link = Database::get_course_table(TABLE_LINK);
-        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $courseId = (int) $courseId;
-        $sessionId = (int) $sessionId;
-        $categoryId = (int) $categoryId;
-
-        // Condition for the session.
-        $condition_session = api_get_session_condition(
-            $sessionId,
-            true,
-            false,
-            'ip.session_id'
-        );
-
-        if (!empty($sessionId)) {
-            $conditionBaseSession = api_get_session_condition(
-                0,
-                true,
-                $withBaseContent,
-                'ip.session_id'
-            );
-            $condition = " AND
-                (
-                    (ip.visibility = '1' $conditionBaseSession) OR
-
-                    (
-                        (ip.visibility = '0' OR ip.visibility = '1')
-                        $condition_session
-                    )
-                )
-            ";
-        } else {
-            $condition = api_get_session_condition(
-                0,
-                true,
-                false,
-                'ip.session_id'
-            );
-            $condition .= " AND (ip.visibility = '0' OR ip.visibility = '1') $condition ";
-        }
-
-        $sql = "SELECT
-                    link.id,
-                    ip.session_id,
-                    link.session_id link_session_id,
-                    url,
-                    category_id,
-                    visibility,
-                    description,
-                    title,
-                    target,
-                    on_homepage
-                FROM $tbl_link link
-                INNER JOIN $TABLE_ITEM_PROPERTY ip
-                ON (link.id = ip.ref AND link.c_id = ip.c_id)
-                WHERE
-                    ip.tool = '".TOOL_LINK."' AND
-                    link.category_id = '".$categoryId."' AND
-                    link.c_id = $courseId AND
-                    ip.c_id = $courseId
-                    $condition
-                ORDER BY link.display_order ASC, ip.session_id DESC";
-
-        $result = Database:: query($sql);
-
-        return Database::store_result($result);
     }
 
     /**
@@ -1002,11 +878,15 @@ class Link extends Model
         if (!empty($links)) {
             $courseEntity = api_get_course_entity($courseId);
             $sessionEntity = api_get_session_entity($sessionId);
-            $_user = api_get_user_info();
-
-            $content .= '<div class="link list-group">';
+            $user = api_get_user_entity();
             $i = 1;
             $linksAdded = [];
+            $iconLink = Display::return_icon(
+                'url.png',
+                get_lang('Link'),
+                null,
+                ICON_SIZE_SMALL
+            );
             foreach ($links as $link) {
                 $linkId = $link->getIid();
                 $resourceLink = $link->getFirstResourceLink();
@@ -1027,10 +907,7 @@ class Link extends Model
                 $session_img = '';
                 $session = $resourceLink->getSession();
                 if ($session) {
-                    $session_img = api_get_session_image(
-                        $session->getId(),
-                        $_user['status']
-                    );
+                    $session_img = api_get_session_image($session->getId(), $user);
                 }
 
                 $toolbar = '';
@@ -1061,7 +938,7 @@ class Link extends Model
                         $toolbar .= Display::toolbarButton(
                             '',
                             $url,
-                            'pencil-alt',
+                            'pencil',
                             'secondary btn-sm',
                             [
                                 'title' => $title,
@@ -1094,7 +971,7 @@ class Link extends Model
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
-                                'eye-slash',
+                                'eye-off',
                                 'secondary btn-sm',
                                 [
                                     'title' => $title,
@@ -1137,7 +1014,7 @@ class Link extends Model
                         $toolbar .= Display::toolbarButton(
                             '',
                             $url,
-                            'trash',
+                            'delete',
                             'secondary btn-sm',
                             [
                                 'onclick' => $event,
@@ -1159,20 +1036,14 @@ class Link extends Model
                 }
 
                 if ($showLink) {
-                    $iconLink = Display::return_icon(
-                        'url.png',
-                        get_lang('Link'),
-                        null,
-                        ICON_SIZE_SMALL
-                    );
                     $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($link->getUrl());
-                    $content .= '<div class="list-group-item">';
+                    $actions = '';
                     if ($showActionLinks) {
-                        $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
+                        $actions .= $toolbar;
                     }
-                    $content .= '<h4 class="list-group-item-heading">';
-                    $content .= $iconLink;
-                    $content .= Display::tag(
+
+                    $title = $iconLink;
+                    $title .= Display::tag(
                         'a',
                         Security::remove_XSS($link->getTitle()),
                         [
@@ -1181,15 +1052,12 @@ class Link extends Model
                             'class' => $titleClass,
                         ]
                     );
-                    $content .= $link_validator;
-                    $content .= $session_img;
-                    $content .= '</h4>';
-                    $content .= '<p class="list-group-item-text">'.$link->getDescription().'</p>';
-                    $content .= '</div>';
+                    $title .= $link_validator;
+                    $title .= $session_img;
+                    $content .= Display::panel(null, $title, null, null, null, null, null, $actions);
                 }
                 $i++;
             }
-            $content .= '</div>';
         }
 
         return $content;
@@ -1486,45 +1354,45 @@ Do you really want to delete this category and its links ?')."')) return false;\
     ) {
         $categoryId = (int) $categoryId;
         $content = '';
+        $toolbar = '';
         $categories = self::getLinkCategories($courseId, $sessionId);
         $countCategories = count($categories);
         $linksPerCategory = self::showLinksPerCategory(0, $courseId, $sessionId, $showActionLinks);
 
         if ($showActionLinks) {
             /*	Action Links */
-            $content = '<div class="actions">';
+            $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=addlink&category_id='.$categoryId.'">'.
+                $actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=addlink&category_id='.$categoryId.'">'.
                     Display::return_icon('new_link.png', get_lang('Add a link'), '', ICON_SIZE_MEDIUM).'</a>';
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=addcategory&category_id='.$categoryId.'">'.
+                $actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=addcategory&category_id='.$categoryId.'">'.
                     Display::return_icon('new_folder.png', get_lang('Add a category'), '', ICON_SIZE_MEDIUM).'</a>';
             }
 
             if (!empty($countCategories)) {
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-                $content .= Display::return_icon(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
+                $actions .= Display::return_icon(
                         'forum_listview.png',
                         get_lang('List View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).' </a>';
 
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-                $content .= Display::return_icon(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
+                $actions .= Display::return_icon(
                         'forum_nestedview.png',
                         get_lang('Nested View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).'</a>';
             }
-
-            $content .= Display::url(
+            $actions .= Display::url(
                 Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&action=export'
             );
-            $content .= '</div>';
+            $toolbar = Display::toolbarAction('toolbar', [$actions]);
         }
 
         if (empty($countCategories)) {
@@ -1578,7 +1446,8 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 $header .= Display::return_icon('forum_nestedview.png');
             } else {
                 $header .= '<a
-                    class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
+                    class="'.$visibilityClass.'"
+                    href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
                 $header .= Display::return_icon('forum_listview.png');
             }
             $header .= Security::remove_XSS($category->getCategoryTitle()).'</a>';
@@ -1609,7 +1478,16 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $counter++;
         }
 
-        return $content;
+        if (empty($content) && api_is_allowed_to_edit()) {
+            $content .= Display::noDataView(
+                get_lang('Links'),
+                Display::return_icon('links.png', '', [], 64),
+                get_lang('Add links'),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'addlink'])
+            );
+        }
+
+        return $toolbar.$content;
     }
 
     /**
@@ -1654,7 +1532,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $title = $linkInfo['title'];
             $description = $linkInfo['description'];
             $category = $linkInfo['category_id'];
-            if (0 != $linkInfo['on_homepage']) {
+            if (isset($linkInfo['on_homepage']) && 0 != $linkInfo['on_homepage']) {
                 $onhomepage = 1;
             }
             $target_link = $linkInfo['target'];
@@ -1709,7 +1587,6 @@ Do you really want to delete this category and its links ?')."')) return false;\
         ];
 
         if ('true' === api_get_setting('search_enabled')) {
-            require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 
@@ -1735,7 +1612,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             }
         }
 
-        $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
+        $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
         $form->addButtonSave(get_lang('Save links'), 'submitLink');
         $defaults['skills'] = array_keys($skillList);

@@ -1,12 +1,13 @@
 {% extends '@ChamiloCore/Layout/no_layout.html.twig' %}
 {% block content %}
 {% autoescape false %}
+    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/scorm.css' }}"/>
     <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
         {% if show_left_column == 1 %}
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
                     <div id="scorm-info">
-                        <div id="panel-scorm" class="panel-body">
+                        <div id="panel-scorm" class="bg-ch-primary panel-body">
                             <div class="image-avatar">
                                 {% if lp_author == '' %}
                                     <div class="text-center">
@@ -67,7 +68,7 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <b>
-                                            {{ "ProgressSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                            {{ "Progress"|trans|format(lp_accumulate_work_time) }}
                                         </b>
                                     </div>
                                     <div class="col-xs-8">
@@ -79,7 +80,7 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <b>
-                                            {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                            {{ "Time spent in the learning path"|trans|format(lp_accumulate_work_time) }}
                                         </b>
                                     </div>
                                     <div class="col-xs-8">
@@ -112,18 +113,18 @@
                                         <div class="col-xs-6">
                                             {% if gamification_stars > 0 %}
                                                 {% for i in 1..gamification_stars %}
-                                                    <em class="fa fa-star level"></em>
+                                                    <i class="level mdi-star-face mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                                 {% endfor %}
                                             {% endif %}
 
                                             {% if gamification_stars < 4 %}
                                                 {% for i in 1..4 - gamification_stars %}
-                                                    <em class="fa fa-star"></em>
+                                                    <i class="mdi-home-outline mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
                                         <div class="col-xs-6 text-right">
-                                            {{ "XPoints"|get_lang|format(gamification_points) }}
+                                            {{ "%s points"|trans|format(gamification_points) }}
                                         </div>
                                     </div>
                                     <div class="row">
@@ -146,39 +147,44 @@
                         <div id="flag-mobile" class="visible-xs-block" aria-hidden="true"></div>
                         {% include '@ChamiloCore/LearnPath/scorm_list.html.twig' %}
                     </div>
-                    {# end TOC layout #}
                 </div>
             </div>
-            {# end left zone #}
         {% endif %}
 
         {# Right zone #}
         <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
             <div class="lp-view-zone-container">
                 <div class="lp-view-tabs">
-                    <div id="navTabsbar" class="nav-tabs-bar">
-                        <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
+                    <div id="navTabBar" class="mt-2 mb-16 nav-tabs-bar">
+                        <div class="text-left">
+                            <h2 class="text-h3">{{ lp_title_scorm }}</h2>
+                            <div id="item-parent-names">
+                                {% for parent_title in lp_item_parents %}
+                                    <h3 class="text-h5">{{  parent_title }}</h3>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!--ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
-                                <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
+                                <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                    <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
-                                    <span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                                    <i class="mdi-book mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                    <span class="sr-only">{{ 'Lesson'|trans }}</span>
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}"
+                                <a href="#lp-view-forum" title="{{ 'Forum'|trans }}"
                                    aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                    <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
-                                    <span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                                    <i class="mdi-message-reply-text mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                    <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>
-                        </ul>
+                        </ul-->
                     </div>
 
                     {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
-                    <div id="tab-iframe" class="tab-content">
-
+                    <div id="tab-iframe" class="auto tab-content">
                         <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                             <div id="wrapper-iframe">
                                 {% if lp_mode == 'fullscreen' %}
@@ -190,7 +196,9 @@
                                         border="0"
                                         frameborder="0"
                                         allowfullscreen="true"
-                                        webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                        webkitallowfullscreen="true"
+                                        mozallowfullscreen="true">
+                                    </iframe>
                                 {% else %}
                                     <iframe
                                         id="content_id"
@@ -200,7 +208,9 @@
                                         border="0"
                                         frameborder="0"
                                         allowfullscreen="true"
-                                        webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                        webkitallowfullscreen="true"
+                                        mozallowfullscreen="true">
+                                    </iframe>
                                 {% endif %}
                             </div>
                         </div>
@@ -214,9 +224,6 @@
     </div>
 
     <script>
-        document.querySelector('.menu-button').onclick = function(e) {
-            e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
-        }
         var LPViewUtils = {
             setHeightLPToc: function () {
                 var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -227,49 +234,56 @@
         };
 
         $(function() {
-            if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
-                // Fix an issue where you cannot scroll below first screen in
-                // learning paths on Apple devices
-                document.getElementById('wrapper-iframe').setAttribute(
-                    'style',
-                    'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
-                );
-                // Fix another issue whereby buttons do not react to click below
-                // second screen in learning paths on Apple devices
-                document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
-            }
+            $('.menu-button').on('click', function() {
+                $('.circle').toggleClass('open');
+                $('.menu-button').toggleClass('menu-button-selected');
+            });
+            if (/iPhone|iPod|iPad|Safari/.test(navigator.userAgent)) {
+                if (!/Chrome/.test(navigator.userAgent)) {
+                    // Fix an issue where you cannot scroll below first screen in
+                    // learning paths on Apple devices
+                    document.getElementById('wrapper-iframe').setAttribute(
+                        'style',
+                        'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+                    );
+                    $('#wrapper-iframe').before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>');
 
+                    // Fix another issue whereby buttons do not react to click below
+                    // second screen in learning paths on Apple devices
+                    document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
+                }
+            }
             {% if lp_mode == 'embedframe' %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-expand-horizontal');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-collapse-horizontal');
+                var className = $('#lp-view-expand-toggle i.mdi').attr('class');
+                if (className == 'mdi-arrow-collapse-horizontal') {
+                    $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    $(this).attr('title', '{{ "Collapse" | trans }}');
                 }
 
-                if($('#navTabsbar').is(':hidden')) {
-                    $('#navTabsbar').show();
+                if($('#navTabBar').is(':hidden')) {
+                    $('#navTabBar').show();
                 } else {
-                    $('#navTabsbar').hide();
+                    $('#navTabBar').hide();
                 }
             });
             {% else %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-collapse-horizontal');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-expand-horizontal');
 
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                var className = $('#lp-view-expand-toggle i.mdi').attr('class');
+                if (className == 'mdi-arrow-expand-horizontal') {
+                    $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    $(this).attr('title', '{{ "Collapse" | trans }}');
                 }
             });
             {% endif %}
@@ -280,41 +294,40 @@
 
             $('a#ui-option').on('click', function (e) {
                 e.preventDefault();
-                var icon = $(this).children('.fa');
-                if (icon.is('.fa-chevron-up')) {
-                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                var icon = $(this).children('.mdi');
+                if (icon.is('.mdi-chevron-up')) {
+                    icon.removeClass('mdi-chevron-up').addClass('mdi-chevron-down');
 
                     return;
                 }
-                icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                icon.removeClass('mdi-chevron-down').addClass('mdi-chevron-up');
             });
 
             LPViewUtils.setHeightLPToc();
 
-            $('.image-avatar img').load(function () {
+            $('.image-avatar img').on('load', function () {
                 LPViewUtils.setHeightLPToc();
             });
 
             $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').animate({opacity: 0}, 500);
+                //$('.lp-view-tabs').animate({opacity: 0}, 500);
             });
 
             $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
-                $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-                $('.lp-view-tabs').animate({opacity: 1}, 500);
+                //$('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
+                //$('.lp-view-tabs').animate({opacity: 1}, 500);
             });
 
             {% if lp_mode == 'embedded' %}
-                $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                    $('.lp-view-tabs').animate({opacity: 0}, 500);
-
-                    if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
-                        $('#lp-view-expand-toggle').trigger('click');
-                    }
-                });
+            /*$('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
+                $('.lp-view-tabs').animate({opacity: 0}, 500);
+                if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
+                    $('#lp-view-expand-toggle').trigger('click');
+                }
+            });*/
             {% endif %}
 
-            loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
+            //loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_available_list %}
@@ -381,7 +394,27 @@
             });
         });
     </script>
-
-
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+          acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display == 'block') {
+              panel.style.display = "none";
+            } else {
+              panel.style.display = "block";
+            }
+          });
+        }
+      });
+    </script>
+    <style>
+        .item-children {
+            display: none;
+        }
+    </style>
 {% endautoescape %}
 {% endblock %}

@@ -23,7 +23,8 @@ $form_sent = 0;
 $errorMsg = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-SessionManager::protectSession($id);
+$session = api_get_session_entity($id);
+SessionManager::protectSession($session);
 
 $htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -100,7 +101,7 @@ echo Display::input('hidden', 'form_sent', '1');
         <td colspan="3" align="center">
             <br />
             <?php
-            echo '<button class="btn btn-success" type="submit">'.
+            echo '<button class="btn btn--success" type="submit">'.
                 get_lang('Subscribe teachers to session(s)').'</button>';
             ?>
         </td>

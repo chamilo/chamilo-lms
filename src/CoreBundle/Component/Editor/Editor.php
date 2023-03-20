@@ -1,60 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Template;
 
-/**
- * Class Editor.
- */
 class Editor
 {
-    /**
-     * @var string
-     */
-    public $textareaId;
+    public string $textareaId;
 
     /**
      * Name of the instance.
-     *
-     * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * Name of the toolbar to load.
-     *
-     * @var string
      */
-    public $toolbarSet;
+    public string $toolbarSet;
 
-    /**
-     * Initial value.
-     *
-     * @var string
-     */
-    public $value;
+    public string $value;
 
-    /**
-     * @var array
-     */
-    public $config;
+    public array $config;
 
-    /** @var TranslatorInterface */
-    public $translator;
+    public TranslatorInterface $translator;
 
-    /** @var RouterInterface */
-    public $urlGenerator;
+    public RouterInterface $urlGenerator;
 
-    /** @var \Template */
-    public $template;
+    public Template $template;
 
-    /**
-     * Editor constructor.
-     */
     public function __construct(
         TranslatorInterface $translator,
         RouterInterface $urlGenerator
@@ -81,7 +60,7 @@ class Editor
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -109,7 +88,7 @@ class Editor
     /**
      * @param string $key
      */
-    public function setConfigAttribute($key, $value)
+    public function setConfigAttribute($key, $value): void
     {
         $this->config[$key] = $value;
     }
@@ -119,15 +98,15 @@ class Editor
      */
     public function getConfigAttribute($key)
     {
-        return isset($this->config[$key]) ? $this->config[$key] : null;
+        return $this->config[$key] ?? null;
     }
 
     /**
      * @param array $config
      */
-    public function processConfig($config)
+    public function processConfig($config): void
     {
-        if (is_array($config)) {
+        if (\is_array($config)) {
             foreach ($config as $key => $value) {
                 switch ($key) {
                     case 'ToolbarSet':
@@ -163,14 +142,6 @@ class Editor
     }
 
     /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return api_get_language_isocode();
-    }
-
-    /**
      * Converts a PHP variable into its Javascript equivalent.
      * The code of this method has been "borrowed" from the function drupal_to_js() within the Drupal CMS.
      *
@@ -184,7 +155,7 @@ class Editor
      */
     protected function toJavascript($var)
     {
-        switch (gettype($var)) {
+        switch (\gettype($var)) {
             case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
             case 'integer':
@@ -203,7 +174,7 @@ class Editor
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
-                if (empty($var) || array_keys($var) === range(0, count($var) - 1)) {
+                if (empty($var) || array_keys($var) === range(0, \count($var) - 1)) {
                     $output = [];
                     foreach ($var as $v) {
                         $output[] = $this->toJavascript($v);
@@ -219,7 +190,7 @@ class Editor
                     $output[] = $this->toJavascript((string) $k).': '.$this->toJavascript($v);
                 }
 
-                return '{ '.implode(', ', $output).' }';
+                return '{ '.implode(', '."\n", $output).' } '."\n";
 
                 break;
             default:

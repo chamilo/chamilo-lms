@@ -335,14 +335,11 @@ class UserDataGenerator
         if (isset($this->avgcache)) {
             $avgscore = $this->avgcache[$item->get_item_type().$item->get_id()];
         } else {
-            $avgscore = $item->calc_score();
+            $avgscore = $item->calc_score('', 'average');
         }
-
         $scoredisplay = ScoreDisplay::instance();
         $displaytype = SCORE_AVERAGE;
-        /*if ($ignore_score_color)
-            $displaytype |= SCORE_IGNORE_SPLIT;
-        */
+
         return $scoredisplay->display_score($avgscore, $displaytype);
     }
 

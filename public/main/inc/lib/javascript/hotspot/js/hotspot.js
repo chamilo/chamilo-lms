@@ -1,10 +1,10 @@
+// webCidReq is defined in the <body tag>
 window.HotspotQuestion = (function () {
     return function (settings) {
         var HotspotModel = function (attributes) {
             this.attributes = attributes;
             this.id = 0;
             this.name = '';
-
             this.changeEvent = null;
         };
         HotspotModel.prototype.set = function (key, value) {
@@ -913,13 +913,6 @@ window.HotspotQuestion = (function () {
 
                     self.answersCollection.get(answerIndex).set('x', point.x);
                     self.answersCollection.get(answerIndex).set('y', point.y);
-                })
-                .on('mouseup', function (e) {
-                    if (!isMoving) {
-                        return;
-                    }
-
-                    e.preventDefault();
 
                     $('[name="hotspot[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
                         return [point.x, point.y].join(';');
@@ -927,6 +920,12 @@ window.HotspotQuestion = (function () {
                     $('[name="choice[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
                         return [point.x, point.y].join(';');
                     });
+                })
+                .on('mouseup', function (e) {
+                    e.preventDefault();
+                    if (!isMoving) {
+                        return;
+                    }
 
                     isMoving = false;
                 });
@@ -1659,6 +1658,7 @@ window.DelineationQuestion = (function () {
 
     var PreviewSVG = function (polygonCollection, image) {
         this.collection = polygonCollection;
+        this.image = image;
         this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
         var self = this,
@@ -1671,14 +1671,15 @@ window.DelineationQuestion = (function () {
         this.render = function () {
             var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
             imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
-            imageSvg.setAttribute('width', image.width);
-            imageSvg.setAttribute('height', image.height);
+            imageSvg.setAttribute('width', this.image.width);
+            imageSvg.setAttribute('height', this.image.height);
 
             this.el.setAttribute('version', '1.1');
-            this.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
-            this.el.setAttribute('width', image.width);
-            this.el.setAttribute('height', image.height);
+            this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+            this.el.setAttribute('width', this.image.width);
+            this.el.setAttribute('height', this.image.height);
             this.el.appendChild(imageSvg);
+            return this;
         };
 
         this.renderPolygon = function (oarModel) {
@@ -1696,7 +1697,7 @@ window.DelineationQuestion = (function () {
             $(config.selector).html('');
 
             var polygonCollection = new PolygonCollection(),
-                previewSvg = new AdminSvg(polygonCollection, image);
+                previewSvg = new PreviewSVG(polygonCollection, image);
 
             $(config.selector)
                 .css('width', this.width)
@@ -1765,7 +1766,8 @@ window.DelineationQuestion = (function () {
                 break;
             case 'user':
                 xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + webCidReq, {
-                    modifyAnswers: parseInt(config.questionId)
+                    modifyAnswers: parseInt(config.questionId),
+                    exe_id: parseInt(config.exerciseId)
                 });
                 break;
             case 'solution':

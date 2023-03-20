@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,83 +18,60 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketPriority
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
-    protected $code;
+    protected string $code;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="color", type="string", nullable=false)
      */
-    protected $color;
+    protected string $color;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="urgency", type="string", nullable=false)
      */
-    protected $urgency;
+    protected string $urgency;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
-    /**
-     * Priority constructor.
-     */
     public function __construct()
     {
-        $this->insertDateTime = new \DateTime();
+        $this->insertDateTime = new DateTime();
         $this->color = '';
         $this->urgency = '';
     }
@@ -105,18 +85,6 @@ class TicketPriority
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketPriority
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -124,12 +92,7 @@ class TicketPriority
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return TicketPriority
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -144,12 +107,7 @@ class TicketPriority
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return TicketPriority
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -164,12 +122,7 @@ class TicketPriority
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return TicketPriority
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -184,12 +137,7 @@ class TicketPriority
         return $this->color;
     }
 
-    /**
-     * @param string $color
-     *
-     * @return TicketPriority
-     */
-    public function setColor($color)
+    public function setColor(string $color): self
     {
         $this->color = $color;
 
@@ -204,12 +152,7 @@ class TicketPriority
         return $this->urgency;
     }
 
-    /**
-     * @param string $urgency
-     *
-     * @return TicketPriority
-     */
-    public function setUrgency($urgency)
+    public function setUrgency(string $urgency): self
     {
         $this->urgency = $urgency;
 
@@ -224,12 +167,7 @@ class TicketPriority
         return $this->insertUserId;
     }
 
-    /**
-     * @param int $insertUserId
-     *
-     * @return TicketPriority
-     */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId): self
     {
         $this->insertUserId = $insertUserId;
 
@@ -237,19 +175,14 @@ class TicketPriority
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
         return $this->insertDateTime;
     }
 
-    /**
-     * @param \DateTime $insertDateTime
-     *
-     * @return TicketPriority
-     */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -264,12 +197,7 @@ class TicketPriority
         return $this->lastEditUserId;
     }
 
-    /**
-     * @param int $lastEditUserId
-     *
-     * @return TicketPriority
-     */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId): self
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -277,19 +205,14 @@ class TicketPriority
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @param \DateTime $lastEditDateTime
-     *
-     * @return TicketPriority
-     */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

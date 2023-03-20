@@ -17,18 +17,17 @@ $courseCategoriesRepo = Container::getCourseCategoryRepository();
 
 $urlId = api_get_current_access_url_id();
 
-$courseId = isset($_GET['id']) ? $_GET['id'] : null;
+$courseId = $_GET['id'] ?? null;
 
 if (empty($courseId)) {
     api_not_allowed(true);
 }
 
 $courseInfo = api_get_course_info_by_id($courseId);
-$courseCode = $courseInfo['code'];
-
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+$courseCode = $courseInfo['code'];
 
 $tool_name = get_lang('Edit course information');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -180,8 +179,7 @@ $form->addSelectAjax(
 );
 $courseInfo['course_teachers'] = $course_teachers;
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-    $form->addElement(
-        'checkbox',
+    $form->addCheckBox(
         'add_teachers_to_sessions_courses',
         null,
         get_lang('Teachers will be added as a coach in all course sessions.')
@@ -210,8 +208,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
 
         $groupName = 'session_coaches_'.$sessionId;
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
-        $form->addElement(
-            'advmultiselect',
+        $form->addMultiSelect(
             $groupName,
             Display::url(
                 $session['name'],
@@ -234,13 +231,7 @@ $form->applyFilter('department_url', 'trim');
 
 $form->addSelectLanguage('course_language', get_lang('Course language'));
 
-$group = [];
-$group[] = $form->createElement('radio', 'visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Hidden - Completely hidden to all users except the administrators'), COURSE_VISIBILITY_HIDDEN);
-$form->addGroup($group, '', get_lang('Course access'));
+CourseManager::addVisibilityOptions($form);
 
 $group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
@@ -256,9 +247,12 @@ $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang(
 $form->addRule('disk_quota', get_lang('Required field'), 'required');
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
 
+$form->addText('video_url', get_lang('Video URL'), false);
+$form->addCheckBox('sticky', null, get_lang('Sticky'));
+
 // Extra fields
-$extra_field = new ExtraField('course');
-$extra = $extra_field->addElements(
+$extraField = new ExtraField('course');
+$extra = $extraField->addElements(
     $form,
     $courseId,
     [],
@@ -291,7 +285,7 @@ $form->addButtonUpdate(get_lang('Edit course information'));
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
-$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
 $form->setDefaults($courseInfo);
 
@@ -354,8 +348,7 @@ if ($form->validate()) {
         $department_url = 'http://'.$department_url;
     }
 
-    /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
-    $courseEntity = $courseInfo['entity'];
+    $courseEntity = api_get_course_entity($courseId);
     $courseEntity
         ->setCourseLanguage($course['course_language'])
         ->setTitle(str_replace('&amp;', '&', $course['title']))
@@ -366,6 +359,8 @@ if ($form->validate()) {
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
+        ->setSticky(1 === (int) ($course['sticky'] ?? 0))
+        ->setVideoUrl($params['video_url'] ?? '')
     ;
 
     $em->persist($courseEntity);
@@ -445,14 +440,21 @@ if ($form->validate()) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
-echo Display::url(Display::return_icon('course_home.png', get_lang('Course homepage')), $courseInfo['course_public_url'], ['target' => '_blank']);
-echo Display::url(
-    Display::return_icon('info2.png', get_lang('Information')),
-    api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back')),
+    api_get_path(WEB_CODE_PATH).'admin/course_list.php'
 );
-echo '</div>';
+$actions .= Display::url(
+    Display::return_icon('course_home.png', get_lang('Course homepage')),
+    $courseInfo['course_public_url'],
+    ['target' => '_blank']
+);
+$actions .= Display::url(
+    Display::return_icon('info2.png', get_lang('Information')),
+    api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
+);
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 echo "<script>
 function moveItem(origin , destination) {
@@ -502,7 +504,6 @@ function valide() {
 }
 </script>";
 
-// Display the form
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

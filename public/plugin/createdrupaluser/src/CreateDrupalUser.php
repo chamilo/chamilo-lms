@@ -110,7 +110,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
             $extraField = new ExtraField('user');
             $extraField->save(
                 [
-                    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+                    'value_type' => ExtraField::FIELD_TYPE_INTEGER,
                     'variable' => self::EXTRAFIELD_VARIABLE_NAME,
                     'display_text' => get_plugin_lang('DrupalUserId', 'CreateDrupalUser'),
                     'default_value' => null,

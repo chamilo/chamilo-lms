@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,9 +8,6 @@
  */
 class SelectLanguage extends HTML_QuickForm_select
 {
-    /**
-     * Class constructor.
-     */
     public function __construct(
         $elementName = null,
         $elementLabel = null,
@@ -18,21 +16,20 @@ class SelectLanguage extends HTML_QuickForm_select
     ) {
         parent::__construct($elementName, $elementLabel, $options, $attributes);
 
-        $default = isset($attributes['set_custom_default']) ? $attributes['set_custom_default'] : false;
-
+        $default = $attributes['set_custom_default'] ?? false;
+        if (!empty($default)) {
+            $defaultValue = $default;
+        } else {
+            $defaultValue = api_get_setting('platformLanguage');
+        }
         // Get all languages
         $languages = api_get_languages();
-        foreach ($languages as $index => $name) {
-            if (!empty($default)) {
-                $defaultValue = $default;
-            } else {
-                $defaultValue = api_get_setting('platformLanguage');
+        foreach ($languages as $iso => $name) {
+            $attributes = [];
+            if ($iso === $defaultValue) {
+                $attributes = ['selected' => 'selected'];
             }
-            if ($languages[$index] == $defaultValue) {
-                $this->addOption($name, $index, ['selected' => 'selected']);
-            } else {
-                $this->addOption($name, $index);
-            }
+            $this->addOption($name, $iso, $attributes);
         }
     }
 }

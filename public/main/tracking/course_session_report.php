@@ -39,7 +39,7 @@ foreach ($session_list as $sesion_item) {
 if (0 == count($session_list)) {
     $my_session_list[0] = get_lang('none');
 }
-$form->addElement('select', 'session_id', get_lang('Course sessions'), $my_session_list);
+$form->addSelect('session_id', get_lang('Course sessions'), $my_session_list);
 $form->addButtonFilter(get_lang('Filter'));
 
 if (!empty($_REQUEST['score'])) {
@@ -121,7 +121,7 @@ $total_average_score = 0;
 $total_average_score_count = 0;
 $html_result = '';
 if (!empty($users) && is_array($users)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('User').'</th>';
     foreach ($course_list as $item) {
         $html_result .= '<th>'.$item['title'].'<br /> '.get_lang('Average score').' %</th>';

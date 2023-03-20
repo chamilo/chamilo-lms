@@ -19,8 +19,8 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import CourseCategoryForm from '../../components/coursecategory/Form.vue';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
 
 const servicePrefix = 'CourseCategory';

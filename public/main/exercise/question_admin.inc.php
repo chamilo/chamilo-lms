@@ -8,19 +8,21 @@
  *
  * @author Olivier Brouckaert
  */
+$type = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : 0;
+
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.api_get_cidreq().'&answerType='.$type.'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
-    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
+    $action = api_get_self().'?'.api_get_cidreq().'&answerType='.$type.'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
 }
 
 if (is_object($objQuestion)) {
     // FORM CREATION
     $form = new FormValidator('question_admin_form', 'post', $action);
 
-    $class = 'btn btn-default';
+    $class = 'btn btn--plain';
     if (isset($_GET['editQuestion'])) {
         $text = get_lang('Save the question');
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
@@ -61,13 +63,13 @@ if (is_object($objQuestion)) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('Item updated')));
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
                     header("Location: $url");
                     exit;
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Item updated')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
                 header("Location: $url");
                 exit;
             } else {
@@ -78,12 +80,12 @@ if (is_object($objQuestion)) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }
                 Display::addFlash(Display::return_message(get_lang('Item added')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
                 header("Location: $url");
                 exit;
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script>window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

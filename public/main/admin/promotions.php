@@ -125,7 +125,12 @@ switch ($action) {
         $career = new Career();
         $careers = $career->get_all();
         if (empty($careers)) {
-            $url = Display::url(get_lang('You will have to create a career before you can add promotions (promotions are sub-elements of a career)'), 'careers.php?action=add');
+            $url = Display::url(
+                get_lang(
+                    'You will have to create a career before you can add promotions (promotions are sub-elements of a career)'
+                ),
+                'careers.php?action=add'
+            );
             echo Display::return_message($url, 'normal', false);
             Display::display_footer();
             exit;
@@ -145,9 +150,11 @@ switch ($action) {
             }
             $promotion->display();
         } else {
-            echo '<div class="actions">';
-            echo Display::url(Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM), api_get_self());
-            echo '</div>';
+            $actions = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+                api_get_self()
+            );
+            echo Display::toolbarAction('promotion_actions', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();
@@ -170,8 +177,7 @@ switch ($action) {
             }
             $promotion->display();
         } else {
-            echo '<div class="actions">';
-            echo Display::url(
+            $actions = Display::url(
                 Display::return_icon(
                     'back.png',
                     get_lang('Back'),
@@ -180,7 +186,7 @@ switch ($action) {
                 ),
                 api_get_self()
             );
-            echo '</div>';
+            echo Display::toolbarAction('promotion_actions', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();

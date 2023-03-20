@@ -16,14 +16,10 @@ use ChamiloSession as Session;
  * - exercise.lib.php : functions used in the exercise tool
  * - exercise_admin.inc.php : management of the exercise
  * - question_admin.inc.php : management of a question (statement & answers)
- * - statement_admin.inc.php : management of a statement
  * - question_list_admin.inc.php : management of the question list
  *
  * Main variables used in this script :
  *
- * - $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
- * - $objExercise : exercise object
- * - $objQuestion : question object
  * - $objAnswer : answer object
  * - $exerciseId : the exercise ID
  * - $picturePath : the path of question pictures
@@ -64,15 +60,14 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$exerciseId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-$newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+$newQuestion = $_GET['newQuestion'] ?? 0;
 $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
 $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+$cloneQuestion = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
@@ -106,12 +101,12 @@ if (isset($_REQUEST['convertAnswer'])) {
 $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
-// tables used in the exercise tool
-if (!empty($_GET['action']) && 'exportqti2' == $_GET['action'] && !empty($_GET['questionId'])) {
+// tables used in the exercise tool.
+if (!empty($_GET['action']) && 'exportqti2' === $_GET['action'] && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
     $qid = (int) $_GET['questionId'];
-
+    $name = 'qti2_export_'.$qid.'.zip';
     $zip = api_create_zip($name);
     $zip->addFile("qti2export_$qid.xml", $export);
     $zip->finish();
@@ -147,7 +142,7 @@ if ($objExercise->sessionId != $sessionId) {
 // doesn't select the exercise ID if we come from the question pool
 if (!$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
-    if (!$exerciseId = $objExercise->selectId()) {
+    if (!$exerciseId = $objExercise->getId()) {
         $modifyExercise = 'yes';
     }
 }
@@ -171,7 +166,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
     // checks if the object exists
     if (is_object($objQuestion)) {
         // gets the question ID
-        $questionId = $objQuestion->selectId();
+        $questionId = $objQuestion->getId();
     }
 }
 
@@ -202,30 +197,30 @@ if ($cancelQuestion) {
     }
 }
 
-if (!empty($clone_question) && !empty($objExercise->getId())) {
-    $old_question_obj = Question::read($clone_question);
-    $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
+if (!empty($cloneQuestion) && !empty($objExercise->getId())) {
+    $oldQuestionObj = Question::read($cloneQuestion);
+    $oldQuestionObj->question = $oldQuestionObj->question.' - '.get_lang('Copy');
 
-    $new_id = $old_question_obj->duplicate(api_get_course_info());
-    $new_question_obj = Question::read($new_id);
-    $new_question_obj->addToList($exerciseId);
+    $newId = $oldQuestionObj->duplicate(api_get_course_info());
+    $newQuestionObj = Question::read($newId);
+    $newQuestionObj->addToList($exerciseId);
 
     // Save category to the destination course
-    if (!empty($old_question_obj->category)) {
-        $new_question_obj->saveCategory($old_question_obj->category, api_get_course_int_id());
+    if (!empty($oldQuestionObj->category)) {
+        $newQuestionObj->saveCategory($oldQuestionObj->category);
     }
 
     // This should be moved to the duplicate function
-    $new_answer_obj = new Answer($clone_question);
-    $new_answer_obj->read();
-    $new_answer_obj->duplicate($new_question_obj);
+    $newAnswerObj = new Answer($cloneQuestion);
+    $newAnswerObj->read();
+    $newAnswerObj->duplicate($newQuestionObj);
 
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->getId(), false);
 
     Display::addFlash(Display::return_message(get_lang('Item copied')));
 
-    header('Location: admin.php?'.api_get_cidreq().'&id='.$objExercise->getId().'&page='.$page);
+    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&page='.$page);
     exit;
 }
 
@@ -249,10 +244,13 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
+];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->getId().'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 } else {
@@ -277,22 +275,12 @@ if ('thisExercise' === $modifyIn) {
     }
 }
 
-//$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
-//$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_build_js('exercise.js');
 
 $template = new Template();
 $templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
-//$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
-
-if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
-        //  Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
-    }
-}
 
 Display::display_header($nameTools, 'Exercise');
 
@@ -300,25 +288,27 @@ Display::display_header($nameTools, 'Exercise');
 $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
-    echo '<div class="actions">';
+    $actions = '';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'">'.
+        $actions .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
+        $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&id='.$objExercise->getId().'&preview=1">'.
+    $actions .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
         Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results and feedback'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&id='.$objExercise->getId()
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId()
     );
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&id='.$objExercise->getId().'">'.
+    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->getId().'">'.
         Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
@@ -334,7 +324,8 @@ if ($inATest) {
         }
     }
 
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
+
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(
             get_lang(
@@ -345,7 +336,7 @@ if ($inATest) {
     }
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
-            Display::returnFontAwesomeIcon('exclamation-triangle"')
+            Display::getMdiIcon('alert')
                 .get_lang('ThisQuestionExistsInAnotherTestsWarning'),
             'warning',
             false
@@ -353,11 +344,12 @@ if ($inATest) {
     }
 
     $alert = '';
-    if ($showPagination === false) {
+    if (false === $showPagination) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
-        $fullQuestionsScore = array_reduce(
+        $outMaxScore = 0;
+        $outMaxScore = array_reduce(
             $objExercise->selectQuestionList(true, true),
             function ($acc, $questionId) {
                 $objQuestionTmp = Question::read($questionId);
@@ -371,7 +363,7 @@ if ($inATest) {
         $alert .= sprintf(
             get_lang('%d questions, for a total score (all questions) of %s.'),
             $nbrQuestions,
-            $fullQuestionsScore
+            $outMaxScore
         );
     }
     if ($objExercise->random > 0) {
@@ -382,10 +374,20 @@ if ($inATest) {
             $maxScoreAllQuestions
         );
     }
-    if ($showPagination === false) {
+    if ($objExercise->random > 0) {
+        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= sprintf(
+            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            $objExercise->random,
+            $maxScoreAllQuestions
+        );
+    }
+    if (false === $showPagination) {
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
-                '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+                '<br>'.get_lang(
+                    'Only %d questions will be selected based on the test configuration, for a total score of %s.'
+                ),
                 count($questionList),
                 $maxScoreAllQuestions
             );
@@ -394,17 +396,15 @@ if ($inATest) {
     echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
-    echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
+    $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 } else {
     // If we are in question_pool but not in an test, go back to question create in pool
-    echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">'.
+    $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).
         '</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 if ($newQuestion || $editQuestion) {
@@ -436,7 +436,8 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
-            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->selectId());
+            // @todo
+            //ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
         }
     }
 }
@@ -459,7 +460,12 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
 if (EXERCISE_FEEDBACK_TYPE_EXAM == $objExercise->getFeedbackType()) {
-    echo Display::return_message(get_lang('This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'), 'normal');
+    echo Display::return_message(
+        get_lang(
+            'This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'
+        ),
+        'normal'
+    );
 }
 
 Session::write('objQuestion', $objQuestion);

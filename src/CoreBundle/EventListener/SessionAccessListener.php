@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -7,34 +9,26 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Class SessionAccessListener.
- */
 class SessionAccessListener
 {
-    protected $em;
+    protected EntityManager $em;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
+    protected ?Request $request = null;
 
-    /**
-     * SessionAccessListener constructor.
-     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
-    public function setRequest(RequestStack $requestStack)
+    public function setRequest(RequestStack $requestStack): void
     {
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    public function onSessionAccessEvent(SessionAccess $event)
+    public function onSessionAccessEvent(SessionAccess $event): void
     {
         $user = $event->getUser();
         $course = $event->getCourse();
@@ -46,7 +40,8 @@ class SessionAccessListener
             ->setCId($course->getId())
             ->setUser($user)
             ->setSessionId($session->getId())
-            ->setUserIp($ip);
+            ->setUserIp($ip)
+        ;
 
         $this->em->persist($access);
         $this->em->flush();

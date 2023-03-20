@@ -1,252 +1,220 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CSurvey.
- *
+ * @Gedmo\Tree(type="nested")
  * @ORM\Table(
- *  name="c_survey",
- *  indexes={
- *     @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"}),
- *     @ORM\Index(name="idx_survey_code", columns={"code"})
- *  }
+ *     name="c_survey",
+ *     indexes={
+ *         @ORM\Index(name="idx_survey_code", columns={"code"})
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyRepository")
  */
-class CSurvey
+class CSurvey extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="code", type="string", length=40, nullable=true)
      */
-    protected $cId;
+    #[Assert\NotBlank]
+    protected ?string $code = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer")
+     * @ORM\Column(name="title", type="text", nullable=false)
      */
-    protected $surveyId;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=20, nullable=true)
-     */
-    protected $code;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="text", nullable=true)
-     */
-    protected $title;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
-    protected $subtitle;
+    protected ?string $subtitle;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="author", type="string", length=20, nullable=true)
-     */
-    protected $author;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
      */
-    protected $lang;
+    protected ?string $lang;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="avail_from", type="date", nullable=true)
+     * @ORM\Column(name="avail_from", type="datetime", nullable=true)
      */
-    protected $availFrom;
+    protected ?DateTime $availFrom = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="avail_till", type="date", nullable=true)
+     * @ORM\Column(name="avail_till", type="datetime", nullable=true)
      */
-    protected $availTill;
+    protected ?DateTime $availTill = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
      */
-    protected $isShared;
+    protected ?string $isShared = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="template", type="string", length=20, nullable=true)
      */
-    protected $template;
+    protected ?string $template = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected $intro;
+    protected ?string $intro = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="surveythanks", type="text", nullable=true)
      */
-    protected $surveyThanks;
+    protected ?string $surveyThanks = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="invited", type="integer", nullable=false)
      */
-    protected $invited;
+    protected int $invited;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
-    protected $answered;
+    protected int $answered;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="invite_mail", type="text", nullable=false)
      */
-    protected $inviteMail;
+    protected string $inviteMail;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="reminder_mail", type="text", nullable=false)
      */
-    protected $reminderMail;
+    protected string $reminderMail;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
      */
-    protected $mailSubject;
+    protected string $mailSubject;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
      */
-    protected $anonymous;
+    #[Assert\NotBlank]
+    protected string $anonymous;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="access_condition", type="text", nullable=true)
      */
-    protected $accessCondition;
+    protected ?string $accessCondition = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="shuffle", type="boolean", nullable=false)
      */
-    protected $shuffle;
+    protected bool $shuffle;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
      */
-    protected $oneQuestionPerPage;
+    protected bool $oneQuestionPerPage;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="survey_version", type="string", length=255, nullable=false)
      */
-    protected $surveyVersion;
+    protected string $surveyVersion;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
-    protected $parentId;
+    protected ?int $lft = null;
 
     /**
-     * @var int
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
+     */
+    protected ?int $rgt = null;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
+     */
+    protected ?int $lvl = null;
+
+    /**
+     * @var Collection|CSurveyQuestion[]
      *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey", cascade={"remove"})
+     */
+    protected Collection $questions;
+
+    /**
+     * @var Collection|CSurveyInvitation[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation", mappedBy="survey", cascade={"remove"})
+     */
+    protected Collection $invitations;
+
+    /**
+     * @Gedmo\TreeParent
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected ?CSurvey $surveyParent = null;
+
+    /**
+     * @var Collection|CSurvey[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", mappedBy="surveyParent")
+     */
+    protected Collection $children;
+
+    /**
+     * @var Collection|CSurveyQuestionOption[]
+     *
+     * @ORM\OrderBy({"sort"="ASC"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="survey", cascade={"remove"})
+     */
+    protected Collection $options;
+
+    /**
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
      */
-    protected $surveyType;
+    protected int $surveyType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
      */
-    protected $showFormProfile;
+    protected int $showFormProfile;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="form_fields", type="text", nullable=false)
      */
-    protected $formFields;
+    protected string $formFields;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="visible_results", type="integer", nullable=true)
      */
-    protected $visibleResults;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
-     */
-    protected $isMandatory = false;
+    protected ?int $visibleResults = null;
 
     /**
      * @var bool
@@ -256,22 +224,36 @@ class CSurvey
     protected $displayQuestionNumber;
 
     /**
-     * CSurvey constructor.
+     * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
      */
+    protected bool $isMandatory = false;
+
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
         $this->invited = 0;
         $this->answered = 0;
-        $this->surveyId = 0;
+        $this->anonymous = '0';
+        $this->formFields = '0';
+        $this->subtitle = '';
         $this->inviteMail = '';
+        $this->lang = '';
         $this->reminderMail = '';
         $this->mailSubject = '';
-        $this->shuffle = 0;
-        $this->oneQuestionPerPage = 0;
+        $this->shuffle = false;
+        $this->oneQuestionPerPage = false;
         $this->surveyVersion = '';
-        $this->parentId = 0;
         $this->surveyType = 0;
+        $this->showFormProfile = 0;
+        $this->questions = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
+        $this->options = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCode();
     }
 
     public function getIid(): int
@@ -279,21 +261,7 @@ class CSurvey
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Set code.
-     *
-     * @param string $code
-     *
-     * @return CSurvey
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -310,86 +278,31 @@ class CSurvey
         return $this->code;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CSurvey
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set subtitle.
-     *
-     * @param string $subtitle
-     *
-     * @return CSurvey
-     */
-    public function setSubtitle($subtitle)
+    public function setSubtitle(string $subtitle): self
     {
         $this->subtitle = $subtitle;
 
         return $this;
     }
 
-    /**
-     * Get subtitle.
-     *
-     * @return string
-     */
-    public function getSubtitle()
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
 
-    /**
-     * Set author.
-     *
-     * @param string $author
-     *
-     * @return CSurvey
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set lang.
-     *
-     * @param string $lang
-     *
-     * @return CSurvey
-     */
-    public function setLang($lang)
+    public function setLang(string $lang): self
     {
         $this->lang = $lang;
 
@@ -406,62 +319,31 @@ class CSurvey
         return $this->lang;
     }
 
-    /**
-     * Set availFrom.
-     *
-     * @param \DateTime $availFrom
-     *
-     * @return CSurvey
-     */
-    public function setAvailFrom($availFrom)
+    public function setAvailFrom(DateTime $availFrom): self
     {
         $this->availFrom = $availFrom;
 
         return $this;
     }
 
-    /**
-     * Get availFrom.
-     *
-     * @return \DateTime
-     */
-    public function getAvailFrom()
+    public function getAvailFrom(): ?DateTime
     {
         return $this->availFrom;
     }
 
-    /**
-     * Set availTill.
-     *
-     * @param \DateTime $availTill
-     *
-     * @return CSurvey
-     */
-    public function setAvailTill($availTill)
+    public function setAvailTill(DateTime $availTill): self
     {
         $this->availTill = $availTill;
 
         return $this;
     }
 
-    /**
-     * Get availTill.
-     *
-     * @return \DateTime
-     */
-    public function getAvailTill()
+    public function getAvailTill(): ?DateTime
     {
         return $this->availTill;
     }
 
-    /**
-     * Set isShared.
-     *
-     * @param string $isShared
-     *
-     * @return CSurvey
-     */
-    public function setIsShared($isShared)
+    public function setIsShared(string $isShared): self
     {
         $this->isShared = $isShared;
 
@@ -478,14 +360,7 @@ class CSurvey
         return $this->isShared;
     }
 
-    /**
-     * Set template.
-     *
-     * @param string $template
-     *
-     * @return CSurvey
-     */
-    public function setTemplate($template)
+    public function setTemplate(string $template): self
     {
         $this->template = $template;
 
@@ -502,14 +377,7 @@ class CSurvey
         return $this->template;
     }
 
-    /**
-     * Set intro.
-     *
-     * @param string $intro
-     *
-     * @return CSurvey
-     */
-    public function setIntro($intro)
+    public function setIntro(string $intro): self
     {
         $this->intro = $intro;
 
@@ -526,14 +394,7 @@ class CSurvey
         return $this->intro;
     }
 
-    /**
-     * Set surveythanks.
-     *
-     * @param string $surveythanks
-     *
-     * @return CSurvey
-     */
-    public function setSurveythanks($surveythanks)
+    public function setSurveythanks(string $surveythanks): self
     {
         $this->surveyThanks = $surveythanks;
 
@@ -550,14 +411,7 @@ class CSurvey
         return $this->surveyThanks;
     }
 
-    /**
-     * Set creationDate.
-     *
-     * @param \DateTime $creationDate
-     *
-     * @return CSurvey
-     */
-    public function setCreationDate($creationDate)
+    public function setCreationDate(DateTime $creationDate): self
     {
         $this->creationDate = $creationDate;
 
@@ -567,21 +421,14 @@ class CSurvey
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
         return $this->creationDate;
     }
 
-    /**
-     * Set invited.
-     *
-     * @param int $invited
-     *
-     * @return CSurvey
-     */
-    public function setInvited($invited)
+    public function setInvited(int $invited): self
     {
         $this->invited = $invited;
 
@@ -598,14 +445,7 @@ class CSurvey
         return $this->invited;
     }
 
-    /**
-     * Set answered.
-     *
-     * @param int $answered
-     *
-     * @return CSurvey
-     */
-    public function setAnswered($answered)
+    public function setAnswered(int $answered): self
     {
         $this->answered = $answered;
 
@@ -622,14 +462,7 @@ class CSurvey
         return $this->answered;
     }
 
-    /**
-     * Set inviteMail.
-     *
-     * @param string $inviteMail
-     *
-     * @return CSurvey
-     */
-    public function setInviteMail($inviteMail)
+    public function setInviteMail(string $inviteMail): self
     {
         $this->inviteMail = $inviteMail;
 
@@ -646,14 +479,7 @@ class CSurvey
         return $this->inviteMail;
     }
 
-    /**
-     * Set reminderMail.
-     *
-     * @param string $reminderMail
-     *
-     * @return CSurvey
-     */
-    public function setReminderMail($reminderMail)
+    public function setReminderMail(string $reminderMail): self
     {
         $this->reminderMail = $reminderMail;
 
@@ -670,14 +496,7 @@ class CSurvey
         return $this->reminderMail;
     }
 
-    /**
-     * Set mailSubject.
-     *
-     * @param string $mailSubject
-     *
-     * @return CSurvey
-     */
-    public function setMailSubject($mailSubject)
+    public function setMailSubject(string $mailSubject): self
     {
         $this->mailSubject = $mailSubject;
 
@@ -694,14 +513,7 @@ class CSurvey
         return $this->mailSubject;
     }
 
-    /**
-     * Set anonymous.
-     *
-     * @param string $anonymous
-     *
-     * @return CSurvey
-     */
-    public function setAnonymous($anonymous)
+    public function setAnonymous(string $anonymous): self
     {
         $this->anonymous = $anonymous;
 
@@ -718,14 +530,7 @@ class CSurvey
         return $this->anonymous;
     }
 
-    /**
-     * Set accessCondition.
-     *
-     * @param string $accessCondition
-     *
-     * @return CSurvey
-     */
-    public function setAccessCondition($accessCondition)
+    public function setAccessCondition(string $accessCondition): self
     {
         $this->accessCondition = $accessCondition;
 
@@ -742,14 +547,7 @@ class CSurvey
         return $this->accessCondition;
     }
 
-    /**
-     * Set shuffle.
-     *
-     * @param bool $shuffle
-     *
-     * @return CSurvey
-     */
-    public function setShuffle($shuffle)
+    public function setShuffle(bool $shuffle): self
     {
         $this->shuffle = $shuffle;
 
@@ -766,14 +564,7 @@ class CSurvey
         return $this->shuffle;
     }
 
-    /**
-     * Set oneQuestionPerPage.
-     *
-     * @param bool $oneQuestionPerPage
-     *
-     * @return CSurvey
-     */
-    public function setOneQuestionPerPage($oneQuestionPerPage)
+    public function setOneQuestionPerPage(bool $oneQuestionPerPage): self
     {
         $this->oneQuestionPerPage = $oneQuestionPerPage;
 
@@ -790,14 +581,7 @@ class CSurvey
         return $this->oneQuestionPerPage;
     }
 
-    /**
-     * Set surveyVersion.
-     *
-     * @param string $surveyVersion
-     *
-     * @return CSurvey
-     */
-    public function setSurveyVersion($surveyVersion)
+    public function setSurveyVersion(string $surveyVersion): self
     {
         $this->surveyVersion = $surveyVersion;
 
@@ -814,38 +598,7 @@ class CSurvey
         return $this->surveyVersion;
     }
 
-    /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return CSurvey
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
-     * Set surveyType.
-     *
-     * @param int $surveyType
-     *
-     * @return CSurvey
-     */
-    public function setSurveyType($surveyType)
+    public function setSurveyType(int $surveyType): self
     {
         $this->surveyType = $surveyType;
 
@@ -862,14 +615,7 @@ class CSurvey
         return $this->surveyType;
     }
 
-    /**
-     * Set showFormProfile.
-     *
-     * @param int $showFormProfile
-     *
-     * @return CSurvey
-     */
-    public function setShowFormProfile($showFormProfile)
+    public function setShowFormProfile(int $showFormProfile): self
     {
         $this->showFormProfile = $showFormProfile;
 
@@ -886,14 +632,7 @@ class CSurvey
         return $this->showFormProfile;
     }
 
-    /**
-     * Set formFields.
-     *
-     * @param string $formFields
-     *
-     * @return CSurvey
-     */
-    public function setFormFields($formFields)
+    public function setFormFields(string $formFields): self
     {
         $this->formFields = $formFields;
 
@@ -910,38 +649,7 @@ class CSurvey
         return $this->formFields;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CSurvey
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set visibleResults.
-     *
-     * @param int $visibleResults
-     *
-     * @return CSurvey
-     */
-    public function setVisibleResults($visibleResults)
+    public function setVisibleResults(int $visibleResults): self
     {
         $this->visibleResults = $visibleResults;
 
@@ -958,72 +666,147 @@ class CSurvey
         return $this->visibleResults;
     }
 
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurvey
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CSurvey
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * @param bool $isMandatory
-     *
-     * @return CSurvey
-     */
-    public function setIsMandatory($isMandatory)
+    public function setIsMandatory(bool $isMandatory): self
     {
         $this->isMandatory = $isMandatory;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMandatory()
+    public function isMandatory(): bool
     {
         return $this->isMandatory;
+    }
+
+    /**
+     * @return CSurveyQuestion[]|Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions(Collection $questions): self
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+    public function getSurveyParent(): ?self
+    {
+        return $this->surveyParent;
+    }
+
+    public function setSurveyParent(?self $surveyParent): self
+    {
+        $this->surveyParent = $surveyParent;
+
+        return $this;
+    }
+
+    public function getLft(): ?int
+    {
+        return $this->lft;
+    }
+
+    public function setLft(?int $lft): self
+    {
+        $this->lft = $lft;
+
+        return $this;
+    }
+
+    public function getRgt(): ?int
+    {
+        return $this->rgt;
+    }
+
+    public function setRgt(?int $rgt): self
+    {
+        $this->rgt = $rgt;
+
+        return $this;
+    }
+
+    public function getLvl(): ?int
+    {
+        return $this->lvl;
+    }
+
+    public function setLvl(?int $lvl): self
+    {
+        $this->lvl = $lvl;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurvey[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CSurvey[]|Collection $children
+     *
+     * @return CSurvey
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurveyQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurveyInvitation[]|Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    /**
+     * @param CSurveyInvitation[]|Collection $invitations
+     */
+    public function setInvitations($invitations): self
+    {
+        $this->invitations = $invitations;
+
+        return $this;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getCode();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCode($name);
     }
 
     /**

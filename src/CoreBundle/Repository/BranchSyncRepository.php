@@ -1,35 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class BranchSyncRepository.
- */
-class BranchSyncRepository extends NestedTreeRepository
+class BranchSyncRepository extends ServiceEntityRepository
 {
+    use NestedTreeRepositoryTrait;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, BranchSync::class);
+        $this->initializeTreeRepository($this->getEntityManager(), $this->getClassMetadata());
+    }
+
     /**
-     * @param string $keyword
+     * @return BranchSync[]|Collection
      */
-    public function searchByKeyword($keyword)
+    public function searchByKeyword(string $keyword)
     {
         $qb = $this->createQueryBuilder('a');
 
         //Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Chamilo\CoreBundle\Entity\BranchSync', 'b');
+        $qb->from(BranchSync::class, 'b');
 
         //Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');
 
         //@todo check app settings
-        $qb->add('orderBy', 'b.branchName ASC');
+        $qb->addOrderBy('b.branchName', 'ASC');
         $qb->where('b.branchName LIKE :keyword');
-        $qb->setParameter('keyword', "%$keyword%");
+        $qb->setParameter('keyword', "%$keyword%", Types::STRING);
         $q = $qb->getQuery();
 
         return $q->execute();
@@ -38,24 +51,18 @@ class BranchSyncRepository extends NestedTreeRepository
     /**
      * Gets the first branch with parent_id = NULL.
      */
-    public function getTopBranch()
+    public function getTopBranch(): ?BranchSync
     {
         $qb = $this->createQueryBuilder('a');
 
         //Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Chamilo\CoreBundle\Entity\BranchSync', 'b');
+        $qb->from(BranchSync::class, 'b');
         $qb->where('b.parent IS NULL');
-        $qb->add('orderBy', 'b.id ASC');
+        $qb->orderBy('b.id', Criteria::ASC);
         $qb->setMaxResults(1);
-        $q = $qb->getQuery()->getResult();
-        if (empty($q)) {
-            return null;
-        } else {
-            foreach ($q as $result) {
-                return $result;
-            }
-        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

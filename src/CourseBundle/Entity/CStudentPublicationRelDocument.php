@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,120 +9,56 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublicationRelDocument.
- *
  * @ORM\Table(
- *  name="c_student_publication_rel_document",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="work", columns={"work_id"}),
- *      @ORM\Index(name="document", columns={"document_id"})
- *  }
+ *     name="c_student_publication_rel_document",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
 class CStudentPublicationRelDocument
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication")
+     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    protected CStudentPublication $publication;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="work_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CDocument")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $workId;
+    protected CDocument $document;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="document_id", type="integer", nullable=false)
-     */
-    protected $documentId;
-
-    /**
-     * Set workId.
-     *
-     * @param int $workId
-     *
-     * @return CStudentPublicationRelDocument
-     */
-    public function setWorkId($workId)
+    public function getPublication(): CStudentPublication
     {
-        $this->workId = $workId;
+        return $this->publication;
+    }
+
+    public function setPublication(CStudentPublication $publication): self
+    {
+        $this->publication = $publication;
 
         return $this;
     }
 
-    /**
-     * Get workId.
-     *
-     * @return int
-     */
-    public function getWorkId()
+    public function getDocument(): CDocument
     {
-        return $this->workId;
+        return $this->document;
     }
 
-    /**
-     * Set documentId.
-     *
-     * @param int $documentId
-     *
-     * @return CStudentPublicationRelDocument
-     */
-    public function setDocumentId($documentId)
+    public function setDocument(CDocument $document): self
     {
-        $this->documentId = $documentId;
+        $this->document = $document;
 
         return $this;
-    }
-
-    /**
-     * Get documentId.
-     *
-     * @return int
-     */
-    public function getDocumentId()
-    {
-        return $this->documentId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CStudentPublicationRelDocument
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**
@@ -129,17 +67,5 @@ class CStudentPublicationRelDocument
     public function getIid()
     {
         return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CStudentPublicationRelDocument
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 }

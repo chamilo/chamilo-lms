@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -8,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * MailTemplate.
- *
  * @ORM\Table(name="mail_template")
  * @ORM\Entity
  */
@@ -18,60 +18,44 @@ class MailTemplate
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="name", type="string", nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="template", type="text", nullable=true)
      */
-    protected $template;
+    protected ?string $template = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    protected $authorId;
+    protected float $authorId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="result_id", type="integer", nullable=false)
      */
-    protected $urlId;
+    protected int $urlId;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_template", type="boolean", nullable=false)
      */
-    protected $defaultTemplate;
+    protected bool $defaultTemplate;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="`system`", type="integer", nullable=false, options={"default":0})
      */
-    protected $system;
+    protected bool $system;
 }

@@ -10,9 +10,9 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import CourseForm from '../../components/course/Form';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import CourseForm from '../../components/course/Form.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
 
 const servicePrefix = 'Course';

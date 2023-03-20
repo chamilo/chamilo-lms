@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,43 +17,33 @@ use Doctrine\ORM\Mapping as ORM;
 class UserGroupRelUserGroup
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
-    protected $groupId;
+    protected int $groupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="subgroup_id", type="integer", nullable=false)
      */
-    protected $subgroupId;
+    protected int $subgroupId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    protected int $relationType;
 
     /**
      * Set groupId.
      *
-     * @param int $groupId
-     *
      * @return $this
      */
-    public function setGroupId($groupId)
+    public function setGroupId(int $groupId)
     {
         $this->groupId = $groupId;
 
@@ -71,11 +63,9 @@ class UserGroupRelUserGroup
     /**
      * Set subgroupId.
      *
-     * @param int $subgroupId
-     *
      * @return $this
      */
-    public function setSubgroupId($subgroupId)
+    public function setSubgroupId(int $subgroupId)
     {
         $this->subgroupId = $subgroupId;
 
@@ -95,11 +85,9 @@ class UserGroupRelUserGroup
     /**
      * Set relationType.
      *
-     * @param int $relationType
-     *
      * @return $this
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType)
     {
         $this->relationType = $relationType;
 

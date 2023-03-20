@@ -1,68 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
-use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\CCourseDescriptionType;
-use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\FormInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
-final class CCourseDescriptionRepository extends ResourceRepository implements GridInterface
+final class CCourseDescriptionRepository extends ResourceRepository
 {
-    public function getResourceSettings(): Settings
+    public function __construct(ManagerRegistry $registry)
     {
-        $settings = parent::getResourceSettings();
-
-        $settings->setAllowResourceCreation(true);
-
-        return $settings;
+        parent::__construct($registry, CCourseDescription::class);
     }
 
-    public function getTemplates(): Template
+    public function findByTypeInCourse(int $type, Course $course, Session $session = null, CGroup $group = null)
     {
-        $templates = parent::getTemplates();
-
-        $templates
-            ->setViewResource('@ChamiloCore/Resource/course_description/view_resource.html.twig')
-            ->setIndex('@ChamiloCore/Resource/course_description/index.html.twig');
-
-        return $templates;
-    }
-
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
-
-    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
-    {
-        /** @var CCourseDescription $newResource */
-        $newResource = $form->getData();
-
-        $newResource
-            ->setCId($course->getId())
+        $qb = $this->getResourcesByCourse($course, $session, $group)
+            ->andWhere('resource.descriptionType = :description_type')
+            ->setParameter('description_type', $type)
         ;
 
-        if ($session) {
-            $newResource->setSessionId($session->getId());
-        }
+        $query = $qb->getQuery();
 
-        return $newResource;
-    }
-
-    public function getResourceFormType(): string
-    {
-        return CCourseDescriptionType::class;
+        return $query->getResult();
     }
 }

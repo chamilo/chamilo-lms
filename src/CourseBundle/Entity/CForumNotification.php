@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -10,62 +12,50 @@ use Doctrine\ORM\Mapping as ORM;
  * CForumNotification.
  *
  * @ORM\Table(
- *  name="c_forum_notification",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="thread", columns={"thread_id"}),
- *      @ORM\Index(name="post", columns={"post_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"}),
- *      @ORM\Index(name="forum_id", columns={"forum_id"})
- *  }
+ *     name="c_forum_notification",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="thread", columns={"thread_id"}),
+ *         @ORM\Index(name="post", columns={"post_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id"}),
+ *         @ORM\Index(name="forum_id", columns={"forum_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CForumNotification
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="forum_id", type="integer")
      */
-    protected $forumId;
+    protected int $forumId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer")
      */
-    protected $threadId;
+    protected int $threadId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="post_id", type="integer")
      */
-    protected $postId;
+    protected int $postId;
 
     public function __construct()
     {
@@ -77,11 +67,9 @@ class CForumNotification
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CForumNotification
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -101,11 +89,9 @@ class CForumNotification
     /**
      * Set userId.
      *
-     * @param int $userId
-     *
      * @return CForumNotification
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId)
     {
         $this->userId = $userId;
 
@@ -125,11 +111,9 @@ class CForumNotification
     /**
      * Set forumId.
      *
-     * @param int $forumId
-     *
      * @return CForumNotification
      */
-    public function setForumId($forumId)
+    public function setForumId(int $forumId)
     {
         $this->forumId = $forumId;
 
@@ -149,11 +133,9 @@ class CForumNotification
     /**
      * Set threadId.
      *
-     * @param int $threadId
-     *
      * @return CForumNotification
      */
-    public function setThreadId($threadId)
+    public function setThreadId(int $threadId)
     {
         $this->threadId = $threadId;
 
@@ -173,11 +155,9 @@ class CForumNotification
     /**
      * Set postId.
      *
-     * @param int $postId
-     *
      * @return CForumNotification
      */
-    public function setPostId($postId)
+    public function setPostId(int $postId)
     {
         $this->postId = $postId;
 

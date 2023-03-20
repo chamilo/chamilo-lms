@@ -1,49 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Controller\Api\CreateResourceNodeFileAction;
-use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
+use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      shortName="Documents",
- *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
- *      denormalizationContext={"groups"={"document:write"}},
- *      itemOperations={
- *          "put" ={
- *              "controller"=UpdateResourceNodeFileAction::class,
- *              "deserialize"=false,
- *              "security" = "is_granted('EDIT', object.resourceNode)",
- *              "validation_groups"={"Default", "media_object_create", "document:write"},
- *          },
- *          "get" = {
- *              "security" = "is_granted('VIEW', object.resourceNode)",
- *          },
- *          "delete" = {
- *              "security" = "is_granted('DELETE', object.resourceNode)",
- *          },
+ *     shortName="Documents",
+ *     normalizationContext={"groups"={"document:read", "resource_node:read"}},
+ *     denormalizationContext={"groups"={"document:write"}},
+ *     itemOperations={
+ *         "put" ={
+ *             "controller"=UpdateDocumentFileAction::class,
+ *             "deserialize"=false,
+ *             "security" = "is_granted('EDIT', object.resourceNode)",
+ *             "validation_groups"={"media_object_create", "document:write"},
+ *         },
+ *         "put_toggle_visibility" = {
+ *             "method" = "PUT",
+ *             "deserialize"=false,
+ *             "security" = "is_granted('EDIT', object.resourceNode)",
+ *             "path"="/documents/{iid}/toggle_visibility",
+ *             "controller"=UpdateVisibilityDocument::class,
+ *         },
+ *         "get" = {
+ *             "security" = "is_granted('VIEW', object.resourceNode)",
+ *         },
+ *         "delete" = {
+ *             "security" = "is_granted('DELETE', object.resourceNode)",
+ *         },
+ *
  *     },
  *     collectionOperations={
  *         "post"={
- *             "controller"=CreateResourceNodeFileAction::class,
+ *             "controller"=CreateDocumentFileAction::class,
  *             "deserialize"=false,
- *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_SESSION_COURSE_TEACHER')",
+ *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
  *             "validation_groups"={"Default", "media_object_create", "document:write"},
  *             "openapi_context"={
  *                 "requestBody"={
@@ -75,18 +85,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                     "resourceLinkList"={
  *                                         "type"="array",
  *                                         "items": {
- *                                              "type": "object",
- *                                              "properties"={
- *                                                  "visibility"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                  "c_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                                   "session_id"={
- *                                                       "type"="integer",
- *                                                   },
- *                                              }
+ *                                             "type": "object",
+ *                                             "properties"={
+ *                                                 "visibility"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "cid"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "gid"={
+ *                                                     "type"="integer",
+ *                                                 },
+ *                                                 "sid"={
+ *                                                     "type"="integer",
+ *                                                 }
+ *                                             }
  *                                         }
  *                                     },
  *                                 }
@@ -97,87 +110,108 @@ use Symfony\Component\Validator\Constraints as Assert;
  *             }
  *         },
  *         "get" = {
- *              "security"="is_granted('ROLE_USER')",
- *         },
+ *             "openapi_context" = {
+ *                 "parameters" = {
+ *                     {
+ *                         "name" = "resourceNode.parent",
+ *                         "in" = "query",
+ *                         "required" = true,
+ *                         "description" = "Resource node Parent",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     },
+ *                     {
+ *                         "name" = "cid",
+ *                         "in" = "query",
+ *                         "required" = true,
+ *                         "description" = "Course id",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     },
+ *                     {
+ *                         "name" = "sid",
+ *                         "in" = "query",
+ *                         "required" = false,
+ *                         "description" = "Session id",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     }
+ *                 }
+ *             }
+ *         }
  *     },
- * )
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(
- *     OrderFilter::class,
- *     properties={
- *          "id",
- *          "filetype",
- *          "resourceNode.title",
- *          "resourceNode.createdAt",
- *          "resourceNode.resourceFile.size",
- *          "resourceNode.updatedAt"
- *      }
  * )
  *
  * @ORM\Table(
- *  name="c_document",
- *  indexes={
- *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
- *  }
+ *     name="c_document",
+ *     indexes={
+ *         @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
+ *     }
  * )
- * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
- * GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CDocumentRepository")
  */
-class CDocument extends AbstractResource implements ResourceInterface
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'resourceNode.parent' => 'exact',
+])]
+//resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
+#[ApiFilter(OrderFilter::class, properties: [
+    'iid',
+    'filetype',
+    'resourceNode.title',
+    'resourceNode.createdAt',
+    'resourceNode.resourceFile.size',
+    'resourceNode.updatedAt',
+])]
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
-    use ShowCourseResourcesInSessionTrait;
-
     /**
-     * @var int
-     * @Groups({"document:read"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    #[ApiProperty(identifier: true)]
+    #[Groups(['document:read'])]
+    protected int $iid;
 
     /**
-     * @var string
-     * @Groups({"document:read", "document:write"})
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    #[Groups(['document:read', 'document:write', 'document:browse'])]
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    #[Groups(['document:read', 'document:write'])]
+    protected ?string $comment;
 
     /**
-     * @var string File type, it can be 'folder' or 'file'
-     * @Groups({"document:read", "document:write"})
      * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
-    protected $filetype;
+    #[Groups(['document:read', 'document:write'])]
+    protected string $filetype;
 
     /**
-     * @var bool
      * @ORM\Column(name="readonly", type="boolean", nullable=false)
      */
-    protected $readonly;
+    protected bool $readonly;
 
     /**
-     * @var bool
      * @ORM\Column(name="template", type="boolean", nullable=false)
      */
-    protected $template;
+    protected bool $template;
 
-    /**
-     * CDocument constructor.
-     */
     public function __construct()
     {
+        $this->comment = '';
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
@@ -200,24 +234,14 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -229,17 +253,11 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Document title.
-     */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->title;
     }
 
-    /**
-     * Set filetype.
-     */
     public function setFiletype(string $filetype): self
     {
         $this->filetype = $filetype;
@@ -247,36 +265,19 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get filetype.
-     *
-     * @return string
-     */
-    public function getFiletype()
+    public function getFiletype(): string
     {
         return $this->filetype;
     }
 
-    /**
-     * Set readonly.
-     *
-     * @param bool $readonly
-     *
-     * @return CDocument
-     */
-    public function setReadonly($readonly)
+    public function setReadonly(bool $readonly): self
     {
         $this->readonly = $readonly;
 
         return $this;
     }
 
-    /**
-     * Get readonly.
-     *
-     * @return bool
-     */
-    public function getReadonly()
+    public function getReadonly(): bool
     {
         return $this->readonly;
     }
@@ -289,9 +290,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

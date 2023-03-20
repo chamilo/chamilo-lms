@@ -36,9 +36,10 @@ if ($pluginCalendar) {
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-$courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
 
+/*
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
         $user_id,
@@ -76,10 +77,12 @@ if (!empty($courseUserList)) {
         $count++;
     }
 }
+*/
 
 $content = Tracking::show_user_progress($user_id, $sessionId);
-$content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
+$content .= Tracking::show_course_detail($user_id, $courseId, $sessionId);
 
+/*
 if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';
@@ -96,10 +99,11 @@ if (!empty($dates)) {
     $content .= '<a href="#" id="next"></a>';
     $content .= '</div></div>';
 }
+*/
 
-if (true === api_get_configuration_value('private_messages_about_user_visible_to_user')) {
+if (api_get_configuration_value('private_messages_about_user_visible_to_user')) {
     $allowMessages = api_get_configuration_value('private_messages_about_user');
-    if (true === $allowMessages) {
+    if ($allowMessages) {
         // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
         $content .= MessageManager::getMessagesAboutUserToString(api_get_user_info());

@@ -56,7 +56,7 @@ $(function() {
 });
 
 function confirmation(name) {
-    if (confirm("'.get_lang('AreYouSureToDeleteJS', '').' " + name + " ?")) {
+    if (confirm("'.get_lang('Are you sure to delete?').' " + name + " ?")) {
             document.forms["profile"].submit();
     } else {
         return false;
@@ -95,7 +95,7 @@ $user_data = api_get_user_info(
     true
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
-$id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
+$id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'default');
 $value_array = [];
 if (isset($array_list_key[$id_temp_key])) {
     $value_array = $array_list_key[$id_temp_key];
@@ -138,8 +138,8 @@ $form->addElement(
     get_lang('Username'),
     [
         'id' => 'username',
-        'maxlength' => USERNAME_MAX_LENGTH,
-        'size' => USERNAME_MAX_LENGTH,
+        'maxlength' => User::USERNAME_MAX_LENGTH,
+        'size' => User::USERNAME_MAX_LENGTH,
     ]
 );
 if (!in_array('login', $profileList) || 'true' == api_get_setting('login_is_email')) {
@@ -225,7 +225,7 @@ if (!in_array('language', $profileList)) {
 
 // THEME
 if ('true' === api_get_setting('profile.is_editable') && 'true' === api_get_setting('user_selected_theme')) {
-    $form->addElement('SelectTheme', 'theme', get_lang('Graphical theme'));
+    $form->addSelectTheme('theme', get_lang('Graphical theme'));
     if (!in_array('theme', $profileList)) {
         $form->freeze('theme');
     }
@@ -273,10 +273,12 @@ if ('true' === api_get_setting('extended_profile')) {
     );
 
     //    MY PRODUCTIONS
+    /*
     $form->addElement('file', 'production', get_lang('My productions'));
     if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
+    */
     //    MY PERSONAL OPEN AREA
     $form->addHtmlEditor(
         'openarea',
@@ -369,8 +371,7 @@ $filtered_extension = false;
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
-    /** @var User $user */
-    $user = UserManager::getRepository()->find(api_get_user_id());
+    $user = api_get_user_entity(api_get_user_id());
 
     // set password if a new one was provided
     $validPassword = false;
@@ -385,9 +386,8 @@ if ($form->validate()) {
     ) {
         $passwordWasChecked = true;
         $validPassword = UserManager::isPasswordValid(
-            $user->getPassword(),
+            $user,
             $user_data['password0'],
-            $user->getSalt()
         );
 
         if ($validPassword) {
@@ -462,6 +462,7 @@ if ($form->validate()) {
     }
 
     // Remove production.
+    /*
     if (isset($user_data['remove_production']) &&
         is_array($user_data['remove_production'])
     ) {
@@ -479,7 +480,7 @@ if ($form->validate()) {
             Display:: return_message(get_lang('File deleted'), 'normal', false)
         );
     }
-
+    */
     // upload production if a new one is provided
     /*if (isset($_FILES['production']) && $_FILES['production']['size']) {
         $res = upload_user_production(api_get_user_id());
@@ -691,15 +692,6 @@ $tabs = SocialManager::getHomeProfileTabs('profile');
 
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-    $menu = SocialManager::show_social_menu(
-        'home',
-        null,
-        api_get_user_id(),
-        false,
-        $show_delete_account_button
-    );
-
-    $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.html.twig');
     $tpl->display($social_layout);

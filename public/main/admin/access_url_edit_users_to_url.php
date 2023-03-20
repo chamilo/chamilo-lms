@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
-// resetting the course id
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -13,7 +14,6 @@ $xajax->registerFunction(['search_users', 'AccessUrlEditUsersToUrl', 'search_use
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
 api_protect_global_admin_script();
 
 if (!api_get_multiple_access_url()) {
@@ -73,7 +73,7 @@ $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $UserList = $_POST['sessionUsersList'];
+    $UserList = !empty($_POST['sessionUsersList']) ?: [];
 
     if (!is_array($UserList)) {
         $UserList = [];
@@ -131,17 +131,20 @@ if (!empty($message)) {
     echo Display::return_message($message, 'normal', false);
 }
 
-echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('Add user to this URL'), ''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
+echo Display::toolbarAction(
+    'url',
+    [
+        Display::url(
+            Display::return_icon('view_more_stats.gif', get_lang('Add user to this URL'), ''),
+            api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
+        ),
+    ]
 );
-echo '</div>';
 
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 $nosessionUsersList = $sessionUsersList = [];
-$ajax_search = 'unique' == $add_type ? true : false;
+$ajax_search = 'unique' === $add_type ? true : false;
 
 if ($ajax_search) {
     $Users = UrlManager::get_url_rel_user_data($access_url_id);
@@ -158,7 +161,7 @@ if ($ajax_search) {
         }
     }
 
-    $sql = "SELECT u.user_id, lastname, firstname, username
+    $sql = "SELECT u.id as user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS.' '.
             $order_clause;
     $result = Database::query($sql);
@@ -263,17 +266,17 @@ if (!empty($errorMsg)) {
   <td width="10%" valign="middle" align="center">
     <?php if ($ajax_search) {
         ?>
-        <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))">
+        <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))">
             <em class="fa fa-arrow-left"></em>
         </button>
     <?php
     } else {
         ?>
-        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
+        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
             <em class="fa fa-arrow-right"></em>
         </button>
         <br /><br />
-        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
+        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
             <em class="fa fa-arrow-left"></em>
 
         </button>

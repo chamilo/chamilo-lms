@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 
 /**
@@ -29,7 +30,7 @@ $user = api_get_user_entity($userId);
 
 if (empty($sessionId) && $user) {
     /** @var TrackECourseAccessRepository $trackCourseAccessRepository */
-    $trackCourseAccessRepository = $entityManager->getRepository('ChamiloCoreBundle:TrackECourseAccess');
+    $trackCourseAccessRepository = $entityManager->getRepository(TrackECourseAccess::class);
     $lastCourseAccess = $trackCourseAccessRepository->getLastAccessByUser($user);
     $lastSessionId = 0;
     if ($lastCourseAccess) {
@@ -48,7 +49,7 @@ if (empty($sessionId) && $user) {
     }
 }
 
-$sessionCourseSubscriptions = $user->getSessionCourseSubscriptions();
+$sessionCourseSubscriptions = $user->getSessionRelCourseRelUsers();
 $currentSession = api_get_session_entity($sessionId);
 
 $sessionList = [];

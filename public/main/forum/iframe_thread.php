@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
@@ -30,15 +30,13 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('Forums');
 
-require_once 'forumfunction.inc.php';
-
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
 $forumEntity = null;
 if (!empty($forumId)) {
-    /** @var CForumForum $forumEntity */
+    /** @var CForum $forumEntity */
     $forumEntity = $repo->find($forumId);
 }
 
@@ -73,7 +71,6 @@ $sql = "SELECT username, firstname, lastname, u.id, post_date, post_title, post_
         INNER JOIN $table_users u
         ON (posts.poster_id = u.id)
         WHERE
-            posts.c_id = $course_id AND
             posts.thread_id='".$threadEntity->getIid()."'
         ORDER BY posts.iid ASC";
 $result = Database::query($sql);

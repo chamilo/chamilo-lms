@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,64 +21,48 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEHotpotatoes
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="exe_name", type="string", length=255, nullable=false)
      */
-    protected $exeName;
+    protected string $exeName;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
-    protected $exeUserId;
+    protected ?int $exeUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
-    protected $exeDate;
+    protected DateTime $exeDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="smallint", nullable=false)
      */
-    protected $score;
+    protected int $score;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_score", type="smallint", nullable=false)
      */
-    protected $maxScore;
+    protected int $maxScore;
 
     /**
      * Set exeName.
      *
-     * @param string $exeName
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeName($exeName)
+    public function setExeName(string $exeName)
     {
         $this->exeName = $exeName;
 
@@ -95,11 +82,9 @@ class TrackEHotpotatoes
     /**
      * Set exeUserId.
      *
-     * @param int $exeUserId
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeUserId($exeUserId)
+    public function setExeUserId(int $exeUserId)
     {
         $this->exeUserId = $exeUserId;
 
@@ -119,11 +104,9 @@ class TrackEHotpotatoes
     /**
      * Set exeDate.
      *
-     * @param \DateTime $exeDate
-     *
      * @return TrackEHotpotatoes
      */
-    public function setExeDate($exeDate)
+    public function setExeDate(DateTime $exeDate)
     {
         $this->exeDate = $exeDate;
 
@@ -133,7 +116,7 @@ class TrackEHotpotatoes
     /**
      * Get exeDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExeDate()
     {
@@ -143,11 +126,9 @@ class TrackEHotpotatoes
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return TrackEHotpotatoes
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 

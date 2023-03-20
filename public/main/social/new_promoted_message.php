@@ -140,7 +140,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<span id="link-more-attach"><a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
+        '<span id="link-more-attach"><a class="btn btn--plain" href="javascript://" onclick="return add_image_form()">'.
         get_lang('Add one more file').'</a></span>&nbsp;('.
         sprintf(
             get_lang('Maximun file size: %s'),
@@ -219,7 +219,7 @@ $social_right_content = null;
 $social_left_content = '';
 
 // Block Social Menu
-$social_menu_block = SocialManager::show_social_menu('messages');
+//$social_menu_block = SocialManager::show_social_menu('messages');
 $social_right_content .= '<div class="row">';
 $social_right_content .= '<div class="col-md-12">';
 $social_right_content .= '<div class="actions">';
@@ -255,7 +255,6 @@ $social_right_content .= '</div>';
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 MessageManager::cleanAudioMessage();
 
-$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/inbox.tpl');
 $tpl->display($social_layout);

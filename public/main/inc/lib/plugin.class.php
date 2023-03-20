@@ -329,22 +329,22 @@ class Plugin
     /**
      * Returns the value of a given plugin global setting.
      *
-     * @param string $name of the plugin
+     * @param string $name of the plugin setting
      *
-     * @return string Value of the plugin
+     * @return string Value of the plugin setting
      */
     public function get($name)
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] == $this->get_name().'_'.$name) {
-                $unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
+            if ($setting['variable'] === $this->get_name().'_'.$name) {
+                /*$unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
 
                 if (!empty($setting['selected_value']) &&
                     false !== $unserialized
                 ) {
                     $setting['selected_value'] = $unserialized;
-                }
+                }*/
 
                 return $setting['selected_value'];
             }
@@ -403,7 +403,7 @@ class Plugin
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
         if (is_null($this->strings)) {
-            $language_interface = api_get_interface_language();
+            $language_interface = api_get_language_isocode();
             $root = api_get_path(SYS_PLUGIN_PATH);
             $plugin_name = $this->get_name();
 

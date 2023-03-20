@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,57 +17,38 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeModel
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
-    protected $defaultLowestEvalExclude;
+    protected ?bool $defaultLowestEvalExclude = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
-    protected $defaultExternalEval;
+    protected ?bool $defaultExternalEval = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_external_eval_prefix", type="string", length=140, nullable=true)
      */
-    protected $defaultExternalEvalPrefix;
+    protected ?string $defaultExternalEvalPrefix = null;
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return GradeModel
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -82,14 +65,7 @@ class GradeModel
         return $this->name;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return GradeModel
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -106,14 +82,7 @@ class GradeModel
         return $this->description;
     }
 
-    /**
-     * Set defaultLowestEvalExclude.
-     *
-     * @param bool $defaultLowestEvalExclude
-     *
-     * @return GradeModel
-     */
-    public function setDefaultLowestEvalExclude($defaultLowestEvalExclude)
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
         $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
@@ -130,14 +99,7 @@ class GradeModel
         return $this->defaultLowestEvalExclude;
     }
 
-    /**
-     * Set defaultExternalEval.
-     *
-     * @param bool $defaultExternalEval
-     *
-     * @return GradeModel
-     */
-    public function setDefaultExternalEval($defaultExternalEval)
+    public function setDefaultExternalEval(bool $defaultExternalEval): self
     {
         $this->defaultExternalEval = $defaultExternalEval;
 
@@ -154,14 +116,7 @@ class GradeModel
         return $this->defaultExternalEval;
     }
 
-    /**
-     * Set defaultExternalEvalPrefix.
-     *
-     * @param string $defaultExternalEvalPrefix
-     *
-     * @return GradeModel
-     */
-    public function setDefaultExternalEvalPrefix($defaultExternalEvalPrefix)
+    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix): self
     {
         $this->defaultExternalEvalPrefix = $defaultExternalEvalPrefix;
 

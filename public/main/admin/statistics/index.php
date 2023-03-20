@@ -2,9 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 /**
  * This tool show global Statistics on general platform events.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -12,7 +16,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
-$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+$report = $_REQUEST['report'] ?? '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
@@ -22,8 +26,8 @@ in_array(
     ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
 )
 ) {
-    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-    $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
+    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {
@@ -130,7 +134,7 @@ in_array(
             $form = new FormValidator('users_active', 'get', api_get_self().'?report=users_active');
             $form->addDateRangePicker(
                 'daterange',
-                get_lang('DateRange'),
+                get_lang('Date range'),
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
@@ -162,14 +166,14 @@ in_array(
                 cutoutPercentage: 25
                 ';
 
-            $reportName1 = get_lang('UsersCreatedInTheSelectedPeriod');
-            $reportName2 = get_lang('UsersByStatus');
-            $reportName3 = get_lang('UsersByLanguage');
-            $reportName4 = get_lang('UsersByTargetLanguage');
-            $reportName5 = get_lang('UsersByCareer');
-            $reportName6 = get_lang('UsersByContract');
-            $reportName7 = get_lang('UsersByCertificate');
-            $reportName8 = get_lang('UsersByAge');
+            $reportName1 = get_lang('Users created in the selected period');
+            $reportName2 = get_lang('Users by status');
+            $reportName3 = get_lang('Users per language');
+            $reportName4 = get_lang('Users by target language');
+            $reportName5 = get_lang('Users by career');
+            $reportName6 = get_lang('Users by contract');
+            $reportName7 = get_lang('Users by certificate');
+            $reportName8 = get_lang('Users by age');
 
             //$url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -194,12 +198,12 @@ in_array(
             $form = new FormValidator('session_by_date', 'get');
             $form->addDateRangePicker(
                 'range',
-                get_lang('DateRange'),
+                get_lang('Date range'),
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
             $options = SessionManager::getStatusList();
-            $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+            $form->addSelect('status_id', get_lang('Session status'), $options, ['placeholder' => get_lang('All')]);
 
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
@@ -235,10 +239,10 @@ in_array(
                 $url3 = $urlBase.'a=session_by_date&filter=status'.$conditions;
                 $url4 = $urlBase.'a=session_by_date&filter=course_in_session'.$conditions;
 
-                $reportName1 = get_lang('SessionsPerCategory');
-                $reportName2 = get_lang('SessionsPerLanguage');
-                $reportName3 = get_lang('SessionsPerStatus');
-                $reportName4 = get_lang('CourseInSession');
+                $reportName1 = get_lang('Sessions per category');
+                $reportName2 = get_lang('Sessions per language');
+                $reportName3 = get_lang('Sessions per status');
+                $reportName4 = get_lang('Courses in sessions');
 
                 $reportType = 'pie';
                 $reportOptions = '
@@ -300,7 +304,6 @@ in_array(
                                 var label = data.labels[tooltipItem.datasetIndex];
                                 var currentValue = dataset.data[tooltipItem.index];
                                 var percentage = Math.floor(((currentValue/total) * 100)+0.5);
-
                                 return label + " " + percentage + "%";
                             }
                         }
@@ -329,23 +332,23 @@ if (isset($_GET['export'])) {
 $tool_name = get_lang('Statistics');
 $tools = [
     get_lang('Courses') => [
-        'report=courses' => get_lang('CountCours'),
-        'report=tools' => get_lang('PlatformToolAccess'),
-        'report=courselastvisit' => get_lang('LastAccess'),
-        'report=coursebylanguage' => get_lang('CountCourseByLanguage'),
+        'report=courses' => get_lang('Courses'),
+        'report=tools' => get_lang('Tools access'),
+        'report=courselastvisit' => get_lang('Latest access'),
+        'report=coursebylanguage' => get_lang('Number of courses by language'),
     ],
     get_lang('Users') => [
-        'report=users' => get_lang('CountUsers'),
+        'report=users' => get_lang('Number of users'),
         'report=recentlogins' => get_lang('Logins'),
-        'report=logins&amp;type=month' => get_lang('Logins').' ('.get_lang('PeriodMonth').')',
-        'report=logins&amp;type=day' => get_lang('Logins').' ('.get_lang('PeriodDay').')',
-        'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('PeriodHour').')',
-        'report=pictures' => get_lang('CountUsers').' ('.get_lang('UserPicture').')',
-        'report=logins_by_date' => get_lang('LoginsByDate'),
-        'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
+        'report=logins&amp;type=month' => get_lang('Logins').' ('.get_lang('Month').')',
+        'report=logins&amp;type=day' => get_lang('Logins').' ('.get_lang('Day').')',
+        'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('Hour').')',
+        'report=pictures' => get_lang('Number of users').' ('.get_lang('Picture').')',
+        'report=logins_by_date' => get_lang('Logins by date'),
+        'report=no_login_users' => get_lang('Not logged in for some time'),
         'report=zombies' => get_lang('Zombies'),
-        'report=users_active' => get_lang('UserStats'),
-        'report=users_online' => get_lang('UsersOnline'),
+        'report=users_active' => get_lang('Users statistics'),
+        'report=users_online' => get_lang('Users online'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -361,7 +364,6 @@ $tools = [
     ],
 ];
 
-$course_categories = Statistics::getCourseCategories();
 $content = '';
 
 switch ($report) {
@@ -386,6 +388,7 @@ switch ($report) {
 
             // User count
             $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+            $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
             $sql = "SELECT * FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
@@ -403,12 +406,15 @@ switch ($report) {
             }
 
             $content .= Display::page_subheader2(get_lang('GeneralStats'));
-            // Coach
-            // Coach
-            $sql = "SELECT count(DISTINCT(id_coach)) count FROM $tableSession
+            // Coach.
+            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count
+                    FROM $tableSession s
+                    INNER JOIN $tableSessionRelUser sru
+                    ON s.id = sru.session_id
                     WHERE
-                        (display_start_date BETWEEN '$start' AND '$end' OR
-                        display_end_date BETWEEN '$start' AND '$end')
+                        (s.display_start_date BETWEEN '$start' AND '$end' OR
+                        s.display_end_date BETWEEN '$start' AND '$end') AND
+                        sru.relation_type = ".Session::GENERAL_COACH."
                         $statusCondition
                      ";
             $result = Database::query($sql);
@@ -582,7 +588,7 @@ switch ($report) {
             $link = Display::url(
                 Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
                 $url,
-                ['class' => 'btn btn-default']
+                ['class' => 'btn btn--plain']
             );
         }
 
@@ -595,7 +601,7 @@ switch ($report) {
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
-        $date = new DateTime($now);
+        $date = new DateTime();
         $startDate = $date->format('Y-m-d').' 00:00:00';
         $endDate = $date->format('Y-m-d').' 23:59:59';
         $start = $startDate;
@@ -685,13 +691,15 @@ switch ($report) {
 
         break;
     case 'courses':
+        $courseCategoryRepo = Container::getCourseCategoryRepository();
+        $categories = $courseCategoryRepo->findAll();
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
-        foreach ($course_categories as $code => $name) {
-            $courses[$name] = Statistics::countCourses($code);
+        foreach ($categories as $category) {
+            $courses[$category->getName()] = $category->getCourses()->count();
         }
         // courses for each course category
-        $content .= Statistics::printStats(get_lang('CountCours'), $courses);
+        $content .= Statistics::printStats(get_lang('Courses'), $courses);
         break;
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
@@ -854,7 +862,6 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -1132,7 +1139,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
+                            $years = $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;
@@ -1446,8 +1453,12 @@ switch ($report) {
                 get_lang('Learners') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ]
         );
-        foreach ($course_categories as $code => $name) {
-            $name = str_replace(get_lang('Department'), "", $name);
+        $courseCategoryRepo = Container::getCourseCategoryRepository();
+        $categories = $courseCategoryRepo->findAll();
+        foreach ($categories as $category) {
+            $code = $category->getCode();
+            $name = $category->getName();
+            $name = str_replace(get_lang('Department'), '', $name);
             $teachers[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }

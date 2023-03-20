@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -15,13 +16,14 @@ class scormItem extends learnpathItem
     public $isvisible = '';
     public $parameters = '';
     public $title = '';
+
+    /** @var array|scormItem[] */
     public $sub_items = [];
     public $metadata;
     //public $prerequisites = ''; - defined in learnpathItem.class.php
     // Modified by Ivan Tcholakov, 06-FEB-2010.
     //public $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
     public $max_time_allowed = '00:00:00';
-
     public $timelimitaction = '';
     public $datafromlms = '';
     public $mastery_score = '';
@@ -35,13 +37,13 @@ class scormItem extends learnpathItem
      * @param mixed  $element   Depending on the type given, DB id for the lp_item or reference to the DOM element
      * @param int    $course_id
      */
-    public function __construct($type = 'manifest', &$element, $course_id = 0)
+    public function __construct($type = 'manifest', &$element = null)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.
             switch ($type) {
                 case 'db':
-                    parent::__construct($element, api_get_user_id(), $course_id);
+                    parent::__construct($element, api_get_user_id());
                     $this->scorm_contact = false;
                     // TODO: Implement this way of metadata object creation.
                     break;
@@ -137,7 +139,6 @@ class scormItem extends learnpathItem
                         }
                     }
             }
-            // End parsing using PHP5 DOMXML methods.
         }
     }
 
@@ -162,7 +163,7 @@ class scormItem extends learnpathItem
             'maxtimeallowed' => $this->max_time_allowed,
             'metadata' => $this->metadata,
             'parameters' => $this->parameters,
-            'prerequisites' => (!empty($this->prereq_string) ? $this->prereq_string : ''),
+            'prerequisites' => !empty($this->prereq_string) ? $this->prereq_string : '',
             'rel_order' => $rel_order,
             'timelimitaction' => $this->timelimitaction,
             'title' => $this->title,

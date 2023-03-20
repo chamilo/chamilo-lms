@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Traits;
@@ -8,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Session;
 
 trait SessionTrait
 {
-    protected $session;
+    protected ?Session $session = null;
 
     /**
      * @return Session

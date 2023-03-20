@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -9,33 +11,29 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AccessUrlRelSession.
  *
- * @ORM\Table(name="access_url_rel_session",
- *  indexes={
- * }))
+ * @ORM\Table(name="access_url_rel_session")
  * @ORM\Entity
  */
-class AccessUrlRelSession
+class AccessUrlRelSession implements EntityAccessUrlInterface
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="urls", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $session;
+    protected ?Session $session = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="session", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $url;
+    protected ?AccessUrl $url = null;
 
     /**
      * Get id.
@@ -47,40 +45,26 @@ class AccessUrlRelSession
         return $this->id;
     }
 
-    /**
-     * Set url.
-     *
-     * @return AccessUrlRelSession
-     */
-    public function setUrl(AccessUrl $url)
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @return $this
-     */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }

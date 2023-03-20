@@ -11,7 +11,7 @@ Feature: Link tool
     And wait the page to be loaded when ready
     When I fill in the following:
       | category_title | Category 1 |
-    And I fill in ckeditor field "description" with "Category description"
+    And I fill in editor field "description" with "Category description"
     And I press "submitCategory"
     And wait for the page to be loaded
     Then I should see "Category added"

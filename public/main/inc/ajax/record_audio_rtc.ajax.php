@@ -1,107 +1,73 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\AttemptFeedback;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../global.inc.php';
 
-// Add security from Chamilo
 api_block_anonymous_users();
 
-$courseInfo = api_get_course_info();
-/** @var string $tool document or exercise */
-$tool = isset($_REQUEST['tool']) ? $_REQUEST['tool'] : '';
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
+$httpRequest = Request::createFromGlobals();
 
-if ('document' == $type) {
-    api_protect_course_script();
-}
-
+$type = $httpRequest->get('type');
+$trackExerciseId = (int) $httpRequest->get('t_exercise');
+$questionId = (int) $httpRequest->get('question');
 $userId = api_get_user_id();
 
-if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
-    if ('exercise' === $tool) {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'error' => true,
-            'message' => Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error'),
-        ]);
-
-        Display::cleanFlashMessages();
-        exit;
-    }
-
+if (empty($_FILES) || empty($_FILES['audio_blob'])) {
     Display::addFlash(
-        Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error')
+        Display::return_message(
+            get_lang('Upload failed, please check maximum file size limits and folder rights.'),
+            'error'
+        )
     );
     exit;
 }
 
-$file = isset($_FILES['audio_blob']) ? $_FILES['audio_blob'] : [];
-$file['file'] = $file;
-$audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
+$em = Container::getEntityManager();
+$assetRepo = Container::getAssetRepository();
 
 switch ($type) {
-    case 'document':
-        /*$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $saveDir = $dirBaseDocuments.$audioDir;
-        if (!is_dir($saveDir)) {
-            mkdir($saveDir, api_get_permissions_for_new_directories(), true);
-        }*/
-        $uploadedDocument = DocumentManager::upload_document(
-            $file,
-            $audioDir,
-            $file['name'],
-            null,
-            0,
-            'overwrite',
-            false,
-            in_array($tool, ['document', 'exercise']),
-            'file',
-            true,
-            api_get_user_id(),
-            $courseInfo,
-            api_get_session_id(),
-            api_get_group_id()
-        );
+    case Asset::EXERCISE_ATTEMPT:
+        $asset = (new Asset())
+            ->setCategory(Asset::EXERCISE_ATTEMPT)
+            ->setTitle($_FILES['audio_blob']['name'])
+        ;
 
-        $error = empty($uploadedDocument) || !is_array($uploadedDocument);
+        $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);
 
-        if (!$error) {
-            $newDocId = $uploadedDocument['id'];
-            $courseId = $uploadedDocument['c_id'];
+        ChamiloSession::write("oral_expression_asset_$questionId", $asset->getId()->toRfc4122());
+        break;
 
-            /** @var learnpath $lp */
-            $lp = Session::read('oLP');
-            $lpItemId = isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : null;
-            if (!empty($lp) && empty($lpItemId)) {
-                $lp->set_modified_on();
+    case Asset::EXERCISE_FEEDBACK:
+        $asset = (new Asset())
+            ->setCategory(Asset::EXERCISE_FEEDBACK)
+            ->setTitle("feedback_$questionId")
+        ;
 
-                $lpItem = new learnpathItem($lpItemId);
-                $lpItem->add_audio_from_documents($newDocId);
-            }
+        $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);
 
-            $data = DocumentManager::get_document_data_by_id($newDocId, $courseInfo['code']);
+        $attemptFeedback = (new AttemptFeedback())
+            ->setAsset($asset);
 
-            if ('exercise' === $tool) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'error' => $error,
-                    'message' => Display::getFlashToString(),
-                    'fileUrl' => $data['document_url'],
-                ]);
+        /** @var TrackEExercise $exeAttempt */
+        $exeAttempt = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+        $attempt = $exeAttempt->getAttemptByQuestionId($questionId);
 
-                Display::cleanFlashMessages();
-                exit;
-            }
-
-            echo $data['document_url'];
+        if (null === $attempt) {
+            exit;
         }
 
-        break;
-    case 'message':
-        Session::write('current_audio_id', $file['name']);
-        api_upload_file('audio_message', $file, api_get_user_id());
+        $attempt->addAttemptFeedback($attemptFeedback);
 
+        $em->persist($attemptFeedback);
+        $em->flush();
         break;
+    default:
+        throw new \Exception('Unexpected value');
 }

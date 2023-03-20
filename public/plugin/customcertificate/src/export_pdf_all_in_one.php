@@ -151,7 +151,7 @@ foreach ($result as $value) {
                 break;
             }
 
-            switch ($field['field_type']) {
+            switch ($field['value_type']) {
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_ALPHANUMERIC:
                     $pos = stripos($extraFieldValueData['value'], $_GET['extra_'.$field['variable']]);

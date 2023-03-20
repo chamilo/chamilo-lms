@@ -9,7 +9,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-$_user = api_get_user_info();
+$userInfo = api_get_user_info();
+$userInfo['user_id'] = (int) $userInfo['user_id'];
 $id = (int) $_GET['id'];
 $formSent = 0;
 $errorMsg = '';
@@ -43,7 +44,7 @@ if ($infos['date_end']) {
     list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 }
 
-if (!api_is_platform_admin() && $infos['session_admin_id'] != $_user['user_id'] && !api_is_session_admin()) {
+if (!api_is_platform_admin() && !SessionManager::sessionHasSessionAdmin($id, $userInfo['user_id']) && !api_is_session_admin()) {
     api_not_allowed(true);
 }
 
@@ -92,9 +93,9 @@ if (!empty($return)) {
             <label class="col-sm-3 control-label"><?php echo get_lang('Name'); ?></label>
             <div class="col-sm-6">
                 <input class="form-control" type="text" name="name" size="50" maxlength="50" value="<?php if ($formSent) {
-    echo api_htmlentities($name, ENT_QUOTES, $charset);
+    echo api_htmlentities($name, ENT_QUOTES);
 } else {
-    echo api_htmlentities($infos['name'], ENT_QUOTES, $charset);
+    echo api_htmlentities($infos['name'], ENT_QUOTES);
 } ?>">
             </div>
             <div class="col-sm-3"></div>
@@ -411,7 +412,7 @@ if (!empty($return)) {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
-                <button class="btn btn-success" type="submit" value="<?php echo get_lang('Edit'); ?>">
+                <button class="btn btn--success" type="submit" value="<?php echo get_lang('Edit'); ?>">
                     <?php echo get_lang('Edit'); ?>
                 </button>
             </div>

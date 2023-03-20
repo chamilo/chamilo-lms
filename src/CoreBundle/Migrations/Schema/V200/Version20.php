@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -13,16 +16,171 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Basic changes';
+    }
+
     public function up(Schema $schema): void
     {
-        // Use $schema->createTable
         $this->addSql('set sql_mode=""');
+        // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
+        //$this->addSql('set autocommit=0');
+        $this->addSql('set unique_checks=0');
+        $this->addSql('set foreign_key_checks=0');
+
+        // Basic checks.
+        $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
+
+        $table = $schema->getTable('user');
+        if (false === $table->hasColumn('uuid')) {
+            $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");
+        }
+
+        if (false === $schema->hasTable('asset')) {
+            $this->addSql("CREATE TABLE asset (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', title VARCHAR(255) NOT NULL, category VARCHAR(255) NOT NULL, compressed TINYINT(1) NOT NULL, mime_type LONGTEXT DEFAULT NULL, original_name LONGTEXT DEFAULT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT '(DC2Type:simple_array)', size INT NOT NULL, crop VARCHAR(255) DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+        }
+
+        $this->addSql('DELETE FROM track_e_attempt WHERE exe_id IS NULL');
+        $this->addSql('ALTER TABLE track_e_attempt CHANGE exe_id exe_id INT NOT NULL');
+
+        $this->addSql('UPDATE branch_transaction_status SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE branch_transaction_status CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE room SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE room CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE session_rel_course_rel_user SET legal_agreement = 0 WHERE legal_agreement IS NULL');
+        $this->addSql('ALTER TABLE session_rel_course_rel_user CHANGE legal_agreement legal_agreement INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_courses = 0 WHERE nbr_courses IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_courses nbr_courses INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_users = 0 WHERE nbr_users IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_users nbr_users INT NOT NULL');
+
+        $this->addSql('UPDATE session SET nbr_classes = 0 WHERE nbr_classes IS NULL');
+        $this->addSql('ALTER TABLE session CHANGE nbr_classes nbr_classes INT NOT NULL');
+
+        $this->addSql('UPDATE user_friend_relation_type SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE user_friend_relation_type CHANGE title title VARCHAR(20) NOT NULL');
+
+        $this->addSql('UPDATE settings_options SET variable = "No variable name" WHERE variable IS NULL');
+        $this->addSql('ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) NOT NULL');
+
+        if ($schema->hasTable('mail_template')) {
+            $this->addSql('UPDATE mail_template SET name = "No name" WHERE name IS NULL');
+            $this->addSql('ALTER TABLE mail_template CHANGE name name VARCHAR(255) NOT NULL');
+        }
+
+        $this->addSql('UPDATE session_rel_user SET duration = "0" WHERE duration IS NULL');
+        $this->addSql('ALTER TABLE session_rel_user CHANGE duration duration INT NOT NULL');
+
+        if ($schema->hasTable('portfolio_category')) {
+            $this->addSql('UPDATE portfolio_category SET title = "No name" WHERE title IS NULL');
+            $this->addSql('ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL');
+        }
+
+        $this->addSql('UPDATE gradebook_linkeval_log SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE gradebook_linkeval_log CHANGE name name LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE session_category SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE session_category CHANGE name name VARCHAR(100) NOT NULL');
+
+        $this->addSql('UPDATE c_group_info SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE c_group_info CHANGE name name VARCHAR(100) NOT NULL');
+
+        $this->addSql('UPDATE c_group_info SET status = 0 WHERE status IS NULL');
+        $this->addSql('ALTER TABLE c_group_info CHANGE status status TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_quiz_question_option SET name = "No name" WHERE name IS NULL');
+        $this->addSql('ALTER TABLE c_quiz_question_option CHANGE name name VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_survey SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_survey CHANGE title title LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE c_dropbox_file SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_dropbox_file CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_announcement SET title = "No title" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_announcement CHANGE title title LONGTEXT NOT NULL');
+
+        $this->addSql('UPDATE c_quiz SET hide_question_title = 0 WHERE hide_question_title IS NULL');
+        $this->addSql('ALTER TABLE c_quiz CHANGE hide_question_title hide_question_title TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_link SET title = "No name" WHERE title IS NULL');
+        $this->addSql('ALTER TABLE c_link CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_post SET post_title = "No name" WHERE post_title IS NULL');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_title post_title VARCHAR(250) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_post SET visible = 0 WHERE visible IS NULL');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE visible visible TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE c_link SET title = "No title" WHERE title IS NULL OR title = "" OR title = "/" ');
+        $this->addSql('ALTER TABLE c_link CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_document SET title = "No title" WHERE title IS NULL OR title = "" OR title = "/" ');
+        $this->addSql('ALTER TABLE c_document CHANGE title title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_thread SET thread_title = "No name" WHERE thread_title IS NULL');
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_title thread_title VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE c_forum_thread SET thread_sticky = 0 WHERE thread_sticky IS NULL');
+        $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_sticky thread_sticky TINYINT(1) NOT NULL');
+
+        $this->addSql('UPDATE ticket_message SET subject = "Ticket #"+ id WHERE subject IS NULL');
+        $this->addSql('ALTER TABLE ticket_message CHANGE subject subject VARCHAR(255) NOT NULL');
+
+        $this->addSql('UPDATE settings_current SET variable = "No name" WHERE variable IS NULL');
+        $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL;');
+
+        // Global tool.
+        if (false === $schema->hasTable('tool')) {
+            $this->addSql(
+                'CREATE TABLE IF NOT EXISTS tool (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
+            );
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_20F33ED15E237E06 ON tool (name)');
+        }
 
         $table = $schema->getTable('language');
         if ($table->hasIndex('idx_language_dokeos_folder')) {
             $this->addSql('DROP INDEX idx_language_dokeos_folder ON language;');
             $this->addSql('ALTER TABLE language DROP dokeos_folder;');
         }
+
+        // Update language to ISO.
+        $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
+        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+        $this->addSql('UPDATE language SET english_name = "english" WHERE english_name IS NULL');
+        $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
+
+        $languages = LanguageFixtures::getLanguages();
+        $languages = array_column($languages, 'isocode', 'english_name');
+
+        $sql = 'SELECT * FROM language';
+        $connection = $this->getEntityManager()->getConnection();
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $id = $item['id'];
+            $englishName = $item['english_name'];
+            if (isset($languages[$englishName])) {
+                $newIso = $languages[$englishName];
+                $this->addSql("UPDATE language SET isocode = '$newIso' WHERE id = $id");
+            }
+        }
+
+        $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
+        $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+
+        $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
+        $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");
+
+        $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
+        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
+        $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
 
         $table = $schema->getTable('fos_group');
         if (false === $table->hasColumn('name')) {
@@ -34,12 +192,15 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE fos_group CHANGE name name VARCHAR(255) NOT NULL');
 
         $table = $schema->getTable('fos_user_user_group');
-        if ($table->hasForeignKey('fos_user_user_group')) {
+        if ($table->hasForeignKey('FK_B3C77447A76ED395')) {
             $this->addSql('ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447A76ED395');
+            $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        } else {
             $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
 
         $this->addSql('ALTER TABLE course_request CHANGE user_id user_id INT DEFAULT NULL;');
+
         $table = $schema->getTable('course_request');
         if (false === $table->hasForeignKey('FK_33548A73A76ED395')) {
             $this->addSql(
@@ -47,6 +208,17 @@ class Version20 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE INDEX IDX_33548A73A76ED395 ON course_request (user_id);');
         }
+
+        if ($table->hasColumn('directory')) {
+            $this->addSql('ALTER TABLE course_request DROP directory');
+        }
+
+        if ($table->hasColumn('db_name')) {
+            $this->addSql('ALTER TABLE course_request DROP db_name');
+        }
+
+        $this->addSql('ALTER TABLE course_request CHANGE course_language course_language VARCHAR(20) NOT NULL');
+        $this->addSql('ALTER TABLE course_request CHANGE title title VARCHAR(250) NOT NULL');
 
         $table = $schema->getTable('search_engine_ref');
         if (false === $table->hasColumn('c_id')) {
@@ -64,59 +236,39 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE sequence_value CHANGE user_id user_id INT DEFAULT NULL');
 
         $table = $schema->getTable('sequence_value');
-        if ($table->hasForeignKey('FK_66FBF12DA76ED395')) {
+        if (false === $table->hasForeignKey('FK_66FBF12DA76ED395')) {
             $this->addSql(
                 'ALTER TABLE sequence_value ADD CONSTRAINT FK_66FBF12DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
-        if ($table->hasIndex('IDX_66FBF12DA76ED395')) {
+
+        if (false === $table->hasIndex('IDX_66FBF12DA76ED395')) {
             $this->addSql('CREATE INDEX IDX_66FBF12DA76ED395 ON sequence_value (user_id)');
         }
 
         $table = $schema->getTable('branch_sync');
         $this->addSql('ALTER TABLE branch_sync CHANGE access_url_id access_url_id INT DEFAULT NULL');
-        if ($table->hasForeignKey('FK_F62F45ED73444FD5')) {
+        if (false === $table->hasForeignKey('FK_F62F45ED73444FD5')) {
             $this->addSql('ALTER TABLE branch_sync ADD CONSTRAINT FK_F62F45ED73444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)');
         }
-        if ($table->hasIndex('IDX_F62F45ED73444FD5')) {
+        if (false === $table->hasIndex('IDX_F62F45ED73444FD5')) {
             $this->addSql('CREATE INDEX IDX_F62F45ED73444FD5 ON branch_sync (access_url_id)');
-        }
-
-        $table = $schema->getTable('c_tool');
-        if (false === $table->hasForeignKey('FK_8456658091D79BD3')) {
-            $this->addSql(
-                'ALTER TABLE c_tool ADD CONSTRAINT FK_8456658091D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
-            );
-        }
-        $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
-        $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
-        $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
-        $this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
-        $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
-
-        if ($table->hasColumn('course')) {
-            $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
-        }
-        if ($table->hasColumn('position')) {
-            $this->addSql('ALTER TABLE c_tool ADD position INT NOT NULL');
-        }
-        if ($table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665801BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE INDEX IDX_845665808F7B22CC ON c_tool (tool_id)');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_845665801BAD783F ON c_tool (resource_node_id)');
         }
 
         $table = $schema->getTable('personal_agenda');
         if ($table->hasColumn('course')) {
             $this->addSql('ALTER TABLE personal_agenda DROP course');
         }
-        if ($table->hasForeignKey('FK_D86124608D93D649')) {
+
+        if (false === $table->hasForeignKey('FK_D86124608D93D649')) {
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }
 
+        // Convert user_api_key.api_service to 'default'
+        $table = $schema->getTable('user_api_key');
+        if ($table->hasColumn('api_service')) {
+            $this->addSql("UPDATE user_api_key SET api_service = 'default' WHERE api_service = 'dokeos'");
+        }
         //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');
@@ -180,13 +332,26 @@ class Version20 extends AbstractMigrationChamilo
             'CREATE TABLE IF NOT EXISTS ext_log_entries (id INT AUTO_INCREMENT NOT NULL, action VARCHAR(8) NOT NULL, logged_at DATETIME NOT NULL, object_id VARCHAR(64) DEFAULT NULL, object_class VARCHAR(191) NOT NULL, version INT NOT NULL, data LONGTEXT DEFAULT NULL COMMENT "(DC2Type:array)", username VARCHAR(191) DEFAULT NULL, INDEX log_class_lookup_idx (object_class), INDEX log_date_lookup_idx (logged_at), INDEX log_user_lookup_idx (username), INDEX log_version_lookup_idx (object_id, object_class, version), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
         );
         $this->addSql(
-            'CREATE TABLE IF NOT EXISTS mail_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, template LONGTEXT DEFAULT NULL, type VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, default_template TINYINT(1) NOT NULL, `system` INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            'CREATE TABLE IF NOT EXISTS mail_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, template LONGTEXT DEFAULT NULL, type VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, default_template TINYINT(1) NOT NULL, `system` INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
         );
 
         $table = $schema->getTable('usergroup');
-        if (!$table->hasColumn('author_id')) {
+        if (false === $table->hasColumn('author_id')) {
             $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
         }
+
+        if (false === $table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE usergroup ADD resource_node_id BIGINT DEFAULT NULL');
+        }
+
+        // sequence_resource.
+        $table = $schema->getTable('sequence_resource');
+
+        if ($table->hasForeignKey('FK_34ADA43998FB19AE')) {
+            $this->addSql('ALTER TABLE sequence_resource DROP FOREIGN KEY FK_34ADA43998FB19AE;');
+        }
+
+        $this->addSql('ALTER TABLE sequence_resource ADD CONSTRAINT FK_34ADA43998FB19AE FOREIGN KEY (sequence_id) REFERENCES sequence (id) ON DELETE CASCADE');
 
         // Update template.
         $table = $schema->getTable('templates');
@@ -206,39 +371,74 @@ class Version20 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_6F287D8EA76ED395')) {
             $this->addSql('CREATE INDEX IDX_6F287D8EA76ED395 ON templates (user_id)');
         }
-
         if (false === $table->hasForeignKey('FK_6F287D8EA76ED395')) {
             $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
 
+        $this->addSql('CREATE TABLE IF NOT EXISTS ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(191) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+
+        // Rename extra_field field_type and extra_field_type to item_type and value_type, also, the term "value" in exta_field_values.value renamed to field_value
+        $this->addSql('ALTER TABLE extra_field CHANGE extra_field_type item_type INT NOT NULL');
+        $this->addSql('ALTER TABLE extra_field CHANGE field_type value_type INT NOT NULL');
+        $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
+
         // Drop unused columns
         $dropColumnsAndIndex = [
-            'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],
-            'track_e_hotspot' => ['columns' => ['hotspot_course_code'], 'index' => ['hotspot_course_code']],
-            'templates' => ['columns' => ['course_code'], 'index' => []],
-            'personal_agenda' => ['columns' => ['hotspot_course_code'], 'index' => []],
+            'track_e_uploads' => [
+                'columns' => ['upload_cours_id'],
+                'index' => ['upload_cours_id'],
+            ],
+            'track_e_hotspot' => [
+                'columns' => ['hotspot_course_code'],
+                'index' => ['hotspot_course_code'],
+            ],
+            'templates' => [
+                'columns' => ['course_code'],
+                'index' => [],
+            ],
+            'personal_agenda' => [
+                'columns' => ['hotspot_course_code'],
+                'index' => [],
+            ],
+            'c_item_property' => [
+                'fks' => [
+                    'FK_1D84C18129F6EE60',
+                    'FK_1D84C181330D47E9',
+                    'FK_1D84C181613FECDF',
+                    'FK_1D84C18191D79BD3',
+                    'FK_1D84C1819C859CC3',
+                ],
+            ],
         ];
 
         foreach ($dropColumnsAndIndex as $tableName => $data) {
             if ($schema->hasTable($tableName)) {
-                $indexList = $data['index'];
+                $table = $schema->getTable($tableName);
+
+                $indexList = $data['index'] ?? [];
                 foreach ($indexList as $index) {
                     if ($table->hasIndex($index)) {
                         $table->dropIndex($index);
                     }
                 }
 
-                $columns = $data['columns'];
-                $table = $schema->getTable($tableName);
+                $columns = $data['columns'] ?? [];
                 foreach ($columns as $column) {
                     if ($table->hasColumn($column)) {
                         $table->dropColumn($column);
                     }
                 }
+
+                $fks = $data['fks'] ?? [];
+                foreach ($fks as $fk) {
+                    if ($table->hasForeignKey($fk)) {
+                        $table->removeForeignKey($fk);
+                    }
+                }
             }
         }
 
-        // Drop tables
+        // Drop unused tables.
         $dropTables = [
             'event_email_template',
             'event_sent',
@@ -247,14 +447,102 @@ class Version20 extends AbstractMigrationChamilo
             'track_stored_values',
             'track_stored_values_stack',
             'course_module',
+            'c_resource',
+            'track_e_item_property',
         ];
+
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
                 $schema->dropTable($table);
             }
         }
-        $this->addSql('DROP TABLE c_resource');
-        $this->addSql('DROP TABLE track_e_item_property');
+
+        // Disable c_id and session_id.
+        $tables = [
+            'c_announcement' => ['c_id', 'session_id'],
+            'c_announcement_attachment' => ['c_id'],
+            'c_attendance' => ['c_id', 'session_id'],
+            'c_attendance_calendar' => ['c_id'],
+            'c_attendance_calendar_rel_group' => ['c_id', 'group_id'],
+            'c_attendance_result' => ['c_id'],
+            'c_attendance_sheet' => ['c_id'],
+            'c_attendance_sheet_log' => ['c_id'],
+            'c_calendar_event' => ['c_id', 'session_id'],
+            'c_calendar_event_attachment' => ['c_id'],
+            'c_calendar_event_repeat' => ['c_id'],
+            'c_calendar_event_repeat_not' => ['c_id'],
+            'c_course_description' => ['c_id', 'session_id'],
+            'c_document' => ['c_id', 'session_id'],
+            'c_forum_attachment' => ['c_id'],
+            'c_forum_category' => ['c_id', 'session_id', 'cat_id'],
+            'c_forum_forum' => ['c_id', 'session_id', 'post_id'],
+            'c_forum_notification' => ['c_id'],
+            'c_forum_post' => ['c_id', 'post_id'],
+            'c_forum_thread' => ['c_id', 'session_id'],
+            'c_forum_thread_qualify' => ['c_id', 'session_id'],
+            'c_forum_thread_qualify_log' => ['c_id', 'session_id'],
+            'c_glossary' => ['c_id', 'session_id', 'glossary_id'],
+            'c_group_category' => ['c_id'],
+            'c_group_info' => ['c_id', 'session_id'],
+            //'c_group_rel_tutor' => ['c_id'],
+            'c_link' => ['c_id', 'session_id'],
+            'c_link_category' => ['c_id', 'session_id'],
+
+            'c_lp' => ['c_id', 'session_id'],
+            'c_lp_category' => ['c_id'],
+            'c_lp_item' => ['c_id'],
+            'c_lp_item_view' => ['c_id', 'session_id'],
+            // 'c_lp_iv_interaction' => ['c_id'],
+            //'c_lp_iv_objective' => ['c_id'],
+            'c_notebook' => ['c_id', 'session_id'],
+            'c_quiz' => ['c_id', 'session_id'],
+            'c_quiz_answer' => ['c_id'],
+            'c_quiz_question' => ['c_id'],
+            'c_quiz_question_category' => ['c_id'],
+            'c_quiz_question_option' => ['c_id'],
+            'c_quiz_question_rel_category' => ['c_id'],
+            'c_quiz_rel_category' => ['c_id'],
+            'c_quiz_rel_question' => ['c_id'],
+            'c_student_publication' => ['c_id', 'session_id'],
+            'c_student_publication_assignment' => ['c_id'],
+            'c_student_publication_comment' => ['c_id'],
+            'c_student_publication_rel_document' => ['c_id'],
+            'c_student_publication_rel_user' => ['c_id'],
+            'c_survey' => ['c_id', 'session_id', 'survey_id'],
+            'c_survey_answer' => ['c_id', 'answer_id'],
+            'c_survey_group' => ['c_id'],
+            'c_survey_invitation' => [
+                'c_id',
+                'session_id',
+                'group_id',
+                'survey_invitation_id',
+                'survey_group_sec1',
+                'survey_group_sec2',
+            ],
+            'c_survey_question' => ['c_id', 'question_id', 'survey_group_pri'],
+            'c_survey_question_option' => ['c_id', 'question_option_id'],
+            'c_thematic' => ['c_id', 'session_id'],
+            'c_thematic_advance' => ['c_id'],
+            'c_thematic_plan' => ['c_id'],
+            'c_tool' => ['c_id', 'session_id'],
+            'c_tool_intro' => ['c_id', 'session_id'],
+            'c_wiki' => ['c_id', 'session_id'],
+
+            // core tables
+
+            'message' => ['user_receiver_id'],
+        ];
+
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE survey_code survey_code VARCHAR(20) DEFAULT NULL');
+
+        foreach ($tables as $tableName => $fields) {
+            $table = $schema->getTable($tableName);
+            foreach ($fields as $field) {
+                if ($table->hasColumn($field)) {
+                    $this->addSql("ALTER TABLE $tableName CHANGE $field $field INT DEFAULT NULL");
+                }
+            }
+        }
     }
 
     public function down(Schema $schema): void

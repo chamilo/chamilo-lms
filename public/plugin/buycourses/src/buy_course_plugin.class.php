@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -356,8 +357,8 @@ class BuyCoursesPlugin extends Plugin
         $productId = (int) $productId;
         $productType = (int) $productType;
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.$productType;
-        $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
-            Display::returnFontAwesomeIcon('shopping-cart').'</a>';
+        $html = '<a class="btn btn--success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
+            Display::getMdiIcon('cart').'</a>';
 
         return $html;
     }
@@ -591,7 +592,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $sessionCatalog = [];
-        // loop through all sessions
+        /** @var Session $session */
         foreach ($sessions as $session) {
             $sessionCourses = $session->getCourses();
 
@@ -609,7 +610,7 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $sessionData = $this->getSessionInfo($session->getId());
-            $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
+            $sessionData['coaches'] = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getFullname());
             $sessionData['enrolled'] = $this->getUserStatusForSession(
                 api_get_user_id(),
                 $session
@@ -624,9 +625,9 @@ class BuyCoursesPlugin extends Plugin
                     'coaches' => [],
                 ];
 
-                $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus(
                     $course,
-                    Chamilo\CoreBundle\Entity\Session::COACH
+                    Chamilo\CoreBundle\Entity\Session::COURSE_COACH
                 );
 
                 foreach ($userCourseSubscriptions as $userCourseSubscription) {
@@ -812,25 +813,13 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct(
-            $session->getId(),
-            self::PRODUCT_TYPE_SESSION
-        );
+        $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
 
         if (empty($item)) {
             return [];
         }
 
-        $sessionDates = SessionManager::parseSessionDates(
-            [
-                'display_start_date' => $session->getDisplayStartDate(),
-                'display_end_date' => $session->getDisplayEndDate(),
-                'access_start_date' => $session->getAccessStartDate(),
-                'access_end_date' => $session->getAccessEndDate(),
-                'coach_access_start_date' => $session->getCoachAccessStartDate(),
-                'coach_access_end_date' => $session->getCoachAccessEndDate(),
-            ]
-        );
+        $sessionDates = SessionManager::parseSessionDates($session);
 
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
@@ -865,9 +854,9 @@ class BuyCoursesPlugin extends Plugin
                 'coaches' => [],
             ];
 
-            $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+            $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus(
                 $course,
-                Chamilo\CoreBundle\Entity\Session::COACH
+                Chamilo\CoreBundle\Entity\Session::COURSE_COACH
             );
 
             foreach ($userCourseSubscriptions as $userCourseSubscription) {
@@ -1127,8 +1116,7 @@ class BuyCoursesPlugin extends Plugin
         $saleIsCompleted = false;
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
-                $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $sale['product_id']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
                 SessionManager::subscribeUsersToSession(
@@ -2802,7 +2790,7 @@ class BuyCoursesPlugin extends Plugin
         switch ($saleInfo['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $courseInfo = api_get_course_info_by_id($saleInfo['product_id']);
-                $url = api_get_course_url($courseInfo['code']);
+                $url = api_get_course_url($courseInfo['real_id']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
                 $sessionId = (int) $saleInfo['product_id'];

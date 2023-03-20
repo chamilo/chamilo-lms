@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,25 +10,17 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Tool\AbstractTool;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
-//use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class CourseSettingsSchema.
- */
 class CourseSettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * @var ToolChain
-     */
-    protected $toolChain;
-    //protected $repository;
+    protected ToolChain $toolChain;
 
     public function getProcessedToolChain(): array
     {
@@ -45,7 +39,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $this->toolChain = $tools;
     }
 
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $tools = $this->getProcessedToolChain();
 
@@ -53,7 +47,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'homepage_view' => 'activity_big',
-                    'show_tool_shortcuts' => 'false', // @todo check default value?
+                    'show_tool_shortcuts' => 'false',
+                    // @todo check default value?
                     'active_tools_on_create' => $tools,
                     'display_coursecode_in_courselist' => 'false',
                     'display_teacher_in_courselist' => 'true',
@@ -87,7 +82,9 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'enable_record_audio' => 'false',
                     'lp_show_reduced_report' => 'false',
                     'course_creation_splash_screen' => 'true',
-                    'block_registered_users_access_to_open_course_contents' => 'false', // @todo
+                    'block_registered_users_access_to_open_course_contents' => 'false',
+                    'enable_bootstrap_in_documents_html' => 'false',
+                    // @todo
                 ]
             )
             ->setTransformer(
@@ -116,7 +113,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $tools = $this->getProcessedToolChain();
 
@@ -226,6 +223,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('lp_show_reduced_report', YesNoType::class)
             ->add('course_creation_splash_screen', YesNoType::class)
             ->add('block_registered_users_access_to_open_course_contents', YesNoType::class)
+            ->add('enable_bootstrap_in_documents_html', YesNoType::class)
         ;
     }
 }

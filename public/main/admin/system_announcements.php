@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SysAnnouncement;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * This page allows the administrator to manage the system announcements.
  */
@@ -15,25 +18,26 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 $action_todo = false;
 
-// Access restrictions
 api_protect_admin_script(true);
 
 $allowCareers = api_get_configuration_value('allow_careers_in_global_announcements');
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = [
-    "url" => 'index.php',
-    "name" => get_lang('Administration'),
+    'url' => 'index.php',
+    'name' => get_lang('Administration'),
 ];
 
-$visibleList = SystemAnnouncementManager::getVisibilityList();
+$repo = Container::getSysAnnouncementRepository();
+
+$visibleList = $repo->getVisibilityList();
 
 $tool_name = null;
 if (empty($_GET['lang'])) {
-    $_GET['lang'] = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
+    $_GET['lang'] = $_SESSION['user_language_choice'] ?? null;
 }
 
 if (!empty($action)) {
@@ -41,13 +45,13 @@ if (!empty($action)) {
         "url" => "system_announcements.php",
         "name" => get_lang('Portal news'),
     ];
-    if ('add' == $action) {
+    if ('add' === $action) {
         $interbreadcrumb[] = [
             "url" => '#',
             "name" => get_lang('Add an announcement'),
         ];
     }
-    if ('edit' == $action) {
+    if ('edit' === $action) {
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     }
 } else {
@@ -82,23 +86,21 @@ function showCareer() {
 }
 </script>';
 
-// Displaying the header.
 Display::display_header($tool_name);
 if ('add' !== $action && 'edit' !== $action) {
-    echo '<div class="actions">';
-    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
-    echo '</div>';
+    $actions = '<a href="?action=add">'.
+        Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 $show_announcement_list = true;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$action = $_REQUEST['action'] ?? null;
 
 // Form was posted?
 if (isset($_POST['action'])) {
     $action_todo = true;
 }
 
-// Actions
 switch ($action) {
     case 'make_visible':
     case 'make_invisible':
@@ -107,21 +109,21 @@ switch ($action) {
             $status = true;
         }
 
-        SystemAnnouncementManager::set_visibility(
+        /*SystemAnnouncementManager::set_visibility(
             $_GET['id'],
             $_GET['person'],
             $status
-        );
+        );*/
         echo Display::return_message(get_lang('Update successful'), 'confirmation');
         break;
     case 'delete':
         // Delete an announcement.
-        SystemAnnouncementManager::delete_announcement($_GET['id']);
+        $repo->delete($_GET['id']);
         echo Display::return_message(get_lang('Announcement has been deleted'), 'confirmation');
         break;
     case 'delete_selected':
         foreach ($_POST['id'] as $index => $id) {
-            SystemAnnouncementManager::delete_announcement($id);
+            $repo->delete($id);
         }
         echo Display::return_message(get_lang('Announcement has been deleted'), 'confirmation');
         $action_todo = false;
@@ -139,39 +141,36 @@ switch ($action) {
         break;
     case 'edit':
         // Edit an announcement.
-        $announcement = SystemAnnouncementManager::get_announcement($_GET['id']);
-        $values['id'] = $announcement->id;
-        $values['title'] = $announcement->title;
-        $values['content'] = $announcement->content;
-        $values['start'] = api_get_local_time($announcement->date_start);
-        $values['end'] = api_get_local_time($announcement->date_end);
-        $values['range'] = substr(api_get_local_time($announcement->date_start), 0, 16).' / '.
-            substr(api_get_local_time($announcement->date_end), 0, 16);
+        /** @var SysAnnouncement $announcement */
+        $announcement = $repo->find($_GET['id']);
+        $values['id'] = $announcement->getId();
+        $values['title'] = $announcement->getTitle();
+        $values['content'] = $announcement->getContent();
+        $values['start'] = api_get_local_time($announcement->getDateStart());
+        $values['end'] = api_get_local_time($announcement->getDateEnd());
+        $values['range'] = substr(api_get_local_time($announcement->getDateStart()), 0, 16).' / '.
+            substr(api_get_local_time($announcement->getDateEnd()), 0, 16);
 
-        $data = (array) $announcement;
-        foreach ($visibleList as $key => $value) {
-            if (isset($data[$key])) {
-                $values[$key] = $data[$key];
-            }
-        }
+        $values['roles'] = $announcement->getRoles();
+
         if ($allowCareers) {
-            $values['career_id'] = $announcement->career_id;
-            $values['promotion_id'] = $announcement->promotion_id;
+            $values['career_id'] = $announcement->getCareer() ? $announcement->getCareer()->getId() : 0;
+            $values['promotion_id'] = $announcement->getPromotion() ? $announcement->getPromotion() : 0;
         }
 
-        $values['lang'] = $announcement->lang;
+        $values['lang'] = $announcement->getLang();
         $values['action'] = 'edit';
-        $groups = SystemAnnouncementManager::get_announcement_groups($announcement->id);
-        $values['group'] = isset($groups['group_id']) ? $groups['group_id'] : 0;
+        $groups = SystemAnnouncementManager::get_announcement_groups($announcement->getId());
+        $values['group'] = $groups['group_id'] ?? 0;
         $action_todo = true;
         break;
 }
 
 if ($action_todo) {
-    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
+    if ('add' === $action) {
         $form_title = get_lang('Add news');
         $url = api_get_self();
-    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
+    } elseif ('edit' === $action) {
         $form_title = get_lang('Edit News');
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
@@ -201,7 +200,7 @@ if ($action_todo) {
     );
     $form->addDateRangePicker(
         'range',
-        get_lang('StartTimeWindow'),
+        get_lang('Start'),
         true,
         ['id' => 'range']
     );
@@ -215,7 +214,11 @@ if ($action_todo) {
             'career_id',
             get_lang('Career'),
             $list,
-            ['onchange' => 'javascript: showCareer();', 'placeholder' => get_lang('SelectAnOption'), 'id' => 'career_id']
+            [
+                'onchange' => 'javascript: showCareer();',
+                'placeholder' => get_lang('SelectAnOption'),
+                'id' => 'career_id',
+            ]
         );
 
         $display = 'none;';
@@ -241,7 +244,7 @@ if ($action_todo) {
 
     // Add Picture Announcements
     try {
-        $form->addFile(
+        /*$form->addFile(
             'picture',
             [
                 get_lang('Add Picture'),
@@ -270,76 +273,51 @@ if ($action_todo) {
 
             $form->addHtml($image);
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-        }
+        }*/
     } catch (Exception $e) {
         error_log($e);
     }
 
-    $form->addDateRangePicker(
-        'range',
-        get_lang('Start'),
-        true,
-        ['id' => 'range']
-    );
+    $form->addSelect('roles', get_lang('Visible'), $visibleList, ['multiple' => 'multiple']);
 
-    $group = [];
-    foreach ($visibleList as $key => $name) {
-        $group[] = $form->createElement(
-            'checkbox',
-            $key,
-            null,
-            $name
-        );
-    }
-
-    $form->addGroup($group, null, get_lang('Visible'));
     $form->addElement('hidden', 'id');
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $group_list = $userGroup->get_all();
 
     if (!empty($group_list)) {
         $group_list = array_column($group_list, 'name', 'id');
         $group_list[0] = get_lang('All');
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'group',
             get_lang('Announcement for a group'),
             $group_list
         );
     }
 
-    $values['group'] = isset($values['group']) ? $values['group'] : '0';
-    $form->addElement('checkbox', 'send_mail', null, get_lang('Send mail'));
+    $values['group'] = $values['group'] ?? '0';
+    $form->addCheckBox('send_mail', null, get_lang('Send mail'));
 
-    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
+    if ('add' === $action) {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
         $text = get_lang('Add news');
         $class = 'add';
-        $form->addElement('hidden', 'action', 'add');
-    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
+        $form->addHidden('action', 'add');
+    } elseif ('edit' === $action) {
         $text = get_lang('Edit News');
         $class = 'save';
-        $form->addElement('hidden', 'action', 'edit');
+        $form->addHidden('action', 'edit');
     }
     $form->addElement('checkbox', 'send_email_test', null, get_lang('Send an email to myself for testing purposes.'));
-    $form->addButtonSend($text, 'submit');
+    $form->addButtonSend($text);
     $form->setDefaults($values);
 
     if ($form->validate()) {
         $values = $form->getSubmitValues();
-        $visibilityResult = [];
-        foreach ($visibleList as $key => $value) {
-            if (!isset($values[$key])) {
-                $values[$key] = false;
-            }
-            $visibilityResult[$key] = (int) $values[$key];
-        }
-
         if ('all' === $values['lang']) {
             $values['lang'] = null;
         }
 
-        $sendMail = isset($values['send_mail']) ? $values['send_mail'] : null;
+        $sendMail = $values['send_mail'] ?? null;
 
         switch ($values['action']) {
             case 'add':
@@ -348,7 +326,7 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $visibilityResult,
+                    $values['roles'] ?? [],
                     $values['lang'],
                     $sendMail,
                     empty($values['add_to_calendar']) ? false : true,
@@ -356,6 +334,7 @@ if ($action_todo) {
                 );
 
                 if (false !== $announcement_id) {
+                    /*
                     // ADD Picture
                     $picture = $_FILES['picture'];
                     if (!empty($picture['name'])) {
@@ -364,7 +343,7 @@ if ($action_todo) {
                             $picture['tmp_name'],
                             $values['picture_crop_result']
                         );
-                    }
+                    }*/
 
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(
@@ -372,17 +351,19 @@ if ($action_todo) {
                             [$values['group']]
                         );
                     }
-                    Display::addFlash(Display::return_message(
-                        get_lang('Announcement has been added'),
-                        'confirmation'
-                    ));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('Announcement has been added'),
+                            'confirmation'
+                        )
+                    );
                 }
 
                 api_location(api_get_self());
 
                 break;
             case 'edit':
-                $sendMailTest = isset($values['send_email_test']) ? $values['send_email_test'] : null;
+                $sendMailTest = $values['send_email_test'] ?? null;
 
                 if (SystemAnnouncementManager::update_announcement(
                     $values['id'],
@@ -390,24 +371,25 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $visibilityResult,
+                    $values['roles'] ?? [],
                     $values['lang'],
                     $sendMail,
                     $sendMailTest
                 )) {
-                    $deletePicture = isset($values['delete_picture']) ? $values['delete_picture'] : '';
+                    $deletePicture = $values['delete_picture'] ?? '';
 
                     if ($deletePicture) {
-                        SystemAnnouncementManager::deleteAnnouncementPicture($values['id']);
+                        //SystemAnnouncementManager::deleteAnnouncementPicture($values['id']);
                     } else {
-                        $picture = $_FILES['picture'];
+                        // @todo
+                        /*$picture = $_FILES['picture'];
                         if (!empty($picture['name'])) {
                             $picture_uri = SystemAnnouncementManager::update_announcements_picture(
                                 $values['id'],
                                 $picture['tmp_name'],
                                 $values['picture_crop_result']
                             );
-                        }
+                        }*/
                     }
 
                     if (isset($values['group'])) {
@@ -418,7 +400,7 @@ if ($action_todo) {
                     }
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('AnnouncementUpdate successful'),
+                            get_lang('Announcement has been updated'),
                             'confirmation'
                         )
                     );
@@ -438,29 +420,36 @@ if ($action_todo) {
 }
 
 if ($show_announcement_list) {
-    $announcements = SystemAnnouncementManager :: get_all_announcements();
+    $criteria = ['url' => api_get_url_entity()];
+    $announcements = $repo->findBy($criteria);
     $announcement_data = [];
-    foreach ($announcements as $index => $announcement) {
+    /** @var SysAnnouncement $announcement */
+    foreach ($announcements as $announcement) {
         $row = [];
-        $row[] = $announcement->id;
-        $row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('The announcement is available') : get_lang('The announcement is not available')));
-        $row[] = $announcement->title;
-        $row[] = api_convert_and_format_date($announcement->date_start);
-        $row[] = api_convert_and_format_date($announcement->date_end);
+        $row[] = $announcement->getId();
+        $row[] = Display::return_icon(
+            ($announcement->isVisible() ? 'accept.png' : 'exclamation.png'),
+            ($announcement->isVisible() ? get_lang('The announcement is available') : get_lang(
+                'The announcement is not available'
+            ))
+        );
+        $row[] = $announcement->getTitle();
+        $row[] = api_convert_and_format_date($announcement->getDateStart());
+        $row[] = api_convert_and_format_date($announcement->getDateEnd());
+        $row[] = implode(', ', $announcement->getRoles());
 
-        $data = (array) $announcement;
-        foreach ($visibleList as $key => $value) {
-            $value = $data[$key];
-            $action = $value ? 'make_invisible' : 'make_visible';
-            $row[] = "<a href=\"?id=".$announcement->id."&person=".$key."&action=".$action."\">".
-                Display::return_icon(($value ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
-        }
         /*$row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_TEACHER."&action=".($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_STUDENT."&action=".($announcement->visible_student ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_GUEST."&action=".($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";*/
 
-        $row[] = $announcement->lang;
-        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\" title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)."</a>";
+        $row[] = $announcement->getLang();
+        $row[] = "<a href=\"?action=edit&id=".$announcement->getId()."\">".
+            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a>
+            <a
+                href=\"?action=delete&id=".$announcement->getId()."\"
+                title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".
+            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).
+            "</a>";
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);
@@ -469,19 +458,13 @@ if ($show_announcement_list) {
     $table->set_header(2, get_lang('Title'));
     $table->set_header(3, get_lang('Start'));
     $table->set_header(4, get_lang('End'));
-
-    $count = 5;
-    foreach ($visibleList as $key => $title) {
-        $table->set_header($count, $title);
-        $count++;
-    }
-
-    $table->set_header($count++, get_lang('Language'));
-    $table->set_header($count++, get_lang('Edit'), false, 'width="50px"');
+    $table->set_header(5, get_lang('Roles'));
+    $table->set_header(6, get_lang('Language'));
+    $table->set_header(7, get_lang('Edit'), false, 'width="50px"');
     $form_actions = [];
     $form_actions['delete_selected'] = get_lang('Delete');
     $table->set_form_actions($form_actions);
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

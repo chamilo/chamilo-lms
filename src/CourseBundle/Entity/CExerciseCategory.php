@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -13,8 +15,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CExerciseCategory.
- *
  * @ORM\Table(name="c_exercise_category")
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
@@ -23,55 +23,47 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Course
+     * @Gedmo\SortableGroup
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
      * @Gedmo\SortablePosition
      *
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
-    /**
-     * Project constructor.
-     */
     public function __construct()
     {
+        $this->position = 0;
+        $this->description = '';
     }
 
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**
@@ -82,62 +74,31 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return CExerciseCategory
-     */
-    public function setId($id)
+    public function getName(): string
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return (string) $this->name;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return CExerciseCategory
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return CExerciseCategory
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
@@ -149,24 +110,18 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return CExerciseCategory
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getId();

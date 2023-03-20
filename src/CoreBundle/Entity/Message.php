@@ -1,211 +1,380 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Message.
- *
  * @ORM\Table(name="message", indexes={
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
- *     @ORM\Index(name="idx_message_user_receiver", columns={"user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_sender_user_receiver", columns={"user_sender_id", "user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
- *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_parent", columns={"parent_id"}),
- *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
+ *     @ORM\Index(name="idx_message_type", columns={"msg_type"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\MessageListener"})
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_USER')",  // the get collection is also filtered by MessageExtension.php
+        ],
+        'post' => [
+            //'security' => "is_granted('ROLE_USER')",
+            /*'messenger' => true,
+            'output' => false,
+            'status' => 202,*/
+            'security_post_denormalize' => "is_granted('CREATE', object)",
+            //            'deserialize' => false,
+            //            'controller' => Create::class,
+            //            'openapi_context' => [
+            //                'requestBody' => [
+            //                    'content' => [
+            //                        'multipart/form-data' => [
+            //                            'schema' => [
+            //                                'type' => 'object',
+            //                                'properties' => [
+            //                                    'title' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                    'content' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                ],
+            //                            ],
+            //                        ],
+            //                    ],
+            //                ],
+            //            ],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['message:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'msgType' => 'exact',
+    'status' => 'exact',
+    'sender' => 'exact',
+    'receivers.receiver' => 'exact',
+    'receivers.tags.tag' => 'exact',
+    'parent' => 'exact',
+])]
 class Message
 {
+    public const MESSAGE_TYPE_INBOX = 1;
+    public const MESSAGE_TYPE_GROUP = 5;
+    public const MESSAGE_TYPE_INVITATION = 6;
+    public const MESSAGE_TYPE_CONVERSATION = 7;
+
+    // status
+    public const MESSAGE_STATUS_DELETED = 3;
+    public const MESSAGE_STATUS_DRAFT = 4;
+    public const MESSAGE_STATUS_INVITATION_PENDING = 5;
+    public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
+    public const MESSAGE_STATUS_INVITATION_DENIED = 7;
+
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected $id;
+    #[ApiProperty(identifier: true)]
+    #[Groups(['message:read'])]
+    protected ?int $id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
-    protected $userSender;
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
+    protected User $sender;
 
     /**
-     * @var User
+     * @var Collection|MessageRelUser[]
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
-     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser", mappedBy="message", cascade={"persist", "remove"})
      */
-    protected $userReceiver;
+    #[Assert\Valid]
+    #[Groups(['message:read', 'message:write'])]
+    #[ApiSubresource]
+    protected array | null | Collection $receivers;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="msg_status", type="smallint", nullable=false)
+     * @var Collection|MessageRelUser[]
      */
-    protected $msgStatus;
+    #[Groups(['message:read', 'message:write'])]
+    protected array | null | Collection $receiversTo;
 
     /**
-     * @var \DateTime
-     *
+     * @var Collection|MessageRelUser[]
+     */
+    #[Groups(['message:read', 'message:write'])]
+    protected array | null | Collection $receiversCc;
+
+    /**
+     * @ORM\Column(name="msg_type", type="smallint", nullable=false)
+     */
+    #[Assert\NotBlank]
+    // @todo use enums with PHP 8.1
+    /*#[Assert\Choice([
+        self::MESSAGE_TYPE_INBOX,
+        self::MESSAGE_TYPE_OUTBOX,
+        self::MESSAGE_TYPE_PROMOTED,
+    ])]*/
+    /*#[ApiProperty(attributes: [
+        'openapi_context' => [
+            'type' => 'int',
+            'enum' => [self::MESSAGE_TYPE_INBOX, self::MESSAGE_TYPE_OUTBOX],
+        ],
+    ])]*/
+    #[Groups(['message:read', 'message:write'])]
+    protected int $msgType;
+
+    /**
+     * @ORM\Column(name="status", type="smallint", nullable=false)
+     */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
+    protected int $status;
+
+    /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
-    protected $sendDate;
+    #[Groups(['message:read'])]
+    protected DateTime $sendDate;
 
     /**
-     * @var string
-     * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
+    protected string $title;
 
     /**
-     * @var string
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
+    protected string $content;
+
+    #[Groups(['message:read', 'message:write'])]
+    protected ?MessageRelUser $firstReceiver;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $groupId;
+    protected ?Usergroup $group = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @var Collection|Message[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="parent")
      */
-    protected $parentId;
+    protected Collection $children;
 
     /**
-     * @var \DateTime
-     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    #[Groups(['message:write'])]
+    protected ?Message $parent = null;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
-    protected $updateDate;
+    protected ?DateTime $updateDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="votes", type="integer", nullable=true)
      */
-    protected $votes;
+    protected ?int $votes;
 
     /**
-     * @var ArrayCollection|MessageAttachment[]
+     * @var Collection|MessageAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message", cascade={"remove", "persist"})
      */
-    protected $attachments;
+    #[Groups(['message:read'])]
+    protected Collection $attachments;
 
-    /**
-     * @var ArrayCollection|MessageFeedback[]
-     *
-     * @ORM\OneToMany(targetEntity="MessageFeedback", mappedBy="message", orphanRemoval=true)
-     */
-    protected $likes;
-
-    /**
-     * Message constructor.
-     */
     public function __construct()
     {
+        $this->sendDate = new DateTime('now');
+        $this->updateDate = $this->sendDate;
+        $this->msgType = self::MESSAGE_TYPE_INBOX;
+        $this->content = '';
         $this->attachments = new ArrayCollection();
-        $this->likes = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->receivers = new ArrayCollection();
+        $this->receiversCc = new ArrayCollection();
+        $this->receiversTo = new ArrayCollection();
+        $this->votes = 0;
+        $this->status = 0;
     }
 
     /**
-     * Set userSender.
-     *
-     * @return Message
+     * @return null|Collection|MessageRelUser[]
      */
-    public function setUserSender(User $userSender)
+    public function getReceivers()
     {
-        $this->userSender = $userSender;
+        return $this->receivers;
+    }
+
+    /**
+     * @return MessageRelUser[]
+     */
+    public function getReceiversTo()
+    {
+        /*return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
+            return MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType();
+        });*/
+
+        $list = [];
+        foreach ($this->receivers as $receiver) {
+            if (MessageRelUser::TYPE_TO === $receiver->getReceiverType()) {
+                $list[] = $receiver;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @return MessageRelUser[]
+     */
+    public function getReceiversCc()
+    {
+        $list = [];
+        foreach ($this->receivers as $receiver) {
+            if (MessageRelUser::TYPE_CC === $receiver->getReceiverType()) {
+                $list[] = $receiver;
+            }
+        }
+
+        /*
+        For some reason this doesn't work, api platform returns an obj instead a collection.
+        $result = $this->receivers->filter(function (MessageRelUser $messageRelUser) {
+            error_log((string)$messageRelUser->getId());
+            return MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType();
+        });
+        */
+        return $list;
+    }
+
+    public function getFirstReceiver(): ?MessageRelUser
+    {
+        if ($this->receivers->count() > 0) {
+            return $this->receivers->first();
+        }
+
+        return null;
+    }
+
+    public function hasReceiver(User $receiver)
+    {
+        if ($this->receivers->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('receiver', $receiver),
+            )->andWhere(
+                Criteria::expr()->eq('message', $this),
+            );
+
+            return $this->receivers->matching($criteria)->count() > 0;
+        }
+
+        return false;
+    }
+
+    public function addReceiver(User $receiver, int $receiverType = MessageRelUser::TYPE_TO): self
+    {
+        $messageRelUser = (new MessageRelUser())
+            ->setReceiver($receiver)
+            ->setReceiverType($receiverType)
+            ->setMessage($this)
+        ;
+        if (!$this->receivers->contains($messageRelUser)) {
+            $this->receivers->add($messageRelUser);
+        }
 
         return $this;
     }
 
     /**
-     * Get userSender.
-     *
-     * @return User
+     * @param Collection|MessageRelUser $receivers
      */
-    public function getUserSender()
+    public function setReceivers($receivers): self
     {
-        return $this->userSender;
-    }
-
-    /**
-     * Set userReceiver.
-     *
-     * @return Message
-     */
-    public function setUserReceiver(User $userReceiver)
-    {
-        $this->userReceiver = $userReceiver;
+        /** @var MessageRelUser $receiver */
+        foreach ($receivers as $receiver) {
+            $receiver->setMessage($this);
+        }
+        $this->receivers = $receivers;
 
         return $this;
     }
 
-    /**
-     * Get userReceiver.
-     *
-     * @return User
-     */
-    public function getUserReceiver()
+    public function setSender(User $sender): self
     {
-        return $this->userReceiver;
-    }
-
-    /**
-     * Set msgStatus.
-     *
-     * @param bool $msgStatus
-     *
-     * @return Message
-     */
-    public function setMsgStatus($msgStatus)
-    {
-        $this->msgStatus = $msgStatus;
+        $this->sender = $sender;
 
         return $this;
     }
 
-    /**
-     * Get msgStatus.
-     *
-     * @return bool
-     */
-    public function getMsgStatus()
+    public function getSender(): User
     {
-        return $this->msgStatus;
+        return $this->sender;
     }
 
-    /**
-     * Set sendDate.
-     *
-     * @param \DateTime $sendDate
-     *
-     * @return Message
-     */
-    public function setSendDate($sendDate)
+    public function setMsgType(int $msgType): self
+    {
+        $this->msgType = $msgType;
+
+        return $this;
+    }
+
+    public function getMsgType(): int
+    {
+        return $this->msgType;
+    }
+
+    public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
 
@@ -215,117 +384,38 @@ class Message
     /**
      * Get sendDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getSendDate()
     {
         return $this->sendDate;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return Message
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return Message
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * Set groupId.
-     *
-     * @param int $groupId
-     *
-     * @return Message
-     */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return Message
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
-     * Set updateDate.
-     *
-     * @param \DateTime $updateDate
-     *
-     * @return Message
-     */
-    public function setUpdateDate($updateDate)
+    public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
 
@@ -335,7 +425,7 @@ class Message
     /**
      * Get updateDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdateDate()
     {
@@ -352,26 +442,14 @@ class Message
         return $this->id;
     }
 
-    /**
-     * Set votes.
-     *
-     * @param int $votes
-     *
-     * @return Message
-     */
-    public function setVotes($votes)
+    public function setVotes(int $votes): self
     {
         $this->votes = $votes;
 
         return $this;
     }
 
-    /**
-     * Get votes.
-     *
-     * @return int
-     */
-    public function getVotes()
+    public function getVotes(): int
     {
         return $this->votes;
     }
@@ -379,26 +457,71 @@ class Message
     /**
      * Get attachments.
      *
-     * @return ArrayCollection
+     * @return Collection|MessageAttachment[]
      */
     public function getAttachments()
     {
         return $this->attachments;
     }
 
-    /**
-     * Get an excerpt from the content.
-     *
-     * @param int $length Optional. Length of the excerpt.
-     *
-     * @return string
-     */
-    public function getExcerpt($length = 50)
+    public function addAttachment(MessageAttachment $attachment): self
     {
-        $striped = strip_tags($this->content);
-        $replaced = str_replace(["\r\n", "\n"], ' ', $striped);
-        $trimmed = trim($replaced);
+        $this->attachments->add($attachment);
+        $attachment->setMessage($this);
 
-        return api_trunc_str($trimmed, $length);
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): self
+    {
+        $this->children[] = $child;
+        $child->setParent($this);
+
+        return $this;
+    }
+
+    public function setParent(self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getGroup(): ?Usergroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?Usergroup $group): self
+    {
+//        $this->msgType = self::MESSAGE_TYPE_GROUP;
+        $this->group = $group;
+
+        return $this;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

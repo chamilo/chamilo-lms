@@ -159,20 +159,20 @@ $items = [
     'url' => 'status.php?action=add',
     'content' => get_lang('Add status'),
 ];
-echo '<div class="actions">';
-echo Display::url(
+
+$actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 $sections = TicketManager::getSettingsMenuItems('status');
 array_unshift($sections, $items);
 foreach ($sections as $item) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
         $item['url']
     );
 }
-echo '</div>';
+echo Display::toolbarAction('ticket', [$actions]);
 echo $formToString;
 echo $table->return_table();
 

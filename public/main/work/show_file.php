@@ -9,7 +9,6 @@
  * rewrite mechanism.
  */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'work.lib.php';
 
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 $this_section = SECTION_COURSES;

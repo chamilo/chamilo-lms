@@ -12,6 +12,7 @@ namespace Chamilo\CoreBundle\Hook;
 use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookObserverInterface;
 use Doctrine\ORM\EntityManager;
+use SplObjectStorage;
 
 /**
  * Class HookEvent.
@@ -37,7 +38,7 @@ abstract class HookEvent implements HookEventInterface
     {
         $this->entityManager = $entityManager;
 
-        $this->observers = new \SplObjectStorage();
+        $this->observers = new SplObjectStorage();
         $this->eventName = $eventName;
         $this->eventData = [];
         $this->manager = HookManagement::create($this->entityManager);

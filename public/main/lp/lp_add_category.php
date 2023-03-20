@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
  */
@@ -47,7 +49,7 @@ $form->addElement('hidden', 'c_id', api_get_course_int_id());
 $form->addElement('hidden', 'id', 0);
 
 $form->addButtonSave(get_lang('Save'));
-
+$repo = Container::getLpCategoryRepository();
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     if (!empty($values['id'])) {
@@ -67,9 +69,9 @@ if ($form->validate()) {
     $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
     if ($id) {
-        $item = learnpath::getCategory($id);
+        $item = $repo->find($id);
         $defaults = [
-            'id' => $item->getId(),
+            'id' => $item->getIid(),
             'name' => $item->getName(),
         ];
         $form->setDefaults($defaults);
@@ -78,8 +80,7 @@ if ($form->validate()) {
 
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
-echo '<div class="actions">';
-echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
+$actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',
         get_lang('ReturnToLearning paths'),
@@ -87,7 +88,8 @@ echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
         ICON_SIZE_MEDIUM
     ).
     '</a>';
-echo '</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $form->display();
 

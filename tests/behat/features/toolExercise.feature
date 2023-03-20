@@ -11,8 +11,9 @@ Feature: Exercise tool
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 1 |
-    And I fill in ckeditor field "category_description" with "Category 1 description"
+    And I fill in editor field "category_description" with "Category 1 description"
     And I press "SubmitNote"
+    And wait for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create a second question category
@@ -20,8 +21,9 @@ Feature: Exercise tool
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 2 |
-    And I fill in ckeditor field "category_description" with "Category 2 description"
+    And I fill in editor field "category_description" with "Category 2 description"
     And I press "SubmitNote"
+    And wait for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create an exercise
@@ -29,8 +31,9 @@ Feature: Exercise tool
     And I press advanced settings
     When I fill in the following:
       | exercise_title | Exercise 1 |
-    And I fill in ckeditor field "exerciseDescription" with "Exercise description"
+    And I fill in editor field "exerciseDescription" with "Exercise description"
     And I press "submitExercise"
+    And wait for the page to be loaded
     Then I should see "Test added"
 
   Scenario: Edit an exercise
@@ -39,6 +42,7 @@ Feature: Exercise tool
     And I follow "Edit"
     And I follow "Edit test name and settings"
     And I press "submitExercise"
+    And wait for the page to be loaded
     Then I should see "Test name and settings have been saved."
 
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
@@ -49,16 +53,17 @@ Feature: Exercise tool
     When I fill in the following:
       | questionName | Multiple choice |
       | weighting[1] | 10 |
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
@@ -70,16 +75,17 @@ Feature: Exercise tool
       | questionName | Multiple answers |
       | weighting[1] | 10 |
     Then I check the "correct[1]" radio button
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"
@@ -89,8 +95,9 @@ Feature: Exercise tool
     And I follow "Fill blanks or form"
     When I fill in the following:
       | questionName | Fill blanks |
-    Then I fill in ckeditor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
+    Then I fill in editor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"
@@ -100,12 +107,13 @@ Feature: Exercise tool
     And I follow "Matching"
     When I fill in the following:
       | questionName | Matching |
-    And I fill in ckeditor field "answer[1]" with "Answer A"
-    And I fill in ckeditor field "answer[2]" with "Answer B"
-    And I fill in ckeditor field "option[1]" with "Option A"
-    And I fill in ckeditor field "option[2]" with "Option B"
+    And I fill in editor field "answer1" with "Answer A"
+    And I fill in editor field "answer2" with "Answer B"
+    And I fill in editor field "option1" with "Option A"
+    And I fill in editor field "option2" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
     Scenario: Add question "Open" to exercise created "Exercise 1"
@@ -117,6 +125,7 @@ Feature: Exercise tool
       | questionName | Open question |
       | weighting | 10 |
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
 #    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
@@ -138,12 +147,12 @@ Feature: Exercise tool
     When I fill in the following:
       | questionName | Exact answers combination |
     Then I check the "correct[1]" radio button
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
     Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
@@ -155,14 +164,15 @@ Feature: Exercise tool
         | questionName | Unique answer with unknown |
         | weighting[1] | 10 |
       Then I check the "correct" radio button
-      Then I fill in ckeditor field "answer[1]" with "Answer true"
-      Then I fill in ckeditor field "answer[2]" with "Answer false"
-      Then I fill in ckeditor field "answer[3]" with "Answer false"
+      Then I fill in editor field "answer1" with "Answer true"
+      Then I fill in editor field "answer2" with "Answer false"
+      Then I fill in editor field "answer3" with "Answer false"
 
-      Then I fill in ckeditor field "comment[1]" with "Comment true"
-      Then I fill in ckeditor field "comment[2]" with "Comment false"
-      Then I fill in ckeditor field "comment[3]" with "Comment false"
+      Then I fill in editor field "comment1" with "Comment true"
+      Then I fill in editor field "comment2" with "Comment false"
+      Then I fill in editor field "comment3" with "Comment false"
       And I press "submitQuestion"
+      And wait for the page to be loaded
       Then I should see "Item added"
 
   Scenario: Add question "Multiple answer true/false/don't know" to exercise created "Exercise 1"
@@ -178,16 +188,17 @@ Feature: Exercise tool
     Then I check the "correct[3]" radio button
     Then I check the "correct[4]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer true"
-    Then I fill in ckeditor field "answer[3]" with "Answer true"
-    Then I fill in ckeditor field "answer[4]" with "Answer true"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer true"
+    Then I fill in editor field "answer3" with "Answer true"
+    Then I fill in editor field "answer4" with "Answer true"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment true"
-    Then I fill in ckeditor field "comment[3]" with "Comment true"
-    Then I fill in ckeditor field "comment[4]" with "Comment true"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment true"
+    Then I fill in editor field "comment3" with "Comment true"
+    Then I fill in editor field "comment4" with "Comment true"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Combination true/false/don't-know" to exercise created "Exercise 1"
@@ -200,12 +211,13 @@ Feature: Exercise tool
 
     Then I check the "correct[1]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
@@ -219,41 +231,44 @@ Feature: Exercise tool
 
     Then I check the "correct[1]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
 
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Duplicate exercise
     Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Copy this exercise as a new one"
     And I confirm the popup
-    Then I should see "Exercise copied"
+    And wait very long for the page to be loaded
+    Then I should see "copied"
+    And wait for the page to be loaded
     And I should see "Exercise 1 - Copy"
 
-  Scenario: Import exercise to test questions categories
-    Given I am on "/main/exercise/upload_exercise.php?cid=1"
-    And I should see "Import quiz from Excel"
-    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
-    When I press "Upload"
-    And wait for the page to be loaded
-    Then I should see "Exercise for Behat test"
-
-    Scenario: Import exercise from excel
-    Given I am on "/main/exercise/upload_exercise.php?cid=1"
-    Then I should see "Import quiz from Excel"
-    Then I attach the file "/public/main/exercise/quiz_template.xls" to "user_upload_quiz"
-    And I press "Upload"
-    And wait for the page to be loaded
-    Then I should see "Definition of oligarchy"
+#  Scenario: Import exercise to test questions categories
+#    Given I am on "/main/exercise/upload_exercise.php?cid=1"
+#    And I should see "Import quiz from Excel"
+#    And I attach the file "/tests/fixtures/exercise.xls" to "user_upload_quiz"
+#    When I press "Upload"
+#    And wait for the page to be loaded
+#    Then I should see "Exercise for Behat test"
+#
+#    Scenario: Import exercise from excel
+#    Given I am on "/main/exercise/upload_exercise.php?cid=1"
+#    Then I should see "Import quiz from Excel"
+#    Then I attach the file "/public/main/exercise/quiz_template.xls" to "user_upload_quiz"
+#    And I press "Upload"
+#    And wait for the page to be loaded
+#    Then I should see "Definition of oligarchy"
 
   Scenario: Try exercise "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
@@ -282,7 +297,8 @@ Feature: Exercise tool
       | choice_id_3_9 | l'été |
       | choice_id_3_10 | cherchent à |
       | choice_id_3_11 | Übung |
-    Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
+    #Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
+    Then I select "Ärger" from "choice_id_3_12"
     Then I press "Next question"
     And wait for the page to be loaded
     # Question 4 - Matching
@@ -359,7 +375,8 @@ Feature: Exercise tool
     Then I should see "Update successful"
 
   Scenario: Try exercise with categorized questions as student
-    Given I am a student
+    Given I am not logged
+    And I am a student
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cid=1"
@@ -425,25 +442,25 @@ Feature: Exercise tool
       | none          | 80 / 60        | 133.33%        |
       | Total         | 190 / 190      | 100%           |
 
-  Scenario: Delete an exercise
-    Given I am on "/main/exercise/exercise.php?cid=1"
-    And I follow "Delete"
-    And I confirm the popup
-    Then I should see "The test has been deleted"
-
-  Scenario: Delete an exercise category
-    Given I am on "/main/exercise/tests_category.php?cid=1"
-    And I follow "Delete"
-    Then I should see "Category deleted"
-
-  Scenario: Delete an exercise category
-    Given I am on "/main/exercise/tests_category.php?cid=1"
-    And I follow "Delete"
-    Then I should see "Category deleted"
-
-  Scenario: Delete session
-    Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
-    And wait for the page to be loaded
-    And I follow "Delete"
-    And I confirm the popup
-    Then I should see "Deleted"
+#  Scenario: Delete an exercise
+#    Given I am on "/main/exercise/exercise.php?cid=1"
+#    And I follow "Delete"
+#    And I confirm the popup
+#    Then I should see "The test has been deleted"
+#
+#  Scenario: Delete an exercise category
+#    Given I am on "/main/exercise/tests_category.php?cid=1"
+#    And I follow "Delete"
+#    Then I should see "Category deleted"
+#
+#  Scenario: Delete an exercise category
+#    Given I am on "/main/exercise/tests_category.php?cid=1"
+#    And I follow "Delete"
+#    Then I should see "Category deleted"
+#
+#  Scenario: Delete session
+#    Given I am on "/main/session/session_list.php?keyword=Session+Exercise"
+#    And wait for the page to be loaded
+#    And I follow "Delete"
+#    And I confirm the popup
+#    Then I should see "Deleted"

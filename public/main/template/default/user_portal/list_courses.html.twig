@@ -36,12 +36,12 @@
                 <div class="float-right">
                     {% if item.document == '' %}
                         <a class="btn btn-outline-primary btn-sm" href="{{ item.edit_actions }}">
-                            <i class="fas fa-pencil-alt"></i>
+                            {{ 'pencil' | mdi_icon }}
                         </a>
                     {% else %}
                         <div class="btn-group" role="group">
                             <a class="btn btn-outline-primary btn-sm" href="{{ item.edit_actions }}">
-                                <i class="fas fa-pencil-alt"></i>
+                                {{ 'pencil' | mdi_icon }}
                             </a>
                             {{ item.document }}
                         </div>

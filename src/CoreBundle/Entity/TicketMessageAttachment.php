@@ -1,92 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MessageAttachment.
- *
  * @ORM\Table(name="ticket_message_attachments")
  * @ORM\Entity
  */
-class TicketMessageAttachment
+class TicketMessageAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Ticket
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $ticket;
+    protected Ticket $ticket;
 
     /**
-     * @var TicketMessage
-     *
-     * @ORM\ManyToOne(targetEntity="TicketMessage")
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketMessage")
+     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $message;
+    protected TicketMessage $message;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="text", nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="size", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="size", type="integer")
      */
-    protected $size;
+    protected int $size;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
+
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
 
     /**
      * @return int
@@ -97,18 +83,6 @@ class TicketMessageAttachment
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return TicketMessage
      */
     public function getMessage()
@@ -116,12 +90,7 @@ class TicketMessageAttachment
         return $this->message;
     }
 
-    /**
-     * @param TicketMessage $message
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setMessage($message)
+    public function setMessage(TicketMessage $message): self
     {
         $this->message = $message;
 
@@ -136,12 +105,7 @@ class TicketMessageAttachment
         return $this->path;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setPath($path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -156,12 +120,7 @@ class TicketMessageAttachment
         return $this->filename;
     }
 
-    /**
-     * @param string $filename
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setFilename($filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -176,14 +135,50 @@ class TicketMessageAttachment
         return $this->size;
     }
 
-    /**
-     * @param int $size
-     *
-     * @return TicketMessageAttachment
-     */
-    public function setSize($size)
+    public function setSize(int $size): self
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getTicket(): Ticket
+    {
+        return $this->ticket;
+    }
+
+    public function setTicket(Ticket $ticket): self
+    {
+        $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
+    }
+
+    public function setResourceName(string $name)
+    {
+        return $this->setFilename($name);
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function setInsertUserId(int $insertUserId): self
+    {
+        $this->insertUserId = $insertUserId;
+
+        return $this;
+    }
+
+    public function setInsertDateTime(DateTime $insertDateTime): self
+    {
+        $this->insertDateTime = $insertDateTime;
 
         return $this;
     }

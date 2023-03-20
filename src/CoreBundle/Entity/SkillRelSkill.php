@@ -1,122 +1,64 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SkillRelSkill.
- *
  * @ORM\Table(name="skill_rel_skill")
  * @ORM\Entity
  */
 class SkillRelSkill
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="skill_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="skills")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
      */
-    protected $skillId;
+    protected Skill $skill;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $parentId;
+    protected ?Skill $parent = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
-    protected $relationType;
+    #[Assert\NotBlank]
+    protected int $relationType;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
-    protected $level;
+    #[Assert\NotBlank]
+    protected int $level;
 
-    /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
+    public function getParent(): ?Skill
     {
-        $this->id = $id;
+        return $this->parent;
     }
 
-    /**
-     * Set skillId.
-     *
-     * @param int $skillId
-     *
-     * @return SkillRelSkill
-     */
-    public function setSkillId($skillId)
+    public function setParent(?Skill $parent): self
     {
-        $this->skillId = $skillId;
+        $this->parent = $parent;
 
         return $this;
     }
 
-    /**
-     * Get skillId.
-     *
-     * @return int
-     */
-    public function getSkillId()
-    {
-        return $this->skillId;
-    }
-
-    /**
-     * Set parentId.
-     *
-     * @param int $parentId
-     *
-     * @return SkillRelSkill
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
-     * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return SkillRelSkill
-     */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
@@ -133,37 +75,32 @@ class SkillRelSkill
         return $this->relationType;
     }
 
-    /**
-     * Set level.
-     *
-     * @param int $level
-     *
-     * @return SkillRelSkill
-     */
-    public function setLevel($level)
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
         return $this;
     }
 
-    /**
-     * Get level.
-     *
-     * @return int
-     */
-    public function getLevel()
+    public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getSkill(): Skill
+    {
+        return $this->skill;
+    }
+
+    public function setSkill(Skill $skill): self
+    {
+        $this->skill = $skill;
+
+        return $this;
     }
 }

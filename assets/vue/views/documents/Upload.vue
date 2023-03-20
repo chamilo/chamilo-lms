@@ -1,26 +1,25 @@
 <template>
   <div>
-    <DocumentsForm
-      ref="createForm"
-      :values="files"
-      :parentResourceNodeId="parentResourceNodeId"
-      :resourceLinkList="resourceLinkList"
-      :errors="violations"
+    <dashboard
+        :uppy="uppy"
+        :plugins="['Webcam', 'ImageEditor']"
+        :props="{
+          //metaFields: [{id: 'name', name: 'Name', placeholder: 'file name'}],
+          proudlyDisplayPoweredByUppy: false,
+          width: '100%'
+        }"
     />
-    <Toolbar
-      :handle-submit="onUploadForm"
-    />
-    <Loading :visible="isLoading" />
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormUpload';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+//import FormUpload from '../../components/documents/FormUpload.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import UploadMixin from '../../mixins/UploadMixin';
+import { ref, onMounted } from 'vue'
 
 const servicePrefix = 'Documents';
 
@@ -29,15 +28,85 @@ const { mapFields } = createHelpers({
   mutationType: 'documents/updateField'
 });
 
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+import '@uppy/image-editor/dist/style.css'
+
+import Uppy from '@uppy/core'
+import Webcam from '@uppy/webcam'
+const XHRUpload = require('@uppy/xhr-upload');
+import { Dashboard } from '@uppy/vue'
+import {useRoute} from "vue-router";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import {ENTRYPOINT} from "../../config/entrypoint";
+const ImageEditor = require('@uppy/image-editor');
+
 export default {
-  name: 'DocumentsCreate',
+  name: 'DocumentsUpload',
   servicePrefix,
+  mixins: [UploadMixin],
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
+    //FormUpload,
+    Dashboard
   },
-  mixins: [UploadMixin],
+  setup() {
+    const createForm = ref(null);
+    const parentResourceNodeId = ref(null);
+    const resourceLinkList = ref(null);
+    const route = useRoute();
+
+    parentResourceNodeId.value = Number(route.params.node);
+    resourceLinkList.value = JSON.stringify([{
+      gid: route.query.gid,
+      sid: route.query.sid,
+      cid: route.query.cid,
+      visibility: RESOURCE_LINK_PUBLISHED,
+    }]);
+
+    let uppy = ref();
+    uppy.value = new Uppy()
+        .use(Webcam)
+        .use(ImageEditor, {
+          cropperOptions: {
+            viewMode: 1,
+            background: false,
+            autoCropArea: 1,
+            responsive: true
+          },
+          actions: {
+            revert: true,
+            rotate: true,
+            granularRotate: true,
+            flip: true,
+            zoomIn: true,
+            zoomOut: true,
+            cropSquare: true,
+            cropWidescreen: true,
+            cropWidescreenVertical: true
+          }
+        })
+        .use(
+            XHRUpload, {
+              endpoint: ENTRYPOINT + 'documents',
+              formData: true,
+              fieldName: 'uploadFile'
+            }
+        )
+    ;
+
+    uppy.value.setMeta({
+      filetype: 'file',
+      parentResourceNodeId: parentResourceNodeId.value,
+      resourceLinkList: resourceLinkList.value,
+    });
+
+    return {
+      createForm,
+      uppy
+    }
+  },
   data() {
     return {
       files : [],
@@ -52,13 +121,37 @@ export default {
     console.log('created');
     this.parentResourceNodeId = Number(this.$route.params.node);
     this.resourceLinkList = JSON.stringify([{
-      c_id: this.$route.query.cid,
-      visibility: 2,
+      gid: this.$route.query.gid,
+      sid: this.$route.query.sid,
+      cid: this.$route.query.cid,
+      visibility: RESOURCE_LINK_PUBLISHED,
     }]);
     this.files = [];
   },
   methods: {
-    ...mapActions('documents', ['uploadMany', 'create'])
+    async processFiles(files) {
+      return new Promise((resolve) => {
+        for (let i = 0; i < files.length; i++) {
+          files[i].title = files[i].name;
+          files[i].parentResourceNodeId = this.parentResourceNodeId;
+          files[i].resourceLinkList = this.resourceLinkList;
+          files[i].uploadFile = files[i];
+          this.createFile(files[i]);
+        }
+
+        resolve(files);
+      }).then(() => {
+        this.files = [];
+      });
+    },
+    validate(file) {
+      if (file) {
+        return '';
+      }
+
+      return 'error';
+    },
+    ...mapActions('documents', ['uploadMany', 'createFile'])
   }
 };
 </script>

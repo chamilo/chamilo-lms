@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class JuryMembersType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'role',
@@ -22,23 +28,26 @@ class JuryMembersType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->where('u.role LIKE :role')
-                            ->setParameter(':role', 'ROLE_JURY%')
-                            ->orderBy('u.name', 'DESC');
+                        ->where('u.role LIKE :role')
+                        ->setParameter(':role', 'ROLE_JURY%')
+                        ->orderBy('u.name', Criteria::DESC)
+                    ;
                 },
             ]
         );
 
-        $builder->add('user_id', 'choice', ['label' => 'User']);
+        $builder->add('user_id', ChoiceType::class, [
+            'label' => 'User',
+        ]);
         $builder->add('jury_id', 'hidden');
-        $builder->add('submit', 'submit');
+        $builder->add('submit', SubmitType::class);
 
         $factory = $builder->getFormFactory();
 
         // Fixes issue with the ajax select, waiting this workaround until symfony add ajax search into the core
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function ($event) use ($factory) {
+            function ($event) use ($factory): void {
                 $form = $event->getForm();
                 $case = $event->getData();
                 $id = $case['user_id'][0];
@@ -48,9 +57,11 @@ class JuryMembersType extends AbstractType
                     $form->add(
                         $factory->createNamed(
                             'user_id',
-                            'hidden',
+                            HiddenType::class,
                             $id,
-                            ['auto_initialize' => false]
+                            [
+                                'auto_initialize' => false,
+                            ]
                         )
                     );
                 }
@@ -58,7 +69,7 @@ class JuryMembersType extends AbstractType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -67,7 +78,7 @@ class JuryMembersType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'jury_user';
     }

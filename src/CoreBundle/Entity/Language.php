@@ -1,205 +1,134 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Language.
+ * Platform languages.
  *
  * @ORM\Table(
  *     name="language",
- *     options={"row_format":"DYNAMIC"}
+ *     options={"row_format"="DYNAMIC"}
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\LanguageRepository")
  */
 class Language
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
-    protected $originalName;
+    #[Assert\NotBlank]
+    protected ?string $originalName = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="english_name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="english_name", type="string", length=255)
      */
-    protected $englishName;
+    #[Assert\NotBlank]
+    protected string $englishName;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="isocode", type="string", length=10, nullable=true)
+     * @ORM\Column(name="isocode", type="string", length=10)
      */
-    protected $isocode;
+    #[Assert\NotBlank]
+    protected string $isocode;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="available", type="boolean", nullable=false)
      */
-    protected $available;
+    protected bool $available;
 
     /**
-     * @var Language
-     * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
-    protected $parent;
+    protected ?Language $parent = null;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Language", mappedBy="parent")
      */
-    protected $subLanguages;
+    protected Collection $subLanguages;
 
-    /**
-     * Language constructor.
-     */
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        $this->subLanguages = new ArrayCollection();
     }
 
-    /**
-     * Set originalName.
-     *
-     * @param string $originalName
-     *
-     * @return Language
-     */
-    public function setOriginalName($originalName)
+    public function setOriginalName(string $originalName): self
     {
         $this->originalName = $originalName;
 
         return $this;
     }
 
-    /**
-     * Get originalName.
-     *
-     * @return string
-     */
-    public function getOriginalName()
+    public function getOriginalName(): string
     {
         return $this->originalName;
     }
 
-    /**
-     * Set englishName.
-     *
-     * @param string $englishName
-     *
-     * @return Language
-     */
-    public function setEnglishName($englishName)
+    public function setEnglishName(string $englishName): self
     {
         $this->englishName = $englishName;
 
         return $this;
     }
 
-    /**
-     * Get englishName.
-     *
-     * @return string
-     */
-    public function getEnglishName()
+    public function getEnglishName(): string
     {
         return $this->englishName;
     }
 
-    /**
-     * Set isocode.
-     *
-     * @param string $isocode
-     *
-     * @return Language
-     */
-    public function setIsocode($isocode)
+    public function setIsocode(string $isocode): self
     {
         $this->isocode = $isocode;
 
         return $this;
     }
 
-    /**
-     * Get isocode.
-     *
-     * @return string
-     */
-    public function getIsocode()
+    public function getIsocode(): string
     {
         return $this->isocode;
     }
 
-    /**
-     * Set available.
-     *
-     * @param bool $available
-     *
-     * @return Language
-     */
-    public function setAvailable($available)
+    public function setAvailable(bool $available): self
     {
         $this->available = $available;
 
         return $this;
     }
 
-    /**
-     * Get available.
-     *
-     * @return bool
-     */
-    public function getAvailable()
+    public function getAvailable(): bool
     {
         return $this->available;
     }
 
-    /**
-     * Set parent.
-     *
-     * @return Language
-     */
-    public function setParent(self $parent)
+    public function setParent(self $parent): self
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    /**
-     * Get parent.
-     *
-     * @return Language
-     */
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * Get subLanguages.
-     *
-     * @return ArrayCollection
-     */
-    public function getSubLanguages()
+    public function getSubLanguages(): Collection
     {
         return $this->subLanguages;
     }

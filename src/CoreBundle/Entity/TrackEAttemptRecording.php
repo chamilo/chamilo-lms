@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -12,94 +15,77 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="track_e_attempt_recording",
  *     indexes={
- *          @ORM\Index(name="exe_id", columns={"exe_id"}),
- *          @ORM\Index(name="question_id", columns={"question_id"}),
- *          @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
+ *         @ORM\Index(name="exe_id", columns={"exe_id"}),
+ *         @ORM\Index(name="question_id", columns={"question_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     })
+ *     @ORM\Entity
  */
 class TrackEAttemptRecording
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="exe_id", type="integer", nullable=false)
      */
-    protected $exeId;
+    protected int $exeId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
-    protected $questionId;
+    protected int $questionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="marks", type="integer", nullable=false)
      */
-    protected $marks;
+    protected int $marks;
 
     /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
-    protected $insertDate;
+    protected DateTime $insertDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="author", type="integer", nullable=false)
      */
-    protected $author;
+    protected int $author;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    protected $teacherComment;
+    protected string $teacherComment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="answer", type="text", nullable=true)
      */
-    protected $answer;
+    protected ?string $answer;
 
     public function __construct()
     {
-        $this->answer = '';
+        $this->teacherComment = '';
+        $this->answer = null;
         $this->sessionId = 0;
+        $this->author = 0;
     }
 
     /**
      * Set exeId.
      *
-     * @param int $exeId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setExeId($exeId)
+    public function setExeId(int $exeId)
     {
         $this->exeId = $exeId;
 
@@ -119,11 +105,9 @@ class TrackEAttemptRecording
     /**
      * Set questionId.
      *
-     * @param int $questionId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setQuestionId($questionId)
+    public function setQuestionId(int $questionId)
     {
         $this->questionId = $questionId;
 
@@ -140,14 +124,7 @@ class TrackEAttemptRecording
         return $this->questionId;
     }
 
-    /**
-     * Set marks.
-     *
-     * @param int $marks
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setMarks($marks)
+    public function setMarks(int $marks): self
     {
         $this->marks = $marks;
 
@@ -164,14 +141,7 @@ class TrackEAttemptRecording
         return $this->marks;
     }
 
-    /**
-     * Set insertDate.
-     *
-     * @param \DateTime $insertDate
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setInsertDate($insertDate)
+    public function setInsertDate(DateTime $insertDate): self
     {
         $this->insertDate = $insertDate;
 
@@ -181,7 +151,7 @@ class TrackEAttemptRecording
     /**
      * Get insertDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDate()
     {
@@ -191,11 +161,9 @@ class TrackEAttemptRecording
     /**
      * Set author.
      *
-     * @param int $author
-     *
      * @return TrackEAttemptRecording
      */
-    public function setAuthor($author)
+    public function setAuthor(int $author)
     {
         $this->author = $author;
 
@@ -212,14 +180,7 @@ class TrackEAttemptRecording
         return $this->author;
     }
 
-    /**
-     * Set teacherComment.
-     *
-     * @param string $teacherComment
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setTeacherComment($teacherComment)
+    public function setTeacherComment(string $teacherComment): self
     {
         $this->teacherComment = $teacherComment;
 
@@ -239,11 +200,9 @@ class TrackEAttemptRecording
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return TrackEAttemptRecording
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -268,5 +227,17 @@ class TrackEAttemptRecording
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getAnswer(): ?string
+    {
+        return $this->answer;
+    }
+
+    public function setAnswer(?string $answer): self
+    {
+        $this->answer = $answer;
+
+        return $this;
     }
 }

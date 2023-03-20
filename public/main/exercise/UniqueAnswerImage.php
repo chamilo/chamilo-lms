@@ -14,9 +14,6 @@ class UniqueAnswerImage extends UniqueAnswer
     public $typePicture = 'uaimg.png';
     public $explanationLangVar = 'Unique answer image';
 
-    /**
-     * UniqueAnswerImage constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -24,9 +21,6 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * @throws Exception
-     */
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
@@ -60,7 +54,8 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         $html = '<div class="alert alert-success" role="alert">'.
-                get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+                get_lang('Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size.')
+            .'</div>';
 
         $zoomOptions = api_get_configuration_value('quiz_image_zoom');
         if (isset($zoomOptions['options'])) {
@@ -69,13 +64,11 @@ class UniqueAnswerImage extends UniqueAnswer
             $html .= '<link rel="stylesheet" type="text/css" media="screen"
                 href="'.$finderFolder.'css/elfinder.full.css">';
             $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
-
             $html .= '<!-- elFinder JS (REQUIRED) -->';
             $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
-
             $html .= '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';
-            $platformLanguage = api_get_interface_language();
+            $platformLanguage = api_get_language_isocode();
             $iso = api_get_language_isocode($platformLanguage);
             $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
             $file = api_get_path(SYS_PATH).$filePart;
@@ -130,13 +123,13 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html .= '<table class="table table-striped table-hover">
             <thead>
-                <tr style="text-align: center;">
-                    <th width="10">'.get_lang('N°').'</th>
+                <tr>
+                    <th>'.get_lang('N°').'</th>
                     <th>'.get_lang('True').'</th>
                     <th>'.get_lang('Answer').'</th>
                         '.$commentTitle.'
                         '.$feedbackTitle.'
-                    <th width="15">'.get_lang('Score').'</th>
+                    <th>'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -196,23 +189,23 @@ class UniqueAnswerImage extends UniqueAnswer
         for ($i = 1; $i <= $numberAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
-                if ($answer->correct[$i]) {
+                if (isset($answer->correct[$i]) && $answer->correct[$i]) {
                     $correct = $i;
                 }
 
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format(
-                    $answer->weighting[$i],
-                    1
-                );
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? '';
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? '';
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : 0;
 
-                $itemList = explode('@@', $answer->destination[$i]);
+                $itemList = [];
+                if (isset($answer->destination[$i])) {
+                    $itemList = explode('@@', $answer->destination[$i]);
+                }
 
-                $try = $itemList[0];
-                $lp = $itemList[1];
-                $listDestination = $itemList[2];
-                $url = $itemList[3];
+                $try = $itemList[0] ?? '';
+                $lp = $itemList[1] ?? '';
+                $listDestination = $itemList[2] ?? '';
+                $url = $itemList[3] ?? '';
 
                 $tryResult = 0;
                 if (0 != $try) {
@@ -254,7 +247,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     '<br><div class="form-group ">
                         <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <button class="add_img_link btn btn-info btn-sm"
+                            <button class="add_img_link btn btn--info btn-sm"
                                 name="btn_add_img['.$i.']"
                                 type="submit"
                                 id="question_admin_form_btn_add_img['.$i.']">
@@ -279,7 +272,6 @@ class UniqueAnswerImage extends UniqueAnswer
 
             $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox']);
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
-
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             switch ($objExercise->getFeedbackType()) {
@@ -348,13 +340,16 @@ class UniqueAnswerImage extends UniqueAnswer
 
             $scenario = $form->getSubmitValue('scenario');
 
+            $try = null;
+            $lp = null;
+            $destination = null;
+            $url = null;
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
-
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            $try = $scenario['try'.$i] ?? null;
+            $lp = $scenario['lp'.$i] ?? null;
+            $destination = $scenario['destination'.$i] ?? null;
+            $url = trim($scenario['url'.$i] ?? null);
 
             /*
               How we are going to parse the destination value
@@ -421,27 +416,5 @@ class UniqueAnswerImage extends UniqueAnswer
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
-    }
-
-    public function return_header(Exercise $exercise, $counter = null, $score = [])
-    {
-        if ($exercise->showExpectedChoice()) {
-            $header = '<table class="'.$this->question_table_class.'">
-			<tr>
-				<th>'.get_lang('Your choice').'</th>';
-            if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
-            }
-            $header .= '<th>'.get_lang('Answer').'</th>';
-            $header .= '<th>'.get_lang('Status').'</th>';
-            if (false === $exercise->hideComment) {
-                $header .= '<th>'.get_lang('Comment').'</th>';
-            }
-            $header .= '</tr>';
-        } else {
-            $header = parent::return_header($exercise, $counter, $score);
-        }
-
-        return $header;
     }
 }

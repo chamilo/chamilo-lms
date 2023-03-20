@@ -18,7 +18,7 @@ if (api_is_anonymous()) {
     // Only available for the selected language.
     $languageToActivate = api_get_plugin_setting('before_login', 'language');
 
-    if (api_get_interface_language() != $languageToActivate) {
+    if (api_get_language_isocode() != $languageToActivate) {
         return null;
     }
 
@@ -36,7 +36,7 @@ if (api_is_anonymous()) {
 
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));
-    $form->addElement('button', 'submit', get_lang('Confirm'), ['class' => 'btn btn-primary']);
+    $form->addElement('button', 'submit', get_lang('Confirm'), ['class' => 'btn btn--primary']);
     $formHtml = $form->returnForm();
     if ($form->validate()) {
         $result = $form->getSubmitValues();

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 
@@ -26,6 +27,7 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('Announcements');
@@ -33,11 +35,11 @@ $repo = Container::getAnnouncementRepository();
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+    (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+    ($sessionId && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
 );
 $allowStudentInGroupToSend = false;
 
-$sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
@@ -45,29 +47,27 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
 
 // Database Table Definitions
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $isTutor = false;
 if (!empty($group_id)) {
-    $groupProperties = GroupManager::get_group_properties($group_id);
+    $groupEntity = api_get_group_entity($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupProperties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
 
     if (false === $allowToEdit) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
+        $isTutor = $groupEntity->hasTutor(api_get_user_entity());
         if ($isTutor) {
             $allowToEdit = true;
         }
-
         // Last chance ... students can send announcements
-        if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
+        if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupEntity->getAnnouncementsState()) {
             $allowStudentInGroupToSend = true;
         }
     }
@@ -90,9 +90,11 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $announcementAttachmentIsDisabled = api_get_configuration_value('disable_announcement_attachment');
+$thisAnnouncementId = null;
 
 switch ($action) {
     case 'move':
+        throw new Exception('@todo move');
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
@@ -102,7 +104,7 @@ switch ($action) {
             $thisAnnouncementId = (int) ($_GET['down']);
             $sortDirection = 'DESC';
         }
-
+        /*
         if (!empty($_GET['up'])) {
             $thisAnnouncementId = (int) ($_GET['up']);
             $sortDirection = 'ASC';
@@ -149,7 +151,7 @@ switch ($action) {
             Display::addFlash(Display::return_message(get_lang('The announcement has been moved')));
             header('Location: '.$homeUrl);
             exit;
-        }
+        }*/
 
         break;
     case 'view':
@@ -185,7 +187,7 @@ switch ($action) {
             }
         }
         $users = [];
-        $searchForm->addElement('select', 'user_id', get_lang('Users'), $userList);
+        $searchForm->addSelect('user_id', get_lang('Users'), $userList);
         $searchForm->addButtonSearch(get_lang('Search'));
 
         $filterData = [];
@@ -287,17 +289,12 @@ switch ($action) {
             if (($allowToEdit || $allowStudentInGroupToSend) &&
                 (empty($_GET['origin']) || 'learnpath' !== $_GET['origin'])
             ) {
-                $html .= '<div id="no-data-view">';
-                $html .= '<h3>'.get_lang('Announcements').'</h3>';
-                $html .= Display::return_icon('valves.png', '', [], 64);
-                $html .= '<div class="controls">';
-                $html .= Display::url(
+                $html .= Display::noDataView(
+                    get_lang('Announcements'),
+                    Display::return_icon('valves.png', '', [], 64),
                     get_lang('Add an announcement'),
-                    api_get_self().'?'.api_get_cidreq().'&action=add',
-                    ['class' => 'btn btn-primary']
+                    api_get_self().'?'.api_get_cidreq().'&action=add'
                 );
-                $html .= '</div>';
-                $html .= '</div>';
             } else {
                 $html = Display::return_message(get_lang('There are no announcements.'), 'warning');
             }
@@ -486,7 +483,7 @@ switch ($action) {
             }
             $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $groupProperties, []);
+            $element = CourseManager::addGroupMultiSelect($form, $groupEntity, []);
         }
 
         $form->addHtml('</div>');
@@ -507,7 +504,7 @@ switch ($action) {
             $to = AnnouncementManager::loadEditUsers($announcementInfo);
 
             if (!empty($group_id)) {
-                $separated = CourseManager::separateUsersGroups($to);
+                $separated = AbstractResource::separateUsersGroups($to);
                 if (isset($separated['groups']) && count($separated['groups']) > 1) {
                     $form->freeze();
                     Display::addFlash(Display::return_message(get_lang('Disabled by trainer')));
@@ -586,8 +583,7 @@ switch ($action) {
         }
 
         $defaults['email_ann'] = true;
-        $form->addElement(
-            'text',
+        $form->addText(
             'title',
             get_lang('Subject'),
             ['onkeypress' => 'return event.keyCode != 13;']
@@ -640,12 +636,23 @@ switch ($action) {
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('Send a copy by email to myself.'));
         $defaults['send_me_a_copy_by_email'] = true;
 
+        if (empty($id)) {
+            $form->addButtonAdvancedSettings(
+                'add_event',
+                get_lang('Add event in course calendar')
+            );
+            $form->addHtml('<div id="add_event_options" style="display:none;">');
+            $form->addDateTimePicker('event_date_start', get_lang('Date start'));
+            $form->addDateTimePicker('event_date_end', get_lang('Date end'));
+            $form->addHtml('</div>');
+        }
+
         if ($showSubmitButton) {
             $form->addLabel('',
                 Display::url(
                     get_lang('Preview'),
                     'javascript:void(0)',
-                    ['class' => 'btn btn-default', 'id' => 'announcement_preview']
+                    ['class' => 'btn btn--plain', 'id' => 'announcement_preview']
                 ).'<div id="announcement_preview_result" style="display:none"></div>'
             );
             $form->addHtml('<div id="send_button" style="display:none">');
@@ -656,9 +663,9 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
-            $data['users'] = isset($data['users']) ? $data['users'] : [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
-            $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
+            $data['users'] = $data['users'] ?? [];
+            $sendToUsersInSession = isset($data['send_to_users_in_session']);
+            $sendMeCopy = isset($data['send_me_a_copy_by_email']);
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
@@ -729,6 +736,19 @@ switch ($action) {
                 }
 
                 if ($announcement) {
+                    if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                        Container::getCalendarEventRepository()
+                            ->createFromAnnouncement(
+                                $announcement,
+                                api_get_utc_datetime($data['event_date_start'], true, true),
+                                api_get_utc_datetime($data['event_date_end'], true, true),
+                                $data['users'],
+                                api_get_course_entity(),
+                                api_get_session_entity(),
+                                api_get_group_entity()
+                            );
+                    }
+
                     Display::addFlash(
                         Display::return_message(
                             get_lang('Announcement has been added'),

@@ -1,21 +1,57 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class ExtraField.
- *
  * @ORM\Entity
  * @ORM\Table(name="extra_field")
  *
  * @ORM\MappedSuperclass
  */
-class ExtraField // extends BaseAttribute
+#[ApiResource(
+    collectionOperations:[
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations:[
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    denormalizationContext: [
+        'groups' => ['extra_field:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['extra_field:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['variable'])]
+class ExtraField
 {
     public const USER_FIELD_TYPE = 1;
     public const COURSE_FIELD_TYPE = 2;
@@ -35,121 +71,120 @@ class ExtraField // extends BaseAttribute
     public const FORUM_POST_TYPE = 16;
     public const EXERCISE_FIELD_TYPE = 17;
     public const TRACK_EXERCISE_FIELD_TYPE = 18;
+    public const PORTFOLIO_TYPE = 19;
+    public const LP_VIEW_TYPE = 20;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    #[Groups(['extra_field:read'])]
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="item_type", type="integer")
      */
-    protected $extraFieldType;
+    #[Groups(['extra_field:read', 'extra_field:write'])]
+    protected int $itemType;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="value_type", type="integer")
      */
-    protected $fieldType;
+    #[Groups(['extra_field:read', 'extra_field:write'])]
+    protected int $valueType;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="variable", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="variable", type="string", length=255)
      */
-    protected $variable;
+    #[Assert\NotBlank]
+    #[Groups(['extra_field:read', 'extra_field:write'])]
+    protected string $variable;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    #[Groups(['extra_field:read', 'extra_field:write'])]
+    protected ?string $description;
 
     /**
-     * @var string
-     *
+     * @Gedmo\Translatable
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
-    protected $displayText;
+    #[Assert\NotBlank]
+    #[Groups(['extra_field:read', 'extra_field:write'])]
+    protected ?string $displayText = null;
 
     /**
-     * @var string
-     *
+     * @Gedmo\Locale
+     */
+    protected ?string $locale = null;
+
+    /**
      * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
      */
-    protected $helperText;
+    protected ?string $helperText = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
      */
-    protected $defaultValue;
+    protected ?string $defaultValue = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
      */
-    protected $fieldOrder;
+    protected ?int $fieldOrder = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
      */
-    protected $visibleToSelf;
+    protected ?bool $visibleToSelf;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
      */
-    protected $visibleToOthers;
+    protected ?bool $visibleToOthers;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
      */
-    protected $changeable;
+    protected ?bool $changeable = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
      */
-    protected $filter;
+    protected ?bool $filter = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
+     *
+     * @var Collection<int, ExtraFieldOptions>
      */
-    protected $options;
+    #[Groups(['extra_field:read'])]
+    protected Collection $options;
 
     /**
-     * @var \DateTime
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Tag", mappedBy="field")
      *
+     * @var Tag[]|Collection
+     */
+    protected Collection $tags;
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
-    /**
-     * ExtraField constructor.
-     */
     public function __construct()
     {
-        //parent::__construct();
+        $this->options = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->description = '';
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
+        $this->changeable = false;
+        $this->filter = false;
     }
 
     /**
@@ -162,42 +197,26 @@ class ExtraField // extends BaseAttribute
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getExtraFieldType()
+    public function getItemType(): int
     {
-        return $this->extraFieldType;
+        return $this->itemType;
     }
 
-    /**
-     * @param int $extraFieldType
-     *
-     * @return $this
-     */
-    public function setExtraFieldType($extraFieldType)
+    public function setItemType(int $itemType): self
     {
-        $this->extraFieldType = $extraFieldType;
+        $this->itemType = $itemType;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getFieldType()
+    public function getValueType(): int
     {
-        return $this->fieldType;
+        return $this->valueType;
     }
 
-    /**
-     * @param int $fieldType
-     *
-     * @return $this
-     */
-    public function setFieldType($fieldType)
+    public function setValueType(int $valueType): self
     {
-        $this->fieldType = $fieldType;
+        $this->valueType = $valueType;
 
         return $this;
     }
@@ -210,12 +229,7 @@ class ExtraField // extends BaseAttribute
         return $this->variable;
     }
 
-    /**
-     * @param string $variable
-     *
-     * @return $this
-     */
-    public function setVariable($variable)
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
 
@@ -223,25 +237,14 @@ class ExtraField // extends BaseAttribute
     }
 
     /**
-     * @param bool $translated Optional. Whether translate the display text
-     *
      * @return string
      */
-    public function getDisplayText($translated = true)
+    public function getDisplayText()
     {
-        if ($translated) {
-            return \ExtraField::translateDisplayName($this->variable, $this->displayText);
-        }
-
         return $this->displayText;
     }
 
-    /**
-     * @param string $displayText
-     *
-     * @return $this
-     */
-    public function setDisplayText($displayText)
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
 
@@ -256,12 +259,7 @@ class ExtraField // extends BaseAttribute
         return $this->defaultValue;
     }
 
-    /**
-     * @param string $defaultValue
-     *
-     * @return $this
-     */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
 
@@ -276,12 +274,7 @@ class ExtraField // extends BaseAttribute
         return $this->fieldOrder;
     }
 
-    /**
-     * @param int $fieldOrder
-     *
-     * @return $this
-     */
-    public function setFieldOrder($fieldOrder)
+    public function setFieldOrder(int $fieldOrder): self
     {
         $this->fieldOrder = $fieldOrder;
 
@@ -296,79 +289,50 @@ class ExtraField // extends BaseAttribute
         return $this->changeable;
     }
 
-    /**
-     * @param bool $changeable
-     *
-     * @return $this
-     */
-    public function setChangeable($changeable)
+    public function setChangeable(bool $changeable): self
     {
         $this->changeable = $changeable;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFilter()
+    public function isFilter(): bool
     {
         return $this->filter;
     }
 
-    /**
-     * @param bool $filter
-     *
-     * @return $this
-     */
-    public function setFilter($filter)
+    public function setFilter(bool $filter): self
     {
         $this->filter = $filter;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVisibleToSelf()
+    public function isVisibleToSelf(): bool
     {
         return $this->visibleToSelf;
     }
 
-    /**
-     * @param bool $visibleToSelf
-     *
-     * @return ExtraField
-     */
-    public function setVisibleToSelf($visibleToSelf)
+    public function setVisibleToSelf(bool $visibleToSelf): self
     {
         $this->visibleToSelf = $visibleToSelf;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isVisibleToOthers()
+    public function isVisibleToOthers(): bool
     {
         return $this->visibleToOthers;
     }
 
-    /**
-     * @param bool $visibleToOthers
-     *
-     * @return ExtraField
-     */
-    public function setVisibleToOthers($visibleToOthers)
+    public function setVisibleToOthers(bool $visibleToOthers): self
     {
         $this->visibleToOthers = $visibleToOthers;
 
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -380,9 +344,50 @@ class ExtraField // extends BaseAttribute
         return $this;
     }
 
+    /**
+     * @return Collection<int, ExtraFieldOptions>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return Tag[]|Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags(Collection $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function hasTag(string $tagName): bool
+    {
+        if (0 === $this->tags->count()) {
+            return false;
+        }
+
+        return $this->tags->exists(function ($key, Tag $tag) use ($tagName) {
+            return $tagName === $tag->getTag();
+        });
+    }
+
     public function getTypeToString(): string
     {
-        switch ($this->type) {
+        switch ($this->getItemType()) {
             case \ExtraField::FIELD_TYPE_RADIO:
             case \ExtraField::FIELD_TYPE_SELECT:
                 return 'choice';
@@ -403,5 +408,17 @@ class ExtraField // extends BaseAttribute
         $this->helperText = $helperText;
 
         return $this;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getTranslatableLocale()
+    {
+        return $this->locale;
     }
 }

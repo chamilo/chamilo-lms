@@ -14,7 +14,8 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-SessionManager::protectSession($id_session);
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 
 if (empty($id_session)) {
     api_not_allowed();
@@ -101,7 +102,7 @@ $sql = "
     WHERE
         s.session_id = $id_session AND
         url.access_url_id = $urlId
-    ORDER BY $sort $direction
+    ORDER BY `$sort` $direction
     LIMIT $from,".($limit + 1);
 
 if ('desc' === $direction) {
@@ -193,29 +194,29 @@ echo Display::page_header($tool_name);
                     <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
                     <?php if ($is_western_name_order) {
                     ?>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
+                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
+                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
                     <?php
                 } else {
                     ?>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
+                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
+                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
                     <?php
                 } ?>
-                    <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES, $charset); ?></td>
+                    <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES); ?></td>
                     <td>
                         <?php if ($enreg['is_subscribed']) {
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php Display::display_icon('delete.png', get_lang('Delete')); ?>
+                                <?php echo Display::return_icon('delete.png', get_lang('Delete')); ?>
                             </a>
                         <?php
                 } else {
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php Display::display_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
                             </a>
                         <?php
                 } ?>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -8,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * GradebookResultAttempt.
- *
  * @ORM\Table(name="gradebook_result_attempt")
  * @ORM\Entity
  */
@@ -18,32 +18,66 @@ class GradebookResultAttempt
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment = null;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    protected $score;
+    protected ?float $score = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="result_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult")
+     * @ORM\JoinColumn(name="result_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $resultId;
+    protected GradebookResult $result;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    public function getResult(): GradebookResult
+    {
+        return $this->result;
+    }
+
+    public function setResult(GradebookResult $result): self
+    {
+        $this->result = $result;
+
+        return $this;
+    }
 }

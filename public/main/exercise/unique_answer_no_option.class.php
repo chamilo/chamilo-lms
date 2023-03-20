@@ -17,9 +17,6 @@ class UniqueAnswerNoOption extends Question
     public $typePicture = 'mcuao.png';
     public $explanationLangVar = 'Unique answer with unknown';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -115,7 +112,7 @@ class UniqueAnswerNoOption extends Question
 
         foreach ($new_list as $key) {
             $i = $key;
-            $form->addElement('html', '<tr>');
+            $form->addHtml('<tr>');
             if (is_object($answer)) {
                 if (666 == $answer->position[$i]) {
                     //we set nothing
@@ -183,8 +180,8 @@ class UniqueAnswerNoOption extends Question
                 'weighting['.$i.']'
             );
 
-            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
-            $answer_number->freeze();
+            $answerNumber = $form->addText('counter['.$i.']', null, false, ['value' => $i]);
+            $answerNumber->freeze();
 
             $form->addElement(
                 'radio',
@@ -194,15 +191,15 @@ class UniqueAnswerNoOption extends Question
                 $i,
                 ['class' => 'checkbox', 'style' => 'margin-left: 0em;']
             );
-            $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
-            $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
-            $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
-            $form->addElement('html', '</tr>');
+            $form->addHtmlEditor('answer['.$i.']', null, [], $editor_config);
+            $form->addHtmlEditor('comment['.$i.']', null, [], $editor_config);
+            $form->addText('weighting['.$i.']', null, false, ['style' => 'width: 60px;', 'value' => '0']);
+            $form->addHtml('</tr>');
             $i++;
         }
 
         if (empty($this->id)) {
-            $form->addElement('hidden', 'new_question', 1);
+            $form->addHidden('new_question', 1);
         }
 
         //Adding the "I don't know" question answer
@@ -241,12 +238,12 @@ class UniqueAnswerNoOption extends Question
             ->addElement('text', 'counter['.$i.']', null)
             ->freeze();
 
-        $form->addElement('hidden', 'position['.$i.']', '666');
+        $form->addHidden('position['.$i.']', '666');
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
-        $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
+        $form->addHtmlEditor('answer['.$i.']', null, true, [], $editor_config);
 
         $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
-        $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
+        $form->addHtmlEditor('comment['.$i.']', null, true, [], $editor_config);
         $form->addElement('text', "weighting[$i]", null)->freeze();
 
         $form->addHTml('</tr>');
@@ -300,10 +297,10 @@ class UniqueAnswerNoOption extends Question
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            $try = $scenario['try'.$i] ?? null;
+            $lp = $scenario['lp'.$i] ?? null;
+            $destination = $scenario['destination'.$i] ?? null;
+            $url = trim($scenario['url'.$i] ?? null);
 
             /*
             How we are going to parse the destination value
@@ -394,7 +391,7 @@ class UniqueAnswerNoOption extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -402,14 +399,16 @@ class UniqueAnswerNoOption extends Question
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
         }
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
         $header .= '</tr>';
 
         return $header;

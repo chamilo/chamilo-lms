@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 /**
  * Defines a gradebook Result object.
  *
@@ -110,7 +112,7 @@ class Result
                     $sql = 'SELECT c_id, user_id as user_id, status
                             FROM '.$tbl_session_rel_course_user.'
 							WHERE
-							    status= 0 AND
+							    status= '.Session::STUDENT.' AND
 							    c_id = "'.api_get_course_int_id().'" AND
 							    session_id = '.$sessionId;
                 } else {
@@ -217,7 +219,7 @@ class Result
             $sql .= ")";
             Database::query($sql);
         } else {
-            die('Error in Result add: required field empty');
+            exit('Error in Result add: required field empty');
         }
     }
 
@@ -247,7 +249,7 @@ class Result
 
             Database::query($sql);
         } else {
-            die('Error in Result add: required field empty');
+            exit('Error in Result add: required field empty');
         }
     }
 
@@ -266,7 +268,14 @@ class Result
         } else {
             $sql .= 'null';
         }
-        $sql .= ' WHERE id = '.$this->id;
+        if (isset($this->id)) {
+            $sql .= " WHERE id = {$this->id}";
+        } else {
+            $sql .= " WHERE evaluation_id = {$this->evaluation}
+                AND user_id = {$this->user_id}
+            ";
+        }
+
         // no need to update creation date
         Database::query($sql);
 
@@ -300,16 +309,15 @@ class Result
      */
     public function exists()
     {
-        $em = Database::getManager();
-
-        $result = $em
-            ->createQuery(
-                'SELECT COUNT(gr) FROM ChamiloCoreBundle:GradebookResult gr
-                WHERE gr.evaluationId = :eval_id AND gr.userId = :user_id'
-            )
-            ->setParameters(['eval_id' => $this->evaluation, 'user_id' => $this->user_id])
-            ->getSingleScalarResult();
-        $count = (int) $result;
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = "SELECT COUNT(*) AS count
+                FROM $table gr
+                WHERE gr.evaluation_id = $this->evaluation
+                AND gr.user_id = $this->user_id
+        ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $count = (int) $row['count'];
 
         return $count > 0;
     }

@@ -1,16 +1,11 @@
 <?php
+
 /**
- * HTML class for a checkbox type field.
- *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
- *
- * @category    HTML
  *
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
@@ -19,21 +14,7 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  *
  * @version     CVS: $Id: checkbox.php,v 1.23 2009/04/04 21:34:02 avb Exp $
- *
- * @see        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * HTML class for a checkbox type field.
- *
- * @category    HTML
- *
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
- * @author      Alexey Borzov <avb@php.net>
- *
  * @version     Release: 3.2.11
- *
  * @since       1.0
  */
 class HTML_QuickForm_checkbox extends HTML_QuickForm_input
@@ -52,7 +33,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
     /**
      * Class constructor.
      *
-     * @param string $elementName  (optional)Input field name attribute
+     * @param string $elementName  Input field name attribute
      * @param string $elementLabel (optional)Input field value
      * @param string $text         (optional)Checkbox display text
      * @param mixed  $attributes   (optional)Either a typical HTML attribute string
@@ -66,10 +47,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         $elementName = null,
         $elementLabel = null,
         $text = '',
-        $attributes = null
+        ?array $attributes = []
     ) {
         $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
-        $this->checkboxClass = isset($attributes['checkbox-class']) ? $attributes['checkbox-class'] : 'checkbox';
+        $this->checkboxClass = isset($attributes['checkbox-class']) ? $attributes['checkbox-class'] : 'field-checkbox';
 
         if (isset($attributes['label-class'])) {
             unset($attributes['label-class']);
@@ -79,6 +60,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             unset($attributes['checkbox-class']);
         }
 
+        $attributes['class'] = '  ';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_text = $text;
@@ -132,6 +114,12 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      */
     public function toHtml()
     {
+        $extraClass = "appearance-none checked:bg-support-4 outline-none";
+        if (isset($this->_attributes['class'])) {
+            $this->_attributes['class'] .= $extraClass;
+        } else {
+            $this->_attributes['class'] = $extraClass;
+        }
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->_flagFrozen) {
@@ -140,84 +128,17 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $labelClass = $this->labelClass;
             $checkClass = $this->checkboxClass;
             $name = $this->_attributes['name'];
-            $label = '<div id="'.$name.'" class="'.$checkClass.'">
-                <label class="'.$labelClass.'">'.
-                    HTML_QuickForm_input::toHtml().' '.$this->_text.
-                '</label>
-                </div>
-            ';
+            $id = $this->getAttribute('id');
 
-            return $label;
+            return '<div id="'.$name.'" class="'.$checkClass.'">
+                    '.parent::toHtml().'
+                    <label for="'.$id.'" class="'.$labelClass.'">
+                        '.$this->_text.
+                    '</label>
+                </div>';
         }
 
         return HTML_QuickForm_input::toHtml().$label;
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->calculateSize();
-        switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                <div class="input-group">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                </div>
-                <div class="input-group {error_class}">
-                    {element}
-                </div>
-                ';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="row form-group {error_class}">
-                    <label {label-for}  class="col-sm-'.$size[0].' col-form-label  {extra_label_class}" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-            case FormValidator::LAYOUT_GRID:
-            case FormValidator::LAYOUT_BOX:
-                return '
-                        <div class="input-group">
-                            <label>{label}</label>
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-        }
     }
 
     /**

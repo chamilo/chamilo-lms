@@ -14,8 +14,8 @@ SessionManager::protectSession(null, false);
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
+$action = $_REQUEST['action'] ?? null;
+$idChecked = $_REQUEST['idChecked'] ?? null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
 
 switch ($action) {
@@ -54,7 +54,7 @@ switch ($action) {
 $tool_name = get_lang('Session list');
 Display::display_header($tool_name);
 
-$courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+$courseId = $_GET['course_id'] ?? null;
 
 $sessionFilter = new FormValidator(
     'course_filter',
@@ -64,13 +64,13 @@ $sessionFilter = new FormValidator(
     [],
     FormValidator::LAYOUT_INLINE
 );
-$courseSelect = $sessionFilter->addElement(
-    'select_ajax',
+$courseSelect = $sessionFilter->addSelectAjax(
     'course_name',
-    get_lang('Search courses'),
     null,
+    [],
     [
         'id' => 'course_name',
+        'placeholder' => get_lang('Search courses'),
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
     ]
 );
@@ -152,16 +152,15 @@ $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('Add courses to this session'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>'.
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session')).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('Add courses to this session')).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy')).'</a>'.
+    '<button type="button" title="'.get_lang('Delete').'" onclick="if(confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) window.location = '."\'session_list.php?action=delete&idChecked=\' + ".'\' + options.rowId +\';">'.Display::return_icon('delete.png', get_lang('Delete')).'</button>'.
     '\';
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-$allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>
@@ -280,8 +279,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
-            <?php if ($allowOrder) {
-                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -302,8 +299,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},
@@ -352,21 +347,25 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             });
         });
     </script>
-    <div class="actions">
 <?php
 
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
+$actionsRight = '';
+$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
     Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_platform_admin()) {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
         Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
         Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;
 if (api_is_platform_admin()) {
-    echo '<div class="pull-right">';
+    $actionsRight .= '<div class="pull-right">';
+    $actionsRight .= $sessionFilter->returnForm();
+    $actionsRight .= '</div>';
+
+    $actionsRight .= '<div class="pull-right">';
     // Create a search-box
     $form = new FormValidator(
         'search_simple',
@@ -379,17 +378,11 @@ if (api_is_platform_admin()) {
     $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
     $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
-    $form->display();
-    echo '</div>';
-
-    echo '<div class="pull-right">';
-    echo $sessionFilter->returnForm();
-    echo '</div>';
+    $actionsRight .= $form->returnForm().'</div>';
 }
-echo '</div>';
 
+echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 echo SessionManager::getSessionListTabs($listType);
-
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * GradebookCertificate.
- *
  * @ORM\Table(
  *     name="gradebook_certificate",
  *     indexes={
- *      @ORM\Index(name="idx_gradebook_certificate_category_id", columns={"cat_id"}),
- *      @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
- *      @ORM\Index(name="idx_gradebook_certificate_category_id_user_id", columns={"cat_id", "user_id"})}
+ *         @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
@@ -24,89 +25,46 @@ class GradebookCertificate
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="cat_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\JoinColumn(name="cat_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $catId;
+    protected GradebookCategory $category;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCertificates")
-     * @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score_certificate", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $scoreCertificate;
+    protected float $scoreCertificate;
 
     /**
-     * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $createdAt;
+    protected DateTime $createdAt;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path_certificate", type="text", nullable=true)
      */
-    protected $pathCertificate;
+    protected ?string $pathCertificate = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
-    protected $downloadedAt;
+    protected ?DateTime $downloadedAt = null;
 
-    /**
-     * Set catId.
-     *
-     * @param int $catId
-     *
-     * @return GradebookCertificate
-     */
-    public function setCatId($catId)
-    {
-        $this->catId = $catId;
-
-        return $this;
-    }
-
-    /**
-     * Get catId.
-     *
-     * @return int
-     */
-    public function getCatId()
-    {
-        return $this->catId;
-    }
-
-    /**
-     * Set scoreCertificate.
-     *
-     * @param float $scoreCertificate
-     *
-     * @return GradebookCertificate
-     */
-    public function setScoreCertificate($scoreCertificate)
+    public function setScoreCertificate(float $scoreCertificate): self
     {
         $this->scoreCertificate = $scoreCertificate;
 
@@ -123,14 +81,7 @@ class GradebookCertificate
         return $this->scoreCertificate;
     }
 
-    /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return GradebookCertificate
-     */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -140,21 +91,14 @@ class GradebookCertificate
     /**
      * Get createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    /**
-     * Set pathCertificate.
-     *
-     * @param string $pathCertificate
-     *
-     * @return GradebookCertificate
-     */
-    public function setPathCertificate($pathCertificate)
+    public function setPathCertificate(string $pathCertificate): self
     {
         $this->pathCertificate = $pathCertificate;
 
@@ -181,14 +125,38 @@ class GradebookCertificate
         return $this->id;
     }
 
-    public function getDownloadedAt(): \DateTime
+    public function getDownloadedAt(): DateTime
     {
         return $this->downloadedAt;
     }
 
-    public function setDownloadedAt(\DateTime $downloadedAt): self
+    public function setDownloadedAt(DateTime $downloadedAt): self
     {
         $this->downloadedAt = $downloadedAt;
+
+        return $this;
+    }
+
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

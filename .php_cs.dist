@@ -22,28 +22,19 @@ $rules = [
     'no_useless_return' => true,
     'ordered_class_elements' => true,
     'ordered_imports' => true,
-    'phpdoc_order' => true,
+    //'phpdoc_order' => true,
     'no_break_comment' => true,
-    // To be tested before insertion:
-//    'strict_comparison' => true,
-//    'strict_param' => true,
-//    'php_unit_strict' => true,
+    'global_namespace_import' => true,
 ];
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('assets')
     ->exclude('bin')
-    ->exclude('documentation')
-    ->exclude('public/main/inc/lib/internationalization_database')
     ->exclude('public/main/inc/lib/javascript')
     ->exclude('public/main/inc/lib/kses-0.2.2')
-    ->exclude('public/main/inc/lib/mimetex')
     ->exclude('public/main/inc/lib/nusoap')
-    ->exclude('public/main/inc/lib/opengraph')
     ->exclude('public/main/inc/lib/ppt2png')
     ->exclude('public/main/inc/lib/pear')
-    ->exclude('public/main/inc/lib/svg-edit')
-    ->exclude('public/main/inc/lib/wami-recorder')
     ->exclude('public/main/inc/lib/xajax')
     ->exclude('public/main/lp/packaging')
     ->exclude('public/main/template')
@@ -58,11 +49,11 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('public/plugin/test2pdf/class')
     ->exclude('public/plugin/jcapture/src')
     ->exclude('public/plugin/jcapture/lib')
+    ->exclude('src/CoreBundle/Traits/Repository/ORM')
     ->exclude('tests')
     ->exclude('var')
     ->exclude('vendor')
 
-    ->notPath('public/main/admin/db.php')
     ->notPath('public/check.php')
     ->notPath('public/main/admin/ldap_synchro.php')
     ->notPath('public/main/chat/emoji_strategy.php')

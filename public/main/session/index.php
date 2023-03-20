@@ -5,9 +5,7 @@
 use ChamiloSession as Session;
 
 /**
- *   Session view.
- *
- *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
+ * @author Julio Montoya <gugli100@gmail.com>  Beeznest
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -40,22 +38,21 @@ Session::erase('objExercise');
 Session::erase('duration_time_previous');
 Session::erase('duration_time');
 
-$userId = api_get_user_id();
-$session_info = SessionManager::fetch($session_id);
+$user = api_get_user_entity();
+$session = api_get_session_entity($session_id);
 $session_list = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $courseList = SessionManager::get_course_list_by_session_id($session_id);
-$userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
 $user_course_list = [];
 $exerciseListPerCourse = [];
 
 foreach ($courseList as $course) {
     $status = SessionManager::get_user_status_in_course_session(
-        $userId,
+        $user->getId(),
         $course['real_id'],
         $session_id
     );
-    if (false !== $status || api_is_platform_admin() || $userIsGeneralCoach) {
+    if (false !== $status || api_is_platform_admin() || $session->hasUserAsGeneralCoach($user)) {
         $user_course_list[] = $course['real_id'];
     }
 
@@ -99,13 +96,13 @@ if (!empty($courseList)) {
         if (api_is_platform_admin()) {
             $course_data['title'] = Display::url(
                 $course_data['title'],
-                api_get_course_url($course_data['code'], $session_id)
+                api_get_course_url($course_data['real_id'], $session_id)
             );
         } else {
             if (in_array($course_data['real_id'], $user_course_list) || api_is_anonymous()) {
                 $course_data['title'] = Display::url(
                     $course_data['title'],
-                    api_get_course_url($course_data['code'], $session_id)
+                    api_get_course_url($course_data['real_id'], $session_id)
                 );
             } else {
                 continue;
@@ -116,7 +113,7 @@ if (!empty($courseList)) {
             api_get_user_id(),
             api_get_course_info($course_data['code']),
             $session_id,
-            'lp.publicatedOn ASC',
+            'lp.publishedOn ASC',
             true,
             null,
             true
@@ -155,7 +152,7 @@ if (!empty($courseList)) {
                 $label = get_lang('Learning path updated');
             }
 
-            $mutation_date = api_strtotime($item['publicated_on']) > api_strtotime($lp_date_original) ? $item['publicated_on'] : $lp_date_original;
+            $mutation_date = api_strtotime($item['published_on']) > api_strtotime($lp_date_original) ? $item['published_on'] : $lp_date_original;
 
             if (api_strtotime($mutation_date) > api_strtotime($max_mutation_date)) {
                 $max_mutation_date = $mutation_date;
@@ -190,18 +187,14 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$session = api_get_session_entity($session_id);
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
     $sessionCourses = $session->getCourses();
     $sessionCourse = $sessionCourses[0]->getCourse();
-    $courseUrl = $sessionCourse->getDirectory().'/index.php?';
-    $courseUrl .= http_build_query([
-        'id_session' => $session->getId(),
-    ]);
+    $url = api_get_course_url($sessionCourse->getId(), $session->getId());
 
-    header('Location: '.api_get_path(WEB_COURSE_PATH).$courseUrl);
+    header('Location: '.$url);
     exit;
 }
 
@@ -219,12 +212,11 @@ if (count($session_select) > 1) {
         'get',
         api_get_self().'?session_id='.$session_id
     );
-    $form->addElement(
-        'select',
+    $form->addSelect(
         'session_id',
         get_lang('Session list'),
         $session_select,
-        'onchange="javascript:change_session()"'
+        ['onchange' => 'javascript:change_session()']
     );
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);
@@ -258,7 +250,7 @@ if (!empty($courseList)) {
         if (!empty($exerciseList)) {
             // Exercises
             foreach ($exerciseList as $exerciseInfo) {
-                if ('0000-00-00 00:00:00' == $exerciseInfo['start_time']) {
+                if ('0000-00-00 00:00:00' === $exerciseInfo['start_time']) {
                     $start_date = '-';
                 } else {
                     $start_date = $exerciseInfo['start_time'];
@@ -281,7 +273,7 @@ if (!empty($courseList)) {
                 }
 
                 $exerciseResultInfo = Event::getExerciseResultsByUser(
-                    $userId,
+                    $user->getId(),
                     $exerciseId,
                     $courseId,
                     $session_id
@@ -289,7 +281,7 @@ if (!empty($courseList)) {
 
                 if (empty($exerciseResultInfo)) {
                     // We check the date validation of the exercise if the user can make it
-                    if ('0000-00-00 00:00:00' != $exerciseInfo['start_time']) {
+                    if ('0000-00-00 00:00:00' !== $exerciseInfo['start_time']) {
                         $allowed_time = api_strtotime($exerciseInfo['start_time'], 'UTC');
                         if ($now < $allowed_time) {
                             continue;
@@ -375,21 +367,10 @@ if (!empty($new_exercises)) {
     $my_real_array = array_merge($new_exercises, $my_real_array);
 }
 
-$start = $end = $start_only = $end_only = '';
-
-if (!empty($session_info['access_start_date'])) {
-    $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
-    $start_only = get_lang('From').' '.$session_info['access_start_date'];
-}
-if (!empty($session_info['access_start_date'])) {
-    $end = api_convert_and_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
-    $end_only = get_lang('Until').' '.$session_info['access_end_date'];
-}
-
-if (!empty($start) && !empty($end)) {
-    $dates = Display::tag('i', sprintf(get_lang('From %s to %s'), $start, $end));
+if ($session->getDuration() > 0) {
+    $dates = sprintf(get_lang("%s days"), $session->getDuration());
 } else {
-    $dates = Display::tag('i', $start_only.' '.$end_only);
+    $dates = SessionManager::parseSessionDates($session)['access'];
 }
 
 $editLink = '';
@@ -400,16 +381,16 @@ if (api_is_platform_admin()) {
     );
 }
 
-echo Display::tag('h1', $session_info['name'].$editLink);
-echo $dates.'<br />';
+echo Display::tag('h1', $session->getName().$editLink);
+echo Display::tag('i', $dates);
 $allow = 'true' === api_get_setting('show_session_description');
 
-if (1 == $session_info['show_description'] && $allow) {
+if ($session->getShowDescription() && $allow) {
     ?>
     <div class="home-course-intro">
         <div class="page-course">
             <div class="page-course-intro">
-                <p><?php echo $session_info['description']; ?></p>
+                <p><?php echo $session->getDescription(); ?></p>
             </div>
         </div>
     </div>
@@ -631,7 +612,7 @@ if (!api_is_anonymous()) {
         $reportingTab .= '<br />';
         $reportingTab .= Tracking::show_course_detail(
             api_get_user_id(),
-            $courseCode,
+            $course_id,
             $session_id
         );
     }

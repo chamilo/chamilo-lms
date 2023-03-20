@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
-/**
- * Class OutcomeDeleteResponse.
- */
+use SimpleXMLElement;
+
 class OutcomeDeleteResponse extends OutcomeResponse
 {
     /**
@@ -21,7 +22,7 @@ class OutcomeDeleteResponse extends OutcomeResponse
         parent::__construct($statusInfo, $bodyParam);
     }
 
-    protected function generateBody(\SimpleXMLElement $xmlBody)
+    protected function generateBody(SimpleXMLElement $xmlBody): void
     {
         $xmlBody->addChild('deleteResultResponse');
     }

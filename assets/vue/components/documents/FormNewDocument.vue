@@ -1,85 +1,65 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        cols="12"
-        sm="6"
-        md="6"
-      >
-        <b-form-group>
-          <b-form-input
-            v-model="item.title"
-            :error-messages="titleErrors"
-            :placeholder="$t('Title')"
-            required
-            @input="$v.item.title.$touch()"
-            @blur="$v.item.title.$touch()"
-          />
-        </b-form-group>
+  <q-form>
+    <q-input
+        id="item_title"
+        v-model="item.title"
+        :error="v$.item.title.$error"
+        :error-message="titleErrors"
+        :placeholder="$t('Title')"
+        @input="v$.item.title.$touch()"
+        @blur="v$.item.title.$touch()"
+    />
 
-        <editor
-          v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
-          v-model="item.contentFile"
-          :error-messages="contentFileErrors"
-          required
-          :init="{
-            skin_url: '/build/libs/tinymce/skins/ui/oxide',
-            content_css: '/build/libs/tinymce/skins/content/default/content.css',
-            branding:false,
-            height: 500,
-            toolbar_mode: 'sliding',
-            file_picker_callback : browser,
-            /*file_picker_callback: function(callback, value, meta) {
-                    // Provide file and text for the link dialog
-                    if (meta.filetype == 'file') {
-                      callback('mypage.html', {text: 'My text'});
-                    }
-
-                    // Provide image and alt text for the image dialog
-                    if (meta.filetype == 'image') {
-                      callback('myimage.jpg', {alt: 'My alt text'});
-                    }
-
-                    // Provide alternative source and posted for the media dialog
-                    if (meta.filetype == 'media') {
-                      callback('movie.mp4', {source2: 'alt.ogg', poster: 'image.jpg'});
-                    }
-                  },*/
-            /*images_upload_handler: (blobInfo, success, failure) => {
-                    const img = 'data:image/jpeg;base64,' + blobInfo.base64();
-                    //console.log(img);
-                    success(img);
-                  },*/
-            //menubar: true,
-            autosave_ask_before_unload: true,
-            plugins: [
-              'fullpage advlist autolink lists link image charmap print preview anchor',
-              'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste wordcount'
-            ],
-            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
-          }
-          "
-        />
-      </b-col>
-    </b-row>
-  </b-form>
+    <TinyEditor
+        id="item_content"
+        v-if="(item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument"
+        v-model="item.contentFile"
+        :error-message="contentFileErrors"
+        required
+        :init="{
+          skin_url: '/build/libs/tinymce/skins/ui/oxide',
+          content_css: '/build/libs/tinymce/skins/content/default/content.css',
+          branding: false,
+          relative_urls: false,
+          height: 500,
+          toolbar_mode: 'sliding',
+          file_picker_callback : browser,
+          autosave_ask_before_unload: true,
+          plugins: [
+            'fullpage advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste wordcount emoticons ' + extraPlugins
+          ],
+          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' + extraPlugins,
+        }
+        "
+    />
+    <!-- For extra content-->
+    <slot></slot>
+  </q-form>
 </template>
 
 <script>
-import has from 'lodash/has';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
-//import UploadAdapter from './UploadAdapter';
-
-import Editor from '../Editor'
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import {ref} from "vue";
+import isEmpty from "lodash/isEmpty";
 
 export default {
   name: 'DocumentsForm',
-  components: {
-    'editor': Editor
+  setup () {
+    const config = ref([]);
+    const extraPlugins = ref('');
+
+    if (!isEmpty(window.config)) {
+      config.value = window.config;
+      if (config.value['editor.translate_html']) {
+        extraPlugins.value = 'translatehtml';
+      }
+    }
+
+    return { v$: useVuelidate(), extraPlugins }
   },
-  mixins: [validationMixin],
   props: {
     values: {
       type: Object,
@@ -108,20 +88,25 @@ export default {
     },
     titleErrors() {
       const errors = [];
-      if (!this.$v.item.title.$dirty) return errors;
+
+      /*if (!this.$v.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
-      !this.$v.item.title.required && errors.push(this.$t('Field is required'));
+      !this.$v.item.title.required && errors.push(this.$t('Field is required'));*/
+
+      if (this.v$.item.title.required) {
+        return this.$t('Field is required')
+      }
 
       return errors;
     },
     contentFileErrors() {
       const errors = [];
 
-      if (this.item.resourceNode && this.item.resourceNode.fileEditableText) {
+      /*if (this.item.resourceNode && this.item.resourceNode.resourceFile && this.item.resourceNode.resourceFile.text) {
         if (!this.$v.item.contentFile.$dirty) return errors;
         has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
         !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));
-      }
+      }*/
 
       return errors;
     },
@@ -131,8 +116,33 @@ export default {
   },
   methods: {
     browser (callback, value, meta) {
+      //const route = useRoute();
+      let nodeId = this.$route.params['node'];
+      let folderParams = this.$route.query;
+      let url = this.$router.resolve({ name: 'DocumentForHtmlEditor', params: { id: nodeId }, query: folderParams })
+      url = url.fullPath;
+      console.log(url);
+
+      if (meta.filetype === 'image') {
+        url = url + "&type=images";
+      } else {
+        url = url + "&type=files";
+      }
+
+      console.log(url);
+
+      window.addEventListener('message', function (event) {
+        var data = event.data;
+        if (data.url) {
+          url = data.url;
+          console.log(meta); // {filetype: "image", fieldname: "src"}
+          callback(url);
+        }
+      });
+
+
       tinymce.activeEditor.windowManager.openUrl({
-        url: '/',// use an absolute path!
+        url: url,// use an absolute path!
         title: 'file manager',
         /*width: 900,
         height: 450,
@@ -148,17 +158,17 @@ export default {
           info = file.name + ' (' + fm.formatSize(file.size) + ')';
 
           // Provide file and text for the link dialog
-          if (meta.filetype == 'file') {
+          if (meta.filetype === 'file') {
             callback(url, {text: info, title: info});
           }
 
           // Provide image and alt text for the image dialog
-          if (meta.filetype == 'image') {
+          if (meta.filetype === 'image') {
             callback(url, {alt: info});
           }
 
           // Provide alternative source and posted for the media dialog
-          if (meta.filetype == 'media') {
+          if (meta.filetype === 'media') {
             callback(url);
           }
         }

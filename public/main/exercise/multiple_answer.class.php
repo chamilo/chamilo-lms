@@ -17,9 +17,6 @@ class MultipleAnswer extends Question
     public $typePicture = 'mcma.png';
     public $explanationLangVar = 'Multiple answer';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -36,7 +33,7 @@ class MultipleAnswer extends Question
         ];
 
         // The previous default value was 2. See task #1759.
-        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
+        $nb_answers = $_POST['nb_answers'] ?? 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $obj_ex = Session::read('objExercise');
@@ -68,9 +65,8 @@ class MultipleAnswer extends Question
             }
         }
 
-        $form->addElement('hidden', 'nb_answers');
+        $form->addHidden('nb_answers', $nb_answers);
         $boxes_names = [];
-
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(get_lang('You have to create at least one answer'));
@@ -120,13 +116,7 @@ class MultipleAnswer extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement(
-                'checkbox',
-                'correct['.$i.']',
-                null,
-                null,
-                'class="checkbox" style="margin-left: 0em;"'
-            );
+            $form->addCheckBox('correct['.$i.']', null);
             $boxes_names[] = 'correct['.$i.']';
 
             $form->addHtmlEditor("answer[$i]", null, null, false, $editorConfig);
@@ -134,7 +124,7 @@ class MultipleAnswer extends Question
 
             $form->addHtmlEditor("comment[$i]", null, null, false, $editorConfig);
 
-            $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
+            $form->addText('weighting['.$i.']', null, true, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -222,20 +212,22 @@ class MultipleAnswer extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
 
         $header .= '<th>'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            $header .= '<th>'.get_lang('Expected choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
 
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
         $header .= '</tr>';
 
         return $header;

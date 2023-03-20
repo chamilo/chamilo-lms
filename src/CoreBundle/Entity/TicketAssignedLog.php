@@ -1,57 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class AssignedLog.
- *
  * @ORM\Table(
- *  name="ticket_assigned_log",
+ *     name="ticket_assigned_log",
  * )
  * @ORM\Entity
  */
 class TicketAssignedLog
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Ticket
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $ticket;
+    protected Ticket $ticket;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false)
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="assigned_date", type="datetime", nullable=false)
      */
-    protected $assignedDate;
+    protected DateTime $assignedDate;
 }

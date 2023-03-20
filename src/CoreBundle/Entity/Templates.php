@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -18,66 +20,50 @@ class Templates
     use UserTrait;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=250, nullable=false)
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="templates", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="templates")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_doc", type="integer", nullable=false)
      */
-    protected $refDoc;
+    protected int $refDoc;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
-    protected $image;
+    protected string $image;
 
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return Templates
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -97,11 +83,9 @@ class Templates
     /**
      * Set description.
      *
-     * @param string $description
-     *
      * @return Templates
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
 
@@ -121,11 +105,9 @@ class Templates
     /**
      * Set refDoc.
      *
-     * @param int $refDoc
-     *
      * @return Templates
      */
-    public function setRefDoc($refDoc)
+    public function setRefDoc(int $refDoc)
     {
         $this->refDoc = $refDoc;
 
@@ -145,11 +127,9 @@ class Templates
     /**
      * Set image.
      *
-     * @param string $image
-     *
      * @return Templates
      */
-    public function setImage($image)
+    public function setImage(string $image)
     {
         $this->image = $image;
 

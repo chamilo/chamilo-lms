@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+require_once __DIR__.'/../inc/global.inc.php';
+
 /**
   hubert.borderiou
   Manage tests category page
@@ -21,9 +23,7 @@ $htmlHeadXtra[] = '
 </script>';
 
 $nameTools = '';
-
-require_once __DIR__.'/../inc/global.inc.php';
-
+$this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -40,7 +40,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $_GET['action'] ?? '';
 $content = '';
 
 switch ($action) {
@@ -64,7 +64,7 @@ switch ($action) {
 
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $export[] = [$category['title'], $category['description']];
+                $export[] = [$category->getTitle(), $category->getDescription()];
             }
         }
 
@@ -156,6 +156,7 @@ function edit_category_form($action)
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
+
             if ($check) {
                 $values = $form->exportValues();
                 $category = new TestCategory();
@@ -180,7 +181,7 @@ function edit_category_form($action)
         }
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CannotEdit this category'), 'error')
+            Display::return_message(get_lang('Could not edit category'), 'error')
         );
     }
 }
@@ -188,9 +189,9 @@ function edit_category_form($action)
 // process to delete a category
 function delete_category_form()
 {
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category = new TestCategory();
-        if ($category->removeCategory($_GET['id'])) {
+        if ($category->removeCategory($_GET['category_id'])) {
             Display::addFlash(Display::return_message(get_lang('Category deleted')));
         } else {
             Display::addFlash(Display::return_message(get_lang('Error: could not delete category'), 'error'));
@@ -236,7 +237,7 @@ function add_category_form($action)
             if ($category->save()) {
                 Display::addFlash(Display::return_message(get_lang('Category added')));
             } else {
-                Display::addFlash(Display::return_message(get_lang('AddCategory nameAlreadyExists'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('Already exists'), 'warning'));
             }
         }
         Security::clear_token();
@@ -252,24 +253,22 @@ function add_category_form($action)
 // Display add category button
 function displayActionBar()
 {
-    echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
+    $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
+    $actions .= '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
         Display::return_icon('new_folder.png', get_lang('Add category'), null, ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?action=export_category&'.api_get_cidreq()
     );
 
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('import_csv.png', get_lang('Import from a CSV'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?action=import_category&'.api_get_cidreq()
     );
 
-    echo '</div>';
-    echo '<br/>';
-    echo '<fieldset><legend>'.get_lang('Questions category').'</legend></fieldset>';
+    echo Display::toolbarAction('toolbar', [$actions]);
+    echo Display::page_header(get_lang('Questions category'));
 }

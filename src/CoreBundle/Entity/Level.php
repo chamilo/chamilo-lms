@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -8,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Level.
+ * Skill level.
  *
  * @ORM\Table(name="skill_level")
  * @ORM\Entity
@@ -16,34 +18,28 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Level
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @Gedmo\SortablePosition
      *
      * @ORM\Column(name="position", type="integer")
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="short_name", type="string", length=255, nullable=false)
      */
-    protected $shortName;
+    protected string $shortName;
 
     /**
      * @Gedmo\SortableGroup
@@ -51,14 +47,11 @@ class Level
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="levels")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
-    protected $profile;
+    protected ?Profile $profile = null;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**
@@ -70,18 +63,6 @@ class Level
     }
 
     /**
-     * @param int $id
-     *
-     * @return Level
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -89,42 +70,31 @@ class Level
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Level
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return Level
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
         return $this;
     }
 
-    public function getShortName()
+    public function getShortName(): string
     {
         return $this->shortName;
     }
 
-    /**
-     * @return Level
-     */
-    public function setShortName($shortName)
+    public function setShortName(string $shortName): self
     {
         $this->shortName = $shortName;
 
@@ -139,10 +109,7 @@ class Level
         return $this->profile;
     }
 
-    /**
-     * @return Level
-     */
-    public function setProfile($profile)
+    public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
 

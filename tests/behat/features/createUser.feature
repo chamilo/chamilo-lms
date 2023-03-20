@@ -138,7 +138,7 @@ Feature: Users management as admin
   Scenario: HRM logs as teacher
     Given I am not logged
     Then I am logged as "hrm"
-    And I am on "/main/mySpace/teachers.php"
+    And I am on "/main/my_space/teachers.php"
     And wait the page to be loaded when ready
     Then I should see "teacher lastname"
     Then I follow "teacher lastname"
@@ -150,7 +150,7 @@ Feature: Users management as admin
   Scenario: HRM logs as student
     Given I am not logged
     Then I am logged as "hrm"
-    And I am on "/main/mySpace/student.php"
+    And I am on "/main/my_space/student.php"
     And wait the page to be loaded when ready
     Then I should see "student lastname"
     Then I follow "student lastname"

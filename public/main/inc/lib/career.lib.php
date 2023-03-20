@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Career as CareerEntity;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-/**
- * Class Career.
- */
 class Career extends Model
 {
     public $table;
@@ -19,9 +17,6 @@ class Career extends Model
         'updated_at',
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_CAREER);
@@ -44,17 +39,12 @@ class Career extends Model
         return $row['count'];
     }
 
-    /**
-     * @param array $where_conditions
-     *
-     * @return array
-     */
-    public function get_all($where_conditions = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',
             $this->table,
-            ['where' => $where_conditions, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'name ASC']
         );
     }
 
@@ -85,14 +75,13 @@ class Career extends Model
      */
     public function display()
     {
-        $html = '<div class="actions" style="margin-bottom:20px">';
-        $html .= '<a href="career_dashboard.php">'.
+        $actions = '<a href="career_dashboard.php">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_platform_admin()) {
-            $html .= '<a href="'.api_get_self().'?action=add">'.
+            $actions .= '<a href="'.api_get_self().'?action=add">'.
                     Display::return_icon('new_career.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         }
-        $html .= '</div>';
+        $html = Display::toolbarAction('career_actions', [$actions]);
         $html .= Display::grid_html('careers');
 
         return $html;
@@ -104,8 +93,8 @@ class Career extends Model
     public function get_status_list()
     {
         return [
-            CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
-            CAREER_STATUS_INACTIVE => get_lang('Archived'),
+            CareerEntity::CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
+            CareerEntity::CAREER_STATUS_INACTIVE => get_lang('Archived'),
         ];
     }
 
@@ -124,7 +113,7 @@ class Career extends Model
         $form = new FormValidator('career', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $header = get_lang('Edit');
         }
 
@@ -144,9 +133,9 @@ class Career extends Model
             ]
         );
         $status_list = $this->get_status_list();
-        $form->addElement('select', 'status', get_lang('Status'), $status_list);
+        $form->addSelect('status', get_lang('Status'), $status_list);
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             $extraField = new ExtraField('career');
             $extraField->addElements($form, $id);
 
@@ -248,10 +237,10 @@ class Career extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $career = new \Chamilo\CoreBundle\Entity\Career();
+        $career = new CareerEntity();
         $career
             ->setName($params['name'])
-            ->setStatus($params['status'])
+            ->setStatus((int) $params['status'])
             ->setDescription($params['description']);
 
         Database::getManager()->persist($career);
@@ -567,7 +556,7 @@ class Career extends Model
                                     '',
                                     $explode[0]
                                 );
-                                $simpleFirstConnection = 'g'.(int) $groupValueId;
+                                $simpleFirstConnection = 'g'.$groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0])) {
@@ -594,7 +583,7 @@ class Career extends Model
                                     '',
                                     $value
                                 );
-                                $simpleSecondConnection = 'g'.(int) $groupValueId;
+                                $simpleSecondConnection = 'g'.$groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {
@@ -865,7 +854,7 @@ class Career extends Model
      *
      * @return string
      */
-    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections, $userResult)
+    public static function parseVertexList($groupCourseList, $vertexList, $addRow, &$graph, $group, &$connections, $userResult)
     {
         if (empty($vertexList)) {
             return '';
@@ -909,18 +898,22 @@ class Career extends Model
                     $icon = '';
                     switch ($iconData['Icon']) {
                         case 0:
-                            $icon = Display::returnFontAwesomeIcon('times-circle', $size);
+                            $icon = Display::getMdiIcon('close-circle');
                             break;
                         case 1:
-                            $icon = Display::returnFontAwesomeIcon('check-circle', $size);
+                            $icon = Display::getMdiIcon('check-circle');
                             break;
                         case 2:
-                            $icon = Display::returnFontAwesomeIcon('info-circle', $size);
+                            $icon = Display::getMdiIcon('information');
                             break;
                     }
 
                     if (2 == substr($resultId, 0, 1)) {
                         $iconData['Description'] = 'Result Id = '.$resultId;
+                    }
+
+                    if ('Joe Anonymous' === $iconData['TeacherUsername']) {
+                        $iconData['TeacherUsername'] = '';
                     }
 
                     if (!empty($icon)) {
@@ -957,7 +950,7 @@ class Career extends Model
 
             $originalRow--;
             $column--;
-            //$title = "$originalRow / $column";
+
             $graphHtml .= Display::panel(
                 $content,
                 $title,

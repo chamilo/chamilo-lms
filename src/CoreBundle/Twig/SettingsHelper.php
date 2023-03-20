@@ -2,48 +2,43 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Twig;
 
-use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
+use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
-/**
- * Class SettingsHelper.
- */
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {
-    /**
-     * @var SettingsManager
-     */
-    private $settingsManager;
+    private SettingsManagerInterface $settingsManager;
 
     public function __construct(SettingsManagerInterface $settingsManager)
     {
         $this->settingsManager = $settingsManager;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_settings';
     }
 
     /**
-     * @param string $schemaAlias Example: admin, agenda, etc
-     *
-     * @return \Sylius\Bundle\SettingsBundle\Model\Settings
+     * @param string $schemaAlias example: admin, agenda, etc
      */
-    public function getSettings($schemaAlias)
+    public function getSettings($schemaAlias): SettingsInterface
     {
         return $this->settingsManager->load($schemaAlias);
     }
 
     /**
-     * @param string $parameter Example: admin.administrator_name
+     * @param string $parameter Example: platform.theme
      */
-    public function getSettingsParameter($parameter)
+    public function getSettingsParameter(string $parameter)
     {
-        return $this->settingsManager->getSetting($parameter);
+        return $this->settingsManager instanceof SettingsManager ? $this->settingsManager->getSetting($parameter) : '';
     }
 }

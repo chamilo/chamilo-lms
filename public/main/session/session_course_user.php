@@ -14,15 +14,17 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $tool_name = get_lang('Edit session courses by user');
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-SessionManager::protectSession($id_session);
+$session = api_get_session_entity($id_session);
+SessionManager::protectSession($session);
 
 $id_user = intval($_GET['id_user']);
 
 $em = Database::getManager();
 $session = api_get_session_entity($id_session);
 $user = api_get_user_entity($id_user);
+$currentUser = api_get_user_entity();
 
-if (!api_is_platform_admin() && $session->getSessionAdmin()->getId() != api_get_user_id()) {
+if (!api_is_platform_admin() && !$session->hasUserAsSessionAdmin($currentUser)) {
     api_not_allowed(true);
 }
 
@@ -39,8 +41,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?id_user='.$user->getId().'&id_session='.$session->getId()
 );
-$form->addElement(
-    'advmultiselect',
+$form->addMultiSelect(
     'courses_to_avoid',
     $tool_name,
     getSessionCourseList($session)

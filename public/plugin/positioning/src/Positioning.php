@@ -172,7 +172,7 @@ class Positioning extends Plugin
         }
 
         $data = $this->getPositionData($exerciseId, $courseId, $sessionId);
-        $disableField = $field === 'is_initial' ? 'is_final' : 'is_initial';
+        $disableField = 'is_initial' === $field ? 'is_final' : 'is_initial';
         if ($data && isset($data['id'])) {
             $id = $data['id'];
             $sql = "UPDATE $this->table SET

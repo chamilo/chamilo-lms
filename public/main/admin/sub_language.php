@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+exit;
 /**
  * Script for sub-language administration.
  */
@@ -192,7 +195,7 @@ function search_language_term(
                         'btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file],
                         get_lang('Save'),
                         [
-                            'class' => 'save  btn btn-default btn-sm',
+                            'class' => 'save  btn btn--plain btn-sm',
                             'type' => 'button',
                             'id' => 'btnid_'.$parent_name_variable,
                         ]
@@ -268,7 +271,7 @@ function search_language_term(
                         'btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file],
                         get_lang('Save'),
                         [
-                            'class' => 'save btn btn-default btn-sm',
+                            'class' => 'save btn btn--plain btn-sm',
                             'type' => 'button',
                             'id' => 'btnid_'.$name_variable,
                         ]
@@ -329,7 +332,7 @@ function search_language_term(
                         'btn|'.$name_variable.'|'.$language_files_to_load_keys[$lang_file],
                         get_lang('Save'),
                         [
-                            'class' => 'save btn btn-default btn-sm',
+                            'class' => 'save btn btn--plain btn-sm',
                             'type' => 'button',
                             'id' => 'btnid_'.$name_variable,
                         ]

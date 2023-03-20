@@ -19,33 +19,28 @@ class FormValidator extends HTML_QuickForm
     private $layout;
 
     /**
-     * Constructor.
-     *
-     * @param string $name        Name of the form
-     * @param string $method      (optional) Method ('post' (default) or 'get')
-     * @param string $action      (optional) Action (default is $PHP_SELF)
-     * @param string $target      (optional) Form's target defaults to '_self'
-     * @param mixed  $attributes  (optional) Extra attributes for <form> tag
-     * @param string $layout
-     * @param bool   $trackSubmit (optional) Whether to track if the form was
-     *                            submitted by adding a special hidden field (default = true)
+     * @param string      $name        Name of the form
+     * @param string      $method      (optional) Method ('post' (default) or 'get')
+     * @param string      $action      (optional) Action (default is $PHP_SELF)
+     * @param string|null $target      (optional) Form's target defaults to '_self'
+     * @param mixed       $attributes  (optional) Extra attributes for <form> tag
+     * @param bool        $trackSubmit Whether to track if the form was submitted by adding a special hidden field
      */
     public function __construct(
-        $name,
-        $method = 'post',
-        $action = '',
-        $target = '',
-        $attributes = [],
-        $layout = self::LAYOUT_HORIZONTAL,
-        $trackSubmit = true
+        string $name,
+        ?string $method = 'post',
+        ?string $action = '',
+        ?string $target = '',
+        ?array $attributes = [],
+        string $layout = self::LAYOUT_HORIZONTAL,
+        bool $trackSubmit = true
     ) {
-        // Default form class.
-        if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
-            $attributes['class'] = 'form-horizontal';
+        if (null === $attributes) {
+            $attributes = [];
         }
 
-        if (isset($attributes['class']) && false !== strpos($attributes['class'], 'form-search')) {
-            $layout = 'inline';
+        if (isset($attributes['class']) && str_contains($attributes['class'], 'form-search')) {
+            $layout = self::LAYOUT_INLINE;
         }
 
         $this->setLayout($layout);
@@ -54,17 +49,17 @@ class FormValidator extends HTML_QuickForm
         $formTemplate = $this->getFormTemplate();
 
         switch ($layout) {
-            case self::LAYOUT_HORIZONTAL:
-                $attributes['class'] = 'form-horizontal';
+            case self::LAYOUT_BOX_SEARCH:
+                $attributes['class'] = 'form--search';
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'form-inline';
+                $attributes['class'] = 'gap-3 ';
                 break;
             case self::LAYOUT_BOX:
-                $attributes['class'] = 'form-inline-box';
+                $attributes['class'] = 'ch flex gap-1 ';
                 break;
             case self::LAYOUT_GRID:
-                $attributes['class'] = 'form-grid';
+                $attributes['class'] = 'ch form-grid';
                 $formTemplate = $this->getGridFormTemplate();
                 break;
         }
@@ -73,14 +68,15 @@ class FormValidator extends HTML_QuickForm
 
         // Modify the default templates
         $renderer = &$this->defaultRenderer();
-
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && 'form-inline' == $attributes['class']) {
+        if ((isset($attributes['class']) && 'form--inline' === $attributes['class']) ||
+            (self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)
+        ) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
-        } elseif (isset($attributes['class']) && 'form-search' == $attributes['class']) {
+        } elseif (isset($attributes['class']) && 'form-search' === $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {
@@ -100,38 +96,43 @@ class FormValidator extends HTML_QuickForm
         }
 
         //Set Header template
-        $renderer->setHeaderTemplate('<legend>{header}</legend>');
+        $renderer->setHeaderTemplate(' <h1 class="text-h3 font-small text-gray-800 mb-4">{header}<hr /></h1>');
 
-        //Set required field template
-        $this->setRequiredNote(
-            '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>'
-        );
+        $required = '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>';
+        if ((self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)) {
+            $required = '';
+        }
+        // Set required field template
+        $this->setRequiredNote($required);
 
-        $noteTemplate = <<<EOT
+        if (self::LAYOUT_BOX_SEARCH !== $layout) {
+            $noteTemplate = <<<EOT
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">{requiredNote}</div>
 	</div>
 EOT;
-        $renderer->setRequiredNoteTemplate($noteTemplate);
+            $renderer->setRequiredNoteTemplate($noteTemplate);
+        }
     }
 
-    /**
-     * @return string
-     */
-    public function getFormTemplate()
+    public function getFormTemplate(): string
     {
+        if (self::LAYOUT_BOX_SEARCH == $this->layout) {
+            return '<form {attributes}>
+                    <div class="form__group form__group--inline p-inputgroup">
+                        {content}
+                        {hidden}
+                    </div>
+                </form>';
+        }
+
         return '<form{attributes}>
-        <fieldset>
-            {content}
-        </fieldset>
-        {hidden}
-        </form>';
+                {content}
+                {hidden}
+            </form>';
     }
 
-    /**
-     * @return string
-     */
-    public function getGridFormTemplate()
+    public function getGridFormTemplate(): string
     {
         return '
         <style>
@@ -155,13 +156,11 @@ EOT;
 
     /**
      * @todo this function should be added in the element class
-     *
-     * @return string
      */
-    public function getDefaultElementTemplate()
+    public function getDefaultElementTemplate(): string
     {
         return '
-            <div class="form-group row {error_class}">
+            <div class="row mb-3 {error_class}">
                 <label {label-for} class="col-sm-2 col-form-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
@@ -185,18 +184,12 @@ EOT;
             </div>';
     }
 
-    /**
-     * @return string
-     */
-    public function getLayout()
+    public function getLayout(): string
     {
         return $this->layout;
     }
 
-    /**
-     * @param string $layout
-     */
-    public function setLayout($layout)
+    public function setLayout(string $layout)
     {
         $this->layout = $layout;
     }
@@ -205,10 +198,13 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string|array $label      The label for the form-element
      * @param string       $name       The element name
+     * @param string|array $label      The label for the form-element
      * @param bool         $required   (optional)    Is the form-element required (default=true)
      * @param array        $attributes (optional)    List of attributes for the form-element
+     * @param bool         $createElement
+     *
+     * @throws Exception
      *
      * @return HTML_QuickForm_text
      */
@@ -272,13 +268,16 @@ EOT;
         return $this->addElement('SelectLanguage', $name, $label, $options, $attributes);
     }
 
+    public function addSelectTheme($name, $label, $options = [], $attributes = [])
+    {
+        return $this->addElement('SelectTheme', $name, $label, $options, $attributes);
+    }
+
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $options
-     * @param array  $attributes
-     *
-     * @throws Exception
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $options
+     * @param array        $attributes
      *
      * @return SelectAjax
      */
@@ -447,7 +446,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'times',
+            'close',
             'danger',
             null,
             null,
@@ -517,7 +516,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'trash',
+            'delete',
             'danger',
             null,
             null,
@@ -540,7 +539,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'arrow-circle-right',
+            'arrow-right-bold-circle',
             'primary',
             null,
             null,
@@ -564,7 +563,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'paper-plane',
+            'send',
             'primary',
             null,
             null,
@@ -587,7 +586,7 @@ EOT;
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'search', 'primary');
+        return $this->addButton($name, $label, 'magnify', 'primary');
     }
 
     /**
@@ -783,7 +782,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'search',
+            'magnify',
             'primary',
             null,
             null,
@@ -872,14 +871,11 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $options
-     * @param array  $attributes
+     * @param string|array $label
      *
      * @return HTML_QuickForm_select
      */
-    public function addSelect($name, $label, $options = [], $attributes = [])
+    public function addSelect(string $name, $label, ?array $options = [], array $attributes = [])
     {
         return $this->addElement('select', $name, $label, $options, $attributes);
     }
@@ -921,6 +917,11 @@ EOT;
         return $this->addElement('select', $name, $label, $options, $attributes);
     }
 
+    public function addMultiSelect(string $name, $label, array $options, array $attributes = [])
+    {
+        $this->addElement('advmultiselect', $name, $label, $options, $attributes);
+    }
+
     /**
      * @param string $label
      * @param string $text
@@ -952,9 +953,9 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
      *
      * @throws Exception if the file doesn't have an id
      *
@@ -977,7 +978,7 @@ EOT;
                             <div id="'.$id.'_crop_image" class="cropCanvas">
                                 <img id="'.$id.'_preview_image">
                             </div>
-                            <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
+                            <button class="btn btn--primary" type="button" name="cropButton" id="'.$id.'_crop_button">
                                 <em class="fa fa-crop"></em> '.get_lang('Crop your picture').'
                             </button>
                         </div>
@@ -1008,6 +1009,61 @@ EOT;
         return true;
     }
 
+    public function addStartPanel(string $id, string $title, bool $open = false)
+    {
+        $parent = null;
+        $html = '
+                <script>
+                 document.addEventListener("DOMContentLoaded", function() {
+                    const query = window.location.hash.replace("#", "#collapse_");
+                    if (query) {
+                        const selected = document.querySelector(query);
+                        if (selected) {
+                             if (selected.classList.contains("hidden")) {
+                                selected.classList.remove("hidden");
+                            }
+                        }
+                    }
+
+                    const button = document.querySelector("#card_'.$id.'");
+                        button.addEventListener("click", (e) => {
+                        let menu = document.querySelector("#collapse_'.$id.'");
+                        if (menu.classList.contains("hidden")) {
+                            menu.classList.remove("hidden");
+                        } else {
+                            menu.classList.add("hidden");
+                        }
+                    });
+                });
+                </script>
+                <div class="mt-4 rounded-lg">
+                    <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
+                        <h5>
+                            <a role="button"
+                                class="'.(($open) ? 'collapse' : ' ').'"
+                                data-toggle="collapse"
+                                data-target="#collapse_'.$id.'"
+                                aria-expanded="true"
+                                aria-controls="collapse_'.$id.'"
+                            >
+                                '.$title.'
+                            </a>
+                        </h5>
+                    </div>
+                    <div
+                        id="collapse_'.$id.'"
+                        class="px-4 border border-gray-50 bg-white hidden collapse '.(($open) ? 'show' : ' ').'"
+                        aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">
+                    <div id="collapse_contant_'.$id.'"  class="card-body ">';
+
+        $this->addHtml($html);
+    }
+
+    public function addEndPanel()
+    {
+        $this->addHtml('</div></div></div>');
+    }
+
     /**
      * Draws a panel of options see the course_info/infocours.php page.
      *
@@ -1015,7 +1071,7 @@ EOT;
      * @param string $title     visible title
      * @param array  $groupList list of group or elements
      */
-    public function addPanelOption($name, $title, $groupList, $icon, $open = false, $parent)
+    public function addPanelOption($name, $title, $groupList, $icon, $open, $parent)
     {
         $html = '<div class="card">';
         $html .= '<div class="card-header" id="card_'.$name.'">';
@@ -1066,16 +1122,17 @@ EOT;
         $config = [],
         $attributes = []
     ) {
-        $attributes = [];
-        $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
-        $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
-        $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
-        $attributes['class'] = isset($config['class']) ? $config['class'] : [];
-        $attributes['id'] = isset($config['id']) ? $config['id'] : '';
+        $attributes['rows'] = $config['rows'] ?? 15;
+        $attributes['cols'] = $config['cols'] ?? 80;
+        $attributes['cols-size'] = $config['cols-size'] ?? [];
+        $attributes['class'] = $config['class'] ?? [];
+        $cleanName = str_replace(['[', ']', '#'], '', $name);
 
         if (empty($attributes['id'])) {
-            $attributes['id'] = $name;
+            $attributes['id'] = $cleanName;
         }
+
+        //$attributes['id'] = $config['id'] ?? 'editor_'.$cleanName;
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
@@ -1085,7 +1142,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        $config['style'] = isset($config['style']) ? $config['style'] : false;
+        $config['style'] = $config['style'] ?? false;
         if ($fullPage) {
             $config['fullPage'] = true;
             // Adds editor_content.css in ckEditor
@@ -1148,12 +1205,12 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
+     * @param string       $name
+     * @param string|array $label
      *
      * @return mixed
      */
-    public function addButtonAdvancedSettings($name, $label = '')
+    public function addButtonAdvancedSettings($name, $label = null)
     {
         $label = !empty($label) ? $label : get_lang('Advanced settings');
 
@@ -1206,7 +1263,6 @@ EOT;
     public function returnForm()
     {
         $returnValue = '';
-
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as &$element) {
             $element->setLayout($this->getLayout());
@@ -1577,7 +1633,7 @@ EOT;
             <div class="description-upload">
             '.get_lang('Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!').'
             </div>
-            <span class="btn btn-success fileinput-button">
+            <span class="btn btn--success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>'.get_lang('Add files').'</span>
                 <!-- The file input field used as target for the file upload widget -->
@@ -1768,7 +1824,7 @@ EOT;
 
             var url = '".$url."';
             var uploadButton = $('<button/>')
-                .addClass('btn btn-primary')
+                .addClass('btn btn--primary')
                 .prop('disabled', true)
                 .text('".addslashes(get_lang('Loading'))."')
                 .on('click', function () {
@@ -1847,7 +1903,7 @@ EOT;
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
                     var message = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
+                        $('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
                 });

@@ -6,8 +6,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
-
-require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
@@ -37,16 +35,16 @@ protectWork($courseInfo, $workId);
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager::get_group_properties($group_id);
+    $group_properties = api_get_group_entity($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access(
+        $show_work = GroupManager::userHasAccess(
             api_get_user_id(),
-            $group_properties['iid'],
+            $group_properties,
             GroupManager::GROUP_TOOL_WORK
         );
     }
@@ -61,7 +59,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties->getName(),
     ];
 }
 
@@ -74,13 +72,10 @@ $interbreadcrumb[] = [
     'name' => $my_folder_data['title'],
 ];
 
-Display :: display_header(null);
-
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
+Display::display_header(null);
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
     Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+echo Display::toolbarAction('toolbar', [$actions]);
 if (!empty($my_folder_data['description'])) {
     echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
         Security::remove_XSS($my_folder_data['description']).'</p></div></p>';

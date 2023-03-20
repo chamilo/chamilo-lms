@@ -134,13 +134,13 @@ function modify_filter($id, $params, $row)
     $result = Display::url(
         get_lang('Tickets'),
         "tickets.php?project_id={$row['id']}",
-        ['class' => 'btn btn-small btn-default']
+        ['class' => 'btn btn-small btn--plain']
     );
 
     $result .= Display::url(
         get_lang('Categories'),
         "categories.php?project_id={$row['id']}",
-        ['class' => 'btn btn-default']
+        ['class' => 'btn btn--plain']
     );
 
     $result .= Display::url(
@@ -170,21 +170,20 @@ $items = [
     'content' => get_lang('Add project'),
 ];
 
-echo '<div class="actions">';
-echo Display::url(
+$actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 $sections = TicketManager::getSettingsMenuItems('project');
 array_unshift($sections, $items);
 foreach ($sections as $item) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
         $item['url']
     );
 }
-echo '</div>';
 
+echo Display::toolbarAction('ticket', [$actions]);
 echo $formToString;
 echo $table->return_table();
 

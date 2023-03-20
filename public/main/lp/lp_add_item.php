@@ -15,14 +15,15 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$isStudentView = $_REQUEST['isStudentView'] ?? null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
-$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-$type = isset($_GET['type']) ? $_GET['type'] : null;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$submit = $_POST['submit_button'] ?? null;
+$type = $_GET['type'] ?? null;
+$action = $_GET['action'] ?? null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
-$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
+$listUrl = api_get_path(WEB_CODE_PATH).
+    'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
 if (!$is_allowed_to_edit) {
     header("Location: $listUrl");
     exit;
@@ -42,41 +43,15 @@ if ($learnPath->get_lp_session_id() != api_get_session_id()) {
 }
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."
-function load_cbo(id, previousId) {
-    if (!id) {
-        return false;
-    }
-
-    previousId = previousId || 'previous';
-
-    var cbo = document.getElementById(previousId);
-    for (var i = cbo.length - 1; i > 0; i--) {
-        cbo.options[i] = null;
-    }
-
-    var k=0;
-    for (var i = 1; i <= child_name[id].length; i++){
-        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-        option.style.paddingLeft = '40px';
-        cbo.options[i] = option;
-        k = i;
-    }
-
-    cbo.options[k].selected = true;
-    //$('#' + previousId).selectpicker('refresh');
-}
-
 $(function() {
     if ($('#previous')) {
         if('parent is'+$('#idParent').val()) {
             load_cbo($('#idParent').val());
         }
     }
+
     $('.lp_resource_element').click(function() {
-        window.location.href = $('a', this).attr('href');
-    });
-    CKEDITOR.on('instanceReady', function (e) {
-        showTemplates('content_lp');
+        //window.location.href = $('a', this).attr('href');
     });
 });
 </script>";
@@ -118,96 +93,20 @@ switch ($type) {
 }
 
 if ('add_item' === $action && 'document' === $type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
+    $interbreadcrumb[] = [
+        'url' => '#',
+        'name' => get_lang('The rich media page/activity has been added to the course'),
+    ];
 }
 
-// Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
-Display::display_header(null, 'Path');
-
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-$(function() {
-    //$('.scrollbar-inner').scrollbar();
-
-    $('#subtab ').on('click', 'a:first', function() {
-        window.location.reload();
-    });
-    expandColumnToogle('#hide_bar_template', {
-        selector: '#lp_sidebar'
-    }, {
-        selector: '#doc_form'
-    });
-
-    $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
-
-        if (!associate) {
-            e.preventDefault();
-        }
-    });
-
-    $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
-
-        if (!dissociate) {
-            e.preventDefault();
-        }
-    });
-
-    // hide the current template list for new documment until it tab clicked
-    $('#frmModel').hide();
-});
-
-// document template for new document tab handler
-$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-    var id = e.target.id;
-    if (id == 'subtab2') {
-        $('#frmModel').show();
-    } else {
-        $('#frmModel').hide();
-    }
-})
-</script>
-<?php
-
-echo $learnPath->build_action_menu();
-echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-echo $learnPath->return_new_tree(null, true);
-
-$message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
-
-// Show the template list.
-if (('document' == $type || 'step' == $type) && !isset($_GET['file'])) {
-    // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
-    echo '</div>';
-}
-echo '</div>';
-
-echo '<div id="doc_form" class="col-md-8">';
-
-$learnPath->displayResources();
+$tpl = new Template();
+$tpl->assign('actions', $learnPath->build_action_menu(true));
+$tpl->assign('left', $learnPath->showBuildSideBar(null, true, $type));
+$tpl->assign('right', $learnPath->displayResources());
+$tpl->displayTwoColTemplate();
 
 /*
 switch ($type) {
@@ -248,7 +147,3 @@ switch ($type) {
     case 'step':
         break;
 }*/
-echo '</div>';
-echo '</div>';
-
-Display::display_footer();

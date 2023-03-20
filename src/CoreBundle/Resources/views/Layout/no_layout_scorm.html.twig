@@ -2,7 +2,7 @@
 {# overrides everything inside body no-footer no-header #}
 {% block chamilo_wrap %}
     {% autoescape false %}
-        <link rel="stylesheet" href="{{ url('home') ~ 'build/css/scorm.css' }}"/>
+        <link rel="stylesheet" href="{{ url('index') ~ 'build/css/scorm.css' }}"/>
         <section id="content-scorm">
         {% block content %}
         {{ content }}

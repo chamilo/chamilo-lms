@@ -29,14 +29,16 @@ $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_
 
 // initializing variables
 $user_id = (int) ($_GET['user']);
-$user_info = api_get_user_info($user_id);
+
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+$user = api_get_user_entity($user_id);
+$isSessionAdmin = api_is_session_admin($user);
 
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-    $tool_name = get_lang('AssignCoursesToAdministrationistrator');
-} elseif (SESSIONADMIN == $user_info['status']) {
+    $tool_name = get_lang('Assign courses to platform\'s administrator');
+} elseif ($isSessionAdmin) {
     $tool_name = get_lang('Assign courses to session\'s administrator');
 } else {
     $tool_name = get_lang('Assign courses to HR manager');
@@ -176,7 +178,7 @@ $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">
 echo $html = Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 
 echo Display::page_header(
-    sprintf(get_lang('Assign courses to %s'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    sprintf(get_lang('Assign courses to %s'), UserManager::formatUserFullName($user)),
     null,
     'h3'
 );
@@ -248,32 +250,32 @@ if (!empty($msg)) {
         <p><?php echo get_lang('First letter (code)'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
-            <?php  echo Display :: get_alphabet_options($firstLetter); ?>
+            <?php echo Display :: get_alphabet_options($firstLetter); ?>
         </select>
         <?php
     } ?>
         </div>
         <div class="control-course">
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                     <em class="fa fa-arrow-right"></em>
                 </button>
             </div>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                     <em class="fa fa-arrow-left"></em>
                 </button>
             </div>
             <div class="separate-action">
-                <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
+                <?php echo '<button class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <h5><?php
         if (UserManager::is_admin($user_id)) {
-            echo get_lang('AssignedCoursesListToAdministrationistrator');
-        } elseif (SESSIONADMIN == $user_info['status']) {
+            echo get_lang('Assigned courses list to platform administrator');
+        } elseif ($isSessionAdmin) {
             echo get_lang('Assigned courses list to sessions administrator');
         } else {
             echo get_lang('Courses assigned to the HR manager');

@@ -1,22 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SessionTreeType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(
             'type',
-            'choice',
-            ['choices' => ['1', '2', '3', '4']]
+            ChoiceType::class,
+            [
+                'choices' => ['1', '2', '3', '4'],
+            ]
         );
 
         $builder->add(
@@ -27,7 +34,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', Criteria::DESC)
+                    ;
                 },
             ]
         );
@@ -40,7 +48,8 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', Criteria::DESC)
+                    ;
                 },
             ]
         );
@@ -53,41 +62,45 @@ class SessionTreeType extends AbstractType
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', Criteria::DESC)
+                    ;
                 },
             ]
         );
 
         $builder->add(
             'session',
-            'entity',
+            EntityType::class,
             [
                 'class' => 'Entity\Session',
                 'property' => 'name',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
+                        ->orderBy('u.name', Criteria::DESC)
+                    ;
                 },
             ]
         );
 
         $builder->add(
             'course',
-            'entity',
+            EntityType::class,
             [
                 'class' => 'Entity\Course',
                 'property' => 'title',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            ->orderBy('u.title', 'DESC');
+                        ->orderBy('u.title', Criteria::DESC)
+                    ;
                 },
             ]
         );
         $builder
-            ->add('submit', 'submit');
+            ->add('submit', 'submit')
+        ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
@@ -96,7 +109,7 @@ class SessionTreeType extends AbstractType
         );
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'sessionPath';
     }

@@ -1,0 +1,35 @@
+.install-steps {
+  @apply space-y-4;
+
+  .logo-install {
+    @apply block mx-auto w-fit;
+  }
+
+  ol {
+    @apply list-decimal list-inside flex flex-col gap-1;
+  }
+
+  &__step {
+    @apply border-0 border-solid py-3 pl-9 pr-3 text-body-2-bold text-gray-50;
+
+    &--active {
+      @apply bg-support-1 text-primary border-primary border-l-4 pl-8;
+    }
+  }
+}
+
+.install-step {
+
+}
+
+table.requirements-list {
+  .requirements-item {
+    @apply text-left;
+  }
+  .requirements-recommended {
+    @apply text-center;
+  }
+  .requirements-value {
+    @apply text-center;
+  }
+}

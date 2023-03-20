@@ -19,13 +19,12 @@ set_time_limit(0);
 
 $inserted_in_course = [];
 
-// Display the header.
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
+$actions = '<a href="../session/session_list.php">'.
     Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 if (!empty($error_message)) {
     echo Display::return_message($error_message, 'normal', false);
@@ -65,17 +64,16 @@ if ($form->validate()) {
 
 $form->display();
 
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-
+$content = '
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
 Username;SessionName;
 drh1;Session 1;
 drh2;Session 2;
 </pre>
-</blockquote>
-<?php
+</blockquote>';
 
-/* FOOTER */
+echo Display::prose($content);
+
 Display::display_footer();

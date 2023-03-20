@@ -20,7 +20,7 @@ $form->addHeader('Redirection');
 $form->addSelectAjax(
     'user_id',
     get_lang('User'),
-    null,
+    [],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
         'id' => 'user_id',
@@ -55,7 +55,7 @@ $content .= '
             <th>User</th>
             <th>URL</th>
             <th></th>
-        </tr>        
+        </tr>
 ';
 
 foreach ($list as $item) {
@@ -67,7 +67,7 @@ foreach ($list as $item) {
     $content .= '<tr>';
     $content .= '<td>'.$userName.'</td>';
     $content .= '<td>'.$item['url'].'</td>';
-    $content .= '<td><a class="btn btn-danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
+    $content .= '<td><a class="btn btn--danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
     $content .= '</tr>';
 }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -16,7 +18,7 @@ class WikiTask extends Basic
      */
     public function getConfig()
     {
-        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
+        if ('true' !== api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -55,10 +57,10 @@ class WikiTask extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
+            ['true' === api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }
@@ -77,7 +79,7 @@ class WikiTask extends Basic
             ['Table'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
-            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Source'],
         ];
     }
@@ -96,7 +98,7 @@ class WikiTask extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }

@@ -3,6 +3,7 @@
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
+api_protect_admin_script(true);
 Display::display_header(null);
 
 $form = new FormValidator('export_certificate');
@@ -11,7 +12,7 @@ $options = [];
 foreach ($courses as $course) {
     $options[$course['id']] = $course['title'];
 }
-$form->addElement('select', 'course', get_lang('Course'), $options);
+$form->addSelect('course', get_lang('Course'), $options);
 $form->addElement('file', 'file', get_lang('File'));
 $form->addButton('submit', get_lang('Submit'));
 $form->display();

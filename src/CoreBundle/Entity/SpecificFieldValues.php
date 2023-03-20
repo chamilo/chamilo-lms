@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,57 +17,43 @@ use Doctrine\ORM\Mapping as ORM;
 class SpecificFieldValues
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
      */
-    protected $courseCode;
+    protected string $courseCode;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
      */
-    protected $toolId;
+    protected string $toolId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
-    protected $refId;
+    protected int $refId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
-    protected $fieldId;
+    protected int $fieldId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="string", length=200, nullable=false)
      */
-    protected $value;
+    protected string $value;
 
     /**
      * Set courseCode.
      *
-     * @param string $courseCode
-     *
      * @return SpecificFieldValues
      */
-    public function setCourseCode($courseCode)
+    public function setCourseCode(string $courseCode)
     {
         $this->courseCode = $courseCode;
 
@@ -85,11 +73,9 @@ class SpecificFieldValues
     /**
      * Set toolId.
      *
-     * @param string $toolId
-     *
      * @return SpecificFieldValues
      */
-    public function setToolId($toolId)
+    public function setToolId(string $toolId)
     {
         $this->toolId = $toolId;
 
@@ -109,11 +95,9 @@ class SpecificFieldValues
     /**
      * Set refId.
      *
-     * @param int $refId
-     *
      * @return SpecificFieldValues
      */
-    public function setRefId($refId)
+    public function setRefId(int $refId)
     {
         $this->refId = $refId;
 
@@ -133,11 +117,9 @@ class SpecificFieldValues
     /**
      * Set fieldId.
      *
-     * @param int $fieldId
-     *
      * @return SpecificFieldValues
      */
-    public function setFieldId($fieldId)
+    public function setFieldId(int $fieldId)
     {
         $this->fieldId = $fieldId;
 
@@ -157,11 +139,9 @@ class SpecificFieldValues
     /**
      * Set value.
      *
-     * @param string $value
-     *
      * @return SpecificFieldValues
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $this->value = $value;
 

@@ -6,6 +6,8 @@ parameters:
     secret: '%env(APP_SECRET)%'
     locale: '%env(APP_LOCALE)%'
     installed: '%env(APP_INSTALLED)%'
+    multiple_access_url: '%env(APP_MULTIPLE_ACCESS_URL)%'
+    container.dumper.inline_factories: true
     twig:
         form:
             resources:
@@ -15,7 +17,7 @@ parameters:
     #    router.request_context.base_url: '%env(APP_URL_APPEND)%'
     #    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
-    # See https://glide.thephpleague.com/1.0/api/quick-reference/
+    # See https://glide.thephpleague.com/2.0/api/quick-reference/
     glide_media_filters:
         editor_thumbnail:
             w: 64
@@ -44,58 +46,26 @@ services:
         # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
-    Chamilo\CoreBundle\Component\Utils\Glide:
-        arguments:
-            - {source: '@oneup_flysystem.resources_filesystem', cache: '@oneup_flysystem.cache_resources_filesystem'}
-            - '%glide_media_filters%'
-
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
-
-    Chamilo\CoreBundle\Controller\ResourceController:
-        arguments:
-            - '@Chamilo\CoreBundle\Repository\ResourceFactory'
 
     Symfony\Component\Mailer\Mailer:
         public: true
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
-    chamilo_core.hook_factory:
-        class: 'Chamilo\CoreBundle\Hook\HookFactory'
+    # Locale listener
+    Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
+        arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
-    chamilo_lti_utils:
-        class: Chamilo\LtiBundle\Util\Utils
-        arguments: ['@chamilo.settings.manager']
-
-    League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
-
-    Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
+    Chamilo\CoreBundle\EventSubscriber\LoginFailureSubscriber:
         tags:
-            - {name: kernel.event_listener, event: kernel.exception}
-
-    Chamilo\CoreBundle\EventListener\ExceptionListener:
-        arguments: ['@twig']
-        tags:
-            - {name: kernel.event_listener, event: kernel.exception}
-
-sylius_settings:
-    driver: doctrine/orm
-
-# Course settings
-chamilo_course:
-    driver: doctrine/orm
-
-gregwar_captcha:
-    width: 200
-    height: 50
-    length: 6
+            - name: kernel.event_subscriber
+              dispatcher: security.event_dispatcher.main
 
 cocur_slugify:
     lowercase: true
 
 imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
+    - {resource: ../src/LtiBundle/Resources/config/services.yml}

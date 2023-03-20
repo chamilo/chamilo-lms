@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -7,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Access url.
- */
 class Version20170628122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Access url changes';
+    }
+
     public function up(Schema $schema): void
     {
         // access_url_rel_user.
@@ -19,13 +23,27 @@ class Version20170628122900 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('id')) {
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN access_url_id INT NOT NULL');
             $this->addSql('ALTER TABLE access_url_rel_user MODIFY COLUMN user_id INT NOT NULL');
-            $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
-            $this->addSql(
-                'ALTER TABLE access_url_rel_user ADD id INT AUTO_INCREMENT NOT NULL, CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, ADD PRIMARY KEY (id);'
-            );
-            if (false === $table->hasForeignKey('FK_85574263A76ED395')) {
-                $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+            if ($table->hasPrimaryKey()) {
+                $this->addSql('ALTER TABLE access_url_rel_user DROP PRIMARY KEY');
             }
+
+            $this->addSql(
+                'ALTER TABLE access_url_rel_user ADD id INT AUTO_INCREMENT NOT NULL, ADD PRIMARY KEY (id)'
+            );
+
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE access_url_id access_url_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE access_url_rel_user CHANGE user_id user_id INT DEFAULT NULL');
+        }
+
+        if ($table->hasForeignKey('FK_85574263A76ED395')) {
+            $this->addSql('ALTER TABLE access_url_rel_user DROP FOREIGN KEY FK_85574263A76ED395');
+            $this->addSql(
+                'ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        } else {
+            $this->addSql(
+                'ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
         }
 
         // access_url_rel_session.
@@ -73,7 +91,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE access_url ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE access_url ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE access_url ADD CONSTRAINT FK_9436187B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -101,7 +119,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
         }
         if (false === $table->hasForeignKey('FK_3545C2A66628AD36')) {
             $this->addSql(
-                'ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A66628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)'
+                'ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A66628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
             );
         }
         if (false === $table->hasIndex('IDX_3545C2A673444FD5')) {
@@ -115,13 +133,24 @@ class Version20170628122900 extends AbstractMigrationChamilo
 
         // access_url_rel_usergroup.
         $table = $schema->getTable('access_url_rel_usergroup');
-        if (false === $table->hasForeignKey('FK_AD488DD573444FD5')) {
+        if (!$table->hasForeignKey('FK_AD488DD573444FD5')) {
             $this->addSql(
                 'ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD573444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id)'
             );
         }
-        if (false === $table->hasIndex('IDX_AD488DD573444FD5')) {
+        if (!$table->hasIndex('IDX_AD488DD573444FD5')) {
             $this->addSql('CREATE INDEX IDX_AD488DD573444FD5 ON access_url_rel_usergroup (access_url_id)');
+        }
+
+        $this->addSql('ALTER TABLE access_url_rel_usergroup CHANGE usergroup_id usergroup_id INT DEFAULT NULL;');
+
+        if (!$table->hasForeignKey('FK_AD488DD5D2112630')) {
+            $this->addSql(
+                'ALTER TABLE access_url_rel_usergroup ADD CONSTRAINT FK_AD488DD5D2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id) ON DELETE CASCADE;'
+            );
+        }
+        if (!$table->hasIndex('IDX_AD488DD5D2112630')) {
+            $this->addSql('CREATE INDEX IDX_AD488DD5D2112630 ON access_url_rel_usergroup (usergroup_id);');
         }
     }
 

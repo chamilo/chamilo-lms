@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Entity\MessageFeedback;
+use Chamilo\CoreBundle\Entity\SocialPost;
+use Chamilo\CoreBundle\Entity\SocialPostFeedback;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -14,58 +15,6 @@ $action = isset($_GET['a']) ? $_GET['a'] : null;
 
 $current_user_id = api_get_user_id();
 switch ($action) {
-    case 'add_friend':
-        if (api_is_anonymous()) {
-            echo '';
-            break;
-        }
-        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
-        if (isset($_GET['is_my_friend'])) {
-            $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
-        }
-
-        if (isset($_GET['friend_id'])) {
-            $my_current_friend = $_GET['friend_id'];
-            UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
-            UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
-            SocialManager::invitation_accepted($my_current_friend, $current_user_id);
-            Display::addFlash(
-                Display::return_message(get_lang('Added contact to list'), 'success')
-            );
-
-            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
-            exit;
-        }
-        break;
-    case 'deny_friend':
-        if (api_is_anonymous()) {
-            echo '';
-            break;
-        }
-        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
-        if (isset($_GET['is_my_friend'])) {
-            $relation_type = USER_RELATION_TYPE_FRIEND; //my friend
-        }
-        if (isset($_GET['denied_friend_id'])) {
-            SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
-            Display::addFlash(
-                Display::return_message(get_lang('Invitation denied'), 'success')
-            );
-
-            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
-            exit;
-        }
-        break;
-    case 'delete_friend':
-        if (api_is_anonymous()) {
-            echo '';
-            break;
-        }
-        $my_delete_friend = (int) $_POST['delete_friend_id'];
-        if (isset($_POST['delete_friend_id'])) {
-            SocialManager::remove_user_rel_user($my_delete_friend);
-        }
-        break;
     case 'show_my_friends':
         if (api_is_anonymous()) {
             echo '';
@@ -106,7 +55,7 @@ switch ($action) {
                                             <a href="profile.php?u='.$friend['friend_user_id'].'">'.$user_name.'</a>
                                         </h3>
                                         <p>
-                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
+                                            <button class="btn btn--danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
                                                 '.get_lang('Delete').'
                                             </button>
                                         </p>
@@ -126,8 +75,6 @@ switch ($action) {
             echo '';
             break;
         }
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
         $user_id = Session::read('social_user_id');
 
         if ($_POST['action']) {
@@ -136,19 +83,19 @@ switch ($action) {
 
         switch ($action) {
             case 'load_course':
-                $course_id = intval($_POST['course_code']); // the int course id
-                $course_info = api_get_course_info_by_id($course_id);
-                $course_code = $course_info['code'];
+                $courseId = intval($_POST['course_code']); // the int course id
+                $course = api_get_course_entity($courseId);
+                $course_code = $course->getCode();
+                $user = api_get_user_entity();
 
-                if (api_is_user_of_course($course_id, api_get_user_id())) {
+                if ($course->hasUser($user)) {
                     //------Forum messages
-                    $forum_result = get_all_post_from_user($user_id, $course_id);
+                    $forum_result = Container::getForumPostRepository()->countUserForumPosts($user, $course);
                     $all_result_data = 0;
                     if ('' != $forum_result) {
                         echo '<div id="social-forum-main-title">';
                         echo api_xml_http_response_encode(get_lang('Forum'));
                         echo '</div>';
-
                         echo '<div style="background:#FAF9F6; padding:0px;" >';
                         echo api_xml_http_response_encode($forum_result);
                         echo '</div>';
@@ -157,10 +104,10 @@ switch ($action) {
                     }
 
                     //------Blog posts
-                    $result = Blog::getBlogPostFromUser($course_id, $user_id, $course_code);
+                    $result = Blog::getBlogPostFromUser($courseId, $user_id, $courseCode);
 
                     if (!empty($result)) {
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
+                        Display::page_subheader2(api_xml_http_response_encode(get_lang('Blog')));
                         echo '<div style="background:#FAF9F6; padding:0px;">';
                         echo api_xml_http_response_encode($result);
                         echo '</div>';
@@ -169,10 +116,10 @@ switch ($action) {
                     }
 
                     //------Blog comments
-                    $result = Blog::getBlogCommentsFromUser($course_id, $user_id, $course_code);
+                    $result = Blog::getBlogCommentsFromUser($courseId, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Blog comments')));
+                        Display::page_subheader2(api_xml_http_response_encode(get_lang('Blog comments')));
                         echo api_xml_http_response_encode($result);
                         echo '</div>';
                         echo '<br />';
@@ -183,7 +130,7 @@ switch ($action) {
                     }
                 } else {
                     echo '<div class="clear"></div><br />';
-                    api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
+                    Display::page_subheader2(api_xml_http_response_encode(get_lang('Details')));
                     echo '<div style="background:#FAF9F6; padding:0px;">';
                     echo api_xml_http_response_encode(get_lang('User not registered in course'));
                     echo '<div class="clear"></div><br />';
@@ -194,67 +141,6 @@ switch ($action) {
             case 'unload_course':
             default:
                 break;
-        }
-        break;
-    case 'send_comment':
-        if (api_is_anonymous()) {
-            exit;
-        }
-
-        if ('true' !== api_get_setting('allow_social_tool')) {
-            exit;
-        }
-
-        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (empty($messageId)) {
-            exit;
-        }
-
-        $userId = api_get_user_id();
-        $messageInfo = MessageManager::get_message_by_id($messageId);
-        if (!empty($messageInfo)) {
-            $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
-            if (!empty($comment)) {
-                $messageId = SocialManager::sendWallMessage(
-                    $userId,
-                    $messageInfo['user_receiver_id'],
-                    $comment,
-                    $messageId,
-                    MESSAGE_STATUS_WALL
-                );
-                if ($messageId) {
-                    $messageInfo = MessageManager::get_message_by_id($messageId);
-                    echo SocialManager::processPostComment($messageInfo);
-                }
-            }
-        }
-        break;
-    case 'delete_message':
-        if (api_is_anonymous()) {
-            exit;
-        }
-
-        if ('true' !== api_get_setting('allow_social_tool')) {
-            exit;
-        }
-
-        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (empty($messageId)) {
-            exit;
-        }
-
-        $userId = api_get_user_id();
-        $messageInfo = MessageManager::get_message_by_id($messageId);
-        if (!empty($messageInfo)) {
-            $canDelete = ($messageInfo['user_receiver_id'] == $userId || $messageInfo['user_sender_id'] == $userId) &&
-                empty($messageInfo['group_id']);
-            if ($canDelete || api_is_platform_admin()) {
-                SocialManager::deleteMessage($messageId);
-                echo Display::return_message(get_lang('The message has been deleted'));
-                break;
-            }
         }
         break;
     case 'list_wall_message':
@@ -318,18 +204,6 @@ switch ($action) {
         }
         echo $html;
         break;
-        // Read the Url using OpenGraph and returns the hyperlinks content
-    case 'read_url_with_open_graph':
-        $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
-        $url = trim($url);
-        $html = '';
-        if (true == SocialManager::verifyUrl($url)) {
-            $html = Security::remove_XSS(
-                SocialManager::readContentWithOpenGraph($url)
-            );
-        }
-        echo $html;
-        break;
     case 'like_message':
         header('Content-Type: application/json');
 
@@ -351,10 +225,9 @@ switch ($action) {
         }
 
         $em = Database::getManager();
-        $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
-        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageFeedback');
+        $messageRepo = $em->getRepository(SocialPost::class);
+        $messageLikesRepo = $em->getRepository(SocialPostFeedback::class);
 
-        /** @var Message $message */
         $message = $messageRepo->find($messageId);
 
         if (empty($message)) {
@@ -362,13 +235,13 @@ switch ($action) {
             exit;
         }
 
-        if ((int) $message->getGroupId() !== $groupId) {
-            echo json_encode(false);
-            exit;
-        }
+        if (!empty($message->getGroupReceiver())) {
+            if ($message->getGroupReceiver()->getId() !== $groupId) {
+                echo json_encode(false);
+                exit;
+            }
 
-        if (!empty($message->getGroupId())) {
-            $usergroup = new UserGroup();
+            $usergroup = new UserGroupModel();
             $groupInfo = $usergroup->get($groupId);
 
             if (empty($groupInfo)) {
@@ -386,12 +259,12 @@ switch ($action) {
 
         $user = api_get_user_entity($current_user_id);
 
-        $userLike = $messageLikesRepo->findOneBy(['message' => $message, 'user' => $user]);
+        $userLike = $messageLikesRepo->findOneBy(['post' => $message, 'user' => $user]);
 
         if (empty($userLike)) {
-            $userLike = new MessageFeedback();
+            $userLike = new SocialPostFeedback();
             $userLike
-                ->setMessage($message)
+                ->setSocialPost($message)
                 ->setUser($user);
         }
 

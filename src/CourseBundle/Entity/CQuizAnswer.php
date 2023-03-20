@@ -1,113 +1,90 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizAnswer.
  *
  * @ORM\Table(
- *  name="c_quiz_answer",
- *  indexes={
- *      @ORM\Index(name="c_id", columns={"c_id"}),
- *      @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
- *  }
+ *     name="c_quiz_answer",
+ *     indexes={
+ *         @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
 class CQuizAnswer
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer", options={"unsigned": true})
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="answers", cascade={"persist"})
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    #[Assert\NotBlank]
+    protected CQuizQuestion $question;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
-    protected $questionId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    protected $answer;
+    #[Assert\NotBlank]
+    protected string $answer;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="correct", type="integer", nullable=true)
      */
-    protected $correct;
+    protected ?int $correct;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
-    protected $ponderation;
+    protected float $ponderation;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected $position;
+    protected int $position;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_coordinates", type="text", nullable=true)
      */
-    protected $hotspotCoordinates;
+    protected ?string $hotspotCoordinates;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="hotspot_type", type="string", length=40, nullable=true)
      */
-    protected $hotspotType;
+    protected ?string $hotspotType;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="destination", type="text", nullable=true)
      */
-    protected $destination;
+    protected ?string $destination;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
      */
-    protected $answerCode;
+    protected ?string $answerCode;
 
     public function __construct()
     {
+        $this->answer = '';
         $this->correct = null;
         $this->comment = null;
         $this->ponderation = 0.0;
@@ -117,62 +94,19 @@ class CQuizAnswer
         $this->answerCode = null;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CQuizAnswer
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set answer.
-     *
-     * @param string $answer
-     *
-     * @return CQuizAnswer
-     */
-    public function setAnswer($answer)
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
 
         return $this;
     }
 
-    /**
-     * Get answer.
-     *
-     * @return string
-     */
-    public function getAnswer()
+    public function getAnswer(): string
     {
         return $this->answer;
     }
 
-    /**
-     * Set correct.
-     *
-     * @param int $correct
-     *
-     * @return CQuizAnswer
-     */
-    public function setCorrect($correct)
+    public function setCorrect(int $correct): self
     {
         $this->correct = $correct;
 
@@ -189,40 +123,21 @@ class CQuizAnswer
         return $this->correct;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     *
-     * @return CQuizAnswer
-     */
-    public function setComment($comment)
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    /**
-     * Set weight.
-     *
-     * @param float $weight
-     *
-     * @return CQuizAnswer
-     */
-    public function setPonderation($weight)
+    public function setPonderation($weight): self
     {
-        $this->ponderation = empty($weight) ? 0.0 : $weight;
+        $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
         return $this;
     }
@@ -237,14 +152,7 @@ class CQuizAnswer
         return $this->ponderation;
     }
 
-    /**
-     * Set position.
-     *
-     * @param int $position
-     *
-     * @return CQuizAnswer
-     */
-    public function setPosition($position)
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
@@ -261,14 +169,7 @@ class CQuizAnswer
         return $this->position;
     }
 
-    /**
-     * Set hotspotCoordinates.
-     *
-     * @param string $hotspotCoordinates
-     *
-     * @return CQuizAnswer
-     */
-    public function setHotspotCoordinates($hotspotCoordinates)
+    public function setHotspotCoordinates(?string $hotspotCoordinates): self
     {
         $this->hotspotCoordinates = $hotspotCoordinates;
 
@@ -285,14 +186,7 @@ class CQuizAnswer
         return $this->hotspotCoordinates;
     }
 
-    /**
-     * Set hotspotType.
-     *
-     * @param string $hotspotType
-     *
-     * @return CQuizAnswer
-     */
-    public function setHotspotType($hotspotType)
+    public function setHotspotType(?string $hotspotType): self
     {
         $this->hotspotType = $hotspotType;
 
@@ -309,38 +203,19 @@ class CQuizAnswer
         return $this->hotspotType;
     }
 
-    /**
-     * Set destination.
-     *
-     * @param string $destination
-     *
-     * @return CQuizAnswer
-     */
-    public function setDestination($destination)
+    public function setDestination(?string $destination)
     {
         $this->destination = empty($destination) ? null : $destination;
 
         return $this;
     }
 
-    /**
-     * Get destination.
-     *
-     * @return string
-     */
-    public function getDestination()
+    public function getDestination(): ?string
     {
         return $this->destination;
     }
 
-    /**
-     * Set answerCode.
-     *
-     * @param string $answerCode
-     *
-     * @return CQuizAnswer
-     */
-    public function setAnswerCode($answerCode)
+    public function setAnswerCode(string $answerCode): self
     {
         $this->answerCode = $answerCode;
 
@@ -358,30 +233,6 @@ class CQuizAnswer
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CQuizAnswer
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Get iid.
      *
      * @return int
@@ -389,5 +240,17 @@ class CQuizAnswer
     public function getIid()
     {
         return $this->iid;
+    }
+
+    public function getQuestion(): CQuizQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CQuizQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
     }
 }

@@ -292,7 +292,7 @@ class CourseSelectForm
                       <button
                         class="save"
                         type="submit"
-                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" >'.
                     get_lang('Validate').'</button>';
             } else {
                 if ($recycleOption) {
@@ -300,7 +300,7 @@ class CourseSelectForm
                 } else {
                     echo '<br />
                           <button
-                                class="save btn btn-primary"
+                                class="save btn btn--primary"
                                 type="submit"
                                 onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'.
                     get_lang('Validate').'</button>';
@@ -397,13 +397,21 @@ class CourseSelectForm
                             }
                         }
 
+                        if (RESOURCE_QUIZ == $type) {
+                            echo Display::return_message(
+                                get_lang(
+                                    'IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'
+                                ),
+                                'warning'
+                            );
+                        }
                         if ($showItems) {
                             echo '<div class="well">';
                             echo '<div class="btn-group">';
-                            echo "<a class=\"btn btn-default\"
+                            echo "<a class=\"btn btn--plain\"
                                         href=\"javascript: void(0);\"
                                         onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All').'</a>';
-                            echo "<a class=\"btn btn-default\"
+                            echo "<a class=\"btn btn--plain\"
                                         href=\"javascript: void(0);\"
                                         onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('none').'</a>';
                             echo '</div>';
@@ -772,6 +780,7 @@ class CourseSelectForm
 
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 
+        $icon = Display::returnIconPath('progress_bar.gif');
         echo '<div class="tool-backups-options">';
         echo '<form method="post" id="upload_form" name="course_select_form">';
         echo '<input type="hidden" name="action" value="course_select_form"/>';

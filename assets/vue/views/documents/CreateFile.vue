@@ -1,26 +1,25 @@
 <template>
-  <div>
+    <Toolbar
+        :handle-submit="onSendFormData"
+        :handle-reset="resetForm"
+    />
     <DocumentsForm
       ref="createForm"
       :values="item"
       :errors="violations"
     />
 
-    <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
-    />
     <Loading :visible="isLoading" />
-  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import DocumentsForm from '../../components/documents/FormNewDocument.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 const servicePrefix = 'Documents';
 
@@ -30,7 +29,7 @@ const { mapFields } = createHelpers({
 });
 
 export default {
-  name: 'DocumentsCreate',
+  name: 'DocumentsCreateFile',
   servicePrefix,
   components: {
     Loading,
@@ -55,12 +54,14 @@ export default {
   created() {
     this.item.parentResourceNodeId = this.$route.params.node;
     this.item.resourceLinkList = JSON.stringify([{
-      c_id: this.$route.query.cid,
-      visibility: 2,
+      gid: this.$route.query.gid,
+      sid: this.$route.query.sid,
+      cid: this.$route.query.cid,
+      visibility: RESOURCE_LINK_PUBLISHED,
     }]);
   },
   methods: {
-    ...mapActions('documents', ['create', 'reset'])
+    ...mapActions('documents', ['createWithFormData', 'reset'])
   }
 };
 </script>

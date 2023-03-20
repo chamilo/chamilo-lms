@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -17,21 +20,19 @@ class ResourceTag
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceComments")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $author;
+    protected ?User $author = null;
 }

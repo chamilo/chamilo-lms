@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -7,82 +9,51 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyAnswer.
- *
  * @ORM\Table(
- *  name="c_survey_answer",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_survey_answer",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
 class CSurveyAnswer
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    protected CSurvey $survey;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="answer_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="answers")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    protected $answerId;
+    protected CSurveyQuestion $question;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="survey_id", type="integer", nullable=false)
-     */
-    protected $surveyId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
-    protected $questionId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="option_id", type="text", nullable=false)
      */
-    protected $optionId;
+    protected string $optionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
-    protected $value;
+    protected int $value;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="user", type="string", length=250, nullable=false)
      */
-    protected $user;
+    protected string $user;
 
-    /**
-     * CSurveyAnswer constructor.
-     */
     public function __construct()
     {
-        $this->answerId = 0;
     }
 
     public function getIid(): int
@@ -90,93 +61,7 @@ class CSurveyAnswer
         return $this->iid;
     }
 
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Set surveyId.
-     *
-     * @param int $surveyId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setSurveyId($surveyId)
-    {
-        $this->surveyId = $surveyId;
-
-        return $this;
-    }
-
-    /**
-     * Get surveyId.
-     *
-     * @return int
-     */
-    public function getSurveyId()
-    {
-        return $this->surveyId;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
-    }
-
-    /**
-     * Set optionId.
-     *
-     * @param string $optionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setOptionId($optionId)
-    {
-        $this->optionId = $optionId;
-
-        return $this;
-    }
-
-    /**
-     * Get optionId.
-     *
-     * @return string
-     */
-    public function getOptionId()
-    {
-        return $this->optionId;
-    }
-
-    /**
-     * Set value.
-     *
-     * @param int $value
-     *
-     * @return CSurveyAnswer
-     */
-    public function setValue($value)
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
@@ -193,14 +78,31 @@ class CSurveyAnswer
         return $this->value;
     }
 
-    /**
-     * Set user.
-     *
-     * @param string $user
-     *
-     * @return CSurveyAnswer
-     */
-    public function setUser($user)
+    public function getSurvey(): CSurvey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
+
+        return $this;
+    }
+
+    public function getQuestion(): CSurveyQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CSurveyQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    public function setUser(string $user): self
     {
         $this->user = $user;
 
@@ -217,51 +119,15 @@ class CSurveyAnswer
         return $this->user;
     }
 
-    /**
-     * Set answerId.
-     *
-     * @param int $answerId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setAnswerId($answerId)
+    public function getOptionId(): string
     {
-        $this->answerId = $answerId;
+        return $this->optionId;
+    }
+
+    public function setOptionId(string $optionId): self
+    {
+        $this->optionId = $optionId;
 
         return $this;
-    }
-
-    /**
-     * Get answerId.
-     *
-     * @return int
-     */
-    public function getAnswerId()
-    {
-        return $this->answerId;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

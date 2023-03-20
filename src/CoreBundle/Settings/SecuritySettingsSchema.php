@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -9,18 +11,16 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class SecuritySettingsSchema.
- */
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder->setDefaults(
             [
                 'filter_terms' => '',
                 'allow_browser_sniffer' => 'false',
-                'admins_can_set_users_pass' => '', // ?
+                'admins_can_set_users_pass' => '',
+                // ?
                 'allow_strength_pass_checker' => 'true',
                 'allow_captcha' => 'false',
                 'user_reset_password' => 'false',
@@ -39,7 +39,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('filter_terms', TextareaType::class)

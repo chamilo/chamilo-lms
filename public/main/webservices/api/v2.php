@@ -16,6 +16,7 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
@@ -68,13 +69,13 @@ try {
             break;
 
         case Rest::GET_USER_MESSAGES:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::POST_USER_MESSAGE_READ:
         case Rest::POST_USER_MESSAGE_UNREAD:
-            $messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
+            /*$messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
                 ? array_map('intval', $_POST['messages'])
                 : [];
 
@@ -82,8 +83,6 @@ try {
             if (empty($messagesId)) {
                 throw new Exception(get_lang('NoData'));
             }
-
-            $messageStatus = Rest::POST_USER_MESSAGE_READ === $action ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
 
             $data = array_flip($messagesId);
 
@@ -95,10 +94,11 @@ try {
                 );
             }
 
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::GET_USER_COURSES:
-            $courses = $restApi->getUserCourses();
+            $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+            $courses = $restApi->getUserCourses($userId);
             $restResponse->setData($courses);
             break;
         case Rest::GET_COURSE_INFO:
@@ -184,6 +184,10 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::UNSUBSCRIBE_USER_FROM_COURSE:
+            $data = $restApi->unSubscribeUserToCourse($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);
@@ -207,6 +211,55 @@ try {
         case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
+            break;
+        case Rest::GET_COURSES_FROM_EXTRA_FIELD:
+            $variable = $_REQUEST['extra_field_variable'] ?? '';
+            $value = $_REQUEST['extra_field_value'] ?? '';
+            $urlId = $_REQUEST['id_campus'] ?? '';
+            $extraField = new ExtraField('course');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
+
+            if (empty($extraFieldInfo)) {
+                throw new Exception("$variable not found");
+            }
+
+            $extraFieldValue = new ExtraFieldValue('course');
+            $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                $variable,
+                $value,
+                false,
+                false,
+                true
+            );
+            $courseList = [];
+            foreach ($items as $item) {
+                $courseId = $item['item_id'];
+                if (UrlManager::relation_url_course_exist($courseId, $urlId)) {
+                    $courseList[] = api_get_course_info_by_id($courseId);
+                }
+            }
+
+            $restResponse->setData($courseList);
+            break;
+        case Rest::DELETE_COURSE:
+            $courseCode = $_REQUEST['course_code'] ?? '';
+            $courseId = $_REQUEST['course_id'] ?? 0;
+
+            $course = [];
+            if (!empty($courseCode)) {
+                $course = api_get_course_info($courseCode);
+            }
+
+            if (empty($course) && !empty($courseId)) {
+                $course = api_get_course_info_by_id($courseId);
+            }
+
+            if (empty($course)) {
+                throw new Exception("Course doesn't exists");
+            }
+
+            $result = CourseManager::delete_course($course['code']);
+            $restResponse->setData(['status' => $result]);
             break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
@@ -243,21 +296,25 @@ try {
             $courses = $restApi->getUserSessions();
             $restResponse->setData($courses);
             break;
+        case Rest::GET_USERS_SUBSCRIBED_TO_COURSE:
+            $users = $restApi->getUsersSubscribedToCourse();
+            $restResponse->setData($users);
+            break;
         case Rest::SAVE_USER_MESSAGE:
-            $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
+            /*$receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
             $data = $restApi->saveUserMessage($subject, $text, $receivers);
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::GET_MESSAGE_USERS:
-            $search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
+            /*$search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
             if (!$search || strlen($search) < 2) {
                 throw new Exception(get_lang('TooShort'));
             }
 
             $data = $restApi->getMessageUsers($search);
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:
             $title = !empty($_POST['title']) ? $_POST['title'] : null;
@@ -284,25 +341,25 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_MESSAGES_RECEIVED:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserReceivedMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::GET_USER_MESSAGES_SENT:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserSentMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::DELETE_USER_MESSAGE:
-            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            /*$messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
             $restApi->deleteUserMessage($messageId, $messageType);
-            $restResponse->setData(['status' => true]);
+            $restResponse->setData(['status' => true]);*/
             break;
         case Rest::SET_MESSAGE_READ:
-            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            /*$messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $restApi->setMessageRead($messageId);
-            $restResponse->setData(['status' => true]);
+            $restResponse->setData(['status' => true]);*/
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
             $newSessionId = $restApi->createSessionFromModel(

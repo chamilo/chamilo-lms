@@ -1,29 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CForumPost.
  *
  * @ORM\Table(
- *  name="c_forum_post",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="poster_id", columns={"poster_id"}),
- *      @ORM\Index(name="forum_id", columns={"forum_id"}),
- *      @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
- *      @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
- *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
- *  }
+ *     name="c_forum_post",
+ *     indexes={
+ *         @ORM\Index(name="forum_id", columns={"forum_id"}),
+ *         @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
+ *         @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
  */
 class CForumPost extends AbstractResource implements ResourceInterface
 {
@@ -32,244 +35,136 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public const STATUS_REJECTED = 3;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="post_title", type="string", length=250, nullable=false)
      */
-    protected $cId;
+    #[Assert\NotBlank]
+    protected string $postTitle;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
-     */
-    protected $postTitle;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="post_text", type="text", nullable=true)
      */
-    protected $postText;
+    protected ?string $postText = null;
 
     /**
-     * @var CForumThread|null
-     *
+     * @ORM\Column(name="post_date", type="datetime", nullable=false)
+     */
+    #[Assert\NotBlank]
+    protected DateTime $postDate;
+
+    /**
+     * @ORM\Column(name="post_notification", type="boolean", nullable=true)
+     */
+    protected ?bool $postNotification = null;
+
+    /**
+     * @ORM\Column(name="visible", type="boolean", nullable=false)
+     */
+    #[Assert\NotNull]
+    protected bool $visible;
+
+    /**
+     * @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    protected ?int $status = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $thread;
+    protected ?CForumThread $thread = null;
 
     /**
-     * @var CForumForum|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="posts")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forum;
+    protected ?CForum $forum = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="poster_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      */
-    protected $posterId;
+    #[Assert\NotBlank]
+    protected ?User $user = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="poster_name", type="string", length=100, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="children")
+     * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
-    protected $posterName;
+    protected ?CForumPost $postParent = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="post_date", type="datetime", nullable=true)
+     * @var Collection|CForumPost[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="postParent")
      */
-    protected $postDate;
+    protected Collection $children;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="post_notification", type="boolean", nullable=true)
-     */
-    protected $postNotification;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
-     */
-    protected $postParentId;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="visible", type="boolean", nullable=true)
-     */
-    protected $visible;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="status", type="integer", nullable=true)
-     */
-    protected $status;
-
-    /**
-     * @var ArrayCollection|CForumAttachment[]
+     * @var Collection|CForumAttachment[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment", mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    protected $attachments;
+    protected Collection $attachments;
 
     public function __construct()
     {
-        $this->postParentId = null;
+        $this->postDate = new DateTime();
+        $this->visible = false;
         $this->attachments = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return (string) $this->getPostTitle();
+        return $this->getPostTitle();
     }
 
-    /**
-     * Set postTitle.
-     *
-     * @param string $postTitle
-     *
-     * @return CForumPost
-     */
-    public function setPostTitle($postTitle)
+    public function setPostTitle(string $postTitle): self
     {
         $this->postTitle = $postTitle;
 
         return $this;
     }
 
-    /**
-     * Get postTitle.
-     *
-     * @return string
-     */
-    public function getPostTitle()
+    public function getPostTitle(): string
     {
         return $this->postTitle;
     }
 
-    /**
-     * Set postText.
-     *
-     * @param string $postText
-     *
-     * @return CForumPost
-     */
-    public function setPostText($postText)
+    public function setPostText(string $postText): self
     {
         $this->postText = $postText;
 
         return $this;
     }
 
-    /**
-     * Get postText.
-     *
-     * @return string
-     */
-    public function getPostText()
+    public function getPostText(): ?string
     {
         return $this->postText;
     }
 
-    /**
-     * Set thread.
-     *
-     * @return CForumPost
-     */
-    public function setThread(CForumThread $thread = null)
+    public function setThread(CForumThread $thread = null): self
     {
+        if (null !== $thread) {
+            $thread->getPosts()->add($this);
+        }
         $this->thread = $thread;
 
         return $this;
     }
 
-    /**
-     * Get thread.
-     *
-     * @return CForumThread|null
-     */
-    public function getThread()
+    public function getThread(): CForumThread
     {
         return $this->thread;
     }
 
-    /**
-     * Set posterId.
-     *
-     * @param int $posterId
-     *
-     * @return CForumPost
-     */
-    public function setPosterId($posterId)
-    {
-        $this->posterId = $posterId;
-
-        return $this;
-    }
-
-    /**
-     * Get posterId.
-     *
-     * @return int
-     */
-    public function getPosterId()
-    {
-        return $this->posterId;
-    }
-
-    /**
-     * Set posterName.
-     *
-     * @param string $posterName
-     *
-     * @return CForumPost
-     */
-    public function setPosterName($posterName)
-    {
-        $this->posterName = $posterName;
-
-        return $this;
-    }
-
-    /**
-     * Get posterName.
-     *
-     * @return string
-     */
-    public function getPosterName()
-    {
-        return $this->posterName;
-    }
-
-    /**
-     * Set postDate.
-     *
-     * @param \DateTime $postDate
-     *
-     * @return CForumPost
-     */
-    public function setPostDate($postDate)
+    public function setPostDate(DateTime $postDate): self
     {
         $this->postDate = $postDate;
 
@@ -279,21 +174,14 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * Get postDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPostDate()
     {
         return $this->postDate;
     }
 
-    /**
-     * Set postNotification.
-     *
-     * @param bool $postNotification
-     *
-     * @return CForumPost
-     */
-    public function setPostNotification($postNotification)
+    public function setPostNotification(bool $postNotification): self
     {
         $this->postNotification = $postNotification;
 
@@ -310,38 +198,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->postNotification;
     }
 
-    /**
-     * Set postParentId.
-     *
-     * @param int $postParentId
-     *
-     * @return CForumPost
-     */
-    public function setPostParentId($postParentId)
-    {
-        $this->postParentId = $postParentId;
-
-        return $this;
-    }
-
-    /**
-     * Get postParentId.
-     *
-     * @return int
-     */
-    public function getPostParentId()
-    {
-        return $this->postParentId;
-    }
-
-    /**
-     * Set visible.
-     *
-     * @param bool $visible
-     *
-     * @return CForumPost
-     */
-    public function setVisible($visible)
+    public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
 
@@ -359,30 +216,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CForumPost
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * @return int
      */
     public function getStatus()
@@ -390,12 +223,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->status;
     }
 
-    /**
-     * @param int $status
-     *
-     * @return CForumPost
-     */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -412,34 +240,72 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @return CForumAttachment[]
-     */
-    public function getAttachments()
+    public function getAttachments(): Collection
     {
         return $this->attachments;
     }
 
-    public function removeAttachment(CForumAttachment $attachment)
+    public function removeAttachment(CForumAttachment $attachment): void
     {
         $this->attachments->removeElement($attachment);
     }
 
-    public function getForum(): ?CForumForum
+    public function getForum(): ?CForum
     {
         return $this->forum;
     }
 
-    public function setForum(?CForumForum $forum): self
+    public function setForum(?CForum $forum): self
     {
+        $forum->getPosts()->add($this);
+
         $this->forum = $forum;
 
         return $this;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPostParent(): ?self
+    {
+        return $this->postParent;
+    }
+
+    public function setPostParent(?self $postParent): self
+    {
+        $this->postParent = $postParent;
+
+        return $this;
+    }
+
     /**
-     * Resource identifier.
+     * @return CForumPost[]|Collection
      */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CForumPost[]|Collection $children
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

@@ -1,62 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * User platform roles.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="fos_group")
  */
 class Group
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
-     * @var array
+     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
+     */
+    #[Assert\NotBlank]
+    protected string $code;
+
+    /**
      * @ORM\Column(name="roles", type="array")
      */
-    protected $roles;
+    protected array $roles;
 
     /**
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\User", mappedBy="groups")
-     */
-    protected $users;
-
-    /**
-     * @var string
      *
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
+     * @var User[]|Collection
      */
-    protected $code;
+    protected Collection $users;
 
-    public function __construct($name, $roles = [])
+    public function __construct(string $name, array $roles = [])
     {
         $this->name = $name;
         $this->roles = $roles;
+        $this->users = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName() ?: '';
     }
 
-    public function addRole($role)
+    public function addRole(string $role): self
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -65,17 +71,17 @@ class Group
         return $this;
     }
 
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
-        return in_array(strtoupper($role), $this->roles, true);
+        return \in_array(strtoupper($role), $this->roles, true);
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function removeRole($role)
+    public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -97,10 +103,7 @@ class Group
         return $this;
     }
 
-    /**
-     * @return Group
-     */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -117,25 +120,20 @@ class Group
         return $this->id;
     }
 
+    /**
+     * @return User[]|Collection
+     */
     public function getUsers()
     {
         return $this->users;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @param string $code
-     *
-     * @return Group
-     */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 

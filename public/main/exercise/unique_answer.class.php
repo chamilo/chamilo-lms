@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use ChamiloSession as Session;
 
 /**
@@ -20,9 +19,6 @@ class UniqueAnswer extends Question
     public $typePicture = 'mcua.png';
     public $explanationLangVar = 'Multiple choice';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -90,7 +86,7 @@ class UniqueAnswer extends Question
                 $nb_answers = $answer->nbrAnswers;
             }
         }
-        $form->addElement('hidden', 'nb_answers');
+        $form->addHidden('nb_answers', $nb_answers);
 
         $obj_ex->setQuestionList(true);
         $question_list = $obj_ex->getQuestionList();
@@ -121,9 +117,7 @@ class UniqueAnswer extends Question
         $temp_scenario = [];
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(
-                get_lang('You have to create at least one answer')
-            );
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -139,10 +133,10 @@ class UniqueAnswer extends Question
                 if (isset($answer->destination[$i])) {
                     $item_list = explode('@@', $answer->destination[$i]);
                 }
-                $try = isset($item_list[0]) ? $item_list[0] : '';
-                $lp = isset($item_list[1]) ? $item_list[1] : '';
-                $list_dest = isset($item_list[2]) ? $item_list[2] : '';
-                $url = isset($item_list[3]) ? $item_list[3] : '';
+                $try = $item_list[0] ?? '';
+                $lp = $item_list[1] ?? '';
+                $list_dest = $item_list[2] ?? '';
+                $url = $item_list[3] ?? '';
 
                 if (0 == $try) {
                     $try_result = 0;
@@ -192,13 +186,14 @@ class UniqueAnswer extends Question
                 'weighting['.$i.']'
             );
 
-            $answer_number = $form->addElement(
-                'text',
+            $answerNumber = $form->addText(
                 'counter['.$i.']',
                 null,
-                ' value = "'.$i.'"'
+                false,
+                ['value' => $i]
             );
-            $answer_number->freeze();
+            $answerNumber->freeze();
+
             $form->addElement(
                 'radio',
                 'correct',
@@ -441,80 +436,22 @@ class UniqueAnswer extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
 
         $header .= '<th>'.get_lang('Your choice').'</th>';
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            $header .= '<th>'.get_lang('Expected choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
-        $header .= '<th>'.get_lang('Comment').'</th>';
+        if (false === $exercise->hideComment) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
         $header .= '</tr>';
 
         return $header;
-    }
-
-    /**
-     * Saves one answer to the database.
-     *
-     * @param int    $id          The ID of the answer (has to be calculated for this course)
-     * @param int    $question_id The question ID (to which the answer is attached)
-     * @param string $title       The text of the answer
-     * @param string $comment     The feedback for the answer
-     * @param float  $score       The score you get when picking this answer
-     * @param int    $correct     Whether this answer is considered *the* correct one (this is the unique answer type)
-     */
-    public function addAnswer(
-        $id,
-        $question_id,
-        $title,
-        $comment,
-        $score = 0.0,
-        $correct = 0
-    ) {
-        $em = Database::getManager();
-        $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $course_id = api_get_course_int_id();
-        $question_id = (int) $question_id;
-        $score = (float) $score;
-        $correct = (int) $correct;
-        $title = Database::escape_string($title);
-        $comment = Database::escape_string($comment);
-        // Get the max position.
-        $sql = "SELECT max(position) as max_position
-                FROM $tbl_quiz_answer
-                WHERE
-                    c_id = $course_id AND
-                    question_id = $question_id";
-        $rs_max = Database::query($sql);
-        $row_max = Database::fetch_object($rs_max);
-        $position = $row_max->max_position + 1;
-
-        // Insert a new answer
-        $quizAnswer = new CQuizAnswer();
-        $quizAnswer
-            ->setCId($course_id)
-            ->setQuestionId($question_id)
-            ->setAnswer($title)
-            ->setCorrect($correct)
-            ->setComment($comment)
-            ->setPonderation($score)
-            ->setPosition($position)
-            ->setDestination('0@@0@@0@@0');
-
-        $em->persist($quizAnswer);
-        $em->flush();
-
-        if ($correct) {
-            $sql = "UPDATE $tbl_quiz_question
-                    SET ponderation = (ponderation + $score)
-                    WHERE c_id = $course_id AND id = ".$question_id;
-            Database::query($sql);
-        }
     }
 }

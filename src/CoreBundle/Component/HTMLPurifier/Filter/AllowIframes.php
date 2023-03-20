@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\HTMLPurifier\Filter;
@@ -73,8 +75,8 @@ class AllowIframes extends HTMLPurifier_Filter
             }
 
             return '<iframe '.$matches[1].$extra.'></iframe>';
-        } else {
-            return '';
         }
+
+        return '';
     }
 }

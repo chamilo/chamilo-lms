@@ -37,7 +37,7 @@ class LinkAddEditForm extends FormValidator
             $link->set_session_id(api_get_session_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
-            die('LinkAddEditForm error: define link_type/category_object or link_object');
+            exit('LinkAddEditForm error: define link_type/category_object or link_object');
         }
 
         $defaults = [];
@@ -184,7 +184,8 @@ class LinkAddEditForm extends FormValidator
 
         // ELEMENT: visible
         $visible = (self::TYPE_EDIT == $form_type && $link->is_visible()) ? '1' : '0';
-        $this->addElement('checkbox', 'visible', null, get_lang('Visible'), $visible);
+        //$this->addCheckBox('visible', null, get_lang('Visible'), $visible);
+        $this->addCheckBox('visible', null, get_lang('Visible'));
         if (self::TYPE_EDIT == $form_type) {
             $defaults['visible'] = $link->is_visible();
         }

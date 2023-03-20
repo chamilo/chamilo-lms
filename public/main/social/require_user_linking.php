@@ -85,7 +85,7 @@ $content .= '<div class="row">';
 foreach ($usersAssigned as $userAssigned) {
     $userAssigned = api_get_user_info($userAssigned['user_id']);
     $userPicture = isset($userAssigned["avatar_medium"]) ? $userAssigned["avatar_medium"] : $userAssigned["avatar"];
-    $studentLink = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userAssigned['user_id'];
+    $studentLink = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userAssigned['user_id'];
 
     $content .= '
         <div class="col-sm-4 col-md-3">

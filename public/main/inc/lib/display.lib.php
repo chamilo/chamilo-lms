@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
@@ -28,9 +27,6 @@ class Display
     public static $preview_style = null;
     public static $legacyTemplate;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -82,14 +78,6 @@ class Display
         self::$legacyTemplate = '@ChamiloCore/Layout/no_layout.html.twig';
 
         return true;
-
-        global $show_learnpath, $tool_name;
-        self::$global_template = new Template(
-            $tool_name,
-            false,
-            false,
-            $show_learnpath
-        );
     }
 
     /**
@@ -128,20 +116,33 @@ class Display
             $url = $courseInfo['course_public_url'];
             $sessionId = api_get_session_id();
             if (!empty($sessionId)) {
-                $url .= '&sid='.$sessionId;
+                $url .= '?sid='.$sessionId;
             }
 
-            array_unshift(
+            if (!empty($interbreadcrumb)) {
+                array_unshift(
+                    $interbreadcrumb,
+                    ['name' => $courseInfo['title'], 'url' => $url]
+                );
+            }
+        }
+
+        if (empty($interbreadcrumb)) {
+            $interbreadcrumb = [];
+        } else {
+            $interbreadcrumb = array_filter(
                 $interbreadcrumb,
-                ['name' => $courseInfo['title'], 'url' => $url]
+                function ($item) {
+                    return isset($item['name']) && !empty($item['name']);
+                }
             );
         }
 
         $params['legacy_javascript'] = $htmlHeadXtra;
-        $params['legacy_breadcrumb'] = $interbreadcrumb;
+        $params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
 
         Template::setVueParams($params);
-        $content = Container::getTemplating()->render($tpl, $params);
+        $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
         $response->send();
         exit;
@@ -152,24 +153,7 @@ class Display
      */
     public static function display_reduced_footer()
     {
-        $contents = ob_get_contents();
-        if (ob_get_length()) {
-            ob_end_clean();
-        }
-        $tpl = '@ChamiloCore/Layout/no_layout.html.twig';
-        if (!empty(self::$legacyTemplate)) {
-            $tpl = self::$legacyTemplate;
-        }
-        $response = new Response();
-        $params['content'] = $contents;
-        global $interbreadcrumb, $htmlHeadXtra;
-        $params['legacy_javascript'] = $htmlHeadXtra;
-        $params['legacy_breadcrumb'] = $interbreadcrumb;
-
-        $content = Container::getTemplating()->render($tpl, $params);
-        $response->setContent($content);
-        $response->send();
-        exit;
+        return self::display_footer();
     }
 
     /**
@@ -187,7 +171,8 @@ class Display
         $tool,
         $editor_config = null
     ) {
-        echo self::return_introduction_section($tool, $editor_config);
+        // @todo replace introduction section with a vue page.
+        return;
     }
 
     /**
@@ -198,13 +183,6 @@ class Display
         $tool,
         $editor_config = null
     ) {
-        $moduleId = $tool;
-        if ('true' == api_get_setting('enable_tool_introduction') || TOOL_COURSE_HOMEPAGE == $tool) {
-            $introduction_section = null;
-            require api_get_path(SYS_CODE_PATH).'inc/introductionSection.inc.php';
-
-            return $introduction_section;
-        }
     }
 
     /**
@@ -245,13 +223,13 @@ class Display
         $tableName = 'tablename',
         $tableId = ''
     ) {
-        $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
-        $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+        $column = $sorting_options['column'] ?? 0;
+        $default_items_per_page = $paging_options['per_page'] ?? 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $tableName, null, $tableId);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
-        if ('table' == $style) {
+        if ('table' === $style) {
             if (is_array($header) && count($header) > 0) {
                 foreach ($header as $index => $header_item) {
                     $table->set_header(
@@ -383,9 +361,9 @@ class Display
         $elementCount = 0
     ) {
         $column = 0;
-        $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+        $default_items_per_page = $paging_options['per_page'] ?? 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
-        $table->total_number_of_items = intval($elementCount);
+        $table->total_number_of_items = (int) $elementCount;
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
@@ -484,8 +462,7 @@ class Display
         if ($filter) {
             $message = api_htmlentities(
                 $message,
-                ENT_QUOTES,
-                api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding()
+                ENT_QUOTES
             );
         }
 
@@ -595,48 +572,6 @@ class Display
     }
 
     /**
-     * Returns an mailto icon hyperlink.
-     *
-     * @param string  e-mail
-     * @param string  icon source file from the icon lib
-     * @param int  icon size from icon lib
-     * @param string  optional, class from stylesheet
-     *
-     * @return string encrypted mailto hyperlink
-     */
-    public static function icon_mailto_link(
-        $email,
-        $icon_file = "mail.png",
-        $icon_size = 22,
-        $style_class = ''
-    ) {
-        // "mailto:" already present?
-        if ('mailto:' != substr($email, 0, 7)) {
-            $email = 'mailto:'.$email;
-        }
-        // Class (stylesheet) defined?
-        if ('' != $style_class) {
-            $style_class = ' class="'.$style_class.'"';
-        }
-        // Encrypt email
-        $hmail = '';
-        for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
-        }
-        // icon html code
-        $icon_html_source = self::return_icon(
-            $icon_file,
-            $hmail,
-            '',
-            $icon_size
-        );
-        // Return encrypted mailto hyperlink
-
-        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$icon_html_source.'</a>';
-    }
-
-    /**
      * Prints an <option>-list with all letters (A-Z).
      *
      * @todo This is English language specific implementation.
@@ -682,23 +617,6 @@ class Display
         }
 
         return $result;
-    }
-
-    /**
-     * This public function displays an icon.
-     *
-     * @param string   The filename of the file (in the main/img/ folder
-     * @param string   The alt text (probably a language variable)
-     * @param array    additional attributes (for instance height, width, onclick, ...)
-     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
-     */
-    public static function display_icon(
-        $image,
-        $alt_text = '',
-        $additional_attributes = [],
-        $size = null
-    ) {
-        echo self::return_icon($image, $alt_text, $additional_attributes, $size);
     }
 
     /**
@@ -841,12 +759,6 @@ class Display
         $filterPath = true
     ) {
         if (empty($image_path)) {
-            // For some reason, the call to img() happened without a proper
-            // image. Log the error and return an empty string to avoid
-            // breaking the HTML
-            $trace = debug_backtrace();
-            $caller = $trace[1];
-            //error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
             return '';
         }
         // Sanitizing the parameter $image_path
@@ -966,45 +878,23 @@ class Display
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @param array $attributes
-     *
-     * @return string
-     */
-    public static function button($name, $value, $attributes = [])
-    {
-        if (!empty($name)) {
-            $attributes['name'] = $name;
-        }
-
-        return self::tag('button', $value, $attributes);
-    }
-
-    /**
      * Displays an HTML select tag.
-     *
-     * @param string $name
-     * @param array  $values
-     * @param int    $default
-     * @param array  $extra_attributes
-     * @param bool   $show_blank_item
-     * @param string $blank_item_text
-     *
-     * @return string
      */
     public static function select(
-        $name,
-        $values,
-        $default = -1,
-        $extra_attributes = [],
-        $show_blank_item = true,
-        $blank_item_text = ''
-    ) {
+        string $name,
+        array $values,
+        mixed $default = -1,
+        array $extra_attributes = [],
+        bool $show_blank_item = true,
+        string $blank_item_text = ''
+    ): string {
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
-        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
+        $extra_attributes = array_merge(
+            ['class' => 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled'],
+            $extra_attributes
+        );
         foreach ($extra_attributes as $key => $parameter) {
             if ('id' == $key) {
                 $default_id = '';
@@ -1054,14 +944,27 @@ class Display
     }
 
     /**
+     * @param $name
+     * @param $value
+     * @param array $attributes
+     *
+     * @return string
+     */
+    public static function button($name, $value, $attributes = [])
+    {
+        if (!empty($name)) {
+            $attributes['name'] = $name;
+        }
+
+        return self::tag('button', $value, $attributes);
+    }
+
+    /**
      * Creates a tab menu
      * Requirements: declare the jquery, jquery-ui libraries + the jquery-ui.css
      * in the $htmlHeadXtra variable before the display_header
      * Add this script.
      *
-     * @example
-     * <script>
-                </script>
      * @param array  $headers       list of the tab titles
      * @param array  $items
      * @param string $id            id of the container of the tab in the example "tabs"
@@ -1079,7 +982,7 @@ class Display
         $ul_attributes = [],
         $selected = ''
     ) {
-        if (empty($headers) || 0 == count($headers)) {
+        if (empty($headers) || 0 === count($headers)) {
             return '';
         }
 
@@ -1102,8 +1005,10 @@ class Display
                 'a',
                 $item,
                 [
-                    'href' => '#'.$id.'-'.$i,
+                    //'href' => '#'.$id.'-'.$i,
+                    'href' => 'javascript:void(0)',
                     'class' => 'nav-item nav-link '.$active,
+                    '@click' => "openTab =  $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
                     'role' => 'tab',
@@ -1119,7 +1024,7 @@ class Display
             'nav',
             $lis,
             [
-                'id' => 'ul_'.$id,
+                'id' => 'nav_'.$id,
                 'class' => 'nav nav-tabs',
                 'role' => 'tablist',
             ]
@@ -1145,25 +1050,28 @@ class Display
                 $content,
                 [
                     'id' => $id.'-'.$i,
-                    'class' => 'tab-pane fade '.$active,
-                    'role' => 'tabpanel',
-                    'aria-labelledby' => $id.$i.'-tab',
+                    'x-show' => "openTab === $i",
+                    //'class' => 'tab-pane fade '.$active,
+                    //'role' => 'tabpanel',
+                    //'aria-labelledby' => $id.$i.'-tab',
                 ]
             );
             $i++;
         }
 
-        $attributes['id'] = $id;
-        $attributes['class'] = 'tab_wrapper';
+        $attributes['id'] = ''.$id;
+        if (empty($attributes['class'])) {
+            $attributes['class'] = '';
+        }
+        $attributes['class'] .= ' tab_wrapper ';
+        $attributes['x-data'] = ' { openTab: 1 } ';
 
-        $html = self::tag(
+        return self::tag(
             'div',
             $ul.
-            self::tag('div', $divs, ['class' => 'tab-content']),
+            $divs,
             $attributes
         );
-
-        return $html;
     }
 
     /**
@@ -1174,9 +1082,9 @@ class Display
      */
     public static function tabsOnlyLink($headers, $selected = null)
     {
-        $id = uniqid();
+        $id = uniqid('tabs_');
         $i = 1;
-        $lis = null;
+        $list = '';
         foreach ($headers as $item) {
             $class = null;
             if ($i == $selected) {
@@ -1188,18 +1096,14 @@ class Display
                 [
                     'id' => $id.'-'.$i,
                     'href' => $item['url'],
-                    'class' => 'nav-link '.$class,
+                    'class' => 'btn '.$class,
                 ]
             );
-            $lis .= self::tag('li', $item, ['class' => 'nav-item']);
+            $list .= $item;
             $i++;
         }
 
-        return self::tag(
-            'ul',
-            $lis,
-            ['class' => 'nav nav-tabs tabs-margin']
-        );
+        return self::toolbarAction($id, [$list]);
     }
 
     /**
@@ -1225,20 +1129,6 @@ class Display
         $table .= self::tag('div', '', ['id' => $div_id.'_pager']);
 
         return $table;
-    }
-
-    /**
-     * @param string $label
-     * @param string $form_item
-     *
-     * @return string
-     */
-    public static function form_row($label, $form_item)
-    {
-        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
-        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
-
-        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**
@@ -1297,7 +1187,7 @@ class Display
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
         $obj->guiStyle = 'bootstrap4';
-        $obj->iconSet = 'fontAwesomeSolid';
+        $obj->iconSet = 'materialDesignIcons';
         $all_value = 10000000;
 
         // Sets how many records we want to view in the grid
@@ -1506,200 +1396,6 @@ class Display
     }
 
     /**
-     * Returns the "what's new" icon notifications.
-     *
-     * The general logic of this function is to track the last time the user
-     * entered the course and compare to what has changed inside this course
-     * since then, based on the item_property table inside this course. Note that,
-     * if the user never entered the course before, he will not see notification
-     * icons. This function takes session ID into account (if any) and only shows
-     * the corresponding notifications.
-     *
-     * @param array $courseInfo Course information array, containing at least elements 'db' and 'k'
-     * @param bool  $loadAjax
-     *
-     * @return string The HTML link to be shown next to the course
-     */
-    public static function show_notification($courseInfo, $loadAjax = true)
-    {
-        if (empty($courseInfo)) {
-            return '';
-        }
-
-        return '';
-
-        $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-        $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $course_code = Database::escape_string($courseInfo['code']);
-
-        $user_id = api_get_user_id();
-        $course_id = (int) $courseInfo['real_id'];
-        $sessionId = (int) $courseInfo['id_session'];
-        $status = (int) $courseInfo['status'];
-
-        $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
-
-        if ($loadNotificationsByAjax) {
-            if ($loadAjax) {
-                $id = 'notification_'.$course_id.'_'.$sessionId.'_'.$status;
-                Session::write($id, true);
-
-                return '<span id ="'.$id.'" class="course_notification"></span>';
-            }
-        }
-
-        // Get the user's last access dates to all tools of this course
-        $sql = "SELECT *
-                FROM $t_track_e_access
-                WHERE
-                    c_id = $course_id AND
-                    access_user_id = '$user_id' AND
-                    access_session_id ='".$sessionId."'
-                ORDER BY access_date DESC
-                LIMIT 1
-                ";
-        $result = Database::query($sql);
-
-        // latest date by default is the creation date
-        $latestDate = $courseInfo['creation_date'];
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $latestDate = $row['access_date'];
-        }
-
-        $sessionCondition = api_get_session_condition(
-            $sessionId,
-            true,
-            false,
-            'session_id'
-        );
-
-        $hideTools = [TOOL_NOTEBOOK, TOOL_CHAT];
-        // Get current tools in course
-        $sql = "SELECT name
-                FROM $course_tool_table
-                WHERE
-                    c_id = $course_id AND
-                    visibility = '1' AND
-                    name NOT IN ('".implode("','", $hideTools)." ')
-                ";
-        $result = Database::query($sql);
-        $tools = Database::store_result($result);
-
-        $group_ids = GroupManager::get_group_ids($courseInfo['real_id'], $user_id);
-        $group_ids[] = 0; //add group 'everyone'
-        $notifications = [];
-        if ($tools) {
-            foreach ($tools as $tool) {
-                $toolName = $tool['name'];
-                $toolName = Database::escape_string($toolName);
-                // Fix to get student publications
-                $toolCondition = " tool = '$toolName' AND ";
-                if ('student_publication' == $toolName || 'work' == $toolName) {
-                    $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
-                }
-
-                $toolName = addslashes($toolName);
-
-                $sql = "SELECT * FROM $tool_edit_table
-                        WHERE
-                            c_id = $course_id AND
-                            $toolCondition
-                            lastedit_type NOT LIKE '%Deleted%' AND
-                            lastedit_type NOT LIKE '%deleted%' AND
-                            lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$latestDate' AND
-                            lastedit_user_id != $user_id $sessionCondition AND
-                            visibility != 2 AND
-                            (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
-                            (to_group_id IN ('".implode("','", $group_ids)."') OR to_group_id IS NULL)
-                        ORDER BY lastedit_date DESC
-                        LIMIT 1";
-                $result = Database::query($sql);
-
-                $latestChange = Database::fetch_array($result, 'ASSOC');
-
-                if ($latestChange) {
-                    $latestChange['link'] = $tool['link'];
-                    $latestChange['image'] = $tool['image'];
-                    $latestChange['tool'] = $tool['name'];
-                    $notifications[$toolName] = $latestChange;
-                }
-            }
-        }
-
-        // Show all tool icons where there is something new.
-        $return = '';
-        foreach ($notifications as $notification) {
-            $toolName = $notification['tool'];
-            if (!(
-                    '1' == $notification['visibility'] ||
-                    ('1' == $status && '0' == $notification['visibility']) ||
-                    !isset($notification['visibility'])
-                )
-            ) {
-                continue;
-            }
-
-            if (TOOL_SURVEY == $toolName) {
-                $survey_info = SurveyManager::get_survey($notification['ref'], 0, $course_code);
-                if (!empty($survey_info)) {
-                    $invited_users = SurveyUtil::get_invited_users(
-                        $survey_info['code'],
-                        $course_code
-                    );
-                    if (!in_array($user_id, $invited_users['course_users'])) {
-                        continue;
-                    }
-                }
-            }
-
-            if (TOOL_LEARNPATH == $notification['tool']) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
-                    continue;
-                }
-            }
-
-            if (TOOL_DROPBOX == $notification['tool']) {
-                $notification['link'] = 'dropbox/dropbox_download.php?id='.$notification['ref'];
-            }
-
-            if ('work' == $notification['tool'] &&
-                'DirectoryCreated' == $notification['lastedit_type']
-            ) {
-                $notification['lastedit_type'] = 'WorkAdded';
-            }
-
-            $lastDate = api_get_local_time($notification['lastedit_date']);
-            $type = $notification['lastedit_type'];
-            if ('CalendareventVisible' == $type) {
-                $type = 'Visible';
-            }
-            $label = get_lang('Since your latest visit').": ".get_lang($type)." ($lastDate)";
-
-            if (false === strpos($notification['link'], '?')) {
-                $notification['link'] = $notification['link'].'?notification=1';
-            } else {
-                $notification['link'] = $notification['link'].'&notification=1';
-            }
-
-            $image = substr($notification['image'], 0, -4).'.png';
-
-            $return .= self::url(
-                self::return_icon($image, $label),
-                api_get_path(WEB_CODE_PATH).
-                $notification['link'].'&cidReq='.$course_code.
-                '&ref='.$notification['ref'].
-                '&gid='.$notification['to_group_id'].
-                '&sid='.$sessionId
-            ).PHP_EOL;
-        }
-
-        return $return;
-    }
-
-    /**
      * Get the session box details as an array.
      *
      * @todo check session visibility.
@@ -1712,23 +1408,22 @@ class Display
     public static function getSessionTitleBox($session_id)
     {
         $session_info = api_get_session_info($session_id);
-        $coachInfo = [];
-        if (!empty($session_info['id_coach'])) {
-            $coachInfo = api_get_user_info($session_info['id_coach']);
-        }
+        $generalCoachesNames = implode(
+            ' - ',
+            SessionManager::getGeneralCoachesNamesForSession($session_id)
+        );
 
         $session = [];
         $session['category_id'] = $session_info['session_category_id'];
         $session['title'] = $session_info['name'];
-        $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
         $session['dates'] = '';
         $session['coach'] = '';
-        if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-            $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
+        if ('true' === api_get_setting('show_session_coach') && $generalCoachesNames) {
+            $session['coach'] = get_lang('General coach').': '.$generalCoachesNames;
         }
         $active = false;
-        if (('0000-00-00 00:00:00' == $session_info['access_end_date'] &&
-            '0000-00-00 00:00:00' == $session_info['access_start_date']) ||
+        if (('0000-00-00 00:00:00' === $session_info['access_end_date'] &&
+            '0000-00-00 00:00:00' === $session_info['access_start_date']) ||
             (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
         ) {
             if (isset($session_info['duration']) && !empty($session_info['duration'])) {
@@ -1741,9 +1436,6 @@ class Display
         } else {
             $dates = SessionManager::parseSessionDates($session_info, true);
             $session['dates'] = $dates['access'];
-            if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-                $session['coach'] = $coachInfo['complete_name'];
-            }
             //$active = $date_start <= $now && $date_end >= $now;
         }
         $session['active'] = $active;
@@ -1774,7 +1466,7 @@ class Display
                     'variable' => $value->getField()->getVariable(),
                     'display_text' => $value->getField()->getDisplayText(),
                 ],
-                'value' => $value->getValue(),
+                'value' => $value->getFieldValue(),
             ];
         }
 
@@ -1867,13 +1559,6 @@ class Display
         return self::page_header($title, $second_title);
     }
 
-    public static function page_subheader_and_translate($title, $second_title = null)
-    {
-        $title = get_lang($title);
-
-        return self::page_subheader($title, $second_title);
-    }
-
     public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
@@ -1895,14 +1580,9 @@ class Display
         return self::page_header($title, $second_title, 'h5');
     }
 
-    /**
-     * @param array $list
-     *
-     * @return string|null
-     */
-    public static function description($list)
+    public static function description(array $list): string
     {
-        $html = null;
+        $html = '';
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
             foreach ($list as $item) {
@@ -1950,49 +1630,14 @@ class Display
     }
 
     /**
-     * @param string $count
-     * @param string $type
-     *
-     * @return string|null
-     */
-    public static function badge($count, $type = 'warning')
-    {
-        $class = '';
-
-        switch ($type) {
-            case 'success':
-                $class = 'bg-success';
-                break;
-            case 'warning':
-                $class = 'bg-warning text-dark';
-                break;
-            case 'important':
-                $class = 'bg-important';
-                break;
-            case 'info':
-                $class = 'bg-info';
-                break;
-            case 'inverse':
-                $class = 'bg-inverse';
-                break;
-        }
-
-        if (!empty($count)) {
-            return ' <span class="badge '.$class.'">'.$count.'</span>';
-        }
-
-        return null;
-    }
-
-    /**
      * @param array $badge_list
      *
      * @return string
      */
-    public static function badge_group($badge_list)
+    public static function badgeGroup($list)
     {
         $html = '<div class="badge-group">';
-        foreach ($badge_list as $badge) {
+        foreach ($list as $badge) {
             $html .= $badge;
         }
         $html .= '</div>';
@@ -2001,38 +1646,22 @@ class Display
     }
 
     /**
-     * @param string $content
-     * @param string $type
-     *
-     * @return string
+     * Return an HTML span element with the badge class and an additional bg-$type class
      */
-    public static function label($content, $type = 'default')
+    public static function label(string $content, string $type = 'default'): string
     {
-        switch ($type) {
-            case 'success':
-                $class = 'success';
-                break;
-            case 'warning':
-                $class = 'warning text-dark';
-                break;
-            case 'important':
-            case 'danger':
-                $class = 'danger';
-                break;
-            case 'info':
-                $class = 'info';
-                break;
-            case 'primary':
-                $class = 'primary';
-                break;
-            default:
-                $class = 'secondary';
-                break;
-        }
-
         $html = '';
         if (!empty($content)) {
-            $html = '<span class="badge bg-'.$class.'">';
+            $class = match ($type) {
+                'success' => 'success',
+                'warning' => 'warning',
+                'important', 'danger', 'error' => 'error',
+                'info' => 'info',
+                'primary' => 'primary',
+                default => 'secondary',
+            };
+
+            $html = '<span class="badge badge--'.$class.'">';
             $html .= $content;
             $html .= '</span>';
         }
@@ -2040,36 +1669,19 @@ class Display
         return $html;
     }
 
-    /**
-     * @param array  $items
-     * @param string $class
-     *
-     * @return string|null
-     */
-    public static function actions($items, $class = 'new_actions')
+    public static function actions(array $items): string
     {
-        $html = null;
-        if (!empty($items)) {
-            $html = '<div class="'.$class.'"><ul class="nav nav-pills">';
-            foreach ($items as $value) {
-                $class = null;
-                if (isset($value['active']) && $value['active']) {
-                    $class = 'class ="active"';
-                }
-
-                if (basename($_SERVER['REQUEST_URI']) == basename($value['url'])) {
-                    $class = 'class ="active"';
-                }
-                $html .= "<li $class >";
-                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : [];
-                $html .= self::url($value['content'], $value['url'], $attributes);
-                $html .= '</li>';
-            }
-            $html .= '</ul></div>';
-            $html .= '<br />';
+        if (empty($items)) {
+            return '';
         }
 
-        return $html;
+        $links = '';
+        foreach ($items as $value) {
+            $attributes = $value['url_attributes'] ?? [];
+            $links .= self::url($value['content'], $value['url'], $attributes);
+        }
+
+        return self::toolbarAction(uniqid('toolbar', false), [$links]);
     }
 
     /**
@@ -2090,47 +1702,6 @@ class Display
             $text,
             ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );
-    }
-
-    /**
-     * @param array  $items
-     * @param string $type
-     * @param null   $id
-     *
-     * @return string|null
-     */
-    public static function generate_accordion($items, $type = 'jquery', $id = null)
-    {
-        $html = null;
-        if (!empty($items)) {
-            if (empty($id)) {
-                $id = api_get_unique_id();
-            }
-            if ('jquery' == $type) {
-                $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
-            } else {
-                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
-            }
-
-            $count = 1;
-            foreach ($items as $item) {
-                $html .= '<div class="accordion-my-group">';
-                $html .= '<div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
-                            '.$item['title'].'
-                            </a>
-                          </div>';
-
-                $html .= '<div id="collapse'.$count.'" class="accordion-body">';
-                $html .= '<div class="accordion-my-inner">
-                            '.$item['content'].'
-                            </div>
-                          </div>';
-            }
-            $html .= '</div>';
-        }
-
-        return $html;
     }
 
     /**
@@ -2160,17 +1731,59 @@ class Display
      */
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
-        $id = uniqid('dropdown', true);
-        $html = '<div class="btn-group" role="group">
-                <button id = "'.$id.'" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                '.$title.'
-                </button>
-                <div class="dropdown-menu aria-labelledby="'.$id.'" '.($alignToRight ? 'dropdown-menu-right' : '').'">';
+        $id = uniqid('dropdown', false);
+        $html = '
+        <div class="dropdown inline-block relative">
+            <button
+                id="'.$id.'"
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                aria-expanded="false"
+                aria-haspopup="true"
+            >
+              '.$title.'
+              <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div
+                id="'.$id.'_menu"
+                class=" dropdown-menu hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="menu-button"
+                tabindex="-1"
+            >
+            <div class="py-1" role="none">';
         foreach ($elements as $item) {
-            $html .= self::tag('li', self::url($item['title'], $item['href'], ['class' => 'dropdown-item']));
+            $html .= self::url(
+                    $item['title'],
+                    $item['href'],
+                    [
+                        'class' => 'text-gray-700 block px-4 py-2 text-sm',
+                        'role' => 'menuitem',
+                        'onclick' => $item['onclick'] ?? '',
+                        'data-action' => $item['data-action'] ?? '',
+                    ]
+                );
         }
-        $html .= '</div>
-            </div>';
+        $html .= '
+            </div>
+            </div>
+            </div>
+            <script>
+             document.addEventListener("DOMContentLoaded", function() {
+                const button = document.querySelector("#'.$id.'");
+                    button.addEventListener("click", (e) => {
+                    let menu = document.querySelector("#'.$id.'_menu");
+                    if (menu.classList.contains("hidden")) {
+                        menu.classList.remove("hidden");
+                    } else {
+                        menu.classList.add("hidden");
+                    }
+                });
+            });
+            </script>';
 
         return $html;
     }
@@ -2347,7 +1960,7 @@ class Display
         }
         $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
-        return  '<li class = "'.$class.'">'.$link.'</li>';
+        return '<li class = "'.$class.'">'.$link.'</li>';
     }
 
     /**
@@ -2441,9 +2054,7 @@ class Display
      */
     public static function getVCardUserLink($userId)
     {
-        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);
-
-        return $vCardUrl;
+        return api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);
     }
 
     /**
@@ -2473,11 +2084,6 @@ class Display
             $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
         }
 
-        if (!empty($rightAction)) {
-            $rightAction = '<span class="float-right">'.$rightAction.'</span>';
-        }
-
-        $title = !empty($title) ? '<h5 class="card-title">'.$title.' '.$rightAction.'</h5>'.$extra : '';
         $footer = !empty($footer) ? '<p class="card-text"><small class="text-muted">'.$footer.'</small></p>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
@@ -2487,12 +2093,20 @@ class Display
         }
         $cardBody = $title.' '.self::contentPanel($content).' '.$footer;
 
-        $panel = Display::tag('div', $cardBody, ['id' => 'card-'.$id, 'class' => 'card-body']);
+        return "
+            <div $id class=card>
+                <div class='flex justify-between items-center py-2'>
+                    <div class='relative mt-1 flex'>
+                        $title
+                    </div>
+                    <div>
+                        $rightAction
+                    </div>
+                </div>
 
-        return '
-            <div '.$id.' class="card">
-                '.$panel.'
-            </div>'
+                $content
+                $footer
+            </div>"
         ;
     }
 
@@ -2528,13 +2142,14 @@ class Display
         array $attributes = [],
         $includeText = true
     ) {
-        $buttonClass = "btn btn-outline-secondary";
+        $buttonClass = "btn btn--secondary-outline";
         if (!empty($type)) {
-            $buttonClass = "btn btn-$type";
+            $buttonClass = "btn btn--$type";
         }
-        $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $icon = self::getMdiIcon($icon);
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
-        $attributes['title'] = isset($attributes['title']) ? $attributes['title'] : $text;
+        $attributes['title'] = $attributes['title'] ?? $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">'.$text.'</span>';
@@ -2544,44 +2159,63 @@ class Display
     }
 
     /**
-     * @param string $id
-     * @param array  $content
-     * @param array  $colsWidth Optional. Columns width
-     *
-     * @return string
+     * Generate an HTML "p-toolbar" div element with the given id attribute.
+     * @param string $id The HTML div's "id" attribute to set
+     * @param array  $contentList Array of left-center-right elements for the toolbar. If only 2 elements are defined, this becomes left-right (no center)
+     * @return string HTML div for the toolbar
      */
-    public static function toolbarAction($id, $content, $colsWidth = [])
+    public static function toolbarAction(string $id, array $contentList): string
     {
-        $col = count($content);
+        $contentListPurged = array_filter($contentList);
 
-        if (!$colsWidth) {
-            $width = 12 / $col;
-            array_walk($content, function () use ($width, &$colsWidth) {
-                $colsWidth[] = $width;
-            });
+        if (empty($contentListPurged)) {
+            return '';
         }
 
-        $html = '<div id="'.$id.'" class="actions">';
-        $html .= '<div class="row">';
+        $count = count($contentList);
 
-        for ($i = 0; $i < $col; $i++) {
-            $class = 'col-sm-'.$colsWidth[$i];
+        $start = $contentList[0];
+        $center = '';
+        $end = '';
 
-            if ($col > 1) {
-                if ($i > 0 && $i < count($content) - 1) {
-                    $class .= ' text-center';
-                } elseif ($i === count($content) - 1) {
-                    $class .= ' text-right';
-                }
-            }
-
-            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        if (2 === $count) {
+            $end = $contentList[1];
+        } elseif (3 === $count) {
+            $center = $contentList[1];
+            $end = $contentList[2];
         }
 
-        $html .= '</div>';
-        $html .= '</div>';
+        return '<div id="'.$id.'" class="p-toolbar p-component" role="toolbar">
+                <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
+                <div class="p-toolbar-group-center">'.$center.'</div>
+                <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
+            </div>
+        ';
+    }
 
-        return $html;
+    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
+    {
+        $sizeString = '';
+        if (!empty($pixelSize)) {
+            $sizeString = 'font-size: '.$pixelSize.'px; width: '.$pixelSize.'px; height: '.$pixelSize.'px; ';
+        }
+        if (empty($style)) {
+            $style = '';
+        }
+        $additionalAttributes['class'] = "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass";
+        $additionalAttributes['style'] = $sizeString.$style;
+        $additionalAttributes['medium'] = '';
+        $additionalAttributes['aria-hidden'] = 'true';
+
+        if (!empty($title)) {
+            $additionalAttributes['title'] = htmlentities($title);
+        }
+
+        return self::tag(
+            'i',
+            '',
+            $additionalAttributes
+        );
     }
 
     /**
@@ -2593,6 +2227,7 @@ class Display
      * @param string     $additionalClass Optional. Additional class
      *
      * @return string
+     * @deprecated Use getMdiIcon() instead
      */
     public static function returnFontAwesomeIcon(
         $name,
@@ -2600,7 +2235,7 @@ class Display
         $fixWidth = false,
         $additionalClass = ''
     ) {
-        $className = "fa fa-$name";
+        $className = "mdi mdi-$name";
 
         if ($fixWidth) {
             $className .= ' fa-fw';
@@ -2639,7 +2274,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return string|null
+     * @return string
      *
      * @todo rework function to easy use
      */
@@ -2654,32 +2289,30 @@ class Display
         $fullClickable = false
     ) {
         if (!empty($idAccordion)) {
-            $headerClass = '';
-            $headerClass .= $fullClickable ? 'center-block ' : '';
+            $headerClass = $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
 
             $html = <<<HTML
-
-                <div class="card" id="$id">
-                    <div class="card-header">
+                <div class="v-card bg-white mx-2" id="$id">
+                    <div class="v-card-header text-h5 my-2">
                         $title
                     </div>
-                    <div class="card-body">$content</div>
+                    <div class="v-card-text">$content</div>
                 </div>
 HTML;
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
             }
-            $params['class'] = 'card';
-            $html = null;
+            $params['class'] = 'v-card bg-white mx-2';
+            $html = '';
             if (!empty($title)) {
-                $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
+                $html .= '<div class="v-card-header text-h5 my-2">'.$title.'</div>'.PHP_EOL;
             }
-            $html .= '<div class="card-body">'.$content.'</div>'.PHP_EOL;
+            $html .= '<div class="v-card-text">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
 
@@ -2699,14 +2332,13 @@ HTML;
             return '';
         }
 
-        if ($dateTime instanceof \DateTime) {
-            $dateTime = $dateTime->format('Y-m-d H:i:s');
+        if (is_string($dateTime)) {
+            $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
         }
 
         return self::tip(
             date_to_str_ago($dateTime),
             api_convert_and_format_date($dateTime, DATE_TIME_FORMAT_LONG)
-            //api_get_local_time($dateTime)
         );
     }
 
@@ -2732,7 +2364,7 @@ HTML;
         }
 
         return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">
-                    <img src="'.$userInfo['avatar'].'" class="rounded">
+                    <img src="'.$userInfo['avatar'].'" class="rounded" />
                     <h3 class="card-title">'.$userInfo['complete_name'].'</h3>
                     <div class="card-body">
                        <div class="card-title">
@@ -2780,93 +2412,6 @@ HTML;
     }
 
     /**
-     * @param string $frameName
-     *
-     * @return string
-     */
-    public static function getFrameReadyBlock($frameName)
-    {
-        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
-
-        $videoFeatures = [
-            'playpause',
-            'current',
-            'progress',
-            'duration',
-            'tracks',
-            'volume',
-            'fullscreen',
-            'vrview',
-            'markersrolls',
-        ];
-        $features = api_get_configuration_value('video_features');
-        $videoPluginsJS = [];
-        $videoPluginCSS = [];
-        if (!empty($features) && isset($features['features'])) {
-            foreach ($features['features'] as $feature) {
-                if ('vrview' === $feature) {
-                    continue;
-                }
-                $defaultFeatures[] = $feature;
-                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
-                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
-            }
-        }
-
-        $videoPluginFiles = '';
-        foreach ($videoPluginsJS as $file) {
-            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
-        }
-
-        $videoPluginCssFiles = '';
-        foreach ($videoPluginCSS as $file) {
-            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
-        }
-
-        $translateHtml = '';
-        $translate = api_get_configuration_value('translate_html');
-        if ($translate) {
-            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
-        }
-
-        $videoFeatures = implode("','", $videoFeatures);
-        $frameReady = '
-        $.frameReady(function() {
-             $(function () {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
-                    features: [\''.$videoFeatures.'\'],
-                    success: function(mediaElement, originalNode, instance) {
-                        '.ChamiloApi::getQuizMarkersRollsJS().'
-                    },
-                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
-                });
-            });
-        },
-        "'.$frameName.'",
-        [
-            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-            {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-            {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-            {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
-            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js",
-                deps: [
-                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
-                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
-                '.$videoPluginFiles.'
-            ]},
-            '.$translateHtml.'
-            ]},
-            '.$videoPluginCssFiles.'
-            {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
-        ]);';
-
-        return $frameReady;
-    }
-
-    /**
      * @param string $image
      * @param int    $size
      *
@@ -2875,31 +2420,6 @@ HTML;
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
         return self::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return self::return_icon($image, $name, [], $size);
-    }
-
-    public static function dropdownMenu($items = [], array $attr = [])
-    {
-        $links = null;
-        $url = null;
-        foreach ($items as $row) {
-            $url = self::url($row['icon'].$row['item'], $row['url'], ['class' => 'dropdown-item']);
-            $links .= self::tag('li', $url);
-        }
-        $html = self::tag('ul', $links, $attr);
-
-        return  $html;
     }
 
     /**
@@ -2933,5 +2453,33 @@ HTML;
 
             return $result; // example: #fc443a
         }
+    }
+
+    public static function noDataView(string $title, string $icon, string $buttonTitle, string $url): string
+    {
+        $content = '<div id="no-data-view">';
+        $content .= '<h3>'.$title.'</h3>';
+        $content .= $icon;
+        $content .= '<div class="controls">';
+        $content .= self::url(
+            '<em class="fa fa-plus"></em> '.$buttonTitle,
+            $url,
+            ['class' => 'btn btn--primary']
+        );
+        $content .= '</div>';
+        $content .= '</div>';
+
+        return $content;
+    }
+
+    public static function prose(string $contents): string
+    {
+        return "
+            <div class=''>
+                <div class='prose prose-blue'>
+                $contents
+                </div>
+            </div>
+            ";
     }
 }

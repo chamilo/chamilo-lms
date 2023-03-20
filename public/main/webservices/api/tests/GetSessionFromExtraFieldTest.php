@@ -29,7 +29,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
         $firstExtraFieldName = 'firstExtraField'.time();
         $firstExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $firstExtraFieldName,
                 'display_text' => $firstExtraFieldName,
                 'visible_to_self' => 1,
@@ -41,7 +41,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
         $secondExtraFieldName = 'secondExtraField'.time();
         $secondExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $secondExtraFieldName,
                 'display_text' => $secondExtraFieldName,
                 'visible_to_self' => 1,
@@ -60,7 +60,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
         $secondSessionId = SessionManager::create_session(
@@ -71,7 +71,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
             '2019-12-31 00:00',
             '2019-09-01 00:00',
             '2019-12-31 00:00',
-            null,
+            [],
             null
         );
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,12 +10,9 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class TrackingSettingsSchema.
- */
 class TrackingSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -26,7 +25,8 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'meta_twitter_site' => '',
                     'meta_twitter_creator' => '',
                 ]
-            );
+            )
+        ;
 //            ->setAllowedTypes(
 //                array(
 //                    // commenting this line allows setting to be null
@@ -36,7 +36,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
 //            );
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('header_extra_content', TextareaType::class)

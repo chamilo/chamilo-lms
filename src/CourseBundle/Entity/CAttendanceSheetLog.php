@@ -1,131 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendanceSheetLog.
- *
  * @ORM\Table(
- *  name="c_attendance_sheet_log",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *     name="c_attendance_sheet_log",
+ *     indexes={
+ *     }
  * )
  * @ORM\Entity
  */
 class CAttendanceSheetLog
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="logs")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    protected CAttendance $attendance;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="lastedit_user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $attendanceId;
+    protected User $user;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
-    protected $lasteditDate;
+    #[Assert\NotNull]
+    protected DateTime $lasteditDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lastedit_type", type="string", length=200, nullable=false)
      */
-    protected $lasteditType;
+    #[Assert\NotNull]
+    protected string $lasteditType;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
-     */
-    protected $lasteditUserId;
-
-    /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="calendar_date_value", type="datetime", nullable=true)
      */
-    protected $calendarDateValue;
+    protected ?DateTime $calendarDateValue = null;
 
-    /**
-     * Set attendanceId.
-     *
-     * @param int $attendanceId
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setAttendanceId($attendanceId)
-    {
-        $this->attendanceId = $attendanceId;
-
-        return $this;
-    }
-
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
-    {
-        return $this->attendanceId;
-    }
-
-    /**
-     * Set lasteditDate.
-     *
-     * @param \DateTime $lasteditDate
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditDate($lasteditDate)
+    public function setLasteditDate(DateTime $lasteditDate): self
     {
         $this->lasteditDate = $lasteditDate;
 
         return $this;
     }
 
-    /**
-     * Get lasteditDate.
-     *
-     * @return \DateTime
-     */
-    public function getLasteditDate()
+    public function getLasteditDate(): DateTime
     {
         return $this->lasteditDate;
     }
 
-    /**
-     * Set lasteditType.
-     *
-     * @param string $lasteditType
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditType($lasteditType)
+    public function setLasteditType(string $lasteditType): self
     {
         $this->lasteditType = $lasteditType;
 
@@ -142,38 +86,7 @@ class CAttendanceSheetLog
         return $this->lasteditType;
     }
 
-    /**
-     * Set lasteditUserId.
-     *
-     * @param int $lasteditUserId
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setLasteditUserId($lasteditUserId)
-    {
-        $this->lasteditUserId = $lasteditUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get lasteditUserId.
-     *
-     * @return int
-     */
-    public function getLasteditUserId()
-    {
-        return $this->lasteditUserId;
-    }
-
-    /**
-     * Set calendarDateValue.
-     *
-     * @param \DateTime $calendarDateValue
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setCalendarDateValue($calendarDateValue)
+    public function setCalendarDateValue(?DateTime $calendarDateValue): self
     {
         $this->calendarDateValue = $calendarDateValue;
 
@@ -183,34 +96,34 @@ class CAttendanceSheetLog
     /**
      * Get calendarDateValue.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCalendarDateValue()
     {
         return $this->calendarDateValue;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceSheetLog
-     */
-    public function setCId($cId)
+    public function getAttendance(): CAttendance
     {
-        $this->cId = $cId;
+        return $this->attendance;
+    }
+
+    public function setAttendance(CAttendance $attendance): self
+    {
+        $this->attendance = $attendance;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getUser(): User
     {
-        return $this->cId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

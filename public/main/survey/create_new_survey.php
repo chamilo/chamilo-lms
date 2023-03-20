@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
@@ -7,15 +10,16 @@
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
  *
- * @todo only the available platform languages should be used => need an
+ * @todo   only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+$repo = Container::getSurveyRepository();
 
 $_course = api_get_course_info();
 $this_section = SECTION_COURSES;
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
@@ -23,7 +27,7 @@ $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 if (!api_is_allowed_to_edit()) {
     if (!api_is_session_general_coach() ||
         (!empty($_GET['survey_id']) &&
-        !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
+            !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
     ) {
         api_not_allowed(true);
     }
@@ -41,14 +45,14 @@ $gradebook_link_type = 8;
 $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
-if ('add' == $action) {
+if ('add' === $action) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
     ];
     $tool_name = get_lang('Create survey');
 }
-if ('edit' == $action && is_numeric($survey_id)) {
+if ('edit' === $action && is_numeric($survey_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
@@ -61,17 +65,14 @@ if ('edit' == $action && is_numeric($survey_id)) {
 }
 $gradebook_link_id = null;
 // Getting the default values
-if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
-
-    if ($allowSurveyAvailabilityDatetime) {
-        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
-        $defaults['start_date'] = $defaults['avail_from'];
-        $defaults['end_date'] = $defaults['avail_till'];
-    }
+    $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
+    $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+    $defaults['start_date'] = $defaults['avail_from'];
+    $defaults['end_date'] = $defaults['avail_till'];
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(
         $course_id,
@@ -94,15 +95,9 @@ if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date(
-        $allowSurveyAvailabilityDatetime ? 'Y-m-d 00:00:00' : 'Y-m-d',
-        api_strtotime(api_get_local_time())
-    );
+    $defaults['start_date'] = date('Y-m-d 00:00:00', api_strtotime(api_get_local_time()));
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date(
-        $allowSurveyAvailabilityDatetime ? 'Y-m-d 23:59:59' : 'Y-m-d',
-        $startdateandxdays
-    );
+    $defaults['end_date'] = date('Y-m-d 23:59:59', $startdateandxdays);
     $defaults['anonymous'] = 0;
 }
 
@@ -116,19 +111,19 @@ $form = new FormValidator(
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement(
+$surveyCodeElement = $form->addElement(
     'text',
     'survey_code',
     get_lang('Code'),
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ('edit' == $action) {
-    $survey_code->freeze();
+if ('edit' === $action) {
+    $surveyCodeElement->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 
@@ -154,20 +149,10 @@ $form->addElement(
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-
-if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
-    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-} else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'date');
-    $form->addRule('end_date', get_lang('Invalid date'), 'date');
-}
+$startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+$endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->setRequired($startDateElement);
 $form->setRequired($endDateElement);
@@ -182,7 +167,7 @@ $visibleResults = [
 if (api_get_configuration_value('hide_survey_reporting_button')) {
     $form->addLabel(get_lang('Results visibility'), get_lang('Feature disabled by administrator'));
 } else {
-    $form->addElement('select', 'visible_results', get_lang('Results visibility'), $visibleResults);
+    $form->addSelect('visible_results', get_lang('Results visibility'), $visibleResults);
 }
 //$defaults['visible_results'] = 0;
 $form->addElement(
@@ -228,28 +213,28 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook
-    $form->addElement(
-        'checkbox',
+    $form->addCheckBox(
         'survey_qualify_gradebook',
         null,
         get_lang('Grade in the assessment tool'),
-        'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
+        ['onclick' => 'javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }'],
     );
-    $form->addElement(
-        'html',
-        '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>'
-    );
-    $form->addElement(
-        'text',
+    $form->addHtml('<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
+    $form->addText(
         'survey_weight',
         get_lang('Weight in Report'),
-        'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"'
+        false,
+        [
+            'value' => "0.00",
+            'style' => "width: 40px;",
+            'onfocus' => 'javascript: this.select();',
+        ]
     );
     $form->applyFilter('survey_weight', 'html_filter');
 
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
-    if ('edit' == $action) {
+    if ('edit' === $action) {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
@@ -260,12 +245,15 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ('add' == $action) {
-    $form->addElement('hidden', 'survey_type', 0);
-    $survey_tree = new SurveyTree();
-    $list_surveys = $survey_tree->createList($survey_tree->surveylist);
-    $list_surveys[0] = '';
-    $form->addElement('select', 'parent_id', get_lang('Parent Survey'), $list_surveys);
+if ('add' === $action) {
+    $form->addHidden('survey_type', 0);
+    $qb = $repo->findAllByCourse(api_get_course_entity(), api_get_session_entity());
+    $surveys = $qb->getQuery()->getResult();
+    $surveyOptions[0] = '';
+    foreach ($surveys as $survey) {
+        $surveyOptions[$survey->getIid()] = implode(' > ', $repo->getPath($survey));
+    }
+    $form->addSelect('parent_id', get_lang('Parent Survey'), $surveyOptions);
     $defaults['parent_id'] = 0;
 }
 
@@ -275,14 +263,13 @@ $form->addElement('checkbox', 'display_question_number', null, get_lang('Display
 
 $input_name_list = null;
 
-if ('edit' == $action && !empty($survey_id)) {
+if ('edit' === $action && !empty($survey_id)) {
     if (0 == $survey_data['anonymous']) {
-        $form->addElement(
-            'checkbox',
+        $form->addCheckBox(
             'show_form_profile',
             null,
             get_lang('Show profile form'),
-            'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+            ['onclick' => "javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"]
         );
 
         if (1 == $survey_data['show_form_profile']) {
@@ -320,24 +307,23 @@ if ('edit' == $action && !empty($survey_id)) {
     }
 }
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
-
+$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 $form->addElement('html', '</div><br />');
 
-if (isset($_GET['survey_id']) && 'edit' == $action) {
+if (isset($_GET['survey_id']) && 'edit' === $action) {
     $form->addButtonUpdate(get_lang('Edit survey'), 'submit_survey');
 } else {
     $form->addButtonCreate(get_lang('Create survey'), 'submit_survey');
 }
 
 // Setting the rules
-if ('add' == $action) {
+if ('add' === $action) {
     $form->addRule('survey_code', get_lang('Required field'), 'required');
     $form->addRule('survey_code', '', 'maxlength', 20);
 }
 $form->addRule('survey_title', get_lang('Required field'), 'required');
-$form->addRule('start_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
-$form->addRule('end_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 $form->addRule(
     ['start_date', 'end_date'],
     get_lang('Start DateShouldBeBeforeEnd Date'),
@@ -356,7 +342,7 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
-    Skill::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
+    SkillModel::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
 
     $values['item_id'] = $return['id'];
     $extraFieldValue = new ExtraFieldValue('survey');

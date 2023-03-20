@@ -31,11 +31,10 @@ $sessionFilter = new FormValidator(
     [],
     FormValidator::LAYOUT_INLINE
 );
-$courseSelect = $sessionFilter->addElement(
-    'select_ajax',
+$courseSelect = $sessionFilter->addSelectAjax(
     'course_name',
     get_lang('SearchCourse'),
-    null,
+    [],
     ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 
@@ -124,15 +123,14 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
     Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
     Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-$allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>
@@ -251,8 +249,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
-            <?php if ($allowOrder) {
-                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -273,8 +269,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},

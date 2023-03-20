@@ -43,7 +43,7 @@
                 <td class="text-center">{{ sale.reference }}</td>
                 <td class="text-center">
                     <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
-                       class="btn btn-info btn-sm">{{ 'Info'|get_lang }}</a>
+                       class="btn btn--info btn-sm">{{ 'Info'|get_lang }}</a>
                 </td>
                 </td>
             </tr>
@@ -77,7 +77,7 @@
                         buttons: {
                             main: {
                                 label: "{{ 'Close'|get_lang }}",
-                                className: "btn-default"
+                                className: "btn--plain"
                             }
                         }
                     });

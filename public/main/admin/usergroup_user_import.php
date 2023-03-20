@@ -15,7 +15,7 @@ function validate_data($user_classes)
     global $purification_option_for_usernames;
     $errors = [];
     $classcodes = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
 
     foreach ($user_classes as $index => $user_class) {
         $user_class['line'] = $index + 1;
@@ -72,7 +72,7 @@ function save_data($users_classes, $deleteUsersNotInList = false)
     global $purification_option_for_usernames;
     // Table definitions.
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
     $csv_data = [];
     if (!empty($users_classes)) {
@@ -131,7 +131,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $usergroup->protectScript();
 
 $tool_name = get_lang('Add users to a class').' CSV';

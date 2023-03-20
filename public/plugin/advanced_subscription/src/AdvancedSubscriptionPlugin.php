@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookAdminBlock;
 use Chamilo\CoreBundle\Hook\HookNotificationContent;
@@ -222,7 +223,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             Database::get_main_table(TABLE_MAIN_SESSION).' s ON s.id = su.session_id';
         $whereSessionParams = 'su.relation_type = ? AND s.access_start_date >= ? AND su.user_id = ?';
         $whereSessionParamsValues = [
-            0,
+            Session::STUDENT,
             $newYearDate->format('Y-m-d'),
             $userId,
         ];
@@ -1217,7 +1218,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
         $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $userJoinTable = $queueTable.' q INNER JOIN '.$userTable.' u ON q.user_id = u.user_id';
+        $userJoinTable = $queueTable.' q INNER JOIN '.$userTable.' u ON q.user_id = u.id';
         $where = [
             'where' => [
                 'q.session_id = ?' => [
@@ -1447,7 +1448,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (!$areaExists) {
             $extraField = new ExtraField('user');
             $extraField->save([
-                'field_type' => 1,
+                'value_type' => 1,
                 'variable' => 'area',
                 'display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
                 'default_value' => null,
@@ -1513,9 +1514,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id
             INNER JOIN $tSessionUser AS su ON s.id = su.session_id
             WHERE
-                sf.extra_field_type = $extraFieldType AND
+                sf.item_type = $extraFieldType AND
                 sf.variable = 'is_induction_session' AND
-                su.relation_type = 0 AND
+                su.relation_type = ".Session::STUDENT." AND
                 su.user_id = ".(int) $userId;
 
         $result = Database::query($sql);

@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Criteria;
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
 if (!api_is_platform_admin(true) && !api_is_teacher()) {
     api_not_allowed(true);
@@ -53,7 +52,7 @@ if ($session) {
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] = $course->getCode();
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('status', Session::COACH)
+            Criteria::expr()->eq('status', Session::COURSE_COACH)
         );
         $userCourseSubscriptions = $session
             ->getUserCourseSubscriptions()
@@ -79,7 +78,7 @@ if ($session) {
             $usersInfo[$user->getId()][$course->getId().'_last_work'] = null;
             $usersInfo[$user->getId()][$course->getId().'_time_spent_of_course'] = null;
 
-            if (!$session->hasCoachInCourseWithStatus($user, $course)) {
+            if (!$session->hasCourseCoachInCourse($user, $course)) {
                 continue;
             }
 
@@ -164,9 +163,9 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'mySpace/', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'my_space/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
+    'url' => api_get_path(WEB_CODE_PATH).'my_space/session.php',
     'name' => get_lang('Followed sessions'),
 ];
 

@@ -226,16 +226,16 @@ if (!empty($OkMsg)) {
     </select></div>
   </td>
   <td width="10%" valign="middle" align="center">
-      <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+      <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
         <em class="fa fa-arrow-right"></em>
     </button>
     <br /><br />
-    <button class="btn  btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+    <button class="btn  btn--plain" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
         <em class="fa fa-arrow-left"></em>
     </button>
     <br /><br /><br /><br /><br /><br />
     <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscription sessions in the category').'</button>';
+        echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" >'.get_lang('Subscription sessions in the category').'</button>';
     ?>
   </td>
   <td width="45%" align="center">

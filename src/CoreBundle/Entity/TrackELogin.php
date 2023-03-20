@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,74 +21,46 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELogin
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
-     */
-    protected $loginUserId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="login_date", type="datetime", nullable=false)
-     */
-    protected $loginDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
-     */
-    protected $userIp;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="logout_date", type="datetime", nullable=true)
-     */
-    protected $logoutDate;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="login_id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
-    protected $loginId;
+    protected int $loginId;
 
     /**
-     * Set loginUserId.
-     *
-     * @param int $loginUserId
-     *
-     * @return TrackELogin
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="logins")
+     * @ORM\JoinColumn(name="login_user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public function setLoginUserId($loginUserId)
+    protected User $user;
+
+    /**
+     * @ORM\Column(name="login_date", type="datetime", nullable=false)
+     */
+    protected DateTime $loginDate;
+
+    /**
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
+     */
+    protected string $userIp;
+
+    /**
+     * @ORM\Column(name="logout_date", type="datetime", nullable=true)
+     */
+    protected ?DateTime $logoutDate = null;
+
+    public function getUser(): User
     {
-        $this->loginUserId = $loginUserId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get loginUserId.
-     *
-     * @return int
-     */
-    public function getLoginUserId()
-    {
-        return $this->loginUserId;
-    }
-
-    /**
-     * Set loginDate.
-     *
-     * @param \DateTime $loginDate
-     *
-     * @return TrackELogin
-     */
-    public function setLoginDate($loginDate)
+    public function setLoginDate(DateTime $loginDate): self
     {
         $this->loginDate = $loginDate;
 
@@ -95,21 +70,14 @@ class TrackELogin
     /**
      * Get loginDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLoginDate()
     {
         return $this->loginDate;
     }
 
-    /**
-     * Set userIp.
-     *
-     * @param string $userIp
-     *
-     * @return TrackELogin
-     */
-    public function setUserIp($userIp)
+    public function setUserIp(string $userIp): self
     {
         $this->userIp = $userIp;
 
@@ -126,14 +94,7 @@ class TrackELogin
         return $this->userIp;
     }
 
-    /**
-     * Set logoutDate.
-     *
-     * @param \DateTime $logoutDate
-     *
-     * @return TrackELogin
-     */
-    public function setLogoutDate($logoutDate)
+    public function setLogoutDate(DateTime $logoutDate): self
     {
         $this->logoutDate = $logoutDate;
 
@@ -143,7 +104,7 @@ class TrackELogin
     /**
      * Get logoutDate.
      *
-     * @return \DateTime
+     * @return null|DateTime
      */
     public function getLogoutDate()
     {

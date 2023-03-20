@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -53,7 +55,7 @@ $form->applyFilter('visual_code', 'html_filter');
 $form->addSelectAjax(
     'course_categories',
     get_lang('Categories'),
-    null,
+    [],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
         'multiple' => 'multiple',
@@ -106,37 +108,24 @@ if (1 === count($languages)) {
     // If there's only one language available, there's no point in asking
     $form->addElement('hidden', 'course_language', $languages[0]);
 } else {
-    $form->addSelectLanguage(
-        'course_language',
-        get_lang('Language'),
-        [],
-        ['style' => 'width:150px']
-    );
+    $form->addSelectLanguage('course_language', get_lang('Language'));
 }
 
 if ('true' === api_get_setting('teacher_can_select_course_template')) {
-    $form->addElement(
-        'select_ajax',
+    $form->addSelectAjax(
         'course_template',
         [
             get_lang('Course template'),
             get_lang('Pick a course as template for this new course'),
         ],
-        null,
+        [],
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }
 
 $form->addElement('checkbox', 'exemplary_content', '', get_lang('Fill with demo content'));
 
-$group = [];
-$group[] = $form->createElement('radio', 'visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Hidden - Completely hidden to all users except the administrators'), COURSE_VISIBILITY_HIDDEN);
-
-$form->addGroup($group, '', get_lang('Course access'));
+CourseManager::addVisibilityOptions($form);
 
 $group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
@@ -152,6 +141,8 @@ $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang(
     'id' => 'disk_quota',
 ]);
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
+$form->addText('video_url', get_lang('Video URL'), false);
+$form->addCheckBox('sticky', null, get_lang('Sticky'));
 
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
@@ -180,7 +171,7 @@ $default_course_visibility = api_get_setting('courses_default_creation_visibilit
 if (isset($default_course_visibility)) {
     $values['visibility'] = api_get_setting('courses_default_creation_visibility');
 } else {
-    $values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
+    $values['visibility'] = Course::OPEN_PLATFORM;
 }
 $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
@@ -206,13 +197,13 @@ if ($form->validate()) {
         include $file_to_include;
     }
 
-    $courseInfo = CourseManager::create_course($course);
-    if ($courseInfo && isset($courseInfo['course_public_url'])) {
+    $course = CourseManager::create_course($course);
+    if (null !== $course) {
         Display::addFlash(
             Display::return_message(
                 sprintf(
                     get_lang('Course %s added'),
-                    Display::url($courseInfo['title'], $courseInfo['course_public_url'])
+                    Display::url($course->getTitle(), api_get_course_url($course->getId()))
                 ),
                 'confirmation',
                 false

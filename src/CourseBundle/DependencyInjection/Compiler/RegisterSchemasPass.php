@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\DependencyInjection\Compiler;
 
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -14,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class RegisterSchemasPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('chamilo_course.registry.settings_schema')) {
             return;
@@ -25,7 +28,7 @@ class RegisterSchemasPass implements CompilerPassInterface
         foreach ($taggedServicesIds as $id => $tags) {
             foreach ($tags as $attributes) {
                 if (!isset($attributes['alias'])) {
-                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "alias" attribute on "sylius.settings_schema" tags.', $id));
+                    throw new InvalidArgumentException(sprintf('Service "%s" must define the "alias" attribute on "sylius.settings_schema" tags.', $id));
                 }
 
                 $schemaRegistry->addMethodCall('register', [$attributes['alias'], new Reference($id)]);

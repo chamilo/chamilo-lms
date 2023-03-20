@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -10,7 +12,10 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,7 +29,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ApiResource(
  *     iri="http://schema.org/MediaObject",
  *     normalizationContext={
- *      "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read"}
+ *         "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"}
  *     },
  *     collectionOperations={
  *         "post"={
@@ -56,73 +61,61 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "get"
  *     }
  * )
- * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
- * @ApiFilter(PropertyFilter::class)
+ * @Vich\Uploadable
  * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
  * @ORM\Entity
- * @Vich\Uploadable
- *
  * @ORM\Table(name="resource_file")
  */
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'name' => 'partial',
+])]
 class ResourceFile
 {
     use TimestampableEntity;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected ?string $name = null;
 
     /**
-     * @var string
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $mimeType;
+    protected ?string $mimeType = null;
 
     /**
-     * @var string
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $originalName;
+    protected ?string $originalName = null;
 
     /**
-     * @var string
-     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $dimensions;
+    protected ?array $dimensions;
 
     /**
-     * @var int
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      *
      * @ORM\Column(type="integer")
      */
-    protected $size;
+    protected ?int $size = 0;
 
     /**
-     * @var File
-     *
-     * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",
@@ -132,51 +125,68 @@ class ResourceFile
      *     dimensions="dimensions"
      * )
      */
-    protected $file;
+//    #[Vich\UploadableField(
+//        mapping: 'resources',
+//        fileNameProperty: 'name',
+//        size: 'size',
+//        mimeType: 'mimeType',
+//        originalName: 'originalName',
+//        dimensions: 'dimensions'
+//    )]
+    protected ?File $file = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
-    protected $crop;
+    protected ?string $crop = null;
 
     /**
-     * @var ResourceNode
-     *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
      */
-    protected $resourceNode;
+    protected ResourceNode $resourceNode;
 
     /**
-     * @var array
+     * @var string[]
      *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $metadata;
+    protected ?array $metadata = [];
+
+    #[Groups(['message:read'])]
+    protected ?bool $audio = null;
 
     /**
-     * @var bool
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
-    protected $image;
+    protected ?bool $image = null;
 
     /**
-     * @var bool
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
-    protected $video;
+    protected ?bool $video = null;
 
     /**
-     * Constructor.
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
+    protected ?bool $text = null;
+
+    /**
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    protected ?string $description = null;
+
+    /**
+     * @var DateTime|DateTimeImmutable
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
+
     public function __construct()
     {
+        $this->size = 0;
         $this->metadata = [];
         $this->dimensions = [];
-        $this->size = 0;
     }
 
     public function __toString(): string
@@ -184,32 +194,40 @@ class ResourceFile
         return $this->getOriginalName();
     }
 
+    public function isText(): bool
+    {
+        $mimeType = $this->getMimeType();
+
+        return str_contains($mimeType, 'text');
+    }
+
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'image')) {
-            return true;
-        }
 
-        return false;
+        return str_contains($mimeType, 'image');
     }
 
     public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
-        if (false !== strpos($mimeType, 'video')) {
-            return true;
-        }
 
-        return false;
+        return str_contains($mimeType, 'video');
     }
 
-    public function getName(): string
+    public function isAudio(): bool
+    {
+        $mimeType = $this->getMimeType();
+
+        return str_contains($mimeType, 'audio');
+    }
+
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName($name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -225,26 +243,21 @@ class ResourceFile
     }
 
     /**
-     * @param string $crop
-     *
-     * @return $this
+     * $crop example: 100,100,100,100 = width,height,x,y.
      */
-    public function setCrop($crop): self
+    public function setCrop(string $crop): self
     {
         $this->crop = $crop;
 
         return $this;
     }
 
-    public function getSize(): int
+    public function getSize(): ?int
     {
-        return (int) $this->size;
+        return $this->size;
     }
 
-    /**
-     * @param int $size
-     */
-    public function setSize($size): self
+    public function setSize(?int $size): self
     {
         $this->size = $size;
 
@@ -295,15 +308,12 @@ class ResourceFile
         return $this;
     }*/
 
-    public function getMimeType(): string
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
 
-    /**
-     * @param string $mimeType
-     */
-    public function setMimeType($mimeType): self
+    public function setMimeType(?string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -312,13 +322,10 @@ class ResourceFile
 
     public function getOriginalName(): string
     {
-        return (string) $this->originalName;
+        return $this->originalName;
     }
 
-    /**
-     * @param string $originalName
-     */
-    public function setOriginalName($originalName): self
+    public function setOriginalName(?string $originalName): self
     {
         $this->originalName = $originalName;
 
@@ -330,10 +337,7 @@ class ResourceFile
         return $this->dimensions;
     }
 
-    /**
-     * @param $dimensions
-     */
-    public function setDimensions($dimensions): self
+    public function setDimensions(?array $dimensions): self
     {
         $this->dimensions = $dimensions;
 
@@ -343,7 +347,7 @@ class ResourceFile
     public function getWidth(): int
     {
         $data = $this->getDimensions();
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[0];
@@ -356,7 +360,7 @@ class ResourceFile
     {
         $data = $this->getDimensions();
 
-        if ($data) {
+        if ([] !== $data) {
             //$data = explode(',', $data);
 
             return (int) $data[1];
@@ -377,33 +381,35 @@ class ResourceFile
         return $this;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getFile(): ?File
     {
         return $this->file;
     }
 
     /**
-     * @param File|UploadedFile $file
+     * @param File|UploadedFile|null $file
      */
-    public function setFile(File $file = null): void
+    public function setFile(?File $file = null): self
     {
         $this->file = $file;
 
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTimeImmutable();
         }
-    }
-
-    public function getContentUrl(): ?string
-    {
-        return $this->contentUrl;
-    }
-
-    public function setContentUrl(?string $contentUrl): self
-    {
-        $this->contentUrl = $contentUrl;
 
         return $this;
     }

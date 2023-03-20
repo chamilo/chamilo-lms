@@ -10,8 +10,6 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-require_once 'work.lib.php';
-
 $courseInfo = api_get_course_info();
 $user_id = api_get_user_id();
 $sessionId = api_get_session_id();
@@ -34,7 +32,7 @@ $tool_name = get_lang('Assignments');
 
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
+$action = $_REQUEST['action'] ?? 'list';
 
 $display_upload_form = false;
 if ('upload_form' === $action) {
@@ -123,10 +121,9 @@ Event::registerLog($logInfo);
 $groupId = api_get_group_id();
 $isTutor = false;
 if (!empty($groupId)) {
-    $groupInfo = GroupManager::get_group_properties($groupId);
-    $isTutor = GroupManager::is_tutor_of_group(
+    $isTutor = GroupManager::isTutorOfGroup(
         api_get_user_id(),
-        $groupInfo
+        api_get_group_entity()
     );
 }
 
@@ -173,7 +170,7 @@ switch ($action) {
             );
 
             if ($result) {
-                Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
+                SkillModel::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
 
                 $message = Display::return_message(get_lang('Directory created'), 'success');
             } else {
@@ -228,12 +225,12 @@ switch ($action) {
 
             /** @var CStudentPublication $studentPublication */
             $studentPublication = $repo->find($_REQUEST['item_id']);
-            $studentPublication->setParentId($_REQUEST['move_to_id']);
+            if ($_REQUEST['move_to_id']) {
+                $parent = $repo->find($_REQUEST['move_to_id']);
+                $studentPublication->setParent($parent);
+            }
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
-
-            $repo->getEntityManager()->persist($studentPublication);
-            $repo->getEntityManager()->flush();
-
+            $repo->update($studentPublication);
             /*api_item_property_update(
                 $courseInfo,
                 'work',

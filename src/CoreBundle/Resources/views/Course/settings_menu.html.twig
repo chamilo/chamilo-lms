@@ -1,4 +1,4 @@
-<div class="list-group">
+<div class="list-group q-card ">
 {% set current_namespace = app.request.get('namespace') %}
 {% for namespace in schemas|keys %}
     {% set namespace = namespace | replace({'chamilo_course.settings.' : ''}) %}

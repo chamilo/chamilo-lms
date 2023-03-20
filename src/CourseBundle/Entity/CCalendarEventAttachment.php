@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -12,56 +14,43 @@ use Doctrine\ORM\Mapping as ORM;
  * CCalendarEventAttachment.
  *
  * @ORM\Table(
- *  name="c_calendar_event_attachment",
- *  indexes={
- *  }
+ *     name="c_calendar_event_attachment",
+ *     indexes={
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository")
  */
 class CCalendarEventAttachment extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
-    protected $filename;
+    protected string $filename;
 
     /**
-     * @var CCalendarEvent
-     *
      * @ORM\ManyToOne(targetEntity="CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
      * @ORM\JoinColumn(name="agenda_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $event;
+    protected CCalendarEvent $event;
 
     public function __toString(): string
     {
         return $this->getFilename();
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     */
-    public function setComment($comment): self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
 
@@ -78,14 +67,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->comment;
     }
 
-    /**
-     * Set filename.
-     *
-     * @param string $filename
-     *
-     * @return CCalendarEventAttachment
-     */
-    public function setFilename($filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -115,9 +97,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->event;
     }
 
-    /**
-     * @return CCalendarEventAttachment
-     */
     public function setEvent(CCalendarEvent $event): self
     {
         $this->event = $event;

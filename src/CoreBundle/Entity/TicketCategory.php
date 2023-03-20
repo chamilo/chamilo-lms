@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,85 +18,62 @@ use Doctrine\ORM\Mapping as ORM;
 class TicketCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_tickets", type="integer", nullable=false)
      */
-    protected $totalTickets;
+    protected int $totalTickets;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="course_required", type="boolean", nullable=false)
      */
-    protected $courseRequired;
+    protected bool $courseRequired;
 
     /**
-     * @var TicketProject
-     *
-     * @ORM\ManyToOne(targetEntity="TicketProject")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
-    protected $project;
+    protected TicketProject $project;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_user_id", type="integer")
      */
-    protected $insertUserId;
+    protected int $insertUserId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sys_insert_datetime", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
      */
-    protected $insertDateTime;
+    protected DateTime $insertDateTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
-    protected $lastEditUserId;
+    protected ?int $lastEditUserId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
-    protected $lastEditDateTime;
+    protected ?DateTime $lastEditDateTime = null;
 
-    /**
-     * Category constructor.
-     */
     public function __construct()
     {
         $this->totalTickets = 0;
-        $this->insertDateTime = new \DateTime();
+        $this->insertDateTime = new DateTime();
     }
 
     /**
@@ -105,18 +85,6 @@ class TicketCategory
     }
 
     /**
-     * @param int $id
-     *
-     * @return TicketCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -124,12 +92,7 @@ class TicketCategory
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return TicketCategory
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -144,12 +107,7 @@ class TicketCategory
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return TicketCategory
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -164,32 +122,19 @@ class TicketCategory
         return $this->totalTickets;
     }
 
-    /**
-     * @param int $totalTickets
-     *
-     * @return TicketCategory
-     */
-    public function setTotalTickets($totalTickets)
+    public function setTotalTickets(int $totalTickets): self
     {
         $this->totalTickets = $totalTickets;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCourseRequired()
+    public function isCourseRequired(): bool
     {
         return $this->courseRequired;
     }
 
-    /**
-     * @param bool $courseRequired
-     *
-     * @return TicketCategory
-     */
-    public function setCourseRequired($courseRequired)
+    public function setCourseRequired(bool $courseRequired): self
     {
         $this->courseRequired = $courseRequired;
 
@@ -204,12 +149,7 @@ class TicketCategory
         return $this->project;
     }
 
-    /**
-     * @param TicketProject $project
-     *
-     * @return TicketCategory
-     */
-    public function setProject($project)
+    public function setProject(TicketProject $project): self
     {
         $this->project = $project;
 
@@ -225,11 +165,9 @@ class TicketCategory
     }
 
     /**
-     * @param int $insertUserId
-     *
      * @return TicketCategory
      */
-    public function setInsertUserId($insertUserId)
+    public function setInsertUserId(int $insertUserId)
     {
         $this->insertUserId = $insertUserId;
 
@@ -237,19 +175,14 @@ class TicketCategory
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDateTime()
     {
         return $this->insertDateTime;
     }
 
-    /**
-     * @param \DateTime $insertDateTime
-     *
-     * @return TicketCategory
-     */
-    public function setInsertDateTime($insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -265,11 +198,9 @@ class TicketCategory
     }
 
     /**
-     * @param int $lastEditUserId
-     *
      * @return TicketCategory
      */
-    public function setLastEditUserId($lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -277,19 +208,14 @@ class TicketCategory
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEditDateTime()
     {
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @param \DateTime $lastEditDateTime
-     *
-     * @return TicketCategory
-     */
-    public function setLastEditDateTime($lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

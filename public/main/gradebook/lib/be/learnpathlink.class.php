@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Defines a gradebook LearnpathLink object.
  *
@@ -10,7 +13,6 @@
  */
 class LearnpathLink extends AbstractLink
 {
-    private $course_info;
     private $learnpath_table;
     private $learnpath_data;
 
@@ -34,7 +36,22 @@ class LearnpathLink extends AbstractLink
             return [];
         }
 
-        $session_id = $this->get_session_id();
+        $lpRepo = Container::getLpRepository();
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
+        $qb = $lpRepo->getResourcesByCourse($course, $session);
+        $lps = $qb->getQuery()->getResult();
+
+        $list = [];
+        /** @var CLp $lp */
+        foreach ($lps as $lp) {
+            $list[] = [$lp->getIid(), $lp->getName()];
+        }
+
+        return $list;
+
+        /*$session_id = $this->get_session_id();
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
         } else {
@@ -50,7 +67,7 @@ class LearnpathLink extends AbstractLink
             $cats[] = [$data['iid'], $data['name']];
         }
 
-        return $cats;
+        return $cats;*/
     }
 
     /**

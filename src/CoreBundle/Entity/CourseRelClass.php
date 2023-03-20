@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -7,7 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRelClass.
+ * Course subscriptions to a class.
  *
  * @ORM\Table(name="course_rel_class")
  * @ORM\Entity
@@ -15,31 +17,25 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseRelClass
 {
     /**
-     * @var string
-     *
      * @ORM\Column(name="course_code", type="string", length=40)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $courseCode;
+    protected string $courseCode;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="class_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $classId;
+    protected int $classId;
 
     /**
      * Set courseCode.
      *
-     * @param string $courseCode
-     *
      * @return CourseRelClass
      */
-    public function setCourseCode($courseCode)
+    public function setCourseCode(string $courseCode)
     {
         $this->courseCode = $courseCode;
 
@@ -59,11 +55,9 @@ class CourseRelClass
     /**
      * Set classId.
      *
-     * @param int $classId
-     *
      * @return CourseRelClass
      */
-    public function setClassId($classId)
+    public function setClassId(int $classId)
     {
         $this->classId = $classId;
 

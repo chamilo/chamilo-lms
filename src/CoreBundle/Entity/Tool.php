@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Tool.
+ * Platform tools.
  *
  * @ORM\Table(name="tool")
  * @ORM\Entity
@@ -17,37 +22,36 @@ use Doctrine\ORM\Mapping as ORM;
 class Tool
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
+     * @Groups({"tool:read"})
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */
-    protected $name;
+    #[Assert\NotBlank]
+    protected string $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
+     *
+     * @var ResourceType[]|Collection
      */
-    protected $resourceTypes;
+    protected Collection $resourceTypes;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __construct()
     {
-        return (string) $this->getName();
+        $this->resourceTypes = new ArrayCollection();
     }
 
-    /**
-     * @return ArrayCollection
-     */
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     /*public function getToolResourceRight()
     {
         return $this->toolResourceRight;
@@ -62,9 +66,6 @@ class Tool
         }
     }*/
 
-    /**
-     * @return $this
-     */
     /*public function addToolResourceRight(ToolResourceRight $toolResourceRight)
     {
         $toolResourceRight->setTool($this);
@@ -78,9 +79,6 @@ class Tool
         return $this->resourceNodes;
     }*/
 
-    /**
-     * @return $this
-     */
     /*public function setResourceNodes($resourceNodes)
     {
         $this->resourceNodes = $resourceNodes;
@@ -88,65 +86,56 @@ class Tool
         return $this;
     }*/
 
-    /**
-     * Get id.
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Tool
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getResourceTypes()
     {
         return $this->resourceTypes;
     }
 
-    /**
-     * @return Tool
-     */
-    public function setResourceTypes($resourceTypes)
+    public function hasResourceType(ResourceType $resourceType): bool
+    {
+        if (0 !== $this->resourceTypes->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('name', $resourceType->getName())
+            );
+            $relation = $this->resourceTypes->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
+    public function setResourceTypes(Collection $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
 
         return $this;
     }
 
-    /**
-     * @param $name
-     *
-     * @return ResourceType
-     */
-    public function getResourceTypeByName($name)
+    /*public function getResourceTypeByName(string $name): ?ResourceType
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('name', $name));
 
         return $this->getResourceTypes()->matching($criteria)->first();
-    }
+    }*/
 }

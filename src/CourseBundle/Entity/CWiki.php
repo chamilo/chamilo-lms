@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,213 +26,172 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CWikiRepository")
  */
-class CWiki
+class CWiki extends AbstractResource implements ResourceInterface
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="page_id", type="integer", nullable=true)
      */
-    protected $pageId;
+    protected ?int $pageId = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="reflink", type="string", length=255, nullable=false)
      */
-    protected $reflink;
+    protected string $reflink;
 
     /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    #[Assert\NotBlank]
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
-    protected $content;
+    #[Assert\NotBlank]
+    protected string $content;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $userId;
+    protected int $userId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    protected $groupId;
+    protected ?int $groupId = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="dtime", type="datetime", nullable=true)
      */
-    protected $dtime;
+    protected ?DateTime $dtime = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="addlock", type="integer", nullable=false)
      */
-    protected $addlock;
+    protected int $addlock;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="editlock", type="integer", nullable=false)
      */
-    protected $editlock;
+    protected int $editlock;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    protected $visibility;
+    protected int $visibility;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="addlock_disc", type="integer", nullable=false)
      */
-    protected $addlockDisc;
+    protected int $addlockDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility_disc", type="integer", nullable=false)
      */
-    protected $visibilityDisc;
+    protected int $visibilityDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ratinglock_disc", type="integer", nullable=false)
      */
-    protected $ratinglockDisc;
+    protected int $ratinglockDisc;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="assignment", type="integer", nullable=false)
      */
-    protected $assignment;
+    protected int $assignment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    protected $comment;
+    protected string $comment;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="progress", type="text", nullable=false)
      */
-    protected $progress;
+    protected string $progress;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="score", type="integer", nullable=true)
      */
-    protected $score;
+    protected ?int $score = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
-    protected $version;
+    protected ?int $version = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="is_editing", type="integer", nullable=false)
      */
-    protected $isEditing;
+    protected int $isEditing;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="time_edit", type="datetime", nullable=true)
      */
-    protected $timeEdit;
+    protected ?DateTime $timeEdit = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="hits", type="integer", nullable=true)
      */
-    protected $hits;
+    protected ?int $hits = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="linksto", type="text", nullable=false)
      */
-    protected $linksto;
+    protected string $linksto;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="tag", type="text", nullable=false)
      */
-    protected $tag;
+    protected string $tag;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
      */
-    protected $userIp;
+    protected string $userIp;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected $sessionId;
+    protected ?int $sessionId = null;
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 
     /**
-     * Set pageId.
+     * Get title.
      *
-     * @param int $pageId
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set title.
      *
      * @return CWiki
      */
-    public function setPageId($pageId)
+    public function setTitle(string $title)
     {
-        $this->pageId = $pageId;
+        $this->title = $title;
 
         return $this;
     }
@@ -243,15 +207,13 @@ class CWiki
     }
 
     /**
-     * Set reflink.
-     *
-     * @param string $reflink
+     * Set pageId.
      *
      * @return CWiki
      */
-    public function setReflink($reflink)
+    public function setPageId(int $pageId)
     {
-        $this->reflink = $reflink;
+        $this->pageId = $pageId;
 
         return $this;
     }
@@ -267,39 +229,13 @@ class CWiki
     }
 
     /**
-     * Set title.
-     *
-     * @param string $title
+     * Set reflink.
      *
      * @return CWiki
      */
-    public function setTitle($title)
+    public function setReflink(string $reflink)
     {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return CWiki
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
+        $this->reflink = $reflink;
 
         return $this;
     }
@@ -315,15 +251,13 @@ class CWiki
     }
 
     /**
-     * Set userId.
-     *
-     * @param int $userId
+     * Set content.
      *
      * @return CWiki
      */
-    public function setUserId($userId)
+    public function setContent(string $content)
     {
-        $this->userId = $userId;
+        $this->content = $content;
 
         return $this;
     }
@@ -339,15 +273,13 @@ class CWiki
     }
 
     /**
-     * Set groupId.
-     *
-     * @param int $groupId
+     * Set userId.
      *
      * @return CWiki
      */
-    public function setGroupId($groupId)
+    public function setUserId(int $userId)
     {
-        $this->groupId = $groupId;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -363,15 +295,13 @@ class CWiki
     }
 
     /**
-     * Set dtime.
-     *
-     * @param \DateTime $dtime
+     * Set groupId.
      *
      * @return CWiki
      */
-    public function setDtime($dtime)
+    public function setGroupId(int $groupId)
     {
-        $this->dtime = $dtime;
+        $this->groupId = $groupId;
 
         return $this;
     }
@@ -379,7 +309,7 @@ class CWiki
     /**
      * Get dtime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDtime()
     {
@@ -387,15 +317,13 @@ class CWiki
     }
 
     /**
-     * Set addlock.
-     *
-     * @param int $addlock
+     * Set dtime.
      *
      * @return CWiki
      */
-    public function setAddlock($addlock)
+    public function setDtime(DateTime $dtime)
     {
-        $this->addlock = $addlock;
+        $this->dtime = $dtime;
 
         return $this;
     }
@@ -411,15 +339,13 @@ class CWiki
     }
 
     /**
-     * Set editlock.
-     *
-     * @param int $editlock
+     * Set addlock.
      *
      * @return CWiki
      */
-    public function setEditlock($editlock)
+    public function setAddlock(int $addlock)
     {
-        $this->editlock = $editlock;
+        $this->addlock = $addlock;
 
         return $this;
     }
@@ -435,15 +361,13 @@ class CWiki
     }
 
     /**
-     * Set visibility.
-     *
-     * @param int $visibility
+     * Set editlock.
      *
      * @return CWiki
      */
-    public function setVisibility($visibility)
+    public function setEditlock(int $editlock)
     {
-        $this->visibility = $visibility;
+        $this->editlock = $editlock;
 
         return $this;
     }
@@ -459,15 +383,13 @@ class CWiki
     }
 
     /**
-     * Set addlockDisc.
-     *
-     * @param int $addlockDisc
+     * Set visibility.
      *
      * @return CWiki
      */
-    public function setAddlockDisc($addlockDisc)
+    public function setVisibility(int $visibility)
     {
-        $this->addlockDisc = $addlockDisc;
+        $this->visibility = $visibility;
 
         return $this;
     }
@@ -483,15 +405,13 @@ class CWiki
     }
 
     /**
-     * Set visibilityDisc.
-     *
-     * @param int $visibilityDisc
+     * Set addlockDisc.
      *
      * @return CWiki
      */
-    public function setVisibilityDisc($visibilityDisc)
+    public function setAddlockDisc(int $addlockDisc)
     {
-        $this->visibilityDisc = $visibilityDisc;
+        $this->addlockDisc = $addlockDisc;
 
         return $this;
     }
@@ -507,15 +427,13 @@ class CWiki
     }
 
     /**
-     * Set ratinglockDisc.
-     *
-     * @param int $ratinglockDisc
+     * Set visibilityDisc.
      *
      * @return CWiki
      */
-    public function setRatinglockDisc($ratinglockDisc)
+    public function setVisibilityDisc(int $visibilityDisc)
     {
-        $this->ratinglockDisc = $ratinglockDisc;
+        $this->visibilityDisc = $visibilityDisc;
 
         return $this;
     }
@@ -531,15 +449,13 @@ class CWiki
     }
 
     /**
-     * Set assignment.
-     *
-     * @param int $assignment
+     * Set ratinglockDisc.
      *
      * @return CWiki
      */
-    public function setAssignment($assignment)
+    public function setRatinglockDisc(int $ratinglockDisc)
     {
-        $this->assignment = $assignment;
+        $this->ratinglockDisc = $ratinglockDisc;
 
         return $this;
     }
@@ -555,15 +471,13 @@ class CWiki
     }
 
     /**
-     * Set comment.
-     *
-     * @param string $comment
+     * Set assignment.
      *
      * @return CWiki
      */
-    public function setComment($comment)
+    public function setAssignment(int $assignment)
     {
-        $this->comment = $comment;
+        $this->assignment = $assignment;
 
         return $this;
     }
@@ -579,15 +493,13 @@ class CWiki
     }
 
     /**
-     * Set progress.
-     *
-     * @param string $progress
+     * Set comment.
      *
      * @return CWiki
      */
-    public function setProgress($progress)
+    public function setComment(string $comment)
     {
-        $this->progress = $progress;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -603,15 +515,13 @@ class CWiki
     }
 
     /**
-     * Set score.
-     *
-     * @param int $score
+     * Set progress.
      *
      * @return CWiki
      */
-    public function setScore($score)
+    public function setProgress(string $progress)
     {
-        $this->score = $score;
+        $this->progress = $progress;
 
         return $this;
     }
@@ -627,15 +537,13 @@ class CWiki
     }
 
     /**
-     * Set version.
-     *
-     * @param int $version
+     * Set score.
      *
      * @return CWiki
      */
-    public function setVersion($version)
+    public function setScore(int $score)
     {
-        $this->version = $version;
+        $this->score = $score;
 
         return $this;
     }
@@ -651,15 +559,13 @@ class CWiki
     }
 
     /**
-     * Set isEditing.
-     *
-     * @param int $isEditing
+     * Set version.
      *
      * @return CWiki
      */
-    public function setIsEditing($isEditing)
+    public function setVersion(int $version)
     {
-        $this->isEditing = $isEditing;
+        $this->version = $version;
 
         return $this;
     }
@@ -675,15 +581,13 @@ class CWiki
     }
 
     /**
-     * Set timeEdit.
-     *
-     * @param \DateTime $timeEdit
+     * Set isEditing.
      *
      * @return CWiki
      */
-    public function setTimeEdit($timeEdit)
+    public function setIsEditing(int $isEditing)
     {
-        $this->timeEdit = $timeEdit;
+        $this->isEditing = $isEditing;
 
         return $this;
     }
@@ -691,7 +595,7 @@ class CWiki
     /**
      * Get timeEdit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeEdit()
     {
@@ -699,15 +603,13 @@ class CWiki
     }
 
     /**
-     * Set hits.
-     *
-     * @param int $hits
+     * Set timeEdit.
      *
      * @return CWiki
      */
-    public function setHits($hits)
+    public function setTimeEdit(DateTime $timeEdit)
     {
-        $this->hits = $hits;
+        $this->timeEdit = $timeEdit;
 
         return $this;
     }
@@ -723,15 +625,13 @@ class CWiki
     }
 
     /**
-     * Set linksto.
-     *
-     * @param string $linksto
+     * Set hits.
      *
      * @return CWiki
      */
-    public function setLinksto($linksto)
+    public function setHits(int $hits)
     {
-        $this->linksto = $linksto;
+        $this->hits = $hits;
 
         return $this;
     }
@@ -747,15 +647,13 @@ class CWiki
     }
 
     /**
-     * Set tag.
-     *
-     * @param string $tag
+     * Set linksto.
      *
      * @return CWiki
      */
-    public function setTag($tag)
+    public function setLinksto(string $linksto)
     {
-        $this->tag = $tag;
+        $this->linksto = $linksto;
 
         return $this;
     }
@@ -771,15 +669,13 @@ class CWiki
     }
 
     /**
-     * Set userIp.
-     *
-     * @param string $userIp
+     * Set tag.
      *
      * @return CWiki
      */
-    public function setUserIp($userIp)
+    public function setTag(string $tag)
     {
-        $this->userIp = $userIp;
+        $this->tag = $tag;
 
         return $this;
     }
@@ -795,15 +691,13 @@ class CWiki
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
+     * Set userIp.
      *
      * @return CWiki
      */
-    public function setSessionId($sessionId)
+    public function setUserIp(string $userIp)
     {
-        $this->sessionId = $sessionId;
+        $this->userIp = $userIp;
 
         return $this;
     }
@@ -819,15 +713,13 @@ class CWiki
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * Set sessionId.
      *
      * @return CWiki
      */
-    public function setCId($cId)
+    public function setSessionId(int $sessionId)
     {
-        $this->cId = $cId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
@@ -840,5 +732,37 @@ class CWiki
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set cId.
+     *
+     * @return CWiki
+     */
+    public function setCId(int $cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use CourseManager;
 use Database;
 use TestCategory;
 
@@ -88,7 +89,7 @@ class CourseRecycler
         }
 
         if ('full_backup' === $backupType) {
-            \CourseManager::deleteCoursePicture($this->course_info['code']);
+            CourseManager::deleteCoursePicture($this->course_info['code']);
         }
     }
 
@@ -323,7 +324,7 @@ class CourseRecycler
                   f.c_id = $courseId AND
                   i.c_id = f.c_id AND
                   i.tool = 'forum' AND
-        	      f.iid = i.ref AND 
+        	      f.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $forumCategoryTable
                     WHERE c_id = $courseId AND cat_id NOT IN ($subQuery)";
@@ -350,7 +351,7 @@ class CourseRecycler
                   l.c_id = $courseId AND
                   i.c_id = l.c_id AND
                   i.tool = 'link' AND
-        	      l.iid = i.ref AND 
+        	      l.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $linkCategoryTable
                     WHERE c_id = $courseId AND id NOT IN ($subQuery)";
@@ -430,7 +431,7 @@ class CourseRecycler
                         WHERE c_id = '.$this->course_id.' AND id IN('.$ids.')';
                 Database::query($sql);
                 $sql = 'DELETE FROM '.$table_rel.'
-                        WHERE c_id = '.$this->course_id.' AND exercice_id IN('.$ids.')';
+                        WHERE c_id = '.$this->course_id.' AND quiz_id IN('.$ids.')';
                 Database::query($sql);
             }
 
@@ -442,9 +443,9 @@ class CourseRecycler
                         SELECT q.id, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        
+
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.id = r.quiz_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
                     )
                     UNION
@@ -459,7 +460,7 @@ class CourseRecycler
                         SELECT q.id, r.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
+                        WHERE r.c_id = ".$this->course_id." AND (r.quiz_id = '-1' OR r.quiz_id = '0')
                     )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
@@ -618,9 +619,13 @@ class CourseRecycler
     {
         $learningPathTable = Database::get_course_table(TABLE_LP_MAIN);
         $learningPathCategoryTable = Database::get_course_table(TABLE_LP_CATEGORY);
+        $tblCTool = Database::get_course_table(TABLE_TOOL_LIST);
         if (isset($this->course->resources[RESOURCE_LEARNPATH_CATEGORY])) {
             foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $learnpathCategory) {
                 $categoryId = $learnpathCategory->object->getId();
+                $sql = "DELETE FROM $tblCTool WHERE c_id = {$this->course_id}
+                    AND link LIKE '%lp_controller.php%action=view_category&id=$categoryId%'";
+                Database::query($sql);
                 // Dissociate learning paths from categories that will be deleted
                 $sql = "UPDATE $learningPathTable SET category_id = 0 WHERE category_id = ".$categoryId;
                 Database::query($sql);

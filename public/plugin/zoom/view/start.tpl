@@ -29,16 +29,16 @@
             <td>{{ meeting.formattedStartTime }}</td>
             <td>{{ meeting.formattedDuration }}</td>
             <td>
-                <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
+                <a class="btn btn--primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
                 {% if is_manager %}
-                    <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
+                    <a class="btn btn--plain" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
                         {{ 'Details'|get_plugin_lang('ZoomPlugin') }}
                     </a>
 
-                    <a class="btn btn-danger"
+                    <a class="btn btn--danger"
                        href="start.php?action=delete&meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
                        onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
                     >

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -10,178 +12,92 @@ use Doctrine\ORM\Mapping as ORM;
  * CLpItemView.
  *
  * @ORM\Table(
- *  name="c_lp_item_view",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="lp_item_id", columns={"lp_item_id"}),
- *      @ORM\Index(name="lp_view_id", columns={"lp_view_id"}),
- *      @ORM\Index(name="idx_c_lp_item_view_cid_lp_view_id_lp_item_id", columns={"c_id", "lp_view_id", "lp_item_id"}),
- *      @ORM\Index(name="idx_c_lp_item_view_cid_id_view_count", columns={"c_id", "iid", "view_count"})
- *
- *  }
+ *     name="c_lp_item_view",
+ *     indexes={
+ *         @ORM\Index(name="lp_item_id", columns={"lp_item_id"}),
+ *         @ORM\Index(name="lp_view_id", columns={"lp_view_id"}),
+ *     }
  * )
  * @ORM\Entity
  */
 class CLpItemView
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
+     * @ORM\JoinColumn(name="lp_item_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $cId;
+    protected CLpItem $item;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="lp_item_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpView")
+     * @ORM\JoinColumn(name="lp_view_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $lpItemId;
+    protected CLpView $view;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="lp_view_id", type="integer", nullable=false)
-     */
-    protected $lpViewId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
-    protected $viewCount;
+    protected int $viewCount;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      */
-    protected $startTime;
+    protected int $startTime;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="total_time", type="integer", nullable=false)
      */
-    protected $totalTime;
+    protected int $totalTime;
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $score;
+    protected float $score;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", length=32, nullable=false, options={"default":"not attempted"})
      */
-    protected $status;
+    protected string $status;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="suspend_data", type="text", nullable=true)
      */
-    protected $suspendData;
+    protected ?string $suspendData = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="lesson_location", type="text", nullable=true)
      */
-    protected $lessonLocation;
+    protected ?string $lessonLocation = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="core_exit", type="string", length=32, nullable=false, options={"default":"none"})
      */
-    protected $coreExit;
+    protected string $coreExit;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="max_score", type="string", length=8, nullable=true)
      */
-    protected $maxScore;
+    protected ?string $maxScore = null;
 
-    /**
-     * CLpItemView constructor.
-     */
     public function __construct()
     {
         $this->status = 'not attempted';
         $this->coreExit = 'none';
     }
 
-    /**
-     * Set lpItemId.
-     *
-     * @param int $lpItemId
-     *
-     * @return CLpItemView
-     */
-    public function setLpItemId($lpItemId)
+    public function getIid(): int
     {
-        $this->lpItemId = $lpItemId;
-
-        return $this;
+        return $this->iid;
     }
 
-    /**
-     * Get lpItemId.
-     *
-     * @return int
-     */
-    public function getLpItemId()
-    {
-        return $this->lpItemId;
-    }
-
-    /**
-     * Set lpViewId.
-     *
-     * @param int $lpViewId
-     *
-     * @return CLpItemView
-     */
-    public function setLpViewId($lpViewId)
-    {
-        $this->lpViewId = $lpViewId;
-
-        return $this;
-    }
-
-    /**
-     * Get lpViewId.
-     *
-     * @return int
-     */
-    public function getLpViewId()
-    {
-        return $this->lpViewId;
-    }
-
-    /**
-     * Set viewCount.
-     *
-     * @param int $viewCount
-     *
-     * @return CLpItemView
-     */
-    public function setViewCount($viewCount)
+    public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
 
@@ -198,14 +114,7 @@ class CLpItemView
         return $this->viewCount;
     }
 
-    /**
-     * Set startTime.
-     *
-     * @param int $startTime
-     *
-     * @return CLpItemView
-     */
-    public function setStartTime($startTime)
+    public function setStartTime(int $startTime): self
     {
         $this->startTime = $startTime;
 
@@ -222,14 +131,7 @@ class CLpItemView
         return $this->startTime;
     }
 
-    /**
-     * Set totalTime.
-     *
-     * @param int $totalTime
-     *
-     * @return CLpItemView
-     */
-    public function setTotalTime($totalTime)
+    public function setTotalTime(int $totalTime): self
     {
         $this->totalTime = $totalTime;
 
@@ -246,14 +148,7 @@ class CLpItemView
         return $this->totalTime;
     }
 
-    /**
-     * Set score.
-     *
-     * @param float $score
-     *
-     * @return CLpItemView
-     */
-    public function setScore($score)
+    public function setScore(float $score): self
     {
         $this->score = $score;
 
@@ -270,14 +165,7 @@ class CLpItemView
         return $this->score;
     }
 
-    /**
-     * Set status.
-     *
-     * @param string $status
-     *
-     * @return CLpItemView
-     */
-    public function setStatus($status)
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -294,14 +182,7 @@ class CLpItemView
         return $this->status;
     }
 
-    /**
-     * Set suspendData.
-     *
-     * @param string $suspendData
-     *
-     * @return CLpItemView
-     */
-    public function setSuspendData($suspendData)
+    public function setSuspendData(string $suspendData): self
     {
         $this->suspendData = $suspendData;
 
@@ -318,14 +199,7 @@ class CLpItemView
         return $this->suspendData;
     }
 
-    /**
-     * Set lessonLocation.
-     *
-     * @param string $lessonLocation
-     *
-     * @return CLpItemView
-     */
-    public function setLessonLocation($lessonLocation)
+    public function setLessonLocation(string $lessonLocation): self
     {
         $this->lessonLocation = $lessonLocation;
 
@@ -342,14 +216,7 @@ class CLpItemView
         return $this->lessonLocation;
     }
 
-    /**
-     * Set coreExit.
-     *
-     * @param string $coreExit
-     *
-     * @return CLpItemView
-     */
-    public function setCoreExit($coreExit)
+    public function setCoreExit(string $coreExit): self
     {
         $this->coreExit = $coreExit;
 
@@ -366,14 +233,7 @@ class CLpItemView
         return $this->coreExit;
     }
 
-    /**
-     * Set maxScore.
-     *
-     * @param string $maxScore
-     *
-     * @return CLpItemView
-     */
-    public function setMaxScore($maxScore)
+    public function setMaxScore(string $maxScore): self
     {
         $this->maxScore = $maxScore;
 
@@ -390,27 +250,27 @@ class CLpItemView
         return $this->maxScore;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLpItemView
-     */
-    public function setCId($cId)
+    public function getItem(): CLpItem
     {
-        $this->cId = $cId;
+        return $this->item;
+    }
+
+    public function setItem(CLpItem $item): self
+    {
+        $this->item = $item;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getView(): CLpView
     {
-        return $this->cId;
+        return $this->view;
+    }
+
+    public function setView(CLpView $view): self
+    {
+        $this->view = $view;
+
+        return $this;
     }
 }

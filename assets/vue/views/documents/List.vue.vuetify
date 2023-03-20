@@ -4,6 +4,7 @@
       :handle-add="addHandler"
       :handle-add-document="addDocumentHandler"
       :handle-upload-document="uploadDocumentHandler"
+      :handle-download-document="downloadDocumentHandler"
     />
     <b-container fluid>
       <b-row>
@@ -26,7 +27,7 @@
             :items="items"
             :items-per-page.sync="options.itemsPerPage"
             :loading="isLoading"
-            :loading-text="$t('Loading...')"
+            :loading-text="$t('Loading')"
             :options.sync="options"
             :server-items-length="totalItems"
             class="elevation-1"
@@ -121,7 +122,7 @@ export default {
         }),
         // From ListMixin
         ...mapFields('documents', {
-            deletedItem: 'deleted',
+            deletedResource: 'deleted',
             error: 'error',
             isLoading: 'isLoading',
             resetList: 'resetList',

@@ -1,35 +1,38 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketMessage;
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class TicketManager.
  */
 class TicketManager
 {
-    const PRIORITY_NORMAL = 'NRM';
-    const PRIORITY_HIGH = 'HGH';
-    const PRIORITY_LOW = 'LOW';
+    public const PRIORITY_NORMAL = 'NRM';
+    public const PRIORITY_HIGH = 'HGH';
+    public const PRIORITY_LOW = 'LOW';
 
-    const SOURCE_EMAIL = 'MAI';
-    const SOURCE_PHONE = 'TEL';
-    const SOURCE_PLATFORM = 'PLA';
-    const SOURCE_PRESENTIAL = 'PRE';
+    public const SOURCE_EMAIL = 'MAI';
+    public const SOURCE_PHONE = 'TEL';
+    public const SOURCE_PLATFORM = 'PLA';
+    public const SOURCE_PRESENTIAL = 'PRE';
 
-    const STATUS_NEW = 'NAT';
-    const STATUS_PENDING = 'PND';
-    const STATUS_UNCONFIRMED = 'XCF';
-    const STATUS_CLOSE = 'CLS';
-    const STATUS_FORWARDED = 'REE';
+    public const STATUS_NEW = 'NAT';
+    public const STATUS_PENDING = 'PND';
+    public const STATUS_UNCONFIRMED = 'XCF';
+    public const STATUS_CLOSE = 'CLS';
+    public const STATUS_FORWARDED = 'REE';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -272,21 +275,21 @@ class TicketManager
     /**
      * Inserts a new ticket in the corresponding tables.
      *
-     * @param int    $category_id
-     * @param int    $course_id
-     * @param int    $sessionId
-     * @param int    $project_id
-     * @param string $other_area
-     * @param string $subject
-     * @param string $content
-     * @param string $personalEmail
-     * @param array  $fileAttachments
-     * @param string $source
-     * @param string $priority
-     * @param string $status
-     * @param int    $assignedUserId
-     * @param int    $exerciseId
-     * @param int    $lpId
+     * @param int      $category_id
+     * @param int      $course_id
+     * @param int      $sessionId
+     * @param int      $project_id
+     * @param string   $other_area
+     * @param string   $subject
+     * @param string   $content
+     * @param string   $personalEmail
+     * @param array    $fileAttachments
+     * @param string   $source
+     * @param string   $priority
+     * @param string   $status
+     * @param int|null $assignedUserId
+     * @param int      $exerciseId
+     * @param int      $lpId
      *
      * @return bool
      */
@@ -303,7 +306,7 @@ class TicketManager
         $source = '',
         $priority = '',
         $status = '',
-        $assignedUserId = 0,
+        $assignedUserId = null,
         $exerciseId = null,
         $lpId = null
     ) {
@@ -329,14 +332,12 @@ class TicketManager
             }
         }
 
-        if (!empty($category_id)) {
-            if (empty($assignedUserId)) {
-                $usersInCategory = self::getUsersInCategory($category_id);
-                if (!empty($usersInCategory) && count($usersInCategory) > 0) {
-                    $userCategoryInfo = $usersInCategory[0];
-                    if (isset($userCategoryInfo['user_id'])) {
-                        $assignedUserId = $userCategoryInfo['user_id'];
-                    }
+        if (empty($assignedUserId)) {
+            $usersInCategory = self::getUsersInCategory($category_id);
+            if (!empty($usersInCategory) && count($usersInCategory) > 0) {
+                $userCategoryInfo = $usersInCategory[0];
+                if (isset($userCategoryInfo['user_id'])) {
+                    $assignedUserId = $userCategoryInfo['user_id'];
                 }
             }
         }
@@ -487,77 +488,76 @@ class TicketManager
                 );
             }
 
-            if (empty($category_id)) {
-                if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                    $warningSubject = sprintf(
-                        get_lang('Ticket %s createdWithNoCategory'),
-                        $ticket_code
-                    );
-                    Display::addFlash(Display::return_message($warningSubject));
+            if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                $warningSubject = sprintf(
+                    get_lang('Ticket %s createdWithNoCategory'),
+                    $ticket_code
+                );
+                Display::addFlash(Display::return_message($warningSubject));
 
-                    $admins = UserManager::get_all_administrators();
-                    foreach ($admins as $userId => $data) {
-                        if ($data['active']) {
-                            MessageManager::send_message_simple(
-                                $userId,
-                                $warningSubject,
-                                $helpDeskMessage
-                            );
-                        }
-                    }
-                }
-            } else {
-                $categoryInfo = self::getCategory($category_id);
-                $usersInCategory = self::getUsersInCategory($category_id);
-
-                $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
-
-                if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
-                    $usersInCategory = self::getUsersInCategory($category_id);
-                    if (empty($usersInCategory)) {
-                        $subject = sprintf(
-                            get_lang('Warning: No one has been assigned to category %s'),
-                            $categoryInfo['name']
+                $admins = UserManager::get_all_administrators();
+                foreach ($admins as $userId => $data) {
+                    if ($data['active']) {
+                        MessageManager::send_message_simple(
+                            $userId,
+                            $warningSubject,
+                            $helpDeskMessage
                         );
-
-                        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                            Display::addFlash(Display::return_message(
-                                sprintf(
-                                    get_lang('A notification was sent to the administrators to report this category has no user assigned'),
-                                    $categoryInfo['name']
-                                ),
-                                null,
-                                false
-                            ));
-
-                            $admins = UserManager::get_all_administrators();
-                            foreach ($admins as $userId => $data) {
-                                if ($data['active']) {
-                                    self::sendNotification(
-                                        $ticketId,
-                                        $subject,
-                                        $message,
-                                        $userId
-                                    );
-                                }
-                            }
-                        } else {
-                            Display::addFlash(Display::return_message($subject));
-                        }
                     }
                 }
+            }
 
-                // Send notification to all users
-                if (!empty($usersInCategory)) {
-                    foreach ($usersInCategory as $data) {
-                        if ($data['user_id']) {
-                            self::sendNotification(
-                                $ticketId,
-                                $subject,
-                                $message,
-                                $data['user_id']
-                            );
+            $categoryInfo = self::getCategory($category_id);
+            $usersInCategory = self::getUsersInCategory($category_id);
+            $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
+
+            if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
+                $usersInCategory = self::getUsersInCategory($category_id);
+                if (empty($usersInCategory)) {
+                    $subject = sprintf(
+                        get_lang('Warning: No one has been assigned to category %s'),
+                        $categoryInfo['name']
+                    );
+
+                    if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                        Display::addFlash(Display::return_message(
+                            sprintf(
+                                get_lang(
+                                    'A notification was sent to the administrators to report this category has no user assigned'
+                                ),
+                                $categoryInfo['name']
+                            ),
+                            null,
+                            false
+                        ));
+
+                        $admins = UserManager::get_all_administrators();
+                        foreach ($admins as $userId => $data) {
+                            if ($data['active']) {
+                                self::sendNotification(
+                                    $ticketId,
+                                    $subject,
+                                    $message,
+                                    $userId
+                                );
+                            }
                         }
+                    } else {
+                        Display::addFlash(Display::return_message($subject));
+                    }
+                }
+            }
+
+            // Send notification to all users
+            if (!empty($usersInCategory)) {
+                foreach ($usersInCategory as $data) {
+                    if ($data['user_id']) {
+                        self::sendNotification(
+                            $ticketId,
+                            $subject,
+                            $message,
+                            $data['user_id']
+                        );
                     }
                 }
             }
@@ -656,9 +656,9 @@ class TicketManager
             $form =
                 '<form action="ticket_details.php?ticket_id='.$ticketId.'" id="confirmticket" method="POST" >
                      <p>'.get_lang('Was this answer satisfactory?').'</p>
-                     <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">'.
+                     <button class="btn btn--primary responseyes" name="response" id="responseyes" value="1">'.
                 get_lang('Yes').'</button>
-                     <button class="btn btn-danger responseno" name="response" id="responseno" value="0">'.
+                     <button class="btn btn--danger responseno" name="response" id="responseno" value="0">'.
                 get_lang('No').'</button>
                  </form>';
             $content .= $form;
@@ -715,62 +715,68 @@ class TicketManager
     /**
      * Attachment files when a message is sent.
      *
-     * @param $file_attach
-     * @param $ticketId
-     * @param $message_id
-     *
-     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function saveMessageAttachmentFile(
-        $file_attach,
+        $fileAttach,
         $ticketId,
-        $message_id
-    ) {
-        $now = api_get_utc_datetime();
-        $userId = api_get_user_id();
-        $ticketId = (int) $ticketId;
-
-        $new_file_name = add_ext_on_mime(
-            stripslashes($file_attach['name']),
-            $file_attach['type']
-        );
-        $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
-        if (!filter_extension($new_file_name)) {
-            echo Display::return_message(
-                get_lang('File upload failed: this file extension or file type is prohibited'),
-                'error'
-            );
-        } else {
-            $result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
-            if ($result) {
-                $safe_file_name = Database::escape_string($new_file_name);
-                $safe_new_file_name = Database::escape_string($result['path_to_save']);
-                $sql = "INSERT INTO $table_support_message_attachments (
-                        filename,
-                        path,
-                        ticket_id,
-                        message_id,
-                        size,
-                        sys_insert_user_id,
-                        sys_insert_datetime,
-                        sys_lastedit_user_id,
-                        sys_lastedit_datetime
-                    ) VALUES (
-                        '$safe_file_name',
-                        '$safe_new_file_name',
-                        '$ticketId',
-                        '$message_id',
-                        '".$file_attach['size']."',
-                        '$userId',
-                        '$now',
-                        '$userId',
-                        '$now'
-                    )";
-                Database::query($sql);
-
-                return true;
-            }
+        $messageId
+    ): bool {
+        if (!is_array($fileAttach) || UPLOAD_ERR_OK != $fileAttach['error']) {
+            return false;
         }
+
+        $em = Database::getManager();
+
+        $ticket = $em->find(Ticket::class, $ticketId);
+        $message = $em->find(TicketMessage::class, $messageId);
+
+        $newFileName = add_ext_on_mime(
+            stripslashes($fileAttach['name']),
+            $fileAttach['type']
+        );
+
+        $fileName = $fileAttach['name'];
+
+        if (!filter_extension($newFileName)) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('File upload failed: this file extension or file type is prohibited'),
+                    'error'
+                )
+            );
+
+            return false;
+        }
+
+        $currentUser = api_get_user_entity();
+
+        $repo = Container::getTicketMessageAttachmentRepository();
+        $attachment = (new TicketMessageAttachment())
+            ->setFilename($fileName)
+            ->setPath(uniqid('ticket_message', true))
+            ->setMessage($message)
+            ->setSize((int) $fileAttach['size'])
+            ->setTicket($ticket)
+            ->setInsertUserId($currentUser->getId())
+            ->setInsertDateTime(api_get_utc_datetime(null, false, true))
+            ->setParent($currentUser)
+        ;
+
+        if (null !== $ticket->getAssignedLastUser()) {
+            $attachment->addUserLink($ticket->getAssignedLastUser());
+        }
+
+        $em->persist($attachment);
+        $em->flush();
+
+        $file = new UploadedFile($fileAttach['tmp_name'], $fileAttach['name'], $fileAttach['type'], $fileAttach['error']);
+
+        $repo->addFile($attachment, $file);
+
+        return true;
     }
 
     /**
@@ -783,12 +789,8 @@ class TicketManager
      *
      * @return array
      */
-    public static function getTicketsByCurrentUser(
-        $from,
-        $number_of_items,
-        $column,
-        $direction
-    ) {
+    public static function getTicketsByCurrentUser($from, $number_of_items, $column, $direction)
+    {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
@@ -861,7 +863,7 @@ class TicketManager
         ";
 
         $projectId = (int) $_GET['project_id'];
-        $userIsAllowInProject = self::userIsAllowInProject($userInfo, $projectId);
+        $userIsAllowInProject = self::userIsAllowInProject(api_get_user_entity($userId), $projectId);
 
         // Check if a role was set to the project
         if (false == $userIsAllowInProject) {
@@ -928,7 +930,7 @@ class TicketManager
                      )
             )";
         }
-        $sql .= " ORDER BY $column $direction";
+        $sql .= " ORDER BY `$column` $direction";
         $sql .= " LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);
@@ -1001,8 +1003,18 @@ class TicketManager
                 ];
             }
             if ($isAdmin) {
-                $ticket['0'] .= '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
-					<img onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('History').'" alt="'.get_lang('History').'"/>
+                $ticket['0'] .= '&nbsp;&nbsp;<a
+                href="javascript:void(0)"
+                onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
+                    <a
+                        onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')"
+					    onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')"
+					    title="'.get_lang('History').'"
+					    alt="'.get_lang('History').'"
+                    >
+                    '.Display::getMdiIcon('history').'
+                    </a>
+
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }
@@ -1047,7 +1059,8 @@ class TicketManager
 
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (!in_array($userInfo['status'], $allowRoleList)) {
+            $allowed = self::userIsAllowInProject(api_get_user_entity(), $projectId);
+            if (!$allowed) {
                 $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
             }
         } else {
@@ -1128,7 +1141,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->getRepository('TicketMessageAttachment')->find($id);
+        $item = $em->getRepository(TicketMessageAttachment::class)->find($id);
         if ($item) {
             return $item;
         }
@@ -1145,7 +1158,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $items = $em->getRepository('TicketMessageAttachment')->findBy(['ticket' => $id]);
+        $items = $em->getRepository(TicketMessageAttachment::class)->findBy(['ticket' => $id]);
         if ($items) {
             return $items;
         }
@@ -1160,13 +1173,14 @@ class TicketManager
      */
     public static function get_ticket_detail_by_id($ticketId)
     {
+        $attachmentRepo = Container::getTicketMessageAttachmentRepository();
+
         $ticketId = (int) $ticketId;
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
-        $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
@@ -1185,6 +1199,8 @@ class TicketManager
                     ticket.id = $ticketId ";
         $result = Database::query($sql);
         $ticket = [];
+
+        $repo = Container::getLpRepository();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
@@ -1233,7 +1249,8 @@ class TicketManager
                     $row['lp_url'] = null;
 
                     if (!empty($row['lp_id'])) {
-                        $lpName = learnpath::getLpNameById($row['lp_id']);
+                        /** @var CLp $lp */
+                        $lp = $repo->find($row['lp_id']);
                         $dataLp = [
                             'cidReq' => $course['code'],
                             'id_session' => $sessionId,
@@ -1242,7 +1259,10 @@ class TicketManager
                         ];
                         $urlParamsLp = http_build_query($dataLp);
 
-                        $row['lp_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.$lpName.'</a>';
+                        $row['lp_url'] = '<a
+                            href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.
+                            $lp->getName().
+                        '</a>';
                     }
                 }
 
@@ -1253,32 +1273,32 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id
+            $sql = "SELECT *, message.id as message_id, user.id AS user_id
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
-                    ON (message.sys_insert_user_id = user.user_id)
+                    ON (message.sys_insert_user_id = user.id)
                     WHERE
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
             $ticket['messages'] = [];
             $attach_icon = Display::return_icon('attachment.gif', '');
-            $webPath = api_get_path(WEB_CODE_PATH);
+
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
                 $message['admin'] = UserManager::is_admin($message['user_id']);
                 $message['user_info'] = api_get_user_info($message['user_id']);
-                $sql = "SELECT *
-                        FROM $table_support_message_attachments
-                        WHERE
-                            message_id = ".$row['message_id']." AND
-                            ticket_id = $ticketId";
 
-                $result_attach = Database::query($sql);
-                while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
-                    $row2['attachment_link'] = $attach_icon.
-                        '&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
-                    $message['attachments'][] = $row2;
+                $messageAttachments = $attachmentRepo->findBy(['ticket' => $ticketId, 'message' => $row['message_id']]);
+
+                /** @var TicketMessageAttachment $messageAttachment */
+                foreach ($messageAttachments as $messageAttachment) {
+                    $archiveURL = $attachmentRepo->getResourceFileDownloadUrl($messageAttachment);
+                    $link = Display::url(
+                        sprintf("%s (%d)", $messageAttachment->getFilename(), $messageAttachment->getSize()),
+                        $archiveURL
+                    );
+
+                    $message['attachments'][] = $attach_icon.PHP_EOL.$link;
                 }
                 $ticket['messages'][] = $message;
             }
@@ -1367,23 +1387,7 @@ class TicketManager
         if (!empty($attachments)) {
             /** @var TicketMessageAttachment $attachment */
             foreach ($attachments as $attachment) {
-                $file = api_get_uploaded_file(
-                    'ticket_attachment',
-                    $ticketId,
-                    $attachment->getPath()
-                );
-                if (!empty($file)) {
-                    $attachmentList[] = [
-                        'tmp_name' => api_get_uploaded_file(
-                            'ticket_attachment',
-                            $ticketId,
-                            $attachment->getPath()
-                        ),
-                        'size' => $attachment->getSize(),
-                        'name' => $attachment->getFilename(),
-                        'error' => 0,
-                    ];
-                }
+                //$attachment->get
             }
         }
 
@@ -1397,8 +1401,7 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
-                    false,
+                    true,
                     $attachmentList
                 );
             }
@@ -1412,7 +1415,6 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
                     false,
                     $attachmentList
                 );
@@ -1429,7 +1431,6 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
                     false,
                     $attachmentList
                 );
@@ -1867,7 +1868,7 @@ class TicketManager
      */
     public static function getStatusList()
     {
-        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
+        $items = Database::getManager()->getRepository(TicketStatus::class)->findAll();
 
         $list = [];
         /** @var TicketStatus $row */
@@ -1885,8 +1886,7 @@ class TicketManager
      */
     public static function getTicketsFromCriteria($criteria)
     {
-        $items = Database::getManager()->getRepository('ChamiloCoreBundle:Ticket')->findBy($criteria);
-
+        $items = Database::getManager()->getRepository(Ticket::class)->findBy($criteria);
         $list = [];
         /** @var Ticket $row */
         foreach ($items as $row) {
@@ -1904,7 +1904,7 @@ class TicketManager
     public static function getStatusIdFromCode($code)
     {
         $item = Database::getManager()
-            ->getRepository('TicketStatus')
+            ->getRepository(TicketStatus::class)
             ->findOneBy(['code' => $code])
         ;
 
@@ -1920,8 +1920,7 @@ class TicketManager
      */
     public static function getPriorityList()
     {
-        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketPriority::class)->findAll();
         $list = [];
         /** @var TicketPriority $row */
         foreach ($projects as $row) {
@@ -1936,7 +1935,7 @@ class TicketManager
      */
     public static function getProjects()
     {
-        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
+        $projects = Database::getManager()->getRepository(TicketProject::class)->findAll();
 
         $list = [];
         /** @var TicketProject $row */
@@ -1958,8 +1957,7 @@ class TicketManager
      */
     public static function getProjectsSimple()
     {
-        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketProject::class)->findAll();
         $list = [];
         /** @var TicketProject $row */
         foreach ($projects as $row) {
@@ -1982,12 +1980,10 @@ class TicketManager
      */
     public static function getProjectsCount()
     {
-        $count = Database::getManager()->getRepository('TicketProject')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketProject::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -2011,7 +2007,7 @@ class TicketManager
      */
     public static function getProject($id)
     {
-        return Database::getManager()->getRepository('TicketProject')->find($id);
+        return Database::getManager()->getRepository(TicketProject::class)->find($id);
     }
 
     /**
@@ -2062,8 +2058,7 @@ class TicketManager
      */
     public static function getStatusAdminList()
     {
-        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
-
+        $items = Database::getManager()->getRepository(TicketStatus::class)->findAll();
         $list = [];
         /** @var TicketStatus $row */
         foreach ($items as $row) {
@@ -2083,12 +2078,11 @@ class TicketManager
     /**
      * @return array
      */
-    public static function getStatusSimple()
+    /*public static function getStatusSimple()
     {
-        $projects = Database::getManager()->getRepository('TicketStatus')->findAll();
-
+        $projects = Database::getManager()->getRepository(TicketStatus::class)->findAll();
         $list = [];
-        /** @var TicketProject $row */
+        // @var TicketProject $row
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2099,19 +2093,17 @@ class TicketManager
         }
 
         return $list;
-    }
+    }*/
 
     /**
      * @return int
      */
     public static function getStatusCount()
     {
-        $count = Database::getManager()->getRepository('TicketStatus')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketStatus::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -2135,7 +2127,7 @@ class TicketManager
      */
     public static function getStatus($id)
     {
-        return Database::getManager()->getRepository('TicketStatus')->find($id);
+        return Database::getManager()->getRepository(TicketStatus::class)->find($id);
     }
 
     /**
@@ -2184,7 +2176,7 @@ class TicketManager
      */
     public static function getPriorityAdminList()
     {
-        $items = Database::getManager()->getRepository('TicketPriority')->findAll();
+        $items = Database::getManager()->getRepository(TicketPriority::class)->findAll();
 
         $list = [];
         /** @var TicketStatus $row */
@@ -2203,37 +2195,14 @@ class TicketManager
     }
 
     /**
-     * @return array
-     */
-    public static function getPrioritySimple()
-    {
-        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
-
-        $list = [];
-        /** @var TicketPriority $row */
-        foreach ($projects as $row) {
-            $list[] = [
-                'id' => $row->getId(),
-                '0' => $row->getId(),
-                '1' => Display::url($row->getName()),
-                '2' => $row->getDescription(),
-            ];
-        }
-
-        return $list;
-    }
-
-    /**
      * @return int
      */
     public static function getPriorityCount()
     {
-        $count = Database::getManager()->getRepository('TicketPriority')->createQueryBuilder('p')
+        return Database::getManager()->getRepository(TicketPriority::class)->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**
@@ -2262,7 +2231,7 @@ class TicketManager
      */
     public static function getPriority($id)
     {
-        return Database::getManager()->getRepository('TicketPriority')->find($id);
+        return Database::getManager()->getRepository(TicketPriority::class)->find($id);
     }
 
     /**
@@ -2386,7 +2355,7 @@ class TicketManager
     public static function deleteUserFromTicketSystem($userId)
     {
         $userId = (int) $userId;
-        $schema = Database::getManager()->getConnection()->getSchemaManager();
+        $schema = Database::getManager()->getConnection()->createSchemaManager();
 
         if ($schema->tablesExist('ticket_assigned_log')) {
             $sql = "UPDATE ticket_assigned_log SET user_id = NULL WHERE user_id = $userId";
@@ -2454,44 +2423,60 @@ class TicketManager
     }
 
     /**
-     * @param array $userInfo
      * @param int   $projectId
-     *
-     * @return bool
      */
-    public static function userIsAllowInProject($userInfo, $projectId)
+    public static function userIsAllowInProject(User $user, $projectId): bool
     {
-        if (api_is_platform_admin()) {
+        if ($user->hasRole('ROLE_ADMIN')) {
             return true;
         }
 
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
-        // Check if a role was set to the project
+        // Check if a role was set to the project.
         // Project 1 is considered the default and is accessible to all users
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (in_array($userInfo['status'], $allowRoleList)) {
-                return true;
+            $result = false;
+            foreach ($allowRoleList as $role) {
+                if ($user->hasRole($role)) {
+                    $result = true;
+                    break;
+                }
             }
+
+            return $result;
         }
 
         return false;
     }
 
-    /**
-     * @param int $projectId
-     *
-     * @todo load from database instead of configuration.php setting
-     *
-     * @return array
-     */
-    public static function getAllowedRolesFromProject($projectId)
+    public static function getAllowedRolesFromProject(int $projectId): array
     {
-        $options = api_get_configuration_value('ticket_project_user_roles');
-        if ($options) {
-            if (isset($options['permissions'][$projectId])) {
-                return $options['permissions'][$projectId];
+        if ('' === $options = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles')) {
+            return [];
+        }
+
+        if ([] === $permissionsLines = explode(PHP_EOL, $options)) {
+            return [];
+        }
+
+        foreach ($permissionsLines as $permissionsLine) {
+            [$id, $rolesLine] = explode(':', $permissionsLine, 2);
+
+            if (empty($rolesLine)) {
+                continue;
             }
+
+            $roles = explode(',', $rolesLine);
+
+            if ($projectId !== (int) $id) {
+                continue;
+            }
+
+            return array_map(
+                fn($role) => (int) $role,
+                $roles
+            );
         }
 
         return [];

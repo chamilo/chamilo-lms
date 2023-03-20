@@ -13,21 +13,11 @@ class LearnPathItemForm
 {
     public static function setForm(FormValidator $form, $action, learnpath $lp, CLpItem $lpItem)
     {
-        $itemId = $lpItem->getIid();
-        $itemTitle = $lpItem->getTitle();
-        $itemDescription = $lpItem->getDescription();
-        $parentItemId = $lpItem->getParentItemId();
-        $itemType = $lpItem->getItemType();
-        $previousItemId = $lpItem->getPreviousItemId();
-
         $arrLP = $lp->getItemsForForm();
-        $lp->tree_array($arrLP);
-        $arrLP = isset($lp->arrMenu) ? $lp->arrMenu : [];
 
         switch ($action) {
             case 'add':
                 $form->addHeader(get_lang('Add'));
-
                 self::setItemTitle($form);
 
                 break;
@@ -44,25 +34,12 @@ class LearnPathItemForm
                 break;
         }
 
-        $arrHide = [];
-        $count = count($arrLP);
-        $sections = [];
-        for ($i = 0; $i < $count; $i++) {
-            if ('add' !== $action) {
-                if ('dir' === $arrLP[$i]['item_type'] &&
-                    !in_array($arrLP[$i]['id'], $arrHide) &&
-                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
-                ) {
-                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                }
-            }
-
-            if ('dir' === $arrLP[$i]['item_type']) {
-                $sections[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                $sections[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-            }
-        }
+        $itemId = $lpItem->getIid();
+        $itemTitle = $lpItem->getTitle();
+        $itemDescription = $lpItem->getDescription();
+        $parentItemId = $lpItem->getParentItemId();
+        $itemType = $lpItem->getItemType();
+        //$previousItemId = $lpItem->getPreviousItemId();
 
         // Parent
         $parentSelect = $form->addSelect(
@@ -74,34 +51,17 @@ class LearnPathItemForm
                 'onchange' => 'javascript:load_cbo(this.value);',
             ]
         );
-        $parentSelect->addOption($lp->name, 0);
 
-        $arrHide = [];
-        for ($i = 0; $i < $count; $i++) {
-            if ($arrLP[$i]['id'] != $itemId && 'dir' !== $arrLP[$i]['item_type']) {
-                $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-            }
-        }
-
-        $sectionCount = 0;
-        foreach ($sections as $key => $value) {
-            if (0 != $sectionCount) {
-                // The LP name is also the first section and is not in the same charset like the other sections.
-                $value['value'] = Security::remove_XSS($value['value']);
-                $parentSelect->addOption(
-                    $value['value'],
-                    $key
-                    //,'style="padding-left:'.$value['padding'].'px;"'
-                );
-            } else {
-                $value['value'] = Security::remove_XSS($value['value']);
-                $parentSelect->addOption(
-                    $value['value'],
-                    $key
-                    //'style="padding-left:'.$value['padding'].'px;"'
-                );
-            }
-            $sectionCount++;
+        $lpItemRepo = Container::getLpItemRepository();
+        $rootItem = $lpItemRepo->getRootItem($lp->get_id());
+        $parentSelect->addOption($lp->name, $rootItem->getIid());
+        /** @var CLpItem[] $sections */
+        $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
+        foreach ($sections as $value) {
+            $parentSelect->addOption(
+                str_repeat('&nbsp;', $value->getLvl()).Security::remove_XSS($value->getTitle()),
+                $value->getIid()
+            );
         }
 
         $parentSelect->setSelected($parentItemId);
@@ -111,9 +71,8 @@ class LearnPathItemForm
         }
 
         $arrHide = [];
-
         // Position
-        for ($i = 0; $i < $count; $i++) {
+        /*for ($i = 0; $i < $count; $i++) {
             if (($arrLP[$i]['parent_item_id'] == $parentItemId && $arrLP[$i]['id'] != $itemId) ||
                 TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']
             ) {
@@ -143,14 +102,14 @@ class LearnPathItemForm
 
         if (is_array($arrLP)) {
             reset($arrLP);
-        }
+        }*/
 
         if (TOOL_LP_FINAL_ITEM == $itemType) {
             $parentSelect->freeze();
-            $position->freeze();
+            //$position->freeze();
         }
 
-        // Content
+        // Content.
         if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_READOUT_TEXT], true)) {
             $document = null;
             if (!empty($lpItem->getPath())) {
@@ -169,14 +128,13 @@ class LearnPathItemForm
                 //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
             ];
 
-            $renderer = $form->defaultRenderer();
-            $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-            $form->addElement('html', '<div class="editor-lp">');
-            $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-            $form->addElement('html', '</div>');
-
-            if ($document) {
-                if ($document->getResourceNode()->hasEditableTextContent()) {
+            if (($document && $document->getResourceNode()->hasEditableTextContent()) || 'add' === $action) {
+                $renderer = $form->defaultRenderer();
+                $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                $form->addHtml('<div class="editor-lp">');
+                $form->addHtmlEditor('content_lp', null, null, true, $editorConfig);
+                $form->addHtml('</div>');
+                if ($document) {
                     $form->addHidden('document_id', $document->getIid());
                     $content = $lp->display_document(
                         $document,

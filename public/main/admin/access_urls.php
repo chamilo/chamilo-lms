@@ -114,35 +114,33 @@ if (-1 == $current_access_url_id) {
     }
 }
 
-// action menu
-echo '<div class="actions">';
-echo Display::url(
+$actions = Display::url(
     Display::return_icon('new_link.png', get_lang('Add URL'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
 );
-echo Display::url(
+$actions .= Display::url(
     Display::return_icon('user.png', get_lang('Manage users'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
 );
-echo Display::url(
+$actions .= Display::url(
     Display::return_icon('course.png', get_lang('Manage courses'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
 );
 
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 if ($userGroup->getUseMultipleUrl()) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('class.png', get_lang('Manage user groups'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
     );
 }
 
-echo Display::url(
+$actions .= Display::url(
     Display::return_icon('folder.png', get_lang('Manage course categories'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
 );
 
-echo '</div>';
+echo Display::toolbarAction('urls', [$actions]);
 
 $data = UrlManager::get_url_data();
 $urls = [];
@@ -174,7 +172,7 @@ foreach ($data as $row) {
         "access_url_edit.php?url_id=$url_id"
     );
     if ('1' != $url_id) {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
     $urls[] = [$url, $description, $status, $createdAt, $actions];

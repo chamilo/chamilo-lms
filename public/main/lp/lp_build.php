@@ -1,4 +1,8 @@
 <?php
+
+// @deprecated? not used
+exit;
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -47,64 +51,39 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $learnPath->getNameNoTags()];
 // Theme calls.
 $lp_theme_css = $learnPath->get_theme();
 $show_learn_path = true;
-Display::display_header('', 'Path');
-$suredel = trim(get_lang('Are you sure to delete'));
 
-?>
-<script>
-/* <![CDATA[ */
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-</script>
-<?php
-
-/* DISPLAY SECTION */
-echo $learnPath->build_action_menu();
-
-echo '<div class="row">';
-echo '<div class="col-md-4">';
-// Build the tree with the menu items in it.
-echo $learnPath->return_new_tree();
-echo '</div>';
-echo '<div class="col-md-8">';
+$rightColumn = $learnPath->showBuildSideBar();
 
 if (isset($is_success) && true === $is_success) {
-    echo Display::return_message(get_lang('The learning object has been removed'), 'confirmation');
+    $rightColumn .= Display::return_message(get_lang('The learning object has been removed'), 'confirmation');
 } else {
     if ($is_new) {
-        echo Display::return_message(get_lang('Course added'), 'normal', false);
+        $rightColumn .= Display::return_message(get_lang('Course added'), 'normal', false);
     }
-    echo Display::page_subheader(get_lang('Welcome to the Chamilo course authoring tool !'));
-    echo '<ul id="lp_overview" class="thumbnails">';
-    echo show_block(
+    $rightColumn .= Display::page_subheader(get_lang('Welcome to the Chamilo course authoring tool !'));
+    $rightColumn .= '<ul id="lp_overview" class="thumbnails">';
+    $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$learnPath->get_id(),
         get_lang("Add learning object or activity"),
         get_lang('Add learning object or activityComment'),
         'tools.png'
     );
-    echo show_block(
+    $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnPath->get_id(),
         get_lang("Ranking"),
         get_lang('RankingComment'),
         'view.png'
     );
-    echo '</ul>';
+    $rightColumn .= '</ul>';
 }
-echo '</div>';
-echo '</div>';
+
+echo 'ju';
+exit;
+
+$tpl = new Template();
+$tpl->assign('left', $learnPath->build_action_menu());
+$tpl->assign('right', $rightColumn);
+echo $tpl->fetch('@ChamiloCore/Layout/layout_two_col.html.twig');
 
 function show_block($link, $title, $subtitle, $icon)
 {

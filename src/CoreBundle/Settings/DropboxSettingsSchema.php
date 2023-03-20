@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
@@ -8,12 +10,9 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * Class DropboxSettingsSchema.
- */
 class DropboxSettingsSchema extends AbstractSettingsSchema
 {
-    public function buildSettings(AbstractSettingsBuilder $builder)
+    public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
             ->setDefaults(
@@ -27,7 +26,8 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
                     'dropbox_hide_course_coach' => 'false',
                     'dropbox_hide_general_coach' => 'false',
                 ]
-            );
+            )
+        ;
 
         $allowedTypes = [
             'dropbox_allow_overwrite' => ['string'],
@@ -35,7 +35,7 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
             ->add('dropbox_allow_overwrite', YesNoType::class)

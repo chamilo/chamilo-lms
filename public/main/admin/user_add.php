@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
-// Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Section for the tabs
@@ -140,12 +142,12 @@ if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');
 }
 
-if ('true' == api_get_setting('login_is_email')) {
+if ('true' === api_get_setting('login_is_email')) {
     $form->addRule(
         'email',
-        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) User::USERNAME_MAX_LENGTH),
         'maxlength',
-        USERNAME_MAX_LENGTH
+        User::USERNAME_MAX_LENGTH
     );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
@@ -163,10 +165,10 @@ $allowed_picture_types = api_get_supported_image_extensions(false);
 $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 // Username
-if ('true' != api_get_setting('login_is_email')) {
-    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
+if ('true' !== api_get_setting('login_is_email')) {
+    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => User::USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('Required field'), 'required');
-    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) User::USERNAME_MAX_LENGTH), 'maxlength', User::USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
     $form->addRule('username', get_lang('This login is already in use'), 'username_available');
 }
@@ -233,8 +235,7 @@ $status[SESSIONADMIN] = get_lang('Sessions administrator');
 $status[STUDENT_BOSS] = get_lang('Student\'s superior');
 $status[INVITEE] = get_lang('Invitee');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'status',
     get_lang('Profile'),
     $status,
@@ -257,7 +258,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '</div>');
 }
 
-$form->addSelectLanguage('language', get_lang('Language'), null);
+$form->addSelectLanguage('locale', get_lang('Language'));
 
 // Send email
 $group = [];
@@ -328,6 +329,7 @@ $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
+$defaults['locale'] = api_get_language_isocode();
 $form->setDefaults($defaults);
 
 // Submit button
@@ -339,8 +341,7 @@ $form->addGroup($html_results_enabled);
 if ($form->validate()) {
     $check = Security::check_token('post');
     if (true) {
-        $user = $form->exportValues();
-
+        $user = $form->getSubmitValues();
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $official_code = $user['official_code'];
@@ -348,10 +349,17 @@ if ($form->validate()) {
         $phone = $user['phone'];
         $username = $user['username'];
         $status = (int) $user['status'];
-        $language = $user['language'];
+        $language = $user['locale'];
         $picture = $_FILES['picture'];
-        $platform_admin = (int) $user['admin']['platform_admin'];
-        $send_mail = (int) $user['mail']['send_mail'];
+        $platform_admin = 0;
+        if (isset($user['admin']) && isset($user['admin']['platform_admin'])) {
+            $platform_admin = (int) $user['admin']['platform_admin'];
+        }
+        $send_mail = 0;
+        if (isset($user['mail']) && isset($user['mail']['send_mail'])) {
+            $send_mail = (int) $user['mail']['send_mail'];
+        }
+
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
         if (isset($extAuthSource) && count($extAuthSource) > 0 &&
@@ -361,22 +369,22 @@ if ($form->validate()) {
             $password = 'PLACEHOLDER';
         } else {
             $auth_source = PLATFORM_AUTH_SOURCE;
-            $password = '1' == $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
+            $password = '1' === $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
         }
 
         $expiration_date = null;
-        if ('1' == $user['radio_expiration_date']) {
+        if ('1' === $user['radio_expiration_date']) {
             $expiration_date = $user['expiration_date'];
         }
 
         $active = (int) $user['active'];
-        if ('true' == api_get_setting('login_is_email')) {
+        if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $extra = [];
         foreach ($user as $key => $value) {
-            if ('extra_' == substr($key, 0, 6)) {
+            if ('extra_' === substr($key, 0, 6)) {
                 // An extra field
                 $extra[substr($key, 6)] = $value;
             }
@@ -414,10 +422,11 @@ if ($form->validate()) {
         $tok = Security::get_token();
         if (!empty($user_id)) {
             if (!empty($picture['name'])) {
-                $picture_uri = UserManager::update_user_picture(
+                $request = Container::getRequest();
+                $file = $request->files->get('picture');
+                UserManager::update_user_picture(
                     $user_id,
-                    $_FILES['picture']['name'],
-                    $_FILES['picture']['tmp_name'],
+                    $file,
                     $user['picture_crop_result']
                 );
                 UserManager::update_user(
@@ -431,7 +440,7 @@ if ($form->validate()) {
                     $status,
                     $official_code,
                     $phone,
-                    $picture_uri,
+                    null,
                     $expiration_date,
                     $active,
                     null,

@@ -5,9 +5,9 @@ exit;
 
 require_once __DIR__ . '/../../main/inc/global.inc.php';
 
-$sql = 'SELECT iid, c_id, title 
-        FROM c_quiz 
-        WHERE active = -1 
+$sql = 'SELECT iid, c_id, title
+        FROM c_quiz
+        WHERE active = -1
         ORDER BY iid';
 
 $result = Database::query($sql);
@@ -24,9 +24,9 @@ foreach ($data as $row) {
 
     $courseInfo = api_get_course_info_by_id($row['c_id']);
 
-    $sql = "SELECT question_id, c_id 
+    $sql = "SELECT question_id, c_id
             FROM c_quiz_rel_question
-            WHERE exercice_id = $id
+            WHERE quiz_id = $id
             ORDER BY iid";
     $result = Database::query($sql);
     $questions = Database::store_result($result);
@@ -41,9 +41,9 @@ foreach ($data as $row) {
         foreach ($questions as $questionData) {
             $questionId = $questionData['question_id'];
             // Check if question is used in another exercise:
-            $sql = "SELECT count(iid) 
+            $sql = "SELECT count(iid)
                     FROM c_quiz_rel_question
-                    WHERE exercice_id != $id AND question_id = $questionId";
+                    WHERE quiz_id != $id AND question_id = $questionId";
             $result = Database::query($sql);
             $dataQuestion = Database::fetch_array($result);
 

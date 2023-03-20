@@ -41,7 +41,7 @@ class UpdateUserFromUsernameTest extends V2TestCase
         $extraFieldName = 'extraUserField'.time();
         $extraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $extraFieldName,
                 'display_text' => $extraFieldName,
                 'visible_to_self' => 1,
@@ -77,7 +77,7 @@ class UpdateUserFromUsernameTest extends V2TestCase
 
         // compare each saved value to the original
         /** @var User $user */
-        $userManager = UserManager::getManager();
+        $userManager = UserManager::getRepository();
         $user = $userManager->find($userId);
         $userManager->reloadUser($user);
         $this->assertSame($newFirstName, $user->getFirstname());

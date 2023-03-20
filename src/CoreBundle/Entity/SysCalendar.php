@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,64 +18,44 @@ use Doctrine\ORM\Mapping as ORM;
 class SysCalendar
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
-    protected $content;
+    protected ?string $content = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
-    protected $startDate;
+    protected ?DateTime $startDate = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
-    protected $endDate;
+    protected ?DateTime $endDate = null;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $accessUrlId;
+    protected AccessUrl $url;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
-    protected $allDay;
+    protected int $allDay;
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return SysCalendar
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -89,14 +72,7 @@ class SysCalendar
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return SysCalendar
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -113,14 +89,7 @@ class SysCalendar
         return $this->content;
     }
 
-    /**
-     * Set startDate.
-     *
-     * @param \DateTime $startDate
-     *
-     * @return SysCalendar
-     */
-    public function setStartDate($startDate)
+    public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -130,21 +99,14 @@ class SysCalendar
     /**
      * Get startDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartDate()
     {
         return $this->startDate;
     }
 
-    /**
-     * Set endDate.
-     *
-     * @param \DateTime $endDate
-     *
-     * @return SysCalendar
-     */
-    public function setEndDate($endDate)
+    public function setEndDate(DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -154,45 +116,14 @@ class SysCalendar
     /**
      * Get endDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndDate()
     {
         return $this->endDate;
     }
 
-    /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return SysCalendar
-     */
-    public function setAccessUrlId($accessUrlId)
-    {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
-    }
-
-    /**
-     * Set allDay.
-     *
-     * @param int $allDay
-     *
-     * @return SysCalendar
-     */
-    public function setAllDay($allDay)
+    public function setAllDay(int $allDay): self
     {
         $this->allDay = $allDay;
 
@@ -217,5 +148,17 @@ class SysCalendar
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
+    public function setUrl(AccessUrl $url): self
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

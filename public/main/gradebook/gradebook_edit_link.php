@@ -8,7 +8,8 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
+//$course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
+$course_id = api_get_course_int_id();
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
@@ -65,10 +66,10 @@ if ($form->validate()) {
     $rs_attendance = Database::query($sql);
     if (Database::num_rows($rs_attendance) > 0) {
         $row_attendance = Database::fetch_array($rs_attendance);
-        $attendance_id = $row_attendance['ref_id'];
+        $attendance_id = (int) $row_attendance['ref_id'];
         $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($final_weight).'
-                WHERE c_id = '.$course_id.' AND id = '.intval($attendance_id);
+                WHERE iid = '.$attendance_id;
         Database::query($sql);
     }
 

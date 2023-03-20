@@ -2,120 +2,140 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\LtiBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use UnserializeApi;
 
 /**
  * Class ExternalTool.
  *
  * @ORM\Table(name="lti_external_tool")
- * @ORM\Entity()
+ * @ORM\Entity
  */
-class ExternalTool
+class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
 {
+    public const V_1P1 = 'lti1p1';
+    public const V_1P3 = 'lti1p3';
+
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string")
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="launch_url", type="string")
      */
-    protected $launchUrl;
+    protected string $launchUrl;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
-    protected $consumerKey;
+    protected ?string $consumerKey;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
-    protected $sharedSecret;
+    protected ?string $sharedSecret;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="custom_params", type="text", nullable=true)
      */
-    protected $customParams;
+    protected ?string $customParams;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
      */
-    protected $activeDeepLinking;
+    protected bool $activeDeepLinking;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
-    protected $privacy;
+    protected ?string $privacy;
 
     /**
-     * @var Course|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected $course;
+    protected ?Course $course;
 
     /**
-     * @var GradebookEvaluation|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
      * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $gradebookEval = null;
+    protected ?GradebookEvaluation $gradebookEval;
 
     /**
-     * @var ExternalTool|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent;
+    protected ?ExternalTool $parent;
 
     /**
-     * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
-    protected $children;
+    protected Collection $children;
 
     /**
-     * ExternalTool constructor.
+     * @ORM\Column(name="client_id", type="string", nullable=true)
      */
+    private ?string $clientId;
+    /**
+     * @ORM\Column(name="login_url", type="string", nullable=true)
+     */
+    private ?string $loginUrl;
+
+    /**
+     * @ORM\Column(name="redirect_url", type="string", nullable=true)
+     */
+    private ?string $redirectUrl;
+
+    /**
+     * @ORM\Column(name="advantage_services", type="json", nullable=true)
+     */
+    private ?array $advantageServices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\LineItem", mappedBy="tool")
+     */
+    private Collection $lineItems;
+
+    /**
+     * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
+     */
+    private string $version;
+    /**
+     * @ORM\Column(name="launch_presentation", type="json")
+     */
+    private array $launchPresentation;
+
+    /**
+     * @ORM\Column(name="replacement_params", type="json")
+     */
+    private array $replacementParams;
+
     public function __construct()
     {
         $this->description = null;
@@ -128,170 +148,87 @@ class ExternalTool
         $this->sharedSecret = null;
         $this->parent = null;
         $this->children = new ArrayCollection();
+        $this->consumerKey = null;
+        $this->sharedSecret = null;
+        $this->lineItems = new ArrayCollection();
+        $this->version = self::V_1P1;
+        $this->launchPresentation = [
+            'document_target' => 'iframe',
+        ];
+        $this->replacementParams = [];
     }
 
-    public function __clone()
+    public function __toString(): string
     {
-        $this->id = 0;
+        return $this->getName();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ExternalTool
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     *
-     * @return ExternalTool
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLaunchUrl()
+    public function getLaunchUrl(): string
     {
         return $this->launchUrl;
     }
 
-    /**
-     * @param string $launchUrl
-     *
-     * @return ExternalTool
-     */
-    public function setLaunchUrl($launchUrl)
+    public function setLaunchUrl(string $launchUrl): static
     {
         $this->launchUrl = $launchUrl;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getConsumerKey()
-    {
-        return $this->consumerKey;
-    }
-
-    /**
-     * @param string $consumerKey
-     *
-     * @return ExternalTool
-     */
-    public function setConsumerKey($consumerKey)
-    {
-        $this->consumerKey = $consumerKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSharedSecret()
-    {
-        return $this->sharedSecret;
-    }
-
-    /**
-     * @param string $sharedSecret
-     *
-     * @return ExternalTool
-     */
-    public function setSharedSecret($sharedSecret)
-    {
-        $this->sharedSecret = $sharedSecret;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getCustomParams()
+    public function getCustomParams(): ?string
     {
         return $this->customParams;
     }
 
-    /**
-     * @param string|null $customParams
-     *
-     * @return ExternalTool
-     */
-    public function setCustomParams($customParams)
+    public function setCustomParams(?string $customParams): static
     {
         $this->customParams = $customParams;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return null === $this->course;
     }
 
-    /**
-     * @return string|null
-     */
-    public function encodeCustomParams(array $params)
+    public function encodeCustomParams(array $params): ?string
     {
         if (empty($params)) {
             return null;
         }
+
         $pairs = [];
+
         foreach ($params as $key => $value) {
             $pairs[] = "$key=$value";
         }
@@ -299,119 +236,90 @@ class ExternalTool
         return implode("\n", $pairs);
     }
 
-    /**
-     * @return array
-     */
-    public function parseCustomParams()
+    public function getCustomParamsAsArray(): array
+    {
+        $params = [];
+        $lines = explode("\n", $this->customParams);
+        $lines = array_filter($lines);
+
+        foreach ($lines as $line) {
+            [$key, $value] = explode('=', $line, 2);
+
+            $key = self::filterSpecialChars($key);
+            $value = self::filterSpaces($value);
+
+            $params[$key] = $value;
+        }
+
+        return $params;
+    }
+
+    public function parseCustomParams(): array
     {
         if (empty($this->customParams)) {
             return [];
         }
+
         $params = [];
         $strings = explode("\n", $this->customParams);
+
         foreach ($strings as $string) {
             if (empty($string)) {
                 continue;
             }
+
             $pairs = explode('=', $string, 2);
-            $key = self::parseCustomKey($pairs[0]);
+            $key = self::filterSpecialChars($pairs[0]);
             $value = $pairs[1];
+
             $params['custom_'.$key] = $value;
         }
 
         return $params;
     }
 
-    /**
-     * Get activeDeepLinking.
-     *
-     * @return bool
-     */
-    public function isActiveDeepLinking()
+    public function isActiveDeepLinking(): bool
     {
         return $this->activeDeepLinking;
     }
 
-    /**
-     * Set activeDeepLinking.
-     *
-     * @param bool $activeDeepLinking
-     *
-     * @return ExternalTool
-     */
-    public function setActiveDeepLinking($activeDeepLinking)
+    public function setActiveDeepLinking(bool $activeDeepLinking): static
     {
         $this->activeDeepLinking = $activeDeepLinking;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course|null
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    /**
-     * Set course.
-     *
-     * @return ExternalTool
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(Course $course = null): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get gradebookEval.
-     *
-     * @return GradebookEvaluation|null
-     */
-    public function getGradebookEval()
+    public function getGradebookEval(): ?GradebookEvaluation
     {
         return $this->gradebookEval;
     }
 
-    /**
-     * Set gradebookEval.
-     *
-     * @param GradebookEvaluation|null $gradebookEval
-     *
-     * @return ExternalTool
-     */
-    public function setGradebookEval($gradebookEval)
+    public function setGradebookEval(?GradebookEvaluation $gradebookEval): static
     {
         $this->gradebookEval = $gradebookEval;
 
         return $this;
     }
 
-    /**
-     * Get privacy.
-     *
-     * @return string|null
-     */
-    public function getPrivacy()
+    public function getPrivacy(): ?string
     {
         return $this->privacy;
     }
 
-    /**
-     * Set privacy.
-     *
-     * @param bool $shareName
-     * @param bool $shareEmail
-     * @param bool $sharePicture
-     *
-     * @return ExternalTool
-     */
-    public function setPrivacy($shareName = false, $shareEmail = false, $sharePicture = false)
+    public function setPrivacy(bool $shareName = false, bool $shareEmail = false, bool $sharePicture = false): static
     {
         $this->privacy = serialize(
             [
@@ -424,53 +332,46 @@ class ExternalTool
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isSharingName()
+    public function isSharingName(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
         return (bool) $unserialize['share_name'];
     }
 
-    public function unserializePrivacy()
+    public function unserializePrivacy(): array
     {
-        return unserialize($this->privacy);
+        return UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
     }
 
-    /**
-     * @return bool
-     */
-    public function isSharingEmail()
+    public function isSharingEmail(): bool
     {
         $unserialize = $this->unserializePrivacy();
+
+        if (!$unserialize) {
+            return false;
+        }
 
         return (bool) $unserialize['share_email'];
     }
 
-    /**
-     * @return bool
-     */
-    public function isSharingPicture()
+    public function isSharingPicture(): bool
     {
         $unserialize = $this->unserializePrivacy();
+
+        if (!$unserialize) {
+            return false;
+        }
 
         return (bool) $unserialize['share_picture'];
     }
 
-    /**
-     * @return ExternalTool|null
-     */
-    public function getParent()
+    public function getToolParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * @return ExternalTool
-     */
-    public function setParent(self $parent)
+    public function setToolParent(self $parent): static
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -480,33 +381,239 @@ class ExternalTool
         return $this;
     }
 
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * @return ExternalTool
-     */
-    public function setChildren(ArrayCollection $children): self
+    public function setChildren(Collection $children): static
     {
         $this->children = $children;
 
         return $this;
     }
 
-    /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function parseCustomKey($key)
+    public function getSharedSecret(): ?string
+    {
+        return $this->sharedSecret;
+    }
+
+    public function setSharedSecret(?string $sharedSecret): static
+    {
+        $this->sharedSecret = $sharedSecret;
+
+        return $this;
+    }
+
+    public function getConsumerKey(): ?string
+    {
+        return $this->consumerKey;
+    }
+
+    public function setConsumerKey(?string $consumerKey): static
+    {
+        $this->consumerKey = $consumerKey;
+
+        return $this;
+    }
+
+    public function getLoginUrl(): ?string
+    {
+        return $this->loginUrl;
+    }
+
+    public function setLoginUrl(?string $loginUrl): static
+    {
+        $this->loginUrl = $loginUrl;
+
+        return $this;
+    }
+
+    public function getRedirectUrl(): ?string
+    {
+        return $this->redirectUrl;
+    }
+
+    public function setRedirectUrl(?string $redirectUrl): static
+    {
+        $this->redirectUrl = $redirectUrl;
+
+        return $this;
+    }
+
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    public function setClientId(?string $clientId): static
+    {
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    public function getAdvantageServices(): array
+    {
+        if (empty($this->advantageServices)) {
+            $this->advantageServices = [];
+        }
+
+        return array_merge(
+            [
+                'ags' => LtiAssignmentGradesService::AGS_NONE,
+                'nrps' => LtiNamesRoleProvisioningService::NRPS_NONE,
+            ],
+            $this->advantageServices
+        );
+    }
+
+    public function setAdvantageServices(array $advantageServices): static
+    {
+        $this->advantageServices = $advantageServices;
+
+        return $this;
+    }
+
+    public function addLineItem(LineItem $lineItem): static
+    {
+        $lineItem->setTool($this);
+
+        $this->lineItems[] = $lineItem;
+
+        return $this;
+    }
+
+    public function getLineItems(
+        int $resourceLinkId = 0,
+        int $resourceId = 0,
+        string $tag = '',
+        int $limit = 0,
+        int $page = 1
+    ): Collection {
+        $criteria = Criteria::create();
+
+        if ($resourceLinkId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if ($resourceId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if (!empty($tag)) {
+            $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
+        }
+
+        if ($limit > 0) {
+            $criteria->setMaxResults($limit);
+
+            if ($page > 0) {
+                $criteria->setFirstResult($page * $limit);
+            }
+        }
+
+        return $this->lineItems->matching($criteria);
+    }
+
+    public function setLineItems(Collection $lineItems): static
+    {
+        $this->lineItems = $lineItems;
+
+        return $this;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): static
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getVersionName(): string
+    {
+        if (self::V_1P1 === $this->version) {
+            return 'LTI 1.0 / 1.1';
+        }
+
+        return 'LTI 1.3';
+    }
+
+    public function setDocumenTarget(string $target): static
+    {
+        $this->launchPresentation['document_target'] = \in_array($target, ['iframe', 'window'], true) ? $target : 'iframe';
+
+        return $this;
+    }
+
+    public function getDocumentTarget()
+    {
+        return $this->launchPresentation['document_target'] ?: 'iframe';
+    }
+
+    public function getLaunchPresentation(): array
+    {
+        return $this->launchPresentation;
+    }
+
+    public function setReplacementForUserId(string $replacement): static
+    {
+        $this->replacementParams['user_id'] = $replacement;
+
+        return $this;
+    }
+
+    public function getReplacementForUserId(): ?string
+    {
+        if (!empty($this->replacementParams['user_id'])) {
+            return $this->replacementParams['user_id'];
+        }
+
+        return null;
+    }
+
+    public function getChildrenInCourses(array $coursesId): Collection
+    {
+        return $this->children->filter(
+            function (self $child) use ($coursesId) {
+                return \in_array($child->getCourse()->getId(), $coursesId, true);
+            }
+        );
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): static
+    {
+        return $this->setName($name);
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    private static function filterSpaces(string $value): string
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
+    }
+
+    private static function filterSpecialChars(string $key): string
     {
         $newKey = '';
         $key = strtolower($key);
         $split = str_split($key);
+
         foreach ($split as $char) {
             if (
                 ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
@@ -515,6 +622,7 @@ class ExternalTool
 
                 continue;
             }
+
             $newKey .= '_';
         }
 

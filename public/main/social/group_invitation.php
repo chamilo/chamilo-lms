@@ -24,7 +24,7 @@ $tbl_group_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 $tool_name = get_lang('Subscribe users to group');
 $group_id = intval($_REQUEST['id']);
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 
 // todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
@@ -142,7 +142,7 @@ if (is_array($Users) && count($Users) > 0) {
     }
 }
 
-$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
+//$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
 $social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
 if (0 == count($nosessionUsersList)) {
@@ -153,7 +153,7 @@ if (0 == count($nosessionUsersList)) {
         $social_right_content .= Display::return_message(get_lang('You already invite all your contacts'), 'info');
     }
     $social_right_content .= '<div>';
-    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::returnFontAwesomeIcon('search').' '.get_lang('Try and find some friends').'</a>';
+    $social_right_content .= '<a href="search.php" class="btn btn--plain btn-sm">'.Display::getMdiIcon('magnify').' '.get_lang('Try and find some friends').'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '<br />';
 }
@@ -162,8 +162,7 @@ $form = new FormValidator('frm_invitation', 'post', api_get_self().'?id='.$group
 $form->addHidden('form_sent', 1);
 $form->addHidden('id', $group_id);
 
-$group_members_element = $form->addElement(
-    'advmultiselect',
+$group_members_element = $form->addMultiSelect(
     'invitation',
     get_lang('Friends'),
     $nosessionUsersList
@@ -200,8 +199,6 @@ if (is_array($members) && count($members) > 0) {
 
 $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
-$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->setHelp('Groups');
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/add_groups.tpl');

@@ -1,106 +1,96 @@
 <template>
-  <div class="">
-    <slot name="left" />
-
-    <b-button
-      v-if="handleList"
-      :loading="isLoading"
-      variant="primary"
-      @click="listItem"
-    >
-      {{ $t('List') }}
-    </b-button>
-    <b-button
-      v-if="handleEdit"
-      :loading="isLoading"
-      variant="primary"
-      @click="editItem"
-    >
-      {{ $t('Edit') }}
-    </b-button>
-
-    <b-button
-      v-if="handleSubmit"
-      :loading="isLoading"
-      variant="primary"
-      @click="submitItem"
-    >
-      <font-awesome-icon icon="save" />
-      {{ $t('Submit') }}
-    </b-button>
-    <!--      <v-btn-->
-    <!--        v-if="handleReset"-->
-    <!--        color="primary"-->
-    <!--        class="ml-sm-2"-->
-    <!--        @click="resetItem"-->
-    <!--      >-->
-    <!--        {{ $t('Reset') }}-->
-    <!--      </v-btn>-->
-    <b-button
-      v-if="handleDelete"
-      variant="danger"
-      class="ml-sm-2"
-      @click="confirmDelete = true"
-    >
-      {{ $t('Delete') }}
-    </b-button>
-
-    <b-button
-      v-if="handleAdd"
-      variant="primary"
-      rounded
-      @click="addItem"
-    >
-      <font-awesome-icon icon="folder-plus" /> New folder
-    </b-button>
-
-    <b-button
-      v-if="handleAddDocument"
-      variant="primary"
-      rounded
-      @click="addDocument"
-    >
-      <font-awesome-icon icon="file-alt" /> New document
-    </b-button>
-
-    <b-button
-      v-if="handleUploadDocument"
-      variant="primary"
-      rounded
-      @click="uploadDocument"
-    >
-      <font-awesome-icon icon="cloud-upload-alt" /> File upload
-    </b-button>
-
-    <DataFilter
-      v-if="filters"
-      :handle-filter="onSendFilter"
-      :handle-reset="resetFilter"
-    >
-      <DocumentsFilterForm
-        ref="filterForm"
-        slot="filter"
-        :values="filters"
+  <PrimeToolbar>
+    <template #start>
+      <PrimeButton
+        v-if="handleList"
+        :label="$t('List')"
+        :loading="isLoading"
+        class="p-button-outlined"
+        @click="listItem"
       />
-    </DataFilter>
 
-    <ConfirmDelete
-      v-if="handleDelete"
-      :visible="confirmDelete"
-      :handle-delete="handleDelete"
-      @close="confirmDelete = false"
-    />
-  </div>
+      <PrimeButton
+        v-if="handleEdit"
+        :loading="isLoading"
+        :title="$t('Edit')"
+        class="p-button-outlined"
+        icon="mdi mdi-pencil"
+        @click="editItem"
+      />
+
+      <PrimeButton
+        v-if="handleSubmit"
+        :loading="isLoading"
+        :title="$t('Submit')"
+        class="p-button-outlined"
+        icon="mdi mdi-content-save"
+        @click="submitItem"
+      />
+
+      <PrimeButton
+        v-if="handleSend"
+        :loading="isLoading"
+        :title="$t('Send')"
+        class="p-button-outlined"
+        icon="mdi mdi-send"
+        @click="sendItem"
+      />
+
+      <PrimeButton
+        v-if="handleDelete"
+        :loading="isLoading"
+        :title="$t('Delete')"
+        class="p-button-outlined"
+        icon="mdi mdi-delete"
+        @click="confirmDeleteClick = true"
+      />
+
+      <PrimeButton
+        v-if="handleAdd"
+        :label="$t('New folder')"
+        class="p-button-outlined"
+        icon="mdi mdi-folder-plus"
+        @click="addItem"
+      />
+
+      <PrimeButton
+        v-if="handleAddDocument"
+        :label="$t('New document')"
+        class="p-button-outlined"
+        icon="mdi mdi-file-plus"
+        @click="addDocument"
+      />
+
+      <PrimeButton
+        v-if="handleUploadDocument"
+        :label="$t('File upload')"
+        class="p-button-outlined"
+        icon="mdi mdi-cloud-upload"
+        @click="uploadDocument"
+      />
+
+      <ConfirmDelete
+        v-if="handleDelete"
+        :show="confirmDeleteClick"
+        :handle-delete="handleDelete"
+        :handle-cancel="() => confirmDeleteClick = false"
+      />
+    </template>
+  </PrimeToolbar>
 </template>
 
 <script>
-import ConfirmDelete from './ConfirmDelete';
-import DocumentsFilterForm from './documents/Filter';
-import DataFilter from './DataFilter';
+import PrimeToolbar from 'primevue/toolbar';
+import PrimeButton from 'primevue/button';
+import ConfirmDelete from './ConfirmDelete.vue';
+import DocumentsFilterForm from './documents/Filter.vue';
+import DataFilter from './DataFilter.vue';
 
 export default {
   name: 'Toolbar',
   components: {
+    PrimeToolbar,
+    PrimeButton,
     ConfirmDelete,
     DocumentsFilterForm,
     DataFilter
@@ -137,6 +127,10 @@ export default {
       type: Function,
       required: false
     },
+    handleSend: {
+      type: Function,
+      required: false
+    },
     handleAddDocument: {
       type: Function,
       required: false
@@ -165,7 +159,7 @@ export default {
   },
   data() {
     return {
-      confirmDelete: false
+      confirmDeleteClick: false
     };
   },
   methods: {
@@ -192,6 +186,11 @@ export default {
     editItem() {
       if (this.handleEdit) {
         this.handleEdit();
+      }
+    },
+    sendItem() {
+      if (this.handleSend) {
+        this.handleSend();
       }
     },
     submitItem() {

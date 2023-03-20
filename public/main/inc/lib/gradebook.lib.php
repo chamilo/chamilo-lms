@@ -71,12 +71,7 @@ class Gradebook extends Model
         return '1' == $item['visibility'];
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = [])
+    public function get_all(array $options = []): array
     {
         $gradebooks = parent::get_all($options);
         foreach ($gradebooks as &$gradebook) {
@@ -100,7 +95,7 @@ class Gradebook extends Model
         $skill_list,
         $deleteSkillNotInList = true
     ) {
-        $skill_gradebook = new SkillRelGradebook();
+        $skill_gradebook = new SkillRelGradebookModel();
         $skill_gradebooks_source = $skill_gradebook->get_all(
             ['where' => ['gradebook_id = ?' => $gradebook_id]]
         );
@@ -172,14 +167,13 @@ class Gradebook extends Model
         $form->addHeader($header);
         $form->addElement('hidden', 'id', $id);
 
-        $skill = new Skill();
+        $skill = new SkillModel();
         $skills = $skill->get_all();
         $clean_skill_list = [];
         foreach ($skills as $skill) {
             $clean_skill_list[$skill['id']] = $skill['name'];
         }
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'skill',
             get_lang('Skills'),
             $clean_skill_list,
@@ -188,7 +182,7 @@ class Gradebook extends Model
             ]
         );
 
-        $selected_skills = self::getSkillsByGradebook($gradebook_id);
+        $selected_skills = $this->getSkillsByGradebook($gradebook_id);
         $clean_selected_skills = [];
         if (!empty($selected_skills)) {
             foreach ($selected_skills as $skill) {
@@ -203,18 +197,18 @@ class Gradebook extends Model
     }
 
     /**
-     * @param int $gradebook_id
+     * @param int $id
      *
      * @return array|resource
      */
-    public function getSkillsByGradebook($gradebook_id)
+    public function getSkillsByGradebook($id)
     {
-        $gradebook_id = intval($gradebook_id);
-        $sql = "SELECT skill.id, skill.name 
+        $id = (int) $id;
+        $sql = "SELECT skill.id, skill.name
                 FROM {$this->table_skill} skill
                 INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
                 ON skill.id = skill_rel_gradebook.skill_id
-                WHERE skill_rel_gradebook.gradebook_id = $gradebook_id";
+                WHERE skill_rel_gradebook.gradebook_id = $id";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
 
@@ -227,7 +221,7 @@ class Gradebook extends Model
     public function display()
     {
         // action links
-        echo self::returnGrid();
+        echo $this->returnGrid();
     }
 
     /**

@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
@@ -10,10 +14,9 @@
  *
  * @todo fix excel export
  */
-
-use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
-
 require_once __DIR__.'/../inc/global.inc.php';
+
+$this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
@@ -54,7 +57,7 @@ $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 
@@ -170,66 +173,82 @@ if (isset($_REQUEST['comments']) &&
     $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $exeWeighting = $track_exercise_info['max_score'];
+
+    $attemptData = Event::get_exercise_results_by_attempt($id);
+    $questionListData = [];
+    if ($attemptData && $attemptData[$id] && $attemptData[$id]['question_list']) {
+        $questionListData = $attemptData[$id]['question_list'];
+    }
     $post_content_id = [];
     $comments_exist = false;
 
+    $questionListInPost = [];
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
         if ('comments' === $my_post_info[0]) {
             $comments_exist = true;
+            $questionListInPost[] = $my_post_info[1];
         }
     }
 
-    $loop_in_track = true === $comments_exist ? count($_POST) / 2 : count($_POST);
-    if (true === $comments_exist) {
-        $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
-    } else {
-        $array_content_id_exe = $post_content_id;
-    }
-
-    for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : 0;
-        $my_comments = '';
-        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
-            $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
-        }
-        $my_questionid = (int) $array_content_id_exe[$i];
-
+    foreach ($questionListInPost as $questionId) {
+        $marks = $_POST['marks_'.$questionId] ?? 0;
+        $my_comments = $_POST['comments_'.$questionId] ?? '';
         $params = [
-            'marks' => $my_marks,
             'teacher_comment' => $my_comments,
         ];
+        $question = Question::read($questionId);
+        if (false === $question) {
+            continue;
+        }
+
+        // From the database.
+        $marksFromDatabase = 0;
+        if (isset($questionListData[$questionId])) {
+            $marksFromDatabase = $questionListData[$questionId]['marks'];
+        }
+
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            // From the form.
+            $params['marks'] = $marks;
+            if ($marksFromDatabase != $marks) {
+                Event::addEvent(
+                    LOG_QUESTION_SCORE_UPDATE,
+                    LOG_EXERCISE_ATTEMPT_QUESTION_ID,
+                    [
+                        'exe_id' => $id,
+                        'question_id' => $questionId,
+                        'old_marks' => $marksFromDatabase,
+                        'new_marks' => $marks,
+                    ]
+                );
+            }
+        } else {
+            $marks = $marksFromDatabase;
+        }
+
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,
-            ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
+            ['question_id = ? AND exe_id = ?' => [$questionId, $id]]
         );
 
         $recording = new TrackEAttemptRecording();
         $recording
             ->setExeId($id)
-            ->setQuestionId($my_questionid)
+            ->setQuestionId($questionId)
             ->setAuthor(api_get_user_id())
             ->setTeacherComment($my_comments)
             ->setExeId($id)
-            ->setMarks($my_marks)
+            ->setMarks($marks)
             ->setSessionId(api_get_session_id())
         ;
 
         $em = Database::getManager();
         $em->persist($recording);
         $em->flush();
-
-        /*$params = [
-            'marks' => $my_marks,
-            //'insert_date' => api_get_utc_datetime(),
-            'author' => api_get_user_id(),
-            'teacher_comment' => $my_comments,
-            'session_id' => api_get_session_id(),
-        ];
-        Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);*/
     }
 
     $useEvaluationPlugin = false;
@@ -250,7 +269,11 @@ if (isset($_REQUEST['comments']) &&
         $res = Database::query($qry);
         $tot = 0;
         while ($row = Database :: fetch_array($res, 'ASSOC')) {
-            $tot += $row['marks'];
+            $marks = $row['marks'];
+            if (!$objExerciseTmp->propagate_neg && $marks < 0) {
+                continue;
+            }
+            $tot += $marks;
         }
     } else {
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
@@ -286,6 +309,8 @@ if (isset($_REQUEST['comments']) &&
 
     $notifications = api_get_configuration_value('exercise_finished_notification_settings');
     if ($notifications) {
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
         ob_start();
         $stats = ExerciseLib::displayQuestionListByAttempt(
             $objExerciseTmp,
@@ -296,7 +321,25 @@ if (isset($_REQUEST['comments']) &&
             api_get_configuration_value('quiz_results_answers_report'),
             false
         );
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
         ob_end_clean();
+        // Show all for teachers.
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        $objExerciseTmp->forceShowExpectedChoiceColumn = true;
+        ob_start();
+        $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+        $objExerciseTmp->forceShowExpectedChoiceColumn = false;
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
 
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
@@ -313,19 +356,27 @@ if (isset($_REQUEST['comments']) &&
             $track_exercise_info,
             api_get_course_info(),
             $attemptCount,
-            $stats
+            $stats,
+            $statsTeacher
         );
     }
+
     // Updating LP score here
     if (!empty($lp_id) && !empty($lpItemId)) {
+        $lpRepo = Container::getLpRepository();
+        $lp = null;
+        if (!empty($lpId)) {
+            /** @var CLp $lp */
+            $lp = $lpRepo->find($lpId);
+        }
         $statusCondition = '';
-        $item = new learnpathItem($lpItemId, api_get_user_id(), api_get_course_int_id());
+        $item = new learnpathItem($lpItemId);
         if ($item) {
             $prereqId = $item->get_prereq_string();
             $minScore = $item->getPrerequisiteMinScore();
             $maxScore = $item->getPrerequisiteMaxScore();
             $passed = false;
-            $lp = new learnpath(api_get_course_id(), $lp_id, $student_id);
+            $lp = new learnpath($lp, api_get_course_info(), $student_id);
             $prereqCheck = $lp->prerequisites_match($lpItemId);
             if ($prereqCheck) {
                 $passed = true;
@@ -413,7 +464,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
                 ['style' => 'display:none', 'id' => 'datepicker_span']
             );
         }
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
+        $actions .= '<a class="btn btn--plain" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
             get_lang('QuestionStats').'</a>';
     }
 } else {
@@ -434,18 +485,8 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     $exe_id = (int) $_GET['did'];
     if (!empty($exe_id)) {
-        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
-        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
-        Database::query($sql);
-
-        Event::addEvent(
-            LOG_EXERCISE_ATTEMPT_DELETE,
-            LOG_EXERCISE_ATTEMPT,
-            $exe_id,
-            api_get_utc_datetime()
-        );
-        header('Location: exercise_report.php?'.api_get_cidreq().'&id='.$exercise_id);
+        ExerciseLib::deleteExerciseAttempt($exe_id);
+        header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }
 }
@@ -509,7 +550,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 // Security token to protect deletion
 $token = Security::get_token();
-$actions = Display::div($actions, ['class' => 'actions']);
+$actions = Display::toolbarAction('exercise_report', [$actions]);
 
 $extra = '<script>
     $(function() {
@@ -552,41 +593,30 @@ $form = new FormValidator(
     null,
     ['class' => 'form-vertical']
 );
-$form->addElement(
-    'radio',
+$form->addRadio(
     'export_format',
-    null,
     get_lang('CSV export'),
-    'csv',
+    ['csv'],
     ['id' => 'export_format_csv_label']
 );
-$form->addElement(
-    'radio',
+$form->addRadio(
     'export_format',
-    null,
     get_lang('Excel export'),
-    'xls',
+    ['xls'],
     ['id' => 'export_format_xls_label']
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'load_extra_data',
-    null,
     get_lang('Load extra user fields data (have to be marked as \'Filter\' to appear).'),
     '0',
     ['id' => 'export_format_xls_label']
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'include_all_users',
-    null,
     get_lang('Include all users'),
-    '0'
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'only_best_attempts',
-    null,
     get_lang('Only best attempts'),
     '0'
 );
@@ -609,7 +639,7 @@ $group_parameters = [
 ];
 
 foreach ($group_list as $group) {
-    $group_parameters[] = $group['id'].':'.$group['name'];
+    $group_parameters[] = $group['iid'].':'.$group['name'];
 }
 if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);
@@ -884,8 +914,8 @@ $gridJs = Display::grid_js(
             // Format the date for confirm box
             var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
             var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-            if (confirm("<?php echo convert_double_quote_to_single(get_lang('Are you sure you want to clean results for this test before the selected date ?')).' '; ?>" + selectedDate)) {
-                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
+            if (confirm("<?php echo addslashes(get_lang('Are you sure you want to clean results for this test before the selected date ?')).' '; ?>" + selectedDate)) {
+                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
     }

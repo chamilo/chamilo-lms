@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -18,45 +21,34 @@ class SkillRelCourse
     use TimestampableEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Skill
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="courses")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $skill;
+    protected Skill $skill;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="skills", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="skills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $session;
+    protected ?Session $session = null;
 
-    /**
-     * SkillRelItem constructor.
-     */
     public function __construct()
     {
-        $this->createdAt = new \DateTime('now');
-        $this->updatedAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
     }
 
     /**
@@ -67,72 +59,36 @@ class SkillRelCourse
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return SkillRelCourse
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return Skill
-     */
-    public function getSkill()
+    public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    /**
-     * @param Skill $skill
-     *
-     * @return SkillRelCourse
-     */
-    public function setSkill($skill)
+    public function setSkill(Skill $skill): self
     {
         $this->skill = $skill;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return SkillRelCourse
-     */
-    public function setCourse($course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return SkillRelCourse
-     */
-    public function setSession($session)
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
 
@@ -140,7 +96,7 @@ class SkillRelCourse
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -148,11 +104,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param \DateTime $createdAt
-     *
      * @return SkillRelCourse
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -160,7 +114,7 @@ class SkillRelCourse
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -168,11 +122,9 @@ class SkillRelCourse
     }
 
     /**
-     * @param \DateTime $updatedAt
-     *
      * @return SkillRelCourse
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 

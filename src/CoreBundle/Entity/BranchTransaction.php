@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,106 +18,68 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransaction
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var Room
-     *
-     * @ORM\ManyToOne(targetEntity="BranchTransactionStatus")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchTransactionStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
-    protected $branchTransactionStatus;
+    protected Room $branchTransactionStatus;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="transaction_id", type="bigint", nullable=false, unique=false)
+     * @ORM\Column(name="transaction_id", type="bigint")
      */
-    protected $externalTransactionId;
+    protected int $externalTransactionId;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="action", type="string", length=20, nullable=true, unique=false)
      */
-    protected $action;
+    protected ?string $action = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="item_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected $itemId;
+    protected ?string $itemId = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="origin", type="string", length=255, nullable=true, unique=false)
      */
-    protected $origin;
+    protected ?string $origin = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="dest_id", type="string", length=255, nullable=true, unique=false)
      */
-    protected $destId;
+    protected ?string $destId = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="external_info", type="string", length=255, nullable=true, unique=false)
      */
-    protected $externalInfo;
+    protected ?string $externalInfo = null;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="time_insert", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="time_insert", type="datetime")
      */
-    protected $timeInsert;
+    protected DateTime $timeInsert;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="time_update", type="datetime", nullable=false, unique=false)
+     * @ORM\Column(name="time_update", type="datetime")
      */
-    protected $timeUpdate;
+    protected DateTime $timeUpdate;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="failed_attempts", type="integer", nullable=false, unique=false)
+     * @ORM\Column(name="failed_attempts", type="integer")
      */
-    protected $failedAttempts;
+    protected int $failedAttempts;
 
     /**
-     * @var BranchSync
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
      * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
      */
-    protected $branch;
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return BranchTransaction
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
+    protected BranchSync $branch;
 
     /**
      * Get id.
@@ -126,62 +91,7 @@ class BranchTransaction
         return $this->id;
     }
 
-    /**
-     * Set transactionId.
-     *
-     * @param int $transactionId
-     *
-     * @return BranchTransaction
-     */
-    public function setTransactionId($transactionId)
-    {
-        $this->transactionId = $transactionId;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionId.
-     *
-     * @return int
-     */
-    public function getTransactionId()
-    {
-        return $this->transactionId;
-    }
-
-    /**
-     * Set branchId.
-     *
-     * @param int $branchId
-     *
-     * @return BranchTransaction
-     */
-    public function setBranchId($branchId)
-    {
-        $this->branchId = $branchId;
-
-        return $this;
-    }
-
-    /**
-     * Get branchId.
-     *
-     * @return int
-     */
-    public function getBranchId()
-    {
-        return $this->branchId;
-    }
-
-    /**
-     * Set action.
-     *
-     * @param string $action
-     *
-     * @return BranchTransaction
-     */
-    public function setAction($action)
+    public function setAction(string $action): self
     {
         $this->action = $action;
 
@@ -201,11 +111,9 @@ class BranchTransaction
     /**
      * Set itemId.
      *
-     * @param string $itemId
-     *
      * @return BranchTransaction
      */
-    public function setItemId($itemId)
+    public function setItemId(string $itemId)
     {
         $this->itemId = $itemId;
 
@@ -225,11 +133,9 @@ class BranchTransaction
     /**
      * Set destId.
      *
-     * @param string $destId
-     *
      * @return BranchTransaction
      */
-    public function setDestId($destId)
+    public function setDestId(string $destId)
     {
         $this->destId = $destId;
 
@@ -249,11 +155,9 @@ class BranchTransaction
     /**
      * Set timeInsert.
      *
-     * @param \DateTime $timeInsert
-     *
      * @return BranchTransaction
      */
-    public function setTimeInsert($timeInsert)
+    public function setTimeInsert(DateTime $timeInsert)
     {
         $this->timeInsert = $timeInsert;
 
@@ -263,7 +167,7 @@ class BranchTransaction
     /**
      * Get timeInsert.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeInsert()
     {
@@ -273,11 +177,9 @@ class BranchTransaction
     /**
      * Set timeUpdate.
      *
-     * @param \DateTime $timeUpdate
-     *
      * @return BranchTransaction
      */
-    public function setTimeUpdate($timeUpdate)
+    public function setTimeUpdate(DateTime $timeUpdate)
     {
         $this->timeUpdate = $timeUpdate;
 
@@ -287,7 +189,7 @@ class BranchTransaction
     /**
      * Get timeUpdate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTimeUpdate()
     {
@@ -303,11 +205,9 @@ class BranchTransaction
     }
 
     /**
-     * @param string $origin
-     *
      * @return BranchTransaction
      */
-    public function setOrigin($origin)
+    public function setOrigin(string $origin)
     {
         $this->origin = $origin;
 
@@ -323,11 +223,9 @@ class BranchTransaction
     }
 
     /**
-     * @param string $externalInfo
-     *
      * @return BranchTransaction
      */
-    public function setExternalInfo($externalInfo)
+    public function setExternalInfo(string $externalInfo)
     {
         $this->externalInfo = $externalInfo;
 
@@ -343,11 +241,9 @@ class BranchTransaction
     }
 
     /**
-     * @param int $failedAttempts
-     *
      * @return BranchTransaction
      */
-    public function setFailedAttempts($failedAttempts)
+    public function setFailedAttempts(int $failedAttempts)
     {
         $this->failedAttempts = $failedAttempts;
 
@@ -363,11 +259,9 @@ class BranchTransaction
     }
 
     /**
-     * @param BranchSync $branch
-     *
      * @return $this
      */
-    public function setBranch($branch)
+    public function setBranch(BranchSync $branch)
     {
         $this->branch = $branch;
 
@@ -383,11 +277,9 @@ class BranchTransaction
     }
 
     /**
-     * @param Room $branchTransactionStatus
-     *
      * @return BranchTransaction
      */
-    public function setBranchTransactionStatus($branchTransactionStatus)
+    public function setBranchTransactionStatus(Room $branchTransactionStatus)
     {
         $this->branchTransactionStatus = $branchTransactionStatus;
 
@@ -403,11 +295,9 @@ class BranchTransaction
     }
 
     /**
-     * @param int $externalTransactionId
-     *
      * @return BranchTransaction
      */
-    public function setExternalTransactionId($externalTransactionId)
+    public function setExternalTransactionId(int $externalTransactionId)
     {
         $this->externalTransactionId = $externalTransactionId;
 

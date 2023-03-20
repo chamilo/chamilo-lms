@@ -45,7 +45,7 @@ $form->addElement(
 $form->addSelectAjax(
     'destination_course',
     get_lang('Select target course'),
-    null,
+    [],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_my_courses_and_sessions&'.api_get_cidreq(),
     ]

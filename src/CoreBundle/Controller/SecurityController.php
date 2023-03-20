@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,12 +18,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * Class SecurityController.
- */
 class SecurityController extends AbstractController
 {
-    private $serializer;
+    private SerializerInterface $serializer;
 
     public function __construct(SerializerInterface $serializer)
     {
@@ -26,30 +28,19 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Route("/login", name="login").
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        //$error = $authenticationUtils->getLastAuthenticationError();
-        //$lastUsername = $authenticationUtils->getLastUsername();
-
-        /** @var User $user */
-        $user = $this->getUser();
-        $data = [];
-        if ($user) {
-            $userClone = clone $user;
-            $userClone->setPassword('');
-            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
-        }
-
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }
-
-    /**
      * @Route("/login_json", name="login_json")
      */
     public function loginJson(AuthenticationUtils $authenticationUtils): Response
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->json(
+                [
+                    'error' => 'Invalid login request: check that the Content-Type header is "application/json".',
+                ],
+                400
+            );
+        }
+
         //$error = $authenticationUtils->getLastAuthenticationError();
         //$lastUsername = $authenticationUtils->getLastUsername();
 
@@ -57,6 +48,17 @@ class SecurityController extends AbstractController
         $user = $this->getUser();
         $data = null;
         if ($user) {
+            // Log of connection attempts
+            $trackELoginRecord = new TrackELoginRecord();
+            $trackELoginRecord
+                ->setUsername($user->getUsername())
+                ->setLoginDate(new DateTime())
+                ->setUserIp(api_get_real_ip())
+                ->setSuccess(true)
+            ;
+            $repo = Container::getTrackELoginRecordRepository();
+            $repo->create($trackELoginRecord);
+
             $userClone = clone $user;
             $userClone->setPassword('');
             $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);

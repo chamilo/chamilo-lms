@@ -2,12 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$current_course_tool = TOOL_QUIZ;
 
 api_protect_course_script();
 
@@ -36,7 +39,36 @@ $questionNum = (int) $_GET['num'];
 $questionId = $questionList[$questionNum];
 $choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
 $hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
+$tryAgain = isset($_GET['tryagain']) && 1 === (int) $_GET['tryagain'];
+
+$repo = Container::getQuestionRepository();
+/** @var CQuizQuestion $question */
+$question = $repo->find($questionId);
+
+$allowTryAgain = false;
+if ($tryAgain) {
+    // Check if try again exists in this question, otherwise only allow one attempt BT#15827.
+    $answerType = $question->getType();
+    $showResult = false;
+    //$objAnswerTmp = new Answer($questionId, api_get_course_int_id());
+    $answers = $question->getAnswers();
+    if (!empty($answers)) {
+        foreach ($answers as $answerData) {
+            $destination = $answerData->getDestination();
+            if (!empty($destination)) {
+                $itemList = explode('@@', $destination);
+                if (isset($itemList[0]) && !empty($itemList[0])) {
+                    $allowTryAgain = true;
+                    break;
+                }
+            }
+        }
+    }
+}
 $loaded = isset($_GET['loaded']);
+if ($allowTryAgain) {
+    unset($exerciseResult[$questionId]);
+}
 
 if (empty($choiceValue) && isset($exerciseResult[$questionId])) {
     $choiceValue = $exerciseResult[$questionId];
@@ -54,6 +86,15 @@ if (!empty($choiceValue)) {
     }
 }
 
+$header = '';
+$exeId = 0;
+if (EXERCISE_FEEDBACK_TYPE_POPUP === $objExercise->getFeedbackType()) {
+    $exeId = Session::read('exe_id');
+    $header = '
+        <div class="modal-header">
+            <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
+        </div>';
+}
 echo '<script>
 function tryAgain() {
     $(function () {
@@ -63,22 +104,14 @@ function tryAgain() {
 
 function SendEx(num) {
     if (num == -1) {
-        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        window.location.href = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
     } else {
         num -= 1;
         window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-    }    
+    }
     return false;
 }
 </script>';
-
-$header = '';
-if (EXERCISE_FEEDBACK_TYPE_POPUP === $objExercise->getFeedbackType()) {
-    $header = '
-        <div class="modal-header">
-            <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
-        </div>';
-}
 
 echo '<div id="delineation-container">';
 // Getting the options by js
@@ -121,18 +154,18 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
 if (empty($choiceValue) && empty($hotSpot)) {
     echo "<script>
         // this works for only radio buttons
-        var f = window.document.frm_exercise;        
+        var f = window.document.frm_exercise;
         var choice_js = {answers: []};
         var hotspot = new Array();
         var hotspotcoord = new Array();
         var counter = 0;
-        
-        for (var i = 0; i < f.elements.length; i++) {            
-            if (f.elements[i].type == 'radio' && f.elements[i].checked) {                
+
+        for (var i = 0; i < f.elements.length; i++) {
+            if (f.elements[i].type == 'radio' && f.elements[i].checked) {
                 choice_js.answers.push(f.elements[i].value);
                 counter ++;
             }
-            
+
             if (f.elements[i].type == 'checkbox' && f.elements[i].checked) {
                 choice_js.answers.push(f.elements[i].value);
                 counter ++;
@@ -140,7 +173,7 @@ if (empty($choiceValue) && empty($hotSpot)) {
 
             if (f.elements[i].type == 'hidden') {
                 var name = f.elements[i].name;
-                
+
                 if (name.substr(0,7) == 'hotspot') {
                     hotspot.push(f.elements[i].value);
                 }
@@ -150,9 +183,9 @@ if (empty($choiceValue) && empty($hotSpot)) {
                 }
             }
         }
-        
+
         var my_choice = $('*[name*=\"choice[".$questionId."]\"]').serialize();
-        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();     
+        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();
     ";
 
     // IMPORTANT
@@ -169,6 +202,7 @@ $choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
+$saveResults = EXERCISE_FEEDBACK_TYPE_POPUP == (int) $objExercise->getFeedbackType();
 
 // if the user has answered at least one question
 if (is_array($choice)) {
@@ -178,7 +212,7 @@ if (is_array($choice)) {
         $exerciseResult = $choice;
     } else {
         // gets the question ID from $choice. It is the key of the array
-        list($key) = array_keys($choice);
+        [$key] = array_keys($choice);
         // if the user didn't already answer this question
         if (!isset($exerciseResult[$key])) {
             // stores the user answer into the array
@@ -190,8 +224,7 @@ if (is_array($choice)) {
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
 Session::write('exerciseResult', $exerciseResult);
 
-$objQuestionTmp = Question::read($questionId);
-$answerType = $objQuestionTmp->selectType();
+$answerType = $question->getType();
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
@@ -232,12 +265,12 @@ switch ($answerType) {
 
 ob_start();
 $result = $objExercise->manage_answer(
-    0,
+    $exeId,
     $questionId,
     $choiceValue,
     'exercise_result',
-    null,
-    false,
+    [],
+    $saveResults,
     false,
     $showResult,
     null,

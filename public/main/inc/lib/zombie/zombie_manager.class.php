@@ -86,10 +86,10 @@ class ZombieManager
             $sql .= ' AND user.active = 1';
         }
 
-        $sql .= " ORDER BY $column $direction";
+        $sql .= " ORDER BY `$column` $direction";
         if (!is_null($from) && !is_null($count)) {
-            $count = intval($count);
-            $from = intval($from);
+            $count = (int) $count;
+            $from = (int) $from;
             $sql .= " LIMIT $from, $count ";
         }
 

@@ -8,7 +8,7 @@ Feature: Work tool
     And I am on "/main/work/work.php?action=create_dir&cid=1"
     When I fill in the following:
       | new_dir | Work 1 |
-    And I fill in ckeditor field "description" with "Work description"
+    And I fill in editor field "description" with "Work description"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should see "Directory created"
@@ -27,17 +27,19 @@ Feature: Work tool
     And I wait for the page to be loaded
     Then I should see "Update successful"
 
-  Scenario: Send work as student
+  Scenario: Send work as student (acostea)
     Given I am not logged
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
-    Then I should see "Assignments"
-    Then I am on "/main/work/work_list.php?cid=1&sid=0&gid=0&gradebook=0&origin=&id=1"
+    And I wait for the page to be loaded
     Then I should see "Work 1"
-    Then I should see "Work description"
+    Then I follow "Work 1"
+    Then I should see "Work 1"
+    And I should see "Work description"
     Then I follow "Upload my assignment"
-    Then I should see "Upload a document"
+    Then I should see "Upload (Simple)"
     Then I follow "Upload (Simple)"
+    And wait for the page to be loaded
     Then I attach the file "/public/favicon.ico" to "form-work_file"
     And I press "Upload"
     And wait for the page to be loaded
@@ -62,7 +64,7 @@ Feature: Work tool
 #    Then I should see "Work description"
 #    And wait for the page to be loaded
 #    Then I follow "Correct and rate"
-#    Then I fill in ckeditor field "comment" with "This is a comment"
+#    Then I fill in editor field "comment" with "This is a comment"
 #    Then I attach the file "web/css/base.css" to "attachment"
 #    And I press "Send message"
 #    Then I should see "You comment has been added"

@@ -1,23 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 use Chamilo\CoreBundle\Component\Editor\Toolbar;
 
-/**
- * Class Basic.
- */
 class Basic extends Toolbar
 {
     /**
      * Default plugins that will be use in all toolbars
      * In order to add a new plugin you have to load it in default/layout/head.tpl.
-     *
-     * @var array
      */
-    public $defaultPlugins = [
+    public array $defaultPlugins = [
         //'adobeair',
         //'ajax',
         'audio',
@@ -67,10 +64,9 @@ class Basic extends Toolbar
 
     /**
      * Plugins this toolbar.
-     *
-     * @var array
      */
-    public $plugins = [];
+    public array $plugins = [];
+    private string $toolbarSet;
 
     public function __construct(
         $router,
@@ -83,11 +79,11 @@ class Basic extends Toolbar
         // Adding plugins depending of platform conditions
         $plugins = [];
 
-        if ('ismanual' == api_get_setting('show_glossary_in_documents')) {
+        if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
             $plugins[] = 'glossary';
         }
 
-        if ('true' == api_get_setting('youtube_for_students')) {
+        if ('true' === api_get_setting('youtube_for_students')) {
             $plugins[] = 'youtube';
         } else {
             if (api_is_allowed_to_edit() || api_is_platform_admin()) {
@@ -95,29 +91,29 @@ class Basic extends Toolbar
             }
         }
 
-        if ('true' == api_get_setting('enabled_googlemaps')) {
+        if ('true' === api_get_setting('enabled_googlemaps')) {
             $plugins[] = 'leaflet';
         }
 
-        if ('true' == api_get_setting('math_asciimathML')) {
+        if ('true' === api_get_setting('math_asciimathML')) {
             $plugins[] = 'asciimath';
         }
 
-        if ('true' == api_get_setting('enabled_mathjax')) {
+        if ('true' === api_get_setting('enabled_mathjax')) {
             $plugins[] = 'mathjax';
             $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
-        if ('true' == api_get_setting('enabled_asciisvg')) {
+        if ('true' === api_get_setting('enabled_asciisvg')) {
             $plugins[] = 'asciisvg';
         }
 
-        if ('true' == api_get_setting('enabled_wiris')) {
+        if ('true' === api_get_setting('enabled_wiris')) {
             // Commercial plugin
             $plugins[] = 'ckeditor_wiris';
         }
 
-        if ('true' == api_get_setting('enabled_imgmap')) {
+        if ('true' === api_get_setting('enabled_imgmap')) {
             $plugins[] = 'mapping';
         }
 
@@ -125,11 +121,11 @@ class Basic extends Toolbar
             // Missing
         }*/
 
-        if ('true' == api_get_setting('more_buttons_maximized_mode')) {
+        if ('true' === api_get_setting('more_buttons_maximized_mode')) {
             $plugins[] = 'toolbarswitch';
         }
 
-        if ('true' == api_get_setting('allow_spellcheck')) {
+        if ('true' === api_get_setting('allow_spellcheck')) {
             $plugins[] = 'scayt';
         }
 
@@ -141,6 +137,7 @@ class Basic extends Toolbar
             $plugins[] = 'blockimagepaste';
         }
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
+        $this->toolbarSet = $toolbar;
         parent::__construct($router, $toolbar, $config, $prefix);
     }
 
@@ -152,62 +149,67 @@ class Basic extends Toolbar
     public function getConfig()
     {
         $config = [];
-        if ('true' === api_get_setting('more_buttons_maximized_mode')) {
-            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        $customPlugins = '';
+        $customPluginsPath = [];
+        if ('true' === api_get_setting('editor.translate_html')) {
+            $customPlugins .= ' translatehtml';
+            $customPluginsPath['translatehtml'] = api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
         }
 
-        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';
-        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
-
-        /*filebrowserFlashBrowseUrl
-        filebrowserFlashUploadUrl
-        filebrowserImageBrowseLinkUrl
-        filebrowserImageBrowseUrl
-        filebrowserImageUploadUrl
-        filebrowserUploadUrl*/
-
-        //$config['extraPlugins'] = $this->getPluginsToString();
-
-        //$config['oembed_maxWidth'] = '560';
-        //$config['oembed_maxHeight'] = '315';
-
-        /*$config['wordcount'] = array(
-            // Whether or not you want to show the Word Count
-            'showWordCount' => true,
-            // Whether or not you want to show the Char Count
-            'showCharCount' => true,
-            // Option to limit the characters in the Editor
-            'charLimit' => 'unlimited',
-            // Option to limit the words in the Editor
-            'wordLimit' => 'unlimited'
-        );*/
-
-        $config['skin'] = 'moono-lisa';
-
-        $config['image2_chamilo_alignClasses'] = [
-            'pull-left',
-            'text-center',
-            'pull-right',
-            'img-va-baseline',
-            'img-va-top',
-            'img-va-bottom',
-            'img-va-middle',
-            'img-va-super',
-            'img-va-sub',
-            'img-va-text-top',
-            'img-va-text-bottom',
+        $plugins = [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste wordcount '.$customPlugins,
         ];
-        $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');
 
-        if (isset($this->config)) {
+        if ($this->getConfigAttribute('fullPage')) {
+            $plugins[] = 'fullpage';
+        }
+
+        $config['plugins'] = implode(' ', $plugins);
+        $config['toolbar'] = 'undo redo directionality | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | '.$customPlugins;
+
+        if (!empty($customPluginsPath)) {
+            $config['external_plugins'] = $customPluginsPath;
+        }
+
+        $config['skin_url'] = '/build/libs/tinymce/skins/ui/oxide';
+        $config['content_css'] = '/build/libs/tinymce/skins/content/default/content.css';
+        $config['branding'] = false;
+        $config['relative_urls'] = false;
+        $config['toolbar_mode'] = 'sliding';
+        $config['autosave_ask_before_unload'] = true;
+        $config['toolbar_mode'] = 'sliding';
+
+        // enable title field in the Image dialog
+        $config['image_title'] = true;
+        // enable automatic uploads of images represented by blob or data URIs
+        $config['automatic_uploads'] = true;
+        // custom filepicker only to Image dialog
+        $config['file_picker_types'] = 'image';
+
+        $config['file_picker_callback'] = '[browser]';
+
+        $iso = api_get_language_isocode();
+        $url = api_get_path(WEB_PATH);
+
+        // Language list: https://www.tiny.cloud/get-tiny/language-packages/
+        if ('en_US' !== $iso) {
+            $config['language'] = $iso;
+            $config['language_url'] = "$url/libs/editor/langs/$iso.js";
+        }
+
+        /*if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
         } else {
             $this->config = $config;
-        }
+        }*/
+
+        $this->config = $config;
 
         //$config['width'] = '100';
-        //$config['height'] = '200';
+        $this->config['height'] = '300';
+
         return $this->config;
     }
 
@@ -216,7 +218,7 @@ class Basic extends Toolbar
      */
     public function getNewPageBlock()
     {
-        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
+        return ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
     }
 
     /**
@@ -255,7 +257,7 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -292,10 +294,10 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
+            ['true' === api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

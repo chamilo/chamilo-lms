@@ -1,92 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxPost.
  *
  * @ORM\Table(
- *  name="c_dropbox_post",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="dest_user", columns={"dest_user_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
+ *     name="c_dropbox_post",
+ *     indexes={
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="dest_user", columns={"dest_user_id"}),
+ *         @ORM\Index(name="session_id", columns={"session_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CDropboxPost
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $iid;
+    protected int $iid;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
-    protected $feedbackDate;
+    protected DateTime $feedbackDate;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="feedback", type="text", nullable=true)
      */
-    protected $feedback;
+    protected ?string $feedback = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
-    protected $catId;
+    protected int $catId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected $sessionId;
+    protected int $sessionId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    protected int $cId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="file_id", type="integer")
      */
-    protected $fileId;
+    protected int $fileId;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="dest_user_id", type="integer")
      */
-    protected $destUserId;
+    protected int $destUserId;
 
     /**
      * Set feedbackDate.
      *
-     * @param \DateTime $feedbackDate
-     *
      * @return CDropboxPost
      */
-    public function setFeedbackDate($feedbackDate)
+    public function setFeedbackDate(DateTime $feedbackDate)
     {
         $this->feedbackDate = $feedbackDate;
 
@@ -96,7 +81,7 @@ class CDropboxPost
     /**
      * Get feedbackDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getFeedbackDate()
     {
@@ -106,11 +91,9 @@ class CDropboxPost
     /**
      * Set feedback.
      *
-     * @param string $feedback
-     *
      * @return CDropboxPost
      */
-    public function setFeedback($feedback)
+    public function setFeedback(string $feedback)
     {
         $this->feedback = $feedback;
 
@@ -130,11 +113,9 @@ class CDropboxPost
     /**
      * Set catId.
      *
-     * @param int $catId
-     *
      * @return CDropboxPost
      */
-    public function setCatId($catId)
+    public function setCatId(int $catId)
     {
         $this->catId = $catId;
 
@@ -154,11 +135,9 @@ class CDropboxPost
     /**
      * Set sessionId.
      *
-     * @param int $sessionId
-     *
      * @return CDropboxPost
      */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId)
     {
         $this->sessionId = $sessionId;
 
@@ -178,11 +157,9 @@ class CDropboxPost
     /**
      * Set cId.
      *
-     * @param int $cId
-     *
      * @return CDropboxPost
      */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -202,11 +179,9 @@ class CDropboxPost
     /**
      * Set fileId.
      *
-     * @param int $fileId
-     *
      * @return CDropboxPost
      */
-    public function setFileId($fileId)
+    public function setFileId(int $fileId)
     {
         $this->fileId = $fileId;
 
@@ -226,11 +201,9 @@ class CDropboxPost
     /**
      * Set destUserId.
      *
-     * @param int $destUserId
-     *
      * @return CDropboxPost
      */
-    public function setDestUserId($destUserId)
+    public function setDestUserId(int $destUserId)
     {
         $this->destUserId = $destUserId;
 

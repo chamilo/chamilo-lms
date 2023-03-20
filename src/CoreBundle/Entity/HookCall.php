@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -15,57 +17,43 @@ use Doctrine\ORM\Mapping as ORM;
 class HookCall
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
-     */
-    protected $hookEventId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
-     */
-    protected $hookObserverId;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
-     */
-    protected $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="hook_order", type="integer", nullable=false)
-     */
-    protected $hookOrder;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    protected $enabled;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    protected ?int $id = null;
+
+    /**
+     * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
+     */
+    protected int $hookEventId;
+
+    /**
+     * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
+     */
+    protected int $hookObserverId;
+
+    /**
+     * @ORM\Column(name="type", type="boolean", nullable=false)
+     */
+    protected bool $type;
+
+    /**
+     * @ORM\Column(name="hook_order", type="integer", nullable=false)
+     */
+    protected int $hookOrder;
+
+    /**
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    protected bool $enabled;
 
     /**
      * Set hookEventId.
      *
-     * @param int $hookEventId
-     *
      * @return HookCall
      */
-    public function setHookEventId($hookEventId)
+    public function setHookEventId(int $hookEventId)
     {
         $this->hookEventId = $hookEventId;
 
@@ -85,11 +73,9 @@ class HookCall
     /**
      * Set hookObserverId.
      *
-     * @param int $hookObserverId
-     *
      * @return HookCall
      */
-    public function setHookObserverId($hookObserverId)
+    public function setHookObserverId(int $hookObserverId)
     {
         $this->hookObserverId = $hookObserverId;
 
@@ -109,11 +95,9 @@ class HookCall
     /**
      * Set type.
      *
-     * @param bool $type
-     *
      * @return HookCall
      */
-    public function setType($type)
+    public function setType(bool $type)
     {
         $this->type = $type;
 
@@ -133,11 +117,9 @@ class HookCall
     /**
      * Set hookOrder.
      *
-     * @param int $hookOrder
-     *
      * @return HookCall
      */
-    public function setHookOrder($hookOrder)
+    public function setHookOrder(int $hookOrder)
     {
         $this->hookOrder = $hookOrder;
 
@@ -157,11 +139,9 @@ class HookCall
     /**
      * Set enabled.
      *
-     * @param bool $enabled
-     *
      * @return HookCall
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled)
     {
         $this->enabled = $enabled;
 

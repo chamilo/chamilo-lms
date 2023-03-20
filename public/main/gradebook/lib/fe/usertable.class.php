@@ -49,7 +49,7 @@ class UserTable extends SortableTable
     /**
      * Function used by SortableTable to generate the data to display.
      */
-    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
+    public function get_table_data($from = 1, $perPage = null, $column = null, $direction = null, $sort = null)
     {
         $scoredisplay = ScoreDisplay::instance();
 

@@ -142,7 +142,8 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "post-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "php bin/doctrine.php orm:generate-proxies"
         ],
         "post-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"

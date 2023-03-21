@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TrackEAttemptRecording.
+ * TrackEAttemptQualify.
  *
- * @ORM\Table(name="track_e_attempt_recording",
+ * @ORM\Table(name="track_e_attempt_qualify",
  *     indexes={
  *         @ORM\Index(name="exe_id", columns={"exe_id"}),
  *         @ORM\Index(name="question_id", columns={"question_id"}),
@@ -21,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *     })
  *     @ORM\Entity
  */
-class TrackEAttemptRecording
+class TrackEAttemptQualify
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -83,7 +83,7 @@ class TrackEAttemptRecording
     /**
      * Set exeId.
      *
-     * @return TrackEAttemptRecording
+     * @return TrackEAttemptQualify
      */
     public function setExeId(int $exeId)
     {
@@ -105,7 +105,7 @@ class TrackEAttemptRecording
     /**
      * Set questionId.
      *
-     * @return TrackEAttemptRecording
+     * @return TrackEAttemptQualify
      */
     public function setQuestionId(int $questionId)
     {
@@ -161,7 +161,7 @@ class TrackEAttemptRecording
     /**
      * Set author.
      *
-     * @return TrackEAttemptRecording
+     * @return TrackEAttemptQualify
      */
     public function setAuthor(int $author)
     {
@@ -200,7 +200,7 @@ class TrackEAttemptRecording
     /**
      * Set sessionId.
      *
-     * @return TrackEAttemptRecording
+     * @return TrackEAttemptQualify
      */
     public function setSessionId(int $sessionId)
     {

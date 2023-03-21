@@ -3113,7 +3113,7 @@ class ImportCsv
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT),
-            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS),
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),

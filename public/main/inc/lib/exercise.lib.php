@@ -1916,7 +1916,7 @@ HOTSPOT;
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database::get_course_table(TABLE_GROUP);
         $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -1935,7 +1935,7 @@ HOTSPOT;
         (
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
             FROM $TBL_TRACK_EXERCICES ttte
-            LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+            LEFT JOIN $tblTrackAttemptQualify tr
             ON (ttte.exe_id = tr.exe_id)
             WHERE
                 c_id = $courseId AND

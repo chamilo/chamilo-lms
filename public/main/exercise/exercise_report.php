@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -53,7 +53,6 @@ $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $course_id = api_get_course_int_id();
@@ -235,7 +234,7 @@ if (isset($_REQUEST['comments']) &&
             ['question_id = ? AND exe_id = ?' => [$questionId, $id]]
         );
 
-        $recording = new TrackEAttemptRecording();
+        $recording = new TrackEAttemptQualify();
         $recording
             ->setExeId($id)
             ->setQuestionId($questionId)

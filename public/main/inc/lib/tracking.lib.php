@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -6918,7 +6919,6 @@ class Tracking
 
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $attemptRecording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         $TBL_TRACK_E_COURSE_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $TBL_TRACK_E_LAST_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $TBL_LP_VIEW = Database::get_course_table(TABLE_LP_VIEW);
@@ -6953,8 +6953,16 @@ class Tracking
                     //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     //Database::query($sql);
 
-                    $sql = "UPDATE $attemptRecording SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    $repoTrackQualify = $em->getRepository(TrackEAttemptQualify::class);
+                    /** @var TrackEAttemptQualify $trackQualify */
+                    $trackQualify = $repoTrackQualify->findBy([
+                        'exeId' => $exe_id
+                    ]);
+                    if ($trackQualify) {
+                        $trackQualify->setSessionId($new_session_id);
+                        $em->persist($trackQualify);
+                        $em->flush();
+                    }
 
                     if (!isset($result_message[$TABLETRACK_EXERCICES])) {
                         $result_message[$TABLETRACK_EXERCICES] = 0;

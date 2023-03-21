@@ -173,7 +173,7 @@ switch ($action) {
         }
         break;
     case 'download_certificates_report':
-       $exportData = array_map(function($learner) {
+        $exportData = array_map(function($learner) {
             return [
                 $learner['user_id'],
                 $learner['username'],
@@ -183,10 +183,49 @@ switch ($action) {
             ];
         }, $certificate_list);
 
-        array_unshift($exportData, ['Id usuario', 'Usuario', 'Nombre', 'Apellidos', 'Certificado']);
+        $csvContent = [];
+        $csvHeaders = [];
+        $csvHeaders[] = get_lang('Id');
+        $csvHeaders[] = get_lang('UserName');
+        $csvHeaders[] = get_lang('FirstName');
+        $csvHeaders[] = get_lang('LastName');
+        $csvHeaders[] = get_lang('LastName');
+
+        $extraFields = [];
+        $extraFieldsFromSettings = [];
+        $extraFieldsFromSettings = api_get_configuration_value('certificate_export_report_user_extra_fields');
+
+        if (!empty($extraFieldsFromSettings) && isset($extraFieldsFromSettings['extra_fields'])) {
+            $extraFields = $extraFieldsFromSettings['extra_fields'];
+            $usersProfileInfo = [];
+
+            $userIds = array_column($certificate_list, 'user_id', 'user_id');
+
+            foreach ($extraFields as $fieldName) {
+                $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+                if (!empty($extraFieldInfo)) {
+                    $csvHeaders[] = $fieldName;
+
+                    $usersProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                        $extraFieldInfo['id'],
+                        $userIds
+                    );
+                }
+            }
+
+            foreach($exportData as $key => $row) {
+                foreach($usersProfileInfo as $extraInfo) {
+                    $row[] = $extraInfo[$row[0]][0];
+                }
+                $csvContent[] = $row;
+            }
+        }
+
+        array_unshift($csvContent, $csvHeaders);
 
         $fileName = 'learner_certificate_report_'.api_get_local_time();
-        Export::arrayToCsv($exportData, $fileName);
+        Export::arrayToCsv($csvContent, $fileName);
         break;
 }
 

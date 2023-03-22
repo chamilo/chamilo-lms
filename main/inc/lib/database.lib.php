@@ -148,7 +148,11 @@ class Database
         $returnManager = false
     ) {
         $config = self::getDoctrineConfig($entityRootPath);
-        $config->setAutoGenerateProxyClasses(true);
+        $autoGenerate = Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_NEVER;
+        if (api_get_setting('server_type') == 'test') {
+            $autoGenerate = Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_ALWAYS;
+        }
+        $config->setAutoGenerateProxyClasses($autoGenerate);
 
         $config->setEntityNamespaces(
             [
@@ -779,7 +783,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
+        $isDevMode = api_get_setting('server_type') == 'test'; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);

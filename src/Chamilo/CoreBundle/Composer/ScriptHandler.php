@@ -268,7 +268,7 @@ class ScriptHandler
     /**
      * @throws \Exception
      */
-    public static function generateDoctineProxies()
+    public static function generateDoctrineProxies()
     {
         $helperSet = require __DIR__.'/../../../../cli-config.php';
 

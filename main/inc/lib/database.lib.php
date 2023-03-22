@@ -3,10 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Debug\ExceptionHandler;
 
 /**
@@ -148,22 +150,6 @@ class Database
         $returnManager = false
     ) {
         $config = self::getDoctrineConfig($entityRootPath);
-        $autoGenerate = Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_NEVER;
-        if (api_get_setting('server_type') == 'test') {
-            $autoGenerate = Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_ALWAYS;
-        }
-        $config->setAutoGenerateProxyClasses($autoGenerate);
-
-        $config->setEntityNamespaces(
-            [
-                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
-                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
-            ]
-        );
 
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
@@ -783,7 +769,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = api_get_setting('server_type') == 'test'; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
+        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);
@@ -805,12 +791,25 @@ class Database
 
         $proxyDir = $path.'app/cache/';
 
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        $config = Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,
             $proxyDir,
             $cache,
             $isSimpleMode
+        );
+
+        $config->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
+
+        $config->setEntityNamespaces(
+            [
+                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
+                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
+                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
+            ]
         );
 
         return $config;

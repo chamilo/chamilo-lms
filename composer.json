@@ -142,10 +142,12 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "post-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctineProxies"
         ],
         "post-update-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctineProxies"
         ],
         "update-css": "Chamilo\\CoreBundle\\Composer\\ScriptHandler::updateCss"
     },

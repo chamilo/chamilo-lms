@@ -97,3 +97,6 @@
   top: 0;
   transform: rotate(90deg);
 }
+#date_all_text {
+  z-index: 0; !important;
+}

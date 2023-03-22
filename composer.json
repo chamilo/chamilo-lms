@@ -147,7 +147,7 @@
         ],
         "post-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
-            "generateDoctrineProxies"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctrineProxies"
         ],
         "update-css": "Chamilo\\CoreBundle\\Composer\\ScriptHandler::updateCss"
     },

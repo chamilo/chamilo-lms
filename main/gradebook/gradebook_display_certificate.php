@@ -189,7 +189,7 @@ switch ($action) {
         $csvHeaders[] = get_lang('UserName');
         $csvHeaders[] = get_lang('FirstName');
         $csvHeaders[] = get_lang('LastName');
-        $csvHeaders[] = get_lang('LastName');
+        $csvHeaders[] = 'Fecha de emisión';
 
         $extraFields = [];
         $extraFieldsFromSettings = [];

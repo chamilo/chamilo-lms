@@ -97,3 +97,9 @@
   top: 0;
   transform: rotate(90deg);
 }
+#date_alt_text {
+  z-index: 0; !important;
+}
+.input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group {
+  z-index: 0; !important;
+}

@@ -345,6 +345,11 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
         );
     }
 
+    $actions .= Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportCertificateReport'), [], ICON_SIZE_MEDIUM),
+        $url.'&action=download_certificates_report'
+    );
+
     if ($allowCustomCertificate) {
         $actions .= Display::url(
             Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
@@ -355,11 +360,6 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     $actions .= Display::url(
         Display::return_icon('notification_mail.png', get_lang('SendCertificateNotifications'), [], ICON_SIZE_MEDIUM),
         $url.'&action=show_notification_form'
-    );
-
-    $actions .= Display::url(
-        Display::return_icon('export_csv.png', get_lang('ExportCertificateReport'), [], ICON_SIZE_MEDIUM),
-        $url.'&action=download_certificates_report'
     );
 }
 

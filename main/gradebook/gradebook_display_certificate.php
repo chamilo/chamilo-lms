@@ -179,7 +179,6 @@ switch ($action) {
                 $learner['username'],
                 $learner['firstname'],
                 $learner['lastname'],
-                $learner['created_at'],
             ];
         }, $certificate_list);
 
@@ -189,7 +188,8 @@ switch ($action) {
         $csvHeaders[] = get_lang('UserName');
         $csvHeaders[] = get_lang('FirstName');
         $csvHeaders[] = get_lang('LastName');
-        $csvHeaders[] = 'Fecha de emisión';
+        $csvHeaders[] = get_lang('Score');
+        $csvHeaders[] = get_lang('Date');
 
         $extraFields = [];
         $extraFieldsFromSettings = [];
@@ -215,9 +215,20 @@ switch ($action) {
             }
 
             foreach($exportData as $key => $row) {
+                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $row[0],
+                    $categoryId
+                );
+
+                foreach ($list as $valueCertificate) {
+                    $row[] = $valueCertificate['score_certificate'];
+                    $row[] = api_convert_and_format_date($valueCertificate['created_at']);
+                }
+
                 foreach($usersProfileInfo as $extraInfo) {
                     $row[] = $extraInfo[$row[0]][0];
                 }
+
                 $csvContent[] = $row;
             }
         }

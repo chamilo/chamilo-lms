@@ -7,7 +7,8 @@
       <EditLinks
         :item="item"
         links-type="users"
-        show-share-with-user
+        :show-status="false"
+        :show-share-with-user="false"
       />
     </DocumentsForm>
     <Loading :visible="isLoading" />

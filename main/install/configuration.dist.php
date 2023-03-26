@@ -2399,6 +2399,17 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // main URL (where the access_url_changeable field = 0)
 // $_configuration['multiple_url_hide_disabled_settings'] = false;
 
+// Only courses with this option will be visible in catalogue
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(2, 3, 'show_in_catalogue', 'Show in catalogue', '', 0, 1, 1, 1, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Yes', NULL, NULL, 1),
+(@ef_id, '0', 'No', NULL, NULL, 2);
+//$_configuration['show_courses_in_catalogue'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -3,5 +3,6 @@ $(document).ready(function () {
         $("#nav-from-webservice").toggle("slow");
         $("#nav-from-webservice").css("z-index", 15);
     });
-    $('#menu-toggle').click();
+// Uncomment following line to set the menu open by default
+//    $('#menu-toggle').click();
 });

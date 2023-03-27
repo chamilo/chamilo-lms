@@ -5,7 +5,7 @@ require_once 'OpenAiUrl.php';
 
 class OpenAi
 {
-    private $model = "text-davinci-003";
+    private $model = "text-davinci-003"; // See https://platform.openai.com/docs/models for possible models
     private $headers;
     private $contentTypes;
     private $timeout = 0;

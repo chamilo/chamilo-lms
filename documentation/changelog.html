@@ -113,7 +113,7 @@
     <div class="version" aria-label="1.11.20">
         <a id="1.11.20"></a>
 
-        <h1>Chamilo 1.11.20 - Portsmouth, 01/03/2023</h1>
+        <h1>Chamilo 1.11.20 - Portsmouth, ?/04/2023</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.20 is a minor bug fix release on top of 1.11.18.</p>
         <h3>Release name</h3>
@@ -136,6 +136,8 @@
             <li>[2023-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/08fc2d135f46ab55583282b3374daff1686bdc3c">08fc2d13</a> - <a href="https://task.beeznest.com/issues/20535">BT#20535</a>) Session: Add export of results of session courses in CSV</li>
             <li>[2023-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/159e8ee075cc1d3b8d2cba68e98d05cc705ed3e5">159e8ee0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4594">GH#4594</a>) Plugin: AI Helper: Add tracking table and option to enable in quiz and learnpaths separately</li>
             <li>[2023-02-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/7fd2013f0cb54713b27eae73e88591cb682c5af0">7fd2013f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4608">GH#4608</a>) Plugin: AI Helper: Add option to generate tests within learnpath generation</li>
+            <li>[2023-02-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/e1b5f3026f7c7475a1cc57fe5a068673668374a4">e1b5f302</a> - <a href="https://task.beeznest.com/issues/20570">BT#20570</a>) Tracking: Add extrafields in learning path report</li>
+            <li>[2023-02-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/9f3bcab249e3339233358625637779f7334547cb">9f3bcab2</a> - <a href="https://task.beeznest.com/issues/20575">BT#20575</a>) Tracking: Add duplicated_users report</li>
         </ul>
         <h4>For developers and sysadmins</h4>
         Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
@@ -149,6 +151,12 @@
         <h3>Improvements (minor features) and debug</h3>
         In reverse chronological order...
         <ul aria-live="off">
+            <li>[2023-03-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/98bfc76703c131105b818eb3a7b8d55e4e983d37">98bfc767</a>) Plugin: AI Helper: Change questions generation request to reduce probability of unwanted quoting</li>
+            <li>[2023-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b39c27215c1621c3ae772d04c03e3d5a3bba439">0b39c272</a> - <a href="https://task.beeznest.com/issues/20589">BT#20589</a>) Work: Add parameter to validate invisible subfolders with ajax</li>
+            <li>[2023-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bb784715c76190149f32c3aa2cec63aa6e82fe5">5bb78471</a> - <a href="https://task.beeznest.com/issues/20575">BT#20575</a>) Internal: Fix the overwriting of $_GET in duplicated users report</li>
+            <li>[2023-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/fff9269deb12a928e57353b2409fc9905efb776e">fff9269d</a> - <a href="https://task.beeznest.com/issues/20589">BT#20589</a>) Work: Allow invisible subfolders from documents</li>
+            <li>[2023-02-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e0d1d1d071d6f3f1cda2c28650dc2d8dc81fe2c">6e0d1d1d</a> - <a href="https://task.beeznest.com/issues/20589">BT#20589</a>) Work: Make invisible folders from documents visible in work documents attachments</li>
+            <li>[2023-02-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d82230ff329ac5991a374d26a64f9a18254cfb4">3d82230f</a>) Internal: Fix query in Statistics::countCourses</li>
             <li>[2023-02-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/935d955ea2f59044b55de8522b01477a95ee6199">935d955e</a>) Plugin: AI Helper: Improve query wrapper to reduce chances of incoherent table of contents or test topics in learning path auto-creation. Notably, not setting a context to the test generation would generate a test on the term "conclusion" rather than the "conclusion" chapter of the course.</li>
             <li>[2023-02-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/03d246bc3d3fecb6f2e96f6753b9e39cc3f66c2c">03d246bc</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4606">GH#4606</a>) Plugin: AI Helper: Add styles link for header in lp content using OpenAi</li>
             <li>[2023-02-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/16b3398f4cdee5d1c1881c5d4b0303213d4c13bf">16b3398f</a>) Display: Update checkered flag for end of learning path icon (added in 1.11.18)</li>
@@ -209,7 +217,7 @@
         </ul>
         <h3>Removals</h3>
         <ul aria-live="off">
-            <li>No notable removal</li>
+            <li>[2023-03-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/454f945fca8f312c3ca28f4e3ce256fbedd981c4">454f945f</a>) Internal: Remove .htaccess rule redirecting root literals like /[username] to users.php?[username]. This rule was introduced a very long time ago to emulate social networks. It is confusing and clearly not a very logical rule at the age of GDPR.</li>
         </ul>
         <h3>Known issues</h3>
         <ul aria-live="off">

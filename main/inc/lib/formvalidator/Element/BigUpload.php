@@ -67,6 +67,8 @@ class BigUpload extends HTML_QuickForm_file
                 bigUpload.settings.progressBarColorError = "#da4f49";
                 //Path to the php script for handling the uploads
                 bigUpload.settings.scriptPath = "'.api_get_path(WEB_LIBRARY_JS_PATH).'bigupload/inc/bigUpload.php";
+                //cid Req
+                bigUpload.settings.cidReq = "'.api_get_cidreq().'";
                 //Set the origin upload
                 bigUpload.settings.origin = "'.$origin.'";
                 //The parameters from the upload form

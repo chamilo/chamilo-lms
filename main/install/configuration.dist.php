@@ -2410,6 +2410,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 (@ef_id, '0', 'No', NULL, NULL, 2);
 //$_configuration['show_courses_in_catalogue'] = false;
 
+// Allows defining one or several categories of courses that will be visible in the course catalog
+// $_configuration['courses_catalogue_show_only_category'] = ['Cat1','Cat2'];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

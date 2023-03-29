@@ -126,11 +126,30 @@ class CoursesAndSessionsCatalog
      */
     public static function getCoursesToShowInCatalogueCondition()
     {
+        $categoriesToShow = api_get_configuration_value('courses_catalogue_show_only_category');
+        $coursesCategoryInCatalogue = [];
+        if (!empty($categoriesToShow)) {
+            foreach ($categoriesToShow as $categoryCode) {
+                $courseCategories = CourseCategory::getCoursesInCategory($categoryCode, '', false);
+                if (!empty($courseCategories)) {
+                    foreach ($courseCategories as $course) {
+                        $coursesCategoryInCatalogue[] = $course['id'];
+                    }
+                }
+            }
+        }
+
         $courseListToShow = self::getCoursesToShowInCatalogue();
+        if (false === $courseListToShow) {
+            $courseListToShow = $coursesCategoryInCatalogue;
+        }
         $condition = '';
         if (!empty($courseListToShow)) {
             $courses = [];
             foreach ($courseListToShow as $courseId) {
+                if (!empty($categoriesToShow) && !in_array($courseId, $coursesCategoryInCatalogue)) {
+                    continue;
+                }
                 $courses[] = '"'.$courseId.'"';
             }
             $condition = ' AND course.id IN ('.implode(',', $courses).')';
@@ -222,8 +241,13 @@ class CoursesAndSessionsCatalog
         if (api_is_student()) {
             $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
         }
+
+        $showOnlyCategory = api_get_configuration_value('courses_catalogue_show_only_category');
         foreach ($allCategories as $category) {
             $categoryCode = $category['code'];
+            if (!($showOnlyCategory && in_array($categoryCode, $showOnlyCategory))) {
+                continue;
+            }
             if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
                 continue;
             }

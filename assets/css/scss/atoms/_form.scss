@@ -14,7 +14,7 @@
   [multiple],
   textarea,
   select {
-    @apply text-body-1 text-gray-90
+    @apply text-body-1 text-gray-90 outline-0 outline-none
       placeholder:text-gray-90
       focus:outline-none focus:outline-offset-0 focus:ring-0 focus:ring-offset-0;
   }
@@ -24,12 +24,6 @@
 
     &:empty {
       @apply hidden;
-    }
-  }
-
-  form {
-    small {
-      @apply text-caption;
     }
   }
 }
@@ -63,6 +57,11 @@
   }
 }
 
+.field {
+  > small {
+    @apply text-caption;
+  }
+}
 
 .p-error {
   @apply text-error;
@@ -70,4 +69,36 @@
 
 .p-disabled {
   @apply opacity-60;
+}
+
+.p-float-label {
+  label {
+    @apply left-4 text-support-3 bg-transparent transition-all duration-200;
+  }
+
+  input:focus,
+  input.p-filled,
+  textarea:focus,
+  textarea.p-filled,
+  .p-inputwrapper-focus,
+  .p-inputwrapper-filled {
+    ~ label {
+      @apply bg-white px-1 text-primary top-0 left-2;
+    }
+  }
+
+  .p-invalid ~ label {
+    @apply text-error;
+  }
+
+  input:focus,
+  input.p-filled,
+  textarea:focus,
+  textarea.p-filled,
+  .p-inputwrapper-focus,
+  .p-inputwrapper-filled {
+    &.p-invalid ~ label {
+      @apply text-error;
+    }
+  }
 }

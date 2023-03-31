@@ -18,9 +18,9 @@ trait EventSubscribableTrait
     /**
      * @var int
      *
-     * @ORM\Column(name="max_subscriptions", type="integer", options={"default": 0})
+     * @ORM\Column(name="subscription_item_id", type="integer", nullable=true)
      */
-    protected $maxSubscriptions = 0;
+    protected $subscriptionItemId = null;
 
     public function getSubscriptionVisibility(): int
     {
@@ -34,14 +34,14 @@ trait EventSubscribableTrait
         return $this;
     }
 
-    public function getMaxSubscriptions(): int
+    public function getSubscriptionItemId(): ?int
     {
-        return $this->maxSubscriptions;
+        return $this->subscriptionItemId;
     }
 
-    public function setMaxSubscriptions(int $maxSubscriptions): self
+    public function setSubscriptionItemId(?int $subscriptionItemId): self
     {
-        $this->maxSubscriptions = $maxSubscriptions;
+        $this->subscriptionItemId = $subscriptionItemId;
 
         return $this;
     }

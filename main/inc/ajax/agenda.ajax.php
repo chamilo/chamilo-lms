@@ -228,6 +228,32 @@ switch ($action) {
             );
         }
         break;
+    case 'event_subscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->subscribeCurrentUserToEvent($id);
+        break;
+    case 'event_unsubscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->unsubscribeCurrentUserToEvent($id);
+        break;
     default:
         echo '';
 }

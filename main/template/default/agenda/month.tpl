@@ -942,10 +942,6 @@ $(function() {
                     });
                 {% endif %}
 
-                {% if agenda_event_subscriptions and 'personal' == type %}
-                    $('#simple_subscriptions').html(showSubcriptionsContainer(calEvent));
-                {% endif %}
-
                 var buttons = {
                     '{{"ExportiCalConfidential"|get_lang}}' : function() {
                         url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
@@ -962,19 +958,51 @@ $(function() {
                 };
 
                 {% if agenda_collective_invitations and 'personal' == type %}
-                    buttons['{{ "Delete"|get_lang }}'] = function () {
-                        $.ajax({
-                            url: delete_url,
-                            success:function() {
-                                calendar.fullCalendar('removeEvents',
-                                    calEvent
-                                );
-                                calendar.fullCalendar('refetchEvents');
-                                calendar.fullCalendar('rerenderEvents');
-                                $("#simple-dialog-form").dialog('close');
+                    if (!calEvent.subscription_visibility) {
+                        buttons['{{ "Delete"|get_lang }}'] = function () {
+                            $.ajax({
+                                url: delete_url,
+                                success:function() {
+                                    calendar.fullCalendar('removeEvents',
+                                        calEvent
+                                    );
+                                    calendar.fullCalendar('refetchEvents');
+                                    calendar.fullCalendar('rerenderEvents');
+                                    $("#simple-dialog-form").dialog('close');
+                                }
+                            });
+                        };
+                    }
+                {% endif %}
+
+                {% if agenda_event_subscriptions and 'personal' == type %}
+                    $('#simple_subscriptions').html(showSubcriptionsContainer(calEvent));
+
+                    if (calEvent.subscription_visibility > 0) {
+                        if (calEvent.user_is_subscribed) {
+                            buttons["{{ 'Unsubscribe'|get_lang }}"] = function () {
+                                $.ajax({
+                                    url: '{{ web_agenda_ajax_url }}&a=event_unsubscribe&id=' + calEvent.id,
+                                    success:function() {
+                                        calendar.fullCalendar('refetchEvents');
+                                        //calendar.fullCalendar('rerenderEvents');
+                                        $("#simple-dialog-form").dialog('close');
+                                    }
+                                });
+                            };
+                        } else if (calEvent.can_subscribe) {
+                            buttons["{{ 'Subscribe'|get_lang }}"] = function () {
+                                $.ajax({
+                                    url: '{{ web_agenda_ajax_url }}&a=event_subscribe&id=' + calEvent.id,
+                                    success:function() {
+                                        calendar.fullCalendar('refetchEvents');
+                                        //calendar.fullCalendar('rerenderEvents');
+                                        $("#simple-dialog-form").dialog('close');
+                                    }
+                                });
                             }
-                        });
-                    };
+                        }
+                    }
                 {% endif %}
 
                 if ('session_subscription' === calEvent.type) {
@@ -1027,7 +1055,7 @@ $(function() {
     {{ agenda_reminders_js }}
 
     function showSubcriptionsContainer (calEvent) {
-        if (0 === calEvent.subscription_visibility) {
+        if (calEvent.invitees.length || !calEvent.subscription_visibility) {
             return '';
         }
 
@@ -1047,8 +1075,18 @@ $(function() {
         html += '</dd>';
 
         if (0 <= calEvent.max_subscriptions) {
-            html += "<dt>{{ 'MaxSubcriptions'|get_lang }}</dt>";
+            html += "<dt>{{ 'MaxSubscriptions'|get_lang }}</dt>";
             html += '<dd>' + calEvent.max_subscriptions + '</dd>';
+        }
+
+        html += "<dt>{{ 'Subscriptions'|get_lang }}</dt><dd>" + calEvent.count_subscribers + "</dd>";
+
+        if (calEvent.subscribers) {
+            html += '<dt>{{ 'Subscribers'|get_lang }}</dt><dd>';
+            html += calEvent.subscribers
+                .map(function (invitee) { return invitee.name; })
+                .join('<br>');
+            html += '</dd>'
         }
 
         html += '</dl>';
@@ -1143,10 +1181,7 @@ $(function() {
         {% endif %}
 
         {% if agenda_event_subscriptions and 'personal' == type %}
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{{ 'Subscriptions' }}</label>
-                <div class="col-sm-9" id="simple_subscriptions"></div>
-            </div>
+            <div class="form-group" id="simple_subscriptions"></div>
         {% endif %}
     </form>
 </div>

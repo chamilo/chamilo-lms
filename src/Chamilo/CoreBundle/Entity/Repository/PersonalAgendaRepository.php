@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
 use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -24,6 +25,16 @@ class PersonalAgendaRepository extends EntityRepository
                 $qb->expr()->eq('iu.user', ':user')
             )
         ;
+
+        if (api_get_configuration_value('agenda_event_subscriptions')) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->not(
+                        $qb->expr()->isInstanceOf('i', AgendaEventSubscription::class)
+                    )
+                )
+            ;
+        }
 
         $params = [
             'user' => $user,

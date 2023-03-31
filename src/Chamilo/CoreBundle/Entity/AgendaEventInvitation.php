@@ -96,10 +96,19 @@ class AgendaEventInvitation
         return $this->creator;
     }
 
-    public function setCreator(User $creator): AgendaEventInvitation
+    public function setCreator(User $creator): self
     {
         $this->creator = $creator;
 
         return $this;
+    }
+
+    public function hasUserAsInvitee(User $user): bool
+    {
+        return $this->invitees->exists(
+            function (int $key, AgendaEventInvitee $invitee) use ($user) {
+                return $invitee->getUser() === $user;
+            }
+        );
     }
 }

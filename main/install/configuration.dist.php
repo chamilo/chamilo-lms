@@ -465,7 +465,11 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 
 // It allows to other users to subscribe for events. Requires DB changes:
 /*
-ALTER TABLE personal_agenda ADD subscription_visibility INT DEFAULT 0 NOT NULL, ADD max_subscriptions INT DEFAULT 0 NOT NULL;
+ALTER TABLE personal_agenda ADD subscription_visibility INT DEFAULT 0 NOT NULL, ADD subscription_item_id INT DEFAULT NULL;
+ALTER TABLE agenda_event_invitee ADD type VARCHAR(255) NOT NULL;
+ALTER TABLE agenda_event_invitation ADD type VARCHAR(255) NOT NULL, ADD max_attendees INT DEFAULT 0;
+UPDATE agenda_event_invitation SET type = 'invitation';
+UPDATE agenda_event_invitee SET type = 'invitee';
 */
 // Then uncomment the "use EventSubscribableTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_event_subscriptions'] = false;

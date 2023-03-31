@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
+
 $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
@@ -290,6 +292,37 @@ if (api_get_configuration_value('agenda_collective_invitations') && 'personal' =
         ]
     );
     $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+}
+
+if (
+    api_is_platform_admin()
+    && api_get_configuration_value('agenda_event_subscriptions') && 'personal' === $agenda->type
+) {
+    $form->addHeader(get_lang('Subscriptions'));
+    $form->addHtml('<div id="form_subscriptions_container">');
+    $form->addSelect(
+        'subscription_visibility',
+        get_lang('AllowSubscriptions'),
+        [
+            AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+            AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+        ],
+        [
+            'onchange' => 'document.getElementById(\'max_subscriptions\').disabled = this.value == 0;',
+        ]
+    );
+    $form->addNumeric(
+        'max_subscriptions',
+        ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+        [
+            'disabled' => 'disabled',
+            'step' => 1,
+            'min' => 0,
+            'value' => 0,
+        ]
+    );
+    $form->addHtml('</div>');
+    $form->addHtml('<div id="form_subscriptions_edit" style="display: none;"></div>');
 }
 
 if (api_get_configuration_value('agenda_reminders')) {

@@ -174,6 +174,8 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -194,7 +196,9 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $maxSubscriptions
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -254,6 +258,8 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -307,7 +313,9 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $maxSubscriptions
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

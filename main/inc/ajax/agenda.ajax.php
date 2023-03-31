@@ -51,6 +51,8 @@ switch ($action) {
         $notificationPeriod = $_REQUEST['notification_period'] ?? [];
         $careerId = $_REQUEST['career_id'] ?? 0;
         $promotionId = $_REQUEST['promotion_id'] ?? 0;
+        $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+        $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
         $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -71,7 +73,9 @@ switch ($action) {
             $isCollective,
             $reminders,
             (int) $careerId,
-            (int) $promotionId
+            (int) $promotionId,
+            $subscriptionVisibility,
+            $maxSubscriptions
         );
 
         echo $eventId;

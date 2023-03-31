@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
 use Chamilo\CoreBundle\Entity\AgendaEventInvitee;
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\UserBundle\Entity\User;
 
@@ -254,7 +255,9 @@ class Agenda
         bool $isCollective = false,
         array $reminders = [],
         int $careerId = 0,
-        int $promotionId = 0
+        int $promotionId = 0,
+        int $subscriptionVisibility = 0,
+        int $maxSubscriptions = 0
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -280,6 +283,17 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_collective_invitations')) {
                     Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
+
+                if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
+                    Database::update(
+                        $this->tbl_personal_agenda,
+                        [
+                            'subscription_visibility' => $subscriptionVisibility,
+                            'max_subscriptions' => $subscriptionVisibility > 0 ? $maxSubscriptions : 0,
+                        ],
+                        ['id = ?' => [$id]]
+                    );
                 }
                 break;
             case 'course':
@@ -865,7 +879,9 @@ class Agenda
         bool $isCollective = false,
         array $remindersList = [],
         int $careerId = 0,
-        int $promotionId = 0
+        int $promotionId = 0,
+        int $subscriptionVisibility = 0,
+        int $maxSubscriptions = 0
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -908,6 +924,17 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_collective_invitations')) {
                     Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
+
+                if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
+                    Database::update(
+                        $this->tbl_personal_agenda,
+                        [
+                            'subscription_visibility' => $subscriptionVisibility,
+                            'max_subscriptions' => $subscriptionVisibility > 0 ? $maxSubscriptions : 0,
+                        ],
+                        ['id = ?' => [$id]]
+                    );
                 }
                 break;
             case 'course':
@@ -1759,6 +1786,7 @@ class Agenda
         $endCondition = '';
 
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        $agendaEventSubscriptions = api_get_configuration_value('agenda_event_subscriptions');
 
         if ($start !== 0) {
             $startDate = api_get_utc_datetime($start, true, true);
@@ -1770,8 +1798,37 @@ class Agenda
         }
         $user_id = api_get_user_id();
 
+        $userCondition = "user = $user_id";
+
+        if ($agendaEventSubscriptions) {
+            $objGroup = new UserGroup();
+            $groupList = $objGroup->get_groups_by_user($user_id);
+
+            $userCondition = "(
+                    $userCondition
+                    OR (
+                        subscription_visibility = ".AgendaEventSubscription::SUBSCRIPTION_ALL;
+
+            if ($groupList) {
+                $userCondition .= "
+                    OR (
+                        subscription_visibility = ".AgendaEventSubscription::SUBSCRIPTION_CLASS."
+                        AND subscription_item_id IN (".implode(', ', array_keys($groupList)).")
+                    ) 
+                ";
+            }
+
+            $userCondition .= "
+                    )
+                )
+            ";
+        }
+
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-                WHERE user = $user_id $startCondition $endCondition";
+            WHERE $userCondition
+                $startCondition
+                $endCondition
+        ";
 
         $result = Database::query($sql);
         $my_events = [];
@@ -1782,7 +1839,7 @@ class Agenda
                 $event['title'] = $row['title'];
                 $event['className'] = 'personal';
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_personal_color;
-                $event['editable'] = true;
+                $event['editable'] = $user_id === (int) $row['user'];
                 $event['sent_to'] = get_lang('Me');
                 $event['type'] = 'personal';
 
@@ -1804,6 +1861,11 @@ class Agenda
                 if ($agendaCollectiveInvitations) {
                     $event['collective'] = (bool) $row['collective'];
                     $event['invitees'] = self::getInviteesForPersonalEvent($row['id']);
+                }
+
+                if ($agendaEventSubscriptions) {
+                    $event['subscription_visibility'] = (int) $row['subscription_visibility'];
+                    $event['max_subscriptions'] = (int) $row['max_subscriptions'];
                 }
 
                 $my_events[] = $event;
@@ -2680,6 +2742,9 @@ class Agenda
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
+        $em = Database::getManager();
+        $personalEvent = $id ? $em->find('ChamiloCoreBundle:PersonalAgenda', $id) : null;
+
         $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
@@ -2894,14 +2959,11 @@ class Agenda
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
 
         if ($agendaCollectiveInvitations && 'personal' === $this->type) {
-            $em = Database::getManager();
-
             $invitees = [];
             $isCollective = false;
 
-            if ($id) {
-                $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $id);
-                $eventInvitation = $event->getInvitation();
+            if ($personalEvent) {
+                $eventInvitation = $personalEvent->getInvitation();
 
                 if ($eventInvitation) {
                     foreach ($eventInvitation->getInvitees() as $invitee) {
@@ -2911,7 +2973,7 @@ class Agenda
                     }
                 }
 
-                $isCollective = $event->isCollective();
+                $isCollective = $personalEvent->isCollective();
             }
 
             $form->addSelectAjax(
@@ -2924,6 +2986,7 @@ class Agenda
                 ]
             );
             $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+            $form->addHtml('<hr>');
 
             $params['invitees'] = array_keys($invitees);
             $params['collective'] = $isCollective;
@@ -2938,6 +3001,40 @@ class Agenda
 
             $form->addHtml('</div>');
             $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+        }
+
+        if (api_is_platform_admin()
+            && true === api_get_configuration_value('agenda_event_subscriptions')
+        ) {
+            $form->addSelect(
+                'subscription_visibility',
+                get_lang('AllowSubscriptions'),
+                [
+                    AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+                    AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+                ]
+            );
+            $form->addNumeric(
+                'max_subscriptions',
+                ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+                [
+                    'disabled' => 'disabled',
+                    'step' => 1,
+                    'min' => 0,
+                    'value' => 0,
+                ]
+            );
+            $form->addHtml("<script>
+                $(function () {
+                    $('#add_event_subscription_visibility')
+                        .on('change', function () {
+                            $('#max_subscriptions').prop('disabled', this.value == 0);                        
+                        })
+                        .trigger('change');
+                })
+                </script>
+            ");
             $form->addHtml('<hr>');
         }
 

@@ -1,4 +1,5 @@
 {% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
+{% set agenda_event_subscriptions = 'agenda_event_subscriptions'|api_get_configuration_value %}
 {% set agenda_reminders = 'agenda_reminders'|api_get_configuration_value %}
 {% set career_in_global_events = 'allow_careers_in_global_agenda'|api_get_configuration_value %}
 
@@ -340,6 +341,15 @@ $(function() {
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
+
+                $('#add_event_form').get(0).reset();
+
+                {% if agenda_event_subscriptions and 'personal' == type and api_is_platform_admin() %}
+                    $('#form_subscription_visibility').trigger('change').selectpicker('refresh');
+                    $('#form_subscriptions_container').show('');
+                    $('#form_subscriptions_edit').hide().html('');
+                {% endif %}
+
 				$("#dialog-form").dialog("open");
 				$("#dialog-form").dialog({
 					buttons: {
@@ -580,6 +590,13 @@ $(function() {
                     if ($("#collective").parent().find('#collective_edit').length == 0) {
                         $("#collective").parent().append('<div id="collective_edit"></div>');
                     }
+                {% endif %}
+
+                {% if agenda_event_subscriptions and 'personal' == type and api_is_platform_admin() %}
+                    $('#form_subscriptions_container').hide();
+                    $('#form_subscriptions_edit')
+                        .html(showSubcriptionsContainer(calEvent))
+                        .show();
                 {% endif %}
 
                 {% if agenda_reminders %}
@@ -925,6 +942,10 @@ $(function() {
                     });
                 {% endif %}
 
+                {% if agenda_event_subscriptions and 'personal' == type %}
+                    $('#simple_subscriptions').html(showSubcriptionsContainer(calEvent));
+                {% endif %}
+
                 var buttons = {
                     '{{"ExportiCalConfidential"|get_lang}}' : function() {
                         url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
@@ -1004,6 +1025,36 @@ $(function() {
 	});
 
     {{ agenda_reminders_js }}
+
+    function showSubcriptionsContainer (calEvent) {
+        if (0 === calEvent.subscription_visibility) {
+            return '';
+        }
+
+        var html = '';
+        html += '<dl class="dl-horizontal">';
+        html += "<dt>{{ 'AllowSubscriptions'|get_lang }}</dt>";
+        html += '<dd>';
+
+        if (1 === calEvent.subscription_visibility) {
+            html += "{{ 'AllUsersOfThePlatform'|get_lang }}";
+        }
+
+        if (2 === calEvent.subscription_visibility) {
+            html += "{{ 'UsersInsideClass'|get_lang }}";
+        }
+
+        html += '</dd>';
+
+        if (0 <= calEvent.max_subscriptions) {
+            html += "<dt>{{ 'MaxSubcriptions'|get_lang }}</dt>";
+            html += '<dd>' + calEvent.max_subscriptions + '</dd>';
+        }
+
+        html += '</dl>';
+
+        return html;
+    }
 });
 </script>
 {{ actions_div }}
@@ -1088,6 +1139,13 @@ $(function() {
                 <div class="col-sm-9">
                     <p class="form-control-static" id="simple_promotion"></p>
                 </div>
+            </div>
+        {% endif %}
+
+        {% if agenda_event_subscriptions and 'personal' == type %}
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ 'Subscriptions' }}</label>
+                <div class="col-sm-9" id="simple_subscriptions"></div>
             </div>
         {% endif %}
     </form>

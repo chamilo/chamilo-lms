@@ -344,7 +344,9 @@ function return_navigation_array()
     }
 
     if (api_get_setting('course_catalog_published') == 'true' && api_is_anonymous()) {
-        $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
+        if (true !== api_get_configuration_value('catalog_hide_public_link')) {
+            $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
+        }
     }
 
     if (api_get_user_id() && !api_is_anonymous()) {

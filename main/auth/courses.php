@@ -12,7 +12,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Section for the tabs.
 $this_section = SECTION_CATALOG;
 
-if ('true' !== api_get_setting('course_catalog_published')) {
+if ('true' !== api_get_setting('course_catalog_published') ||
+    ('true' === api_get_setting('course_catalog_published') && api_get_configuration_value('catalog_hide_public_link'))
+) {
     // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }

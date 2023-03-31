@@ -2399,6 +2399,9 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // main URL (where the access_url_changeable field = 0)
 // $_configuration['multiple_url_hide_disabled_settings'] = false;
 
+//Hides the link to the course catalog in the menu when the catalog is public.
+// $_configuration['catalog_hide_public_link'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

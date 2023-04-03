@@ -149,11 +149,7 @@ class CoursesAndSessionsCatalog
 
         if ($coursesToShow && !empty($courseListToShow)) {
             foreach ($courseListToShow as $courseId) {
-                $courseInfo = api_get_course_info_by_id($courseId);
-                if (!empty($courseInfo['category_code']) &&
-                    !empty($categoriesToShow) &&
-                    !in_array($courseId, $coursesCategoryInCatalogue)
-                ) {
+                if (!empty($categoriesToShow) && !in_array($courseId, $coursesCategoryInCatalogue)) {
                     continue;
                 }
                 $courses[] = '"'.$courseId.'"';

@@ -2844,7 +2844,7 @@ class Agenda
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
         $em = Database::getManager();
-        $personalEvent = $id ? $em->find('ChamiloCoreBundle:PersonalAgenda', $id) : null;
+        $personalEvent = 'personal' === $this->type && $id ? $em->find('ChamiloCoreBundle:PersonalAgenda', $id) : null;
 
         $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {

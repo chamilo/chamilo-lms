@@ -77,6 +77,8 @@ class CourseRestorer
     public $add_text_in_items = false;
     public $destination_course_id;
 
+    public $copySessionContent = false;
+
     /**
      * CourseRestorer constructor.
      *
@@ -1512,11 +1514,13 @@ class CourseRestorer
             $tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
-                $sql = "DELETE FROM $tool_intro_table
+                if (!$this->copySessionContent) {
+                    $sql = "DELETE FROM $tool_intro_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
                             id='".self::DBUTF8escapestring($tool_intro->id)."'";
-                Database::query($sql);
+                    Database::query($sql);
+                }
 
                 $tool_intro->intro_text = DocumentManager::replaceUrlWithNewCourseCode(
                     $tool_intro->intro_text,

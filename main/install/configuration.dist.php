@@ -2408,6 +2408,7 @@ SET @ef_id = LAST_INSERT_ID();
 INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
 (@ef_id, '1', 'Yes', NULL, NULL, 1),
 (@ef_id, '0', 'No', NULL, NULL, 2);
+*/
 //$_configuration['show_courses_in_catalogue'] = false;
 
 // Allows defining one or several categories of courses that will be visible in the course catalog

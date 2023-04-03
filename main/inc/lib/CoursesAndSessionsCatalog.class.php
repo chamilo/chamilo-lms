@@ -92,10 +92,6 @@ class CoursesAndSessionsCatalog
 
     public static function getCoursesToShowInCatalogue()
     {
-        if (true !== api_get_configuration_value('show_courses_in_catalogue')) {
-            return false;
-        }
-
         $tblCourseField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblCourseFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $courseListToShow = [];
@@ -127,6 +123,7 @@ class CoursesAndSessionsCatalog
     public static function getCoursesToShowInCatalogueCondition()
     {
         $categoriesToShow = api_get_configuration_value('courses_catalogue_show_only_category');
+        $coursesToShow = api_get_configuration_value('show_courses_in_catalogue');
         $coursesCategoryInCatalogue = [];
         if (!empty($categoriesToShow)) {
             foreach ($categoriesToShow as $categoryCode) {
@@ -140,18 +137,31 @@ class CoursesAndSessionsCatalog
         }
 
         $courseListToShow = self::getCoursesToShowInCatalogue();
-        if (false === $courseListToShow) {
-            $courseListToShow = $coursesCategoryInCatalogue;
-        }
-        $condition = '';
-        if (!empty($courseListToShow)) {
-            $courses = [];
-            foreach ($courseListToShow as $courseId) {
-                if (!empty($categoriesToShow) && !in_array($courseId, $coursesCategoryInCatalogue)) {
+        $courses = [];
+        if (!empty($coursesCategoryInCatalogue)) {
+            foreach ($coursesCategoryInCatalogue as $courseId) {
+                if ($coursesToShow && !in_array($courseId, $courseListToShow)) {
                     continue;
                 }
                 $courses[] = '"'.$courseId.'"';
             }
+        }
+
+        if ($coursesToShow && !empty($courseListToShow)) {
+            foreach ($courseListToShow as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (!empty($courseInfo['category_code']) &&
+                    !empty($categoriesToShow) &&
+                    !in_array($courseId, $coursesCategoryInCatalogue)
+                ) {
+                    continue;
+                }
+                $courses[] = '"'.$courseId.'"';
+            }
+        }
+
+        $condition = '';
+        if (!empty($courses)) {
             $condition = ' AND course.id IN ('.implode(',', $courses).')';
         }
 
@@ -170,7 +180,9 @@ class CoursesAndSessionsCatalog
             foreach ($courseListToAvoid as $courseId) {
                 $courses[] = '"'.$courseId.'"';
             }
-            $condition = ' AND course.id NOT IN ('.implode(',', $courses).')';
+            if (!empty($courses)) {
+                $condition = ' AND course.id NOT IN ('.implode(',', $courses).')';
+            }
         }
 
         return $condition;

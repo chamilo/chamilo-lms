@@ -5924,7 +5924,7 @@ class SessionManager
                         WHERE id = '$session_id'";
                 Database::query($sql);
 
-                self::addClassesByName($session_id, $classes, false);
+                self::addClassesByName($session_id, $classes, false, $error_message);
 
                 if ($debug) {
                     $logger->addInfo("End process session #$session_id -------------------- ");
@@ -10001,7 +10001,7 @@ class SessionManager
      * @param array $classesNames
      * @param bool  $deleteClassSessions Optional. Empty the session list for the usergroup (class)
      */
-    private static function addClassesByName($sessionId, $classesNames, $deleteClassSessions = true)
+    private static function addClassesByName($sessionId, $classesNames, $deleteClassSessions = true, ?string &$error_message = '')
     {
         if (!$classesNames) {
             return;
@@ -10011,6 +10011,13 @@ class SessionManager
 
         foreach ($classesNames as $className) {
             if (empty($className)) {
+                continue;
+            }
+
+            $classIdByName = $usergroup->getIdByName($className);
+
+            if (empty($classIdByName)) {
+                $error_message .= sprintf(get_lang('ClassNameXDoesntExists'), $className).'<br>';
                 continue;
             }
 

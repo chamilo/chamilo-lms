@@ -4692,7 +4692,8 @@ class SessionManager
                             $course['code'],
                             $sid,
                             [],
-                            false
+                            false,
+                            true
                         );
                     }
                 }

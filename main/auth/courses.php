@@ -12,7 +12,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Section for the tabs.
 $this_section = SECTION_CATALOG;
 
-if ('true' !== api_get_setting('course_catalog_published')) {
+if ('true' !== api_get_setting('course_catalog_published') ||
+    ('true' === api_get_setting('course_catalog_published') && api_get_configuration_value('catalog_hide_public_link'))
+) {
     // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }
@@ -47,7 +49,7 @@ switch ($action) {
 
         if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
             $auth = new Auth();
-            $result = $auth->remove_user_from_course($_GET['unsubscribe']);
+            $result = $auth->remove_user_from_course($_GET['course_code']);
             if ($result) {
                 Display::addFlash(
                     Display::return_message(get_lang('YouAreNowUnsubscribed'), 'success')

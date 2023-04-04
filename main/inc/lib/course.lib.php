@@ -4706,7 +4706,8 @@ class CourseManager
         $destination_course_code,
         $destination_session_id,
         $params = [],
-        $withBaseContent = true
+        $withBaseContent = true,
+        $copySessionContent = false
     ) {
         $course_info = api_get_course_info($source_course_code);
 
@@ -4714,6 +4715,7 @@ class CourseManager
             $cb = new CourseBuilder('', $course_info);
             $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
             $restorer = new CourseRestorer($course);
+            $restorer->copySessionContent = $copySessionContent;
             $restorer->skip_content = $params;
             $restorer->restore(
                 $destination_course_code,
@@ -4764,7 +4766,8 @@ class CourseManager
                         $new_course_info['code'],
                         $destination_session_id,
                         $params,
-                        true
+                        true,
+                        $copySessionContent
                     );
                     if ($result) {
                         return $new_course_info;
@@ -5422,7 +5425,7 @@ class CourseManager
                 $my_course['unsubscribe_button'] = Display::url(
                     get_lang('Unreg').' '.
                     Display::returnFontAwesomeIcon('sign-out'),
-                    api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&unsubscribe='.$courseCode
+                    api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&=course_code'.$courseCode
                     .'&sec_token='.$stok.'&category_code='.$categoryCode,
                     [
                         'class' => 'btn btn-danger btn-sm',

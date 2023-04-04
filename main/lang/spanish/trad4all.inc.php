@@ -9030,5 +9030,6 @@ $EndOfLearningPath = "Conclusión";
 $UnableToDeleteTempFile = "No se puede acceder al archivo temporal";
 $DuplicatedUsers = "Usuarios duplicados";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Este reporte solo lista usuarios que tienen el mismo nombre y apellido.";
-$RemoveOldRelationshipsHelp = "Marcando esta casilla, dará aprobación al sistema para eliminar todas las relaciones que *no* estén en el archivo. Usa el archivo como la lista exclusiva de relaciones (lo que no existe en el archivo es eliminado del sistema en general).";
+$RemoveOldRelationshipsHelp = "Marcando esta casilla, eliminas todas las asignaciones previas del responsable de recursos humanos en otras sesiones o cursos. Si lo que quieres es conservar las relaciones que ya tiene ese perfil en tu campus, NO marques esta casilla.";
+$ClassNameXDoesntExists = "No existe una clase con el nombre \"%s\"";
 ?>

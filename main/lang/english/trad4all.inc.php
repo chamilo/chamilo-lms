@@ -9005,5 +9005,6 @@ $EndOfLearningPath = "Conclusion";
 $UnableToDeleteTempFile = "Unable to access temp file";
 $DuplicatedUsers = "Duplicated users";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "This report only lists users that have the same firstname and lastname.";
-$RemoveOldRelationshipsHelp = "By checking this box, you authorize the platform to remove all relationships that are *not* contained in the file you are importing. It will then use your file as the exclusive relationships and will remove all current relationships that are not in the file.";
+$RemoveOldRelationshipsHelp = "By checking this box, you will remove all relationships of the HR manager with other sessions and courses. If what you want is to maintain those relationships, do NOT check this box.";
+$ClassNameXDoesntExists = "There is no class with the name \"%s\"";
 ?>

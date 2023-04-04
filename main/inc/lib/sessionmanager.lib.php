@@ -5096,10 +5096,10 @@ class SessionManager
                     continue;
                 }
 
-                $displayAccessStartDate = isset($enreg['DisplayStartDate']) ? $enreg['DisplayStartDate'] : $enreg['DateStart'];
-                $displayAccessEndDate = isset($enreg['DisplayEndDate']) ? $enreg['DisplayEndDate'] : $enreg['DateEnd'];
-                $coachAccessStartDate = isset($enreg['CoachStartDate']) ? $enreg['CoachStartDate'] : $enreg['DateStart'];
-                $coachAccessEndDate = isset($enreg['CoachEndDate']) ? $enreg['CoachEndDate'] : $enreg['DateEnd'];
+                $displayAccessStartDate = $enreg['DisplayStartDate'] ?? $enreg['DateStart'];
+                $displayAccessEndDate = $enreg['DisplayEndDate'] ?? $enreg['DateEnd'];
+                $coachAccessStartDate = $enreg['CoachStartDate'] ?? $enreg['DateStart'];
+                $coachAccessEndDate = $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
                 // We assume the dates are already in UTC
                 $dateStart = explode('/', $enreg['DateStart']);
                 $dateEnd = explode('/', $enreg['DateEnd']);
@@ -5113,8 +5113,8 @@ class SessionManager
                 $coachAccessStartDate = implode('-', $coachAccessStartDate).' 00:00:00';
                 $coachAccessEndDate = explode('/', $coachAccessEndDate);
                 $coachAccessEndDate = implode('-', $coachAccessEndDate).' 23:59:59';
-                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $session_category_id = $enreg['SessionCategory'] ?? null;
+                $sessionDescription = $enreg['SessionDescription'] ?? null;
                 $classes = isset($enreg['Classes']) ? explode('|', $enreg['Classes']) : [];
                 $extraParams = [];
                 if (!is_null($showDescription)) {
@@ -5124,14 +5124,14 @@ class SessionManager
                 $coachBefore = '';
                 $coachAfter = '';
                 if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
-                    $date = new \DateTime($dateStart);
+                    $date = new DateTime($dateStart);
                     $interval = new DateInterval('P'.$daysCoachAccessBeforeBeginning.'D');
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
                     $coachAccessStartDate = $coachBefore;
                     $coachBefore = api_get_utc_datetime($coachBefore);
 
-                    $date = new \DateTime($dateEnd);
+                    $date = new DateTime($dateEnd);
                     $interval = new DateInterval('P'.$daysCoachAccessAfterBeginning.'D');
                     $date->add($interval);
                     $coachAfter = $date->format('Y-m-d h:i');

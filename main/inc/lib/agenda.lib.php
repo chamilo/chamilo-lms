@@ -3121,7 +3121,7 @@ class Agenda
         }
 
         if (api_get_configuration_value('agenda_reminders')) {
-            $form->addHtml('<hr><div id="notification_list">');
+            $form->addHtml('<div id="notification_list">');
 
             if ($id) {
                 $this->addFieldsForRemindersToForm($id, $form);

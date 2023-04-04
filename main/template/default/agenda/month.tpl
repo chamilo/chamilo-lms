@@ -668,7 +668,7 @@ $(function() {
                 {% if career_in_global_events %}
                     var $careerFieldParent = $('#career_id').parents('.col-sm-8');
                     var $promotionFieldParent = $('#promotion_id').parents('.col-sm-8');
-                    
+
                     if ($careerFieldParent.find('#form_career_id_edit').length === 0) {
                         $careerFieldParent.append('<p id="form_career_id_edit" class="form-control-static"></p>');
                     }

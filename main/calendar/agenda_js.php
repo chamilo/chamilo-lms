@@ -239,6 +239,7 @@ $form = new FormValidator(
     null,
     ['id' => 'add_event_form']
 );
+$form->addHeader(get_lang('Events'));
 
 $form->addHtml('<span id="calendar_course_info"></span><div id="visible_to_input">');
 
@@ -282,6 +283,7 @@ if ('course' === $agenda->type) {
 }
 
 if (api_get_configuration_value('agenda_collective_invitations') && 'personal' === $agenda->type) {
+    $form->addHeader(get_lang('Invitations'));
     $form->addSelectAjax(
         'invitees',
         get_lang('Invitees'),
@@ -352,6 +354,7 @@ if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' ===
 }
 
 $form->addHtml('<div id="attachment_block" style="display: none">');
+$form->addHeader(get_lang('FilesAttachment'));
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');
 

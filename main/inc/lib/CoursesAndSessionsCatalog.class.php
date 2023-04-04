@@ -156,6 +156,12 @@ class CoursesAndSessionsCatalog
             }
         }
 
+        if (empty($courses)) {
+            if ($categoriesToShow || (!$categoriesToShow && $coursesToShow)) {
+                $courses[] = 0;
+            }
+        }
+
         $condition = '';
         if (!empty($courses)) {
             $condition = ' AND course.id IN ('.implode(',', $courses).')';

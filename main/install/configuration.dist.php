@@ -2409,6 +2409,21 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 // main URL (where the access_url_changeable field = 0)
 // $_configuration['multiple_url_hide_disabled_settings'] = false;
 
+// Only courses with this option will be visible in catalogue
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(2, 3, 'show_in_catalogue', 'Show in catalogue', '', 0, 1, 1, 1, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Yes', NULL, NULL, 1),
+(@ef_id, '0', 'No', NULL, NULL, 2);
+*/
+//$_configuration['show_courses_in_catalogue'] = false;
+
+// Allows defining one or several categories of courses that will be visible in the course catalog
+// $_configuration['courses_catalogue_show_only_category'] = ['Cat1','Cat2'];
+
 //Hides the link to the course catalog in the menu when the catalog is public.
 // $_configuration['catalog_hide_public_link'] = false;
 

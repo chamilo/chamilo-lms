@@ -306,9 +306,19 @@ if (
         [
             AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
             AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+            AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
         ],
         [
-            'onchange' => 'document.getElementById(\'max_subscriptions\').disabled = this.value == 0;',
+            'onchange' => 'document.getElementById(\'max_subscriptions\').disabled = this.value == 0; document.getElementById(\'form_subscription_item\').disabled = this.value != 2',
+        ]
+    );
+    $form->addSelectAjax(
+        'subscription_item',
+        get_lang('SocialGroup').' / '.get_lang('Class'),
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+            'disabled' => 'disabled',
         ]
     );
     $form->addNumeric(

@@ -259,6 +259,7 @@ class Agenda
         int $careerId = 0,
         int $promotionId = 0,
         int $subscriptionVisibility = 0,
+        ?int $subscriptionItemId = null,
         int $maxSubscriptions = 0
     ) {
         $start = api_get_utc_datetime($start);
@@ -293,6 +294,7 @@ class Agenda
                     $personalEvent = $em->find(PersonalAgenda::class, $id);
                     $personalEvent
                         ->setSubscriptionVisibility($subscriptionVisibility)
+                        ->setSubscriptionItemId($subscriptionItemId ?: null)
                     ;
 
                     $subscription = (new AgendaEventSubscription())
@@ -893,6 +895,7 @@ class Agenda
         int $careerId = 0,
         int $promotionId = 0,
         int $subscriptionVisibility = 0,
+        ?int $subscriptionItemId = null,
         int $maxSubscriptions = 0
     ) {
         $id = (int) $id;
@@ -944,6 +947,7 @@ class Agenda
                     $personalEvent = $em->find(PersonalAgenda::class, $id);
                     $personalEvent
                         ->setSubscriptionVisibility($subscriptionVisibility)
+                        ->setSubscriptionItemId($subscriptionItemId ?: null)
                     ;
 
                     /** @var AgendaEventSubscription $subscription */
@@ -1371,8 +1375,20 @@ class Agenda
             return;
         }
 
-        if ($subscription->getInvitees()->count() >= $subscription->getMaxAttendees()) {
+        if ($subscription->getInvitees()->count() >= $subscription->getMaxAttendees()
+            && $subscription->getMaxAttendees() > 0
+        ) {
             return;
+        }
+
+        if (AgendaEventSubscription::SUBSCRIPTION_CLASS === $personalEvent->getSubscriptionVisibility()) {
+            $objGroup = new UserGroup();
+            $groupList = $objGroup->getUserGroupListByUser($currentUser->getId(), UserGroup::NORMAL_CLASS);
+            $groupIdList = array_column($groupList, 'id');
+
+            if (!in_array($personalEvent->getSubscriptionItemId(), $groupIdList)) {
+                return;
+            }
         }
 
         $subscriber = (new AgendaEventSubscriber())
@@ -1882,9 +1898,10 @@ class Agenda
         $queryParams['user_id'] = $user_id;
         $userCondition = "pa.user = :user_id";
 
+        $objGroup = new UserGroup();
+
         if ($agendaEventSubscriptions) {
-            $objGroup = new UserGroup();
-            $groupList = $objGroup->get_groups_by_user($user_id);
+            $groupList = $objGroup->getUserGroupListByUser($user_id, UserGroup::NORMAL_CLASS);
 
             $userCondition = "(
                     $userCondition
@@ -1895,7 +1912,7 @@ class Agenda
                 $userCondition .= "
                         OR (
                             pa.subscriptionVisibility = ".AgendaEventSubscription::SUBSCRIPTION_CLASS."
-                            AND pa.subscriptionItemId IN (".implode(', ', array_keys($groupList)).")
+                            AND pa.subscriptionItemId IN (".implode(', ', array_column($groupList, 'id')).")
                         ) 
                 ";
             }
@@ -1941,24 +1958,30 @@ class Agenda
             $event['parent_event_id'] = 0;
             $event['has_children'] = 0;
 
-            if ($agendaCollectiveInvitations) {
-                $event['collective'] = $row->isCollective();
-                $event['invitees'] = self::getInviteesForPersonalEvent($row->getId());
-            }
-
-            if ($agendaEventSubscriptions) {
-                /** @var AgendaEventSubscription $subscription */
+            if ($agendaCollectiveInvitations || $agendaEventSubscriptions) {
                 $subscription = $row->getInvitation();
-                $subscribers = $subscription->getInvitees();
 
-                $event['subscription_visibility'] = $row->getSubscriptionVisibility();
-                $event['max_subscriptions'] = $subscription->getMaxAttendees();
-                $event['can_subscribe'] = $subscribers->count() < $subscription->getMaxAttendees();
-                $event['user_is_subscribed'] = $subscription->hasUserAsInvitee(api_get_user_entity($user_id));
-                $event['count_subscribers'] = $subscribers->count();
+                if ($subscription instanceof AgendaEventSubscription) {
+                    $subscribers = $subscription->getInvitees();
 
-                if ($userIsAdmin) {
-                    $event['subscribers'] = self::getInviteesForPersonalEvent($row->getId(), AgendaEventSubscriber::class);
+                    $event['subscription_visibility'] = $row->getSubscriptionVisibility();
+                    $event['max_subscriptions'] = $subscription->getMaxAttendees();
+                    $event['can_subscribe'] = $subscribers->count() < $subscription->getMaxAttendees()
+                        || $subscription->getMaxAttendees() === 0;
+                    $event['user_is_subscribed'] = $subscription->hasUserAsInvitee(api_get_user_entity($user_id));
+                    $event['count_subscribers'] = $subscribers->count();
+
+                    if ($userIsAdmin) {
+                        $event['subscribers'] = self::getInviteesForPersonalEvent($row->getId(), AgendaEventSubscriber::class);
+                    }
+
+                    if (AgendaEventSubscription::SUBSCRIPTION_CLASS === $row->getSubscriptionVisibility()) {
+                        $groupInfo = $objGroup->get($row->getSubscriptionItemId());
+                        $event['usergroup'] = $groupInfo['name'];
+                    }
+                } else {
+                    $event['collective'] = $row->isCollective();
+                    $event['invitees'] = self::getInviteesForPersonalEvent($row->getId());
                 }
             }
 
@@ -3112,14 +3135,26 @@ class Agenda
         if (api_is_platform_admin()
             && true === api_get_configuration_value('agenda_event_subscriptions')
         ) {
+            $form->addHtml('<hr>');
             $form->addSelect(
                 'subscription_visibility',
                 get_lang('AllowSubscriptions'),
                 [
                     AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
                     AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+                    AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
                 ]
             );
+            $slctItem = $form->addSelectAjax(
+                'subscription_item',
+                get_lang('SocialGroup').' / '.get_lang('Class'),
+                [],
+                [
+                    'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+                    'disabled' => 'disabled',
+                ]
+            );
+
             $form->addNumeric(
                 'max_subscriptions',
                 ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
@@ -3134,7 +3169,8 @@ class Agenda
                 $(function () {
                     $('#add_event_subscription_visibility')
                         .on('change', function () {
-                            $('#max_subscriptions').prop('disabled', this.value == 0);                        
+                            $('#max_subscriptions').prop('disabled', this.value == 0);
+                            $('#add_event_subscription_item').prop('disabled', this.value != 2);                        
                         })
                         .trigger('change');
                 })
@@ -3159,6 +3195,16 @@ class Agenda
                 /** @var AgendaEventSubscription $subscription */
                 $subscription = $personalEvent->getInvitation();
                 $params['max_subscriptions'] = $subscription->getMaxAttendees();
+
+                $groupId = $personalEvent->getSubscriptionItemId();
+
+                if ($groupId) {
+                    $objUserGroup = new UserGroup();
+
+                    $groupInfo = $objUserGroup->get($groupId);
+
+                    $slctItem->addOption($groupInfo['name'], $groupId);
+                }
             }
         }
 
@@ -4835,24 +4881,33 @@ class Agenda
 
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
 
-        $invitation = new AgendaEventInvitation();
-        $invitation->setCreator(api_get_user_entity(api_get_user_id()));
+        $invitation = $event->getInvitation();
 
-        $event
-            ->setCollective($isCollective)
-            ->setInvitation($invitation)
-        ;
+        if ($invitation instanceof AgendaEventSubscription) {
+            return;
+        }
 
-        $em->persist($event);
+        if (!$invitation) {
+            $invitation = new AgendaEventInvitation();
+            $invitation->setCreator(api_get_user_entity(api_get_user_id()));
+
+            $event->setInvitation($invitation);
+        }
+
+        $event->setCollective($isCollective);
 
         foreach ($inviteeUserList as $inviteeId) {
-            $invitee = new AgendaEventInvitee();
-            $invitee
-                ->setUser(api_get_user_entity($inviteeId))
-                ->setInvitation($invitation)
-            ;
+            $userInvitee = api_get_user_entity($inviteeId);
 
-            $em->persist($invitee);
+            if (!$invitation->hasUserAsInvitee($userInvitee)) {
+                $invitee = new AgendaEventInvitee();
+                $invitee
+                    ->setUser($userInvitee)
+                    ->setInvitation($invitation)
+                ;
+
+                $em->persist($invitee);
+            }
         }
 
         $em->flush();

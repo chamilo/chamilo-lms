@@ -1055,7 +1055,9 @@ $(function() {
     {{ agenda_reminders_js }}
 
     function showSubcriptionsContainer (calEvent) {
-        if (calEvent.invitees.length || !calEvent.subscription_visibility) {
+        if ((calEvent.invitees && calEvent.invitees.length)
+            || !calEvent.subscription_visibility
+        ) {
             return '';
         }
 
@@ -1069,12 +1071,12 @@ $(function() {
         }
 
         if (2 === calEvent.subscription_visibility) {
-            html += "{{ 'UsersInsideClass'|get_lang }}";
+            html += "{{ 'UsersInsideClass'|get_lang }}<br>" + calEvent.usergroup;
         }
 
         html += '</dd>';
 
-        if (0 <= calEvent.max_subscriptions) {
+        if (calEvent.max_subscriptions) {
             html += "<dt>{{ 'MaxSubscriptions'|get_lang }}</dt>";
             html += '<dd>' + calEvent.max_subscriptions + '</dd>';
         }

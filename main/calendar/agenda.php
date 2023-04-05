@@ -175,7 +175,7 @@ if ($allowToEdit) {
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
                 $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
-                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item_id'] : null;
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
                 $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];

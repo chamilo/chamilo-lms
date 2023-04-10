@@ -23,6 +23,8 @@ class SelectAjax extends HTML_QuickForm_select
     public function toHtml()
     {
         $iso = api_get_language_isocode(api_get_interface_language());
+        $dropdownParent = $this->getAttribute('dropdownParent');
+        $dropdownParentCondition = $dropdownParent ? "dropdownParent: '$dropdownParent'," : '';
         $formatResult = $this->getAttribute('formatResult');
         $formatSelection = $this->getAttribute('formatSelection');
         $formatCondition = '';
@@ -93,6 +95,7 @@ class SelectAjax extends HTML_QuickForm_select
                         width: '$width',
                         minimumInputLength: '$minimumInputLength',
                         tags: $tags,
+                        $dropdownParentCondition
                         ajax: {
                             url: $url,
                             delay: $delay,
@@ -130,6 +133,7 @@ JS;
         $this->removeAttribute('class');
         $this->removeAttribute('url');
         $this->removeAttribute('url_function');
+        $this->removeAttribute('dropdownParent');
         $this->setAttribute('style', 'width: 100%;');
 
         return parent::toHtml().$html;

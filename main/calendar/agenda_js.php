@@ -301,7 +301,7 @@ if (
     && api_get_configuration_value('agenda_event_subscriptions') && 'personal' === $agenda->type
 ) {
     $form->addHeader(get_lang('Subscriptions'));
-    $form->addHtml('<div id="form_subscriptions_container">');
+    $form->addHtml('<div id="form_subscriptions_container" style="position: relative;">');
     $form->addSelect(
         'subscription_visibility',
         get_lang('AllowSubscriptions'),
@@ -321,6 +321,7 @@ if (
         [
             'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
             'disabled' => 'disabled',
+            'dropdownParent' => '#form_subscriptions_container',
         ]
     );
     $form->addNumeric(

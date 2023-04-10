@@ -97,6 +97,13 @@ class AgendaEventInvitation
         return $this;
     }
 
+    public function removeInvitees(): self
+    {
+        $this->invitees = new ArrayCollection();
+
+        return $this;
+    }
+
     public function getCreator(): User
     {
         return $this->creator;
@@ -116,5 +123,23 @@ class AgendaEventInvitation
                 return $invitee->getUser() === $user;
             }
         );
+    }
+
+    public function removeInviteesNotInIdList(array $idList): self
+    {
+        $toRemove = [];
+
+        /** @var AgendaEventInvitee $invitee */
+        foreach ($this->invitees as $key => $invitee) {
+            if (!in_array($invitee->getUser()->getId(), $idList)) {
+                $toRemove[] = $key;
+            }
+        }
+
+        foreach ($toRemove as $key) {
+            $this->invitees->remove($key);
+        }
+
+        return $this;
     }
 }

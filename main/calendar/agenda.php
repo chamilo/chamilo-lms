@@ -263,6 +263,7 @@ if ($allowToEdit) {
                 $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
                 $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
                 $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
+                $subscribers = $_REQUEST['subscribers'] ?? [];
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -319,7 +320,8 @@ if ($allowToEdit) {
                     (int) $promotionId,
                     $subscriptionVisibility,
                     $subscriptionItemId,
-                    $maxSubscriptions
+                    $maxSubscriptions,
+                    $subscribers
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

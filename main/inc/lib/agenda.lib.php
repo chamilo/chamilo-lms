@@ -896,7 +896,8 @@ class Agenda
         int $promotionId = 0,
         int $subscriptionVisibility = 0,
         ?int $subscriptionItemId = null,
-        int $maxSubscriptions = 0
+        int $maxSubscriptions = 0,
+        array $subscribers = []
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -945,14 +946,18 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
                     $personalEvent = $em->find(PersonalAgenda::class, $id);
-                    $personalEvent
-                        ->setSubscriptionVisibility($subscriptionVisibility)
-                        ->setSubscriptionItemId($subscriptionItemId ?: null)
-                    ;
+                    $personalEvent->setSubscriptionVisibility($subscriptionVisibility);
 
                     /** @var AgendaEventSubscription $subscription */
                     $subscription = $personalEvent->getInvitation();
                     $subscription->setMaxAttendees($subscriptionVisibility > 0 ? $maxSubscriptions : 0);
+
+                    if ($personalEvent->getSubscriptionItemId() != $subscriptionItemId) {
+                        $personalEvent->setSubscriptionItemId($subscriptionItemId ?: null);
+                        $subscription->removeInvitees();
+                    } else {
+                        $subscription->removeInviteesNotInIdList($subscribers);
+                    }
 
                     $em->flush();
                 }
@@ -3178,18 +3183,19 @@ class Agenda
             ");
 
             if ($personalEvent) {
-                $subscribers = array_map(
-                    function (array $subscriberInfo) {
-                        return '<li>'.$subscriberInfo['name'].'</li>';
-                    },
-                    self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class)
+                $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
+                $subscribers = array_combine(
+                    array_column($subscribers, 'id'),
+                    array_column($subscribers, 'name')
                 );
 
-                $form->addLabel(
+                $params['subscribers'] = array_keys($subscribers);
+
+                $form->addSelect(
+                    'subscribers',
                     get_lang('Subscribers'),
-                    '<ul class="form-control-static list-unstyled">'
-                        .implode(PHP_EOL, $subscribers)
-                        .'</ul>'
+                    $subscribers,
+                    ['multiple' => 'multiple']
                 );
 
                 /** @var AgendaEventSubscription $subscription */

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\TrackELogin;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -403,6 +404,9 @@ class OAuth2 extends Plugin
         return $values;
     }
 
+    /**
+     * @throws Exception
+     */
     private function updateUser($userId, $response)
     {
         $user = UserManager::getRepository()->find($userId);
@@ -452,7 +456,12 @@ class OAuth2 extends Plugin
                 $functionName($response, $user);
             }
         }
-        UserManager::getManager()->updateUser($user);
+
+        try {
+            UserManager::getManager()->updateUser($user);
+        } catch (UniqueConstraintViolationException $exception) {
+            throw new Exception(get_lang('UserNameUsedTwice'));
+        }
     }
 
     /**

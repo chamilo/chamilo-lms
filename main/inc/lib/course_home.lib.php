@@ -1911,7 +1911,6 @@ class CourseHome
         ];
 
         if (!empty($tool) && isset($toolsLinks['tool'])) {
-
             return $toolsLinks['tool'];
         }
 

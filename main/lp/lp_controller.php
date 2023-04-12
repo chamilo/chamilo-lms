@@ -907,6 +907,27 @@ switch ($action) {
                 $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
                 $url = isset($_POST['url']) ? $_POST['url'] : '';
 
+                // form validations after submit.
+                $error = false;
+                $errMsg = '';
+                if (true === api_get_configuration_value('lp_item_prerequisite_dates')) {
+                    $extraStartDate = $_POST['extra_start_date'] ?? '';
+                    $extraEndDate = $_POST['extra_end_date'] ?? '';
+                    $error = ((!empty($extraStartDate) && empty($extraEndDate)) || (empty($extraStartDate) && !empty($extraEndDate)));
+                    if (!$error) {
+                        $error = !(strtotime($extraEndDate) >= strtotime($extraStartDate));
+                    }
+                    if ($error) {
+                        $errMsg = get_lang('StartDateMustBeBeforeTheEndDate');
+                    }
+                }
+
+                if ($error) {
+                    Display::addFlash(Display::return_message($errMsg, 'error'));
+                    header('Location: '.api_request_uri());
+                    exit;
+                }
+
                 $_SESSION['oLP']->edit_item(
                     $_REQUEST['id'],
                     $_POST['parent'],

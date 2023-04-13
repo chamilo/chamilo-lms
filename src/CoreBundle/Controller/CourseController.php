@@ -320,8 +320,7 @@ class CourseController extends ToolBaseController
         string $toolName,
         CToolRepository $repo,
         ToolChain $toolChain
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'name' => $toolName,

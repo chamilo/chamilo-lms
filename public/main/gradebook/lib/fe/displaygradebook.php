@@ -283,7 +283,7 @@ class DisplayGradebook
         }
 
         $courseId = CourseManager::get_course_by_category($selectcat);
-        $message_resource = Category::show_message_resource_delete($courseId);
+        $messageResource = Category::show_message_resource_delete($courseId);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
         if (isset($catobj) && !empty($catobj)) {
@@ -370,13 +370,13 @@ class DisplayGradebook
                 $line = '';
             }
             $header .= '</select></form></td>';
-            if (!empty($simple_search_form) && false === $message_resource) {
+            if (!empty($simple_search_form) && false === $messageResource) {
                 $header .= '<td style="vertical-align: top;">'.$simple_search_form->toHtml().'</td>';
             } else {
                 $header .= '<td></td>';
             }
             if (!($is_course_admin &&
-                false === $message_resource &&
+                false === $messageResource &&
                 isset($_GET['selectcat']) && 0 != $_GET['selectcat']) &&
                 isset($_GET['studentoverview'])
             ) {
@@ -404,13 +404,13 @@ class DisplayGradebook
                 if ('' == $my_api_cidreq) {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];
                 }
-                if ($show_add_link && !$message_resource) {
+                if ($show_add_link && !$messageResource) {
                     $actionsLeft .= '<a href="gradebook_add_eval.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'" >'.
                         Display::return_icon('new_evaluation.png', get_lang('Add classroom activity'), '',
                             ICON_SIZE_MEDIUM).'</a>';
                     $cats = Category::load($selectcat);
 
-                    if (null != $cats[0]->get_course_code() && !$message_resource) {
+                    if (null != $cats[0]->get_course_code() && !$messageResource) {
                         $actionsLeft .= '<a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('new_online_evaluation.png', get_lang('Add online activity'), '',
                                 ICON_SIZE_MEDIUM).'</a>';
@@ -432,7 +432,7 @@ class DisplayGradebook
             }
 
             if ('0' != $selectcat && $accessToRead) {
-                if (!$message_resource) {
+                if (!$messageResource) {
                     $actionsLeft .= '<a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                         Display::return_icon('statistics.png', get_lang('List View'), '', ICON_SIZE_MEDIUM).'</a>';
 

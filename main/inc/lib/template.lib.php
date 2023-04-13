@@ -200,6 +200,7 @@ class Template
         $functions = [
             ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
             ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames'],
+            ['name' => 'api_is_platform_admin', 'callable' => 'api_is_platform_admin'],
         ];
 
         foreach ($functions as $function) {

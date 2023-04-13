@@ -174,6 +174,9 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -194,7 +197,10 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -254,6 +260,10 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
+                $subscribers = $_REQUEST['subscribers'] ?? [];
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -307,7 +317,11 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions,
+                    $subscribers
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

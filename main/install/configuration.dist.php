@@ -462,6 +462,24 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
+
+// It allows to other users to subscribe for events.
+// Requires enable agenda_collective_invitations before.
+// Requires DB changes:
+/*
+ALTER TABLE personal_agenda ADD subscription_visibility INT DEFAULT 0 NOT NULL, ADD subscription_item_id INT DEFAULT NULL;
+ALTER TABLE agenda_event_invitee ADD type VARCHAR(255) NOT NULL;
+ALTER TABLE agenda_event_invitation ADD type VARCHAR(255) NOT NULL, ADD max_attendees INT DEFAULT 0;
+UPDATE agenda_event_invitation SET type = 'invitation';
+UPDATE agenda_event_invitee SET type = 'invitee';
+*/
+// Then uncomment the "use EventSubscribableTrait;" line in the PersonalAgenda class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitation class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscription class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitee class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscriber class.
+//$_configuration['agenda_event_subscriptions'] = false;
+
 // Enable reminders for agenda events. Requires database changes:
 /*
  CREATE TABLE agenda_reminder (id BIGINT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT '(DC2Type:dateinterval)', sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;

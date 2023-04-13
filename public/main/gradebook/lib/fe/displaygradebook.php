@@ -487,9 +487,8 @@ class DisplayGradebook
                                     ICON_SIZE_MEDIUM
                                 ).'</a>';
                         } else {
-                            $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
-                                'document/document.php?curdirpath=/certificates&'.
-                                $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                            $actionsRight .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_id.
+                                '/tool/document?cert=1">'.
                                 Display::return_icon(
                                     'certificate.png',
                                     get_lang('Attach certificate'),

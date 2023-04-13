@@ -157,6 +157,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
+    'filetype' => 'exact',
     'resourceNode.parent' => 'exact',
 ])]
 //resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
@@ -193,8 +194,8 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     protected ?string $comment;
 
     /**
-     * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
-     * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
+     * @Assert\Choice({"folder", "file", "certificate"}, message="Choose a valid filetype.")
+     * @ORM\Column(name="filetype", type="string", length=15, nullable=false)
      */
     #[Groups(['document:read', 'document:write'])]
     protected string $filetype;

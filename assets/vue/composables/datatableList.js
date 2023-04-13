@@ -32,10 +32,15 @@ export function useDatatableList (servicePrefix) {
   function onUpdateOptions ({ page, itemsPerPage, sortBy, sortDesc }) {
     page = page || options.value.page
 
+    if (!isEmpty(route.query.cert) && route.query.cert === '1') {
+        filters.value.filetype = 'certificate'
+    } else {
+        filters.value.filetype = ['file', 'folder']
+    }
+
     let params = { ...filters.value }
 
     if (1 === filters.value.loadNode) {
-      console.log('params', route.params)
       params['resourceNode.parent'] = route.params.node
     }
 

@@ -391,6 +391,9 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_DATETIME:
                     $d = DateTime::createFromFormat('Y-m-d H:i', $value);
                     $valid = $d && $d->format('Y-m-d H:i') === $value;
+                    if (!$valid && EntityExtraField::LP_ITEM_FIELD_TYPE === (int) $extraFieldInfo['extra_field_type']) {
+                        $valid = empty($value);
+                    }
                     if ($valid) {
                         $newParams = [
                             'item_id' => $params['item_id'],

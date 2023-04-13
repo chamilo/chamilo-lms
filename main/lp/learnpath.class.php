@@ -4463,19 +4463,30 @@ class learnpath
                 'end_date'
             );
 
-            $result = true;
-            if (
-                !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
-                !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
+            $now = time();
+            $start = !empty($startDate['value']) ? api_strtotime($startDate['value']) : 0;
+            $end = !empty($endDate['value']) ? api_strtotime($endDate['value']) : 0;
+            $result = false;
+
+            if (($start == 0 && $end == 0) ||
+                (($start > 0 && $end == 0) && $now > $start) ||
+                (($start == 0 && $end > 0) && $now < $end) ||
+                (($start > 0 && $end > 0) && ($now > $start && $now < $end))
             ) {
-                $now = time();
-                $start = api_strtotime($startDate['value']);
-                $end = api_strtotime($endDate['value']);
-                $result = ($now > $start && $now < $end);
+                $result = true;
             }
 
             if (!$result) {
-                $this->set_error_msg(get_lang('ItemCanNotBeAccessedPrerequisiteDates'));
+                $errMsg = get_lang('ItemCanNotBeAccessedPrerequisiteDates');
+                if ($start > 0 && $start > $now) {
+                    $errMsg = get_lang('AccessibleFrom').' '.api_format_date($start, DATE_TIME_FORMAT_LONG);
+                }
+                if ($end > 0 && $end < $now) {
+                    $errMsg = get_lang('NoMoreAccessible');
+                }
+                $this->set_error_msg($errMsg);
+                $currentItem = $this->getItem($itemId);
+                $currentItem->prereq_alert = $errMsg;
             }
 
             return $result;
@@ -10247,7 +10258,7 @@ class learnpath
         $form->addHidden('type', TOOL_STUDENTPUBLICATION);
         $form->addHidden('post_time', time());
         $this->setAuthorLpItem($form);
-        $form->setDefaults(['title' => $item_title]);
+        $form->setDefaults(['title' => $item_title, 'start_date' => null]);
 
         $return = '<div class="sectioncomment">';
         $return .= $form->returnForm();

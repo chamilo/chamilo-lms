@@ -9032,4 +9032,8 @@ $DuplicatedUsers = "Usuarios duplicados";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Este reporte solo lista usuarios que tienen el mismo nombre y apellido.";
 $RemoveOldRelationshipsHelp = "Marcando esta casilla, eliminas todas las asignaciones previas del responsable de recursos humanos en otras sesiones o cursos. Si lo que quieres es conservar las relaciones que ya tiene ese perfil en tu campus, NO marques esta casilla.";
 $ClassNameXDoesntExists = "No existe una clase con el nombre \"%s\"";
+$MaxSubscriptionsLeaveEmptyToNotLimit = "Cantidad máxima permitida de suscripciones. Dejar en 0 para no limitarlo.";
+$Subscriptions = "Suscripciones";
+$AllowSubscriptions = "Permitir suscripciones";
+$MaxSubscriptions = "Cantidad máxima permitida de suscripciones";
 ?>

@@ -8939,5 +8939,10 @@ $EndOfLearningPath = "Conclusion";
 $UnableToDeleteTempFile = "Impossible d'accéder au fichier temporaire";
 $DuplicatedUsers = "Utilisateurs en double";
 $ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname = "Ce rapport ne liste que les utilisateurs qui ont les mêmes nom et prénom.";
-$RemoveOldRelationshipsHelp = "En cochant cette case, vous donnez votre approbation pour que le système élimine toutes les relations qui ne sont *pas* dans votre fichier et utilise votre fichier comme une liste exclusive des relations (ce qui n'existe pas dans le fichier est éliminé du système).";
+$RemoveOldRelationshipsHelp = "En cochant cette case, vous éliminerez du système toutes les relations du responsable RH avec des sessions et des cours. Si vous souhaitez maintenir les relations existantes, ne cochez PAS cette case.";
+$ClassNameXDoesntExists = "Il n'y a pas de classe avec le nom \"%s\"";
+$MaxSubscriptionsLeaveEmptyToNotLimit = "Nombre maximum d'inscription autorisée. Laisser à 0 pour ne pas avoir de limite.";
+$Subscriptions = "Inscriptions";
+$AllowSubscriptions = "Autoriser les inscriptions";
+$MaxSubscriptions = "Nombre maximum d'inscriptions";
 ?>

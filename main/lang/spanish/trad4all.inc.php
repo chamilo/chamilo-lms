@@ -9036,4 +9036,6 @@ $MaxSubscriptionsLeaveEmptyToNotLimit = "Cantidad máxima permitida de suscripci
 $Subscriptions = "Suscripciones";
 $AllowSubscriptions = "Permitir suscripciones";
 $MaxSubscriptions = "Cantidad máxima permitida de suscripciones";
+$NoMoreAccessible = "No mas accesible";
+$AccessibleFrom = "Accesible desde el";
 ?>

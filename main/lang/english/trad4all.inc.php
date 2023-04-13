@@ -9011,4 +9011,6 @@ $MaxSubscriptionsLeaveEmptyToNotLimit = "Maximum number of subscriptions allowed
 $Subscriptions = "Subscriptions";
 $AllowSubscriptions = "Allow subscriptions";
 $MaxSubscriptions = "Maximum number of subscriptions";
+$NoMoreAccessible = "No longer available";
+$AccessibleFrom = "Available from";
 ?>

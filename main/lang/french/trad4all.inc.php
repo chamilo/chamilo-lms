@@ -8945,4 +8945,6 @@ $MaxSubscriptionsLeaveEmptyToNotLimit = "Nombre maximum d'inscription autorisée
 $Subscriptions = "Inscriptions";
 $AllowSubscriptions = "Autoriser les inscriptions";
 $MaxSubscriptions = "Nombre maximum d'inscriptions";
+$NoMoreAccessible = "Plus accessible";
+$AccessibleFrom = "Accessible à partir du";
 ?>

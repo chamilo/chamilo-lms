@@ -1239,7 +1239,10 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
 
-                        $defaults['extra_'.$field_details['variable']] = (EntityExtraField::LP_ITEM_FIELD_TYPE == $field_details['extra_field_type'] ? '' : api_get_local_time());
+                        $defaults = [];
+                        if (EntityExtraField::LP_ITEM_FIELD_TYPE !== (int) $field_details['extra_field_type']) {
+                            $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        }
                         if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
                             $form->setDefaults($defaults);
                         }

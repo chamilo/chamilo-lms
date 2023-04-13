@@ -911,10 +911,15 @@ switch ($action) {
                 $error = false;
                 $errMsg = '';
                 if (true === api_get_configuration_value('lp_item_prerequisite_dates')) {
-                    $extraStartDate = $_POST['extra_start_date'] ?? '';
-                    $extraEndDate = $_POST['extra_end_date'] ?? '';
-                    $error = ((!empty($extraStartDate) && empty($extraEndDate)) || (empty($extraStartDate) && !empty($extraEndDate)));
-                    if (!$error) {
+                    if (!isset($_POST['extra_start_date'])) {
+                        $_POST['extra_start_date'] = 0;
+                    }
+                    if (!isset($_POST['extra_end_date'])) {
+                        $_POST['extra_end_date'] = 0;
+                    }
+                    $extraStartDate = $_POST['extra_start_date'];
+                    $extraEndDate = $_POST['extra_end_date'];
+                    if (!empty($extraStartDate) && !empty($extraEndDate)) {
                         $error = !(strtotime($extraEndDate) >= strtotime($extraStartDate));
                     }
                     if ($error) {

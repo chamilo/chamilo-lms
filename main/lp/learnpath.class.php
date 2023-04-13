@@ -4464,24 +4464,24 @@ class learnpath
             );
 
             $now = time();
-            $start = 0;
-            $end = 0;
-            $result = true;
-            if (
-                !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
-                !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
+            $start = !empty($startDate['value']) ? api_strtotime($startDate['value']) : 0;
+            $end = !empty($endDate['value']) ? api_strtotime($endDate['value']) : 0;
+            $result = false;
+
+            if (($start == 0 && $end == 0) ||
+                (($start > 0 && $end == 0) && $now > $start) ||
+                (($start == 0 && $end > 0) && $now < $end) ||
+                (($start > 0 && $end > 0) && ($now > $start && $now < $end))
             ) {
-                $start = api_strtotime($startDate['value']);
-                $end = api_strtotime($endDate['value']);
-                $result = ($now > $start && $now < $end);
+                $result = true;
             }
 
             if (!$result) {
                 $errMsg = get_lang('ItemCanNotBeAccessedPrerequisiteDates');
-                if ($start > $now) {
+                if ($start > 0 && $start > $now) {
                     $errMsg = get_lang('AccessibleFrom').' '.api_format_date($start, DATE_TIME_FORMAT_LONG);
                 }
-                if ($end < $now) {
+                if ($end > 0 && $end < $now) {
                     $errMsg = get_lang('NoMoreAccessible');
                 }
                 $this->set_error_msg($errMsg);

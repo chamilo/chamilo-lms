@@ -4,6 +4,7 @@ import i18n from './i18n';
 import router from './router';
 import store from './store';
 import axios from 'axios'
+import { createPinia } from 'pinia';
 
 // Services.
 
@@ -277,6 +278,8 @@ import Alpine from 'alpinejs'
 window.Alpine = Alpine
 Alpine.start();
 
+const pinia = createPinia();
+
 app
     .use(PrimeVue, {ripple: false})
     .use(Quasar, quasarUserOptions)
@@ -285,6 +288,7 @@ app
     .use(vuetify)
     .use(router)
     .use(store)
+    .use(pinia)
     .use(i18n)
     .use(Toast, toastOptions)
 ;

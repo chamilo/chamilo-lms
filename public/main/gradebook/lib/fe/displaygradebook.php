@@ -282,8 +282,8 @@ class DisplayGradebook
             );
         }
 
-        $course_id = CourseManager::get_course_by_category($selectcat);
-        $message_resource = Category::show_message_resource_delete($course_id);
+        $courseId = CourseManager::get_course_by_category($selectcat);
+        $message_resource = Category::show_message_resource_delete($courseId);
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
         if (isset($catobj) && !empty($catobj)) {
@@ -487,7 +487,7 @@ class DisplayGradebook
                                     ICON_SIZE_MEDIUM
                                 ).'</a>';
                         } else {
-                            $actionsRight .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_id.
+                            $actionsRight .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseId.
                                 '/tool/document?cert=1">'.
                                 Display::return_icon(
                                     'certificate.png',

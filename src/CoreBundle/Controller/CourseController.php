@@ -311,10 +311,10 @@ class CourseController extends ToolBaseController
         );
     }
 
+    #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     /**
      * Redirects the page to a tool, following the tools settings.
      */
-    #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(
         Request $request,
         string $toolName,

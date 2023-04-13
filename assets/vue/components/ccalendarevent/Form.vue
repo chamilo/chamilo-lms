@@ -20,8 +20,8 @@
       />
     </div>
 
-    <div class="flex flex-col md:flex-row gap-5">
-      <div class="md:w-1/2 flex flex-col gap-5">
+    <div class="flex flex-col md:flex-row gap-x-5">
+      <div class="md:w-1/2 flex flex-col">
         <div class="field">
           <div class="p-float-label">
             <Calendar
@@ -87,7 +87,7 @@
         />
       </div>
 
-      <div class="md:w-1/2 flex flex-col gap-5">
+      <div class="md:w-1/2 flex flex-col">
         <div
           v-t="'Invitees'"
           class="text-h6"
@@ -98,9 +98,10 @@
           :item="item"
           :links-type="linksType"
           :show-status="false"
+          show-share-with-user
         />
 
-        <div class="field flex-row">
+        <div class="field-checkbox">
           <Checkbox
             id="is_collective"
             v-model="item.collective"

@@ -252,11 +252,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Toolbar from 'primevue/toolbar'
 import Dialog from 'primevue/dialog'
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useCidReq } from '../../composables/cidReq'
 import { useDatatableList } from '../../composables/datatableList'
 import { useRelativeDatetime } from '../../composables/formatDate'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast';
 
 const store = useStore()
 const route = useRoute()
@@ -265,7 +266,7 @@ const { t } = useI18n()
 
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList('Documents')
 
-const flashMessageList = inject('flashMessageList')
+const toast = useToast();
 
 const { cid, sid, gid } = useCidReq()
 
@@ -352,9 +353,10 @@ function saveItem () {
 
       store.dispatch('documents/createWithFormData', item.value)
           .then(() => {
-            flashMessageList.value.push({
+            toast.add({
               severity: 'success',
-              detail: t('Saved')
+              detail: t('Saved'),
+              life: 3500,
             })
 
             onUpdateOptions(options.value)

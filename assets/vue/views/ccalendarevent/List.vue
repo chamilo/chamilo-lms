@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { computed, inject, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -113,6 +113,7 @@ import allLocales from '@fullcalendar/core/locales-all';
 import toInteger from 'lodash/toInteger';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
 
 const store = useStore();
 const route = useRoute();
@@ -367,17 +368,18 @@ function onCreateEventForm () {
   dialog.value = false;
 }
 
-const flashMessageList = inject('flashMessageList');
+const toast = useToast();
 
 watch(
   () => store.state.ccalendarevent.created,
   (created) => {
-    flashMessageList.value.push({
+    toast.add({
       severity: 'success',
       detail: t(
         '{resource} created',
         { 'resource': created.resourceNode.title }
       ),
+      life: 3500,
     });
 
     reFetch();
@@ -387,12 +389,13 @@ watch(
 watch(
   () => store.state.ccalendarevent.updated,
   (updated) => {
-    flashMessageList.value.push({
+    toast.add({
       severity: 'success',
       detail: t(
         '{resource} updated',
         { 'resource': updated.resourceNode.title }
       ),
+      life: 3500,
     });
 
     reFetch();

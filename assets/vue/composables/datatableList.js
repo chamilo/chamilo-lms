@@ -116,15 +116,16 @@ export function useDatatableList (servicePrefix) {
     });
   }
 
-  async function deleteItem (item) {
+ async function deleteItem (item) {
     await store.dispatch(`${moduleName}/del`, item.value)
 
     onUpdateOptions(options.value);
 
-    flashMessageList.value.push({
+    toast.add({
       severity: 'success',
-      detail: t('Deleted')
-    })
+      detail: t('Deleted'),
+      life: 3500,
+    });
   }
 
   return {

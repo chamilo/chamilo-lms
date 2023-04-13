@@ -6,6 +6,7 @@
           id="item_title"
           v-model="v$.item.title.$model"
           :class="{ 'p-invalid': v$.item.title.$invalid }"
+          type="text"
         />
         <label
           v-t="'Title'"

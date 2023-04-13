@@ -9,19 +9,20 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 import PageForm from '../../components/page/Form.vue';
 import Loading from '../../components/Loading.vue';
 
 import { useDatatableCreate } from '../../composables/datatableCreate';
+import { useToast } from 'primevue/usetoast';
 
 const store = useStore();
 
 const { createItem, onCreated } = useDatatableCreate('Page');
 
-const flashMessageList = inject('flashMessageList');
+const toast = useToast();
 
 const error = computed(() => store.state['page'].error);
 const isLoading = computed(() => store.state['page'].isLoading);
@@ -40,9 +41,10 @@ watch(created, (newCreated) => {
 });
 
 watch(error, (newError) => {
-  flashMessageList.value.push({
+  toast.add({
     severity: 'error',
     detail: newError,
+    life: 3500,
   });
 });
 </script>

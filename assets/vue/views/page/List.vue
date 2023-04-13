@@ -228,8 +228,9 @@
 import PrimeToolbar from 'primevue/toolbar';
 import { useStore } from 'vuex';
 import { useDatatableList } from '../../composables/datatableList';
-import { computed, inject, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useToast } from 'primevue/usetoast';
 
 const store = useStore();
 
@@ -237,7 +238,7 @@ const { t } = useI18n();
 
 const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem, deleteItem } = useDatatableList('Page');
 
-const flashMessageList = inject('flashMessageList');
+const toast = useToast();
 
 onMounted(() => {
   filters.value.loadNode = 0;
@@ -290,9 +291,10 @@ const saveItem = () => {
     if (!item.value.id) {
       // item.value.creator
       //createCategory.value(item.value);
-      flashMessageList.value.push({
+      toast.add({
         severity: 'success',
-        detail: t('Saved')
+        detail: t('Saved'),
+        life: 3500,
       });
     }
 
@@ -308,9 +310,10 @@ const deleteMultipleItems = () => {
     deleteMultipleDialog.value = false;
     selectedItems.value = [];
 
-    flashMessageList.value.push({
+    toast.add({
       severity: 'success',
-      detail: t('Pages deleted')
+      detail: t('Pages deleted'),
+        life: 3500,
     });
   });
 

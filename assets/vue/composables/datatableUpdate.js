@@ -1,8 +1,9 @@
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { isEmpty } from 'lodash';
 import { useI18n } from 'vue-i18n';
+import { useToast } from 'primevue/usetoast';
 
 export function useDatatableUpdate (servicePrefix) {
     const moduleName = servicePrefix.toLowerCase();
@@ -11,7 +12,7 @@ export function useDatatableUpdate (servicePrefix) {
     const route = useRoute();
     const { t } = useI18n();
 
-    const flashMessageList = inject('flashMessageList');
+    const toast = useToast();
 
     const isLoading = computed(() => store.getters[`${moduleName}/isLoading`]);
 
@@ -74,11 +75,12 @@ export function useDatatableUpdate (servicePrefix) {
     }
 
     function onUpdated (item) {
-        flashMessageList.value.push({
+        toast.add({
             severity: 'success',
             detail: t('{resource} updated', {
                 'resource': item['@id'],
             }),
+            life: 3500,
         });
     }
 

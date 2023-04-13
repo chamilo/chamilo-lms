@@ -315,7 +315,12 @@ class CourseController extends ToolBaseController
      * Redirects the page to a tool, following the tools settings.
      */
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
-    public function redirectTool(Request $request , string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
+    public function redirectTool(
+        Request $request,
+        string $toolName,
+        CToolRepository $repo,
+        ToolChain $toolChain
+    ): RedirectResponse
     {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
@@ -334,7 +339,7 @@ class CourseController extends ToolBaseController
         }
         $optionalParams = '';
 
-        $optionalParams =  $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
+        $optionalParams = $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
 
         if (strpos($link, 'nodeId')) {
             $nodeId = (string) $this->getCourse()->getResourceNode()->getId();

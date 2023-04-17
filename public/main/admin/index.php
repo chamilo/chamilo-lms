@@ -299,7 +299,7 @@ if (api_is_platform_admin()) {
             'url' => api_get_path(WEB_CODE_PATH).'skills/skill_badge.php',
             'label' => get_lang('Badges')
         );*/
-        $allow = api_get_configuration_value('gradebook_dependency');
+        $allow = ('true' === api_get_setting('gradebook.gradebook_dependency'));
         if (!$allow) {
             $items[] = [
                 'url' => 'gradebook_list.php',

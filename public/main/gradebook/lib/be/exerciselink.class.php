@@ -126,7 +126,7 @@ class ExerciseLink extends AbstractLink
      */
     public function calc_score($studentId = null, $type = null)
     {
-        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {

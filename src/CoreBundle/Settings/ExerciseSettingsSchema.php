@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -58,6 +59,17 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'limit_exercise_teacher_access' => 'false',
                     'block_category_questions' => 'false',
                     'exercise_score_format' => '0',
+                    'exercise_additional_teacher_modify_actions' => '',
+                    'quiz_confirm_saved_answers' => 'false',
+                    'allow_exercise_categories' => 'false',
+                    'allow_quiz_results_page_config' => 'false',
+                    'quiz_image_zoom' => '',
+                    'quiz_answer_extra_recording' => 'false',
+                    'allow_mandatory_question_in_category' => 'false',
+                    'add_exercise_best_attempt_in_report' => '',
+                    'exercise_category_report_user_extra_fields' => '',
+                    'score_grade_model' => '',
+                    'allow_time_per_question' => 'false',
                 ]
             )
         ;
@@ -120,6 +132,138 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     ],
                 ],
             )
+            ->add(
+                'exercise_additional_teacher_modify_actions',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Allow add additional actions (as links) in exercises list for teachers').
+                        $this->settingArrayHelpValue('exercise_additional_teacher_modify_actions'),
+                ]
+            )
+            ->add('quiz_confirm_saved_answers', YesNoType::class)
+            ->add('allow_exercise_categories', YesNoType::class)
+            ->add('allow_quiz_results_page_config', YesNoType::class)
+            ->add(
+                'quiz_image_zoom',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Zoom in description images quiz').
+                        $this->settingArrayHelpValue('quiz_image_zoom'),
+                ]
+            )
+            ->add('quiz_answer_extra_recording', YesNoType::class)
+            ->add('allow_mandatory_question_in_category', YesNoType::class)
+            ->add(
+                'add_exercise_best_attempt_in_report',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Shows the best exercise score attempt for a student in the reports').
+                        $this->settingArrayHelpValue('add_exercise_best_attempt_in_report'),
+                ]
+            )
+            ->add(
+                'exercise_category_report_user_extra_fields',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Add user extra fields in report: main/mySpace/exercise_category_report.php').
+                        $this->settingArrayHelpValue('exercise_category_report_user_extra_fields'),
+                ]
+            )
+            ->add(
+                'score_grade_model',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Allow to convert a score into a text/color label using a model if score is inside those values. See BT#12898').
+                        $this->settingArrayHelpValue('score_grade_model'),
+                ]
+            )
+            ->add('allow_time_per_question', YesNoType::class)
+
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'exercise_additional_teacher_modify_actions' =>
+                "<pre>
+                    ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+                </pre>",
+            'quiz_image_zoom' =>
+                "<pre>
+                    [
+                        'options' => [
+                              'zoomWindowWidth' => 400,
+                              'zoomWindowHeight' => 400,
+                         ]
+                     ]
+                </pre>",
+            'add_exercise_best_attempt_in_report' =>
+                "<pre>
+                    [
+                        'courses' => [
+                            'ABC' => [88, 89], // Where ABC is the course code and 88 is the exercise id
+                        ]
+                    ]
+                </pre>",
+            'exercise_category_report_user_extra_fields' =>
+                "<pre>
+                    ['fields' => ['skype', 'rssfeeds']]
+                </pre>",
+            'score_grade_model' =>
+                "<pre>
+                    [
+                        'models' => [
+                            [
+                                'id' => 1,
+                                'name' => 'ThisIsMyModel', // Value will be translated using get_lang
+                                'score_list' => [
+                                    [
+                                        'name' => 'VeryBad', // Value will be translated using get_lang
+                                        'css_class' => 'btn-danger',
+                                        'min' => 0,
+                                        'max' => 20,
+                                        'score_to_qualify' => 0
+                                    ],
+                                    [
+                                        'name' => 'Bad',
+                                        'css_class' => 'btn-danger',
+                                        'min' => 21,
+                                        'max' => 50,
+                                        'score_to_qualify' => 25
+                                    ],
+                                    [
+                                        'name' => 'Good',
+                                        'css_class' => 'btn-warning',
+                                        'min' => 51,
+                                        'max' => 70,
+                                        'score_to_qualify' => 60
+                                    ],
+                                    [
+                                        'name' => 'VeryGood',
+                                        'css_class' => 'btn-success',
+                                        'min' => 71,
+                                        'max' => 100,
+                                        'score_to_qualify' => 100
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

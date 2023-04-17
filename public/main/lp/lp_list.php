@@ -56,7 +56,7 @@ $actions = '';
 $allowCategory = true;
 if (!empty($sessionId)) {
     $allowCategory = false;
-    if (api_get_configuration_value('allow_session_lp_category')) {
+    if ('true' === api_get_setting('lp.allow_session_lp_category')) {
         $allowCategory = true;
     }
 }
@@ -870,8 +870,8 @@ learnpath::generate_learning_path_folder($courseInfo);
 //DocumentManager::removeGeneratedAudioTempFile();
 
 $downloadFileAfterFinish = '';
-if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_after_all_lp_finished')) {
-    $downloadFilesSetting = api_get_configuration_value('download_files_after_all_lp_finished');
+if ($ending && $allLpTimeValid && api_get_setting('lp.download_files_after_all_lp_finished', true)) {
+    $downloadFilesSetting = api_get_setting('lp.download_files_after_all_lp_finished', true);
     $courseCode = $courseInfo['code'];
     $downloadFinishId = isset($_REQUEST['download_finished']) ? (int) $_REQUEST['download_finished'] : 0;
     if (isset($downloadFilesSetting['courses'][$courseCode])) {

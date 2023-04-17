@@ -62,6 +62,10 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'thematic_pdf_orientation' => 'landscape',
                     'certificate_pdf_orientation' => 'landscape',
                     'allow_general_certificate' => 'false',
+                    'group_document_access' => 'false',
+                    'group_category_document_access' => 'false',
+                    'allow_compilatio_tool' => 'false',
+                    'compilatio_tool' => '',
                 ]
             )
             ->setTransformer(
@@ -173,6 +177,48 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_general_certificate', YesNoType::class)
+            ->add('group_document_access', YesNoType::class)
+            ->add('group_category_document_access', YesNoType::class)
+            ->add('allow_compilatio_tool', YesNoType::class)
+            ->add(
+                'compilatio_tool',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
+                        $this->settingArrayHelpValue('compilatio_tool'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'compilatio_tool' =>
+                "<pre>
+                [
+                    'settings' => [
+                        'key' => '',
+                        'soap_url' => '',
+                        'proxy_host' => '',
+                        'proxy_port' => '',
+                        'max_filesize' => '',
+                        'transport_mode' => '',
+                        'wget_uri' => '',
+                        'wget_login' => '',
+                        'wget_password' => '',
+                    ]
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

@@ -2545,7 +2545,7 @@ class Category implements GradebookItem
     private static function create_category_objects_from_sql_result($result)
     {
         $categories = [];
-        $allow = api_get_configuration_value('allow_gradebook_stats');
+        $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allow) {
             $em = Database::getManager();
             $repo = $em->getRepository(GradebookCategory::class);

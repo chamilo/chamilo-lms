@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -101,7 +102,9 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_donate_link' => '<some donate button html>',
                     'courses_list_session_title_link' => '1',
                     'hide_course_rating' => 'false',
-                    // @todo
+                    'course_log_hide_columns' => '',
+                    'course_student_info' => '',
+                    'course_catalog_settings' => '',
                 ]
             )
             ->setTransformer(
@@ -282,6 +285,87 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('hide_course_rating', YesNoType::class)
+            ->add(
+                'course_log_hide_columns',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course log - Default columns to hide').
+                        $this->settingArrayHelpValue('course_log_hide_columns'),
+                ]
+            )
+            ->add(
+                'course_student_info',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Show student progress in My courses page').
+                        $this->settingArrayHelpValue('course_student_info'),
+                ]
+            )
+            ->add(
+                'course_catalog_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course catalog links behaviour').
+                        $this->settingArrayHelpValue('course_catalog_settings'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'course_log_hide_columns' =>
+                "<pre>
+                ['columns' => [1, 9]]
+                </pre>",
+            'course_student_info' =>
+                "<pre>
+                [
+                    'score' => false,
+                    'progress' => false,
+                    'certificate' => false,
+                ]
+                </pre>",
+            'course_catalog_settings' =>
+                "<pre>
+                [
+                    'link_settings' => [
+                        'info_url' => 'course_description_popup', // course description popup page
+                        'title_url' => 'course_home', // Course home URL
+                        'image_url' => 'course_about', // Course about URL
+                    ],
+                    'hide_course_title' => false,
+                    'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
+                    'extra_fields_in_search_form' => ['variable1', 'variable2'],
+                    'extra_fields_in_course_block' => ['variable3', 'variable4'],
+                    'standard_sort_options' => [
+                        //  1 means allow sorting in ascending order
+                        // -1 means allow sorting in descending order
+                        'title' => 1,
+                        'creation_date' => -1,
+                        'count_users' => -1, // subscription count
+                        'point_info/point_average' => -1, // average score
+                        'point_info/total_score' => -1, // score sum
+                        'point_info/users' => -1, // vote count
+                    ],
+                    'extra_field_sort_options' => [
+                        'variable5' => -1,
+                        'variable6' => 1,
+                    ],
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

@@ -1573,7 +1573,7 @@ if (empty($details)) {
     if (INVITEE != $user->getStatus()) {
         $csv_content[] = [];
         $csv_content[] = [str_replace('&nbsp;', '', strip_tags($completeName))];
-        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $trackingColumns = api_get_setting('session.tracking_columns', true);
         if (isset($trackingColumns['my_students_lp'])) {
             foreach ($columnHeaders as $key => $value) {
                 if (!isset($trackingColumns['my_progress_lp'][$key]) ||

@@ -819,7 +819,7 @@ class SkillModel extends Model
         }
 
         $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
-        $allowLevels = api_get_configuration_value('skill_levels_names');
+        $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
         $tableResult = '<div id="skillList">';
         if ($isHierarchicalTable) {
@@ -1885,7 +1885,7 @@ class SkillModel extends Model
         $resultId = 0,
         $addHeader = false
     ) {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
             $em = Database::getManager();
             $items = $em->getRepository(SkillRelItem::class)->findBy(
@@ -1963,7 +1963,7 @@ class SkillModel extends Model
      */
     public static function addSkillsToForm(FormValidator $form, $typeId, $itemId = 0)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (!$allowSkillInTools) {
             return [];
         }
@@ -2006,7 +2006,7 @@ class SkillModel extends Model
      */
     public static function getSkillRelItemsPerCourse($courseId, $sessionId = null)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         $skills = [];
 
         if (empty($sessionId)) {
@@ -2104,7 +2104,7 @@ class SkillModel extends Model
      */
     public static function getSkillRelItems($typeId, $itemId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         $skills = [];
         if ($allowSkillInTools) {
             $em = Database::getManager();
@@ -2144,7 +2144,7 @@ class SkillModel extends Model
      */
     public static function deleteSkillsFromItem($itemId, $typeId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
             $itemId = (int) $itemId;
             $typeId = (int) $typeId;
@@ -2174,7 +2174,7 @@ class SkillModel extends Model
      */
     public static function saveSkills($form, $typeId, $itemId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
             $userId = api_get_user_id();
             $courseId = api_get_course_int_id();
@@ -2254,7 +2254,7 @@ class SkillModel extends Model
      */
     public static function saveSkillsToCourse($skills, $courseId, $sessionId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (!$allowSkillInTools) {
             return false;
         }

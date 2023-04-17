@@ -518,7 +518,7 @@ class UserManager
                     }
                 }
 
-                $notification = api_get_configuration_value('send_notification_when_user_added');
+                $notification = api_get_setting('profile.send_notification_when_user_added', true);
                 if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                     foreach ($notification['admins'] as $adminId) {
                         $emailSubjectToAdmin = get_lang('The user has been added').': '.
@@ -2571,7 +2571,7 @@ class UserManager
         }
 
         // Order by dates according to settings
-        $orderBySettings = api_get_configuration_value('my_courses_session_order');
+        $orderBySettings = api_get_setting('session.my_courses_session_order', true);
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
             $field = $orderBySettings['field'];
             $orderSetting = $orderBySettings['order'];
@@ -2634,6 +2634,9 @@ class UserManager
         }
 
         $collapsable = ('true' === api_get_setting('session.allow_user_session_collapsable'));
+
+
+
         $extraField = new ExtraFieldValue('session');
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
@@ -6001,7 +6004,7 @@ SQL;
      */
     public static function addUserCareer($userId, $careerId)
     {
-        if (!api_get_configuration_value('allow_career_users')) {
+        if ('true' !== api_get_setting('profile.allow_career_users')) {
             return false;
         }
 
@@ -6022,7 +6025,7 @@ SQL;
      */
     public static function updateUserCareer($userCareerId, $data)
     {
-        if (!api_get_configuration_value('allow_career_users')) {
+        if ('true' !== api_get_setting('profile.allow_career_users')) {
             return false;
         }
 

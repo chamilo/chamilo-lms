@@ -69,7 +69,7 @@ $courseCatalogSettings = [
 ];
 
 $redirectAfterSubscription = 'course_home';
-$settings = api_get_configuration_value('course_catalog_settings');
+$settings = api_get_setting('course.course_catalog_settings', true);
 // By default all extra fields are shown (visible and filterable)
 $extraFieldsInSearchForm = [];
 $extraFieldsInCourseBlock = [];

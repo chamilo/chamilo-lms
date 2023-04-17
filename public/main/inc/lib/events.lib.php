@@ -516,7 +516,7 @@ class Event
         $position = (int) $position;
         $course_id = (int) $course_id;
         $now = api_get_utc_datetime();
-        $recording = api_get_configuration_value('quiz_answer_extra_recording');
+        $recording = ('true' === api_get_setting('exercise.quiz_answer_extra_recording'));
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -630,7 +630,7 @@ class Event
                 $em->flush();
             }
         } else {
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $attempt['seconds_spent'] = $questionDuration + (int) $attemptData['seconds_spent'];
             }
             Database::update(

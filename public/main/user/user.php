@@ -524,7 +524,7 @@ $table->set_header($header_nr++, get_lang('Login'));
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Group'), false);
 
-$hideFields = api_get_configuration_value('hide_user_field_from_list');
+$hideFields = api_get_setting('profile.hide_user_field_from_list', true);
 
 if (!empty($hideFields)) {
     $hideFields = $hideFields['fields'];

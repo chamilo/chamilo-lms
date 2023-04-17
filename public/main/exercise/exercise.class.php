@@ -866,7 +866,7 @@ class Exercise
                 );
                 $questionsByCategoryMandatory = [];
                 if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $this->getQuestionSelectionType() &&
-                    api_get_configuration_value('allow_mandatory_question_in_category')
+                    ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'))
                 ) {
                     $questionsByCategoryMandatory = TestCategory::getQuestionsByCat(
                         $this->id,
@@ -1608,7 +1608,7 @@ class Exercise
             ->setHideQuestionNumber((int) $this->hideQuestionNumber)
         ;
 
-        $allow = api_get_configuration_value('allow_exercise_categories');
+        $allow = ('true' === api_get_setting('exercise.allow_exercise_categories'));
         if (true === $allow && !empty($this->getExerciseCategoryId())) {
             $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
         }
@@ -1858,7 +1858,7 @@ class Exercise
         $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        if (api_get_configuration_value('allow_exercise_categories')) {
+        if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
             $categoryManager = new ExerciseCategoryManager();
             $categories = $categoryManager->getCategories(api_get_course_int_id());
             $options = [];
@@ -6385,7 +6385,7 @@ class Exercise
         $data['number_of_answers_saved'] = $savedAnswersCount;
         $exeId = $trackExerciseInfo['exe_id'];
 
-        if (false !== api_get_configuration_value('quiz_confirm_saved_answers')) {
+        if ('true' === api_get_setting('exercise.quiz_confirm_saved_answers')) {
             $em = Database::getManager();
 
             if ($saveUserResult) {
@@ -8299,7 +8299,7 @@ class Exercise
 
     public function setPageResultConfiguration(array $values)
     {
-        $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+        $pageConfig = ('true' === api_get_setting('exercise.allow_quiz_results_page_config'));
         if ($pageConfig) {
             $params = [
                 'hide_expected_answer' => $values['hide_expected_answer'] ?? '',
@@ -8328,7 +8328,7 @@ class Exercise
      */
     public function getPageResultConfiguration()
     {
-        $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+        $pageConfig = ('true' === api_get_setting('exercise.allow_quiz_results_page_config'));
         if ($pageConfig) {
             return $this->pageResultConfiguration;
         }
@@ -8548,7 +8548,7 @@ class Exercise
      */
     public function generateStats($exerciseId, $courseInfo, $sessionId)
     {
-        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if (!$allowStats) {
             return false;
         }
@@ -8778,7 +8778,7 @@ class Exercise
         $from = $limit * ($page - 1);
 
         $categoryCondition = '';
-        if (api_get_configuration_value('allow_exercise_categories')) {
+        if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
             if (!empty($categoryId)) {
                 $categoryCondition = " AND exercise_category_id = $categoryId ";
             } else {

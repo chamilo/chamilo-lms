@@ -816,7 +816,7 @@ switch ($action) {
             }
         }
 
-        if ('custom' === $listType && api_get_configuration_value('allow_session_status')) {
+        if ('custom' === $listType && 'true' === api_get_setting('session.allow_session_status')) {
             $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
         }
 
@@ -1439,7 +1439,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_all':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' === $_GET['type']) {
@@ -1484,7 +1484,7 @@ switch ($action) {
             exit;
         }
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         $columns = [
@@ -1513,7 +1513,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_others':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
 
@@ -1553,7 +1553,7 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' == $_GET['type']) {
@@ -1687,7 +1687,7 @@ switch ($action) {
             'username',
         ];
         $extraFieldsToAdd = [];
-        $extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+        $extraFields = api_get_setting('exercise.exercise_category_report_user_extra_fields', true);
         $roundValues = ('true' === api_get_setting('exercise.exercise_category_round_score_in_export'));
 
         if (!empty($extraFields) && isset($extraFields['fields'])) {

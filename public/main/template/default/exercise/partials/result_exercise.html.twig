@@ -86,7 +86,7 @@
                         </span>
                             {% endif %}
 
-                            {% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}
+                            {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
                                 {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
                                 <form class="form-horizontal" action="#" id="quiz_confirm_saved_answers_form">
                                     <div class="form-group">
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    {% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}
+    {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
         {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
         {% if enable_form %}
             <script>

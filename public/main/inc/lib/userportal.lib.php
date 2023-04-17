@@ -904,7 +904,7 @@ class IndexManager
 
         // Student info code check (shows student progress information on
         // courses list
-        $studentInfo = api_get_configuration_value('course_student_info');
+        $studentInfo = api_get_setting('course.course_student_info', true);
 
         $studentInfoProgress = !empty($studentInfo['progress']) && true === $studentInfo['progress'];
         $studentInfoScore = !empty($studentInfo['score']) && true === $studentInfo['score'];
@@ -1704,7 +1704,7 @@ class IndexManager
      */
     public function setGradeBookDependencyBar($userId)
     {
-        $allow = api_get_configuration_value('gradebook_dependency');
+        $allow = ('true' === api_get_setting('gradebook.gradebook_dependency'));
 
         if (api_is_anonymous()) {
             return false;
@@ -1719,7 +1719,7 @@ class IndexManager
                 false
             );
 
-            $courseList = api_get_configuration_value('gradebook_dependency_mandatory_courses');
+            $courseList = api_get_setting('gradebook.gradebook_dependency_mandatory_courses', true);
             $courseList = $courseList['courses'] ?? [];
             $mandatoryCourse = [];
             if (!empty($courseList)) {
@@ -1769,7 +1769,7 @@ class IndexManager
 
             $finalResult = $result20 + $result80;
 
-            $gradeBookList = api_get_configuration_value('gradebook_badge_sidebar');
+            $gradeBookList = api_get_setting('gradebook.gradebook_badge_sidebar', true);
             $gradeBookList = isset($gradeBookList['gradebooks']) ? $gradeBookList['gradebooks'] : [];
             $badgeList = [];
             foreach ($gradeBookList as $id) {

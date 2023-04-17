@@ -689,7 +689,7 @@ switch ($action) {
             }
 
             $questionDuration = 0;
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $extraFieldValue = new ExtraFieldValue('question');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
                 if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
@@ -827,7 +827,7 @@ switch ($action) {
                 $remind_list
             );
 
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $questionStart = Session::read('question_start', []);
                 if (!empty($questionStart)) {
                     if (isset($questionStart[$my_question_id])) {
@@ -994,7 +994,7 @@ switch ($action) {
 
         break;
     case 'quiz_confirm_saved_answers':
-        if (false === api_get_configuration_value('quiz_confirm_saved_answers')) {
+        if ('true' !== api_get_setting('exercise.quiz_confirm_saved_answers')) {
             break;
         }
 

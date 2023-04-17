@@ -115,7 +115,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('No data available'), 'warning');
 }
 
-$show = api_get_configuration_value('allow_career_users');
+$show = ('true' === api_get_setting('profile.allow_career_users'));
 
 if ($show) {
     $careers = UserManager::getUserCareers($user_id);

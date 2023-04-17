@@ -5450,7 +5450,7 @@ function getReportRecipients()
 
                     break;
                 case 'community_managers':
-                    $managers = api_get_configuration_value('community_managers_user_list');
+                    $managers = api_get_setting('profile.community_managers_user_list', true);
                     if (!empty($managers) && isset($managers['users'])) {
                         $users = array_merge($users, $managers['users']);
                     }

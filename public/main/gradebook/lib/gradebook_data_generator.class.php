@@ -114,7 +114,7 @@ class GradebookDataGenerator
         $userCount = !empty($studentList) ? count($studentList) : 0;
         // Generate the data to display
         $data = [];
-        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         $scoreDisplay = ScoreDisplay::instance();
         $defaultData = Session::read($this->preLoadDataKey);
         $model = ExerciseLib::getCourseScoreModel();

@@ -537,7 +537,7 @@ class Evaluation implements GradebookItem
      */
     public function calc_score($studentId = null, $type = null)
     {
-        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
 
         if ($allowStats) {
             $evaluation = $this->entity;
@@ -879,7 +879,7 @@ class Evaluation implements GradebookItem
      */
     public static function generateStats($evaluationId)
     {
-        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+        $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allowStats) {
             $evaluation = self::load($evaluationId);
 
@@ -937,7 +937,7 @@ class Evaluation implements GradebookItem
     private static function create_evaluation_objects_from_sql_result($result)
     {
         $alleval = [];
-        $allow = api_get_configuration_value('allow_gradebook_stats');
+        $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allow) {
             $em = Database::getManager();
             $repo = $em->getRepository(GradebookEvaluation::class);

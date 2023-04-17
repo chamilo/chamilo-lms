@@ -40,7 +40,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$allowTimePerQuestion = api_get_configuration_value('allow_time_per_question');
+$allowTimePerQuestion = ('true' === api_get_setting('exercise.allow_time_per_question'));
 if ($allowTimePerQuestion) {
     $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
 }
@@ -80,7 +80,7 @@ if ('true' === api_get_setting('enable_record_audio')) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+$zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';

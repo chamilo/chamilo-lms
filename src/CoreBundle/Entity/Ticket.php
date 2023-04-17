@@ -134,6 +134,16 @@ class Ticket
      */
     protected DateTime $lastEditDateTime;
 
+    /**
+     * @ORM\Column(name="exercise_id", type="integer", nullable=true, unique=false)
+     */
+    protected int $exerciseId;
+
+    /**
+     * @ORM\Column(name="lp_id", type="integer", nullable=true, unique=false)
+     */
+    protected int $lpId;
+
     public function __construct()
     {
         $this->totalMessages = 0;
@@ -237,6 +247,42 @@ class Ticket
     public function setInsertUserId(int $insertUserId): self
     {
         $this->insertUserId = $insertUserId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExerciseId(): int
+    {
+        return $this->exerciseId;
+    }
+
+    /**
+     * @param int $exerciseId
+     */
+    public function setExerciseId(int $exerciseId): self
+    {
+        $this->exerciseId = $exerciseId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLpId(): int
+    {
+        return $this->lpId;
+    }
+
+    /**
+     * @param int $lpId
+     */
+    public function setLpId(int $lpId): self
+    {
+        $this->lpId = $lpId;
 
         return $this;
     }

@@ -238,7 +238,7 @@ echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
 
 $plagiarismListJqgridColumn = [];
 $plagiarismListJqgridLine = [];
-$allowAntiPlagiarism = api_get_configuration_value('allow_compilatio_tool');
+$allowAntiPlagiarism = ('true' === api_get_setting('document.allow_compilatio_tool'));
 if ($allowAntiPlagiarism) {
     $plagiarismListJqgridColumn = ['Compilatio'];
     $plagiarismListJqgridLine = [

@@ -58,7 +58,7 @@ $invitationsCount = count($sentInvitations);
 $answeredCount = count($answered_data);
 $unAnsweredCount = count($sentInvitations) - count($answered_data);
 
-if (1 == $survey->getAnonymous() && !('true' === api_get_setting('survey.survey_anonymous_show_answered'))) {
+if (1 == $survey->getAnonymous() && ('true' !== api_get_setting('survey.survey_anonymous_show_answered'))) {
     echo Display::return_message(
         get_lang('This survey is anonymous. You can\'t see who answered.').' '.$answeredCount.' '.get_lang(
             'people answered'

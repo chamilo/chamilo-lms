@@ -134,7 +134,7 @@ class Agenda
                 'personal' => 'steel blue', //steel blue
                 'student_publication' => '#FF8C00', //DarkOrange
             ],
-            api_get_configuration_value('agenda_colors') ?: []
+            api_get_setting('agenda.agenda_colors', true) ?: []
         );
 
         // Event colors

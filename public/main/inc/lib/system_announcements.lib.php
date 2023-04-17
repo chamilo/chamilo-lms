@@ -107,7 +107,7 @@ class SystemAnnouncementManager
             ->setUrl(api_get_url_entity())
             ->setRoles($visibility);
 
-        if (api_get_configuration_value('allow_careers_in_global_announcements') && !empty($careerId)) {
+        if (('true' === api_get_setting('announcement.allow_careers_in_global_announcements')) && !empty($careerId)) {
             $careerRepo = Container::getCareerRepository();
             $sysAnnouncement->setCareer($careerRepo->find($careerId));
 
@@ -409,7 +409,7 @@ class SystemAnnouncementManager
         //$list = self::getVisibilityList();
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
-        if (api_get_configuration_value('allow_careers_in_global_announcements') && !empty($careerId)) {
+        if (('true' === api_get_setting('announcement.allow_careers_in_global_announcements')) && !empty($careerId)) {
             $params = [];
             $params['career_id'] = (int) $careerId;
             $params['promotion_id'] = (int) $promotionId;

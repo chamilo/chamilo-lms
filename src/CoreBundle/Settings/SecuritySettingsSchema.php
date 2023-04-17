@@ -39,6 +39,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'security_x_content_type_options' => 'nosniff',
                 'security_referrer_policy' => 'origin-when-cross-origin',
                 'security_block_inactive_users_immediately' => 'false',
+                'password_requirements' => '',
+                'allow_online_users_by_status' => '',
             ]
         );
         $allowedTypes = [
@@ -136,6 +138,53 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('security_block_inactive_users_immediately', YesNoType::class)
+            ->add(
+                'password_requirements',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Customize password generation and verification').
+                        $this->settingArrayHelpValue('password_requirements'),
+                ]
+            )
+            ->add(
+                'allow_online_users_by_status',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Allow online users by user profile 1 = COURSEMANAGER (teacher) 5 = STUDENT 11 = PLATFORM_ADMIN Example: The online users will be available only for teachers and students').
+                        $this->settingArrayHelpValue('allow_online_users_by_status'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'password_requirements' =>
+                "<pre>
+                [
+                    'min' => [
+                        'lowercase' => 2,
+                        'uppercase' => 2,
+                        'numeric' => 2,
+                        'length' => 8
+                    ]
+                ]
+               </pre>",
+            'allow_online_users_by_status' =>
+                "<pre>
+                ['status' =>  [1, 5]]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

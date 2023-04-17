@@ -1323,7 +1323,7 @@ class learnpath
         $nextText = get_lang('Next');
         $fullScreenText = get_lang('Back to normal screen');
 
-        $settings = api_get_configuration_value('lp_view_settings');
+        $settings = api_get_setting('lp.lp_view_settings', true);
         $display = $settings['display'] ?? false;
         $icon = Display::getMdiIcon('information');
 
@@ -7154,7 +7154,7 @@ class learnpath
 
     public static function getCategorySessionId($id)
     {
-        if (false === api_get_configuration_value('allow_session_lp_category')) {
+        if ('true' !== api_get_setting('lp.allow_session_lp_category')) {
             return 0;
         }
 
@@ -7544,7 +7544,7 @@ class learnpath
                     CURLOPT_MAXREDIRS => 10,
                 ];
 
-                $proxySettings = api_get_configuration_value('proxy_settings');
+                $proxySettings = api_get_setting('platform.proxy_settings', true);
                 if (!empty($proxySettings) &&
                     isset($proxySettings['curl_setopt_array'])
                 ) {
@@ -8053,7 +8053,7 @@ class learnpath
      */
     public static function getSubscriptionSettings()
     {
-        $subscriptionSettings = api_get_configuration_value('lp_subscription_settings');
+        $subscriptionSettings = api_get_setting('lp.lp_subscription_settings', true);
         if (empty($subscriptionSettings)) {
             // By default, allow both settings
             $subscriptionSettings = [

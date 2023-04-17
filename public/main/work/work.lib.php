@@ -2006,7 +2006,7 @@ function get_work_user_list(
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $compilation = null;
-    if (api_get_configuration_value('allow_compilatio_tool')) {
+    if ('true' === api_get_setting('document.allow_compilatio_tool')) {
         $compilation = new Compilatio();
     }
 

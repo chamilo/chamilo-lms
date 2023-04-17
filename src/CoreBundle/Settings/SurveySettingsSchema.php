@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SurveySettingsSchema extends AbstractSettingsSchema
@@ -29,6 +30,9 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                     'survey_allow_answered_question_edit' => 'false',
                     'survey_duplicate_order_by_name' => 'true',
                     'survey_backwards_enable' => 'false',
+                    'allow_mandatory_survey' => 'false',
+                    'hide_survey_edition' => '',
+                    'survey_additional_teacher_modify_actions' => '',
                 ]
             )
         ;
@@ -62,6 +66,47 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             ->add('survey_allow_answered_question_edit', YesNoType::class)
             ->add('survey_duplicate_order_by_name', YesNoType::class)
             ->add('survey_backwards_enable', YesNoType::class)
+            ->add('allow_mandatory_survey', YesNoType::class)
+            ->add(
+                'hide_survey_edition',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Hide survey edition tools for all or some surveys. Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked').
+                        $this->settingArrayHelpValue('hide_survey_edition'),
+                ]
+            )
+            ->add(
+                'survey_additional_teacher_modify_actions',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Allow add additional actions (as links) in survey list for teachers').
+                        $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'hide_survey_edition' =>
+                "<pre>
+                ['codes' => []]
+                </pre>",
+            'survey_additional_teacher_modify_actions' =>
+                "<pre>
+                    ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

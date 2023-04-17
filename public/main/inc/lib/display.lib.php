@@ -1196,7 +1196,7 @@ class Display
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
-            $rowList = api_get_configuration_value('table_row_list');
+            $rowList = api_get_setting('platform.table_row_list', true);
             if (!empty($rowList) && isset($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
@@ -1316,7 +1316,7 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
-        if (api_get_configuration_value('allow_compilatio_tool') &&
+        if (('true' === api_get_setting('document.allow_compilatio_tool')) &&
             (false !== strpos($_SERVER['REQUEST_URI'], 'work/work.php') ||
              false != strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php')
             )

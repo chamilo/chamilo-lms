@@ -161,7 +161,7 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite
     Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (3 != $survey_data['survey_type']) {
-    if (!('true' === api_get_setting('survey.hide_survey_reporting_button'))) {
+    if ('true' !== api_get_setting('survey.hide_survey_reporting_button')) {
         $survey_actions .= Display::url(
             Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id

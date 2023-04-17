@@ -105,7 +105,7 @@ class GradebookTable extends SortableTable
         }
 
         $model = ExerciseLib::getCourseScoreModel();
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showWeight = true;
         if ($this->exportToPdf && isset($settings['hide_score_weight']) && $settings['hide_score_weight']) {
             $showWeight = false;
@@ -393,7 +393,7 @@ class GradebookTable extends SortableTable
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $defaultData = Session::read($this->getPreloadDataKey());
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showWeight = true;
         if ($this->exportToPdf && isset($settings['hide_score_weight']) && $settings['hide_score_weight']) {
             $showWeight = false;

@@ -444,7 +444,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.css',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
@@ -596,7 +596,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.js',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ('vrview' === $feature) {

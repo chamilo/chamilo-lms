@@ -936,7 +936,7 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $allowGraph = ('false' === api_get_setting('gradebook.gradebook_hide_graph'));
         $isAllow = api_is_allowed_to_edit(null, true);
 
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
             $showFeedBack = false;

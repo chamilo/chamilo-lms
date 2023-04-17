@@ -290,7 +290,7 @@ class Result
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM '.$table.' WHERE id = '.$this->id;
         Database::query($sql);
-        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         if ($allowMultipleAttempts) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
             $sql = "DELETE FROM $table WHERE result_id = ".$this->id;

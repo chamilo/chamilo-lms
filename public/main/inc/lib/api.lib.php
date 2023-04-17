@@ -2230,7 +2230,7 @@ function api_generate_password($length = 8)
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = api_get_configuration_value('password_requirements');
+    $passwordRequirements = api_get_setting('security.password_requirements', true);
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
@@ -2595,7 +2595,7 @@ function api_get_session_condition(
  *
  * @return string|array
  */
-function api_get_setting($variable)
+function api_get_setting($variable, $isArray = false)
 {
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
@@ -2631,7 +2631,15 @@ function api_get_setting($variable)
             return $newResult;
             break;
         default:
-            return $settingsManager->getSetting($variable);
+            $settingValue = $settingsManager->getSetting($variable);
+            if ($isArray && !empty($settingValue)) {
+                $strArrayValue = rtrim($settingValue, ';');
+                $value = eval("return $strArrayValue;");
+                if (is_array($value)) {
+                    return $value;
+                }
+            }
+            return $settingValue;
             break;
     }
 }
@@ -3237,7 +3245,7 @@ function api_is_allowed_to_edit(
 
     $sessionId = api_get_session_id();
 
-    if ($sessionId && api_get_configuration_value('session_courses_read_only_mode')) {
+    if ($sessionId && 'true' === api_get_setting('session.session_courses_read_only_mode')) {
         $efv = new ExtraFieldValue('course');
         $lockExrafieldField = $efv->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
@@ -7027,7 +7035,7 @@ function api_mail_html(
         $message = new TemplatedEmail();
         $message->subject($subject);
 
-        $list = api_get_configuration_value('send_all_emails_to');
+        $list = api_get_setting('announcement.send_all_emails_to', true);
         if (!empty($list) && isset($list['emails'])) {
             foreach ($list['emails'] as $email) {
                 $message->cc($email);

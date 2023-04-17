@@ -184,7 +184,7 @@ abstract class Question
                         $objQuestion->category = (int) $categoryInfo['category_id'];
                     }
 
-                    if (api_get_configuration_value('allow_mandatory_question_in_category') &&
+                    if (('true' === api_get_setting('exercise.allow_mandatory_question_in_category')) &&
                         isset($categoryInfo['mandatory'])
                     ) {
                         $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
@@ -228,7 +228,7 @@ abstract class Question
      */
     public function selectTitle()
     {
-        if (!('true' === api_get_setting('editor.save_titles_as_html'))) {
+        if ('true' !== api_get_setting('editor.save_titles_as_html')) {
             return $this->question;
         }
 
@@ -376,7 +376,7 @@ abstract class Question
                     ";
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
-            $allowMandatory = api_get_configuration_value('allow_mandatory_question_in_category');
+            $allowMandatory = ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'));
             if ($row['nb'] > 0) {
                 $extraMandatoryCondition = '';
                 if ($allowMandatory) {
@@ -1153,7 +1153,7 @@ abstract class Question
      */
     public function createForm(&$form, $exercise)
     {
-        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        $zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             echo '<!-- elFinder CSS (REQUIRED) -->';
@@ -1269,7 +1269,7 @@ abstract class Question
                 TestCategory::getCategoriesIdAndName()
             );
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
-                api_get_configuration_value('allow_mandatory_question_in_category')
+                ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'))
             ) {
                 $form->addCheckBox('mandatory', get_lang('IsMandatory'));
             }

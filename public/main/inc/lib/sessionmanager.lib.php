@@ -258,7 +258,7 @@ class SessionManager
                     //$values['session_category_id'] = $sessionCategoryId;
                 }
 
-                if (api_get_configuration_value('allow_session_status')) {
+                if ('true' === api_get_setting('session.allow_session_status')) {
                     $session->setStatus($status);
                 }
 
@@ -521,7 +521,7 @@ class SessionManager
                 $select = "SELECT DISTINCT s.* ";
             }
 
-            if (api_get_configuration_value('allow_session_status')) {
+            if ('true' === api_get_setting('session.allow_session_status')) {
                 $select .= ', status';
             }
 
@@ -1845,7 +1845,7 @@ class SessionManager
                     $sessionEntity->setCategory(null);
                 }
 
-                if (api_get_configuration_value('allow_session_status')) {
+                if ('true' === api_get_setting('session.allow_session_status')) {
                     $sessionEntity->setStatus($status);
                 }
 
@@ -7948,7 +7948,7 @@ class SessionManager
             ]
         );
 
-        if (api_get_configuration_value('allow_session_status')) {
+        if ('true' === api_get_setting('session.allow_session_status')) {
             $statusList = self::getStatusList();
             $form->addSelect(
                 'status',
@@ -8364,7 +8364,7 @@ class SessionManager
                     ];
                 }
 
-                if (api_get_configuration_value('allow_session_status')) {
+                if ('true' === api_get_setting('session.allow_session_status')) {
                     $columns[] = get_lang('SessionStatus');
                     $list = self::getStatusList();
                     $listToString = '';
@@ -8473,7 +8473,7 @@ class SessionManager
                     ];
                 }
 
-                if (api_get_configuration_value('allow_session_status')) {
+                if ('true' === api_get_setting('session.allow_session_status')) {
                     $columns[] = get_lang('SessionStatus');
                     $list = self::getStatusList();
                     $listToString = '';
@@ -8655,7 +8655,7 @@ class SessionManager
                     ];
                 }
 
-                if (api_get_configuration_value('allow_session_status')) {
+                if ('true' === api_get_setting('session.allow_session_status')) {
                     $columns[] = get_lang('SessionStatus');
                     $list = self::getStatusList();
                     $listToString = '';

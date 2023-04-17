@@ -1037,7 +1037,7 @@ class SocialManager extends UserManager
             $userRelationType = self::get_relation_between_contacts($currentUserId, $userId);
         }
 
-        $options = api_get_configuration_value('profile_fields_visibility');
+        $options = api_get_setting('profile.profile_fields_visibility', true);
         if (isset($options['options'])) {
             $options = $options['options'];
         }
@@ -1318,7 +1318,7 @@ class SocialManager extends UserManager
      */
     public static function getExtraFieldBlock($user_id, $isArray = false)
     {
-        $fieldVisibility = api_get_configuration_value('profile_fields_visibility');
+        $fieldVisibility = api_get_setting('profile.profile_fields_visibility', true);
         $fieldVisibilityKeys = [];
         if (isset($fieldVisibility['options'])) {
             $fieldVisibility = $fieldVisibility['options'];

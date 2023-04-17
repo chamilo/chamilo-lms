@@ -705,7 +705,7 @@ $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';
 
-$extraSettings = api_get_configuration_value('user_import_settings');
+$extraSettings = api_get_setting('profile.user_import_settings', true);
 if (!empty($extraSettings) && isset($extraSettings['options']) &&
     isset($extraSettings['options']['send_mail_default_option'])
 ) {

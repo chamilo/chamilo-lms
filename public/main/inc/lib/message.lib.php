@@ -1409,7 +1409,7 @@ class MessageManager
         );
         $layoutContent = '';
         $emailbody = '';
-        if (true == api_get_configuration_value('mail_template_system')) {
+        if ('true' === api_get_setting('mail.mail_template_system')) {
             $mailTemplateManager = new MailTemplateManager();
             $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
             if (empty($templateText)) {

@@ -1444,7 +1444,7 @@ class CoursesAndSessionsCatalog
 
     public static function getCatalogSearchSettings()
     {
-        $settings = api_get_configuration_value('catalog_settings');
+        $settings = api_get_setting('session.catalog_settings', true);
         if (empty($settings)) {
             // Default everything is visible
             $settings = [

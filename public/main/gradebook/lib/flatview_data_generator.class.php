@@ -1042,7 +1042,7 @@ class FlatViewDataGenerator
      */
     private function addExtraFieldColumnsHeaders(array &$headers)
     {
-        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+        $extraFieldColumns = api_get_setting('gradebook.gradebook_flatview_extrafields_columns', true);
 
         if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
             return;
@@ -1063,7 +1063,7 @@ class FlatViewDataGenerator
      */
     private function addExtraFieldColumnsData(array &$row, $userId)
     {
-        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+        $extraFieldColumns = api_get_setting('gradebook.gradebook_flatview_extrafields_columns', true);
 
         if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
             return;

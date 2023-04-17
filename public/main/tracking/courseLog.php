@@ -83,7 +83,7 @@ if ($export_csv) {
     }
     ob_start();
 }
-$columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
+$columnsToHideFromSetting = api_get_setting('course.course_log_hide_columns', true);
 $columnsToHide = [0, 8, 9, 10, 11];
 if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['columns'])) {
     $columnsToHide = $columnsToHideFromSetting['columns'];
@@ -693,7 +693,7 @@ if ($nbStudents > 0) {
     );
     $headers['score_best'] = $bestScoreLabel;
 
-    $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+    $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
     $exerciseResultHeaders = [];
     if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
         isset($addExerciseOption['courses'][$courseCode])

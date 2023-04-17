@@ -40,8 +40,16 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'default_session_list_view',
                 'session_automatic_creation_user_id',
                 'user_s_session_duration',
+                'my_courses_session_order',
+                'session_courses_read_only_mode',
+                'session_import_settings',
+                'catalog_settings',
+                'allow_session_status',
+                'tracking_columns',
             ],
             'Security' => [
+                'allow_online_users_by_status',
+                'password_requirements',
                 'security_strict_transport',
                 'security_content_policy',
                 'security_content_policy_report_only',
@@ -70,12 +78,18 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'course_creation_donate_link',
                 'courses_list_session_title_link',
                 'hide_course_rating',
+                'course_log_hide_columns',
+                'course_student_info',
+                'course_catalog_settings',
             ],
             'Language' => [
                 'show_language_selector_in_menu',
                 'language_flags_by_country',
             ],
             'Platform' => [
+                'table_row_list',
+                'video_features',
+                'proxy_settings',
                 'theme_fallback',
                 'unoconv_binaries',
                 'packager',
@@ -89,6 +103,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'block_my_progress_page',
                 'generate_random_login',
                 'timepicker_increment',
+                'allow_portfolio_tool',
             ],
             'Profile' => [
                 'allow_career_diagram',
@@ -102,6 +117,18 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'data_protection_officer_name',
                 'data_protection_officer_role',
                 'data_protection_officer_email',
+                'hide_user_field_from_list',
+                'allow_fields_inscription',
+                'send_notification_when_user_added',
+                'show_conditions_to_user',
+                'allow_teachers_to_classes',
+                'profile_fields_visibility',
+                'user_import_settings',
+                'user_search_on_extra_fields',
+                'allow_career_users',
+                'required_extra_fields_in_inscription',
+                'community_managers_user_list',
+                'allow_social_map_fields',
             ],
             'Admin' => [
                 'show_link_request_hrm_user',
@@ -112,6 +139,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
             'Agenda' => [
                 'personal_agenda_show_all_session_events',
                 'allow_agenda_edit_for_hrm',
+                'agenda_legend',
+                'agenda_colors',
+                'agenda_on_hover_info',
             ],
             'Lp' => [
                 'add_all_files_in_lp_export',
@@ -134,6 +164,12 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'scorm_api_extrafield_to_use_as_student_id',
                 'allow_import_scorm_package_in_course_builder',
                 'allow_htaccess_import_from_scorm',
+                'allow_session_lp_category',
+                'ticket_lp_quiz_info_add',
+                'lp_subscription_settings',
+                'lp_view_settings',
+                'download_files_after_all_lp_finished',
+                'allow_lp_subscription_to_usergroups',
             ],
             'Gradebook' => [
                 'gradebook_enable_best_score',
@@ -145,6 +181,14 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'gradebook_report_score_style',
                 'gradebook_score_display_custom_standalone',
                 'gradebook_use_exercise_score_settings_in_total',
+                'gradebook_dependency',
+                'gradebook_dependency_mandatory_courses',
+                'gradebook_badge_sidebar',
+                'gradebook_multiple_evaluation_attempts',
+                'allow_gradebook_stats',
+                'gradebook_flatview_extrafields_columns',
+                'gradebook_pdf_export_settings',
+                'allow_gradebook_comments',
             ],
             'Exercise' => [
                 'block_quiz_mail_notification_general_coach',
@@ -175,6 +219,17 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'limit_exercise_teacher_access',
                 'block_category_questions',
                 'exercise_score_format',
+                'exercise_additional_teacher_modify_actions',
+                'quiz_confirm_saved_answers',
+                'allow_exercise_categories',
+                'allow_quiz_results_page_config',
+                'quiz_image_zoom',
+                'quiz_answer_extra_recording',
+                'allow_mandatory_question_in_category',
+                'add_exercise_best_attempt_in_report',
+                'exercise_category_report_user_extra_fields',
+                'score_grade_model',
+                'allow_time_per_question',
             ],
             'Glossary' => [
                 'default_glossary_view',
@@ -218,12 +273,19 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'survey_allow_answered_question_edit',
                 'survey_duplicate_order_by_name',
                 'survey_backwards_enable',
+                'allow_mandatory_survey',
+                'hide_survey_edition',
+                'survey_additional_teacher_modify_actions',
             ],
             'Document' => [
                 'send_notification_when_document_added',
                 'thematic_pdf_orientation',
                 'certificate_pdf_orientation',
                 'allow_general_certificate',
+                'group_document_access',
+                'group_category_document_access',
+                'allow_compilatio_tool',
+                'compilatio_tool',
             ],
             'Announcement' => [
                 'disable_announcement_attachment',
@@ -231,6 +293,8 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_scheduled_announcements',
                 'disable_delete_all_announcements',
                 'hide_announcement_sent_to_users_info',
+                'send_all_emails_to',
+                'allow_careers_in_global_announcements',
             ],
             'Skill' => [
                 'allow_private_skills',
@@ -238,6 +302,8 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'skills_teachers_can_assign_skills',
                 'hide_skill_levels',
                 'table_of_hierarchical_skill_presentation',
+                'skill_levels_names',
+                'allow_skill_rel_items',
             ],
             'Mail' => [
                 'update_users_email_to_dummy_except_admins',
@@ -251,6 +317,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'send_two_inscription_confirmation_mail',
                 'show_user_email_in_notification',
                 'send_notification_score_in_percentage',
+                'mail_template_system',
+                'cron_notification_mails',
+                'cron_notification_help_desk',
             ],
             'Work' => [
                 'block_student_publication_edition',
@@ -280,6 +349,35 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 }
             }
         }
+
+        // Insert extra fields required.
+        $result = $connection
+            ->executeQuery(
+                "SELECT COUNT(1) FROM extra_field WHERE variable = 'session_courses_read_only_mode' AND item_type = 2 AND value_type = 13"
+            )
+        ;
+        $count = $result->fetchNumeric()[0];
+        if (empty($count)) {
+            $this->addSql(
+                "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1, 1, NOW())"
+            );
+        }
+
+        // Insert extra fields required.
+        $result = $connection
+            ->executeQuery(
+                "SELECT COUNT(1) FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
+            )
+        ;
+        $count = $result->fetchNumeric()[0];
+        if (empty($count)) {
+            $this->addSql(
+                "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, 1, NOW())"
+            );
+        }
+        // Alter tables required.
+
+
     }
 
     public function down(Schema $schema): void
@@ -298,6 +396,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'block_student_publication_edition',
             ],
             'Mail' => [
+                'cron_notification_help_desk',
+                'cron_notification_mails',
+                'mail_template_system',
                 'send_notification_score_in_percentage',
                 'show_user_email_in_notification',
                 'send_two_inscription_confirmation_mail',
@@ -311,6 +412,8 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'update_users_email_to_dummy_except_admins',
             ],
             'Skill' => [
+                'allow_skill_rel_items',
+                'skill_levels_names',
                 'table_of_hierarchical_skill_presentation',
                 'hide_skill_levels',
                 'skills_teachers_can_assign_skills',
@@ -318,6 +421,8 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_private_skills',
             ],
             'Announcement' => [
+                'allow_careers_in_global_announcements',
+                'send_all_emails_to',
                 'hide_announcement_sent_to_users_info',
                 'allow_scheduled_announcements',
                 'admin_chamilo_announcements_disable',
@@ -325,12 +430,19 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'disable_delete_all_announcements'
             ],
             'Document' => [
+                'compilatio_tool',
+                'allow_compilatio_tool',
+                'group_category_document_access',
+                'group_document_access',
                 'allow_general_certificate',
                 'certificate_pdf_orientation',
                 'thematic_pdf_orientation',
                 'send_notification_when_document_added',
             ],
             'Survey' => [
+                'survey_additional_teacher_modify_actions',
+                'hide_survey_edition',
+                'allow_mandatory_survey',
                 'survey_backwards_enable',
                 'survey_duplicate_order_by_name',
                 'survey_allow_answered_question_edit',
@@ -374,6 +486,17 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'default_glossary_view',
             ],
             'Exercise' => [
+                'allow_time_per_question',
+                'score_grade_model',
+                'exercise_category_report_user_extra_fields',
+                'add_exercise_best_attempt_in_report',
+                'allow_mandatory_question_in_category',
+                'quiz_answer_extra_recording',
+                'quiz_image_zoom',
+                'allow_quiz_results_page_config',
+                'allow_exercise_categories',
+                'quiz_confirm_saved_answers',
+                'exercise_additional_teacher_modify_actions',
                 'exercise_score_format',
                 'block_category_questions',
                 'limit_exercise_teacher_access',
@@ -404,6 +527,14 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'block_quiz_mail_notification_general_coach',
             ],
             'Gradebook' => [
+                'allow_gradebook_comments',
+                'gradebook_pdf_export_settings',
+                'gradebook_flatview_extrafields_columns',
+                'allow_gradebook_stats',
+                'gradebook_multiple_evaluation_attempts',
+                'gradebook_badge_sidebar',
+                'gradebook_dependency_mandatory_courses',
+                'gradebook_dependency',
                 'gradebook_use_exercise_score_settings_in_total',
                 'gradebook_score_display_custom_standalone',
                 'gradebook_report_score_style',
@@ -415,6 +546,12 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'gradebook_enable_best_score',
             ],
             'Lp' => [
+                'allow_lp_subscription_to_usergroups',
+                'download_files_after_all_lp_finished',
+                'lp_view_settings',
+                'lp_subscription_settings',
+                'ticket_lp_quiz_info_add',
+                'allow_session_lp_category',
                 'allow_htaccess_import_from_scorm',
                 'allow_import_scorm_package_in_course_builder',
                 'scorm_api_extrafield_to_use_as_student_id',
@@ -437,6 +574,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'add_all_files_in_lp_export',
             ],
             'Agenda' => [
+                'agenda_on_hover_info',
+                'agenda_colors',
+                'agenda_legend',
                 'allow_agenda_edit_for_hrm',
                 'personal_agenda_show_all_session_events',
             ],
@@ -447,6 +587,18 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'show_link_request_hrm_user',
             ],
             'Profile' => [
+                'allow_social_map_fields',
+                'community_managers_user_list',
+                'required_extra_fields_in_inscription',
+                'allow_career_users',
+                'user_search_on_extra_fields',
+                'user_import_settings',
+                'profile_fields_visibility',
+                'allow_teachers_to_classes',
+                'show_conditions_to_user',
+                'send_notification_when_user_added',
+                'allow_fields_inscription',
+                'hide_user_field_from_list',
                 'data_protection_officer_email',
                 'data_protection_officer_role',
                 'data_protection_officer_name',
@@ -460,6 +612,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_career_diagram',
             ],
             'Platform' => [
+                'allow_portfolio_tool',
                 'timepicker_increment',
                 'generate_random_login',
                 'block_my_progress_page',
@@ -473,12 +626,18 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'packager',
                 'unoconv_binaries',
                 'theme_fallback',
+                'proxy_settings',
+                'video_features',
+                'table_row_list',
             ],
             'Language' => [
                 'language_flags_by_country',
                 'show_language_selector_in_menu',
             ],
             'Course' => [
+                'course_catalog_settings',
+                'course_student_info',
+                'course_log_hide_columns',
                 'hide_course_rating',
                 'courses_list_session_title_link',
                 'course_creation_donate_link',
@@ -507,8 +666,16 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'security_content_policy_report_only',
                 'security_content_policy',
                 'security_strict_transport',
+                'password_requirements',
+                'allow_online_users_by_status',
             ],
             'Session' => [
+                'tracking_columns',
+                'allow_session_status',
+                'catalog_settings',
+                'session_import_settings',
+                'session_courses_read_only_mode',
+                'my_courses_session_order',
                 'user_s_session_duration',
                 'session_automatic_creation_user_id',
                 'default_session_list_view',
@@ -545,6 +712,30 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 }
             }
         }
-    }
 
+        // Delete extra fields required.
+        $result = $connection
+            ->executeQuery(
+                "SELECT COUNT(1) FROM extra_field WHERE variable = 'session_courses_read_only_mode' AND item_type = 2 AND value_type = 13"
+            )
+        ;
+        $count = $result->fetchNumeric()[0];
+        if (!empty($count)) {
+            $this->addSql(
+                "DELETE FROM extra_field WHERE variable = 'session_courses_read_only_mode' AND item_type = 2 AND value_type = 13"
+            );
+        }
+
+        $result = $connection
+            ->executeQuery(
+                "SELECT COUNT(1) FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
+            )
+        ;
+        $count = $result->fetchNumeric()[0];
+        if (!empty($count)) {
+            $this->addSql(
+                "DELETE FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
+            );
+        }
+    }
 }

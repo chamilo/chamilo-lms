@@ -32,7 +32,7 @@ $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillR
 $skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
-$skillLevels = api_get_configuration_value('skill_levels_names');
+$skillLevels = api_get_setting('skill.skill_levels_names', true);
 
 $skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = ['' => get_lang('none')];

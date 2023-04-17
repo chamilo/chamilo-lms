@@ -94,7 +94,7 @@ $(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+$zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
@@ -472,7 +472,7 @@ $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', !$lp->getHideTocFrame());
 
 $showMenu = 0;
-$settings = api_get_configuration_value('lp_view_settings');
+$settings = api_get_setting('lp.lp_view_settings', true);
 $display = $settings['display'] ?? false;
 $navigationInTheMiddle = false;
 if (!empty($display)) {

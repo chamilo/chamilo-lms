@@ -210,7 +210,7 @@ if (count($userList) > 0) {
 }
 echo '</div>';
 
-$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+$allowSkillRelItem = ('true' === api_get_setting('skill.allow_skill_rel_items'));
 
 if (0 == count($userList)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
@@ -223,7 +223,7 @@ if (0 == count($userList)) {
     echo '<th>';
     echo get_lang('Action');
     echo '</th></tr>';
-    $allowComments = api_get_configuration_value('allow_gradebook_comments');
+    $allowComments = ('true' === api_get_setting('gradebook.allow_gradebook_comments'));
     foreach ($userList as $index => $value) {
         $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>

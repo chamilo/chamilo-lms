@@ -672,7 +672,7 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-if (api_get_configuration_value('allow_career_users')) {
+if ('true' === api_get_setting('profile.allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);

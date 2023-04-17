@@ -1782,7 +1782,7 @@ class Tracking
      */
     public static function minimumTimeAvailable($sessionId, $courseId)
     {
-        if (!('true' === api_get_setting('lp.lp_minimum_time'))) {
+        if ('true' !== api_get_setting('lp.lp_minimum_time')) {
             return false;
         }
 
@@ -4521,7 +4521,7 @@ class Tracking
             ],
         ];
 
-        $trackingColumnsConfig = api_get_configuration_value('tracking_columns');
+        $trackingColumnsConfig = api_get_setting('session.tracking_columns', true);
         if (!empty($trackingColumnsConfig)) {
             $trackingColumns = $trackingColumnsConfig;
         }
@@ -5558,7 +5558,7 @@ class Tracking
         ];
 
         $headers = '';
-        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $trackingColumns = api_get_setting('session.tracking_columns', true);
         if (isset($trackingColumns['my_progress_lp'])) {
             foreach ($columnHeaders as $key => $value) {
                 if (!isset($trackingColumns['my_progress_lp'][$key]) ||
@@ -7718,7 +7718,7 @@ class Tracking
             'last_connection' => get_lang('LastConnexion'),
         ];
 
-        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $trackingColumns = api_get_setting('session.tracking_columns', true);
 
         if (isset($trackingColumns['my_progress_lp'])) {
             $columnHeaders = array_filter(
@@ -8651,7 +8651,7 @@ class TrackingCourseLog
         $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);
         $userIdList = [];
-        $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+        $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
         $exerciseResultsToCheck = [];
         if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
             isset($addExerciseOption['courses'][$courseCode])

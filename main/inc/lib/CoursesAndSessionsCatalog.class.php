@@ -259,7 +259,7 @@ class CoursesAndSessionsCatalog
         $showOnlyCategory = api_get_configuration_value('courses_catalogue_show_only_category');
         foreach ($allCategories as $category) {
             $categoryCode = $category['code'];
-            if (!($showOnlyCategory && in_array($categoryCode, $showOnlyCategory))) {
+            if (!(empty($showOnlyCategory) || in_array($categoryCode, $showOnlyCategory))) {
                 continue;
             }
             if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {

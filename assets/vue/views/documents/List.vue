@@ -2,6 +2,7 @@
   <Toolbar v-if="isAuthenticated && isCurrentTeacher">
     <template #start>
       <Button
+        v-if="$route.query.cert !== '1'"
         :label="t('New folder')"
         class="p-button-plain p-button-outlined"
         icon="mdi mdi-folder-plus"

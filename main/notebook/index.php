@@ -89,6 +89,7 @@ if ($action === 'addnote') {
     // Setting the form elements
     $form->addElement('header', '', get_lang('NoteAddNew'));
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
+    $form->applyFilter('text', 'html_filter');
     $form->addElement(
         'html_editor',
         'note_comment',
@@ -146,6 +147,7 @@ if ($action === 'addnote') {
     $form->addElement('header', '', get_lang('ModifyNote'));
     $form->addElement('hidden', 'notebook_id');
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['size' => '100']);
+    $form->applyFilter('text', 'html_filter');
     $form->addElement(
         'html_editor',
         'note_comment',

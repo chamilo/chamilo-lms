@@ -1098,6 +1098,10 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             'trim'
                         );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'html_filter'
+                        );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1523,6 +1527,7 @@ class ExtraField extends Model
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1537,6 +1542,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         $form->addRule(
                             'extra_'.$field_details['variable'],
                             get_lang('MobilePhoneNumberWrong'),

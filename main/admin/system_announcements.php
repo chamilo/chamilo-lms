@@ -185,6 +185,7 @@ if ($action_todo) {
 
     $form->addHeader($form_title);
     $form->addText('title', get_lang('Title'), true);
+    $form->applyFilter('title', 'html_filter');
 
     $extraOption = [];
     $extraOption['all'] = get_lang('All');

@@ -201,6 +201,7 @@ function show_add_forumcategory_form($lp_id)
     // Setting the form elements.
     $form->addElement('header', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
+    $form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement(
         'html_editor',
         'forum_category_comment',
@@ -279,6 +280,7 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
 
     // The title of the forum
     $form->addElement('text', 'forum_title', get_lang('Title'), ['autofocus']);
+    $form->applyFilter('forum_title', 'html_filter');
 
     // The comment of the forum.
     $form->addElement(
@@ -529,6 +531,7 @@ function show_edit_forumcategory_form($inputvalues = [])
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'));
+    $form->applyFilter('forum_category_title', 'html_filter');
 
     $form->addElement(
         'html_editor',
@@ -3197,6 +3200,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
+    $form->applyFilter('post_title', 'post_filter');
     $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),

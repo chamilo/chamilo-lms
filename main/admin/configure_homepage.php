@@ -1167,7 +1167,7 @@ switch ($action) {
                                                     ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
                                                     [
                                                         'href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=',
-                                                        $edit_link.PHP_EOL.$delete_link.PHP_EOL.'</li>'
+                                                        $edit_link.PHP_EOL.$delete_link.PHP_EOL.'</li>',
                                                     ],
                                                     $enreg
                                                 );

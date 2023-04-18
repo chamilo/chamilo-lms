@@ -1,6 +1,7 @@
 <template>
   <component
     :is="layout"
+    v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
     <Toast
@@ -194,4 +195,9 @@ axios.interceptors.response.use(
     throw error;
   })
 );
+
+import {usePlatformConfig} from './store/platformConfig';
+
+const platformConfigurationStore = usePlatformConfig();
+platformConfigurationStore.initialize();
 </script>

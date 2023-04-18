@@ -35,7 +35,8 @@ $tool = TOOL_NOTEBOOK;
 // Tracking
 Event::event_access_tool(TOOL_NOTEBOOK);
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$currentUserId = api_get_user_id();
+$action = $_GET['action'] ?? '';
 
 $logInfo = [
     'tool' => TOOL_NOTEBOOK,
@@ -137,6 +138,15 @@ if ($action === 'addnote') {
         exit;
     }
 
+    // Setting the defaults
+    $defaults = NotebookManager::get_note_information((int) $_GET['notebook_id']);
+
+    if ($currentUserId !== (int) $defaults['user_id']) {
+        echo Display::return_message(get_lang('NotAllowed'), 'error');
+        Display::display_footer();
+        exit();
+    }
+
     // Initialize the object
     $form = new FormValidator(
         'note',
@@ -159,8 +169,6 @@ if ($action === 'addnote') {
     );
     $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
-    // Setting the defaults
-    $defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));
     $form->setDefaults($defaults);
 
     // Setting the rules

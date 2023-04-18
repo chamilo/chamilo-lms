@@ -117,6 +117,7 @@ class NotebookManager
         $notebook_id = (int) $notebook_id;
 
         $sql = "SELECT
+                user_id,
                 notebook_id 		AS notebook_id,
                 title				AS note_title,
                 description 		AS note_comment,

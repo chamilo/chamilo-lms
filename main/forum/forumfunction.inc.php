@@ -3200,7 +3200,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
-    $form->applyFilter('post_title', 'post_filter');
+    $form->applyFilter('post_title', 'html_filter');
     $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),

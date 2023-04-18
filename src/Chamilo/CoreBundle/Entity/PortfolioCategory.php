@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity()
+ * @ORM\Entity()
  */
 class PortfolioCategory
 {
@@ -65,7 +65,7 @@ class PortfolioCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @ORM\Column(name="parent_id", type="integer", nullable=false, options={"default": 0})
      */
     protected $parentId = 0;
 

@@ -118,8 +118,8 @@ const items = ref([
     visible: isAdmin,
     items: [
       {
-        label: t('Administration'),
-        url: '/main/admin/index.php',
+        label: t("Administration"),
+        to: "admin",
       },
       {
         label: t('Users'),

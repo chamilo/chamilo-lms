@@ -75,6 +75,7 @@ class NotebookManager
         }
 
         return [
+            'user_id' => $note->getUser()->getId(),
             'notebook_id' => $note->getIid(),
             'note_title'  => $note->getTitle(),
             'note_comment'=> $note->getDescription(),

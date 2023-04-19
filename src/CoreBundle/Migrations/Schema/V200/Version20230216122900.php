@@ -342,7 +342,8 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 ;
                 $count = $result->fetchNumeric()[0];
                 if (empty($count)) {
-                    $selectedValue = $this->getConfigurationValue($variable);
+                    $settingValue = $this->getConfigurationValue($variable);
+                    $selectedValue = (true === $settingValue ? 'true' : 'false');
                     $this->addSql(
                         "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
                     );

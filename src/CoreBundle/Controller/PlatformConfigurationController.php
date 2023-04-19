@@ -62,7 +62,7 @@ class PlatformConfigurationController extends AbstractController
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
 
             if (!empty($user)) {
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject($user, 1);
+                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
 
                 if ($userIsAllowedInProject
                     && 'true' === $settingsManager->getSetting('display.show_link_ticket_notification')

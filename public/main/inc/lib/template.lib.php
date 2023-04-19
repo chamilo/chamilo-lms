@@ -992,7 +992,7 @@ class Template
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
 
-            $allow = TicketManager::userIsAllowInProject(api_get_user_entity(), $defaultProjectId);
+            $allow = TicketManager::userIsAllowInProject($defaultProjectId);
 
             if ($allow) {
                 $rightFloatMenu .= '<div class="help">

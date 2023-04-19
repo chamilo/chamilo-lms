@@ -863,7 +863,7 @@ class TicketManager
         ";
 
         $projectId = (int) $_GET['project_id'];
-        $userIsAllowInProject = self::userIsAllowInProject(api_get_user_entity($userId), $projectId);
+        $userIsAllowInProject = self::userIsAllowInProject($projectId);
 
         // Check if a role was set to the project
         if (false == $userIsAllowInProject) {
@@ -1059,7 +1059,7 @@ class TicketManager
 
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            $allowed = self::userIsAllowInProject(api_get_user_entity(), $projectId);
+            $allowed = self::userIsAllowInProject($projectId);
             if (!$allowed) {
                 $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
             }
@@ -2422,12 +2422,11 @@ class TicketManager
         }
     }
 
-    /**
-     * @param int   $projectId
-     */
-    public static function userIsAllowInProject(User $user, $projectId): bool
+    public static function userIsAllowInProject(int $projectId): bool
     {
-        if ($user->hasRole('ROLE_ADMIN')) {
+        $authorizationChecked = Container::getAuthorizationChecker();
+
+        if ($authorizationChecked->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
@@ -2435,10 +2434,10 @@ class TicketManager
 
         // Check if a role was set to the project.
         // Project 1 is considered the default and is accessible to all users
-        if (!empty($allowRoleList) && is_array($allowRoleList)) {
+        if (!empty($allowRoleList)) {
             $result = false;
             foreach ($allowRoleList as $role) {
-                if ($user->hasRole($role)) {
+                if ($authorizationChecked->isGranted($role)) {
                     $result = true;
                     break;
                 }

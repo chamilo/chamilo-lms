@@ -1312,7 +1312,7 @@ class UserGroupModel extends Model
      */
     public function allowTeachers()
     {
-        return true === api_get_configuration_value('allow_teachers_to_classes');
+        return 'true' === api_get_setting('profile.allow_teachers_to_classes');
     }
 
     /**

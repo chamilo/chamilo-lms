@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class ForumSettingsSchema extends AbstractSettingsSchema
@@ -20,6 +21,10 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                 [
                     'default_forum_view' => 'flat',
                     'display_groups_forum_in_general_tool' => 'true',
+                    'global_forums_course_id' => '0',
+                    'hide_forum_post_revision_language' => 'false',
+                    'allow_forum_post_revisions' => 'false',
+                    'forum_fold_categories' => 'false',
                 ]
             )
         ;
@@ -45,6 +50,10 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('display_groups_forum_in_general_tool', YesNoType::class)
+            ->add('global_forums_course_id', TextType::class)
+            ->add('hide_forum_post_revision_language', YesNoType::class)
+            ->add('allow_forum_post_revisions', YesNoType::class)
+            ->add('forum_fold_categories', YesNoType::class)
         ;
     }
 }

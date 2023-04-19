@@ -23,7 +23,7 @@ $action_todo = false;
 
 api_protect_admin_script(true);
 
-$allowCareers = api_get_configuration_value('allow_careers_in_global_announcements');
+$allowCareers = ('true' === api_get_setting('announcement.allow_careers_in_global_announcements'));
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = [

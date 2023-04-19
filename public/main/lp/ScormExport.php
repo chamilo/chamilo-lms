@@ -776,7 +776,7 @@ class ScormExport
         $root->appendChild($resources);
         $xmldoc->appendChild($root);
 
-        $copyAll = api_get_configuration_value('add_all_files_in_lp_export');
+        $copyAll = ('true' === api_get_setting('lp.add_all_files_in_lp_export'));
 
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138

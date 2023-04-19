@@ -87,7 +87,7 @@ $form->addButtonSearch(get_lang('Search'));
 Display::display_header($nameTools);
 $form->display();
 
-$extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+$extraFields = api_get_setting('exercise.exercise_category_report_user_extra_fields', true);
 
 if ($form->validate() && !empty($courseInfo)) {
     $values = $form->getSubmitValues();

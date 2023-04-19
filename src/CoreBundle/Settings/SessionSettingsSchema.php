@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Settings;
 
+use _PHPStan_119facc64\Nette\Utils\ArrayHash;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -45,6 +49,28 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_admins_edit_courses_content' => 'false',
                     'allow_session_admin_login_as_teacher' => 'false',
                     'allow_search_diagnostic' => 'false',
+                    'allow_redirect_to_session_after_inscription_about' => 'false',
+                    'session_list_show_count_users' => 'false',
+                    'session_admins_access_all_content' => 'false',
+                    'limit_session_admin_list_users' => 'false',
+                    'hide_search_form_in_session_list' => 'false',
+                    'allow_delete_user_for_session_admin' => 'false',
+                    'allow_disable_user_for_session_admin' => 'false',
+                    'session_multiple_subscription_students_list_avoid_emptying' => 'false',
+                    'hide_reporting_session_list' => 'false',
+                    'allow_session_admin_read_careers' => 'false',
+                    'session_list_order' => 'false',
+                    'allow_user_session_collapsable' => 'false',
+                    'catalog_course_subscription_in_user_s_session' => 'false',
+                    'default_session_list_view' => 'all',
+                    'session_automatic_creation_user_id' => '1',
+                    'user_s_session_duration' => '1095',
+                    'my_courses_session_order' => '',
+                    'session_courses_read_only_mode' => 'false',
+                    'session_import_settings' => '',
+                    'catalog_settings' => '',
+                    'allow_session_status' => 'false',
+                    'tracking_columns' => '',
                 ]
             )
         ;
@@ -99,6 +125,156 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_admins_edit_courses_content', YesNoType::class)
             ->add('allow_session_admin_login_as_teacher', YesNoType::class)
             ->add('allow_search_diagnostic', YesNoType::class)
+            ->add('allow_redirect_to_session_after_inscription_about', YesNoType::class)
+            ->add('session_list_show_count_users', YesNoType::class)
+            ->add('session_admins_access_all_content', YesNoType::class)
+            ->add('limit_session_admin_list_users', YesNoType::class)
+            ->add('hide_search_form_in_session_list', YesNoType::class)
+            ->add('allow_delete_user_for_session_admin', YesNoType::class)
+            ->add('allow_disable_user_for_session_admin', YesNoType::class)
+            ->add('session_multiple_subscription_students_list_avoid_emptying', YesNoType::class)
+            ->add('hide_reporting_session_list', YesNoType::class)
+            ->add('allow_session_admin_read_careers', YesNoType::class)
+            ->add('session_list_order', YesNoType::class)
+            ->add('allow_user_session_collapsable', YesNoType::class)
+            ->add('catalog_course_subscription_in_user_s_session', YesNoType::class)
+            ->add(
+                    'default_session_list_view',
+                    ChoiceType::class,
+                    [
+                        'choices' => [
+                            'All' => 'all',
+                            'Close' => 'close',
+                            'Active' => 'active',
+                            'Custom' => 'custom',
+                        ],
+                    ]
+            )
+            ->add('session_automatic_creation_user_id', TextType::class)
+            ->add('user_s_session_duration', TextType::class)
+            ->add(
+                'my_courses_session_order',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('My courses session order. Possible field values: "start_date", "end_date", "name" Order values: "asc" or "desc"').
+                        $this->settingArrayHelpValue('my_courses_session_order'),
+                ]
+            )
+            ->add('session_courses_read_only_mode', YesNoType::class)
+            ->add(
+                'session_import_settings',
+                TextareaType::class,
+                [
+                'help_html' => true,
+                    'help' => get_lang('This option sets default parameters in the main/session/session_import.php').
+                        $this->settingArrayHelpValue('session_import_settings'),
+                ]
+            )
+            ->add(
+                'catalog_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Catalog search settings visibility').
+                        $this->settingArrayHelpValue('catalog_settings'),
+                ]
+            )
+            ->add('allow_session_status', YesNoType::class)
+            ->add(
+                'tracking_columns',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Customize course session tracking columns').
+                        $this->settingArrayHelpValue('tracking_columns'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'my_courses_session_order' =>
+                '<pre>
+                ["field" => "end_date", "order" => "desc"]
+                </pre>',
+            'session_import_settings' =>
+                "<pre>
+                [
+                    'options' =>  [
+                        'session_exists_default_option' => '1',
+                        'send_mail_default_option' => '1',
+                    ]
+                ]
+                </pre>",
+            'catalog_settings' =>
+                "<pre>
+                [
+                    'sessions' => [
+                        'by_title' => true,
+                        'by_date' => true,
+                        'by_tag' => true,
+                        'show_session_info' => true,
+                        'show_session_date' => true,
+                    ],
+                    'courses' => [
+                        'by_title' => true,
+                    ],
+                ]
+                </pre>",
+            'tracking_columns' =>
+                "<pre>
+                [
+                    'course_session' => [
+                        'course_title' => true,
+                        'published_exercises' => true,
+                        'new_exercises' => true,
+                        'my_average' => true,
+                        'average_exercise_result' => true,
+                        'time_spent' => true,
+                        'lp_progress' => true,
+                        'score' => true,
+                        'best_score' => true,
+                        'last_connection' => true,
+                        'details' => true,
+                    ],
+                    'my_students_lp' => [
+                        'lp' => true,
+                        'time' => true,
+                        'best_score' => true,
+                        'latest_attempt_avg_score' => true,
+                        'progress' => true,
+                        'last_connection' => true,
+                    ],
+                    'my_progress_lp' => [
+                        'lp' => true,
+                        'time' => true,
+                        'progress' => true,
+                        'score' => true,
+                        'best_score' => true,
+                        'last_connection' => true,
+                    ],
+                    'my_progress_courses' => [
+                        'course_title' => true,
+                        'time_spent' => true,
+                        'progress' => true,
+                        'best_score_in_lp' => true,
+                        'best_score_not_in_lp' => true,
+                        'latest_login' => true,
+                        'details' => true
+                    ]
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

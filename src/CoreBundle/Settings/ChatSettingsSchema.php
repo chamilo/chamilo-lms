@@ -19,6 +19,8 @@ class ChatSettingsSchema extends AbstractSettingsSchema
                 [
                     'show_chat_folder' => 'true',
                     'allow_global_chat' => 'true',
+                    'hide_chat_video' => 'false',
+                    'course_chat_restrict_to_coach' => 'false',
                 ]
             )
         ;
@@ -33,6 +35,8 @@ class ChatSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('allow_global_chat', YesNoType::class)
             ->add('show_chat_folder', YesNoType::class)
+            ->add('hide_chat_video', YesNoType::class)
+            ->add('course_chat_restrict_to_coach', YesNoType::class)
         ;
     }
 }

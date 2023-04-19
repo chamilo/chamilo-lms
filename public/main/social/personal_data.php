@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_set_more_memory_and_time_limits();
 api_block_anonymous_users();
 
-if (api_get_configuration_value('disable_gdpr')) {
+if ('true' === api_get_setting('profile.disable_gdpr')) {
     api_not_allowed(true);
 }
 
@@ -415,9 +415,9 @@ $treatmentTypes = LegalManager::getTreatmentTypeList();
     $personalData['treatment'][$item]['content'] = $legalTermContent;
 }*/
 
-$officerName = api_get_configuration_value('data_protection_officer_name');
-$officerRole = api_get_configuration_value('data_protection_officer_role');
-$officerEmail = api_get_configuration_value('data_protection_officer_email');
+$officerName = api_get_setting('profile.data_protection_officer_name');
+$officerRole = api_get_setting('profile.data_protection_officer_role');
+$officerEmail = api_get_setting('profile.data_protection_officer_email');
 if (!empty($officerName)) {
     $personalData['officer_name'] = $officerName;
     $personalData['officer_role'] = $officerRole;

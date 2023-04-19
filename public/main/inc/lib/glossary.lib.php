@@ -128,7 +128,7 @@ class GlossaryManager
         $glossaryName = trim($glossaryName);
         $parsed = $glossaryName;
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $parsed = api_htmlentities($parsed);
             $parsed = "%$parsed%";
         }
@@ -444,7 +444,7 @@ class GlossaryManager
     {
         $view = Session::read('glossary_view', '');
         if (empty($view)) {
-            $defaultView = api_get_configuration_value('default_glossary_view');
+            $defaultView = api_get_setting('glossary.default_glossary_view');
             if (empty($defaultView)) {
                 $defaultView = 'table';
             }
@@ -1029,7 +1029,7 @@ class GlossaryManager
         //usort($data, 'sorter');
         $list = [];
         $list[] = ['term', 'definition'];
-        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
+        $allowStrip = ('true' === api_get_setting('glossary.allow_remove_tags_in_glossary_export'));
         foreach ($data as $line) {
             $definition = $line[1];
             if ($allowStrip) {

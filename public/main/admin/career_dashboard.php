@@ -8,7 +8,7 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+$allowCareer = ('true' === api_get_setting('session.allow_session_admin_read_careers'));
 
 api_protect_admin_script($allowCareer);
 

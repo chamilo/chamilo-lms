@@ -74,7 +74,7 @@ $form = new FormValidator(
 $form->addHeader(get_lang('Edit'));
 
 // Title
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor(
         'lp_name',
         get_lang('Learning path name'),
@@ -252,7 +252,7 @@ $form->addElement(
     get_lang('Accumulate SCORM session time')
 );
 
-$scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+$scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
 $countItems = $learnPath->get_total_items_count();
 $lpType = $learnPath->get_type();
 // This option is only usable for SCORM, if there is only 1 item, otherwise

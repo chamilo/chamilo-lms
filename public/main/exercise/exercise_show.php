@@ -136,7 +136,7 @@ if (!$is_allowedToEdit) {
 }
 
 $allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
-$allowTeacherCommentAudio = true === api_get_configuration_value('allow_teacher_comment_audio');
+$allowTeacherCommentAudio = ('true' === api_get_setting('exercise.allow_teacher_comment_audio'));
 
 //$js = '<script>'.api_get_language_translate_html().'</script>';
 //$htmlHeadXtra[] = $js;
@@ -325,7 +325,7 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
         $track_exercise_info,
         false,
         false,
-        api_get_configuration_value('quiz_results_answers_report')
+        ('true' === api_get_setting('exercise.quiz_results_answers_report'))
     );
 }
 
@@ -689,7 +689,7 @@ foreach ($questionList as $questionId) {
 
                 echo '<div id="'.$marksname.'" class="hidden">';
 
-                $allowDecimalScore = api_get_configuration_value('quiz_open_question_decimal_score');
+                $allowDecimalScore = ('true' === api_get_setting('exercise.quiz_open_question_decimal_score'));
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
                 $formMark->addHeader(get_lang('Assign a grade'));
                 $model = ExerciseLib::getCourseScoreModel();

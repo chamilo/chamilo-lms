@@ -134,7 +134,7 @@ if ('add' === $action || 'edit' === $action) {
     $form->addHidden('formSent', 1);
     $form->addElement('text', 'code', get_lang('Category code'));
 
-    if (api_get_configuration_value('save_titles_as_html')) {
+    if ('true' === api_get_setting('editor.save_titles_as_html')) {
         $form->addHtmlEditor(
             'name',
             get_lang('Category name'),

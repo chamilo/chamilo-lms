@@ -9,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_configuration_value('block_my_progress_page')) {
+if (('true' === api_get_setting('platform.block_my_progress_page'))) {
     api_not_allowed(true);
 }
 
@@ -101,8 +101,8 @@ if (!empty($dates)) {
 }
 */
 
-if (api_get_configuration_value('private_messages_about_user_visible_to_user')) {
-    $allowMessages = api_get_configuration_value('private_messages_about_user');
+if ('true' === api_get_setting('message.private_messages_about_user_visible_to_user')) {
+    $allowMessages = ('true' === api_get_setting('message.private_messages_about_user'));
     if ($allowMessages) {
         // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
@@ -115,7 +115,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('No data available'), 'warning');
 }
 
-$show = api_get_configuration_value('allow_career_users');
+$show = ('true' === api_get_setting('profile.allow_career_users'));
 
 if ($show) {
     $careers = UserManager::getUserCareers($user_id);

@@ -58,7 +58,7 @@ if (!SkillModel::isToolAvailable()) {
     api_not_allowed(true);
 }
 
-$showLevels = false === api_get_configuration_value('hide_skill_levels');
+$showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
 $skillInfo = [
     'id' => $skill->getId(),

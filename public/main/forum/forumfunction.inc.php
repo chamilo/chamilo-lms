@@ -2066,7 +2066,7 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
     }
 
     if ($giveRevision) {
-        $hide = api_get_configuration_value('hide_forum_post_revision_language');
+        $hide = ('true' === api_get_setting('forum.hide_forum_post_revision_language'));
         $form->addHidden('give_revision', 1);
         if (false === $hide) {
             $extraField = new ExtraField('forum_post');
@@ -2355,7 +2355,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
     $form->addFile('user_upload', get_lang('Attachment'));
 
     if ($giveRevision) {
-        $hide = api_get_configuration_value('hide_forum_post_revision_language');
+        $hide = ('true' === api_get_setting('forum.hide_forum_post_revision_language'));
         $form->addHidden('give_revision', 1);
         if (false === $hide) {
             $extraField = new ExtraField('forum_post');
@@ -3431,7 +3431,7 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
     $email_body .= get_lang('New Post in the forum').
         ': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
 
-    $courseId = api_get_configuration_value('global_forums_course_id');
+    $courseId = (int) api_get_setting('forum.global_forums_course_id');
     $subject = get_lang('New Post in the forum').' - '.
         $_course['official_code'].': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
 
@@ -5346,7 +5346,7 @@ function postNeedsRevision(CForumPost $post): bool
  */
 function getAskRevisionButton(CForumPost $post, CForumThread $threadInfo): string
 {
-    if (false === api_get_configuration_value('allow_forum_post_revisions')) {
+    if ('false' === api_get_setting('forum.allow_forum_post_revisions')) {
         return '';
     }
 
@@ -5450,7 +5450,7 @@ function getReportRecipients()
 
                     break;
                 case 'community_managers':
-                    $managers = api_get_configuration_value('community_managers_user_list');
+                    $managers = api_get_setting('profile.community_managers_user_list', true);
                     if (!empty($managers) && isset($managers['users'])) {
                         $users = array_merge($users, $managers['users']);
                     }

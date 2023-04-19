@@ -227,7 +227,7 @@ class ResultTable extends SortableTable
     private function build_edit_column($item)
     {
         $locked_status = $this->evaluation->get_locked();
-        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
         $editColumn = '';
         if (api_is_allowed_to_edit(null, true) && 0 == $locked_status) {

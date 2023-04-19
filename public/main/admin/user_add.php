@@ -296,7 +296,7 @@ $returnParams = $extraField->addElements(
     true
 );
 
-$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+$allowEmailTemplate = ('true' === api_get_setting('mail.mail_template_system'));
 if ($allowEmailTemplate) {
     $form->addEmailTemplate(
         [

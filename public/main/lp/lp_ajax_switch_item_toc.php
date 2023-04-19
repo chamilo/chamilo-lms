@@ -152,7 +152,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         "update_toc('$lessonStatus','".$newItemId."');";
 
     $progressBarSpecial = false;
-    $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+    $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
     if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {

@@ -5,7 +5,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$isAllowed = api_get_configuration_value('show_link_request_hrm_user') && api_is_drh();
+$isAllowed = ('true' === api_get_setting('admin.show_link_request_hrm_user') && api_is_drh());
 
 if (!$isAllowed) {
     api_not_allowed(true);

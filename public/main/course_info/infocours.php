@@ -691,7 +691,7 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-if (api_get_configuration_value('allow_exercise_auto_launch')) {
+if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
     $globalGroup = [];
 
     // Auto launch exercise

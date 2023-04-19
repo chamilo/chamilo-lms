@@ -52,7 +52,7 @@ if (isset($_GET['selecteval'])) {
     $iscourse = !empty(api_get_course_id());
 }
 
-$allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+$allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {

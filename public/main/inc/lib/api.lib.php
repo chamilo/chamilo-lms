@@ -889,7 +889,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     // Session admin has access to course
-    $sessionAccess = api_get_configuration_value('session_admins_access_all_content');
+    $sessionAccess = ('true' === api_get_setting('session.session_admins_access_all_content'));
     if ($sessionAccess) {
         $allow_session_admins = true;
     }
@@ -1051,7 +1051,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 function api_block_inactive_user()
 {
     $data = true;
-    if (1 != api_get_configuration_value('security_block_inactive_users_immediately')) {
+    if ('true' !== api_get_setting('security.security_block_inactive_users_immediately')) {
         return $data;
     }
 
@@ -1903,7 +1903,7 @@ function api_get_anonymous_id()
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
     $ip = Database::escape_string(api_get_real_ip());
-    $max = (int) api_get_configuration_value('max_anonymous_users');
+    $max = (int) api_get_setting('admin.max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
@@ -2230,7 +2230,7 @@ function api_generate_password($length = 8)
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = api_get_configuration_value('password_requirements');
+    $passwordRequirements = api_get_setting('security.password_requirements', true);
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
@@ -2595,7 +2595,7 @@ function api_get_session_condition(
  *
  * @return string|array
  */
-function api_get_setting($variable)
+function api_get_setting($variable, $isArray = false)
 {
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
@@ -2631,7 +2631,15 @@ function api_get_setting($variable)
             return $newResult;
             break;
         default:
-            return $settingsManager->getSetting($variable);
+            $settingValue = $settingsManager->getSetting($variable);
+            if ($isArray && !empty($settingValue)) {
+                $strArrayValue = rtrim($settingValue, ';');
+                $value = eval("return $strArrayValue;");
+                if (is_array($value)) {
+                    return $value;
+                }
+            }
+            return $settingValue;
             break;
     }
 }
@@ -3237,7 +3245,7 @@ function api_is_allowed_to_edit(
 
     $sessionId = api_get_session_id();
 
-    if ($sessionId && api_get_configuration_value('session_courses_read_only_mode')) {
+    if ($sessionId && 'true' === api_get_setting('session.session_courses_read_only_mode')) {
         $efv = new ExtraFieldValue('course');
         $lockExrafieldField = $efv->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
@@ -3449,7 +3457,7 @@ function api_not_allowed(
  */
 function languageToCountryIsoCode($languageIsoCode)
 {
-    $allow = api_get_configuration_value('language_flags_by_country');
+    $allow = ('true' === api_get_setting('language.language_flags_by_country'));
 
     // @todo save in DB
     switch ($languageIsoCode) {
@@ -6615,7 +6623,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
 
     $loginAsStatusForSessionAdmins = [STUDENT];
 
-    if (api_get_setting('session.allow_session_admin_login_as_teacher')) {
+    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
@@ -7027,7 +7035,7 @@ function api_mail_html(
         $message = new TemplatedEmail();
         $message->subject($subject);
 
-        $list = api_get_configuration_value('send_all_emails_to');
+        $list = api_get_setting('announcement.send_all_emails_to', true);
         if (!empty($list) && isset($list['emails'])) {
             foreach ($list['emails'] as $email) {
                 $message->cc($email);
@@ -7050,8 +7058,8 @@ function api_mail_html(
         }
 
         $params = [
-            'mail_header_style' => api_get_configuration_value('mail_header_style'),
-            'mail_content_style' => api_get_configuration_value('mail_content_style'),
+            'mail_header_style' => api_get_setting('mail.mail_header_style'),
+            'mail_content_style' => api_get_setting('mail.mail_content_style'),
             'link' => $additionalParameters['link'] ?? '',
             'automatic_email_text' => $automaticEmailText,
             'content' => $body,
@@ -7202,7 +7210,7 @@ function api_protect_limit_for_session_admin()
  */
 function api_protect_session_admin_list_users()
 {
-    $limitAdmin = api_get_configuration_value('limit_session_admin_list_users');
+    $limitAdmin = ('true' === api_get_setting('session.limit_session_admin_list_users'));
 
     if (api_is_session_admin() && true === $limitAdmin) {
         api_not_allowed(true);

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AgendaSettingsSchema extends AbstractSettingsSchema
@@ -25,6 +26,11 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     //'number_of_upcoming_events' => '0',
                     'default_calendar_view' => 'month',
                     'personal_calendar_show_sessions_occupation' => 'false',
+                    'personal_agenda_show_all_session_events' => 'false',
+                    'allow_agenda_edit_for_hrm' => 'false',
+                    'agenda_legend' => '',
+                    'agenda_colors' => '',
+                    'agenda_on_hover_info' => '',
                 ]
             )
         ;
@@ -57,6 +63,77 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('personal_calendar_show_sessions_occupation', YesNoType::class)
+            ->add('personal_agenda_show_all_session_events', YesNoType::class)
+            ->add('allow_agenda_edit_for_hrm', YesNoType::class)
+            ->add(
+                'agenda_legend',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Agenda legend options').
+                        $this->settingArrayHelpValue('agenda_legend'),
+                ]
+            )
+            ->add(
+                'agenda_colors',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Set customs colors to agenda events').
+                        $this->settingArrayHelpValue('agenda_colors'),
+                ]
+            )
+            ->add(
+                'agenda_on_hover_info',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Customize on hover agenda view. Show agenda comment and/or description').
+                        $this->settingArrayHelpValue('agenda_on_hover_info'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'agenda_legend' =>
+                "<pre>
+                [
+                    'red' => 'red caption',
+                    '#f0f' => 'another caption'
+                ]
+                </pre>",
+            'agenda_colors' =>
+                "<pre>
+                [
+                    'platform' => 'red',
+                    'course' => '#458B00',
+                    'group' => '#A0522D',
+                    'session' => '#00496D',
+                    'other_session' => '#999',
+                    'personal' => 'steel blue',
+                    'student_publication' => '#FF8C00'
+                ]
+                </pre>",
+            'agenda_on_hover_info' =>
+                "<pre>
+                [
+                    'options' => [
+                        'comment' => true,
+                        'description' => true,
+                    ]
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

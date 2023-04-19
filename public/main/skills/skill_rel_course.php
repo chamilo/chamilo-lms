@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\SkillRelCourse;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false == api_get_configuration_value('allow_skill_rel_items')) {
+if ('true' !== api_get_setting('skill.allow_skill_rel_items')) {
     api_not_allowed(true);
 }
 

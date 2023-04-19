@@ -6,11 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Settings;
 
-use _PHPStan_119facc64\Nette\Utils\ArrayHash;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -139,16 +137,16 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('allow_user_session_collapsable', YesNoType::class)
             ->add('catalog_course_subscription_in_user_s_session', YesNoType::class)
             ->add(
-                    'default_session_list_view',
-                    ChoiceType::class,
-                    [
-                        'choices' => [
-                            'All' => 'all',
-                            'Close' => 'close',
-                            'Active' => 'active',
-                            'Custom' => 'custom',
-                        ],
-                    ]
+                'default_session_list_view',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'All' => 'all',
+                        'Close' => 'close',
+                        'Active' => 'active',
+                        'Custom' => 'custom',
+                    ],
+                ]
             )
             ->add('session_automatic_creation_user_id', TextType::class)
             ->add('user_s_session_duration', TextType::class)
@@ -166,7 +164,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 'session_import_settings',
                 TextareaType::class,
                 [
-                'help_html' => true,
+                    'help_html' => true,
                     'help' => get_lang('This option sets default parameters in the main/session/session_import.php').
                         $this->settingArrayHelpValue('session_import_settings'),
                 ]
@@ -186,7 +184,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Customize course session tracking columns').
+                    'help' => get_lang('Customize course session tracking columns').
                         $this->settingArrayHelpValue('tracking_columns'),
                 ]
             )
@@ -196,12 +194,10 @@ class SessionSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'my_courses_session_order' =>
-                '<pre>
+            'my_courses_session_order' => '<pre>
                 ["field" => "end_date", "order" => "desc"]
                 </pre>',
-            'session_import_settings' =>
-                "<pre>
+            'session_import_settings' => "<pre>
                 [
                     'options' =>  [
                         'session_exists_default_option' => '1',
@@ -209,8 +205,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                 </pre>",
-            'catalog_settings' =>
-                "<pre>
+            'catalog_settings' => "<pre>
                 [
                     'sessions' => [
                         'by_title' => true,
@@ -224,8 +219,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
                 </pre>",
-            'tracking_columns' =>
-                "<pre>
+            'tracking_columns' => "<pre>
                 [
                     'course_session' => [
                         'course_title' => true,
@@ -272,7 +266,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

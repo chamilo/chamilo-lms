@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -137,7 +136,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow add additional actions (as links) in exercises list for teachers').
+                    'help' => get_lang('Allow add additional actions (as links) in exercises list for teachers').
                         $this->settingArrayHelpValue('exercise_additional_teacher_modify_actions'),
                 ]
             )
@@ -149,7 +148,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Zoom in description images quiz').
+                    'help' => get_lang('Zoom in description images quiz').
                         $this->settingArrayHelpValue('quiz_image_zoom'),
                 ]
             )
@@ -160,7 +159,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Shows the best exercise score attempt for a student in the reports').
+                    'help' => get_lang('Shows the best exercise score attempt for a student in the reports').
                         $this->settingArrayHelpValue('add_exercise_best_attempt_in_report'),
                 ]
             )
@@ -169,7 +168,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Add user extra fields in report: main/mySpace/exercise_category_report.php').
+                    'help' => get_lang('Add user extra fields in report: main/mySpace/exercise_category_report.php').
                         $this->settingArrayHelpValue('exercise_category_report_user_extra_fields'),
                 ]
             )
@@ -178,7 +177,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow to convert a score into a text/color label using a model if score is inside those values. See BT#12898').
+                    'help' => get_lang('Allow to convert a score into a text/color label using a model if score is inside those values. See BT#12898').
                         $this->settingArrayHelpValue('score_grade_model'),
                 ]
             )
@@ -190,12 +189,10 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'exercise_additional_teacher_modify_actions' =>
-                "<pre>
+            'exercise_additional_teacher_modify_actions' => "<pre>
                     ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
                 </pre>",
-            'quiz_image_zoom' =>
-                "<pre>
+            'quiz_image_zoom' => "<pre>
                     [
                         'options' => [
                               'zoomWindowWidth' => 400,
@@ -203,20 +200,17 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                          ]
                      ]
                 </pre>",
-            'add_exercise_best_attempt_in_report' =>
-                "<pre>
+            'add_exercise_best_attempt_in_report' => "<pre>
                     [
                         'courses' => [
                             'ABC' => [88, 89], // Where ABC is the course code and 88 is the exercise id
                         ]
                     ]
                 </pre>",
-            'exercise_category_report_user_extra_fields' =>
-                "<pre>
+            'exercise_category_report_user_extra_fields' => "<pre>
                     ['fields' => ['skype', 'rssfeeds']]
                 </pre>",
-            'score_grade_model' =>
-                "<pre>
+            'score_grade_model' => "<pre>
                     [
                         'models' => [
                             [
@@ -261,7 +255,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

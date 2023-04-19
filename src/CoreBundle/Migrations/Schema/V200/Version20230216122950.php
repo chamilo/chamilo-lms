@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -42,7 +43,6 @@ final class Version20230216122950 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-
         if ($schema->hasTable('notification_event')) {
             $this->addSql(
                 'DROP TABLE notification_event'
@@ -67,6 +67,5 @@ final class Version20230216122950 extends AbstractMigrationChamilo
         if ($table->hasColumn('mandatory')) {
             $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP mandatory');
         }
-
     }
 }

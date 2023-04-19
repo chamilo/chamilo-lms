@@ -21,7 +21,6 @@ class PlatformConfigurationController extends AbstractController
     {
         $configuration = [
             'settings' => [],
-
         ];
         $variables = [];
 

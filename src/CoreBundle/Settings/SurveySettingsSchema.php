@@ -72,7 +72,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Hide survey edition tools for all or some surveys. Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked').
+                    'help' => get_lang('Hide survey edition tools for all or some surveys. Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked').
                         $this->settingArrayHelpValue('hide_survey_edition'),
                 ]
             )
@@ -81,7 +81,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow add additional actions (as links) in survey list for teachers').
+                    'help' => get_lang('Allow add additional actions (as links) in survey list for teachers').
                         $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
                 ]
             )
@@ -91,12 +91,10 @@ class SurveySettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'hide_survey_edition' =>
-                "<pre>
+            'hide_survey_edition' => "<pre>
                 ['codes' => []]
                 </pre>",
-            'survey_additional_teacher_modify_actions' =>
-                "<pre>
+            'survey_additional_teacher_modify_actions' => "<pre>
                     ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
                 </pre>",
         ];
@@ -104,7 +102,6 @@ class SurveySettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

@@ -143,7 +143,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Customize password generation and verification').
+                    'help' => get_lang('Customize password generation and verification').
                         $this->settingArrayHelpValue('password_requirements'),
                 ]
             )
@@ -152,7 +152,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow online users by user profile 1 = COURSEMANAGER (teacher) 5 = STUDENT 11 = PLATFORM_ADMIN Example: The online users will be available only for teachers and students').
+                    'help' => get_lang('Allow online users by user profile 1 = COURSEMANAGER (teacher) 5 = STUDENT 11 = PLATFORM_ADMIN Example: The online users will be available only for teachers and students').
                         $this->settingArrayHelpValue('allow_online_users_by_status'),
                 ]
             )
@@ -162,8 +162,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'password_requirements' =>
-                "<pre>
+            'password_requirements' => "<pre>
                 [
                     'min' => [
                         'lowercase' => 2,
@@ -173,8 +172,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                </pre>",
-            'allow_online_users_by_status' =>
-                "<pre>
+            'allow_online_users_by_status' => "<pre>
                 ['status' =>  [1, 5]]
                 </pre>",
         ];
@@ -182,7 +180,6 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

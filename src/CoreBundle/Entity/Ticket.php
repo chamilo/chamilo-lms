@@ -251,17 +251,11 @@ class Ticket
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getExerciseId(): int
     {
         return $this->exerciseId;
     }
 
-    /**
-     * @param int $exerciseId
-     */
     public function setExerciseId(int $exerciseId): self
     {
         $this->exerciseId = $exerciseId;
@@ -269,17 +263,11 @@ class Ticket
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLpId(): int
     {
         return $this->lpId;
     }
 
-    /**
-     * @param int $lpId
-     */
     public function setLpId(int $lpId): self
     {
         $this->lpId = $lpId;

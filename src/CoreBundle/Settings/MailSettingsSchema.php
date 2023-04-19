@@ -62,7 +62,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php').
+                    'help' => get_lang('E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php').
                         $this->settingArrayHelpValue('cron_notification_mails'),
                 ]
             )
@@ -71,7 +71,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Help desk emails that will recieve email notifications in import_csv.php').
+                    'help' => get_lang('Help desk emails that will recieve email notifications in import_csv.php').
                         $this->settingArrayHelpValue('cron_notification_help_desk'),
                 ]
             )
@@ -82,12 +82,10 @@ class MailSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'cron_notification_mails' =>
-                "<pre>
+            'cron_notification_mails' => "<pre>
                 ['email@example.com', 'email2@example.com']
                 </pre>",
-            'cron_notification_help_desk' =>
-                "<pre>
+            'cron_notification_help_desk' => "<pre>
                     ['email@example.com', 'email2@example.com']
                 </pre>",
         ];
@@ -95,7 +93,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

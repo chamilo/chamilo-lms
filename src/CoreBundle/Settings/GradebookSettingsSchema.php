@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -126,7 +125,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Courses id list to check in the gradebook sidebar see BT#13099').
+                    'help' => get_lang('Courses id list to check in the gradebook sidebar see BT#13099').
                         $this->settingArrayHelpValue('gradebook_dependency_mandatory_courses'),
                 ]
             )
@@ -135,7 +134,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Gradebook id list needed to build the gradebook sidebar see BT#13099').
+                    'help' => get_lang('Gradebook id list needed to build the gradebook sidebar see BT#13099').
                         $this->settingArrayHelpValue('gradebook_badge_sidebar'),
                 ]
             )
@@ -146,7 +145,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow add one column by each user extra field indicated to the Gradebook Flatview for each user').
+                    'help' => get_lang('Allow add one column by each user extra field indicated to the Gradebook Flatview for each user').
                         $this->settingArrayHelpValue('gradebook_flatview_extrafields_columns'),
                 ]
             )
@@ -155,7 +154,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Gradebook student pdf export settings').
+                    'help' => get_lang('Gradebook student pdf export settings').
                         $this->settingArrayHelpValue('gradebook_pdf_export_settings'),
                 ]
             )
@@ -166,24 +165,20 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'gradebook_dependency_mandatory_courses' =>
-                "<pre>
+            'gradebook_dependency_mandatory_courses' => "<pre>
                 [
                     'courses' => [1, 2]
                 ]
                 </pre>",
-            'gradebook_badge_sidebar' =>
-                "<pre>
+            'gradebook_badge_sidebar' => "<pre>
                 [
                     'gradebooks' => [1, 2, 3]
                 ]
                 </pre>",
-            'gradebook_flatview_extrafields_columns' =>
-                "<pre>
+            'gradebook_flatview_extrafields_columns' => "<pre>
                 ['variables' => []]
                 </pre>",
-            'gradebook_pdf_export_settings' =>
-                "<pre>
+            'gradebook_pdf_export_settings' => "<pre>
                 [
                     'hide_score_weight' => true,
                     'hide_feedback_textarea' => true,
@@ -194,7 +189,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

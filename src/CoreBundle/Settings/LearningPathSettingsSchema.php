@@ -106,7 +106,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow or block user subscriptions to a lp/lp category').
+                    'help' => get_lang('Allow or block user subscriptions to a lp/lp category').
                         $this->settingArrayHelpValue('lp_subscription_settings'),
                 ]
             )
@@ -115,7 +115,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('LP view custom settings').
+                    'help' => get_lang('LP view custom settings').
                         $this->settingArrayHelpValue('lp_view_settings'),
                 ]
             )
@@ -124,7 +124,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id').
+                    'help' => get_lang('Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id').
                         $this->settingArrayHelpValue('download_files_after_all_lp_finished'),
                 ]
             )
@@ -135,8 +135,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'lp_subscription_settings' =>
-                "<pre>
+            'lp_subscription_settings' => "<pre>
                 [
                     'options' => [
                         'allow_add_users_to_lp' => true,
@@ -144,8 +143,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                 </pre>",
-            'lp_view_settings' =>
-                "<pre>
+            'lp_view_settings' => "<pre>
                 [
                     'display' => [
                         'show_reporting_icon' => true,
@@ -155,8 +153,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
                 </pre>",
-            'download_files_after_all_lp_finished' =>
-                "<pre>
+            'download_files_after_all_lp_finished' => "<pre>
                 ['courses' => ['ABC' => [1, 100]]]
                 </pre>",
         ];
@@ -164,7 +161,6 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

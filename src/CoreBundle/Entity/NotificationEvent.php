@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -6,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Table(name="notification_event")
@@ -14,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class NotificationEvent
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -57,17 +56,11 @@ class NotificationEvent
      */
     protected int $eventId;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -75,17 +68,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -93,17 +80,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -111,17 +92,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLink(): string
     {
         return $this->link;
     }
 
-    /**
-     * @param string $link
-     */
     public function setLink(string $link): self
     {
         $this->link = $link;
@@ -129,17 +104,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getPersistent(): int
     {
         return $this->persistent;
     }
 
-    /**
-     * @param int $persistent
-     */
     public function setPersistent(int $persistent): self
     {
         $this->persistent = $persistent;
@@ -147,17 +116,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDayDiff(): int
     {
         return $this->dayDiff;
     }
 
-    /**
-     * @param int $dayDiff
-     */
     public function setDayDiff(int $dayDiff): self
     {
         $this->dayDiff = $dayDiff;
@@ -165,17 +128,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEventType(): string
     {
         return $this->eventType;
     }
 
-    /**
-     * @param string $eventType
-     */
     public function setEventType(string $eventType): self
     {
         $this->eventType = $eventType;
@@ -183,17 +140,11 @@ class NotificationEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getEventId(): int
     {
         return $this->eventId;
     }
 
-    /**
-     * @param int $eventId
-     */
     public function setEventId(int $eventId): self
     {
         $this->eventId = $eventId;

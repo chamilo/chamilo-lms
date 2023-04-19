@@ -318,20 +318,17 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'course_log_hide_columns' =>
-                "<pre>
+            'course_log_hide_columns' => "<pre>
                 ['columns' => [1, 9]]
                 </pre>",
-            'course_student_info' =>
-                "<pre>
+            'course_student_info' => "<pre>
                 [
                     'score' => false,
                     'progress' => false,
                     'certificate' => false,
                 ]
                 </pre>",
-            'course_catalog_settings' =>
-                "<pre>
+            'course_catalog_settings' => "<pre>
                 [
                     'link_settings' => [
                         'info_url' => 'course_description_popup', // course description popup page
@@ -363,7 +360,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

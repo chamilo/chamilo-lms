@@ -52,7 +52,7 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+                    'help' => get_lang('Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
                         Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
                         Add the list of emails as a bcc when sending an email. Configure a cron task pointing at main/cron/scheduled_announcement.php').
                         $this->settingArrayHelpValue('send_all_emails_to'),
@@ -66,8 +66,7 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'send_all_emails_to' =>
-                "<pre>
+            'send_all_emails_to' => "<pre>
                 [
                     'emails' => [
                         'admin1@example.com',
@@ -80,7 +79,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

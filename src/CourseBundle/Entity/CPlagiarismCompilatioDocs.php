@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -13,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CPlagiarismCompilatioDocs
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -38,20 +38,13 @@ class CPlagiarismCompilatioDocs
 
     public function __construct()
     {
-
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -59,17 +52,11 @@ class CPlagiarismCompilatioDocs
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCId(): int
     {
         return $this->cId;
     }
 
-    /**
-     * @param int $cId
-     */
     public function setCId(int $cId): self
     {
         $this->cId = $cId;
@@ -77,17 +64,11 @@ class CPlagiarismCompilatioDocs
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getDocumentId(): int
     {
         return $this->documentId;
     }
 
-    /**
-     * @param int $documentId
-     */
     public function setDocumentId(int $documentId): self
     {
         $this->documentId = $documentId;
@@ -95,17 +76,11 @@ class CPlagiarismCompilatioDocs
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCompilatioId(): ?string
     {
         return $this->compilatioId;
     }
 
-    /**
-     * @param string|null $compilatioId
-     */
     public function setCompilatioId(?string $compilatioId): self
     {
         $this->compilatioId = $compilatioId;

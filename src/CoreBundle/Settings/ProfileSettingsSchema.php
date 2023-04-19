@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -143,7 +142,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Hide fields from this list array').
+                    'help' => get_lang('Hide fields from this list array').
                         $this->settingArrayHelpValue('hide_user_field_from_list'),
                 ]
             )
@@ -152,7 +151,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Only shows the fields in this list').
+                    'help' => get_lang('Only shows the fields in this list').
                         $this->settingArrayHelpValue('allow_fields_inscription'),
                 ]
             )
@@ -161,7 +160,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Send email notification to admin when a user is created').
+                    'help' => get_lang('Send email notification to admin when a user is created').
                         $this->settingArrayHelpValue('send_notification_when_user_added'),
                 ]
             )
@@ -170,7 +169,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Show multiple conditions to user during sign up process. Example with a GDPR condition').
+                    'help' => get_lang('Show multiple conditions to user during sign up process. Example with a GDPR condition').
                         $this->settingArrayHelpValue('show_conditions_to_user'),
                 ]
             )
@@ -180,7 +179,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Validate user login via a webservice, Chamilo will send a "login" and "password" parameters to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access').
+                    'help' => get_lang('Validate user login via a webservice, Chamilo will send a "login" and "password" parameters to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access').
                         $this->settingArrayHelpValue('profile_fields_visibility'),
                 ]
             )
@@ -189,7 +188,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('This option sets default parameters in the main/admin/user_import.php').
+                    'help' => get_lang('This option sets default parameters in the main/admin/user_import.php').
                         $this->settingArrayHelpValue('user_import_settings'),
                 ]
             )
@@ -198,7 +197,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Search user by extra field in the user list').
+                    'help' => get_lang('Search user by extra field in the user list').
                         $this->settingArrayHelpValue('user_search_on_extra_fields'),
                 ]
             )
@@ -208,7 +207,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Set extra fields as required in the inscription.php page').
+                    'help' => get_lang('Set extra fields as required in the inscription.php page').
                         $this->settingArrayHelpValue('required_extra_fields_in_inscription'),
                 ]
             )
@@ -217,7 +216,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Community manager users').
+                    'help' => get_lang('Community manager users').
                         $this->settingArrayHelpValue('community_managers_user_list'),
                 ]
             )
@@ -226,7 +225,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow to show users in a map, users need to have a coordinates extra field BT#15176').
+                    'help' => get_lang('Allow to show users in a map, users need to have a coordinates extra field BT#15176').
                         $this->settingArrayHelpValue('allow_social_map_fields'),
                 ]
             )
@@ -236,12 +235,10 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'hide_user_field_from_list' =>
-                "<pre>
+            'hide_user_field_from_list' => "<pre>
                 ['fields' => ['username']]
                 </pre>",
-            'allow_fields_inscription' =>
-                "<pre>
+            'allow_fields_inscription' => "<pre>
                 [
                     'fields' => [
                         'official_code',
@@ -254,12 +251,10 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                 </pre>",
-            'send_notification_when_user_added' =>
-                "<pre>
+            'send_notification_when_user_added' => "<pre>
                 ['admins' => [1]]
                 </pre>",
-            'show_conditions_to_user' =>
-                "<pre>
+            'show_conditions_to_user' => "<pre>
                 [
                     'conditions' => [
                         [
@@ -275,8 +270,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
                 </pre>",
-            'profile_fields_visibility' =>
-                "<pre>
+            'profile_fields_visibility' => "<pre>
                 [
                     'options' => [
                         'vcard' => false,
@@ -289,20 +283,17 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                 </pre>",
-            'user_import_settings' =>
-                "<pre>
+            'user_import_settings' => "<pre>
                 [
                     'options' =>  [
                         'send_mail_default_option' => '1',
                     ]
                 ]
                 </pre>",
-            'user_search_on_extra_fields' =>
-                "<pre>
+            'user_search_on_extra_fields' => "<pre>
                 ['extra_fields' => ['variable1', 'variable2']]
                 </pre>",
-            'required_extra_fields_in_inscription' =>
-                "<pre>
+            'required_extra_fields_in_inscription' => "<pre>
                 [
                     'options' => [
                         'terms_ville',
@@ -310,12 +301,10 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
                 </pre>",
-            'community_managers_user_list' =>
-                "<pre>
+            'community_managers_user_list' => "<pre>
                 ['users' => [1]]
                 </pre>",
-            'allow_social_map_fields' =>
-                "<pre>
+            'allow_social_map_fields' => "<pre>
                 ['fields' => ['terms_villedustage', 'terms_ville']]
                 </pre>",
         ];
@@ -323,7 +312,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

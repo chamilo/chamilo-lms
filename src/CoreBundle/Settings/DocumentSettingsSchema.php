@@ -185,7 +185,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
+                    'help' => get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
                         $this->settingArrayHelpValue('compilatio_tool'),
                 ]
             )
@@ -195,8 +195,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'compilatio_tool' =>
-                "<pre>
+            'compilatio_tool' => "<pre>
                 [
                     'settings' => [
                         'key' => '',
@@ -216,7 +215,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

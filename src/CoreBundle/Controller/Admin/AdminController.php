@@ -32,6 +32,4 @@ class AdminController extends BaseController
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }
-
-
 }

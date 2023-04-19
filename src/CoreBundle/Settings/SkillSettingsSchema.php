@@ -55,7 +55,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Set skill levels name, then later it will be parsed using get_lang BT#13586').
+                    'help' => get_lang('Set skill levels name, then later it will be parsed using get_lang BT#13586').
                         $this->settingArrayHelpValue('skill_levels_names'),
                 ]
             )
@@ -66,8 +66,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'skill_levels_names' =>
-                "<pre>
+            'skill_levels_names' => "<pre>
                 [
                     'levels' => [
                         1 => 'Skills',
@@ -81,7 +80,6 @@ class SkillSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

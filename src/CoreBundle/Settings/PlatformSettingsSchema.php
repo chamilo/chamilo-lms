@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class PlatformSettingsSchema extends AbstractSettingsSchema
@@ -225,7 +224,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Proxy settings for access external services').
+                    'help' => get_lang('Proxy settings for access external services').
                         $this->settingArrayHelpValue('proxy_settings'),
                 ]
             )
@@ -234,7 +233,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Enable speed controller in video player').
+                    'help' => get_lang('Enable speed controller in video player').
                         $this->settingArrayHelpValue('video_features'),
                 ]
             )
@@ -243,7 +242,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Changes the row list when using jqgrid/sortable tables').
+                    'help' => get_lang('Changes the row list when using jqgrid/sortable tables').
                         $this->settingArrayHelpValue('table_row_list'),
                 ]
             )
@@ -254,8 +253,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'proxy_settings' =>
-                "<pre>
+            'proxy_settings' => "<pre>
                 [
                     'stream_context_create' => [
                         'http' => [
@@ -269,12 +267,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     ]
                 ]
                 </pre>",
-            'video_features' =>
-                "<pre>
+            'video_features' => "<pre>
                 ['features' => ['speed']]
                 </pre>",
-            'table_row_list' =>
-                "<pre>
+            'table_row_list' => "<pre>
                 ['options' => [50, 100, 200, 500]]
                 </pre>",
         ];
@@ -282,7 +278,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

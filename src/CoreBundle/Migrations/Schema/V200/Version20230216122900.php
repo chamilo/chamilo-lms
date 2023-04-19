@@ -376,8 +376,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
         // Alter tables required.
-
-
     }
 
     public function down(Schema $schema): void
@@ -427,7 +425,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_scheduled_announcements',
                 'admin_chamilo_announcements_disable',
                 'disable_announcement_attachment',
-                'disable_delete_all_announcements'
+                'disable_delete_all_announcements',
             ],
             'Document' => [
                 'compilatio_tool',
@@ -695,7 +693,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'session_list_show_count_users',
                 'remove_session_url',
                 'allow_redirect_to_session_after_inscription_about',
-            ]
+            ],
         ];
         foreach ($configurationValues as $category => $variables) {
             foreach ($variables as $variable) {
@@ -744,11 +742,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
         $selectedValue = '';
         $settingValue = $this->getConfigurationValue($variable);
         if (!empty($settingValue)) {
-            if (is_array($settingValue)) {
+            if (\is_array($settingValue)) {
                 $selectedValue = var_export($settingValue, true);
-            } else if (true === $settingValue) {
+            } elseif (true === $settingValue) {
                 $selectedValue = 'true';
-            } else if (false === $settingValue) {
+            } elseif (false === $settingValue) {
                 $selectedValue = 'false';
             } else {
                 $selectedValue = (string) $settingValue;

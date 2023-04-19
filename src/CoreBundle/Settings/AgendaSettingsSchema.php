@@ -70,7 +70,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Agenda legend options').
+                    'help' => get_lang('Agenda legend options').
                         $this->settingArrayHelpValue('agenda_legend'),
                 ]
             )
@@ -79,7 +79,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Set customs colors to agenda events').
+                    'help' => get_lang('Set customs colors to agenda events').
                         $this->settingArrayHelpValue('agenda_colors'),
                 ]
             )
@@ -88,7 +88,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' =>  get_lang('Customize on hover agenda view. Show agenda comment and/or description').
+                    'help' => get_lang('Customize on hover agenda view. Show agenda comment and/or description').
                         $this->settingArrayHelpValue('agenda_on_hover_info'),
                 ]
             )
@@ -98,15 +98,13 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
     private function settingArrayHelpValue(string $variable): string
     {
         $values = [
-            'agenda_legend' =>
-                "<pre>
+            'agenda_legend' => "<pre>
                 [
                     'red' => 'red caption',
                     '#f0f' => 'another caption'
                 ]
                 </pre>",
-            'agenda_colors' =>
-                "<pre>
+            'agenda_colors' => "<pre>
                 [
                     'platform' => 'red',
                     'course' => '#458B00',
@@ -117,8 +115,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     'student_publication' => '#FF8C00'
                 ]
                 </pre>",
-            'agenda_on_hover_info' =>
-                "<pre>
+            'agenda_on_hover_info' => "<pre>
                 [
                     'options' => [
                         'comment' => true,
@@ -131,7 +128,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
         $returnValue = [];
         if (isset($values[$variable])) {
             $returnValue = $values[$variable];
-
         }
 
         return $returnValue;

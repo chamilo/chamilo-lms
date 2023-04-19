@@ -10,7 +10,7 @@
   }
 
   &__step {
-    @apply border-0 border-solid py-3 pl-9 pr-3 text-body-2-bold text-gray-50;
+    @apply border-0 border-solid py-3 pl-9 pr-3 text-body-2 font-semibold text-gray-50;
 
     &--active {
       @apply bg-support-1 text-primary border-primary border-l-4 pl-8;

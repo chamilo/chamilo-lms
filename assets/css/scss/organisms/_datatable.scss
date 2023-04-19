@@ -2,7 +2,7 @@
 
   &-header,
   &-footer {
-    @apply bg-gray-10 text-gray-90 border-solid border-gray-30 p-3 text-caption-bold;
+    @apply bg-gray-10 text-gray-90 border-solid border-gray-30 p-3 text-caption font-semibold;
   }
 
   &-header {
@@ -37,7 +37,7 @@
   &-thead {
     > tr {
       > th {
-        @apply p-3 border-b border-solid border-gray-30 text-body-1-bold bg-gray-15 text-gray-90;
+        @apply p-3 border-b border-solid border-gray-30 text-body-1 font-semibold bg-gray-15 text-gray-90;
       }
     }
   }
@@ -59,7 +59,7 @@
   &-tfoot {
     > tr {
       > td {
-        @apply p-3 border-b border-solid border-gray-30 text-body-1-bold text-gray-90;
+        @apply p-3 border-b border-solid border-gray-30 text-body-1 font-semibold text-gray-90;
       }
     }
   }
@@ -77,7 +77,7 @@
     }
 
     .p-sortable-column-badge {
-      @apply rounded-full ml-2 text-tiny-bold px-1.5 bg-white;
+      @apply rounded-full ml-2 text-tiny font-semibold px-1.5 bg-white;
     }
   }
 

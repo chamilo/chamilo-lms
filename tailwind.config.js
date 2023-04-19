@@ -45,6 +45,12 @@ module.exports = {
       fontFamily: {
         sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
       },
+      fontSize: {
+        "body-1": ["16px", "24px"],
+        "body-2": ["14px", "16px"],
+        caption: ["13px", "16px"],
+        tiny: ["11px", "16px"],
+      },
       gridTemplateColumns: {
         "course-tools": "repeat(auto-fit, 120px)",
       },

@@ -42,7 +42,7 @@
   &__form {
     label,
     a:not(.btn) {
-      @apply text-caption-bold text-primary;
+      @apply text-caption font-semibold text-primary;
     }
   }
 

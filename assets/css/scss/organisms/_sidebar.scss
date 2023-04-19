@@ -17,7 +17,7 @@
   }
 
   &__bottom {
-    @apply border-b border-solid border-gray-25 p-6 text-tiny-bold;
+    @apply border-b border-solid border-gray-25 p-6 text-tiny font-semibold;
   }
 
   &__logout-link {
@@ -63,15 +63,15 @@
         @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
 
         .p-submenu-icon {
-          @apply order-3 rotate-90 text-body-2-bold;
+          @apply order-3 rotate-90 text-body-2 font-semibold;
         }
 
         .p-menuitem-icon {
-          @apply order-1 text-body-2-bold;
+          @apply order-1 text-body-2 font-semibold;
         }
 
         .p-menuitem-text {
-          @apply order-2 grow text-body-2-bold whitespace-nowrap;
+          @apply order-2 grow text-body-2 font-semibold whitespace-nowrap;
         }
 
         &.router-link-active,

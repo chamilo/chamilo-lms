@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {reactive, ref} from "vue";
+import { reactive, ref } from "vue";
 import axios from "axios";
 
 export default {
@@ -54,8 +54,8 @@ export default {
       required: true,
     },
   },
-  emits: ['post-deleted'],
-  setup(props, {emit}) {
+  emits: ["post-deleted"],
+  setup(props, { emit }) {
     const isLoading = reactive({
       like: false,
       dislike: false,
@@ -66,40 +66,41 @@ export default {
       isLoading.like = true;
 
       axios
-        .post(props.socialPost['@id'] + '/like', {})
-        .then(({data}) => {
+        .post(props.socialPost["@id"] + "/like", {})
+        .then(({ data }) => {
           props.socialPost.countFeedbackLikes = data.countFeedbackLikes;
           props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes;
         })
-        .finally(() => isLoading.like = false)
-      ;
+        .finally(() => (isLoading.like = false));
     }
 
     function onDisikeComment() {
       isLoading.dislike = true;
 
       axios
-        .post(props.socialPost['@id'] + '/dislike', {})
-        .then(({data}) => {
+        .post(props.socialPost["@id"] + "/dislike", {})
+        .then(({ data }) => {
           props.socialPost.countFeedbackLikes = data.countFeedbackLikes;
           props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes;
         })
-        .finally(() => isLoading.dislike = false)
-      ;
+        .finally(() => (isLoading.dislike = false));
     }
 
     function onDeleteComment() {
       isLoading.delete = true;
 
       axios
-        .delete(props.socialPost['@id'])
-        .then(() => emit('post-deleted', props.socialPost))
-        .finally(() => isLoading.delete = false)
-      ;
+        .delete(props.socialPost["@id"])
+        .then(() => emit("post-deleted", props.socialPost))
+        .finally(() => (isLoading.delete = false));
     }
 
-    const enableFeedback = ref(window.config['social.social_enable_messages_feedback'] === 'true');
-    const disableDislike = ref(window.config['social.disable_dislike_option'] === 'true');
+    const enableFeedback = ref(
+      window.config["social.social_enable_messages_feedback"] === "true"
+    );
+    const disableDislike = ref(
+      window.config["social.disable_dislike_option"] === "true"
+    );
 
     return {
       enableFeedback,
@@ -108,7 +109,7 @@ export default {
       onLikeComment,
       onDisikeComment,
       onDeleteComment,
-    }
-  }
-}
+    };
+  },
+};
 </script>

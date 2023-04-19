@@ -2,21 +2,17 @@
   <aside class="app-sidebar">
     <div class="app-sidebar__container">
       <h3 class="app-sidebar__top">
-        {{ t('Menu') }}
+        {{ t("Menu") }}
       </h3>
       <div class="app-sidebar__panel">
         <PanelMenu :model="items" />
       </div>
       <div class="app-sidebar__bottom">
-        <p>{{ t('Created with Chamilo &copy; {year}', { 'year': 2022 }) }}</p>
+        <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
       </div>
-      <a
-        v-if="isAuthenticated"
-        href="/logout"
-        class="app-sidebar__logout-link"
-      >
+      <a v-if="isAuthenticated" href="/logout" class="app-sidebar__logout-link">
         <span class="pi pi-fw pi-sign-out" />
-        <span class="logout-text">{{ t('Sign out') }}</span>
+        <span class="logout-text">{{ t("Sign out") }}</span>
       </a>
     </div>
     <ToggleButton
@@ -39,120 +35,122 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from 'vue';
-import PanelMenu from 'primevue/panelmenu';
-import ToggleButton from 'primevue/togglebutton';
-import {useI18n} from "vue-i18n";
-import {useStore} from "vuex";
+import { computed, ref, watch } from "vue";
+import PanelMenu from "primevue/panelmenu";
+import ToggleButton from "primevue/togglebutton";
+import { useI18n } from "vue-i18n";
+import { useStore } from "vuex";
 
 const store = useStore();
-const {t} = useI18n();
+const { t } = useI18n();
 
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
-const isAdmin = computed(() => store.getters['security/isAdmin']);
-const isBoss = computed(() => store.getters['security/isBoss']);
-const isStudent = computed(() => store.getters['security/isStudent']);
+const isAuthenticated = computed(
+  () => store.getters["security/isAuthenticated"]
+);
+const isAdmin = computed(() => store.getters["security/isAdmin"]);
+const isBoss = computed(() => store.getters["security/isBoss"]);
+const isStudent = computed(() => store.getters["security/isStudent"]);
 
 const items = ref([
   {
-    label: t('Home'),
-    to: '/home',
-    icon: 'pi pi-fw pi-home',
+    label: t("Home"),
+    to: { name: "Home" },
+    icon: "pi pi-fw pi-home",
   },
 
   {
-    label: t('Courses'),
-    icon: 'pi pi-fw pi-book',
+    label: t("Courses"),
+    icon: "pi pi-fw pi-book",
     visible: isAuthenticated,
     items: [
       {
-        label: t('My courses'),
-        to: '/courses',
+        label: t("My courses"),
+        to: { name: "MyCourses" },
       },
       {
-        label: t('My sessions'),
-        to: '/sessions',
+        label: t("My sessions"),
+        to: { name: "MySessions" },
       },
     ],
   },
   {
-    label: t('Events'),
-    to: '/resources/ccalendarevent',
-    icon: 'pi pi-fw pi-calendar',
+    label: t("Events"),
+    to: { name: "CCalendarEventList" },
+    icon: "pi pi-fw pi-calendar",
     visible: isAuthenticated,
   },
   {
-    label: t('My progress'),
-    url: '/main/auth/my_progress.php',
-    icon: 'pi pi-fw pi-chart-line',
+    label: t("My progress"),
+    url: "/main/auth/my_progress.php",
+    icon: "pi pi-fw pi-chart-line",
     visible: isAuthenticated,
   },
   {
-    label: t('Social network'),
-    to: '/social',
-    icon: 'pi pi-fw pi-sitemap',
+    label: t("Social network"),
+    to: { name: "SocialWall" },
+    icon: "pi pi-fw pi-sitemap",
     visible: isAuthenticated,
   },
 
   {
-    label: t('Diagnosis'),
-    icon: 'pi pi-fw pi-search',
+    label: t("Diagnosis"),
+    icon: "pi pi-fw pi-search",
     visible: isBoss.value || isStudent.value,
     items: [
       {
-        label: t('Management'),
-        url: '/main/search/load_search.php',
+        label: t("Management"),
+        url: "/main/search/load_search.php",
         visible: isBoss,
       },
       {
-        label: t('Search'),
-        url: '/main/search/search.php',
+        label: t("Search"),
+        url: "/main/search/search.php",
         visible: isBoss.value || isStudent.value,
       },
     ],
   },
 
   {
-    label: t('Administration'),
-    icon: 'pi pi-fw pi-table',
+    label: t("Administration"),
+    icon: "pi pi-fw pi-table",
     visible: isAdmin,
     items: [
       {
         label: t("Administration"),
-        to: "admin",
+        to: { name: "AdminIndex" },
       },
       {
-        label: t('Users'),
-        url: '/main/admin/user_list.php',
+        label: t("Users"),
+        url: "/main/admin/user_list.php",
       },
       {
-        label: t('Courses'),
-        url: '/main/admin/course_list.php',
+        label: t("Courses"),
+        url: "/main/admin/course_list.php",
       },
       {
-        label: t('Sessions'),
-        url: '/main/session/session_list.php',
+        label: t("Sessions"),
+        url: "/main/session/session_list.php",
       },
       {
-        label: t('Reporting'),
-        url: '/main/my_space/index.php',
+        label: t("Reporting"),
+        url: "/main/my_space/index.php",
       },
     ],
   },
 ]);
 
 const sidebarIsOpen = ref(
-  window.localStorage.getItem('sidebarIsOpen') === 'true'
+  window.localStorage.getItem("sidebarIsOpen") === "true"
 );
 
 watch(
   sidebarIsOpen,
   (newValue) => {
-    const appEl = document.querySelector('#app');
+    const appEl = document.querySelector("#app");
 
-    window.localStorage.setItem('sidebarIsOpen', newValue.toString());
+    window.localStorage.setItem("sidebarIsOpen", newValue.toString());
 
-    appEl.classList.toggle('app--sidebar-inactive', !newValue);
+    appEl.classList.toggle("app--sidebar-inactive", !newValue);
   },
   {
     immediate: true,

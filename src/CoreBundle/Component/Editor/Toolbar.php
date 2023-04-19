@@ -38,7 +38,7 @@ class Toolbar
                 $toolbarObj = new $class($urlGenerator, $toolbar, $config);
                 $config = $toolbarObj->getConfig();
 
-                if (api_get_configuration_value('full_ckeditor_toolbar_set')) {
+                if ('true' === api_get_setting('editor.full_ckeditor_toolbar_set')) {
                     $basicClass = __NAMESPACE__.'\\'.$prefix.'\\Toolbar\\Basic';
                     $basicObj = new $basicClass($urlGenerator, $toolbar, $config);
                     $basicConfig = $basicObj->getConfig();

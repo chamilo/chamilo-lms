@@ -222,7 +222,7 @@ foreach ($userSkills as $index => $skillRelUser) {
 
 $template = new Template(get_lang('Issued badge information'));
 $template->assign('user_badges', $allUserBadges);
-$template->assign('show_level', false === api_get_configuration_value('hide_skill_levels'));
+$template->assign('show_level', ('false' === api_get_setting('skill.hide_skill_levels')));
 
 $content = $template->fetch($template->get_template('skill/issued_all.html.twig'));
 $template->assign('header', get_lang('Issued badge information'));

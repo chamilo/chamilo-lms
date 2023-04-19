@@ -85,10 +85,10 @@ if (api_is_platform_admin()) {
     }
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('Profiling')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
-    if (!api_get_configuration_value('disable_gdpr')) {
+    if ('true' !== api_get_setting('profile.disable_gdpr')) {
         $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consents list')];
     }
-    if (api_get_configuration_value('show_link_request_hrm_user')) {
+    if ('true' === api_get_setting('admin.show_link_request_hrm_user')) {
         $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('Student linking requests')];
     }
 } else {
@@ -108,7 +108,7 @@ if (api_is_platform_admin()) {
             });
         }
 
-        if (true === api_get_configuration_value('limit_session_admin_list_users')) {
+        if ('true' === api_get_setting('session.limit_session_admin_list_users')) {
             $items = array_filter($items, function (array $item) {
                 $urls = ['user_list.php'];
 
@@ -241,7 +241,7 @@ if (api_is_platform_admin()) {
         ];
     }
 
-    $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+    $allowCareer = ('true' === api_get_setting('session.allow_session_admin_read_careers'));
 
     if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
         // option only visible in development mode. Enable through code if required
@@ -299,7 +299,7 @@ if (api_is_platform_admin()) {
             'url' => api_get_path(WEB_CODE_PATH).'skills/skill_badge.php',
             'label' => get_lang('Badges')
         );*/
-        $allow = api_get_configuration_value('gradebook_dependency');
+        $allow = ('true' === api_get_setting('gradebook.gradebook_dependency'));
         if (!$allow) {
             $items[] = [
                 'url' => 'gradebook_list.php',

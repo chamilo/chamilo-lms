@@ -199,7 +199,7 @@ class survey_question
                 break;
         }
 
-        if (false === api_get_configuration_value('survey_question_dependency')) {
+        if ('false' === api_get_setting('survey.survey_question_dependency')) {
             $allowParent = false;
         }
 
@@ -237,7 +237,7 @@ class survey_question
             $config
         );
 
-        if (api_get_configuration_value('allow_required_survey_questions') &&
+        if (('true' === api_get_setting('survey.allow_required_survey_questions')) &&
             in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
             $form->addCheckBox('is_required', get_lang('Mandatory?'), get_lang('Yes'));
         }
@@ -314,7 +314,7 @@ class survey_question
              */
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-            $allowQuestionEdit = true == api_get_configuration_value('survey_allow_answered_question_edit');
+            $allowQuestionEdit = ('true' === api_get_setting('survey.survey_allow_answered_question_edit'));
             if ($allowQuestionEdit || !$answersChecker) {
                 $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('Edit question'), 'save', true);
             } else {
@@ -482,7 +482,7 @@ class survey_question
         $formData['answers'] = isset($formData['answers']) ? $formData['answers'] : [];
         Session::write('answer_list', $formData['answers']);
 
-        if (!isset($formData['is_required']) && api_get_configuration_value('survey_mark_question_as_required')) {
+        if (!isset($formData['is_required']) && ('true' === api_get_setting('survey.survey_mark_question_as_required'))) {
             $formData['is_required'] = true;
         }
 
@@ -572,7 +572,7 @@ class survey_question
      */
     public static function getParents($questionId, $list = [])
     {
-        if (true !== api_get_configuration_value('survey_question_dependency')) {
+        if ('false' === api_get_setting('survey.survey_question_dependency')) {
             return $list;
         }
         $courseId = api_get_course_int_id();
@@ -687,7 +687,7 @@ class survey_question
      */
     public static function getDependency($question)
     {
-        if (true !== api_get_configuration_value('survey_question_dependency')) {
+        if ('false' === api_get_setting('survey.survey_question_dependency')) {
             return [];
         }
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);

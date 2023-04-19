@@ -109,7 +109,7 @@ class CourseController extends ToolBaseController
             }
 
             $redirect = true;
-            $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+            $allow = ('true' === Container::getSettingsManager()->getSetting('course.allow_public_course_with_no_terms_conditions'));
             if (true === $allow &&
                 null !== $course->getVisibility() &&
                 COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
@@ -659,7 +659,7 @@ class CourseController extends ToolBaseController
             }
         }
 
-        if (api_get_configuration_value('allow_exercise_auto_launch')) {
+        if (('true' === api_get_setting('exercise.allow_exercise_auto_launch'))) {
             $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
             if (2 === $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {

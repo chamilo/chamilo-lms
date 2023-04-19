@@ -851,7 +851,7 @@ class ImportCsv
                             $value = $extraFieldValue['value'];
                         }
                         if (!empty($user_id) && $value != $user_id) {
-                            $emails = api_get_configuration_value('cron_notification_help_desk');
+                            $emails = api_get_setting('mail.cron_notification_help_desk', true);
                             if (!empty($emails)) {
                                 $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
                                 $subject = 'User not added due to same username';
@@ -3201,7 +3201,7 @@ class ImportCsv
 }
 
 $logger = new Logger('cron');
-$emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;
+$emails = api_get_setting('mail.cron_notification_mails', true);
 
 $minLevel = Logger::DEBUG;
 
@@ -3256,7 +3256,8 @@ if (isset($_configuration['import_csv_disable_dump']) &&
     $import->setDumpValues($dump);
 }
 
-$import->setUpdateEmailToDummy(api_get_configuration_value('update_users_email_to_dummy_except_admins'));
+$settingEmailDummy = ('true' === api_get_setting('mail.update_users_email_to_dummy_except_admins'));
+$import->setUpdateEmailToDummy($settingEmailDummy);
 
 // Do not moves the files to treated
 if (isset($_configuration['import_csv_test'])) {

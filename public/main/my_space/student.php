@@ -303,7 +303,7 @@ $actionsRight .= Display::url(
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
 
 $itemPerPage = 10;
-$perPage = api_get_configuration_value('my_space_users_items_per_page');
+$perPage = api_get_setting('profile.my_space_users_items_per_page');
 if ($perPage) {
     $itemPerPage = (int) $perPage;
 }

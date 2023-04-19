@@ -2728,7 +2728,7 @@ HOTSPOT;
 
         // Ignore other formats and use the configuration['exercise_score_format'] value
         // But also keep the round values settings.
-        $format = api_get_configuration_value('exercise_score_format');
+        $format = (int) api_get_setting('exercise.exercise_score_format');
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
@@ -2805,7 +2805,7 @@ HOTSPOT;
      */
     public static function getScoreModels()
     {
-        return api_get_configuration_value('score_grade_model');
+        return api_get_setting('exercise.score_grade_model', true);
     }
 
     /**
@@ -4655,7 +4655,7 @@ EOT;
         echo $certificateBlock;
 
         // Ofaj change BT#11784
-        if (api_get_configuration_value('quiz_show_description_on_results_page') &&
+        if (('true' === api_get_setting('exercise.quiz_show_description_on_results_page')) &&
             !empty($objExercise->description)
         ) {
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
@@ -4687,7 +4687,7 @@ EOT;
                         $question_list
                     );
 
-                    $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                    $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
                     if ($allowStats) {
                         $objExercise->generateStats(
                             $objExercise->getId(),
@@ -5166,7 +5166,7 @@ EOT;
      */
     public static function getAdditionalTeacherActions($exerciseId, $iconSize = ICON_SIZE_SMALL)
     {
-        $additionalActions = api_get_configuration_value('exercise_additional_teacher_modify_actions') ?: [];
+        $additionalActions = api_get_setting('exercise.exercise_additional_teacher_modify_actions', true) ?: [];
         $actions = [];
 
         foreach ($additionalActions as $additionalAction) {
@@ -5304,7 +5304,7 @@ EOT;
         $courseId,
         $sessionId = 0
     ) {
-        if (!api_get_configuration_value('quiz_generate_certificate_ending') ||
+        if (('true' !== api_get_setting('exercise.quiz_generate_certificate_ending')) ||
             !self::isSuccessExerciseResult($totalScore, $totalWeight, $objExercise->selectPassPercentage())
         ) {
             return '';

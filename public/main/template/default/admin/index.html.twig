@@ -1,4 +1,4 @@
-{% set admin_chamilo_announcements_disable = 'admin_chamilo_announcements_disable'|api_get_configuration_value %}
+{% set admin_chamilo_announcements_disable = 'announcement.admin_chamilo_announcements_disable'|api_get_setting == 'true' %}
 
 {% block content %}
     {% autoescape false %}

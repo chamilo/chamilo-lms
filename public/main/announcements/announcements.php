@@ -89,7 +89,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$announcementAttachmentIsDisabled = api_get_configuration_value('disable_announcement_attachment');
+$announcementAttachmentIsDisabled = ('true' === api_get_setting('announcement.disable_announcement_attachment'));
 $thisAnnouncementId = null;
 
 switch ($action) {
@@ -329,7 +329,7 @@ switch ($action) {
         break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
-            $allow = api_get_configuration_value('disable_delete_all_announcements');
+            $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
             if (false === $allow) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('Announcement has been deletedAll')));
@@ -821,7 +821,7 @@ if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || '
 
 /*
 if ($allowToEdit && 0 == api_get_group_id()) {
-    $allow = api_get_configuration_value('disable_delete_all_announcements');
+    $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
     if (false === $allow && api_is_allowed_to_edit()) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && 'list' == $_GET['action']

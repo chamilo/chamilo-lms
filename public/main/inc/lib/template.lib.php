@@ -444,7 +444,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.css',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
@@ -596,7 +596,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.js',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ('vrview' === $feature) {
@@ -786,7 +786,7 @@ class Template
      */
     public static function getThemeFallback()
     {
-        $theme = api_get_configuration_value('theme_fallback');
+        $theme = api_get_setting('platform.theme_fallback');
         if (empty($theme)) {
             $theme = 'chamilo';
         }
@@ -1077,45 +1077,45 @@ class Template
         // by https://securityheaders.io/
         // Enable these settings in configuration.php to use them on your site
         // Strict-Transport-Security
-        $setting = api_get_configuration_value('security_strict_transport');
+        $setting = api_get_setting('security.security_strict_transport');
         if (!empty($setting)) {
             header('Strict-Transport-Security: '.$setting);
         }
         // Content-Security-Policy
-        $setting = api_get_configuration_value('security_content_policy');
+        $setting = api_get_setting('security.security_content_policy');
         if (!empty($setting)) {
             header('Content-Security-Policy: '.$setting);
         }
-        $setting = api_get_configuration_value('security_content_policy_report_only');
+        $setting = api_get_setting('security.security_content_policy_report_only');
         if (!empty($setting)) {
             header('Content-Security-Policy-Report-Only: '.$setting);
         }
         // Public-Key-Pins
-        $setting = api_get_configuration_value('security_public_key_pins');
+        $setting = api_get_setting('security.security_public_key_pins');
         if (!empty($setting)) {
             header('Public-Key-Pins: '.$setting);
         }
-        $setting = api_get_configuration_value('security_public_key_pins_report_only');
+        $setting = api_get_setting('security.security_public_key_pins_report_only');
         if (!empty($setting)) {
             header('Public-Key-Pins-Report-Only: '.$setting);
         }
         // X-Frame-Options
-        $setting = api_get_configuration_value('security_x_frame_options');
+        $setting = api_get_setting('security.security_x_frame_options');
         if (!empty($setting)) {
             header('X-Frame-Options: '.$setting);
         }
         // X-XSS-Protection
-        $setting = api_get_configuration_value('security_xss_protection');
+        $setting = api_get_setting('security.security_xss_protection');
         if (!empty($setting)) {
             header('X-XSS-Protection: '.$setting);
         }
         // X-Content-Type-Options
-        $setting = api_get_configuration_value('security_x_content_type_options');
+        $setting = api_get_setting('security.security_x_content_type_options');
         if (!empty($setting)) {
             header('X-Content-Type-Options: '.$setting);
         }
         // Referrer-Policy
-        $setting = api_get_configuration_value('security_referrer_policy');
+        $setting = api_get_setting('security.security_referrer_policy');
         if (!empty($setting)) {
             header('Referrer-Policy: '.$setting);
         }

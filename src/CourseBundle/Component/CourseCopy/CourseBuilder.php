@@ -1183,7 +1183,7 @@ class CourseBuilder
         $db_result = Database::query($sql);
         $is_required = 0;
         while ($obj = Database::fetch_object($db_result)) {
-            if (api_get_configuration_value('allow_required_survey_questions')) {
+            if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                 if (isset($obj->is_required)) {
                     $is_required = $obj->is_required;
                 }

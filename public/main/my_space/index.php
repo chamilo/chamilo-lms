@@ -27,7 +27,7 @@ $is_coach = api_is_coach($session_id);
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
 $is_session_admin = api_is_session_admin();
-$skipData = api_get_configuration_value('tracking_skip_generic_data');
+$skipData = ('true' === api_get_setting('platform.tracking_skip_generic_data'));
 
 $logInfo = [
     'tool' => SECTION_TRACKING,

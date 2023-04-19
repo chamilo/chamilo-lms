@@ -77,12 +77,9 @@ class Redirect
         ) {
             if (isset($userInfo) && !empty($userInfo)) {
                 $userId = $userInfo['user_id'];
-                $allow = api_get_configuration_value('plugin_redirection_enabled');
+                $allow = ('true' === api_get_setting('admin.plugin_redirection_enabled'));
                 if ($allow) {
-                    $allow = api_get_configuration_value('plugin_redirection_enabled');
-                    if ($allow) {
-                        RedirectionPlugin::redirectUser($userId);
-                    }
+                    RedirectionPlugin::redirectUser($userId);
                 }
 
                 // Make sure we use the appropriate role redirection in case one has been defined

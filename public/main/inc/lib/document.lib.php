@@ -3451,7 +3451,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if ($document) {
-            $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+            $allowNotification = ('true' === api_get_setting('document.send_notification_when_document_added'));
             if ($sendNotification && $allowNotification) {
                 $courseTitle = $courseEntity->getTitle();
                 if (!empty($sessionId)) {

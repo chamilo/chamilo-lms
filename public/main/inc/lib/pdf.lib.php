@@ -75,7 +75,7 @@ class PDF
         ];
 
         // Default value is 96 set in the mpdf library file config.php
-        $value = api_get_configuration_value('pdf_img_dpi');
+        $value = api_get_setting('platform.pdf_img_dpi');
         if (!empty($value)) {
             $params['img_dpi'] = (int) $value;
         }

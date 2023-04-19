@@ -10,8 +10,11 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class PlatformSettingsSchema extends AbstractSettingsSchema
@@ -53,6 +56,23 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
                     //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
                     //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
+                    'theme_fallback' => 'chamilo',
+                    'unoconv_binaries' => '/usr/bin/unoconv',
+                    'packager' => 'chamilo',
+                    'sync_db_with_schema' => 'false',
+                    'hide_main_navigation_menu' => 'false',
+                    'pdf_img_dpi' => '96',
+                    'tracking_skip_generic_data' => 'false',
+                    'hide_complete_name_in_whoisonline' => 'false',
+                    'table_default_row' => '50',
+                    'allow_double_validation_in_registration' => 'false',
+                    'block_my_progress_page' => 'false',
+                    'generate_random_login' => 'false',
+                    'timepicker_increment' => '5',
+                    'proxy_settings' => '',
+                    'video_features' => '',
+                    'table_row_list' => '',
+                    'allow_portfolio_tool' => 'false',
                 ]
             )
             ->setTransformer(
@@ -71,7 +91,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
-            'show_tabs' => ['array'],
+            'show_tabs' => ['array', 'null'],
             //'gamification_mode' => array('string'),
         ];
 
@@ -157,8 +177,114 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'choices' => $tabs,
                     'label' => 'ShowTabsTitle',
                     'help' => 'ShowTabsComment',
+                ],
+            )
+            ->add(
+                'theme_fallback',
+                TextType::class,
+                [
+                    'label' => 'ThemeFallbackTitle',
+                    'help' => 'ThemeFallbackComment',
                 ]
             )
+            ->add(
+                'unoconv_binaries',
+                TextType::class,
+                [
+                    'label' => 'UnoconvBinariesTitle',
+                    'help' => 'UnoconvBinariesComment',
+                ]
+            )
+            ->add(
+                'packager',
+                TextType::class,
+                [
+                    'label' => 'PackagerTitle',
+                    'help' => 'PackagerComment',
+                ]
+            )
+            ->add('sync_db_with_schema', YesNoType::class)
+            ->add('hide_main_navigation_menu', YesNoType::class)
+            ->add('pdf_img_dpi', TextType::class)
+            ->add('tracking_skip_generic_data', YesNoType::class)
+            ->add('hide_complete_name_in_whoisonline', YesNoType::class)
+            ->add(
+                'table_default_row',
+                TextType::class,
+                [
+                    'label' => 'TableDefaultRowTitle',
+                    'help' => 'TableDefaultRowComment',
+                ]
+            )
+            ->add('allow_double_validation_in_registration', YesNoType::class)
+            ->add('block_my_progress_page', YesNoType::class)
+            ->add('generate_random_login', YesNoType::class)
+            ->add('timepicker_increment', TextType::class)
+            ->add(
+                'proxy_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Proxy settings for access external services').
+                        $this->settingArrayHelpValue('proxy_settings'),
+                ]
+            )
+            ->add(
+                'video_features',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Enable speed controller in video player').
+                        $this->settingArrayHelpValue('video_features'),
+                ]
+            )
+            ->add(
+                'table_row_list',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' =>  get_lang('Changes the row list when using jqgrid/sortable tables').
+                        $this->settingArrayHelpValue('table_row_list'),
+                ]
+            )
+            ->add('allow_portfolio_tool', YesNoType::class)
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'proxy_settings' =>
+                "<pre>
+                [
+                    'stream_context_create' => [
+                        'http' => [
+                            'proxy' => 'tcp://example.com:8080',
+                            'request_fulluri' => true
+                        ]
+                    ],
+                    'curl_setopt_array' => [
+                        'CURLOPT_PROXY' => 'http://example.com',
+                        'CURLOPT_PROXYPORT' => '8080'
+                    ]
+                ]
+                </pre>",
+            'video_features' =>
+                "<pre>
+                ['features' => ['speed']]
+                </pre>",
+            'table_row_list' =>
+                "<pre>
+                ['options' => [50, 100, 200, 500]]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

@@ -68,7 +68,7 @@ $form = new FormValidator(
 $form->addHeader(get_lang('To start, give a title to your course'));
 
 // Title
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor(
         'lp_name',
         get_lang('Learning path name'),

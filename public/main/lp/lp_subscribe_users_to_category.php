@@ -29,7 +29,7 @@ if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
     api_not_allowed(true);
 }
 
-$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+$allowUserGroups = ('true' === api_get_setting('lp.allow_lp_subscription_to_usergroups'));
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
 $sessionId = api_get_session_id();

@@ -586,7 +586,7 @@ $form->addButtonImport(get_lang('Import session(s)'));
 
 $defaults = ['sendMail' => 'true', 'file_type' => 'csv'];
 
-$options = api_get_configuration_value('session_import_settings');
+$options = api_get_setting('session.session_import_settings', true);
 if (!empty($options) && isset($options['options'])) {
     if (isset($options['options']['session_exists_default_option'])) {
         $defaults['overwrite'] = $options['options']['session_exists_default_option'];

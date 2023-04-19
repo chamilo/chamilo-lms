@@ -642,7 +642,7 @@ class SurveyManager
                 'survey_group_sec2' => $row['survey_group_sec2'],
             ];
 
-            if (api_get_configuration_value('allow_required_survey_questions')) {
+            if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                 if (isset($row['is_required'])) {
                     $params['is_required'] = $row['is_required'];
                 }
@@ -856,7 +856,7 @@ class SurveyManager
         $return['horizontalvertical'] = $row['display'];
         $return['shared_question_id'] = $row['shared_question_id'];
         $return['maximum_score'] = $row['max_value'];
-        $return['is_required'] = api_get_configuration_value('allow_required_survey_questions')
+        $return['is_required'] = ('true' === api_get_setting('survey.allow_required_survey_questions'))
             ? $row['is_required']
             : false;
 
@@ -1016,11 +1016,11 @@ class SurveyManager
                         ->setSharedQuestionId((int) $form_content['shared_question_id'])
                     ;
 
-                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                    if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                         $question->setIsMandatory(isset($form_content['is_required']));
                     }
 
-                    if (api_get_configuration_value('survey_question_dependency')) {
+                    if ('true' === api_get_setting('survey.survey_question_dependency')) {
                         $params['parent_id'] = 0;
                         $params['parent_option_id'] = 0;
                         if (isset($form_content['parent_id']) &&
@@ -1071,11 +1071,11 @@ class SurveyManager
                         ->setMaxValue($maxScore)
                     ;
 
-                    if (api_get_configuration_value('allow_required_survey_questions')) {
+                    if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                         $question->isMandatory(isset($form_content['is_required']));
                     }
 
-                    if (api_get_configuration_value('survey_question_dependency')) {
+                    if ('true' === api_get_setting('survey.survey_question_dependency')) {
                         $params['parent_id'] = 0;
                         $params['parent_option_id'] = 0;
                         if (isset($form_content['parent_id']) &&
@@ -1440,7 +1440,7 @@ class SurveyManager
             $sql = "SELECT DISTINCT user FROM $table_survey_answer
 			        WHERE survey_id= '".$survey_id."'  ";
 
-            if (api_get_configuration_value('survey_anonymous_show_answered')) {
+            if ('true' === api_get_setting('survey.survey_anonymous_show_answered')) {
                 $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
@@ -1733,7 +1733,7 @@ class SurveyManager
                     'survey_group_sec2' => $row['survey_group_sec2'],
                 ];
 
-                if (api_get_configuration_value('allow_required_survey_questions')) {
+                if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                     if (isset($row['is_required'])) {
                         $params['is_required'] = $row['is_required'];
                     }
@@ -1815,7 +1815,7 @@ class SurveyManager
             'survey_group_sec1' => $row['survey_group_sec1'],
             'survey_group_sec2' => $row['survey_group_sec2'],
         ];
-        if (api_get_configuration_value('allow_required_survey_questions')) {
+        if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
             if (isset($row['is_required'])) {
                 $params['is_required'] = $row['is_required'];
             }
@@ -1956,7 +1956,7 @@ class SurveyManager
         }
         ksort($newQuestionList);
 
-        $order = api_get_configuration_value('survey_duplicate_order_by_name');
+        $order = ('true' === api_get_setting('survey.survey_duplicate_order_by_name'));
         foreach ($itemList as $class) {
             $className = $class['name'];
             $users = $class['users'];
@@ -2044,7 +2044,7 @@ class SurveyManager
 
     public static function hasDependency(CSurvey $survey)
     {
-        if (false === api_get_configuration_value('survey_question_dependency')) {
+        if ('false' === api_get_setting('survey.survey_question_dependency')) {
             return false;
         }
 

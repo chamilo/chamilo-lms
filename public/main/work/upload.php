@@ -41,7 +41,7 @@ $token = Security::get_token();
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-$onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
+$onlyOnePublication = ('true' === api_get_setting('work.allow_only_one_student_publication_per_user'));
 
 if ($onlyOnePublication) {
     $count = get_work_count_by_student($user_id, $work_id);
@@ -76,7 +76,7 @@ setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addHidden('id', $work_id);
 $form->addHidden('sec_token', $token);
 
-$allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
+$allowRedirect = ('true' === api_get_setting('work.allow_redirect_to_main_page_after_work_upload'));
 $urlToRedirect = '';
 if ($allowRedirect) {
     $urlToRedirect = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
@@ -95,7 +95,7 @@ if ($form->validate()) {
             $group_id,
             $user_id,
             $_FILES['file'],
-            api_get_configuration_value('assignment_prevent_duplicate_upload')
+            ('true' === api_get_setting('work.assignment_prevent_duplicate_upload'))
         );
 
         if ($allowRedirect) {

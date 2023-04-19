@@ -15,6 +15,8 @@ use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -84,7 +86,25 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_splash_screen' => 'true',
                     'block_registered_users_access_to_open_course_contents' => 'false',
                     'enable_bootstrap_in_documents_html' => 'false',
-                    // @todo
+                    'view_grid_courses' => 'true',
+                    'show_simple_session_info' => 'true',
+                    'my_courses_show_courses_in_user_language_only' => 'false',
+                    'allow_public_course_with_no_terms_conditions' => 'false',
+                    'show_all_sessions_on_my_course_page' => 'true',
+                    'disabled_edit_session_coaches_course_editing_course' => 'false',
+                    'allow_base_course_category' => 'false',
+                    'hide_course_sidebar' => 'true',
+                    'allow_course_extra_field_in_catalog' => 'false',
+                    'multiple_access_url_show_shared_course_marker' => 'false',
+                    'course_category_code_to_use_as_model' => 'MY_CATEGORY',
+                    'enable_unsubscribe_button_on_my_course_page' => 'false',
+                    'course_creation_donate_message_show' => 'false',
+                    'course_creation_donate_link' => '<some donate button html>',
+                    'courses_list_session_title_link' => '1',
+                    'hide_course_rating' => 'false',
+                    'course_log_hide_columns' => '',
+                    'course_student_info' => '',
+                    'course_catalog_settings' => '',
                 ]
             )
             ->setTransformer(
@@ -224,6 +244,128 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('course_creation_splash_screen', YesNoType::class)
             ->add('block_registered_users_access_to_open_course_contents', YesNoType::class)
             ->add('enable_bootstrap_in_documents_html', YesNoType::class)
+            ->add('view_grid_courses', YesNoType::class)
+            ->add('show_simple_session_info', YesNoType::class)
+            ->add('my_courses_show_courses_in_user_language_only', YesNoType::class)
+            ->add('allow_public_course_with_no_terms_conditions', YesNoType::class)
+            ->add('show_all_sessions_on_my_course_page', YesNoType::class)
+            ->add('disabled_edit_session_coaches_course_editing_course', YesNoType::class)
+            ->add('allow_base_course_category', YesNoType::class)
+            ->add('hide_course_sidebar', YesNoType::class)
+            ->add('allow_course_extra_field_in_catalog', YesNoType::class)
+            ->add('multiple_access_url_show_shared_course_marker', YesNoType::class)
+            ->add(
+                'course_category_code_to_use_as_model',
+                TextType::class,
+                [
+                    'label' => 'CourseCategoryCodeToUseAsModelTitle',
+                    'help' => 'CourseCategoryCodeToUseAsModelComment',
+                ]
+            )
+            ->add('enable_unsubscribe_button_on_my_course_page', YesNoType::class)
+            ->add('course_creation_donate_message_show', YesNoType::class)
+            ->add(
+                'course_creation_donate_link',
+                TextType::class,
+                [
+                    'label' => 'CourseCreationDonateLinkTitle',
+                    'help' => 'CourseCreationDonateLinkComment',
+                ]
+            )
+            ->add(
+                'courses_list_session_title_link',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'No link' => '0',
+                        'Default' => '1',
+                        'Link' => '2',
+                        'Session link' => '3',
+                    ],
+                ]
+            )
+            ->add('hide_course_rating', YesNoType::class)
+            ->add(
+                'course_log_hide_columns',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course log - Default columns to hide').
+                        $this->settingArrayHelpValue('course_log_hide_columns'),
+                ]
+            )
+            ->add(
+                'course_student_info',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Show student progress in My courses page').
+                        $this->settingArrayHelpValue('course_student_info'),
+                ]
+            )
+            ->add(
+                'course_catalog_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course catalog links behaviour').
+                        $this->settingArrayHelpValue('course_catalog_settings'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'course_log_hide_columns' =>
+                "<pre>
+                ['columns' => [1, 9]]
+                </pre>",
+            'course_student_info' =>
+                "<pre>
+                [
+                    'score' => false,
+                    'progress' => false,
+                    'certificate' => false,
+                ]
+                </pre>",
+            'course_catalog_settings' =>
+                "<pre>
+                [
+                    'link_settings' => [
+                        'info_url' => 'course_description_popup', // course description popup page
+                        'title_url' => 'course_home', // Course home URL
+                        'image_url' => 'course_about', // Course about URL
+                    ],
+                    'hide_course_title' => false,
+                    'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
+                    'extra_fields_in_search_form' => ['variable1', 'variable2'],
+                    'extra_fields_in_course_block' => ['variable3', 'variable4'],
+                    'standard_sort_options' => [
+                        //  1 means allow sorting in ascending order
+                        // -1 means allow sorting in descending order
+                        'title' => 1,
+                        'creation_date' => -1,
+                        'count_users' => -1, // subscription count
+                        'point_info/point_average' => -1, // average score
+                        'point_info/total_score' => -1, // score sum
+                        'point_info/users' => -1, // vote count
+                    ],
+                    'extra_field_sort_options' => [
+                        'variable5' => -1,
+                        'variable6' => 1,
+                    ],
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+
+        }
+
+        return $returnValue;
     }
 }

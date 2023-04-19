@@ -60,7 +60,7 @@
 
                                 {{ social_friend_block }}
 
-                                {% if 'allow_social_map_fields'|api_get_configuration_value %}
+                                {% if 'profile.allow_social_map_fields'|api_get_setting == 'true' %}
                                     <div class="geolocalization">
                                         <a class="btn btn-maps" id="profile-tab" href="{{ _p.web }}main/social/map.php" >
                                             {{ "geolocalization.png"|icon(32) }}

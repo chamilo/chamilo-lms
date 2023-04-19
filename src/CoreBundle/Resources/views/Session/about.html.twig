@@ -31,7 +31,7 @@
                             </div>
                         {% endif %}
 
-                        {% if not 'hide_social_media_links'|api_get_configuration_value %}
+                        {% if not "display.hide_social_media_links" | api_get_setting == 'true' %}
                             <div class="share-social-media">
                                 <ul class="sharing-buttons">
                                     <li>

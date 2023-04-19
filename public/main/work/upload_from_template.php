@@ -100,7 +100,7 @@ if ($form->validate()) {
             $group_id,
             $user_id,
             [],
-            api_get_configuration_value('assignment_prevent_duplicate_upload')
+            ('true' === api_get_setting('work.assignment_prevent_duplicate_upload'))
         );
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {

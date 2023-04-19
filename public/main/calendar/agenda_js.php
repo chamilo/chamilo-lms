@@ -182,7 +182,7 @@ $agendaColors = array_merge(
         'personal' => 'steel blue', //steel blue
         'student_publication' => '#FF8C00', //DarkOrange
     ],
-    api_get_configuration_value('agenda_colors') ?: []
+    api_get_setting('agenda.agenda_colors', true) ?: []
 );
 
 switch ($type_event_class) {
@@ -279,9 +279,9 @@ $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="displa
 $form->addHtml('</div>');
 
 $tpl->assign('form_add', $form->returnForm());
-$tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
+$tpl->assign('legend_list', api_get_setting('agenda.agenda_legend', true));
 
-$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+$onHoverInfo = api_get_setting('agenda.agenda_on_hover_info', true);
 if (!empty($onHoverInfo)) {
     $options = $onHoverInfo['options'];
 } else {

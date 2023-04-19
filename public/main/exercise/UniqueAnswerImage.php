@@ -57,7 +57,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 get_lang('Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size.')
             .'</div>';
 
-        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        $zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             $html .= '<!-- elFinder CSS (REQUIRED) -->';

@@ -2432,7 +2432,7 @@ class learnpathItem
 
                                         if (false === $returnstatus) {
                                             // Check results from another sessions.
-                                            $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                            $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
                                             if ($checkOtherSessions) {
                                                 $returnstatus = $this->getStatusFromOtherSessions(
                                                     $user_id,
@@ -2462,7 +2462,7 @@ class learnpathItem
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         // Check results from another sessions.
-                                        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                        $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
                                         if ($checkOtherSessions && !$returnstatus) {
                                             $returnstatus = $this->getStatusFromOtherSessions(
                                                 $user_id,
@@ -4221,7 +4221,7 @@ class learnpathItem
         $user_id = (int) $user_id;
 
         // Check results from another sessions:
-        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+        $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
         if ($checkOtherSessions) {
             // Check items
             $sql = "SELECT iid FROM $lp_view

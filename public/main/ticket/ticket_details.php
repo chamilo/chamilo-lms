@@ -399,7 +399,7 @@ if (null != $ticket['ticket']['course_url']) {
             <td></td>
             <td colspan="2"></td>
           </tr>';
-    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+    if ('true' === api_get_setting('lp.ticket_lp_quiz_info_add')) {
         if (!empty($ticket['ticket']['exercise_url'])) {
             echo '<tr>
                 <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>

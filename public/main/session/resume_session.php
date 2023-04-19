@@ -152,7 +152,7 @@ if (0 === $session->getNbrCourses()) {
     $courseItem = '';
     $courses = $session->getCourses();
 
-    $allowSkills = api_get_configuration_value('allow_skill_rel_items');
+    $allowSkills = ('true' === api_get_setting('skill.allow_skill_rel_items'));
 
     /** @var SessionRelCourse $sessionRelCourse */
     foreach ($courses as $sessionRelCourse) {

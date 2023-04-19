@@ -94,7 +94,7 @@ $(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+$zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
@@ -120,7 +120,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
     </script>';
 }
 
-$allowLpItemTip = false === api_get_configuration_value('hide_accessibility_label_on_lp_item');
+$allowLpItemTip = ('false' === api_get_setting('lp.hide_accessibility_label_on_lp_item'));
 
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
@@ -472,7 +472,7 @@ $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', !$lp->getHideTocFrame());
 
 $showMenu = 0;
-$settings = api_get_configuration_value('lp_view_settings');
+$settings = api_get_setting('lp.lp_view_settings', true);
 $display = $settings['display'] ?? false;
 $navigationInTheMiddle = false;
 if (!empty($display)) {
@@ -539,7 +539,7 @@ $template->assign('lp_title_scorm', $lp->getName());
 $template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($oLP->get_current_item_id()));
 
 // @todo Fix lp_view_accordion
-/*if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
+/*if ('true' === api_get_setting('lp.lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_panel', $oLP->getTOCTree());
     $template->assign('data_list', null);
 } else {*/
@@ -554,11 +554,11 @@ $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $oLP->get_current_item_id());
 
 $menuLocation = 'left';
-if (!empty(api_get_configuration_value('lp_menu_location'))) {
-    $menuLocation = api_get_configuration_value('lp_menu_location');
+if (!empty(api_get_setting('lp.lp_menu_location'))) {
+    $menuLocation = api_get_setting('lp.lp_menu_location');
 }
 $template->assign('menu_location', $menuLocation);
-$template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
+$template->assign('disable_js_in_lp_view', (int) ('true' === api_get_setting('lp.disable_js_in_lp_view')));
 $template->assign('lp_preview_image', '<img src="'.$lpPreviewImagePath.'" alt="'.$oLP->getNameNoTags().'" />');
 
 //$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');

@@ -87,7 +87,7 @@ class SurveyQuestion extends Resource
         $this->shared_question_id = $shared_question_id;
         $this->max_value = $max_value;
         $this->answers = [];
-        if (api_get_configuration_value('allow_required_survey_questions')) {
+        if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
             $this->is_required = $is_required;
         }
     }

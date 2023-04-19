@@ -9,7 +9,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false === api_get_configuration_value('allow_email_editor_for_anonymous')) {
+if ('false' === api_get_setting('mail.allow_email_editor_for_anonymous')) {
     api_not_allowed(true);
 }
 

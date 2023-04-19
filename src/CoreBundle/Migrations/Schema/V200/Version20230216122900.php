@@ -342,8 +342,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 ;
                 $count = $result->fetchNumeric()[0];
                 if (empty($count)) {
-                    $settingValue = $this->getConfigurationValue($variable);
-                    $selectedValue = (true === $settingValue ? 'true' : 'false');
+                    $selectedValue = $this->getConfigurationSelectedValue($variable);
                     $this->addSql(
                         "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
                     );
@@ -738,5 +737,24 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "DELETE FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
             );
         }
+    }
+
+    public function getConfigurationSelectedValue(string $variable): string
+    {
+        $selectedValue = '';
+        $settingValue = $this->getConfigurationValue($variable);
+        if (!empty($settingValue)) {
+            if (is_array($settingValue)) {
+                $selectedValue = var_export($settingValue, true);
+            } else if (true === $settingValue) {
+                $selectedValue = 'true';
+            } else if (false === $settingValue) {
+                $selectedValue = 'false';
+            } else {
+                $selectedValue = (string) $settingValue;
+            }
+        }
+
+        return $selectedValue;
     }
 }

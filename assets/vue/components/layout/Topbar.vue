@@ -1,10 +1,6 @@
 <template>
   <TopbarNotLoggedIn v-if="!isAuthenticated" />
-  <TopbarLoggedIn
-    v-if="isAuthenticated"
-    :current-user="currentUser"
-    :platform-settings="platformSettings"
-  />
+  <TopbarLoggedIn v-if="isAuthenticated" :current-user="currentUser" />
 </template>
 
 <script setup>
@@ -15,8 +11,6 @@ import TopbarNotLoggedIn from "./TopbarNotLoggedIn.vue";
 import { computed } from "vue";
 
 const store = useStore();
-
-const platformSettings = window.config;
 
 const isAuthenticated = computed(
   () => store.getters["security/isAuthenticated"]

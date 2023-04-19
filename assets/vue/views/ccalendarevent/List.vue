@@ -99,6 +99,7 @@ import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { useConfirm } from "primevue/useconfirm";
 import { useAbbreviatedDatetime } from "../../composables/formatDate.js";
+import { usePlatformConfig } from "../../store/platformConfig";
 
 import Loading from "../../components/Loading.vue";
 import FullCalendar from "@fullcalendar/vue3";
@@ -117,6 +118,7 @@ import { useToast } from "primevue/usetoast";
 const store = useStore();
 const route = useRoute();
 const confirm = useConfirm();
+const platformConfigStore = usePlatformConfig();
 
 const item = ref({});
 const dialog = ref(false);
@@ -172,7 +174,9 @@ async function getCalendarEvents({ startStr, endStr }) {
 async function getSessions({ startStr, endStr }) {
   if (
     "true" !==
-    window.config["agenda.personal_calendar_show_sessions_occupation"]
+    platformConfigStore.getSetting(
+      "agenda.personal_calendar_show_sessions_occupation"
+    )
   ) {
     return [];
   }

@@ -50,6 +50,7 @@ import { useRoute } from "vue-router";
 import MegaMenu from "primevue/megamenu";
 import Avatar from "primevue/avatar";
 import Menu from "primevue/menu";
+import { usePlatformConfig } from "../../store/platformConfig";
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -57,13 +58,11 @@ const props = defineProps({
     required: true,
     type: Object,
   },
-  platformSettings: {
-    required: true,
-    type: Object,
-  },
 });
 
 const route = useRoute();
+
+const platformConfigStore = usePlatformConfig();
 
 const menuItems = ref([
   {
@@ -81,7 +80,7 @@ const menuItems = ref([
     })(),
     visible:
       "true" !==
-      props.platformSettings["display.show_link_ticket_notification"],
+      platformConfigStore.getSetting("display.show_link_ticket_notification"),
     items: [],
   },
   {

@@ -32,8 +32,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { ref } from "vue";
-import isEmpty from "lodash/isEmpty";
-
+import { usePlatformConfig } from "../../store/platformConfig";
 export default {
   name: "ToolIntroForm",
   props: {
@@ -51,14 +50,12 @@ export default {
     },
   },
   setup() {
-    const config = ref([]);
     const extraPlugins = ref("");
 
-    if (!isEmpty(window.config)) {
-      config.value = window.config;
-      if (config.value["editor.translate_html"]) {
-        extraPlugins.value = "translatehtml";
-      }
+    const platformConfigStore = usePlatformConfig();
+
+    if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
+      extraPlugins.value = "translatehtml";
     }
 
     return { v$: useVuelidate(), extraPlugins };

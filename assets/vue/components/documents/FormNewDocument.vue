@@ -50,7 +50,7 @@
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { ref } from "vue";
-import isEmpty from "lodash/isEmpty";
+import { usePlatformConfig } from "../../store/platformConfig";
 
 export default {
   name: "DocumentsForm",
@@ -69,14 +69,11 @@ export default {
     },
   },
   setup() {
-    const config = ref([]);
+    const platformConfigStore = usePlatformConfig();
     const extraPlugins = ref("");
 
-    if (!isEmpty(window.config)) {
-      config.value = window.config;
-      if (config.value["editor.translate_html"]) {
-        extraPlugins.value = "translatehtml";
-      }
+    if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
+      extraPlugins.value = "translatehtml";
     }
 
     return { v$: useVuelidate(), extraPlugins };

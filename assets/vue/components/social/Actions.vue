@@ -41,6 +41,7 @@
 <script>
 import { reactive, ref } from "vue";
 import axios from "axios";
+import { usePlatformConfig } from "../../store/platformConfig";
 
 export default {
   name: "WallActions",
@@ -56,6 +57,8 @@ export default {
   },
   emits: ["post-deleted"],
   setup(props, { emit }) {
+    const platformConfigStore = usePlatformConfig();
+
     const isLoading = reactive({
       like: false,
       dislike: false,
@@ -95,12 +98,12 @@ export default {
         .finally(() => (isLoading.delete = false));
     }
 
-    const enableFeedback = ref(
-      window.config["social.social_enable_messages_feedback"] === "true"
-    );
-    const disableDislike = ref(
-      window.config["social.disable_dislike_option"] === "true"
-    );
+    const enableFeedback =
+      "true" ===
+      platformConfigStore.getSetting("social.social_enable_messages_feedback");
+    const disableDislike =
+      "true" ===
+      platformConfigStore.getSetting("social.disable_dislike_option");
 
     return {
       enableFeedback,

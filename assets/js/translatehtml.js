@@ -1,12 +1,14 @@
 /* For licensing terms, see /license.txt */
 
+import { usePlatformConfig } from "../vue/store/platformConfig";
+
 export default function translateHtml() {
+  const platformConfigStore = usePlatformConfig();
+
   if (
     window.user &&
     window.user.locale &&
-    window.config &&
-    window.config["editor.translate_html"] &&
-    "true" === window.config["editor.translate_html"]
+    "true" === platformConfigStore.getSetting("editor.translate_html")
   ) {
     var isoCode = window.user.locale;
     const translateElement = document.querySelector(".mce-translatehtml");

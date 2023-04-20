@@ -749,7 +749,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     // Forum images
     $has_attachment = false;
     $image_moved = true;
-    if (!empty($_FILES['picture']['name'])) {
+
+    $maxFileSize = getIniMaxFileSizeInBytes();
+    if (!empty($_FILES['picture']['name']) && !($maxFileSize > 0 && $_FILES['picture']['size'] > $maxFileSize)) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
     }
@@ -822,7 +824,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         // Move groups from one group to another
         if (isset($values['group_forum'])) {
             $forumData = get_forums($values['forum_id']);
-            $currentGroupId = $forumData['forum_of_group'];
+            $currentGroupId = $forumData['forum_of_group'] ?? 0;
             if ($currentGroupId != $values['group_forum']) {
                 $threads = get_threads($values['forum_id']);
                 $toGroupId = 'NULL';
@@ -2868,7 +2870,8 @@ function store_thread(
     $upload_ok = 1;
     $has_attachment = false;
 
-    if (!empty($_FILES['user_upload']['name'])) {
+    $maxFileSize = getIniMaxFileSizeInBytes();
+    if (!empty($_FILES['user_upload']['name']) && !($maxFileSize > 0 && $_FILES['user_upload']['size'] > $maxFileSize)) {
         $upload_ok = process_uploaded_file($_FILES['user_upload']);
         $has_attachment = true;
     }
@@ -5251,8 +5254,13 @@ function add_forum_attachment_file($file_comment, $last_id)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
+            continue;
+        }
+
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
             continue;
         }
 
@@ -5347,13 +5355,17 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
             continue;
         }
 
-        $upload_ok = process_uploaded_file($attachment);
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
+            continue;
+        }
 
+        $upload_ok = process_uploaded_file($attachment);
         if (!$upload_ok) {
             continue;
         }

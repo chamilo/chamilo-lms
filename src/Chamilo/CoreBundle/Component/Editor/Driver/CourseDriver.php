@@ -267,6 +267,13 @@ class CourseDriver extends Driver implements DriverInterface
         if ($this->allowToEdit()) {
             // upload file by elfinder.
             $size = filesize($tmpname);
+
+            // check the max filesize.
+            $maxFileSize = getIniMaxFileSizeInBytes();
+            if ($maxFileSize > 0 && $size > $maxFileSize) {
+                return false;
+            }
+
             $maxSpace = \DocumentManager::get_course_quota($this->connector->course['code']);
             // Check if there is enough space to save the file.
             if (!\DocumentManager::enough_space($size, $maxSpace)) {

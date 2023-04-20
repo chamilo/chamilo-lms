@@ -2445,6 +2445,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 //Hides the link to the course catalog in the menu when the catalog is public.
 // $_configuration['catalog_hide_public_link'] = false;
 
+// File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
+//$_configuration['file_upload_size_limit_for_teacher'] = 0;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

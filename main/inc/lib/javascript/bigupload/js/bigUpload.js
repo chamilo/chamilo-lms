@@ -134,6 +134,7 @@ function bigUpload () {
 		var fileSize = this.uploadData.file.size;
 		if(fileSize > this.settings.maxFileSize) {
 			this.printResponse('The file you have chosen is too large.', true);
+			this.$(this.settings.submitButton).disabled = false;
 			return;
 		}
 

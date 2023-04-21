@@ -4442,7 +4442,7 @@ class learnpath
             error_log('End of prerequisites_match(). Error message is now '.$this->error);
         }
 
-        if (true === $result) {
+        if (true === $result && $itemId) {
             // checks the dates values as prerequisites
             $result = $this->prerequistesDatesMatch($itemId);
         }

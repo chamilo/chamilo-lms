@@ -18899,6 +18899,12 @@ msgstr "Revise question later"
 msgid "Number of learners who selected it"
 msgstr "Number of learners who selected it"
 
+msgid "Number of times the question was answered"
+msgstr "Number of times the question was answered"
+
+msgid "Number of times this answer was selected"
+msgstr "Number of times this answer was selected"
+
 msgid "Questions already answered"
 msgstr "Questions already answered"
 

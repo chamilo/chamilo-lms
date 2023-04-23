@@ -18899,6 +18899,12 @@ msgstr "Marcar para revisar después"
 msgid "Number of learners who selected it"
 msgstr "Número de estudiantes quienes la seleccionaron"
 
+msgid "Number of times the question was answered"
+msgstr "Número de veces que la pregunta fue respondida"
+
+msgid "Number of times this answer was selected"
+msgstr "Número de veces que se seleccionó esta respuesta"
+
 msgid "Questions already answered"
 msgstr "Preguntas ya respondidas"
 

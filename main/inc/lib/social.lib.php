@@ -2059,12 +2059,8 @@ class SocialManager extends UserManager
 
     /**
      * get html data with OpenGrap passing the URL.
-     *
-     * @param $link url
-     *
-     * @return string data html
      */
-    public static function readContentWithOpenGraph($link)
+    public static function readContentWithOpenGraph(string $link): string
     {
         if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
             $link = "http://".$link;
@@ -2094,12 +2090,8 @@ class SocialManager extends UserManager
 
     /**
      * verify if Url Exist - Using Curl.
-     *
-     * @param $uri url
-     *
-     * @return bool
      */
-    public static function verifyUrl($uri)
+    public static function verifyUrl(string $uri): bool
     {
         $curl = curl_init($uri);
         curl_setopt($curl, CURLOPT_FAILONERROR, true);
@@ -2368,7 +2360,7 @@ class SocialManager extends UserManager
     /**
      * @return string Get the JS code necessary for social wall to load open graph from URLs.
      */
-    public static function getScriptToGetOpenGraph()
+    public static function getScriptToGetOpenGraph(): string
     {
         return '<script>
             $(function() {
@@ -2836,7 +2828,7 @@ class SocialManager extends UserManager
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                             $icon_path = UserManager::get_favicon_from_url($data);
-                            if (self::verifyUrl($icon_path) == false) {
+                            if (!self::verifyUrl($icon_path)) {
                                 break;
                             }
                             $bottom = '0.2';

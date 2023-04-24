@@ -320,10 +320,10 @@ switch ($action) {
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':
-        $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
+        $url = $_POST['social_wall_new_msg_main'] ?? '';
         $url = trim($url);
         $html = '';
-        if (SocialManager::verifyUrl($url) == true) {
+        if (SocialManager::verifyUrl($url)) {
             $html = Security::remove_XSS(
                 SocialManager::readContentWithOpenGraph($url)
             );

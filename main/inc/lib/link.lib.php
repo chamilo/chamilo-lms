@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLink;
+use GuzzleHttp\Client;
 
 /**
  * Function library for the links tool.
@@ -1553,8 +1554,9 @@ class Link extends Model
             if ($showChildren) {
                 $childrenContent = self::showLinksPerCategory(
                     $myrow['id'],
-                    api_get_course_int_id(),
-                    api_get_session_id()
+                    $course_id,
+                    $session_id,
+                    $showActionLinks
                 );
             }
 
@@ -1791,25 +1793,18 @@ class Link extends Model
         return self::moveLinkDisplayOrder($id, 'DESC');
     }
 
-    /**
-     * @param string $url
-     *
-     * @return bool
-     */
-    public static function checkUrl($url)
+    public static function checkUrl(string $url): bool
     {
-        // Check if curl is available.
-        if (!in_array('curl', get_loaded_extensions())) {
-            return false;
-        }
-
-        // set URL and other appropriate options
         $defaults = [
-            CURLOPT_URL => $url,
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4,
+            'allow_redirects' => [
+                'max' => 5, // max number of redirects allowed
+                'strict' => true, // whether to use strict redirects or not
+                'referer' => true, // whether to add the Referer header when redirecting
+                'protocols' => ['http', 'https'], // protocols allowed to be redirected to
+                'track_redirects' => true // whether to keep track of the number of redirects
+            ],
+            'connect_timeout' => 4,
+            'timeout' => 4,
         ];
 
         $proxySettings = api_get_configuration_value('proxy_settings');
@@ -1817,23 +1812,26 @@ class Link extends Model
         if (!empty($proxySettings) &&
             isset($proxySettings['curl_setopt_array'])
         ) {
-            $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-            $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+            $defaults['proxy'] = sprintf(
+                '%s:%s',
+                $proxySettings['curl_setopt_array']['CURLOPT_PROXY'],
+                $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT']
+            );
         }
 
-        // Create a new cURL resource
-        $ch = curl_init();
-        curl_setopt_array($ch, $defaults);
+        $client = new Client(['defaults' => $defaults]);
 
-        // grab URL and pass it to the browser
-        ob_start();
-        $result = curl_exec($ch);
-        ob_get_clean();
+        try {
+            $response = $client->get($url);
 
-        // close cURL resource, and free up system resources
-        curl_close($ch);
+            if (200 !== $response->getStatusCode()) {
+                return false;
+            }
 
-        return $result;
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**

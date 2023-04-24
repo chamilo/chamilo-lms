@@ -1801,7 +1801,7 @@ class Link extends Model
                 'strict' => true, // whether to use strict redirects or not
                 'referer' => true, // whether to add the Referer header when redirecting
                 'protocols' => ['http', 'https'], // protocols allowed to be redirected to
-                'track_redirects' => true // whether to keep track of the number of redirects
+                'track_redirects' => true, // whether to keep track of the number of redirects
             ],
             'connect_timeout' => 4,
             'timeout' => 4,

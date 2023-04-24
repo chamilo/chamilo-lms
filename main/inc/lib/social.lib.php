@@ -2101,8 +2101,8 @@ class SocialManager extends UserManager
                 'timeout' => 15,
                 'verify' => false,
                 'headers' => [
-                    'User-Agent' => $_SERVER['HTTP_USER_AGENT']
-                ]
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+                ],
             ]);
 
             if (200 !== $response->getStatusCode()) {

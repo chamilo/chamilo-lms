@@ -274,6 +274,7 @@ class ScriptHandler
 
         if (!is_file($configurationFile)) {
             echo 'app/config/configuration.php file does not exits.'.PHP_EOL;
+
             return;
         }
 

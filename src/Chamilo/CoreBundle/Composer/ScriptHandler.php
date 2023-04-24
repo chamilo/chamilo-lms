@@ -270,6 +270,13 @@ class ScriptHandler
      */
     public static function generateDoctrineProxies()
     {
+        $configurationFile = __DIR__.'/../../../../app/config/configuration.php';
+
+        if (!is_file($configurationFile)) {
+            echo 'app/config/configuration.php file does not exits.'.PHP_EOL;
+            return;
+        }
+
         $helperSet = require __DIR__.'/../../../../cli-config.php';
 
         $application = ConsoleRunner::createApplication(

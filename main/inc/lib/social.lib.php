@@ -5,6 +5,7 @@
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
+use GuzzleHttp\Client;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
 
@@ -2093,21 +2094,25 @@ class SocialManager extends UserManager
      */
     public static function verifyUrl(string $uri): bool
     {
-        $curl = curl_init($uri);
-        curl_setopt($curl, CURLOPT_FAILONERROR, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        if (!empty($response)) {
-            return true;
-        }
+        $client = new Client();
 
-        return false;
+        try {
+            $response = $client->request('GET', $uri, [
+                'timeout' => 15,
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT']
+                ]
+            ]);
+
+            if (200 !== $response->getStatusCode()) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**

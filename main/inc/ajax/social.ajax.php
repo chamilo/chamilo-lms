@@ -320,6 +320,8 @@ switch ($action) {
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':
+        api_block_anonymous_users(false);
+
         $url = $_POST['social_wall_new_msg_main'] ?? '';
         $url = trim($url);
         $html = '';

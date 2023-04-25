@@ -1034,7 +1034,7 @@ function display_database_settings_form(
         'dbUsernameForm' => $dbUsernameForm,
         'dbPassForm' => $dbPassForm,
         'dbNameForm' => $dbNameForm,
-        'examplePassword' => api_generate_password(),
+        'examplePassword' => api_generate_password(8, false),
         'dbExists' => $databaseExists,
         'dbConnError' => $databaseConnectionError,
         'connParams' => $connectionParams,

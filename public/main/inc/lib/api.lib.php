@@ -2211,12 +2211,8 @@ function api_format_course_array(Course $course = null)
 
 /**
  * Returns a difficult to guess password.
- *
- * @param int $length the length of the password
- *
- * @return string the generated password
  */
-function api_generate_password($length = 8)
+function api_generate_password(int $length = 8, $useRequirements = true): string
 {
     if ($length < 2) {
         $length = 2;
@@ -2230,7 +2226,7 @@ function api_generate_password($length = 8)
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = api_get_setting('security.password_requirements', true);
+    $passwordRequirements = $useRequirements ? api_get_setting('security.password_requirements', true) : [];
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));

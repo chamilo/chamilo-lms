@@ -224,7 +224,7 @@ if (!isset($_GET['running'])) {
     }
 
     $loginForm = 'admin';
-    $passForm = api_generate_password();
+    $passForm = api_generate_password(8, false);
     $institutionUrlForm = 'https://chamilo.org';
     $languageForm = api_get_language_isocode();
     $checkEmailByHashSent = 0;

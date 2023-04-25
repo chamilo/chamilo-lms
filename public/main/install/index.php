@@ -516,7 +516,9 @@ if (isset($_POST['step2'])) {
 
         // Drop and create the database anyways
         error_log("Drop database $dbNameForm");
-        $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+        $schemaManager = $manager->getConnection()->createSchemaManager();
+        $schemaManager->dropDatabase($dbNameForm);
+        $schemaManager->createDatabase($dbNameForm);
 
         error_log("Connect to database $dbNameForm with user $dbUsernameForm");
         $database = connectToDatabase(

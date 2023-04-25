@@ -10,9 +10,7 @@ export const useBlockSessionsItems = () => {
   const { t } = useI18n();
 
   const isAdmin = computed(() => store.getters["security/isAdmin"]);
-  const isSessionAdmin = computed(() =>
-    store.getters["security/hasRole"]("ROLE_SESSION_MANAGER")
-  );
+  const isSessionAdmin = computed(() => store.getters["security/hasRole"]("ROLE_SESSION_MANAGER"));
 
   let blockItems = [
     {

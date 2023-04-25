@@ -7,19 +7,10 @@
           {{ props.title }}
         </h4>
 
-        <p
-          v-if="props.description"
-          class="text-body-2"
-          v-text="props.description"
-        />
+        <p v-if="props.description" class="text-body-2" v-text="props.description" />
       </div>
 
-      <form
-        v-if="props.searchUrl"
-        :action="props.searchUrl"
-        class="lg:basis-1/3"
-        method="get"
-      >
+      <form v-if="props.searchUrl" :action="props.searchUrl" class="lg:basis-1/3" method="get">
         <div class="p-inputgroup flex-1">
           <InputText :placeholder="t('Keyword')" name="keyword" type="text" />
           <Button :label="t('Search')" icon="pi pi-search" type="submit" />

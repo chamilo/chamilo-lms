@@ -111,10 +111,7 @@ export const useBlockPlatformItems = () => {
     });
   }
 
-  if (
-    "true" ===
-    platformConfigurationStore.getSetting("registration.allow_terms_condition")
-  ) {
+  if ("true" === platformConfigurationStore.getSetting("registration.allow_terms_condition")) {
     blockItems.push({
       className: "item-terms-and-conditions",
       url: "/main/admin/legal_add.php",

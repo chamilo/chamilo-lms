@@ -11,29 +11,16 @@
       :title="block.title"
     />
 
-    <div
-      v-if="isAdmin"
-      class="block-admin-version p-4 rounded-lg shadow-lg space-y-3"
-    >
+    <div v-if="isAdmin" class="block-admin-version p-4 rounded-lg shadow-lg space-y-3">
       <h4 v-t="'Version Check'" />
 
-      <div
-        v-if="
-          'false' ===
-          platformConfigurationStore.getSetting('platform.registered')
-        "
-        class="admin-block-version"
-      >
+      <div v-if="'false' === platformConfigurationStore.getSetting('platform.registered')" class="admin-block-version">
         <i18n-t
           class="mb-3"
           keypath="In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
           tag="p"
         >
-          <a
-            href="https://www.chamilo.org/stats/"
-            target="_blank"
-            v-text="'https://www.chamilo.org/stats/'"
-          />
+          <a href="https://www.chamilo.org/stats/" target="_blank" v-text="'https://www.chamilo.org/stats/'" />
           <a
             href="https://www.chamilo.org/community.php"
             target="_blank"
@@ -49,25 +36,11 @@
           @submit.prevent="checkVersionOnSubmit"
         >
           <div class="field-checkbox">
-            <Checkbox
-              v-model="doNotListCampus"
-              binary
-              input-id="checkbox"
-              name="donotlistcampus"
-            />
-            <label
-              v-t="'Hide campus from public platforms list'"
-              for="checkbox"
-            />
+            <Checkbox v-model="doNotListCampus" binary input-id="checkbox" name="donotlistcampus" />
+            <label v-t="'Hide campus from public platforms list'" for="checkbox" />
           </div>
 
-          <Button
-            id="register"
-            :label="t('Enable version check')"
-            name="Register"
-            severity="secondary"
-            type="submit"
-          />
+          <Button id="register" :label="t('Enable version check')" name="Register" severity="secondary" type="submit" />
         </form>
       </div>
       <div ref="blockAdminVersionCheck" class="block-admin-version_check" />
@@ -135,9 +108,7 @@ blocks.value.push({
   className: "block-admin-sessions",
   icon: "google-classroom",
   title: t("Sessions management"),
-  description: t(
-    "Create course packages for a certain time with training sessions"
-  ),
+  description: t("Create course packages for a certain time with training sessions"),
   searchUrl: "/main/session/session_list.php",
   editable: isAdmin.value,
   items: useBlockSessionsItems(),
@@ -145,16 +116,12 @@ blocks.value.push({
 
 if (isAdmin.value) {
   // SKills
-  if (
-    "true" === platformConfigurationStore.getSetting("skill.allow_skills_tool")
-  ) {
+  if ("true" === platformConfigurationStore.getSetting("skill.allow_skills_tool")) {
     blocks.value.push({
       className: "block-admin-skills",
       icon: "certificate",
       title: t("Skills and gradebook"),
-      description: t(
-        "Manage the skills of your users, through courses and badges"
-      ),
+      description: t("Manage the skills of your users, through courses and badges"),
       editable: false,
       items: useBlockSkillsItems(),
     });
@@ -175,9 +142,7 @@ if (isAdmin.value) {
     className: "block-admin-platform",
     icon: "cogs",
     title: t("Platform management"),
-    description: t(
-      "Configure your platform, view reports, publish and send announcements globally"
-    ),
+    description: t("Configure your platform, view reports, publish and send announcements globally"),
     searchUrl: "/admin/settings/search_settings/",
     editable: true,
     items: useBlockPlatformItems(),
@@ -198,9 +163,7 @@ if (isAdmin.value) {
     className: "block-admin-chamilo",
     icon: "cogs",
     title: "Chamilo.org",
-    description: t(
-      "Learn more about Chamilo and its use, official references links"
-    ),
+    description: t("Learn more about Chamilo and its use, official references links"),
     editable: false,
     items: useBlockChamiloItems(),
   });

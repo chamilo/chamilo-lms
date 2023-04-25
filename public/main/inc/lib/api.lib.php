@@ -2595,7 +2595,7 @@ function api_get_session_condition(
  *
  * @return string|array
  */
-function api_get_setting($variable, $isArray = false)
+function api_get_setting($variable, $isArray = false, $key = null)
 {
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
@@ -2639,6 +2639,11 @@ function api_get_setting($variable, $isArray = false)
                     return $value;
                 }
             }
+
+            if (!empty($key) && isset($settingValue[$variable][$key])) {
+                return $settingValue[$variable][$key];
+            }
+
             return $settingValue;
             break;
     }

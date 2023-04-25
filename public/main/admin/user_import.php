@@ -32,7 +32,7 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-    if ('true' === api_get_setting('registration', 'email') || $checkUniqueEmail) {
+    if ('true' === api_get_setting('registration', false, 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
 

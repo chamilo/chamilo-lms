@@ -2143,7 +2143,7 @@ class Exercise
             ];
             $form->addGroup($group, null, get_lang('Hide question title'));
 
-            $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'))
+            $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'));
 
             if (true === $allow) {
                 // Hide question title.
@@ -6372,7 +6372,7 @@ class Exercise
         $data['duration'] = $duration;
         $data['ip'] = $ip;
 
-        if ('true' === api_get_setting('editor.save_titles_as_html'))) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');
         } else {
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
@@ -8242,7 +8242,7 @@ class Exercise
      */
     public function showPreviousButton()
     {
-        $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'))
+        $allow = ('true' === api_get_setting('exercise.allow_quiz_show_previous_button_setting'));
         if (false === $allow) {
             return true;
         }

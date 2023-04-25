@@ -160,8 +160,7 @@ if (isAdmin.value) {
     });
   }
 
-  if (false) {
-    // api_get_configuration_value('gradebook_dependency')
+  if ("true" === platformConfigurationStore.getSetting("gradebook.gradebook_dependency")) {
     blocks.value.push({
       className: "block-admin-gradebook",
       icon: "certificate",
@@ -225,8 +224,7 @@ function checkVersionOnSubmit() {
 const blockAdminVersionCheck = ref();
 
 onMounted(() => {
-  if (true) {
-    // 'false' === api_get_configuration_value('admin_chamilo_announcements_disable')
+  if ("false" === platformConfigurationStore.getSetting("admin.admin_chamilo_announcements_disable")) {
     axios
       .get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
       .then(({ data }) => toast.add({ severity: "info", detail: data }));

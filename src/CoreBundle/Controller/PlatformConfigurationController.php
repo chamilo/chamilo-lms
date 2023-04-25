@@ -36,6 +36,8 @@ class PlatformConfigurationController extends AbstractController
                 'platform.load_term_conditions_section',
                 'platform.cookie_warning',
 
+                'admin.admin_chamilo_announcements_disable',
+
                 'editor.enabled_mathjax',
                 'editor.translate_html',
 
@@ -44,6 +46,7 @@ class PlatformConfigurationController extends AbstractController
                 'registration.allow_terms_conditions',
 
                 'agenda.personal_calendar_show_sessions_occupation',
+                'agenda.agenda_reminders',
 
                 'social.social_enable_messages_feedback',
                 'social.disable_dislike_option',
@@ -51,10 +54,12 @@ class PlatformConfigurationController extends AbstractController
                 'skill.allow_skills_tool',
 
                 'gradebook.gradebook_enable_grade_model',
+                'gradebook.gradebook_dependency',
 
                 'course.course_validation',
 
                 'session.limit_session_admin_role',
+                'session.allow_session_admin_read_careers',
             ];
 
             $user = $this->getUser();

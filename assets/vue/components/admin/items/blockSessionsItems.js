@@ -1,9 +1,11 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
+import { usePlatformConfig } from "../../../store/platformConfig";
 
 export const useBlockSessionsItems = () => {
   const store = useStore();
+  const platformConfigStore = usePlatformConfig();
 
   const { t } = useI18n();
 
@@ -60,7 +62,10 @@ export const useBlockSessionsItems = () => {
     label: t("Copy from course in session to another session"),
   });
 
-  if (isAdmin.value || isSessionAdmin.value) {
+  if (
+    isAdmin.value ||
+    ("true" === platformConfigStore.getSetting("session.allow_session_admin_read_careers") && isSessionAdmin.value)
+  ) {
     //  && true === api_get_configuration_value('allow_session_admin_read_careers')
     // option only visible in development mode. Enable through code if required
     if (true) {

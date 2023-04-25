@@ -1,7 +1,9 @@
 import { useI18n } from "vue-i18n";
+import { usePlatformConfig } from "../../../store/platformConfig";
 
 export const useBlockSettingsItems = () => {
   const { t } = useI18n();
+  const platformConfigStore = usePlatformConfig();
 
   const blockItems = [];
 
@@ -45,8 +47,7 @@ export const useBlockSettingsItems = () => {
     label: t("Tickets"),
   });
 
-  if (false) {
-    // api_get_configuration_value('allow_session_status')
+  if ("true" === platformConfigStore.getSetting("session.allow_session_status")) {
     blockItems.push({
       url: "/main/session/cron_status.php",
       label: t("Update session status"),

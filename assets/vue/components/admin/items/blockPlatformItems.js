@@ -38,8 +38,7 @@ export const useBlockPlatformItems = () => {
     label: t("Global agenda"),
   });
 
-  if (false) {
-    // true === api_get_configuration_value('agenda_reminders')
+  if ("true" === platformConfigurationStore.getSetting("agenda.agenda_reminders")) {
     blockItems.push({
       className: "item-agenda-reminders",
       url: "/main/admin/import_course_agenda_reminders.php",

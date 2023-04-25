@@ -179,14 +179,14 @@ function api_get_timezone()
         // First, get the default timezone of the server
         $timezone = date_default_timezone_get();
         // Second, see if a timezone has been chosen for the platform
-        $timezoneFromSettings = api_get_setting('timezone_value', 'timezones');
+        $timezoneFromSettings = api_get_setting('timezone_value', false, 'timezones');
 
         if (null != $timezoneFromSettings) {
             $timezone = $timezoneFromSettings;
         }
 
         // If allowed by the administrator
-        $allowUserTimezones = api_get_setting('use_users_timezone', 'timezones');
+        $allowUserTimezones = api_get_setting('use_users_timezone', false, 'timezones');
         $userId = api_get_user_id();
 
         if ('true' === $allowUserTimezones && !empty($userId)) {

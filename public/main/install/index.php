@@ -517,7 +517,13 @@ if (isset($_POST['step2'])) {
         // Drop and create the database anyways
         error_log("Drop database $dbNameForm");
         $schemaManager = $manager->getConnection()->createSchemaManager();
-        $schemaManager->dropDatabase($dbNameForm);
+
+        try {
+            $schemaManager->dropDatabase($dbNameForm);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            error_log("Database ".$dbNameForm." does not exists");
+        }
+
         $schemaManager->createDatabase($dbNameForm);
 
         error_log("Connect to database $dbNameForm with user $dbUsernameForm");

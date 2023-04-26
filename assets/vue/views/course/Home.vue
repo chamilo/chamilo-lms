@@ -5,20 +5,19 @@
   >
     <div class="flex gap-4 items-center">
       <Skeleton
+        class="mr-auto"
         height="2.5rem"
         width="12rem"
-        class="mr-auto"
       />
       <Skeleton
-
+        v-if="isCurrentTeacher"
         height="2.5rem"
         width="8rem"
-        v-if="isCurrentTeacher"
       />
       <Skeleton
+        v-if="isCurrentTeacher"
         height="2.5rem"
         width="3rem"
-        v-if="isCurrentTeacher"
       />
     </div>
 
@@ -33,27 +32,27 @@
       />
       <Skeleton
         v-if="isCurrentTeacher"
-        height="1.5rem"
-        width="6rem"
         class="ml-auto"
+        height="1.5rem"
+        width="6rem"
       />
       <Skeleton
         v-if="isCurrentTeacher"
+        class="aspect-square"
         height="1.5rem"
         width="6rem"
-        class="aspect-square"
       />
       <Skeleton
         v-if="isCurrentTeacher"
+        class="aspect-square"
         height="1.5rem"
         width="6rem"
-        class="aspect-square"
       />
       <Skeleton
         v-if="isCurrentTeacher"
+        class="aspect-square"
         height="1.5rem"
         width="6rem"
-        class="aspect-square"
       />
     </div>
 
@@ -63,9 +62,9 @@
       <Skeleton
         v-for="v in 30"
         :key="v"
+        class="aspect-square"
         height="auto"
         width="7.5rem"
-        class="aspect-square"
       />
     </div>
   </div>
@@ -86,18 +85,18 @@
       <Button
         v-if="course && isCurrentTeacher"
         :label="t('See as student')"
-        icon="pi pi-eye"
         class="p-button-outlined p-button-plain"
+        icon="pi pi-eye"
         type="button"
       />
 
       <Button
         v-if="course && isCurrentTeacher"
-        icon="mdi mdi-cog"
-        class="p-button-text p-button-plain"
-        type="button"
-        aria-haspopup="true"
         aria-controls="course-tmenu"
+        aria-haspopup="true"
+        class="p-button-text p-button-plain"
+        icon="mdi mdi-cog"
+        type="button"
         @click="toggleCourseTMenu"
       />
 
@@ -120,29 +119,29 @@
 
         <Button
           v-if="createInSession && introTool"
+          :label="t('Course introduction')"
           class="p-button-outlined ml-auto"
           icon="mdi mdi-plus"
-          :label="t('Course introduction')"
           @click="addIntro(course, introTool)"
         />
         <Button
           v-else
+          :label="t('Update')"
           class="p-button-outlined ml-auto"
           icon="mdi mdi-pencil"
-          :label="t('Update')"
           @click="updateIntro(intro)"
         />
       </div>
       <EmptyState
         v-else-if="introTool"
-        :summary="t('You don\'t have any course content yet.')"
         :detail="t('Add a course introduction to display to your students.')"
+        :summary="t('You don\'t have any course content yet.')"
         icon="mdi mdi-book-open-page-variant"
       >
         <Button
+          :label="t('Course introduction')"
           class="mt-4 p-button-outlined"
           icon="mdi mdi-plus"
-          :label="t('Course introduction')"
           @click="addIntro(course, introTool)"
         />
       </EmptyState>
@@ -156,39 +155,39 @@
       <h6 v-t="'Tools'" />
       <Button
         v-if="isCurrentTeacher"
-        icon="mdi mdi-eye"
+        :disabled="isSorting || isCustomizing"
         :label="t('Show all')"
         class="p-button-text p-button-plain p-button-sm ml-auto"
-        :disabled="isSorting || isCustomizing"
+        icon="mdi mdi-eye"
         @click="onClickShowAll"
       />
       <Button
         v-if="isCurrentTeacher"
-        icon="mdi mdi-eye-off"
+        :disabled="isSorting || isCustomizing"
         :label="t('Hide all')"
         class="p-button-text p-button-plain p-button-sm"
-        :disabled="isSorting || isCustomizing"
+        icon="mdi mdi-eye-off"
         @click="onClickHideAll"
       />
       <ToggleButton
         v-if="isCurrentTeacher"
         v-model="isSorting"
-        on-icon="mdi mdi-swap-vertical"
-        off-icon="mdi mdi-swap-vertical"
-        :on-label="t('Sort')"
-        :off-label="t('Sort')"
-        class="p-button-text p-button-plain p-button-sm"
         :disabled="isCustomizing"
+        :off-label="t('Sort')"
+        :on-label="t('Sort')"
+        class="p-button-text p-button-plain p-button-sm"
+        off-icon="mdi mdi-swap-vertical"
+        on-icon="mdi mdi-swap-vertical"
       />
       <ToggleButton
         v-if="isCurrentTeacher"
         v-model="isCustomizing"
-        on-icon="mdi mdi-format-paint"
-        off-icon="mdi mdi-format-paint"
-        :on-label="t('Customize')"
-        :off-label="t('Customize')"
-        class="p-button-text p-button-plain p-button-sm"
         :disabled="isSorting"
+        :off-label="t('Customize')"
+        :on-label="t('Customize')"
+        class="p-button-text p-button-plain p-button-sm"
+        off-icon="mdi mdi-format-paint"
+        on-icon="mdi mdi-format-paint"
       />
     </div>
     <hr class="mt-0 mb-4">
@@ -236,20 +235,20 @@
 </template>
 
 <script setup>
-import { computed, provide, ref } from 'vue';
-import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import axios from 'axios';
-import { ENTRYPOINT } from '../../config/entrypoint';
-import Button from 'primevue/button';
-import ToggleButton from 'primevue/togglebutton';
-import TieredMenu from 'primevue/tieredmenu';
-import CourseToolList from '../../components/course/CourseToolList.vue';
-import ShortCutList from '../../components/course/ShortCutList.vue';
-import translateHtml from '../../../js/translatehtml.js';
-import EmptyState from '../../components/EmptyState';
-import Skeleton from 'primevue/skeleton';
+import { computed, provide, ref } from "vue";
+import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import axios from "axios";
+import { ENTRYPOINT } from "../../config/entrypoint";
+import Button from "primevue/button";
+import ToggleButton from "primevue/togglebutton";
+import TieredMenu from "primevue/tieredmenu";
+import CourseToolList from "../../components/course/CourseToolList.vue";
+import ShortCutList from "../../components/course/ShortCutList.vue";
+import translateHtml from "../../../js/translatehtml.js";
+import EmptyState from "../../components/EmptyState";
+import Skeleton from "primevue/skeleton";
 
 const route = useRoute();
 const store = useStore();
@@ -269,22 +268,22 @@ let sessionId = route.query.sid ?? 0;
 
 const isCourseLoading = ref(true);
 
-const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 
 const isSorting = ref(false);
 const isCustomizing = ref(false);
 
-provide('isSorting', isSorting);
-provide('isCustomizing', isCustomizing);
+provide("isSorting", isSorting);
+provide("isCustomizing", isCustomizing);
 
 // Remove the course session state.
-store.dispatch('session/cleanSession');
+store.dispatch("session/cleanSession");
 
 const courseItems = ref([]);
 
 axios
   .get(ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`)
-  .then(({data}) => {
+  .then(({ data }) => {
     course.value = data.course;
     session.value = data.session;
     tools.value = data.tools;
@@ -307,11 +306,11 @@ const courseTMenu = ref(null);
 
 const toggleCourseTMenu = event => {
   courseTMenu.value.toggle(event);
-}
+};
 
-async function getIntro () {
+async function getIntro() {
   // Searching for the CTool called 'course_homepage'.
-  let currentIntroTool = course.value.tools.find(element => element.name === 'course_homepage');
+  let currentIntroTool = course.value.tools.find(element => element.name === "course_homepage");
 
   if (!introTool.value) {
     introTool.value = currentIntroTool;
@@ -324,11 +323,11 @@ async function getIntro () {
     const filter = {
       courseTool: currentIntroTool.iid,
       cid: courseId,
-      sid: sessionId,
+      sid: sessionId
     };
 
     try {
-      const response = await store.dispatch('ctoolintro/findAll', filter);
+      const response = await store.dispatch("ctoolintro/findAll", filter);
       if (response) {
         if (sessionId) {
           createInSession.value = false;
@@ -343,77 +342,77 @@ async function getIntro () {
   }
 }
 
-function addIntro (course, introTool) {
+function addIntro(course, introTool) {
   return router.push({
-    name: 'ToolIntroCreate',
-    params: { 'courseTool': introTool.iid },
+    name: "ToolIntroCreate",
+    params: { "courseTool": introTool.iid },
     query: {
-      'cid': courseId,
-      'sid': sessionId,
-      'parentResourceNodeId': course.resourceNode.id
+      "cid": courseId,
+      "sid": sessionId,
+      "parentResourceNodeId": course.resourceNode.id
     }
   });
 }
 
-function updateIntro (intro) {
+function updateIntro(intro) {
   return router.push({
-    name: 'ToolIntroUpdate',
-    params: { 'id': intro['@id'] },
+    name: "ToolIntroUpdate",
+    params: { "id": intro["@id"] },
     query: {
-      'cid': courseId,
-      'sid': sessionId,
-      'id': intro['@id']
+      "cid": courseId,
+      "sid": sessionId,
+      "id": intro["@id"]
     }
   });
 }
 
-function goToSettingCourseTool (course, tool) {
-  return '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
+function goToSettingCourseTool(course, tool) {
+  return "/course/" + courseId + "/settings/" + tool.tool.name + "?sid=" + sessionId;
 }
 
-function goToCourseTool (course, tool) {
-  return '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
+function goToCourseTool(course, tool) {
+  return "/course/" + courseId + "/tool/" + tool.tool.name + "?sid=" + sessionId;
 }
 
-function goToShortCut (shortcut) {
-  const url = new URLSearchParams('?');
+function goToShortCut(shortcut) {
+  const url = new URLSearchParams("?");
 
-  url.append('cid', courseId);
-  url.append('sid', sessionId);
+  url.append("cid", courseId);
+  url.append("sid", sessionId);
 
-  return shortcut.url + '?' + url;
+  return shortcut.url + "?" + url;
 }
 
 const setToolVisibility = (tool, visibility) => {
   tool.ctool.resourceNode.resourceLinks[0].visibility = visibility;
 };
 
-function changeVisibility (course, tool) {
-  axios.post(ENTRYPOINT + '../r/course_tool/links/' + tool.ctool.resourceNode.id + '/change_visibility')
+function changeVisibility(course, tool) {
+  axios.post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility")
     .then(response => setToolVisibility(tool, response.data.visibility))
     .catch(error => console.log(error));
 }
 
-function onClickShowAll () {
+function onClickShowAll() {
   axios.post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach(tool => setToolVisibility(tool, 2))
+      tools.value.authoring.forEach(tool => setToolVisibility(tool, 2));
 
-      tools.value.interaction.forEach(tool => setToolVisibility(tool, 2))
+      tools.value.interaction.forEach(tool => setToolVisibility(tool, 2));
 
-      tools.value.plugin.forEach(tool => setToolVisibility(tool, 2))
+      tools.value.plugin.forEach(tool => setToolVisibility(tool, 2));
     })
     .catch(error => console.log(error));
 }
 
-function onClickHideAll () {
+function onClickHideAll() {
   axios.post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach(tool => setToolVisibility(tool, 0))
+      tools.value.authoring.forEach(tool => setToolVisibility(tool, 0));
 
-      tools.value.interaction.forEach(tool => setToolVisibility(tool, 0))
+      tools.value.interaction.forEach(tool => setToolVisibility(tool, 0));
 
-      tools.value.plugin.forEach(tool => setToolVisibility(tool, 0))
+      tools.value.plugin.forEach(tool => setToolVisibility(tool, 0));
     })
     .catch(error => console.log(error));
 }

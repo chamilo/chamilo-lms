@@ -36,7 +36,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.load_term_conditions_section',
                 'platform.cookie_warning',
 
-                'admin.admin_chamilo_announcements_disable',
+                //'admin.admin_chamilo_announcements_disable',
 
                 'editor.enabled_mathjax',
                 'editor.translate_html',
@@ -46,7 +46,7 @@ class PlatformConfigurationController extends AbstractController
                 'registration.allow_terms_conditions',
 
                 'agenda.personal_calendar_show_sessions_occupation',
-                'agenda.agenda_reminders',
+                //'agenda.agenda_reminders',
 
                 'social.social_enable_messages_feedback',
                 'social.disable_dislike_option',

@@ -11,47 +11,30 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CStudentPublicationAssignment.
- *
- * @ORM\Table(
- *     name="c_student_publication_assignment",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository")
  */
+#[ORM\Table(name: 'c_student_publication_assignment')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository')]
 class CStudentPublicationAssignment
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="expires_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
     protected ?DateTime $expiresOn = null;
 
-    /**
-     * @ORM\Column(name="ends_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
     protected ?DateTime $endsOn = null;
 
-    /**
-     * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
     protected int $addToCalendar;
 
-    /**
-     * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="assignment")
-     * @ORM\JoinColumn(name="publication_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', inversedBy: 'assignment')]
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
     public function __toString(): string

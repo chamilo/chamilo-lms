@@ -18,144 +18,95 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CStudentPublication.
- *
- * @ORM\Table(
- *     name="c_student_publication",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationRepository")
  */
+#[ORM\Table(name: 'c_student_publication')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CStudentPublicationRepository')]
 class CStudentPublication extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="author", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
     protected ?string $author = null;
 
-    /**
-     * @ORM\Column(name="active", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'active', type: 'integer', nullable: true)]
     protected ?int $active = null;
 
-    /**
-     * @ORM\Column(name="accepted", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'accepted', type: 'boolean', nullable: true)]
     protected ?bool $accepted = null;
 
-    /**
-     * @ORM\Column(name="post_group_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'post_group_id', type: 'integer', nullable: false)]
     protected int $postGroupId;
 
-    /**
-     * @ORM\Column(name="sent_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'sent_date', type: 'datetime', nullable: true)]
     protected ?DateTime $sentDate;
 
-    /**
-     * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Assert\Choice(callback: 'getFileTypes')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
     protected string $filetype;
 
-    /**
-     * @ORM\Column(name="has_properties", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'has_properties', type: 'integer', nullable: false)]
     protected int $hasProperties;
 
-    /**
-     * @ORM\Column(name="view_properties", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'view_properties', type: 'boolean', nullable: true)]
     protected ?bool $viewProperties = null;
 
-    /**
-     * @ORM\Column(name="qualification", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\Column(name: 'qualification', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $qualification;
 
-    /**
-     * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date_of_qualification', type: 'datetime', nullable: true)]
     protected ?DateTime $dateOfQualification = null;
 
     /**
      * @var Collection|CStudentPublication[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="publicationParent")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', mappedBy: 'publicationParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CStudentPublicationComment[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationComment", mappedBy="publication")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublicationComment', mappedBy: 'publication')]
     protected Collection $comments;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
-     */
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublicationAssignment', mappedBy: 'publication')]
     protected ?CStudentPublicationAssignment $assignment = null;
 
-    /**
-     * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
     protected int $qualificatorId;
 
-    /**
-     * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $weight;
 
-    /**
-     * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
     protected int $allowTextAssignment;
 
-    /**
-     * @ORM\Column(name="contains_file", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]
     protected int $containsFile;
 
-    /**
-     * @ORM\Column(name="document_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'document_id', type: 'integer', nullable: false)]
     protected int $documentId;
 
-    /**
-     * @ORM\Column(name="filesize", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
 
     public function __construct()

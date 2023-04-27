@@ -23,82 +23,56 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"comment:read"}}
  * ).
- *
- * @Gedmo\Tree(type="nested")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
- * @ORM\Table(name="resource_comment")
  */
+#[ORM\Table(name: 'resource_comment')]
+#[Gedmo\Tree(type: 'nested')]
+#[ORM\Entity(repositoryClass: 'Gedmo\Tree\Entity\Repository\NestedTreeRepository')]
 class ResourceComment
 {
     use TimestampableTypedEntity;
     use TimestampableAgoTrait;
     use NestedSetEntity;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"comment:read"})
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Groups(['comment:read'])]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
-    /**
-     * @Groups({"comment:read"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[Groups(['comment:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $author;
 
-    /**
-     * @Groups({"comment:read"})
-     *
-     * @ORM\Column(name="content", type="string", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['comment:read'])]
+    #[ORM\Column(name: 'content', type: 'string', nullable: false)]
     protected string $content;
 
-    /**
-     * @Gedmo\TreeParent
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
-     *     inversedBy="children"
-     * )
-     * @ORM\JoinColumns({
-     *     @ORM\JoinColumn(onDelete="CASCADE")
-     * })
-     */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', inversedBy: 'children')]
     protected ?ResourceComment $parent = null;
 
-    /**
-     * @Groups({"comment:read"})
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['comment:read'])]
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $createdAt;
 
-    /**
-     * @Groups({"comment:read"})
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['comment:read'])]
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
 
     /**
      * @var Collection|ResourceComment[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
-     *     mappedBy="parent"
-     * )
-     * @ORM\OrderBy({"id"="ASC"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', mappedBy: 'parent')]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
     public function __construct()

@@ -31,13 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Base entity for all resources.
  *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="resource_node")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener"})
  *
- * @Gedmo\Tree(type="materializedPath")
  */
 #[ApiResource(
     collectionOperations: [
@@ -61,6 +56,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
 ])]
+#[ORM\Table(name: 'resource_node')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\ResourceNodeRepository')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener'])]
+#[Gedmo\Tree(type: 'materializedPath')]
 class ResourceNode
 {
     use TimestampableTypedEntity;
@@ -68,94 +68,70 @@ class ResourceNode
 
     public const PATH_SEPARATOR = '/';
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read'])]
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @Gedmo\TreePathSource
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
+    #[Gedmo\TreePathSource]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(name="slug", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Gedmo\Slug(fields: ['title'])]
+    #[ORM\Column(name: 'slug', type: 'string', length: 255, nullable: false)]
     protected string $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", inversedBy="resourceNodes")
-     * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceType', inversedBy: 'resourceNodes')]
+    #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
     protected ResourceType $resourceType;
 
     /**
      * @var Collection<int, ResourceLink>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
     #[ApiSubresource]
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceLink', mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
 
     /**
      * ResourceFile available file for this node.
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
-     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceFile', inversedBy: 'resourceNode', orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceFile $resourceFile = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'resourceNodes')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="children")
-     * @ORM\JoinColumns({
-     *     @ORM\JoinColumn(name="parent_id", onDelete="CASCADE")
-     * })
-     */
     #[ApiSubresource]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'children')]
     protected ?ResourceNode $parent = null;
 
     /**
      * @var Collection|ResourceNode[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="parent")
-     * @ORM\OrderBy({"id"="ASC"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'parent')]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
-    /**
-     * @Gedmo\TreeLevel
-     *
-     * @ORM\Column(name="level", type="integer", nullable=true)
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'level', type: 'integer', nullable: true)]
     protected ?int $level = null;
 
-    /**
-     * @Gedmo\TreePath(appendId=true, separator="/")
-     *
-     * @ORM\Column(name="path", type="text", nullable=true)
-     */
     #[Groups(['resource_node:read', 'document:read'])]
+    #[Gedmo\TreePath(appendId: true, separator: '/')]
+    #[ORM\Column(name: 'path', type: 'text', nullable: true)]
     protected ?string $path = null;
 
     /**
@@ -168,49 +144,34 @@ class ResourceNode
 
     /**
      * @var Collection|ResourceComment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
     protected Collection $comments;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
     #[Groups(['resource_node:read', 'document:read'])]
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $createdAt;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
     #[Groups(['resource_node:read', 'document:read'])]
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
 
     #[Groups(['resource_node:read', 'document:read'])]
     protected bool $fileEditableText;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
     #[Groups(['resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'boolean')]
     protected bool $public;
 
     protected ?string $content = null;
 
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CShortcut",
-     *     mappedBy="shortCutNode",
-     *     cascade={"persist", "remove"}
-     * )
-     */
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CShortcut', mappedBy: 'shortCutNode', cascade: ['persist', 'remove'])]
     protected ?CShortcut $shortCut = null;
 
-    /**
-     * @ORM\Column(type="uuid", unique=true)
-     */
     #[Groups(['resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'uuid', unique: true)]
     protected ?UuidV4 $uuid = null;
 
     public function __construct()

@@ -12,76 +12,51 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Portfolio.
- *
- * @ORM\Table(
- *     name="portfolio",
- *     indexes={
- *         @ORM\Index(name="user", columns={"user_id"}),
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session", columns={"session_id"}),
- *         @ORM\Index(name="category", columns={"category_id"})
- *     }
- * )
- * @ORM\Entity()
  */
+#[ORM\Table(name: 'portfolio')]
+#[ORM\Index(name: 'user', columns: ['user_id'])]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'session', columns: ['session_id'])]
+#[ORM\Index(name: 'category', columns: ['category_id'])]
+#[ORM\Entity]
 class Portfolio
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text")
-     */
+    #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     protected Session $session;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime")
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime')]
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="update_date", type="datetime")
-     */
+    #[ORM\Column(name: 'update_date', type: 'datetime')]
     protected DateTime $updateDate;
 
-    /**
-     * @ORM\Column(name="is_visible", type="boolean", options={"default":true})
-     */
+    #[ORM\Column(name: 'is_visible', type: 'boolean', options: ['default' => true])]
     protected bool $isVisible = true;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioCategory", inversedBy="items")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\PortfolioCategory', inversedBy: 'items')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected PortfolioCategory $category;
 
     public function __construct()

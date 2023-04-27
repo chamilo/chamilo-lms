@@ -13,162 +13,110 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="gradebook_category",
- *     indexes={
- *     }))
- *     @ORM\Entity
- */
+#[ORM\Table(name: 'gradebook_category')]
+#[ORM\Entity]
 class GradebookCategory
 {
     use UserTrait;
     use CourseTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCategories")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookCategories')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'gradebookCategories')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="subCategories")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', inversedBy: 'subCategories')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradebookCategory $parent = null;
 
     /**
      * @var GradebookCategory[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="parent")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', mappedBy: 'parent')]
     protected Collection $subCategories;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var SkillRelGradebook[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="gradeBookCategory")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelGradebook', mappedBy: 'gradeBookCategory')]
     protected Collection $skills;
 
     /**
      * @var Collection|GradebookEvaluation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation', mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $evaluations;
 
     /**
      * @var Collection|GradebookLink[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="category", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLink', mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $links;
 
     /**
      * @var Collection|GradebookComment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradeBook")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookComment', mappedBy: 'gradeBook')]
     protected Collection $comments;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
-     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradeModel')]
+    #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradeModel $gradeModel = null;
 
-    /**
-     * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'weight', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $weight;
 
-    /**
-     * @ORM\Column(name="visible", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'visible', type: 'boolean', nullable: false)]
     protected bool $visible;
 
-    /**
-     * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
-    /**
-     * @ORM\Column(name="document_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'document_id', type: 'integer', nullable: true)]
     protected ?int $documentId = null;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected ?int $locked;
 
-    /**
-     * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'default_lowest_eval_exclude', type: 'boolean', nullable: true)]
     protected ?bool $defaultLowestEvalExclude = null;
 
-    /**
-     * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
     protected bool $generateCertificates;
 
-    /**
-     * @ORM\Column(
-     *     name="is_requirement",
-     *     type="boolean",
-     *     nullable=false,
-     *     options={"default":0 }
-     * )
-     */
+    #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $isRequirement;
 
-    /**
-     * @ORM\Column(name="depends", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'depends', type: 'text', nullable: true)]
     protected ?string $depends = null;
 
-    /**
-     * @ORM\Column(name="minimum_to_validate", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'minimum_to_validate', type: 'integer', nullable: true)]
     protected ?int $minimumToValidate = null;
 
-    /**
-     * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
     protected ?int $gradeBooksToValidateInDependence = null;
 
     public function __construct()

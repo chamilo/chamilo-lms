@@ -11,49 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEUploads.
- *
- * @ORM\Table(
- *     name="track_e_uploads",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_uploads')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'upload_user_id', columns: ['upload_user_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackEUploads
 {
-    /**
-     * @ORM\Column(name="upload_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'upload_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $uploadId;
 
-    /**
-     * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'upload_user_id', type: 'integer', nullable: true)]
     protected ?int $uploadUserId = null;
 
-    /**
-     * @ORM\Column(name="upload_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'upload_date', type: 'datetime', nullable: false)]
     protected DateTime $uploadDate;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: true)]
     protected ?int $cId = null;
 
-    /**
-     * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'upload_work_id', type: 'integer', nullable: false)]
     protected int $uploadWorkId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
     /**

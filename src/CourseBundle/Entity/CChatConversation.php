@@ -12,22 +12,17 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CChatConversation.
- *
- * @ORM\Table(name="c_chat_conversation")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CChatConversationRepository")
  */
+#[ORM\Table(name: 'c_chat_conversation')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CChatConversationRepository')]
 class CChatConversation extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: true)]
     protected ?string $name = null;
 
     public function __toString(): string

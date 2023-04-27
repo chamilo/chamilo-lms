@@ -8,32 +8,22 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="c_plagiarism_compilatio_docs")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_plagiarism_compilatio_docs')]
+#[ORM\Entity]
 class CPlagiarismCompilatioDocs
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $id;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="document_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'document_id', type: 'integer', nullable: false)]
     protected int $documentId;
 
-    /**
-     * @ORM\Column(name="compilatio_id", type="string", length=32, nullable=true)
-     */
+    #[ORM\Column(name: 'compilatio_id', type: 'string', length: 32, nullable: true)]
     protected ?string $compilatioId = null;
 
     public function __construct()

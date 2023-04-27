@@ -13,63 +13,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CLpView.
- *
- * @ORM\Table(
- *     name="c_lp_view",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="lp_id", columns={"lp_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_lp_view')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class CLpView
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp")
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLp')]
+    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLp $lp;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\Column(name="view_count", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'view_count', type: 'integer', nullable: false)]
     protected int $viewCount;
 
-    /**
-     * @ORM\Column(name="last_item", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'last_item', type: 'integer', nullable: false)]
     protected int $lastItem;
 
-    /**
-     * @ORM\Column(name="progress", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'progress', type: 'integer', nullable: true)]
     protected ?int $progress = null;
 
     public function setViewCount(int $viewCount): self

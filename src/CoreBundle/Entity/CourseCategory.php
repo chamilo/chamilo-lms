@@ -27,101 +27,70 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(SearchFilter::class, properties={"name":"partial", "code":"partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"name", "code"})
- * @ORM\Table(
- *     name="course_category",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="code", columns={"code"})
- *     },
- *     indexes={
- *         @ORM\Index(name="parent_id", columns={"parent_id"}),
- *         @ORM\Index(name="tree_pos", columns={"tree_pos"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseCategoryRepository")
  */
+#[ORM\Table(name: 'course_category')]
+#[ORM\Index(name: 'parent_id', columns: ['parent_id'])]
+#[ORM\Index(name: 'tree_pos', columns: ['tree_pos'])]
+#[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\CourseCategoryRepository')]
 class CourseCategory
 {
-    /**
-     * @Groups({"course_category:read", "course:read"})
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[Groups(['course_category:read', 'course:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", mappedBy="parent")
-     *
      * @var Collection|CourseCategory[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseCategory', mappedBy: 'parent')]
     protected Collection $children;
 
-    /**
-     * @Groups({"course_category:read", "course_category:write", "course:read", "session:read"})
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['course_category:read', 'course_category:write', 'course:read', 'session:read'])]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
 
-    /**
-     * @Groups({"course_category:read", "course_category:write", "course:read"})
-     * @ORM\Column(name="code", type="string", length=40, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['course_category:read', 'course_category:write', 'course:read'])]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\CourseCategory', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?CourseCategory $parent = null;
 
-    /**
-     * @ORM\Column(name="tree_pos", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'tree_pos', type: 'integer', nullable: true)]
     protected ?int $treePos = null;
 
-    /**
-     * @ORM\Column(name="children_count", type="smallint", nullable=true)
-     */
+    #[ORM\Column(name: 'children_count', type: 'smallint', nullable: true)]
     protected ?int $childrenCount;
 
-    /**
-     * @ORM\Column(name="auth_course_child", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'auth_course_child', type: 'string', length: 40, nullable: true)]
     protected ?string $authCourseChild = null;
 
-    /**
-     * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'auth_cat_child', type: 'string', length: 40, nullable: true)]
     protected ?string $authCatChild = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $asset = null;
 
-    /**
-     * @Groups({"course_category:read", "course_category:write"})
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[Groups(['course_category:read', 'course_category:write'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory",
-     *     mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true
-     * )
-     *
      * @var AccessUrlRelCourseCategory[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory', mappedBy: 'courseCategory', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
      * @var Course[]|Collection
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
      */
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Course', mappedBy: 'categories')]
     protected Collection $courses;
 
     public function __construct()

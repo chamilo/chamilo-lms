@@ -10,43 +10,30 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceRowEntity.
- *
- * @ORM\Table(name="sequence_row_entity")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_row_entity')]
+#[ORM\Entity]
 class SequenceRowEntity
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer")
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer')]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="row_id", type="integer")
-     */
+    #[ORM\Column(name: 'row_id', type: 'integer')]
     protected int $rowId;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceTypeEntity")
-     * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceTypeEntity')]
+    #[ORM\JoinColumn(name: 'sequence_type_entity_id', referencedColumnName: 'id')]
     protected ?SequenceTypeEntity $type = null;
 
     /**

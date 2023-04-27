@@ -9,64 +9,42 @@ namespace Chamilo\CoreBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="ticket_message_attachments")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'ticket_message_attachments')]
+#[ORM\Entity]
 class TicketMessageAttachment extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Ticket')]
+    #[ORM\JoinColumn(name: 'ticket_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Ticket $ticket;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketMessage")
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketMessage')]
+    #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TicketMessage $message;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="filename", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'text', nullable: false)]
     protected string $filename;
 
-    /**
-     * @ORM\Column(name="size", type="integer")
-     */
+    #[ORM\Column(name: 'size', type: 'integer')]
     protected int $size;
 
-    /**
-     * @ORM\Column(name="sys_insert_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
 
-    /**
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
+    #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastEditUserId = null;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEditDateTime = null;
 
     public function __toString(): string

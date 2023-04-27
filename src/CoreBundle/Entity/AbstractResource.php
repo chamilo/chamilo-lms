@@ -17,34 +17,31 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
- */
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceListener'])]
 abstract class AbstractResource
 {
     use UserCreatorTrait;
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $downloadUrl = null;
 
     /**
      * Content from ResourceFile - Property set by ResourceNormalizer.php.
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "document:write", "media_object_read"})
      */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read'])]
     public ?string $contentFile = null;
 
     /**
@@ -65,14 +62,6 @@ abstract class AbstractResource
     ])]
     public ?string $illustrationUrl = null;
 
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Assert\Valid]
     #[ApiSubresource]
     #[Groups([
@@ -86,6 +75,8 @@ abstract class AbstractResource
         'message:read',
         'c_tool_intro:read',
     ])]
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
     /**

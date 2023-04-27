@@ -10,53 +10,33 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_forum_attachment",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumAttachmentRepository")
- */
+#[ORM\Table(name: 'c_forum_attachment')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumAttachmentRepository')]
 class CForumAttachment extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist"}, inversedBy="attachments")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CForumPost $post;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
     public function __construct()

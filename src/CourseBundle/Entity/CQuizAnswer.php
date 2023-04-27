@@ -11,75 +11,48 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizAnswer.
- *
- * @ORM\Table(
- *     name="c_quiz_answer",
- *     indexes={
- *         @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_quiz_answer')]
+#[ORM\Index(name: 'idx_cqa_q', columns: ['question_id'])]
+#[ORM\Entity]
 class CQuizAnswer
 {
-    /**
-     * @ORM\Column(name="iid", type="integer", options={"unsigned": true})
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer', options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="answers", cascade={"persist"})
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
     #[Assert\NotBlank]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestion', inversedBy: 'answers', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
-    /**
-     * @ORM\Column(name="answer", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'answer', type: 'text', nullable: false)]
     protected string $answer;
 
-    /**
-     * @ORM\Column(name="correct", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'correct', type: 'integer', nullable: true)]
     protected ?int $correct;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
 
-    /**
-     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
-     */
+    #[ORM\Column(name: 'ponderation', type: 'float', precision: 6, scale: 2, nullable: false, options: ['default' => 0])]
     protected float $ponderation;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'position', type: 'integer', nullable: false)]
     protected int $position;
 
-    /**
-     * @ORM\Column(name="hotspot_coordinates", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'hotspot_coordinates', type: 'text', nullable: true)]
     protected ?string $hotspotCoordinates;
 
-    /**
-     * @ORM\Column(name="hotspot_type", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'hotspot_type', type: 'string', length: 40, nullable: true)]
     protected ?string $hotspotType;
 
-    /**
-     * @ORM\Column(name="destination", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'destination', type: 'text', nullable: true)]
     protected ?string $destination;
 
-    /**
-     * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
-     */
+    #[ORM\Column(name: 'answer_code', type: 'string', length: 10, nullable: true)]
     protected ?string $answerCode;
 
     public function __construct()

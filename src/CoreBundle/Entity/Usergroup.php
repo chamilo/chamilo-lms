@@ -15,9 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Classes and social groups.
- *
- * @ORM\Table(name="usergroup")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\UsergroupRepository")
  */
 #[ApiResource(
     attributes: [
@@ -27,6 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['usergroup:read'],
     ],
 )]
+#[ORM\Table(name: 'usergroup')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\UsergroupRepository')]
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface
 {
     use TimestampableEntity;
@@ -34,89 +33,67 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     public const SOCIAL_CLASS = 1;
     public const NORMAL_CLASS = 0;
 
-    /**
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="group_type", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'group_type', type: 'integer', nullable: false)]
     protected int $groupType;
 
-    /**
-     * @ORM\Column(name="picture", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'picture', type: 'string', length: 255, nullable: true)]
     protected ?string $picture = null;
 
-    /**
-     * @ORM\Column(name="url", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: true)]
     protected ?string $url = null;
 
-    /**
-     * @ORM\Column(name="visibility", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'visibility', type: 'string', length: 255, nullable: false)]
     protected string $visibility;
 
-    /**
-     * @ORM\Column(name="author_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'author_id', type: 'integer', nullable: true)]
     protected ?string $authorId = null;
 
-    /**
-     * @ORM\Column(name="allow_members_leave_group", type="integer")
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'allow_members_leave_group', type: 'integer')]
     protected int $allowMembersToLeaveGroup;
 
     /**
      * @var Collection|UsergroupRelUser[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="usergroup", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelUser', mappedBy: 'usergroup', cascade: ['persist'])]
     protected Collection $users;
 
     /**
      * @var Collection|UsergroupRelCourse[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelCourse", mappedBy="usergroup", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelCourse', mappedBy: 'usergroup', cascade: ['persist'])]
     protected Collection $courses;
 
     /**
      * @var Collection|UsergroupRelSession[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelSession", mappedBy="usergroup", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelSession', mappedBy: 'usergroup', cascade: ['persist'])]
     protected Collection $sessions;
 
     /**
      * @var Collection|UsergroupRelQuestion[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelQuestion", mappedBy="usergroup", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelQuestion', mappedBy: 'usergroup', cascade: ['persist'])]
     protected Collection $questions;
 
     /**
      * @var AccessUrlRelUserGroup[]|Collection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup",
-     *     mappedBy="userGroup", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup', mappedBy: 'userGroup', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
 
     public function __construct()

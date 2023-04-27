@@ -10,51 +10,34 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CForumNotification.
- *
- * @ORM\Table(
- *     name="c_forum_notification",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="thread", columns={"thread_id"}),
- *         @ORM\Index(name="post", columns={"post_id"}),
- *         @ORM\Index(name="user_id", columns={"user_id"}),
- *         @ORM\Index(name="forum_id", columns={"forum_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_forum_notification')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'thread', columns: ['thread_id'])]
+#[ORM\Index(name: 'post', columns: ['post_id'])]
+#[ORM\Index(name: 'user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'forum_id', columns: ['forum_id'])]
+#[ORM\Entity]
 class CForumNotification
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer")
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer')]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="forum_id", type="integer")
-     */
+    #[ORM\Column(name: 'forum_id', type: 'integer')]
     protected int $forumId;
 
-    /**
-     * @ORM\Column(name="thread_id", type="integer")
-     */
+    #[ORM\Column(name: 'thread_id', type: 'integer')]
     protected int $threadId;
 
-    /**
-     * @ORM\Column(name="post_id", type="integer")
-     */
+    #[ORM\Column(name: 'post_id', type: 'integer')]
     protected int $postId;
 
     public function __construct()

@@ -37,16 +37,6 @@ use UserManager;
 
 /**
  * EquatableInterface is needed to check if the user needs to be refreshed.
- *
- * @ORM\Table(
- *     name="user",
- *     indexes={
- *         @ORM\Index(name="status", columns={"status"})
- *     }
- * )
- * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\UserRepository")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
 #[ApiResource(
     collectionOperations: [
@@ -85,6 +75,11 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
+#[ORM\Table(name: 'user')]
+#[ORM\Index(name: 'status', columns: ['status'])]
+#[UniqueEntity('username')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\UserRepository')]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\UserListener'])]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface
 {
     use TimestampableEntity;
@@ -96,19 +91,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const ANONYMOUS = 6;
 
     /*public const COURSE_MANAGER = 1;
-    public const TEACHER = 1;
-    public const SESSION_ADMIN = 3;
-    public const DRH = 4;
-    public const STUDENT = 5;
-    public const ANONYMOUS = 6;*/
-
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
-     */
+      public const TEACHER = 1;
+      public const SESSION_ADMIN = 3;
+      public const DRH = 4;
+      public const STUDENT = 5;
+      public const ANONYMOUS = 6;*/
     #[Groups(['user_json:read'])]
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
     /**
@@ -131,11 +121,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     ])]
     public ?string $illustrationUrl = null;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
     #[Groups([
         'user:read',
         'course:read',
@@ -144,11 +129,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'message:read',
         'user_rel_user:read',
     ])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="username", type="string", length=100, unique=true)
-     */
     #[Assert\NotBlank]
     #[Groups([
         'user_export',
@@ -162,16 +147,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_rel_user:read',
         'social_post:read',
     ])]
+    #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
 
-    /**
-     * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
-     */
+    #[ORM\Column(name: 'api_token', type: 'string', unique: true, nullable: true)]
     protected ?string $apiToken = null;
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @ORM\Column(name="firstname", type="string", length=64, nullable=true)
      */
     #[Assert\NotBlank]
     #[Groups([
@@ -180,161 +163,115 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'resource_node:read',
         'user_json:read',
     ])]
+    #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    /**
-     * @ORM\Column(name="lastname", type="string", length=64, nullable=true)
-     */
     #[Groups([
         'user:read',
         'user:write',
         'resource_node:read',
         'user_json:read',
     ])]
+    #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
-    /**
-     * @ORM\Column(name="website", type="string", length=255, nullable=true)
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'website', type: 'string', length: 255, nullable: true)]
     protected ?string $website;
 
-    /**
-     * @ORM\Column(name="biography", type="text", nullable=true)
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'biography', type: 'text', nullable: true)]
     protected ?string $biography;
 
-    /**
-     * @ORM\Column(name="locale", type="string", length=10)
-     */
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
+    #[ORM\Column(name: 'locale', type: 'string', length: 10)]
     protected string $locale;
 
     #[Groups(['user:write'])]
     protected ?string $plainPassword = null;
 
-    /**
-     * @ORM\Column(name="password", type="string", length=255)
-     */
+    #[ORM\Column(name: 'password', type: 'string', length: 255)]
     protected string $password;
 
-    /**
-     * @ORM\Column(name="username_canonical", type="string", length=180)
-     */
+    #[ORM\Column(name: 'username_canonical', type: 'string', length: 180)]
     protected string $usernameCanonical;
 
-    /**
-     * @ORM\Column(name="timezone", type="string", length=64)
-     */
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
+    #[ORM\Column(name: 'timezone', type: 'string', length: 64)]
     protected string $timezone;
 
-    /**
-     * @ORM\Column(name="email_canonical", type="string", length=100)
-     */
+    #[ORM\Column(name: 'email_canonical', type: 'string', length: 100)]
     protected string $emailCanonical;
 
-    /**
-     * @ORM\Column(name="email", type="string", length=100)
-     */
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[ORM\Column(name: 'email', type: 'string', length: 100)]
     protected string $email;
 
-    /**
-     * @ORM\Column(name="locked", type="boolean")
-     */
+    #[ORM\Column(name: 'locked', type: 'boolean')]
     protected bool $locked;
 
-    /**
-     * @ORM\Column(name="enabled", type="boolean")
-     */
     #[Groups(['user:read', 'user:write'])]
     #[Assert\NotNull]
+    #[ORM\Column(name: 'enabled', type: 'boolean')]
     protected bool $enabled;
 
-    /**
-     * @ORM\Column(name="expired", type="boolean")
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'expired', type: 'boolean')]
     protected bool $expired;
 
-    /**
-     * @ORM\Column(name="credentials_expired", type="boolean")
-     */
+    #[ORM\Column(name: 'credentials_expired', type: 'boolean')]
     protected bool $credentialsExpired;
 
-    /**
-     * @ORM\Column(name="credentials_expire_at", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'credentials_expire_at', type: 'datetime', nullable: true)]
     protected ?DateTime $credentialsExpireAt;
 
-    /**
-     * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date_of_birth', type: 'datetime', nullable: true)]
     protected ?DateTime $dateOfBirth;
 
-    /**
-     * @ORM\Column(name="expires_at", type="datetime", nullable=true)
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'expires_at', type: 'datetime', nullable: true)]
     protected ?DateTime $expiresAt;
 
-    /**
-     * @ORM\Column(name="phone", type="string", length=64, nullable=true)
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'phone', type: 'string', length: 64, nullable: true)]
     protected ?string $phone = null;
 
-    /**
-     * @ORM\Column(name="address", type="string", length=250, nullable=true)
-     */
     #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'address', type: 'string', length: 250, nullable: true)]
     protected ?string $address = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $salt;
 
-    /**
-     * @ORM\Column(name="gender", type="string", length=1, nullable=true)
-     */
+    #[ORM\Column(name: 'gender', type: 'string', length: 1, nullable: true)]
     protected ?string $gender = null;
 
-    /**
-     * @ORM\Column(name="last_login", type="datetime", nullable=true)
-     */
     #[Groups(['user:read'])]
+    #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
     protected ?DateTime $lastLogin = null;
 
     /**
      * Random string sent to the user email address in order to verify it.
-     *
-     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'confirmation_token', type: 'string', length: 255, nullable: true)]
     protected ?string $confirmationToken = null;
 
-    /**
-     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'password_requested_at', type: 'datetime', nullable: true)]
     protected ?DateTime $passwordRequestedAt;
 
     /**
      * @var Collection<int, CourseRelUser>|CourseRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     #[ApiSubresource]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseRelUser', mappedBy: 'user', orphanRemoval: true)]
     protected Collection $courses;
 
     /**
      * @var Collection<int, UsergroupRelUser>|UsergroupRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelUser', mappedBy: 'user')]
     protected Collection $classes;
 
     /**
@@ -350,36 +287,28 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     * @ORM\Column(type="array")
      *
      * @var mixed[]|string[]
      */
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
+    #[ORM\Column(type: 'array')]
     protected array $roles = [];
 
-    /**
-     * @ORM\Column(name="profile_completed", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'profile_completed', type: 'boolean', nullable: true)]
     protected ?bool $profileCompleted = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
      */
     //protected $jurySubscriptions;
 
     /**
      * @var Collection|Group[]
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Group", inversedBy="users")
-     * @ORM\JoinTable(
-     *     name="fos_user_user_group",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'fos_user_user_group')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\InverseJoinColumn(name: 'group_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Group', inversedBy: 'users')]
     protected Collection $groups;
 
     /**
@@ -391,334 +320,224 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $portals;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="creator")
-     *
      * @var Collection<int, ResourceNode>|ResourceNode[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'creator')]
     protected Collection $resourceNodes;
 
     /**
      * @var Collection<int, SessionRelCourseRelUser>|SessionRelCourseRelUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourseRelUser', mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection<int, SessionRelUser>|SessionRelUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sessionsRelUser;
 
     /**
      * @var Collection<int, SkillRelUser>|SkillRelUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $achievedSkills;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment",
-     *     mappedBy="feedbackGiver",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     *
      * @var Collection<int, SkillRelUserComment>|SkillRelUserComment[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUserComment', mappedBy: 'feedbackGiver', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $commentedUserSkills;
 
     /**
      * @var Collection<int, GradebookCategory>|GradebookCategory[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="user")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', mappedBy: 'user')]
     protected Collection $gradeBookCategories;
 
     /**
      * @var Collection<int, GradebookCertificate>|GradebookCertificate[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookCertificate", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCertificate', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookCertificates;
 
     /**
      * @var Collection<int, GradebookComment>|GradebookComment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="user")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookComment', mappedBy: 'user')]
     protected Collection $gradeBookComments;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
-     *
      * @var Collection<int, GradebookEvaluation>|GradebookEvaluation[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookEvaluations;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     *
      * @var Collection<int, GradebookLink>|GradebookLink[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLink', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookLinks;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     *
      * @var Collection<int, GradebookResult>|GradebookResult[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookResult', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookResults;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResultLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
-     *
      * @var Collection<int, GradebookResultLog>|GradebookResultLog[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookResultLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookResultLogs;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookScoreLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
-     *
      * @var Collection<int, GradebookScoreLog>|GradebookScoreLog[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookScoreLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookScoreLogs;
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
     protected Collection $friends;
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelUser", mappedBy="friend", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelUser', mappedBy: 'friend', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
     protected Collection $friendsWithMe;
 
     /**
      * @var Collection<int, GradebookLinkevalLog>|GradebookLinkevalLog[]
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLinkevalLog",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLinkevalLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookLinkEvalLogs;
 
     /**
      * @var Collection<int, SequenceValue>|SequenceValue[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SequenceValue", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceValue', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sequenceValues;
 
     /**
      * @var Collection<int, TrackEExerciseConfirmation>|TrackEExerciseConfirmation[]
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEExerciseConfirmations;
 
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAccessComplete', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEAccessCompleteList;
 
     /**
      * @var Collection<int, Templates>|Templates[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Templates', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $templates;
 
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEAttempts;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     *
      * @var Collection<int, TrackECourseAccess>|TrackECourseAccess[]
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackECourseAccess', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackECourseAccess;
 
     /**
      * @var Collection<int, UserCourseCategory>|UserCourseCategory[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserCourseCategory', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userCourseCategories;
 
     /**
      * @var Collection<int, UserRelCourseVote>|UserRelCourseVote[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelCourseVote", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelCourseVote', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userRelCourseVotes;
 
     /**
      * @var Collection<int, UserRelTag>|UserRelTag[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelTag', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userRelTags;
 
     /**
      * @var Collection<int, PersonalAgenda>|PersonalAgenda[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PersonalAgenda", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\PersonalAgenda', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $personalAgendas;
 
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $courseGroupsAsMember;
 
     /**
      * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="user", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelTutor', mappedBy: 'user', orphanRemoval: true)]
     protected Collection $courseGroupsAsTutor;
 
-    /**
-     * @ORM\Column(name="auth_source", type="string", length=50, nullable=true)
-     */
+    #[ORM\Column(name: 'auth_source', type: 'string', length: 50, nullable: true)]
     protected ?string $authSource;
 
-    /**
-     * @ORM\Column(name="status", type="integer")
-     */
+    #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 
-    /**
-     * @ORM\Column(name="official_code", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'official_code', type: 'string', length: 40, nullable: true)]
     protected ?string $officialCode = null;
 
-    /**
-     * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true)
-     */
+    #[ORM\Column(name: 'picture_uri', type: 'string', length: 250, nullable: true)]
     protected ?string $pictureUri = null;
 
-    /**
-     * @ORM\Column(name="creator_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'creator_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $creatorId = null;
 
-    /**
-     * @ORM\Column(name="competences", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'competences', type: 'text', nullable: true, unique: false)]
     protected ?string $competences = null;
 
-    /**
-     * @ORM\Column(name="diplomas", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'diplomas', type: 'text', nullable: true, unique: false)]
     protected ?string $diplomas = null;
 
-    /**
-     * @ORM\Column(name="openarea", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'openarea', type: 'text', nullable: true, unique: false)]
     protected ?string $openarea = null;
 
-    /**
-     * @ORM\Column(name="teach", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'teach', type: 'text', nullable: true, unique: false)]
     protected ?string $teach = null;
 
-    /**
-     * @ORM\Column(name="productions", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'productions', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $productions = null;
 
-    /**
-     * @ORM\Column(name="registration_date", type="datetime")
-     */
+    #[ORM\Column(name: 'registration_date', type: 'datetime')]
     protected DateTime $registrationDate;
 
-    /**
-     * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'expiration_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $expirationDate = null;
 
-    /**
-     * @ORM\Column(name="active", type="boolean")
-     */
+    #[ORM\Column(name: 'active', type: 'boolean')]
     protected bool $active;
 
-    /**
-     * @ORM\Column(name="openid", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'openid', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $openid = null;
 
-    /**
-     * @ORM\Column(name="theme", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'theme', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $theme = null;
 
-    /**
-     * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'hr_dept_id', type: 'smallint', nullable: true, unique: false)]
     protected ?int $hrDeptId = null;
 
     #[Groups(['user:write'])]
@@ -726,70 +545,41 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\MessageTag",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval="true"
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageTag', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $messageTags;
 
     /**
      * @var Collection<int, Message>|Message[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
-     *     mappedBy="sender",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Message', mappedBy: 'sender', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sentMessages;
 
     /**
      * @var Collection<int, MessageRelUser>|MessageRelUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser",
-     *     mappedBy="receiver",
-     *     cascade={"persist", "remove"}
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageRelUser', mappedBy: 'receiver', cascade: ['persist', 'remove'])]
     protected Collection $receivedMessages;
 
     /**
      * @var Collection<int, CSurveyInvitation>|CSurveyInvitation[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation",
-     *     mappedBy = "user",
-     *     cascade={"remove"}
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation', mappedBy: 'user', cascade: ['remove'])]
     protected Collection $surveyInvitations;
 
     /**
      * @var Collection<int, TrackELogin>|TrackELogin[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackELogin",
-     *     mappedBy = "user",
-     *     cascade={"remove"}
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackELogin', mappedBy: 'user', cascade: ['remove'])]
     protected Collection $logins;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Admin', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected ?Admin $admin = null;
 
     /**
      * @var null|NilUuid|UuidV4
-     *
-     * @ORM\Column(type="uuid", unique=true)
      */
+    #[ORM\Column(type: 'uuid', unique: true)]
     protected $uuid;
 
     // Property used only during installation.
@@ -798,19 +588,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups(['user:read', 'user_json:read', 'social_post:read', 'course:read'])]
     protected string $fullName;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", mappedBy="sender", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', mappedBy: 'sender', orphanRemoval: true)]
     private Collection $sentSocialPosts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", mappedBy="userReceiver")
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', mappedBy: 'userReceiver')]
     private Collection $receivedSocialPosts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPostFeedback", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPostFeedback', mappedBy: 'user', orphanRemoval: true)]
     private Collection $socialPostsFeedbacks;
 
     public function __construct()

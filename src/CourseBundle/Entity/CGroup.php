@@ -19,13 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Course groups.
  *
- * @ORM\Table(
- *     name="c_group_info",
- *     indexes={
- *     }
- * )
  *
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGroupRepository")
  */
 #[ApiResource(
     attributes: [
@@ -35,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['group:read'],
     ],
 )]
+#[ORM\Table(name: 'c_group_info')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CGroupRepository')]
 class CGroup extends AbstractResource implements ResourceInterface
 {
     public const TOOL_NOT_AVAILABLE = 0;
@@ -42,106 +38,72 @@ class CGroup extends AbstractResource implements ResourceInterface
     public const TOOL_PRIVATE = 2;
     public const TOOL_PRIVATE_BETWEEN_USERS = 3;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @Groups({"group:read", "group:write"})
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[Groups(['group:read', 'group:write'])]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
-     * @Groups({"group:read", "group:write"})
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
+    #[Groups(['group:read', 'group:write'])]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="status", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'status', type: 'boolean', nullable: false)]
     protected bool $status;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupCategory", cascade={"persist"})
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupCategory', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CGroupCategory $category = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="max_student", type="integer")
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'max_student', type: 'integer')]
     protected int $maxStudent;
 
-    /**
-     * @ORM\Column(name="doc_state", type="integer")
-     */
+    #[ORM\Column(name: 'doc_state', type: 'integer')]
     protected int $docState;
 
-    /**
-     * @ORM\Column(name="calendar_state", type="integer")
-     */
+    #[ORM\Column(name: 'calendar_state', type: 'integer')]
     protected int $calendarState;
 
-    /**
-     * @ORM\Column(name="work_state", type="integer")
-     */
+    #[ORM\Column(name: 'work_state', type: 'integer')]
     protected int $workState;
 
-    /**
-     * @ORM\Column(name="announcements_state", type="integer")
-     */
+    #[ORM\Column(name: 'announcements_state', type: 'integer')]
     protected int $announcementsState;
 
-    /**
-     * @ORM\Column(name="forum_state", type="integer")
-     */
+    #[ORM\Column(name: 'forum_state', type: 'integer')]
     protected int $forumState;
 
-    /**
-     * @ORM\Column(name="wiki_state", type="integer")
-     */
+    #[ORM\Column(name: 'wiki_state', type: 'integer')]
     protected int $wikiState;
 
-    /**
-     * @ORM\Column(name="chat_state", type="integer")
-     */
+    #[ORM\Column(name: 'chat_state', type: 'integer')]
     protected int $chatState;
 
-    /**
-     * @ORM\Column(name="self_registration_allowed", type="boolean")
-     */
+    #[ORM\Column(name: 'self_registration_allowed', type: 'boolean')]
     protected bool $selfRegistrationAllowed;
 
-    /**
-     * @ORM\Column(name="self_unregistration_allowed", type="boolean")
-     */
+    #[ORM\Column(name: 'self_unregistration_allowed', type: 'boolean')]
     protected bool $selfUnregistrationAllowed;
 
-    /**
-     * @ORM\Column(name="document_access", type="integer", options={"default":0})
-     */
+    #[ORM\Column(name: 'document_access', type: 'integer', options: ['default' => 0])]
     protected int $documentAccess;
 
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelUser', mappedBy: 'group')]
     protected Collection $members;
 
     /**
      * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelTutor', mappedBy: 'group')]
     protected Collection $tutors;
 
     public function __construct()

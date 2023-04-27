@@ -13,41 +13,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User platform roles.
- *
- * @ORM\Entity()
- * @ORM\Table(name="fos_group")
  */
+#[ORM\Table(name: 'fos_group')]
+#[ORM\Entity]
 class Group
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false, unique: true)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false, unique: true)]
     protected string $code;
 
-    /**
-     * @ORM\Column(name="roles", type="array")
-     */
+    #[ORM\Column(name: 'roles', type: 'array')]
     protected array $roles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\User", mappedBy="groups")
-     *
      * @var User[]|Collection
      */
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\User', mappedBy: 'groups')]
     protected Collection $users;
 
     public function __construct(string $name, array $roles = [])

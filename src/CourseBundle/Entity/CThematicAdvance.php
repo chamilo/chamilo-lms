@@ -12,59 +12,37 @@ use Chamilo\CoreBundle\Entity\Room;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_thematic_advance",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_thematic_advance')]
+#[ORM\Entity]
 class CThematicAdvance //extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="advances")
-     * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CThematic', inversedBy: 'advances')]
+    #[ORM\JoinColumn(name: 'thematic_id', referencedColumnName: 'iid')]
     protected CThematic $thematic;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
-     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendance')]
+    #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: false)]
     protected DateTime $startDate;
 
-    /**
-     * @ORM\Column(name="duration", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: false)]
     protected int $duration;
 
-    /**
-     * @ORM\Column(name="done_advance", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'done_advance', type: 'boolean', nullable: false)]
     protected bool $doneAdvance;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Room')]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room = null;
 
     public function __construct()

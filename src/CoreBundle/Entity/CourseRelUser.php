@@ -17,15 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a course.
- *
- * @ORM\Table(
- *     name="course_rel_user",
- *     indexes={
- *         @ORM\Index(name="course_rel_user_user_id", columns={"id", "user_id"}),
- *         @ORM\Index(name="course_rel_user_c_id_user_id", columns={"id", "c_id", "user_id"})
- *     }
- * )
- * @ORM\Entity
  */
 #[ApiResource(
     attributes: [
@@ -59,6 +50,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     'user' => 'exact',
     'user.username' => 'partial',
 ])]
+#[ORM\Table(name: 'course_rel_user')]
+#[ORM\Index(name: 'course_rel_user_user_id', columns: ['id', 'user_id'])]
+#[ORM\Index(name: 'course_rel_user_c_id_user_id', columns: ['id', 'c_id', 'user_id'])]
+#[ORM\Entity]
 
 class CourseRelUser
 {
@@ -69,69 +64,45 @@ class CourseRelUser
     //public const DRH = 4;
     public const STUDENT = 5;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
     #[MaxDepth(1)]
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
     #[Groups(['user:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    /**
-     * @ORM\Column(name="relation_type", type="integer")
-     */
     #[Groups(['course:read', 'user:read'])]
+    #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;
 
-    /**
-     * @ORM\Column(name="status", type="integer")
-     */
     #[Groups(['user:read'])]
+    #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 
-    /**
-     * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'is_tutor', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $tutor;
 
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: true, unique: false)]
     protected ?int $sort;
 
-    /**
-     * @ORM\Column(name="user_course_cat", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'user_course_cat', type: 'integer', nullable: true, unique: false)]
     protected ?int $userCourseCat;
 
-    /**
-     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'legal_agreement', type: 'integer', nullable: true, unique: false)]
     protected ?int $legalAgreement = null;
 
-    /**
-     * @Assert\Range(
-     *     min = 0,
-     *     max = 100,
-     *     notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
-     * )
-     * @ORM\Column(name="progress", type="integer")
-     */
     #[Groups(['course:read', 'user:read'])]
+    #[Assert\Range(min: 0, max: 100, notInRangeMessage: 'Progress from {{ min }} to {{ max }} only')]
+    #[ORM\Column(name: 'progress', type: 'integer')]
     protected int $progress;
 
     public function __construct()

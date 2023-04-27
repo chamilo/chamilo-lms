@@ -14,14 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="page_category",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -49,43 +41,37 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['page_category:read'],
     ],
 )]
+#[ORM\Table(name: 'page_category')]
+#[ORM\Entity]
 class PageCategory
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
     #[Groups(['page_category:read', 'page_category:write'])]
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255)
-     */
     #[Assert\NotBlank]
     #[Groups(['page_category:read', 'page_category:write', 'page:read'])]
+    #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
-    /**
-     * @ORM\Column(name="type", type="string")
-     */
     #[Groups(['page_category:read', 'page_category:write', 'page:read'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'type', type: 'string')]
     protected string $type;
 
     /**
      * @var Collection|Page[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Page", mappedBy="category", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Page', mappedBy: 'category', cascade: ['persist'])]
     protected Collection $pages;
 
     public function __construct()

@@ -8,24 +8,18 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="announcement_rel_group")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'announcement_rel_group')]
+#[ORM\Entity]
 class AnnouncementRelGroup
 {
-    /**
-     * @ORM\Column(name="group_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Column(name: 'group_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected int $groupId;
 
-    /**
-     * @ORM\Column(name="announcement_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Column(name: 'announcement_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected int $announcementId;
 
     /**

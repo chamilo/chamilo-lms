@@ -11,114 +11,77 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_survey_question",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyQuestionRepository")
- */
+#[ORM\Table(name: 'c_survey_question')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CSurveyQuestionRepository')]
 class CSurveyQuestion
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="parent")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', mappedBy: 'parent')]
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', mappedBy: 'question', cascade: ['remove'])]
     protected Collection $options;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade={"remove"})
-     * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'parent_option_id', referencedColumnName: 'iid')]
     protected ?CSurveyQuestionOption $parentOption = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="questions")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'questions')]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
     /**
      * @var Collection|CSurveyAnswer[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyAnswer', mappedBy: 'question', cascade: ['remove'])]
     protected Collection $answers;
 
-    /**
-     * @ORM\Column(name="survey_question", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'survey_question', type: 'text', nullable: false)]
     protected string $surveyQuestion;
 
-    /**
-     * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_question_comment', type: 'text', nullable: false)]
     protected ?string $surveyQuestionComment = null;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'string', length: 250, nullable: false)]
     protected string $type;
 
-    /**
-     * @ORM\Column(name="display", type="string", length=10, nullable=false)
-     */
+    #[ORM\Column(name: 'display', type: 'string', length: 10, nullable: false)]
     protected string $display;
 
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: false)]
     protected int $sort;
 
-    /**
-     * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'shared_question_id', type: 'integer', nullable: true)]
     protected ?int $sharedQuestionId = null;
 
-    /**
-     * @ORM\Column(name="max_value", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'max_value', type: 'integer', nullable: true)]
     protected ?int $maxValue = null;
 
-    /**
-     * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_pri', type: 'integer', nullable: false)]
     protected int $surveyGroupPri;
 
-    /**
-     * @ORM\Column(name="survey_group_sec1", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_sec1', type: 'integer', nullable: false)]
     protected int $surveyGroupSec1;
 
-    /**
-     * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_sec2', type: 'integer', nullable: false)]
     protected int $surveyGroupSec2;
 
-    /**
-     * @ORM\Column(name="is_required", type="boolean", options={"default": false})
-     */
+    #[ORM\Column(name: 'is_required', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
     public function __construct()

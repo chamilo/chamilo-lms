@@ -11,46 +11,31 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Table(name="gradebook_result",
- *     indexes={
- *         @ORM\Index(name="idx_gb_uid_eid", columns={"user_id", "evaluation_id"}),
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'gradebook_result')]
+#[ORM\Index(name: 'idx_gb_uid_eid', columns: ['user_id', 'evaluation_id'])]
+#[ORM\Entity]
 class GradebookResult
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="evaluation_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation')]
+    #[ORM\JoinColumn(name: 'evaluation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookEvaluation $evaluation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookResults")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookResults')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
-     */
+    #[ORM\Column(name: 'score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $score = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
     public function setCreatedAt(DateTime $createdAt): self

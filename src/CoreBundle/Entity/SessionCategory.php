@@ -14,10 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="session_category")
- * @ORM\Entity
- */
 #[ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_USER')",
@@ -37,42 +33,32 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['session_category:write'],
     ],
 )]
+#[ORM\Table(name: 'session_category')]
+#[ORM\Entity]
 class SessionCategory
 {
-    /**
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[Groups(['session_category:read', 'session_rel_user:read'])]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'sessionCategories', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Session', mappedBy: 'category')]
     protected Collection $sessions;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=false)
-     */
     #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false, unique: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="date_start", type="date", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'date_start', type: 'date', nullable: true, unique: false)]
     protected ?DateTime $dateStart = null;
 
-    /**
-     * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'date_end', type: 'date', nullable: true, unique: false)]
     protected ?DateTime $dateEnd = null;
 
     public function __construct()

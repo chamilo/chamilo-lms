@@ -26,17 +26,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="course",
- *     indexes={
- *     }
- * )
- * @UniqueEntity("code")
- * @UniqueEntity("visualCode")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\CourseRepository")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
- */
 #[ApiResource(
     iri: 'https://schema.org/Course',
     attributes: [
@@ -67,6 +56,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 //#[ApiFilter(BooleanFilter::class, properties: ['isSticky'])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+#[ORM\Table(name: 'course')]
+#[UniqueEntity('code')]
+#[UniqueEntity('visualCode')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\CourseRepository')]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceListener', 'Chamilo\CoreBundle\Entity\Listener\CourseListener'])]
 
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface
 {
@@ -76,11 +70,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public const OPEN_WORLD = 3;
     public const HIDDEN = 4;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -90,12 +79,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_course:read',
         'track_e_exercise:read',
     ])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     /**
      * The course title.
-     *
-     * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
     #[Groups([
         'course:read',
@@ -107,37 +97,24 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_course:read',
     ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $title = null;
 
     /**
      * The course code.
      *
-     * @Assert\Length(
-     *     max = 40,
-     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
-     * )
      * @ApiProperty(iri="http://schema.org/courseCode")
      *
-     * @Gedmo\Slug(
-     *     fields={"title"},
-     *     updatable=false,
-     *     unique=true,
-     *     separator="",
-     *     style="upper"
-     * )
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
     #[Groups(['course:read', 'user:write', 'course_rel_user:read'])]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 40, maxMessage: 'Code cannot be longer than {{ limit }} characters')]
+    #[Gedmo\Slug(fields: ['title'], updatable: false, unique: true, separator: '', style: 'upper')]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false, unique: true)]
     protected string $code;
 
-    /**
-     * @Assert\Length(
-     *     max = 40,
-     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
-     * )
-     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
-     */
+    #[Assert\Length(max: 40, maxMessage: 'Code cannot be longer than {{ limit }} characters')]
+    #[ORM\Column(name: 'visual_code', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $visualCode = null;
 
     /**
@@ -146,11 +123,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     #[Groups(['course:read', 'user:read'])]
     #[ApiSubresource]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseRelUser', mappedBy: 'course', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
@@ -159,57 +135,41 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"})
      */
     #[Groups(['course:read', 'user:read'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseRelUser', mappedBy: 'course', cascade: ['persist'])]
     protected Collection $teachers;
 
     /**
      * @var AccessUrlRelCourse[]|Collection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse",
-     *     mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelCourse', mappedBy: 'course', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
      * @var Collection|SessionRelCourse[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourse', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $sessions;
 
     /**
      * @var Collection|SessionRelCourseRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourseRelUser', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection|CTool[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CTool",
-     *     mappedBy="course",
-     *     cascade={"persist", "remove"}
-     *     )
      */
     #[Groups(['course:read'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CTool', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $tools;
 
     /**
      * @var TrackCourseRanking
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackCourseRanking",
-     *     mappedBy="course",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true)
      */
     #[Groups(['course:read'])]
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TrackCourseRanking', mappedBy: 'course', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected TrackCourseRanking|null $trackCourseRanking = null;
     protected Session $currentSession;
 
@@ -217,217 +177,158 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var Collection|SkillRelCourse[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelCourse', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $skills;
 
     /**
      * @var Collection|SkillRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $issuedSkills;
 
     /**
      * @var Collection|GradebookCategory[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookCategories;
 
     /**
      * @var Collection|GradebookEvaluation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookEvaluations;
 
     /**
      * @var Collection|GradebookLink[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLink', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookLinks;
 
     /**
      * @var Collection|TrackEHotspot[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEHotspot', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $trackEHotspots;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
-     *
      * @var SearchEngineRef[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SearchEngineRef', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $searchEngineRefs;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
-     *
      * @var Templates[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Templates', mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $templates;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
      */
     //protected $specificFieldValues;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
      */
     //protected $sharedSurveys;
 
-    /**
-     * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'directory', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $directory = null;
 
-    /**
-     * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
-     */
     #[Groups(['course:read', 'session:read'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'course_language', type: 'string', length: 20, nullable: false, unique: false)]
     protected string $courseLanguage;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true, unique=false)
-     */
     #[Groups(['course:read', 'course_rel_user:read'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true, unique: false)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="introduction", type="text", nullable=true)
-     */
     #[Groups(['course:read', 'course_rel_user:read'])]
+    #[ORM\Column(name: 'introduction', type: 'text', nullable: true)]
     protected ?string $introduction;
 
     /**
      * @var CourseCategory[]|Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinTable(
-     *     name="course_rel_category",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="course_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
-     * )
      */
     #[ApiSubresource]
     #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session:read'])]
+    #[ORM\JoinTable(name: 'course_rel_category')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'course_category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseCategory', inversedBy: 'courses')]
     protected Collection $categories;
 
     /**
      * @var int Course visibility
-     *
-     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
     #[Assert\NotBlank]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'visibility', type: 'integer', nullable: false, unique: false)]
     protected int $visibility;
 
-    /**
-     * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'show_score', type: 'integer', nullable: true, unique: false)]
     protected ?int $showScore = null;
 
-    /**
-     * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, nullable: true, unique: false)]
     protected ?string $tutorName;
 
-    /**
-     * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
-     */
     #[Groups(['course:read'])]
+    #[ORM\Column(name: 'department_name', type: 'string', length: 30, nullable: true, unique: false)]
     protected ?string $departmentName = null;
 
-    /**
-     * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
-     */
     #[Assert\Url]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'department_url', type: 'string', length: 180, nullable: true, unique: false)]
     protected ?string $departmentUrl = null;
 
-    /**
-     * @ORM\Column(name="video_url", type="string", length=255)
-     */
     #[Assert\Url]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'video_url', type: 'string', length: 255)]
     protected string $videoUrl;
 
-    /**
-     * @ORM\Column(name="sticky", type="boolean")
-     */
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'sticky', type: 'boolean')]
     protected bool $sticky;
 
-    /**
-     * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'disk_quota', type: 'bigint', nullable: true, unique: false)]
     protected ?int $diskQuota = null;
 
-    /**
-     * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_visit', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastVisit;
 
-    /**
-     * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_edit', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEdit;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false, unique=false)
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false, unique: false)]
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
-     */
     #[Groups(['course:read'])]
+    #[ORM\Column(name: 'expiration_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $expirationDate = null;
 
-    /**
-     * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'subscribe', type: 'boolean', nullable: false, unique: false)]
     protected bool $subscribe;
 
-    /**
-     * @ORM\Column(name="unsubscribe", type="boolean", nullable=false, unique=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'unsubscribe', type: 'boolean', nullable: false, unique: false)]
     protected bool $unsubscribe;
 
-    /**
-     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'registration_code', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $registrationCode;
 
-    /**
-     * @ORM\Column(name="legal", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'legal', type: 'text', nullable: true, unique: false)]
     protected ?string $legal;
 
-    /**
-     * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'activate_legal', type: 'integer', nullable: true, unique: false)]
     protected ?int $activateLegal;
 
-    /**
-     * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
     protected ?bool $addTeachersToSessionsCourses;
 
-    /**
-     * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'course_type_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $courseTypeId;
 
     /**
@@ -435,10 +336,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     //protected $curriculumCategories;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Room')]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
 
     public function __construct()

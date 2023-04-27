@@ -13,49 +13,32 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_forum_category",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumCategoryRepository")
- */
+#[ORM\Table(name: 'c_forum_category')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumCategoryRepository')]
 class CForumCategory extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'cat_title', type: 'string', length: 255, nullable: false)]
     protected string $catTitle;
 
-    /**
-     * @ORM\Column(name="cat_comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'cat_comment', type: 'text', nullable: true)]
     protected ?string $catComment;
 
-    /**
-     * @ORM\Column(name="cat_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'cat_order', type: 'integer', nullable: false)]
     protected int $catOrder;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
     /**
      * @var Collection|CForum[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="forumCategory")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', mappedBy: 'forumCategory')]
     protected Collection $forums;
 
     public function __construct()

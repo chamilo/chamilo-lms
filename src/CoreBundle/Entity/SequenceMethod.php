@@ -10,42 +10,29 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceMethod.
- *
- * @ORM\Table(name="sequence_method")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_method')]
+#[ORM\Entity]
 class SequenceMethod
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
-    /**
-     * @ORM\Column(name="formula", type="text")
-     */
+    #[ORM\Column(name: 'formula', type: 'text')]
     protected string $formula;
 
-    /**
-     * @ORM\Column(name="assign", type="integer")
-     */
+    #[ORM\Column(name: 'assign', type: 'integer')]
     protected string $assign;
 
-    /**
-     * @ORM\Column(name="met_type", type="string")
-     */
+    #[ORM\Column(name: 'met_type', type: 'string')]
     protected string $metType;
 
-    /**
-     * @ORM\Column(name="act_false", type="string")
-     */
+    #[ORM\Column(name: 'act_false', type: 'string')]
     protected string $actFalse;
 
     /**

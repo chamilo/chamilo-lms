@@ -11,31 +11,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AccessUrlRelCourse.
- *
- * @ORM\Table(name="access_url_rel_course")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'access_url_rel_course')]
+#[ORM\Entity]
 class AccessUrlRelCourse implements EntityAccessUrlInterface
 {
     use CourseTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="urls", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'urls', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
     public function __toString(): string

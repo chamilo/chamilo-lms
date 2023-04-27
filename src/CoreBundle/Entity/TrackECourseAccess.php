@@ -12,64 +12,43 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackECourseAccess.
- *
- * @ORM\Table(
- *     name="track_e_course_access",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="user_id", columns={"user_id"}),
- *         @ORM\Index(name="login_course_date", columns={"login_course_date"}),
- *         @ORM\Index(name="session_id", columns={"session_id"}),
- *         @ORM\Index(name="user_course_session_date", columns={"user_id", "c_id", "session_id", "login_course_date"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TrackECourseAccessRepository")
  */
+#[ORM\Table(name: 'track_e_course_access')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'login_course_date', columns: ['login_course_date'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Index(name: 'user_course_session_date', columns: ['user_id', 'c_id', 'session_id', 'login_course_date'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\TrackECourseAccessRepository')]
 class TrackECourseAccess
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="course_access_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'course_access_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $courseAccessId;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackECourseAccess")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'trackECourseAccess')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'login_course_date', type: 'datetime', nullable: false)]
     protected DateTime $loginCourseDate;
 
-    /**
-     * @ORM\Column(name="logout_course_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'logout_course_date', type: 'datetime', nullable: true)]
     protected ?DateTime $logoutCourseDate = null;
 
-    /**
-     * @ORM\Column(name="counter", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'counter', type: 'integer', nullable: false)]
     protected int $counter;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
     /**

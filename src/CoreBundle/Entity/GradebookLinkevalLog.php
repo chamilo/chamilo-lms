@@ -11,61 +11,41 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Table(name="gradebook_linkeval_log")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'gradebook_linkeval_log')]
+#[ORM\Entity]
 class GradebookLinkevalLog
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'id_linkeval_log', type: 'integer', nullable: false)]
     protected int $idLinkevalLog;
 
-    /**
-     * @ORM\Column(name="name", type="text")
-     */
+    #[ORM\Column(name: 'name', type: 'text')]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="weight", type="smallint", nullable=true)
-     */
+    #[ORM\Column(name: 'weight', type: 'smallint', nullable: true)]
     protected ?int $weight = null;
 
-    /**
-     * @ORM\Column(name="visible", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'visible', type: 'boolean', nullable: true)]
     protected ?bool $visible = null;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=20, nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'string', length: 20, nullable: false)]
     protected string $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
-     * @ORM\JoinColumn(name="user_id_log", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookLinkEvalLogs')]
+    #[ORM\JoinColumn(name: 'user_id_log', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
     /**

@@ -16,11 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="resource_link")
- */
 #[ApiResource]
+#[ORM\Table(name: 'resource_link')]
+#[ORM\Entity]
 class ResourceLink
 {
     use TimestampableTypedEntity;
@@ -30,75 +28,51 @@ class ResourceLink
     public const VISIBILITY_PUBLISHED = 2;
     public const VISIBILITY_DELETED = 3;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'resourceLinks')]
+    #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'resourceLinks')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup')]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup')]
+    #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $user = null;
 
     /**
      * @var Collection|ResourceRight[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceRight",
-     *     mappedBy="resourceLink", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceRight', mappedBy: 'resourceLink', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $resourceRights;
 
-    /**
-     * @ORM\Column(name="visibility", type="integer", nullable=false)
-     */
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
+    #[ORM\Column(name: 'visibility', type: 'integer', nullable: false)]
     protected int $visibility;
 
-    /**
-     * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
-     */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
+    #[ORM\Column(name: 'start_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $startVisibilityAt = null;
 
-    /**
-     * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
-     */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
+    #[ORM\Column(name: 'end_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $endVisibilityAt = null;
 
     public function __construct()

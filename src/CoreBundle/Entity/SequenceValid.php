@@ -8,29 +8,21 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="sequence_valid")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'sequence_valid')]
+#[ORM\Entity]
 class SequenceValid
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceVariable")
-     * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceVariable')]
+    #[ORM\JoinColumn(name: 'sequence_variable_id', referencedColumnName: 'id')]
     protected ?SequenceVariable $variable = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
-     * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceCondition')]
+    #[ORM\JoinColumn(name: 'sequence_condition_id', referencedColumnName: 'id')]
     protected ?SequenceCondition $condition = null;
 
     /**

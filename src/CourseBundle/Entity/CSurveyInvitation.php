@@ -12,79 +12,51 @@ use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_survey_invitation",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_survey_invitation')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Entity]
 class CSurveyInvitation
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'resourceLinks')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup')]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="invitations")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'invitations')]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid')]
     protected CSurvey $survey;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="surveyInvitations")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'surveyInvitations')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     protected string $externalEmail;
 
-    /**
-     * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'invitation_code', type: 'string', length: 250, nullable: false)]
     protected string $invitationCode;
 
-    /**
-     * @ORM\Column(name="answered", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'answered', type: 'integer', nullable: false)]
     protected int $answered;
 
-    /**
-     * @ORM\Column(name="invitation_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'invitation_date', type: 'datetime', nullable: false)]
     protected DateTime $invitationDate;
 
-    /**
-     * @ORM\Column(name="reminder_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'reminder_date', type: 'datetime', nullable: true)]
     protected ?DateTime $reminderDate = null;
 
-    /**
-     * @ORM\Column(name="answered_at", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'answered_at', type: 'datetime', nullable: true)]
     protected ?DateTime $answeredAt = null;
 
     public function __construct()

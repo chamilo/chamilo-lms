@@ -11,52 +11,38 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserRelCourseVote.
- *
- * @ORM\Table(name="user_rel_course_vote", indexes={
- *     @ORM\Index(name="idx_ucv_cid", columns={"c_id"}),
- *     @ORM\Index(name="idx_ucv_uid", columns={"user_id"}),
- *     @ORM\Index(name="idx_ucv_cuid", columns={"user_id", "c_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'user_rel_course_vote')]
+#[ORM\Index(name: 'idx_ucv_cid', columns: ['c_id'])]
+#[ORM\Index(name: 'idx_ucv_uid', columns: ['user_id'])]
+#[ORM\Index(name: 'idx_ucv_cuid', columns: ['user_id', 'c_id'])]
+#[ORM\Entity]
 class UserRelCourseVote
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelCourseVotes")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'userRelCourseVotes')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="courses")
-     * @ORM\JoinColumn(name="url_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'courses')]
+    #[ORM\JoinColumn(name: 'url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\Column(name="vote", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'vote', type: 'integer', nullable: false)]
     protected int $vote;
 
     /**

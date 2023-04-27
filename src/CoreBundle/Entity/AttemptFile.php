@@ -11,38 +11,26 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="attempt_file",
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'attempt_file')]
+#[ORM\Entity]
 class AttemptFile
 {
     use TimestampableEntity;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
     protected Uuid $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", inversedBy="attemptFiles")
-     * @ORM\JoinColumn(name="attempt_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', inversedBy: 'attemptFiles')]
+    #[ORM\JoinColumn(name: 'attempt_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TrackEAttempt $attempt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Asset $asset;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
     public function __construct()

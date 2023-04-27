@@ -19,198 +19,128 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course quizzes.
- *
- * @ORM\Table(
- *     name="c_quiz",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CQuizRepository")
  */
+#[ORM\Table(name: 'c_quiz')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CQuizRepository')]
 class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     public const ALL_ON_ONE_PAGE = 1;
     public const ONE_PER_PAGE = 2;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="sound", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'sound', type: 'string', length: 255, nullable: true)]
     protected ?string $sound = null;
 
-    /**
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'integer', nullable: false)]
     protected int $type;
 
-    /**
-     * @ORM\Column(name="random", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'random', type: 'integer', nullable: false)]
     protected int $random;
 
-    /**
-     * @ORM\Column(name="random_answers", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'random_answers', type: 'boolean', nullable: false)]
     protected bool $randomAnswers;
 
-    /**
-     * @ORM\Column(name="active", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'active', type: 'integer', nullable: false)]
     protected int $active;
 
-    /**
-     * @ORM\Column(name="results_disabled", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'results_disabled', type: 'integer', nullable: false)]
     protected int $resultsDisabled;
 
-    /**
-     * @ORM\Column(name="access_condition", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'access_condition', type: 'text', nullable: true)]
     protected ?string $accessCondition = null;
 
-    /**
-     * @ORM\Column(name="max_attempt", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'max_attempt', type: 'integer', nullable: false)]
     protected int $maxAttempt;
 
-    /**
-     * @ORM\Column(name="start_time", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'start_time', type: 'datetime', nullable: true)]
     protected ?DateTime $startTime = null;
 
-    /**
-     * @ORM\Column(name="end_time", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'end_time', type: 'datetime', nullable: true)]
     protected ?DateTime $endTime = null;
 
-    /**
-     * @ORM\Column(name="feedback_type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'feedback_type', type: 'integer', nullable: false)]
     protected int $feedbackType;
 
-    /**
-     * @ORM\Column(name="expired_time", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'expired_time', type: 'integer', nullable: false)]
     protected int $expiredTime;
 
-    /**
-     * @ORM\Column(name="propagate_neg", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'propagate_neg', type: 'integer', nullable: false)]
     protected int $propagateNeg;
 
-    /**
-     * @ORm\Column(name="save_correct_answers", type="integer", nullable=true)
-     */
+    #[ORm\Column(name: 'save_correct_answers', type: 'integer', nullable: true)]
     protected ?int $saveCorrectAnswers;
 
-    /**
-     * @ORM\Column(name="review_answers", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'review_answers', type: 'integer', nullable: false)]
     protected int $reviewAnswers;
 
-    /**
-     * @ORM\Column(name="random_by_category", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'random_by_category', type: 'integer', nullable: false)]
     protected int $randomByCategory;
 
-    /**
-     * @ORM\Column(name="text_when_finished", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'text_when_finished', type: 'text', nullable: true)]
     protected ?string $textWhenFinished = null;
 
-    /**
-     * @ORM\Column(name="display_category_name", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'display_category_name', type: 'integer', nullable: false)]
     protected int $displayCategoryName;
 
-    /**
-     * @ORM\Column(name="pass_percentage", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'pass_percentage', type: 'integer', nullable: true)]
     protected ?int $passPercentage = null;
 
-    /**
-     * @ORM\Column(name="prevent_backwards", type="integer", nullable=false, options={"default":0})
-     */
+    #[ORM\Column(name: 'prevent_backwards', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $preventBackwards;
 
-    /**
-     * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'question_selection_type', type: 'integer', nullable: true)]
     protected ?int $questionSelectionType = null;
 
-    /**
-     * @ORM\Column(name="hide_question_number", type="integer", nullable=false, options={"default":0})
-     */
+    #[ORM\Column(name: 'hide_question_number', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $hideQuestionNumber;
 
-    /**
-     * @ORM\Column(name="hide_question_title", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'hide_question_title', type: 'boolean', nullable: false)]
     protected bool $hideQuestionTitle;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
-     * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CExerciseCategory', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'exercise_category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?CExerciseCategory $exerciseCategory = null;
 
-    /**
-     * @ORM\Column(name="show_previous_button", type="boolean", nullable=false, options={"default":1})
-     */
+    #[ORM\Column(name: 'show_previous_button', type: 'boolean', nullable: false, options: ['default' => 1])]
     protected bool $showPreviousButton;
 
-    /**
-     * @ORM\Column(name="notifications", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'notifications', type: 'string', length: 255, nullable: true)]
     protected ?string $notifications;
 
-    /**
-     * @ORM\Column(name="autolaunch", type="boolean", nullable=true, options={"default":0})
-     */
+    #[ORM\Column(name: 'autolaunch', type: 'boolean', nullable: true, options: ['default' => 0])]
     protected ?bool $autoLaunch;
 
-    /**
-     * @ORM\Column(name="page_result_configuration", type="array")
-     */
+    #[ORM\Column(name: 'page_result_configuration', type: 'array')]
     protected array $pageResultConfiguration = [];
 
     /**
      * @var Collection|CQuizRelQuestion[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestion', mappedBy: 'quiz', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $questions;
 
     /**
      * @var Collection|CQuizRelQuestionCategory[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory', mappedBy: 'quiz', cascade: ['persist'])]
     protected Collection $questionsCategories;
 
     /**
      * @var Collection<int, TrackEExercise>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercise", mappedBy="quiz")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEExercise', mappedBy: 'quiz')]
     protected Collection $attempts;
 
     public function __construct()

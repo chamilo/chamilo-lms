@@ -12,71 +12,52 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Portal announcements.
- *
- * @ORM\Table(name="sys_announcement")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sys_announcement')]
+#[ORM\Entity]
 class SysAnnouncement
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="date_start", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'date_start', type: 'datetime', nullable: false)]
     protected DateTime $dateStart;
 
-    /**
-     * @ORM\Column(name="date_end", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'date_end', type: 'datetime', nullable: false)]
     protected DateTime $dateEnd;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=250, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
-    /**
-     * @ORM\Column(name="lang", type="string", length=70, nullable=true)
-     */
+    #[ORM\Column(name: 'lang', type: 'string', length: 70, nullable: true)]
     protected ?string $lang = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl')]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     * @ORM\Column(type="array")
      *
      * @var string[]
      */
+    #[ORM\Column(type: 'array')]
     protected array $roles = [];
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
-     * @ORM\JoinColumn(name="career_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Career')]
+    #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Career $career = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion", inversedBy="announcements")
-     * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Promotion', inversedBy: 'announcements')]
+    #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Promotion $promotion = null;
 
     public function __construct()

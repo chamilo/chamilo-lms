@@ -12,10 +12,8 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="c_course_description")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCourseDescriptionRepository")
- */
+#[ORM\Table(name: 'c_course_description')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CCourseDescriptionRepository')]
 class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     public const TYPE_DESCRIPTION = 1;
@@ -27,33 +25,23 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     public const TYPE_ASSESSMENT = 7;
     public const TYPE_CUSTOM = 8;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     protected ?string $title = null;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content;
 
-    /**
-     * @ORM\Column(name="description_type", type="integer", nullable=false)
-     */
     #[Assert\Choice(callback: 'getTypes')]
+    #[ORM\Column(name: 'description_type', type: 'integer', nullable: false)]
     protected int $descriptionType;
 
-    /**
-     * @ORM\Column(name="progress", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'progress', type: 'integer', nullable: false)]
     protected int $progress;
 
     public function __construct()

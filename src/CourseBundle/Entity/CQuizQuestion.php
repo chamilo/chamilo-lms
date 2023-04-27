@@ -15,114 +15,76 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizQuestion.
- *
- * @ORM\Table(
- *     name="c_quiz_question",
- *     indexes={
- *         @ORM\Index(name="position", columns={"position"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CQuizQuestionRepository")
  */
+#[ORM\Table(name: 'c_quiz_question')]
+#[ORM\Index(name: 'position', columns: ['position'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CQuizQuestionRepository')]
 class CQuizQuestion extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="question", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'question', type: 'text', nullable: false)]
     protected string $question;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="ponderation", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
-     */
+    #[ORM\Column(name: 'ponderation', type: 'float', precision: 6, scale: 2, nullable: false, options: ['default' => 0])]
     protected float $ponderation;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'position', type: 'integer', nullable: false)]
     protected int $position;
 
-    /**
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'integer', nullable: false)]
     protected int $type;
 
-    /**
-     * @ORM\Column(name="picture", type="string", length=50, nullable=true)
-     */
+    #[ORM\Column(name: 'picture', type: 'string', length: 50, nullable: true)]
     protected ?string $picture = null;
 
-    /**
-     * @ORM\Column(name="level", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'level', type: 'integer', nullable: false)]
     protected int $level;
 
-    /**
-     * @ORM\Column(name="feedback", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'feedback', type: 'text', nullable: true)]
     protected ?string $feedback = null;
 
-    /**
-     * @ORM\Column(name="extra", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'extra', type: 'string', length: 255, nullable: true)]
     protected ?string $extra = null;
 
-    /**
-     * @ORM\Column(name="question_code", type="string", length=10, nullable=true)
-     */
+    #[ORM\Column(name: 'question_code', type: 'string', length: 10, nullable: true)]
     protected ?string $questionCode = null;
 
     /**
      * @var Collection|CQuizQuestionCategory[]
-     *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questions")
-     * @ORM\JoinTable(name="c_quiz_question_rel_category",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'c_quiz_question_rel_category')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid')]
+    #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'iid')]
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory', inversedBy: 'questions')]
     protected Collection $categories;
 
     /**
      * @var Collection|CQuizRelQuestion[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestion', mappedBy: 'question', cascade: ['persist'])]
     protected Collection $relQuizzes;
 
     /**
      * @var Collection|CQuizAnswer[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizAnswer", mappedBy="question", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizAnswer', mappedBy: 'question', cascade: ['persist'])]
     protected Collection $answers;
 
     /**
      * @var Collection|CQuizQuestionOption[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionOption", mappedBy="question", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestionOption', mappedBy: 'question', cascade: ['persist'])]
     protected Collection $options;
 
-    /**
-     * @ORM\Column(name="mandatory", type="integer")
-     */
+    #[ORM\Column(name: 'mandatory', type: 'integer')]
     protected int $mandatory;
 
     public function __construct()

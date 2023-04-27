@@ -12,20 +12,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait TimestampableTypedEntity
 {
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
     #[ApiProperty]
     #[Groups(['timestampable_created:read'])]
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $createdAt;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
     #[ApiProperty]
     #[Groups(['timestampable_updated:read'])]
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
 
     /**

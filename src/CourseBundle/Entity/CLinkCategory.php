@@ -15,44 +15,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CLinkCategory.
- *
- * @ORM\Table(
- *     name="c_link_category",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLinkCategoryRepository")
  */
+#[ORM\Table(name: 'c_link_category')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CLinkCategoryRepository')]
 class CLinkCategory extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="category_title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'category_title', type: 'string', length: 255, nullable: false)]
     protected string $categoryTitle;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
     protected int $displayOrder;
 
     /**
      * @var Collection|CLink[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CLink', mappedBy: 'category')]
     protected Collection $links;
 
     public function __construct()

@@ -15,210 +15,138 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Gedmo\Tree(type="nested")
- * @ORM\Table(
- *     name="c_survey",
- *     indexes={
- *         @ORM\Index(name="idx_survey_code", columns={"code"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyRepository")
- */
+#[ORM\Table(name: 'c_survey')]
+#[ORM\Index(name: 'idx_survey_code', columns: ['code'])]
+#[Gedmo\Tree(type: 'nested')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CSurveyRepository')]
 class CSurvey extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=40, nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: true)]
     protected ?string $code = null;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="subtitle", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'subtitle', type: 'text', nullable: true)]
     protected ?string $subtitle;
 
-    /**
-     * @ORM\Column(name="lang", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'lang', type: 'string', length: 20, nullable: true)]
     protected ?string $lang;
 
-    /**
-     * @ORM\Column(name="avail_from", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'avail_from', type: 'datetime', nullable: true)]
     protected ?DateTime $availFrom = null;
 
-    /**
-     * @ORM\Column(name="avail_till", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'avail_till', type: 'datetime', nullable: true)]
     protected ?DateTime $availTill = null;
 
-    /**
-     * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
-     */
+    #[ORM\Column(name: 'is_shared', type: 'string', length: 1, nullable: true)]
     protected ?string $isShared = null;
 
-    /**
-     * @ORM\Column(name="template", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'template', type: 'string', length: 20, nullable: true)]
     protected ?string $template = null;
 
-    /**
-     * @ORM\Column(name="intro", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'intro', type: 'text', nullable: true)]
     protected ?string $intro = null;
 
-    /**
-     * @ORM\Column(name="surveythanks", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'surveythanks', type: 'text', nullable: true)]
     protected ?string $surveyThanks = null;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false)]
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="invited", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'invited', type: 'integer', nullable: false)]
     protected int $invited;
 
-    /**
-     * @ORM\Column(name="answered", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'answered', type: 'integer', nullable: false)]
     protected int $answered;
 
-    /**
-     * @ORM\Column(name="invite_mail", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'invite_mail', type: 'text', nullable: false)]
     protected string $inviteMail;
 
-    /**
-     * @ORM\Column(name="reminder_mail", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'reminder_mail', type: 'text', nullable: false)]
     protected string $reminderMail;
 
-    /**
-     * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'mail_subject', type: 'string', length: 255, nullable: false)]
     protected string $mailSubject;
 
-    /**
-     * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'anonymous', type: 'string', length: 10, nullable: false)]
     protected string $anonymous;
 
-    /**
-     * @ORM\Column(name="access_condition", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'access_condition', type: 'text', nullable: true)]
     protected ?string $accessCondition = null;
 
-    /**
-     * @ORM\Column(name="shuffle", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'shuffle', type: 'boolean', nullable: false)]
     protected bool $shuffle;
 
-    /**
-     * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'one_question_per_page', type: 'boolean', nullable: false)]
     protected bool $oneQuestionPerPage;
 
-    /**
-     * @ORM\Column(name="survey_version", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'survey_version', type: 'string', length: 255, nullable: false)]
     protected string $surveyVersion;
 
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'lft', type: 'integer', nullable: true, unique: false)]
     protected ?int $lft = null;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'rgt', type: 'integer', nullable: true, unique: false)]
     protected ?int $rgt = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'lvl', type: 'integer', nullable: true, unique: false)]
     protected ?int $lvl = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $questions;
 
     /**
      * @var Collection|CSurveyInvitation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation", mappedBy="survey", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation', mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $invitations;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CSurvey $surveyParent = null;
 
     /**
      * @var Collection|CSurvey[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", mappedBy="surveyParent")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', mappedBy: 'surveyParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
-     *
-     * @ORM\OrderBy({"sort"="ASC"})
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="survey", cascade={"remove"})
      */
+    #[ORM\OrderBy(['sort' => 'ASC'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $options;
 
-    /**
-     * @ORM\Column(name="survey_type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_type', type: 'integer', nullable: false)]
     protected int $surveyType;
 
-    /**
-     * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'show_form_profile', type: 'integer', nullable: false)]
     protected int $showFormProfile;
 
-    /**
-     * @ORM\Column(name="form_fields", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'form_fields', type: 'text', nullable: false)]
     protected string $formFields;
 
-    /**
-     * @ORM\Column(name="visible_results", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'visible_results', type: 'integer', nullable: true)]
     protected ?int $visibleResults = null;
 
-    /**
-     * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
-     */
+    #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
     public function __construct()

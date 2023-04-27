@@ -18,22 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Associations between users.
- *
- * @ORM\Table(name="user_rel_user",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="user_friend_relation",
- *             columns={"user_id", "friend_user_id", "relation_type"}
- *         )
- *     },
- *     indexes={
- *       @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
- *       @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
- *       @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
- *    }
- * )
- * @ORM\Entity
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserRelUserListener"})
  */
 #[ApiResource(
     collectionOperations: [
@@ -76,6 +60,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     errorPath: 'User',
     message: 'User-friend relation already exists',
 )]
+#[ORM\Table(name: 'user_rel_user')]
+#[ORM\Index(name: 'idx_user_rel_user__user', columns: ['user_id'])]
+#[ORM\Index(name: 'idx_user_rel_user__friend_user', columns: ['friend_user_id'])]
+#[ORM\Index(name: 'idx_user_rel_user__user_friend_user', columns: ['user_id', 'friend_user_id'])]
+#[ORM\UniqueConstraint(name: 'user_friend_relation', columns: ['user_id', 'friend_user_id', 'relation_type'])]
+#[ORM\Entity]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\UserRelUserListener'])]
 class UserRelUser
 {
     use UserTrait;
@@ -93,34 +84,26 @@ class UserRelUser
     public const USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'friends')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
-     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'friendsWithMe')]
+    #[ORM\JoinColumn(name: 'friend_user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     protected User $friend;
 
-    /**
-     * @ORM\Column(name="relation_type", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\Column(name: 'relation_type', type: 'integer', nullable: false)]
     protected int $relationType;
 
     public function __construct()

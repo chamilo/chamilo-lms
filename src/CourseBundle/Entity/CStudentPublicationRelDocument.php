@@ -8,33 +8,21 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_student_publication_rel_document",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_student_publication_rel_document')]
+#[ORM\Entity]
 class CStudentPublicationRelDocument
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication")
-     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication')]
+    #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CDocument")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CDocument')]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CDocument $document;
 
     public function getPublication(): CStudentPublication

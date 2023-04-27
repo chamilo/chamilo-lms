@@ -11,46 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEDownloads.
- *
- * @ORM\Table(name="track_e_downloads", indexes={
- *     @ORM\Index(name="idx_ted_user_id", columns={"down_user_id"}),
- *     @ORM\Index(name="idx_ted_c_id", columns={"c_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_downloads')]
+#[ORM\Index(name: 'idx_ted_user_id', columns: ['down_user_id'])]
+#[ORM\Index(name: 'idx_ted_c_id', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackEDownloads
 {
-    /**
-     * @ORM\Column(name="down_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'down_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $downId;
 
-    /**
-     * @ORM\Column(name="down_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'down_user_id', type: 'integer', nullable: true)]
     protected ?int $downUserId = null;
 
-    /**
-     * @ORM\Column(name="down_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'down_date', type: 'datetime', nullable: false)]
     protected DateTime $downDate;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="down_doc_path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'down_doc_path', type: 'string', length: 255, nullable: false)]
     protected string $downDocPath;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
     /**

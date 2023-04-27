@@ -63,56 +63,42 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * )
  * @Vich\Uploadable
  * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
- * @ORM\Entity
- * @ORM\Table(name="resource_file")
  */
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
 ])]
+#[ORM\Table(name: 'resource_file')]
+#[ORM\Entity]
 class ResourceFile
 {
     use TimestampableEntity;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $name = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mimeType = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $originalName = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     * @ORM\Column(type="simple_array", nullable=true)
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'simple_array', nullable: true)]
     protected ?array $dimensions;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
+    #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
 
     /**
@@ -135,51 +121,38 @@ class ResourceFile
 //    )]
     protected ?File $file = null;
 
-    /**
-     * @ORM\Column(name="crop", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
-     */
+    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'resourceFile')]
     protected ResourceNode $resourceNode;
 
     /**
      * @var string[]
-     *
-     * @ORM\Column(type="array", nullable=true)
      */
+    #[ORM\Column(type: 'array', nullable: true)]
     protected ?array $metadata = [];
 
     #[Groups(['message:read'])]
     protected ?bool $audio = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     protected ?bool $image = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     protected ?bool $video = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     protected ?bool $text = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**
      * @var DateTime|DateTimeImmutable
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
      */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected $updatedAt;
 
     public function __construct()

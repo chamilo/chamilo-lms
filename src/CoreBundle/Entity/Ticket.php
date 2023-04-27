@@ -10,138 +10,87 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="ticket_ticket")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'ticket_ticket')]
+#[ORM\Entity]
 class Ticket
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'code', type: 'string', length: 255, nullable: false)]
     protected string $code;
 
-    /**
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'subject', type: 'string', length: 255, nullable: false)]
     protected string $subject;
 
-    /**
-     * @ORM\Column(name="message", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'message', type: 'text', nullable: true)]
     protected ?string $message = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketProject')]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id')]
     protected TicketProject $project;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketCategory")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketCategory')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected TicketCategory $category;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketPriority")
-     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketPriority')]
+    #[ORM\JoinColumn(name: 'priority_id', referencedColumnName: 'id')]
     protected TicketPriority $priority;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Session $session;
 
-    /**
-     * @ORM\Column(name="personal_email", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'personal_email', type: 'string', length: 255, nullable: false)]
     protected string $personalEmail;
 
-    /**
-     * @ORM\Column(name="assigned_last_user", type="integer", nullable=true)
-     */
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'assigned_last_user', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $assignedLastUser = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketStatus")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketStatus')]
+    #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected TicketStatus $status;
 
-    /**
-     * @ORM\Column(name="total_messages", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'total_messages', type: 'integer', nullable: false)]
     protected int $totalMessages;
 
-    /**
-     * @ORM\Column(name="keyword", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'keyword', type: 'string', length: 255, nullable: true)]
     protected ?string $keyword = null;
 
-    /**
-     * @ORM\Column(name="source", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'source', type: 'string', length: 255, nullable: true)]
     protected ?string $source = null;
 
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $startDate = null;
 
-    /**
-     * @ORM\Column(name="end_date", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $endDate = null;
 
-    /**
-     * @ORM\Column(name="sys_insert_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
 
-    /**
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
+    #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
     protected int $lastEditUserId;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
     protected DateTime $lastEditDateTime;
 
-    /**
-     * @ORM\Column(name="exercise_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'exercise_id', type: 'integer', nullable: true, unique: false)]
     protected int $exerciseId;
 
-    /**
-     * @ORM\Column(name="lp_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'lp_id', type: 'integer', nullable: true, unique: false)]
     protected int $lpId;
 
     public function __construct()

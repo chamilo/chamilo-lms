@@ -9,43 +9,28 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="course_rel_user_catalogue",
- *     indexes={
- *         @ORM\Index(name="course_rel_user_catalogue_user_id", columns={"user_id"}),
- *         @ORM\Index(name="course_rel_user_catalogue_c_id", columns={"c_id"})
- *     }
- * )
- * @ORM\Entity
- * @ORM\Table(name="course_rel_user_catalogue")
- */
+#[ORM\Table(name: 'course_rel_user_catalogue')]
+#[ORM\Index(name: 'course_rel_user_catalogue_user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'course_rel_user_catalogue_c_id', columns: ['c_id'])]
+#[ORM\Entity]
 class CourseRelUserCatalogue
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected ?User $user = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\Column(name="visible", type="integer")
-     */
+    #[ORM\Column(name: 'visible', type: 'integer')]
     protected int $visible;
 
     public function __construct()

@@ -11,10 +11,6 @@ use Chamilo\CoreBundle\Controller\Api\CreateMessageAttachmentAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Table(name="message_attachment")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository")
- */
 #[ApiResource(
     collectionOperations: [
         'get',
@@ -49,40 +45,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
     itemOperations: ['get'],
     normalizationContext: ['groups' => 'message:read'],
 )]
+#[ORM\Table(name: 'message_attachment')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository')]
 class MessageAttachment extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
     #[Groups(['message:read'])]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments", cascade={"persist"})
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Message', inversedBy: 'attachments', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
     public function __construct()

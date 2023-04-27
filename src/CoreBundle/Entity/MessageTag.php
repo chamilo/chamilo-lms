@@ -18,17 +18,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="message_tag",
- *     uniqueConstraints={
- *        @ORM\UniqueConstraint(
- *            name="user_tag",
- *            columns={"user_id", "tag"})
- *     },
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageTagRepository")
- */
 #[UniqueEntity(
     fields: ['user', 'tag'],
     errorPath: 'tag',
@@ -68,52 +57,44 @@ use Symfony\Component\Validator\Constraints as Assert;
     'user' => 'exact',
     'tag' => 'exact',
 ])]
+#[ORM\Table(name: 'message_tag')]
+#[ORM\UniqueConstraint(name: 'user_tag', columns: ['user_id', 'tag'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\MessageTagRepository')]
 class MessageTag
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
     #[Groups(['message_tag:read', 'message:read'])]
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @Gedmo\SortableGroup()
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="messageTags")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="cascade")
-     */
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'messageTags')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="tag", type="string", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write', 'message:read'])]
+    #[ORM\Column(name: 'tag', type: 'string', nullable: false)]
     protected string $tag;
 
-    /**
-     * @ORM\Column(name="color", type="string", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
+    #[ORM\Column(name: 'color', type: 'string', nullable: false)]
     protected string $color;
 
-    /**
-     * @Gedmo\SortablePosition()
-     * @ORM\Column(name="position", type="integer")
-     */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
     /**
      * @var Collection|MessageRelUser[]
-     *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser", mappedBy="tags", cascade={"persist"})
      */
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageRelUser', mappedBy: 'tags', cascade: ['persist'])]
     protected Collection $messageRelUsers;
 
     public function __construct()

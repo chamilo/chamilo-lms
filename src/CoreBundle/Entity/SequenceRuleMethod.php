@@ -10,34 +10,25 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceRuleMethod.
- *
- * @ORM\Table(name="sequence_rule_method")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_rule_method')]
+#[ORM\Entity]
 class SequenceRuleMethod
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="method_order", type="integer")
-     */
+    #[ORM\Column(name: 'method_order', type: 'integer')]
     protected string $methodOrder;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
-     * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceRule')]
+    #[ORM\JoinColumn(name: 'sequence_rule_id', referencedColumnName: 'id')]
     protected ?SequenceRule $rule = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceMethod")
-     * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceMethod')]
+    #[ORM\JoinColumn(name: 'sequence_method_id', referencedColumnName: 'id')]
     protected ?SequenceMethod $method = null;
 
     /**

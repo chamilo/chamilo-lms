@@ -16,56 +16,37 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CNotebook.
- *
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CNotebookRepository")
- * @ORM\Table(
- *     name="c_notebook"
- * )
  */
+#[ORM\Table(name: 'c_notebook')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CNotebookRepository')]
 class CNotebook extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false)]
     protected DateTime $creationDate;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="update_date", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'update_date', type: 'datetime', nullable: false)]
     protected DateTime $updateDate;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: true)]
     protected ?int $status;
 
     public function __construct()

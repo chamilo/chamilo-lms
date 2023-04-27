@@ -17,120 +17,81 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CForumThread.
- *
- * @ORM\Table(
- *     name="c_forum_thread",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumThreadRepository")
  */
+#[ORM\Table(name: 'c_forum_thread')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumThreadRepository')]
 class CForumThread extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="thread_title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'thread_title', type: 'string', length: 255, nullable: false)]
     protected string $threadTitle;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="threads")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', inversedBy: 'threads')]
+    #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CForum $forum = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="thread_poster_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'thread_poster_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="thread_last_post", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'thread_last_post', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CForumPost $threadLastPost = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
-     * @ORM\JoinColumn(name="lp_item_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem')]
+    #[ORM\JoinColumn(name: 'lp_item_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CLpItem $item = null;
 
     /**
      * @var Collection|CForumPost[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', mappedBy: 'thread', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $posts;
 
     /**
      * @var Collection|CForumThreadQualify[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualify", mappedBy="thread", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumThreadQualify', mappedBy: 'thread', cascade: ['persist', 'remove'])]
     protected Collection $qualifications;
 
-    /**
-     * @ORM\Column(name="thread_date", type="datetime", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'thread_date', type: 'datetime', nullable: false)]
     protected DateTime $threadDate;
 
-    /**
-     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default":0})
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'thread_replies', type: 'integer', nullable: false, options: ['unsigned' => true, 'default' => 0])]
     protected int $threadReplies;
 
-    /**
-     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default":0})
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'thread_views', type: 'integer', nullable: false, options: ['unsigned' => true, 'default' => 0])]
     protected int $threadViews;
 
-    /**
-     * @ORM\Column(name="thread_sticky", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'thread_sticky', type: 'boolean', nullable: false)]
     protected bool $threadSticky;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
-    /**
-     * @ORM\Column(name="thread_title_qualify", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'thread_title_qualify', type: 'string', length: 255, nullable: true)]
     protected ?string $threadTitleQualify = null;
 
-    /**
-     * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\Column(name: 'thread_qualify_max', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $threadQualifyMax;
 
-    /**
-     * @ORM\Column(name="thread_close_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'thread_close_date', type: 'datetime', nullable: true)]
     protected ?DateTime $threadCloseDate = null;
 
-    /**
-     * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\Column(name: 'thread_weight', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $threadWeight;
 
-    /**
-     * @ORM\Column(name="thread_peer_qualify", type="boolean")
-     */
+    #[ORM\Column(name: 'thread_peer_qualify', type: 'boolean')]
     protected bool $threadPeerQualify;
 
     public function __construct()

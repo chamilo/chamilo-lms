@@ -12,71 +12,48 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Sequence.
- *
- * @ORM\Table(name="sequence_value")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_value')]
+#[ORM\Entity]
 class SequenceValue
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sequenceValues")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'sequenceValues')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRowEntity")
-     * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceRowEntity')]
+    #[ORM\JoinColumn(name: 'sequence_row_entity_id', referencedColumnName: 'id')]
     protected ?SequenceRowEntity $entity = null;
 
-    /**
-     * @ORM\Column(name="advance", type="float")
-     */
+    #[ORM\Column(name: 'advance', type: 'float')]
     protected int $advance;
 
-    /**
-     * @ORM\Column(name="complete_items", type="integer")
-     */
+    #[ORM\Column(name: 'complete_items', type: 'integer')]
     protected int $completeItems;
 
-    /**
-     * @ORM\Column(name="total_items", type="integer")
-     */
+    #[ORM\Column(name: 'total_items', type: 'integer')]
     protected int $totalItems;
 
-    /**
-     * @ORM\Column(name="success", type="boolean")
-     */
+    #[ORM\Column(name: 'success', type: 'boolean')]
     protected int $success;
 
-    /**
-     * @ORM\Column(name="success_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'success_date', type: 'datetime', nullable: true)]
     protected ?DateTime $successDate = null;
 
-    /**
-     * @ORM\Column(name="available", type="boolean")
-     */
+    #[ORM\Column(name: 'available', type: 'boolean')]
     protected int $available;
 
-    /**
-     * @ORM\Column(name="available_start_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'available_start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableStartDate = null;
 
-    /**
-     * @ORM\Column(name="available_end_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'available_end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableEndDate = null;
 
     /**

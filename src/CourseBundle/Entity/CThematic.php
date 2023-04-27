@@ -13,63 +13,42 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_thematic",
- *     indexes={
- *         @ORM\Index(name="active", columns={"active"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CThematicRepository")
- */
+#[ORM\Table(name: 'c_thematic')]
+#[ORM\Index(name: 'active', columns: ['active'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CThematicRepository')]
 class CThematic extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
     protected int $displayOrder;
 
-    /**
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'active', type: 'boolean', nullable: false)]
     protected bool $active;
 
     /**
      * @var Collection|CThematicPlan[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CThematicPlan', mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $plans;
 
     /**
      * @var Collection|CThematicAdvance[]
      *
-     * @ORM\OrderBy({"startDate" = "ASC"})
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OrderBy(['startDate' => 'ASC'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CThematicAdvance', mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $advances;
 
     public function __construct()

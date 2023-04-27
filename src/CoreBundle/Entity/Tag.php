@@ -11,46 +11,36 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="tag")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TagRepository")
- */
+#[ORM\Table(name: 'tag')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\TagRepository')]
 class Tag
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="tag", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'tag', type: 'string', length: 255, nullable: false)]
     protected string $tag;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="tags")
-     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ExtraField', inversedBy: 'tags')]
+    #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ExtraField $field;
 
     /**
      * @var Collection<int, UserRelTag>|UserRelTag[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelTag", mappedBy="tag", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelTag', mappedBy: 'tag', cascade: ['persist'])]
     protected Collection $userRelTags;
 
     /**
      * @var Collection<int, ExtraFieldRelTag>|ExtraFieldRelTag[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldRelTag", mappedBy="tag", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ExtraFieldRelTag', mappedBy: 'tag', cascade: ['persist'])]
     protected Collection $extraFieldRelTags;
 
-    /**
-     * @ORM\Column(name="count", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'count', type: 'integer', nullable: false)]
     protected int $count;
 
     public function __construct()

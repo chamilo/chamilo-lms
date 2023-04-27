@@ -17,99 +17,71 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CForumPost.
- *
- * @ORM\Table(
- *     name="c_forum_post",
- *     indexes={
- *         @ORM\Index(name="forum_id", columns={"forum_id"}),
- *         @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
- *         @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
  */
+#[ORM\Table(name: 'c_forum_post')]
+#[ORM\Index(name: 'forum_id', columns: ['forum_id'])]
+#[ORM\Index(name: 'idx_forum_post_thread_id', columns: ['thread_id'])]
+#[ORM\Index(name: 'idx_forum_post_visible', columns: ['visible'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumPostRepository')]
 class CForumPost extends AbstractResource implements ResourceInterface
 {
     public const STATUS_VALIDATED = 1;
     public const STATUS_WAITING_MODERATION = 2;
     public const STATUS_REJECTED = 3;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="post_title", type="string", length=250, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'post_title', type: 'string', length: 250, nullable: false)]
     protected string $postTitle;
 
-    /**
-     * @ORM\Column(name="post_text", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'post_text', type: 'text', nullable: true)]
     protected ?string $postText = null;
 
-    /**
-     * @ORM\Column(name="post_date", type="datetime", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'post_date', type: 'datetime', nullable: false)]
     protected DateTime $postDate;
 
-    /**
-     * @ORM\Column(name="post_notification", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'post_notification', type: 'boolean', nullable: true)]
     protected ?bool $postNotification = null;
 
-    /**
-     * @ORM\Column(name="visible", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'visible', type: 'boolean', nullable: false)]
     protected bool $visible;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: true)]
     protected ?int $status = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
-     * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumThread', inversedBy: 'posts')]
+    #[ORM\JoinColumn(name: 'thread_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumThread $thread = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="posts")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', inversedBy: 'posts')]
+    #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForum $forum = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
-     */
     #[Assert\NotBlank]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'poster_id', referencedColumnName: 'id')]
     protected ?User $user = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="children")
-     * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'post_parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CForumPost $postParent = null;
 
     /**
      * @var Collection|CForumPost[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="postParent")
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', mappedBy: 'postParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CForumAttachment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment", mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumAttachment', mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $attachments;
 
     public function __construct()

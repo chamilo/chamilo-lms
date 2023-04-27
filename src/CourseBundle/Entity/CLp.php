@@ -19,205 +19,131 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course learning paths (LPs).
- *
- * @ORM\Table(
- *     name="c_lp"
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLpRepository")
  */
+#[ORM\Table(name: 'c_lp')]
+#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CLpRepository')]
 class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
     public const AICC_TYPE = 3;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="lp_type", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'lp_type', type: 'integer', nullable: false)]
     protected int $lpType;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="ref", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'ref', type: 'text', nullable: true)]
     protected ?string $ref = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="path", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'text', nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="force_commit", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'force_commit', type: 'boolean', nullable: false)]
     protected bool $forceCommit;
 
-    /**
-     * @ORM\Column(name="default_view_mod", type="string", length=32, nullable=false, options={"default":"embedded"})
-     */
+    #[ORM\Column(name: 'default_view_mod', type: 'string', length: 32, nullable: false, options: ['default' => 'embedded'])]
     protected string $defaultViewMod;
 
-    /**
-     * @ORM\Column(name="default_encoding", type="string", length=32, nullable=false, options={"default":"UTF-8"})
-     */
+    #[ORM\Column(name: 'default_encoding', type: 'string', length: 32, nullable: false, options: ['default' => 'UTF-8'])]
     protected string $defaultEncoding;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false, options={"default":"0"})
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $displayOrder;
 
-    /**
-     * @ORM\Column(name="content_maker", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'content_maker', type: 'text', nullable: false)]
     protected string $contentMaker;
 
-    /**
-     * @ORM\Column(name="content_local", type="string", length=32, nullable=false, options={"default":"local"})
-     */
+    #[ORM\Column(name: 'content_local', type: 'string', length: 32, nullable: false, options: ['default' => 'local'])]
     protected string $contentLocal;
 
-    /**
-     * @ORM\Column(name="content_license", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'content_license', type: 'text', nullable: false)]
     protected string $contentLicense;
 
-    /**
-     * @ORM\Column(name="prevent_reinit", type="boolean", nullable=false, options={"default":"1"})
-     */
+    #[ORM\Column(name: 'prevent_reinit', type: 'boolean', nullable: false, options: ['default' => 1])]
     protected bool $preventReinit;
 
-    /**
-     * @ORM\Column(name="js_lib", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'js_lib', type: 'text', nullable: false)]
     protected string $jsLib;
 
-    /**
-     * @ORM\Column(name="debug", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'debug', type: 'boolean', nullable: false)]
     protected bool $debug;
 
-    /**
-     * @ORM\Column(name="theme", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'theme', type: 'string', length: 255, nullable: false)]
     protected string $theme;
 
-    /**
-     * @ORM\Column(name="author", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'author', type: 'text', nullable: false)]
     protected string $author;
 
-    /**
-     * @ORM\Column(name="prerequisite", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'prerequisite', type: 'integer', nullable: false)]
     protected int $prerequisite;
 
-    /**
-     * @ORM\Column(name="hide_toc_frame", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'hide_toc_frame', type: 'boolean', nullable: false)]
     protected bool $hideTocFrame;
 
-    /**
-     * @ORM\Column(name="seriousgame_mode", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'seriousgame_mode', type: 'boolean', nullable: false)]
     protected bool $seriousgameMode;
 
-    /**
-     * @ORM\Column(name="use_max_score", type="integer", nullable=false, options={"default":"1"})
-     */
+    #[ORM\Column(name: 'use_max_score', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $useMaxScore;
 
-    /**
-     * @ORM\Column(name="autolaunch", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'autolaunch', type: 'integer', nullable: false)]
     protected int $autolaunch;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="lps")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpCategory', inversedBy: 'lps')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected ?CLpCategory $category = null;
 
-    /**
-     * @ORM\Column(name="max_attempts", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'max_attempts', type: 'integer', nullable: false)]
     protected int $maxAttempts;
 
-    /**
-     * @ORM\Column(name="subscribe_users", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'subscribe_users', type: 'integer', nullable: false)]
     protected int $subscribeUsers;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_on", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_on', type: 'datetime', nullable: false)]
     protected DateTime $createdOn;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="modified_on", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'modified_on', type: 'datetime', nullable: false)]
     protected DateTime $modifiedOn;
 
-    /**
-     * @ORM\Column(name="published_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'published_on', type: 'datetime', nullable: true)]
     protected ?DateTime $publishedOn;
 
-    /**
-     * @ORM\Column(name="expired_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'expired_on', type: 'datetime', nullable: true)]
     protected ?DateTime $expiredOn = null;
 
-    /**
-     * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
-     */
+    #[ORM\Column(name: 'accumulate_scorm_time', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $accumulateScormTime;
 
-    /**
-     * @ORM\Column(name="accumulate_work_time", type="integer", nullable=false, options={"default":0})
-     */
+    #[ORM\Column(name: 'accumulate_work_time', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accumulateWorkTime;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem', mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;
 
     /**
      * @var Collection|CForum[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="lp", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', mappedBy: 'lp', cascade: ['persist', 'remove'])]
     protected Collection $forums;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
 
     public function __construct()

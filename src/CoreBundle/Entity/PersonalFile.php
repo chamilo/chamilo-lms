@@ -93,10 +93,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *     },
  * )
- *
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
- * @ORM\Table(name="personal_file")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\PersonalFileRepository")
  */
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
@@ -113,24 +109,23 @@ use Symfony\Component\Validator\Constraints as Assert;
         'resourceNode.updatedAt',
     ]
 )]
+#[ORM\Table(name: 'personal_file')]
+#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceListener'])]
+#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\PersonalFileRepository')]
 
 class PersonalFile extends AbstractResource implements ResourceInterface
 {
     use TimestampableEntity;
 
-    /**
-     * @Groups({"personal_file:read"})
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[Groups(['personal_file:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['personal_file:read'])]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
     public function __construct()

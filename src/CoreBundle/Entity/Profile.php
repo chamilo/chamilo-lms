@@ -10,37 +10,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="skill_level_profile")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'skill_level_profile')]
+#[ORM\Entity]
 class Profile
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
-     *
      * @var Skill[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Skill', mappedBy: 'profile', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
-     * @ORM\OrderBy({"position"="ASC"})
      *
      * @var Level[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Level', mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $levels;
 
     public function __construct()

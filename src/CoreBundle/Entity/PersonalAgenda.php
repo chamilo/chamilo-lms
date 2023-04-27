@@ -13,65 +13,44 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PersonalAgenda.
- *
- * @ORM\Table(name="personal_agenda", indexes={
- *     @ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
- *     @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'personal_agenda')]
+#[ORM\Index(name: 'idx_personal_agenda_user', columns: ['user'])]
+#[ORM\Index(name: 'idx_personal_agenda_parent', columns: ['parent_event_id'])]
+#[ORM\Entity]
 class PersonalAgenda
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="personalAgendas")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'personalAgendas')]
+    #[ORM\JoinColumn(name: 'user', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="title", type="text", nullable=true)
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     protected ?string $title = null;
 
-    /**
-     * @ORM\Column(name="text", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'text', type: 'text', nullable: true)]
     protected ?string $text = null;
 
-    /**
-     * @ORM\Column(name="date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date', type: 'datetime', nullable: true)]
     protected ?DateTime $date = null;
 
-    /**
-     * @ORM\Column(name="enddate", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'enddate', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    /**
-     * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'parent_event_id', type: 'integer', nullable: true)]
     protected ?int $parentEventId = null;
 
-    /**
-     * @ORM\Column(name="all_day", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'all_day', type: 'integer', nullable: false)]
     protected int $allDay;
 
-    /**
-     * @ORM\Column(name="color", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
 
     /**

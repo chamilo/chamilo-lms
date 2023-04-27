@@ -22,13 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Quiz user attempts.
- *
- * @ORM\Table(name="track_e_exercises", indexes={
- *     @ORM\Index(name="idx_tee_user_id", columns={"exe_user_id"}),
- *     @ORM\Index(name="idx_tee_c_id", columns={"c_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
  */
 #[ApiResource(
     collectionOperations: [
@@ -74,152 +67,116 @@ use Symfony\Component\Validator\Constraints as Assert;
         'userIp',
     ]
 )]
+#[ORM\Table(name: 'track_e_exercises')]
+#[ORM\Index(name: 'idx_tee_user_id', columns: ['exe_user_id'])]
+#[ORM\Index(name: 'idx_tee_c_id', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackEExercise
 {
     use UserExtraFieldFilterTrait;
 
-    /**
-     * @ORM\Column(name="exe_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'exe_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $exeId;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'exe_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\Column(name="exe_date", type="datetime", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'exe_date', type: 'datetime', nullable: false)]
     protected DateTime $exeDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuiz", inversedBy="attempts")
-     * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuiz', inversedBy: 'attempts')]
+    #[ORM\JoinColumn(name: 'exe_exo_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CQuiz $quiz;
 
-    /**
-     * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'score', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $score;
 
-    /**
-     * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'max_score', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $maxScore;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
-    /**
-     * @ORM\Column(name="status", type="string", length=20, nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'status', type: 'string', length: 20, nullable: false)]
     protected string $status;
 
-    /**
-     * @ORM\Column(name="data_tracking", type="text", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'data_tracking', type: 'text', nullable: false)]
     protected string $dataTracking;
 
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: false)]
     protected DateTime $startDate;
 
-    /**
-     * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'steps_counter', type: 'smallint', nullable: false)]
     protected int $stepsCounter;
 
-    /**
-     * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_id', type: 'integer', nullable: false)]
     protected int $origLpId;
 
-    /**
-     * @ORM\Column(name="orig_lp_item_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_item_id', type: 'integer', nullable: false)]
     protected int $origLpItemId;
 
-    /**
-     * @ORM\Column(name="exe_duration", type="integer", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'exe_duration', type: 'integer', nullable: false)]
     protected int $exeDuration;
 
-    /**
-     * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'expired_time_control', type: 'datetime', nullable: true)]
     protected ?DateTime $expiredTimeControl = null;
 
-    /**
-     * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_item_view_id', type: 'integer', nullable: false)]
     protected int $origLpItemViewId;
 
-    /**
-     * @ORM\Column(name="questions_to_check", type="text", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
     #[Assert\NotNull]
+    #[ORM\Column(name: 'questions_to_check', type: 'text', nullable: false)]
     protected string $questionsToCheck;
 
-    /**
-     * @ORM\Column(name="blocked_categories", type="text", nullable=true)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'blocked_categories', type: 'text', nullable: true)]
     protected ?string $blockedCategories;
 
     /**
      * @var Collection<int, TrackEAttempt>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="trackExercise", cascade={"persist"})
      */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', mappedBy: 'trackExercise', cascade: ['persist'])]
     protected Collection $attempts;
 
     public function __construct()

@@ -11,33 +11,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class SequenceVariable.
- *
- * @ORM\Table(name="sequence_variable")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_variable')]
+#[ORM\Entity]
 class SequenceVariable
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', nullable: true)]
     protected ?string $name = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="default_val", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'default_val', type: 'string', nullable: true)]
     protected ?string $defaultValue = null;
 
     /**

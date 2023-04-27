@@ -11,93 +11,60 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="course_request", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="code", columns={"code"})
- * })
- * @ORM\Entity
- */
+#[ORM\Table(name: 'course_request')]
+#[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
+#[ORM\Entity]
 class CourseRequest
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=40, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
 
-    /**
-     * @ORM\Column(name="course_language", type="string", length=20, nullable=false)
-     */
+    #[ORM\Column(name: 'course_language', type: 'string', length: 20, nullable: false)]
     protected string $courseLanguage;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="category_code", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'category_code', type: 'string', length: 40, nullable: true)]
     protected ?string $categoryCode = null;
 
-    /**
-     * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true)
-     */
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, nullable: true)]
     protected ?string $tutorName = null;
 
-    /**
-     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'visual_code', type: 'string', length: 40, nullable: true)]
     protected ?string $visualCode = null;
 
-    /**
-     * @ORM\Column(name="request_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'request_date', type: 'datetime', nullable: false)]
     protected DateTime $requestDate;
 
-    /**
-     * @ORM\Column(name="objetives", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'objetives', type: 'text', nullable: true)]
     protected ?string $objetives = null;
 
-    /**
-     * @ORM\Column(name="target_audience", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'target_audience', type: 'text', nullable: true)]
     protected ?string $targetAudience = null;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: false)]
     protected int $status;
 
-    /**
-     * @ORM\Column(name="info", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'info', type: 'integer', nullable: false)]
     protected int $info;
 
-    /**
-     * @ORM\Column(name="exemplary_content", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'exemplary_content', type: 'integer', nullable: false)]
     protected int $exemplaryContent;
 
     public function __construct()

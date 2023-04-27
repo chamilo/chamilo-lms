@@ -10,29 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AccessUrlRelUser.
- *
- * @ORM\Table(name="access_url_rel_usergroup")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'access_url_rel_usergroup')]
+#[ORM\Entity]
 class AccessUrlRelUserGroup implements EntityAccessUrlInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl')]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="urls", cascade={"persist"})
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup', inversedBy: 'urls', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Usergroup $userGroup;
 
     /**

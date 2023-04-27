@@ -11,60 +11,38 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CDropboxCategory.
- *
- * @ORM\Table(
- *     name="c_dropbox_category",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_dropbox_category')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class CDropboxCategory
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="cat_id", type="integer")
-     */
+    #[ORM\Column(name: 'cat_id', type: 'integer')]
     protected int $catId;
 
-    /**
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(name="cat_name", type="text", nullable=false)
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column(name: 'cat_name', type: 'text', nullable: false)]
     protected string $catName;
 
-    /**
-     * @ORM\Column(name="received", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'received', type: 'boolean', nullable: false)]
     protected bool $received;
 
-    /**
-     * @ORM\Column(name="sent", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'sent', type: 'boolean', nullable: false)]
     protected bool $sent;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
     /**

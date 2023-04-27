@@ -19,121 +19,78 @@ use UnserializeApi;
 
 /**
  * Class ExternalTool.
- *
- * @ORM\Table(name="lti_external_tool")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'lti_external_tool')]
+#[ORM\Entity]
 class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
 {
     public const V_1P1 = 'lti1p1';
     public const V_1P3 = 'lti1p3';
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string")
-     */
+    #[ORM\Column(name: 'name', type: 'string')]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="launch_url", type="string")
-     */
+    #[ORM\Column(name: 'launch_url', type: 'string')]
     protected string $launchUrl;
 
-    /**
-     * @ORM\Column(name="consumer_key", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'consumer_key', type: 'string', nullable: true)]
     protected ?string $consumerKey;
 
-    /**
-     * @ORM\Column(name="shared_secret", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'shared_secret', type: 'string', nullable: true)]
     protected ?string $sharedSecret;
 
-    /**
-     * @ORM\Column(name="custom_params", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'custom_params', type: 'text', nullable: true)]
     protected ?string $customParams;
 
-    /**
-     * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
-     */
+    #[ORM\Column(name: 'active_deep_linking', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $activeDeepLinking;
 
-    /**
-     * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
-     */
+    #[ORM\Column(name: 'privacy', type: 'text', nullable: true, options: ['default' => null])]
     protected ?string $privacy;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation')]
+    #[ORM\JoinColumn(name: 'gradebook_eval_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?GradebookEvaluation $gradebookEval;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?ExternalTool $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool', mappedBy: 'parent')]
     protected Collection $children;
 
-    /**
-     * @ORM\Column(name="client_id", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'client_id', type: 'string', nullable: true)]
     private ?string $clientId;
-    /**
-     * @ORM\Column(name="login_url", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'login_url', type: 'string', nullable: true)]
     private ?string $loginUrl;
 
-    /**
-     * @ORM\Column(name="redirect_url", type="string", nullable=true)
-     */
+    #[ORM\Column(name: 'redirect_url', type: 'string', nullable: true)]
     private ?string $redirectUrl;
 
-    /**
-     * @ORM\Column(name="advantage_services", type="json", nullable=true)
-     */
+    #[ORM\Column(name: 'advantage_services', type: 'json', nullable: true)]
     private ?array $advantageServices;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\LineItem", mappedBy="tool")
-     */
+    #[ORM\OneToMany(targetEntity: 'Chamilo\LtiBundle\Entity\LineItem', mappedBy: 'tool')]
     private Collection $lineItems;
 
-    /**
-     * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
-     */
+    #[ORM\Column(name: 'version', type: 'string', options: ['default' => 'lti1p1'])]
     private string $version;
-    /**
-     * @ORM\Column(name="launch_presentation", type="json")
-     */
+    #[ORM\Column(name: 'launch_presentation', type: 'json')]
     private array $launchPresentation;
 
-    /**
-     * @ORM\Column(name="replacement_params", type="json")
-     */
+    #[ORM\Column(name: 'replacement_params', type: 'json')]
     private array $replacementParams;
 
     public function __construct()

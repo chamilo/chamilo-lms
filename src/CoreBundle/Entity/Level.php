@@ -11,42 +11,29 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Skill level.
- *
- * @ORM\Table(name="skill_level")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'skill_level')]
+#[ORM\Entity]
 class Level
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @Gedmo\SortablePosition
-     *
-     * @ORM\Column(name="position", type="integer")
-     */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
-    /**
-     * @ORM\Column(name="short_name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'short_name', type: 'string', length: 255, nullable: false)]
     protected string $shortName;
 
-    /**
-     * @Gedmo\SortableGroup
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="levels")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Profile', inversedBy: 'levels')]
+    #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 
     public function __toString(): string

@@ -11,98 +11,61 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CWikiConf.
- *
- * @ORM\Table(
- *     name="c_wiki_conf",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="page_id", columns={"page_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_wiki_conf')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'page_id', columns: ['page_id'])]
+#[ORM\Entity]
 class CWikiConf
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="page_id", type="integer")
-     */
+    #[ORM\Column(name: 'page_id', type: 'integer')]
     protected int $pageId;
 
-    /**
-     * @ORM\Column(name="task", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'task', type: 'text', nullable: false)]
     protected string $task;
 
-    /**
-     * @ORM\Column(name="feedback1", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'feedback1', type: 'text', nullable: false)]
     protected string $feedback1;
 
-    /**
-     * @ORM\Column(name="feedback2", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'feedback2', type: 'text', nullable: false)]
     protected string $feedback2;
 
-    /**
-     * @ORM\Column(name="feedback3", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'feedback3', type: 'text', nullable: false)]
     protected string $feedback3;
 
-    /**
-     * @ORM\Column(name="fprogress1", type="string", length=3, nullable=false)
-     */
+    #[ORM\Column(name: 'fprogress1', type: 'string', length: 3, nullable: false)]
     protected string $fprogress1;
 
-    /**
-     * @ORM\Column(name="fprogress2", type="string", length=3, nullable=false)
-     */
+    #[ORM\Column(name: 'fprogress2', type: 'string', length: 3, nullable: false)]
     protected string $fprogress2;
 
-    /**
-     * @ORM\Column(name="fprogress3", type="string", length=3, nullable=false)
-     */
+    #[ORM\Column(name: 'fprogress3', type: 'string', length: 3, nullable: false)]
     protected string $fprogress3;
 
-    /**
-     * @ORM\Column(name="max_size", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'max_size', type: 'integer', nullable: true)]
     protected ?int $maxSize = null;
 
-    /**
-     * @ORM\Column(name="max_text", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'max_text', type: 'integer', nullable: true)]
     protected ?int $maxText = null;
 
-    /**
-     * @ORM\Column(name="max_version", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'max_version', type: 'integer', nullable: true)]
     protected ?int $maxVersion = null;
 
-    /**
-     * @ORM\Column(name="startdate_assig", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'startdate_assig', type: 'datetime', nullable: true)]
     protected ?DateTime $startdateAssig = null;
 
-    /**
-     * @ORM\Column(name="enddate_assig", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'enddate_assig', type: 'datetime', nullable: true)]
     protected ?DateTime $enddateAssig = null;
 
-    /**
-     * @ORM\Column(name="delayedsubmit", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'delayedsubmit', type: 'integer', nullable: false)]
     protected int $delayedsubmit;
 
     /**

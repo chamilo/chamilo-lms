@@ -11,49 +11,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Room.
- *
- * @ORM\Table(name="room")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'room')]
+#[ORM\Entity]
 class Room
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="geolocation", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'geolocation', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $geolocation = null;
 
-    /**
-     * @ORM\Column(name="ip", type="string", length=45, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'ip', type: 'string', length: 45, nullable: true, unique: false)]
     protected ?string $ip = null;
 
-    /**
-     * @ORM\Column(name="ip_mask", type="string", length=6, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'ip_mask', type: 'string', length: 6, nullable: true, unique: false)]
     protected ?string $ipMask = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
-     * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\BranchSync')]
+    #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
     protected BranchSync $branch;
 
     /**

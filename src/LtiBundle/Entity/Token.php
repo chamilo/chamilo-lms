@@ -10,40 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Token.
- *
- * @ORM\Table(name="lti_token")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'lti_token')]
+#[ORM\Entity]
 class Token
 {
     public const TOKEN_LIFETIME = 3600;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool')]
+    #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ExternalTool $tool;
-    /**
-     * @ORM\Column(name="scope", type="json")
-     */
+    #[ORM\Column(name: 'scope', type: 'json')]
     private array $scope;
-    /**
-     * @ORM\Column(name="hash", type="string")
-     */
+    #[ORM\Column(name: 'hash', type: 'string')]
     private string $hash;
-    /**
-     * @ORM\Column(name="created_at", type="integer")
-     */
+    #[ORM\Column(name: 'created_at', type: 'integer')]
     private int $createdAt;
-    /**
-     * @ORM\Column(name="expires_at", type="integer")
-     */
+    #[ORM\Column(name: 'expires_at', type: 'integer')]
     private int $expiresAt;
 
     public function getId(): int

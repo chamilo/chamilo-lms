@@ -10,29 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceFormula.
- *
- * @ORM\Table(name="sequence_formula")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_formula')]
+#[ORM\Entity]
 class SequenceFormula
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceMethod")
-     * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceMethod')]
+    #[ORM\JoinColumn(name: 'sequence_method_id', referencedColumnName: 'id')]
     protected ?SequenceMethod $method = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceVariable")
-     * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceVariable')]
+    #[ORM\JoinColumn(name: 'sequence_variable_id', referencedColumnName: 'id')]
     protected ?SequenceVariable $variable = null;
 
     /**

@@ -57,11 +57,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     'title' => 'partial',
 ])]
 #[ORM\Table(name: 'resource_node')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\ResourceNodeRepository')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\ResourceNodeRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener'])]
+#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener::class])]
 #[Gedmo\Tree(type: 'materializedPath')]
-class ResourceNode
+class ResourceNode implements \Stringable
 {
     use TimestampableTypedEntity;
     use TimestampableAgoTrait;
@@ -86,7 +86,7 @@ class ResourceNode
     protected string $slug;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceType', inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceType::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
     protected ResourceType $resourceType;
 
@@ -95,33 +95,33 @@ class ResourceNode
      */
     #[ApiSubresource]
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceLink', mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceLink::class, mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
 
     /**
      * ResourceFile available file for this node.
      */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceFile', inversedBy: 'resourceNode', orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceFile::class, inversedBy: 'resourceNode', orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceFile $resourceFile = null;
 
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
     #[ApiSubresource]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'children')]
     protected ?ResourceNode $parent = null;
 
     /**
      * @var Collection|ResourceNode[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
@@ -145,7 +145,7 @@ class ResourceNode
     /**
      * @var Collection|ResourceComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
     protected Collection $comments;
 
     #[Groups(['resource_node:read', 'document:read'])]
@@ -167,7 +167,7 @@ class ResourceNode
 
     protected ?string $content = null;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CShortcut', mappedBy: 'shortCutNode', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CShortcut::class, mappedBy: 'shortCutNode', cascade: ['persist', 'remove'])]
     protected ?CShortcut $shortCut = null;
 
     #[Groups(['resource_node:read', 'document:read'])]
@@ -227,7 +227,7 @@ class ResourceNode
      *
      * @return Collection|ResourceNode[]
      */
-    public function getChildren()
+    public function getChildren(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->children;
     }
@@ -244,10 +244,8 @@ class ResourceNode
 
     /**
      * Returns the parent resource.
-     *
-     * @return null|ResourceNode
      */
-    public function getParent()
+    public function getParent(): ?\Chamilo\CoreBundle\Entity\ResourceNode
     {
         return $this->parent;
     }
@@ -275,7 +273,7 @@ class ResourceNode
     /**
      * @return Collection|ResourceComment[]
      */
-    public function getComments()
+    public function getComments(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->comments;
     }

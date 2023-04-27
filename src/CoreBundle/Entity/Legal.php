@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Legal.
  */
 #[ORM\Table(name: 'legal')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\LegalRepository')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\LegalRepository::class)]
 class Legal
 {
     #[ORM\Column(name: 'id', type: 'integer')]

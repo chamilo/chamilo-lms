@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_survey_question')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CSurveyQuestionRepository')]
+#[ORM\Entity(repositoryClass: CSurveyQuestionRepository::class)]
 class CSurveyQuestion
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -20,34 +21,34 @@ class CSurveyQuestion
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: CSurveyQuestion::class, mappedBy: 'parent')]
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', mappedBy: 'question', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyQuestionOption::class, mappedBy: 'question', cascade: ['remove'])]
     protected Collection $options;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'parent_option_id', referencedColumnName: 'iid')]
     protected ?CSurveyQuestionOption $parentOption = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'questions')]
+    #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
     /**
      * @var Collection|CSurveyAnswer[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyAnswer', mappedBy: 'question', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyAnswer::class, mappedBy: 'question', cascade: ['remove'])]
     protected Collection $answers;
 
     #[Assert\NotBlank]
@@ -306,7 +307,7 @@ class CSurveyQuestion
     /**
      * @return Collection|CSurveyQuestion[]
      */
-    public function getChildren()
+    public function getChildren(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->children;
     }
@@ -314,7 +315,7 @@ class CSurveyQuestion
     /**
      * @param Collection|CSurveyQuestion[] $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(\Doctrine\Common\Collections\Collection|array $children): self
     {
         $this->children = $children;
 
@@ -348,7 +349,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyAnswer[]|Collection
      */
-    public function getAnswers()
+    public function getAnswers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->answers;
     }
@@ -356,7 +357,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyQuestionOption[]|Collection
      */
-    public function getOptions()
+    public function getOptions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->options;
     }
@@ -364,7 +365,7 @@ class CSurveyQuestion
     /**
      * @param CSurveyQuestionOption[]|Collection $options
      */
-    public function setOptions($options): self
+    public function setOptions(array|\Doctrine\Common\Collections\Collection $options): self
     {
         $this->options = $options;
 

@@ -20,7 +20,7 @@ class CAttendanceCalendar
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendance', inversedBy: 'calendars', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendance::class, inversedBy: 'calendars', cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
@@ -33,7 +33,7 @@ class CAttendanceCalendar
     /**
      * @var Collection|CAttendanceSheet[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendanceSheet', mappedBy: 'attendanceCalendar', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceSheet::class, mappedBy: 'attendanceCalendar', cascade: ['persist', 'remove'])]
     protected Collection $sheets;
 
     public function getIid(): int
@@ -85,7 +85,7 @@ class CAttendanceCalendar
     /**
      * @return CAttendanceSheet[]|Collection
      */
-    public function getSheets()
+    public function getSheets(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sheets;
     }
@@ -93,7 +93,7 @@ class CAttendanceCalendar
     /**
      * @param CAttendanceSheet[]|Collection $sheets
      */
-    public function setSheets(Collection $sheets): self
+    public function setSheets(array|\Doctrine\Common\Collections\Collection $sheets): self
     {
         $this->sheets = $sheets;
 

@@ -19,11 +19,11 @@ class CAttendanceResult
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendance', inversedBy: 'results')]
+    #[ORM\ManyToOne(targetEntity: CAttendance::class, inversedBy: 'results')]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 

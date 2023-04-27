@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -45,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'extra_field_values')]
 #[ORM\Index(name: 'idx_efv_fiii', columns: ['field_id', 'item_id'])]
 #[ORM\Index(name: 'idx_efv_item', columns: ['item_id'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository')]
+#[ORM\Entity(repositoryClass: ExtraFieldValuesRepository::class)]
 #[ORM\MappedSuperclass]
 class ExtraFieldValues
 {
@@ -63,11 +64,11 @@ class ExtraFieldValues
 
     #[Assert\NotBlank]
     #[Groups(['extra_field_values:read', 'extra_field_values:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ExtraField')]
+    #[ORM\ManyToOne(targetEntity: ExtraField::class)]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id')]
     protected ExtraField $field;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset')]
+    #[ORM\ManyToOne(targetEntity: Asset::class)]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Asset $asset = null;
 

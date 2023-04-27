@@ -29,7 +29,7 @@ class GradeComponents
     #[ORM\Column(name: 'acronym', type: 'string', length: 255, nullable: false)]
     protected string $acronym;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradeModel')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradeModel::class)]
     #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradeModel $gradeModel;
 

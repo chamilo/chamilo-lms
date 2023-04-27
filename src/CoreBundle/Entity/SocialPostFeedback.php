@@ -24,11 +24,11 @@ class SocialPostFeedback
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', inversedBy: 'feedbacks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SocialPost::class, inversedBy: 'feedbacks')]
     #[ORM\JoinColumn(name: 'social_post_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected SocialPost $socialPost;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'socialPostsFeedbacks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'socialPostsFeedbacks')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 

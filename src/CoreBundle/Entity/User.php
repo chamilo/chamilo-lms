@@ -12,6 +12,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Entity\Listener\UserListener;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -78,9 +80,9 @@ use UserManager;
 #[ORM\Table(name: 'user')]
 #[ORM\Index(name: 'status', columns: ['status'])]
 #[UniqueEntity('username')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\UserRepository')]
-#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\UserListener'])]
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\EntityListeners([UserListener::class])]
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, \Stringable
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -97,7 +99,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
       public const STUDENT = 5;
       public const ANONYMOUS = 6;*/
     #[Groups(['user_json:read'])]
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
@@ -265,13 +267,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, CourseRelUser>|CourseRelUser[]
      */
     #[ApiSubresource]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseRelUser', mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CourseRelUser::class, mappedBy: 'user', orphanRemoval: true)]
     protected Collection $courses;
 
     /**
      * @var Collection<int, UsergroupRelUser>|UsergroupRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UsergroupRelUser', mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: UsergroupRelUser::class, mappedBy: 'user')]
     protected Collection $classes;
 
     /**
@@ -308,7 +310,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\JoinTable(name: 'fos_user_user_group')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\InverseJoinColumn(name: 'group_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Group', inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     protected Collection $groups;
 
     /**
@@ -321,175 +323,175 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelUser::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $portals;
 
     /**
      * @var Collection<int, ResourceNode>|ResourceNode[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'creator')]
+    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'creator')]
     protected Collection $resourceNodes;
 
     /**
      * @var Collection<int, SessionRelCourseRelUser>|SessionRelCourseRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourseRelUser', mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionRelCourseRelUser::class, mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection<int, SessionRelUser>|SessionRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionRelUser::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sessionsRelUser;
 
     /**
      * @var Collection<int, SkillRelUser>|SkillRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $achievedSkills;
 
     /**
      * @var Collection<int, SkillRelUserComment>|SkillRelUserComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUserComment', mappedBy: 'feedbackGiver', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SkillRelUserComment::class, mappedBy: 'feedbackGiver', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $commentedUserSkills;
 
     /**
      * @var Collection<int, GradebookCategory>|GradebookCategory[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: GradebookCategory::class, mappedBy: 'user')]
     protected Collection $gradeBookCategories;
 
     /**
      * @var Collection<int, GradebookCertificate>|GradebookCertificate[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCertificate', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookCertificate::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookCertificates;
 
     /**
      * @var Collection<int, GradebookComment>|GradebookComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookComment', mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: GradebookComment::class, mappedBy: 'user')]
     protected Collection $gradeBookComments;
 
     /**
      * @var Collection<int, GradebookEvaluation>|GradebookEvaluation[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookEvaluation::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookEvaluations;
 
     /**
      * @var Collection<int, GradebookLink>|GradebookLink[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLink', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookLink::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookLinks;
 
     /**
      * @var Collection<int, GradebookResult>|GradebookResult[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookResult', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookResult::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookResults;
 
     /**
      * @var Collection<int, GradebookResultLog>|GradebookResultLog[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookResultLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookResultLog::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookResultLogs;
 
     /**
      * @var Collection<int, GradebookScoreLog>|GradebookScoreLog[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookScoreLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookScoreLog::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookScoreLogs;
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: UserRelUser::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
     protected Collection $friends;
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelUser', mappedBy: 'friend', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(targetEntity: UserRelUser::class, mappedBy: 'friend', cascade: ['persist', 'remove'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
     protected Collection $friendsWithMe;
 
     /**
      * @var Collection<int, GradebookLinkevalLog>|GradebookLinkevalLog[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLinkevalLog', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GradebookLinkevalLog::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $gradeBookLinkEvalLogs;
 
     /**
      * @var Collection<int, SequenceValue>|SequenceValue[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceValue', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SequenceValue::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sequenceValues;
 
     /**
      * @var Collection<int, TrackEExerciseConfirmation>|TrackEExerciseConfirmation[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TrackEExerciseConfirmation::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEExerciseConfirmations;
 
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAccessComplete', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TrackEAccessComplete::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEAccessCompleteList;
 
     /**
      * @var Collection<int, Templates>|Templates[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Templates', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Templates::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $templates;
 
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TrackEAttempt::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackEAttempts;
 
     /**
      * @var Collection<int, TrackECourseAccess>|TrackECourseAccess[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackECourseAccess', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TrackECourseAccess::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $trackECourseAccess;
 
     /**
      * @var Collection<int, UserCourseCategory>|UserCourseCategory[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserCourseCategory', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: UserCourseCategory::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userCourseCategories;
 
     /**
      * @var Collection<int, UserRelCourseVote>|UserRelCourseVote[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelCourseVote', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: UserRelCourseVote::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userRelCourseVotes;
 
     /**
      * @var Collection<int, UserRelTag>|UserRelTag[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\UserRelTag', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: UserRelTag::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $userRelTags;
 
     /**
      * @var Collection<int, PersonalAgenda>|PersonalAgenda[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\PersonalAgenda', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PersonalAgenda::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $personalAgendas;
 
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelUser', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CGroupRelUser::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $courseGroupsAsMember;
 
     /**
      * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelTutor', mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CGroupRelTutor::class, mappedBy: 'user', orphanRemoval: true)]
     protected Collection $courseGroupsAsTutor;
 
     #[ORM\Column(name: 'auth_source', type: 'string', length: 50, nullable: true)]
@@ -546,34 +548,34 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageTag', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: MessageTag::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $messageTags;
 
     /**
      * @var Collection<int, Message>|Message[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Message', mappedBy: 'sender', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $sentMessages;
 
     /**
      * @var Collection<int, MessageRelUser>|MessageRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageRelUser', mappedBy: 'receiver', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: MessageRelUser::class, mappedBy: 'receiver', cascade: ['persist', 'remove'])]
     protected Collection $receivedMessages;
 
     /**
      * @var Collection<int, CSurveyInvitation>|CSurveyInvitation[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation', mappedBy: 'user', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyInvitation::class, mappedBy: 'user', cascade: ['remove'])]
     protected Collection $surveyInvitations;
 
     /**
      * @var Collection<int, TrackELogin>|TrackELogin[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackELogin', mappedBy: 'user', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: TrackELogin::class, mappedBy: 'user', cascade: ['remove'])]
     protected Collection $logins;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Admin', mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: Admin::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected ?Admin $admin = null;
 
     /**
@@ -588,13 +590,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups(['user:read', 'user_json:read', 'social_post:read', 'course:read'])]
     protected string $fullName;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', mappedBy: 'sender', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SocialPost::class, mappedBy: 'sender', orphanRemoval: true)]
     private Collection $sentSocialPosts;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', mappedBy: 'userReceiver')]
+    #[ORM\OneToMany(targetEntity: SocialPost::class, mappedBy: 'userReceiver')]
     private Collection $receivedSocialPosts;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPostFeedback', mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SocialPostFeedback::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $socialPostsFeedbacks;
 
     public function __construct()
@@ -768,7 +770,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, ResourceNode>|ResourceNode[] $resourceNodes
      */
-    public function setResourceNodes(Collection $resourceNodes): self
+    public function setResourceNodes(\Doctrine\Common\Collections\Collection|array $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 
@@ -805,7 +807,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, CourseRelUser>|CourseRelUser[] $courses
      */
-    public function setCourses(Collection $courses): self
+    public function setCourses(\Doctrine\Common\Collections\Collection|array $courses): self
     {
         $this->courses = $courses;
 
@@ -885,7 +887,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, UsergroupRelUser>|UsergroupRelUser[] $classes
      */
-    public function setClasses(Collection $classes): self
+    public function setClasses(\Doctrine\Common\Collections\Collection|array $classes): self
     {
         $this->classes = $classes;
 
@@ -1442,7 +1444,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, SkillRelUser>|SkillRelUser[] $value
      */
-    public function setAchievedSkills(Collection $value): self
+    public function setAchievedSkills(\Doctrine\Common\Collections\Collection|array $value): self
     {
         $this->achievedSkills = $value;
 
@@ -1485,7 +1487,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param AccessUrlRelUser[]|Collection<int, AccessUrlRelUser> $value
      */
-    public function setPortals(Collection $value): void
+    public function setPortals(array|\Doctrine\Common\Collections\Collection $value): void
     {
         $this->portals = $value;
     }
@@ -1508,7 +1510,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, SkillRelUserComment>|SkillRelUserComment[] $commentedUserSkills
      */
-    public function setCommentedUserSkills(Collection $commentedUserSkills): self
+    public function setCommentedUserSkills(\Doctrine\Common\Collections\Collection|array $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
 
@@ -1805,7 +1807,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param Collection<int, GradebookCertificate>|GradebookCertificate[] $gradeBookCertificates
      */
-    public function setGradeBookCertificates(Collection $gradeBookCertificates): self
+    public function setGradeBookCertificates(\Doctrine\Common\Collections\Collection|array $gradeBookCertificates): self
     {
         $this->gradeBookCertificates = $gradeBookCertificates;
 
@@ -1835,7 +1837,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getGradeBookCategories()
+    public function getGradeBookCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookCategories;
     }
@@ -1843,7 +1845,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookComment[]|Collection
      */
-    public function getGradeBookComments()
+    public function getGradeBookComments(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookComments;
     }
@@ -1851,7 +1853,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getGradeBookEvaluations()
+    public function getGradeBookEvaluations(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookEvaluations;
     }
@@ -1859,7 +1861,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getGradeBookLinks()
+    public function getGradeBookLinks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookLinks;
     }
@@ -1867,7 +1869,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookResult[]|Collection
      */
-    public function getGradeBookResults()
+    public function getGradeBookResults(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookResults;
     }
@@ -1875,7 +1877,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookResultLog[]|Collection
      */
-    public function getGradeBookResultLogs()
+    public function getGradeBookResultLogs(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookResultLogs;
     }
@@ -1883,7 +1885,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookScoreLog[]|Collection
      */
-    public function getGradeBookScoreLogs()
+    public function getGradeBookScoreLogs(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookScoreLogs;
     }
@@ -1891,7 +1893,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return GradebookLinkevalLog[]|Collection
      */
-    public function getGradeBookLinkEvalLogs()
+    public function getGradeBookLinkEvalLogs(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookLinkEvalLogs;
     }
@@ -1899,7 +1901,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserRelCourseVote[]|Collection
      */
-    public function getUserRelCourseVotes()
+    public function getUserRelCourseVotes(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->userRelCourseVotes;
     }
@@ -1907,7 +1909,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserRelTag[]|Collection
      */
-    public function getUserRelTags()
+    public function getUserRelTags(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->userRelTags;
     }
@@ -1915,7 +1917,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return PersonalAgenda[]|Collection
      */
-    public function getPersonalAgendas()
+    public function getPersonalAgendas(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->personalAgendas;
     }
@@ -1923,7 +1925,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return Collection|mixed[]
      */
-    public function getCurriculumItems()
+    public function getCurriculumItems(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->curriculumItems;
     }
@@ -1931,7 +1933,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserRelUser[]|Collection
      */
-    public function getFriends()
+    public function getFriends(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->friends;
     }
@@ -1954,7 +1956,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserRelUser[]|Collection
      */
-    public function getFriendsWithMe()
+    public function getFriendsWithMe(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->friendsWithMe;
     }
@@ -1979,7 +1981,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return Templates[]|Collection
      */
-    public function getTemplates()
+    public function getTemplates(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->templates;
     }
@@ -1987,7 +1989,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return ArrayCollection|Collection
      */
-    public function getDropBoxReceivedFiles()
+    public function getDropBoxReceivedFiles(): \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
     {
         return $this->dropBoxReceivedFiles;
     }
@@ -1995,7 +1997,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return SequenceValue[]|Collection
      */
-    public function getSequenceValues()
+    public function getSequenceValues(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sequenceValues;
     }
@@ -2003,7 +2005,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackEExerciseConfirmation[]|Collection
      */
-    public function getTrackEExerciseConfirmations()
+    public function getTrackEExerciseConfirmations(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->trackEExerciseConfirmations;
     }
@@ -2011,7 +2013,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getTrackEAccessCompleteList()
+    public function getTrackEAccessCompleteList(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->trackEAccessCompleteList;
     }
@@ -2019,7 +2021,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getTrackEAttempts()
+    public function getTrackEAttempts(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->trackEAttempts;
     }
@@ -2027,7 +2029,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackECourseAccess[]|Collection
      */
-    public function getTrackECourseAccess()
+    public function getTrackECourseAccess(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->trackECourseAccess;
     }
@@ -2035,7 +2037,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserCourseCategory[]|Collection
      */
-    public function getUserCourseCategories()
+    public function getUserCourseCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->userCourseCategories;
     }
@@ -2063,7 +2065,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return SessionRelUser[]|Collection
      */
-    public function getSessionsRelUser()
+    public function getSessionsRelUser(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sessionsRelUser;
     }
@@ -2197,7 +2199,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return SessionRelCourseRelUser[]|Collection
      */
-    public function getSessionRelCourseRelUsers()
+    public function getSessionRelCourseRelUsers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
@@ -2205,7 +2207,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
      */
-    public function setSessionRelCourseRelUsers($sessionRelCourseRelUsers): self
+    public function setSessionRelCourseRelUsers(array|\Doctrine\Common\Collections\Collection $sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
 
@@ -2227,7 +2229,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return CSurveyInvitation[]|Collection
      */
-    public function getSurveyInvitations()
+    public function getSurveyInvitations(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->surveyInvitations;
     }
@@ -2242,7 +2244,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackELogin[]|Collection
      */
-    public function getLogins()
+    public function getLogins(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->logins;
     }
@@ -2257,7 +2259,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return MessageTag[]|Collection
      */
-    public function getMessageTags()
+    public function getMessageTags(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->messageTags;
     }
@@ -2265,7 +2267,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param MessageTag[]|Collection $messageTags
      */
-    public function setMessageTags($messageTags): self
+    public function setMessageTags(array|\Doctrine\Common\Collections\Collection $messageTags): self
     {
         $this->messageTags = $messageTags;
 
@@ -2295,9 +2297,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             ? 0
             : max(
                 $categoryCourses->map(
-                    function ($courseRelUser) {
-                        return $courseRelUser->getSort();
-                    }
+                    fn ($courseRelUser) => $courseRelUser->getSort()
                 )->toArray()
             );
     }

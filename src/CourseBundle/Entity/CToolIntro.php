@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 #[ORM\Table(name: 'c_tool_intro')]
 #[ORM\Entity]
-class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
     #[Groups(['c_tool_intro:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -68,7 +68,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
 
     #[Assert\NotNull]
     #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CTool')]
+    #[ORM\ManyToOne(targetEntity: CTool::class)]
     #[ORM\JoinColumn(name: 'c_tool_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CTool $courseTool;
 

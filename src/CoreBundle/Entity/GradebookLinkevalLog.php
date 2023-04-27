@@ -40,7 +40,7 @@ class GradebookLinkevalLog
     #[ORM\Column(name: 'type', type: 'string', length: 20, nullable: false)]
     protected string $type;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookLinkEvalLogs')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookLinkEvalLogs')]
     #[ORM\JoinColumn(name: 'user_id_log', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

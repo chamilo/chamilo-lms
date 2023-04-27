@@ -20,11 +20,11 @@ class AccessUrlRelUserGroup implements EntityAccessUrlInterface
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl')]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup', inversedBy: 'urls', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class, inversedBy: 'urls', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Usergroup $userGroup;
 

@@ -59,7 +59,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 #[ORM\Table(name: 'message_tag')]
 #[ORM\UniqueConstraint(name: 'user_tag', columns: ['user_id', 'tag'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\MessageTagRepository')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\MessageTagRepository::class)]
 class MessageTag
 {
     use TimestampableTypedEntity;
@@ -73,7 +73,7 @@ class MessageTag
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'messageTags')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'messageTags')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     protected User $user;
 
@@ -94,7 +94,7 @@ class MessageTag
     /**
      * @var Collection|MessageRelUser[]
      */
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageRelUser', mappedBy: 'tags', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageRelUser::class, mappedBy: 'tags', cascade: ['persist'])]
     protected Collection $messageRelUsers;
 
     public function __construct()

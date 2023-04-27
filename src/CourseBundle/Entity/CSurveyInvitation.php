@@ -22,23 +22,23 @@ class CSurveyInvitation
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'invitations')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, inversedBy: 'invitations')]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid')]
     protected CSurvey $survey;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'surveyInvitations')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'surveyInvitations')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

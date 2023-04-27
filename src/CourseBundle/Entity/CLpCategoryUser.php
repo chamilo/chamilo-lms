@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table(name: 'c_lp_category_user')]
 #[ORM\Entity]
-class CLpCategoryUser
+class CLpCategoryUser implements \Stringable
 {
     use UserTrait;
 
@@ -24,11 +24,11 @@ class CLpCategoryUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpCategory', inversedBy: 'users')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategory::class, inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected CLpCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 

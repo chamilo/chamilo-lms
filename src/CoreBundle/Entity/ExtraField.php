@@ -128,13 +128,13 @@ class ExtraField
      * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ExtraFieldOptions', mappedBy: 'field')]
+    #[ORM\OneToMany(targetEntity: ExtraFieldOptions::class, mappedBy: 'field')]
     protected Collection $options;
 
     /**
      * @var Tag[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Tag', mappedBy: 'field')]
+    #[ORM\OneToMany(targetEntity: Tag::class, mappedBy: 'field')]
     protected Collection $tags;
 
     #[Gedmo\Timestampable(on: 'create')]
@@ -327,7 +327,7 @@ class ExtraField
     /**
      * @return Tag[]|Collection
      */
-    public function getTags()
+    public function getTags(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->tags;
     }
@@ -345,22 +345,15 @@ class ExtraField
             return false;
         }
 
-        return $this->tags->exists(function ($key, Tag $tag) use ($tagName) {
-            return $tagName === $tag->getTag();
-        });
+        return $this->tags->exists(fn ($key, Tag $tag) => $tagName === $tag->getTag());
     }
 
     public function getTypeToString(): string
     {
-        switch ($this->getItemType()) {
-            case \ExtraField::FIELD_TYPE_RADIO:
-            case \ExtraField::FIELD_TYPE_SELECT:
-                return 'choice';
-            case \ExtraField::FIELD_TYPE_TEXT:
-            case \ExtraField::FIELD_TYPE_TEXTAREA:
-            default:
-                return 'text';
-        }
+        return match ($this->getItemType()) {
+            \ExtraField::FIELD_TYPE_RADIO, \ExtraField::FIELD_TYPE_SELECT => 'choice',
+            default => 'text',
+        };
     }
 
     public function getHelperText(): string

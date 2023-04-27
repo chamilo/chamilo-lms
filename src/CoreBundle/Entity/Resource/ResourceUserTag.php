@@ -21,11 +21,11 @@ class ResourceUserTag
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Resource\ResourceTag')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Resource\ResourceTag::class)]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?ResourceTag $tag = null;
 }

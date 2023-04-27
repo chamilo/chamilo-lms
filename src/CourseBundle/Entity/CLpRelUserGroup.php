@@ -27,19 +27,19 @@ class CLpRelUserGroup
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLp')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class)]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid')]
     protected CLp $lp;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true)]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class)]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true)]
     protected ?Usergroup $userGroup = null;
 

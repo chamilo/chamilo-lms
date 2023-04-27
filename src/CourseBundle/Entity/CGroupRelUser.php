@@ -28,11 +28,11 @@ class CGroupRelUser
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courseGroupsAsMember')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courseGroupsAsMember')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup', inversedBy: 'members')]
+    #[ORM\ManyToOne(targetEntity: CGroup::class, inversedBy: 'members')]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CGroup $group;
 

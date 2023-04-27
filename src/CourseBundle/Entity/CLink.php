@@ -8,12 +8,13 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_link')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CLinkRepository')]
-class CLink extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CLinkRepository::class)]
+class CLink extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -31,7 +32,7 @@ class CLink extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLinkCategory', inversedBy: 'links')]
+    #[ORM\ManyToOne(targetEntity: CLinkCategory::class, inversedBy: 'links')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CLinkCategory $category = null;
 

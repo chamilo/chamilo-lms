@@ -24,11 +24,11 @@ class CAttendanceSheet
     #[ORM\Column(name: 'presence', type: 'boolean', nullable: false)]
     protected bool $presence;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendanceCalendar', inversedBy: 'sheets')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceCalendar::class, inversedBy: 'sheets')]
     #[ORM\JoinColumn(name: 'attendance_calendar_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendanceCalendar $attendanceCalendar;
 

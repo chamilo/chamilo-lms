@@ -22,10 +22,10 @@ class LineItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool', inversedBy: 'lineItems')]
+    #[ORM\ManyToOne(targetEntity: ExternalTool::class, inversedBy: 'lineItems')]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ExternalTool $tool;
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation')]
+    #[ORM\OneToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'evaluation', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private GradebookEvaluation $evaluation;
     #[ORM\Column(name: 'resource_id', type: 'string', nullable: true)]

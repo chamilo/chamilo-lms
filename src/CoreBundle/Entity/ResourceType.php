@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'resource_type')]
 #[ORM\Entity]
-class ResourceType
+class ResourceType implements \Stringable
 {
     use TimestampableEntity;
 
@@ -27,14 +27,14 @@ class ResourceType
     #[ORM\Column]
     protected string $name;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Tool', inversedBy: 'resourceTypes')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Tool::class, inversedBy: 'resourceTypes')]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected Tool $tool;
 
     /**
      * @var ResourceNode[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'resourceType', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'resourceType', cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     public function __construct()
@@ -79,7 +79,7 @@ class ResourceType
     /**
      * @return ResourceNode[]|Collection
      */
-    public function getResourceNodes()
+    public function getResourceNodes(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->resourceNodes;
     }
@@ -87,7 +87,7 @@ class ResourceType
     /**
      * @param ResourceNode[]|Collection $resourceNodes
      */
-    public function setResourceNodes($resourceNodes): self
+    public function setResourceNodes(array|\Doctrine\Common\Collections\Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 

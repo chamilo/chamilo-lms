@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'fos_group')]
 #[ORM\Entity]
-class Group
+class Group implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -24,26 +24,20 @@ class Group
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false, unique: true)]
-    protected string $name;
-
-    #[Assert\NotBlank]
     #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false, unique: true)]
     protected string $code;
-
-    #[ORM\Column(name: 'roles', type: 'array')]
-    protected array $roles;
 
     /**
      * @var User[]|Collection
      */
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\User', mappedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\User::class, mappedBy: 'groups')]
     protected Collection $users;
 
-    public function __construct(string $name, array $roles = [])
+    public function __construct(#[Assert\NotBlank]
+        #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false, unique: true)]
+        protected string $name, #[ORM\Column(name: 'roles', type: 'array')]
+        protected array $roles = [])
     {
-        $this->name = $name;
-        $this->roles = $roles;
         $this->users = new ArrayCollection();
     }
 
@@ -113,7 +107,7 @@ class Group
     /**
      * @return User[]|Collection
      */
-    public function getUsers()
+    public function getUsers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->users;
     }

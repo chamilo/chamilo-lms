@@ -19,8 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course forums.
  */
 #[ORM\Table(name: 'c_forum_forum')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumRepository')]
-class CForum extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CForumRepository::class)]
+class CForum extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -40,12 +40,12 @@ class CForum extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'forum_posts', type: 'integer', nullable: true)]
     protected ?int $forumPosts;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CForumPost::class)]
     #[ORM\JoinColumn(name: 'forum_last_post', referencedColumnName: 'iid')]
     protected ?CForumPost $forumLastPost = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumCategory', inversedBy: 'forums')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CForumCategory::class, inversedBy: 'forums')]
     #[ORM\JoinColumn(name: 'forum_category', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumCategory $forumCategory = null;
 
@@ -89,7 +89,7 @@ class CForum extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'end_time', type: 'datetime', nullable: true)]
     protected ?DateTime $endTime = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLp', inversedBy: 'forums', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, inversedBy: 'forums', cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CLp $lp = null;
 
@@ -99,13 +99,13 @@ class CForum extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CForumThread[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumThread', mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CForumThread::class, mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $threads;
 
     /**
      * @var Collection|CForumPost[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CForumPost::class, mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $posts;
 
     public function __construct()
@@ -195,10 +195,8 @@ class CForum extends AbstractResource implements ResourceInterface
 
     /**
      * Get forumCategory.
-     *
-     * @return null|CForumCategory
      */
-    public function getForumCategory()
+    public function getForumCategory(): ?\Chamilo\CourseBundle\Entity\CForumCategory
     {
         return $this->forumCategory;
     }
@@ -449,7 +447,7 @@ class CForum extends AbstractResource implements ResourceInterface
      *
      * @return Collection|CForumThread[]
      */
-    public function getThreads()
+    public function getThreads(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->threads;
     }
@@ -481,7 +479,7 @@ class CForum extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CForumPost[]
      */
-    public function getPosts()
+    public function getPosts(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->posts;
     }

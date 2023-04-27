@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,8 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ORM\Table(name: 'c_group_info')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CGroupRepository')]
-class CGroup extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CGroupRepository::class)]
+class CGroup extends AbstractResource implements ResourceInterface, \Stringable
 {
     public const TOOL_NOT_AVAILABLE = 0;
     public const TOOL_PUBLIC = 1;
@@ -53,7 +54,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'status', type: 'boolean', nullable: false)]
     protected bool $status;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupCategory', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CGroupCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CGroupCategory $category = null;
 
@@ -97,13 +98,13 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelUser', mappedBy: 'group')]
+    #[ORM\OneToMany(targetEntity: CGroupRelUser::class, mappedBy: 'group')]
     protected Collection $members;
 
     /**
      * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CGroupRelTutor', mappedBy: 'group')]
+    #[ORM\OneToMany(targetEntity: CGroupRelTutor::class, mappedBy: 'group')]
     protected Collection $tutors;
 
     public function __construct()
@@ -354,7 +355,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @return CGroupRelUser[]|Collection
      */
-    public function getMembers()
+    public function getMembers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->members;
     }
@@ -362,7 +363,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @param CGroupRelUser[]|Collection<int, CGroupRelUser> $members
      */
-    public function setMembers(Collection $members): self
+    public function setMembers(array|\Doctrine\Common\Collections\Collection $members): self
     {
         $this->members = $members;
 
@@ -380,9 +381,7 @@ class CGroup extends AbstractResource implements ResourceInterface
             return false;
         }
 
-        $list = $this->members->filter(function (CGroupRelUser $member) use ($user) {
-            return $member->getUser()->getId() === $user->getId();
-        });
+        $list = $this->members->filter(fn (CGroupRelUser $member) => $member->getUser()->getId() === $user->getId());
 
         return $list->count() > 0;
     }
@@ -393,9 +392,7 @@ class CGroup extends AbstractResource implements ResourceInterface
             return false;
         }
 
-        $list = $this->tutors->filter(function (CGroupRelTutor $tutor) use ($user) {
-            return $tutor->getUser()->getId() === $user->getId();
-        });
+        $list = $this->tutors->filter(fn (CGroupRelTutor $tutor) => $tutor->getUser()->getId() === $user->getId());
 
         return $list->count() > 0;
     }
@@ -403,7 +400,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @return CGroupRelTutor[]|Collection
      */
-    public function getTutors()
+    public function getTutors(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->tutors;
     }
@@ -411,7 +408,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @param CGroupRelTutor[]|Collection<int, CGroupRelTutor> $tutors
      */
-    public function setTutors(Collection $tutors): self
+    public function setTutors(array|\Doctrine\Common\Collections\Collection $tutors): self
     {
         $this->tutors = $tutors;
 

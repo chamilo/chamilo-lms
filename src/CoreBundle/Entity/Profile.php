@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'skill_level_profile')]
 #[ORM\Entity]
-class Profile
+class Profile implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -25,14 +25,14 @@ class Profile
     /**
      * @var Skill[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Skill', mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, mappedBy: 'profile', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
      *
      * @var Level[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Level', mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Level::class, mappedBy: 'profile', cascade: ['persist'])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $levels;
 
@@ -70,7 +70,7 @@ class Profile
     /**
      * @return Skill[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
@@ -78,7 +78,7 @@ class Profile
     /**
      * @param Skill[]|Collection $skills
      */
-    public function setSkills($skills): self
+    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -88,7 +88,7 @@ class Profile
     /**
      * @return Level[]|Collection
      */
-    public function getLevels()
+    public function getLevels(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->levels;
     }

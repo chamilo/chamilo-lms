@@ -11,18 +11,18 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'ticket_message_attachments')]
 #[ORM\Entity]
-class TicketMessageAttachment extends AbstractResource implements ResourceInterface
+class TicketMessageAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Ticket')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Ticket::class)]
     #[ORM\JoinColumn(name: 'ticket_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Ticket $ticket;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketMessage')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketMessage::class)]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TicketMessage $message;
 

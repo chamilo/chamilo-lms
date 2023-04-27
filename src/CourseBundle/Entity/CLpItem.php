@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity]
-class CLpItem
+class CLpItem implements \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -83,21 +83,21 @@ class CLpItem
     #[ORM\Column(name: 'prerequisite_max_score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $prerequisiteMaxScore = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLp', inversedBy: 'items', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, inversedBy: 'items', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLp $lp;
 
     #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class)]
     #[ORM\JoinColumn(name: 'item_root', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CLpItem $root = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem', inversedBy: 'children', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, inversedBy: 'children', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'parent_item_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CLpItem $parent = null;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[Gedmo\TreeLeft]
@@ -491,7 +491,7 @@ class CLpItem
     /**
      * @return CLpItem[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -499,7 +499,7 @@ class CLpItem
     /**
      * @param CLpItem[]|Collection $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
     {
         $this->children = $children;
 

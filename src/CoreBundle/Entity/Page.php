@@ -93,19 +93,19 @@ class Page
 
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
     #[Groups(['page:read', 'page:write'])]
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\PageCategory', inversedBy: 'pages')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\PageCategory::class, inversedBy: 'pages')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?PageCategory $category = null;
 

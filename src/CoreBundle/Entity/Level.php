@@ -14,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'skill_level')]
 #[ORM\Entity]
-class Level
+class Level implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -32,7 +32,7 @@ class Level
     protected string $shortName;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Profile', inversedBy: 'levels')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Profile::class, inversedBy: 'levels')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 

@@ -66,7 +66,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_user_rel_user__user_friend_user', columns: ['user_id', 'friend_user_id'])]
 #[ORM\UniqueConstraint(name: 'user_friend_relation', columns: ['user_id', 'friend_user_id', 'relation_type'])]
 #[ORM\Entity]
-#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\UserRelUserListener'])]
+#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\UserRelUserListener::class])]
 class UserRelUser
 {
     use UserTrait;
@@ -91,13 +91,13 @@ class UserRelUser
 
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'friends')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'friends')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     protected User $user;
 
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'friendsWithMe')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'friendsWithMe')]
     #[ORM\JoinColumn(name: 'friend_user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     protected User $friend;
 

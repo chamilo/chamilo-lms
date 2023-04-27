@@ -22,7 +22,7 @@ use UnserializeApi;
  */
 #[ORM\Table(name: 'lti_external_tool')]
 #[ORM\Entity]
-class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
+class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface, \Stringable
 {
     public const V_1P1 = 'lti1p1';
     public const V_1P3 = 'lti1p3';
@@ -56,33 +56,33 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     #[ORM\Column(name: 'privacy', type: 'text', nullable: true, options: ['default' => null])]
     protected ?string $privacy;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation')]
+    #[ORM\ManyToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'gradebook_eval_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?GradebookEvaluation $gradebookEval;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: ExternalTool::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?ExternalTool $parent;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: ExternalTool::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[ORM\Column(name: 'client_id', type: 'string', nullable: true)]
-    private ?string $clientId;
+    private ?string $clientId = null;
     #[ORM\Column(name: 'login_url', type: 'string', nullable: true)]
-    private ?string $loginUrl;
+    private ?string $loginUrl = null;
 
     #[ORM\Column(name: 'redirect_url', type: 'string', nullable: true)]
-    private ?string $redirectUrl;
+    private ?string $redirectUrl = null;
 
     #[ORM\Column(name: 'advantage_services', type: 'json', nullable: true)]
     private ?array $advantageServices;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\LtiBundle\Entity\LineItem', mappedBy: 'tool')]
+    #[ORM\OneToMany(targetEntity: LineItem::class, mappedBy: 'tool')]
     private Collection $lineItems;
 
     #[ORM\Column(name: 'version', type: 'string', options: ['default' => 'lti1p1'])]
@@ -537,9 +537,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getChildrenInCourses(array $coursesId): Collection
     {
         return $this->children->filter(
-            function (self $child) use ($coursesId) {
-                return \in_array($child->getCourse()->getId(), $coursesId, true);
-            }
+            fn(self $child) => \in_array($child->getCourse()->getId(), $coursesId, true)
         );
     }
 

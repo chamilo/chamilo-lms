@@ -28,23 +28,23 @@ class Ticket
     #[ORM\Column(name: 'message', type: 'text', nullable: true)]
     protected ?string $message = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketProject')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketProject::class)]
     #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id')]
     protected TicketProject $project;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketCategory')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketCategory::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected TicketCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketPriority')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketPriority::class)]
     #[ORM\JoinColumn(name: 'priority_id', referencedColumnName: 'id')]
     protected TicketPriority $priority;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Session $session;
 
@@ -52,11 +52,11 @@ class Ticket
     #[ORM\Column(name: 'personal_email', type: 'string', length: 255, nullable: false)]
     protected string $personalEmail;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'assigned_last_user', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $assignedLastUser = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketStatus')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketStatus::class)]
     #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected TicketStatus $status;
 

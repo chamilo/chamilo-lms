@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * CStudentPublicationAssignment.
  */
 #[ORM\Table(name: 'c_student_publication_assignment')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository')]
-class CStudentPublicationAssignment
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository::class)]
+class CStudentPublicationAssignment implements \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -33,7 +33,7 @@ class CStudentPublicationAssignment
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', inversedBy: 'assignment')]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, inversedBy: 'assignment')]
     #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 

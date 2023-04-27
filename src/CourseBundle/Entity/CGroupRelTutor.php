@@ -22,11 +22,11 @@ class CGroupRelTutor
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courseGroupsAsTutor')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'courseGroupsAsTutor')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup', inversedBy: 'tutors')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class, inversedBy: 'tutors')]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CGroup $group;
 

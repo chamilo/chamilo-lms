@@ -51,12 +51,12 @@ class SessionRelCourse
     protected ?int $id = null;
 
     #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'courses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: false)]
     protected ?Session $session = null;
 
     #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'sessions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'sessions', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected ?Course $course = null;
 

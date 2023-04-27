@@ -94,17 +94,17 @@ class SocialPost
     protected ?int $id = null;
 
     #[Groups(['social_post:read', 'social_post:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'sentSocialPosts')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentSocialPosts')]
     #[ORM\JoinColumn(nullable: false)]
     protected User $sender;
 
     #[Groups(['social_post:read', 'social_post:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'receivedSocialPosts')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'receivedSocialPosts')]
     #[ORM\JoinColumn(nullable: true)]
     protected ?User $userReceiver;
 
     #[ORM\Column(name: 'subject', type: 'text', nullable: true)]
-    protected ?string $subject;
+    protected ?string $subject = null;
 
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\Column(type: 'text')]
@@ -127,19 +127,19 @@ class SocialPost
     #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPostFeedback', mappedBy: 'socialPost')]
+    #[ORM\OneToMany(targetEntity: SocialPostFeedback::class, mappedBy: 'socialPost')]
     protected Collection $feedbacks;
 
     #[Groups(['social_post:read', 'social_post:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup')]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Usergroup $groupReceiver = null;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: SocialPost::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[Groups(['social_post:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SocialPost', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?SocialPost $parent;
 

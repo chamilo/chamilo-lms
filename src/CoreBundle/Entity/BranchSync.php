@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,7 +17,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BranchSync.
  */
 #[ORM\Table(name: 'branch_sync')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\BranchSyncRepository')]
+#[ORM\Entity(repositoryClass: BranchSyncRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
 class BranchSync
 {
@@ -25,7 +26,7 @@ class BranchSync
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
@@ -97,7 +98,7 @@ class BranchSync
     protected ?int $root = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\BranchSync', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: BranchSync::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?BranchSync $parent = null;
 
@@ -105,7 +106,7 @@ class BranchSync
      *
      * @var BranchSync[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\BranchSync', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: BranchSync::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 
@@ -577,7 +578,7 @@ class BranchSync
     /**
      * @return BranchSync[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }

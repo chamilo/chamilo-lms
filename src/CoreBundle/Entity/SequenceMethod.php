@@ -53,9 +53,6 @@ class SequenceMethod
         return $this->description;
     }
 
-    /**
-     * @return SequenceMethod
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -71,9 +68,6 @@ class SequenceMethod
         return $this->formula;
     }
 
-    /**
-     * @return SequenceMethod
-     */
     public function setFormula(string $formula): self
     {
         $this->formula = $formula;
@@ -89,9 +83,6 @@ class SequenceMethod
         return $this->assign;
     }
 
-    /**
-     * @return SequenceMethod
-     */
     public function setAssign(string $assign): self
     {
         $this->assign = $assign;
@@ -107,9 +98,6 @@ class SequenceMethod
         return $this->metType;
     }
 
-    /**
-     * @return SequenceMethod
-     */
     public function setMetType(string $metType): self
     {
         $this->metType = $metType;
@@ -125,9 +113,6 @@ class SequenceMethod
         return $this->actFalse;
     }
 
-    /**
-     * @return SequenceMethod
-     */
     public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;

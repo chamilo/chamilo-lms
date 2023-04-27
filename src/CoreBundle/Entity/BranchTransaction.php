@@ -21,7 +21,7 @@ class BranchTransaction
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\BranchTransactionStatus')]
+    #[ORM\ManyToOne(targetEntity: BranchTransactionStatus::class)]
     #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected Room $branchTransactionStatus;
 
@@ -52,7 +52,7 @@ class BranchTransaction
     #[ORM\Column(name: 'failed_attempts', type: 'integer')]
     protected int $failedAttempts;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\BranchSync')]
+    #[ORM\ManyToOne(targetEntity: BranchSync::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
     protected BranchSync $branch;
 

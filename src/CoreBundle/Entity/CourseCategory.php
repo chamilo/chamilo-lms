@@ -32,8 +32,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'parent_id', columns: ['parent_id'])]
 #[ORM\Index(name: 'tree_pos', columns: ['tree_pos'])]
 #[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\CourseCategoryRepository')]
-class CourseCategory
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\CourseCategoryRepository::class)]
+class CourseCategory implements \Stringable
 {
     #[Groups(['course_category:read', 'course:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -44,7 +44,7 @@ class CourseCategory
     /**
      * @var Collection|CourseCategory[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\CourseCategory', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\CourseCategory::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[Assert\NotBlank]
@@ -57,7 +57,7 @@ class CourseCategory
     #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\CourseCategory', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\CourseCategory::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?CourseCategory $parent = null;
 
@@ -73,7 +73,7 @@ class CourseCategory
     #[ORM\Column(name: 'auth_cat_child', type: 'string', length: 40, nullable: true)]
     protected ?string $authCatChild = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $asset = null;
 
@@ -84,13 +84,13 @@ class CourseCategory
     /**
      * @var AccessUrlRelCourseCategory[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory', mappedBy: 'courseCategory', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory::class, mappedBy: 'courseCategory', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
      * @var Course[]|Collection
      */
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Course', mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, mappedBy: 'categories')]
     protected Collection $courses;
 
     public function __construct()
@@ -284,7 +284,7 @@ class CourseCategory
     /**
      * @return AccessUrlRelCourseCategory[]|Collection
      */
-    public function getUrls()
+    public function getUrls(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->urls;
     }
@@ -292,7 +292,7 @@ class CourseCategory
     /**
      * @param AccessUrlRelCourseCategory[]|Collection $urls
      */
-    public function setUrls($urls): self
+    public function setUrls(array|\Doctrine\Common\Collections\Collection $urls): self
     {
         $this->urls = $urls;
 

@@ -63,13 +63,13 @@ class TrackEAttempt
     protected ?int $id = null;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEExercise', inversedBy: 'attempts')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TrackEExercise::class, inversedBy: 'attempts')]
     #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false, onDelete: 'CASCADE')]
     protected TrackEExercise $trackExercise;
 
     #[Assert\NotNull]
     #[Groups(['track_e_attempt:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'trackEAttempts')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'trackEAttempts')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
@@ -105,13 +105,13 @@ class TrackEAttempt
     /**
      * @var Collection|AttemptFile[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AttemptFile', mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AttemptFile::class, mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $attemptFiles;
 
     /**
      * @var Collection|AttemptFeedback[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AttemptFeedback', mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AttemptFeedback::class, mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $attemptFeedbacks;
 
     public function __construct()
@@ -295,7 +295,7 @@ class TrackEAttempt
     /**
      * @return AttemptFile[]|Collection
      */
-    public function getAttemptFiles()
+    public function getAttemptFiles(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->attemptFiles;
     }
@@ -303,7 +303,7 @@ class TrackEAttempt
     /**
      * @param AttemptFile[]|Collection $attemptFiles
      */
-    public function setAttemptFiles($attemptFiles): self
+    public function setAttemptFiles(array|\Doctrine\Common\Collections\Collection $attemptFiles): self
     {
         $this->attemptFiles = $attemptFiles;
 
@@ -313,7 +313,7 @@ class TrackEAttempt
     /**
      * @return AttemptFeedback[]|Collection
      */
-    public function getAttemptFeedbacks()
+    public function getAttemptFeedbacks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->attemptFeedbacks;
     }
@@ -321,7 +321,7 @@ class TrackEAttempt
     /**
      * @param AttemptFeedback[]|Collection $attemptFeedbacks
      */
-    public function setAttemptFeedbacks($attemptFeedbacks): self
+    public function setAttemptFeedbacks(array|\Doctrine\Common\Collections\Collection $attemptFeedbacks): self
     {
         $this->attemptFeedbacks = $attemptFeedbacks;
 

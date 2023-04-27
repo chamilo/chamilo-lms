@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course glossary.
  */
 #[ORM\Table(name: 'c_glossary')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CGlossaryRepository')]
-class CGlossary extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CGlossaryRepository::class)]
+class CGlossary extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

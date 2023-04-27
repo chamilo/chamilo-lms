@@ -23,7 +23,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 #[ORM\Table(name: 'asset')]
 #[ORM\Entity]
-class Asset
+class Asset implements \Stringable
 {
     use TimestampableEntity;
 
@@ -59,14 +59,14 @@ class Asset
      *     dimensions="dimensions"
      * )
      */
-//    #[Vich\UploadableField(
-//        mapping: 'assets',
-//        fileNameProperty: 'title',
-//        size: 'size',
-//        mimeType: 'mimeType',
-//        originalName: 'originalName',
-//        dimensions: 'dimensions'
-//    )]
+    //    #[Vich\UploadableField(
+    //        mapping: 'assets',
+    //        fileNameProperty: 'title',
+    //        size: 'size',
+    //        mimeType: 'mimeType',
+    //        originalName: 'originalName',
+    //        dimensions: 'dimensions'
+    //    )]
     #[Assert\NotNull]
     protected File $file;
 
@@ -264,7 +264,7 @@ class Asset
     /**
      * @param File|UploadedFile $file
      */
-    public function setFile(File $file = null): self
+    public function setFile(File|UploadedFile $file = null): self
     {
         $this->file = $file;
 

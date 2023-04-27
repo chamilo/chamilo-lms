@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table(name: 'tool_resource_right')]
 #[ORM\Entity]
-class ToolResourceRight
+class ToolResourceRight implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -27,14 +27,14 @@ class ToolResourceRight
     #[ORM\Column(name: 'mask', type: 'integer', nullable: false)]
     protected int $mask;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Tool', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Tool::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected ?Tool $tool = null;
 
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getMask();
     }

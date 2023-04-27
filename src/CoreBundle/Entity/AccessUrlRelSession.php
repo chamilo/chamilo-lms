@@ -20,11 +20,11 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'urls', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'urls', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'sessions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, inversedBy: 'sessions', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected ?AccessUrl $url = null;
 

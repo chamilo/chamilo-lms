@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -70,9 +71,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 //#[ApiFilter(RangeFilter::class, properties: ['startDate', 'endDate'])]
 #[ApiFilter(DateFilter::class, strategy: DateFilter::EXCLUDE_NULL)]
 #[ORM\Table(name: 'c_calendar_event')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CCalendarEventRepository')]
+#[ORM\Entity(repositoryClass: CCalendarEventRepository::class)]
 
-class CCalendarEvent extends AbstractResource implements ResourceInterface
+class CCalendarEvent extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -98,20 +99,20 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CCalendarEvent', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEvent::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_event_id', referencedColumnName: 'iid')]
     protected ?CCalendarEvent $parentEvent = null;
 
     /**
      * @var Collection|CCalendarEvent[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CCalendarEvent', mappedBy: 'parentEvent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEvent::class, mappedBy: 'parentEvent')]
     protected Collection $children;
 
     /**
      * @var Collection|CCalendarEventRepeat[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CCalendarEventRepeat', mappedBy: 'event', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEventRepeat::class, mappedBy: 'event', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $repeatEvents;
 
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
@@ -126,7 +127,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Room')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room = null;
 
@@ -228,7 +229,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CCalendarEvent[]
      */
-    public function getChildren()
+    public function getChildren(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->children;
     }
@@ -245,7 +246,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @param Collection|CCalendarEvent[] $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(\Doctrine\Common\Collections\Collection|array $children): self
     {
         $this->children = $children;
 
@@ -339,7 +340,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CCalendarEventRepeat[]
      */
-    public function getRepeatEvents()
+    public function getRepeatEvents(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->repeatEvents;
     }
@@ -349,7 +350,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      *
      * @return CCalendarEvent
      */
-    public function setRepeatEvents(Collection $repeatEvents)
+    public function setRepeatEvents(\Doctrine\Common\Collections\Collection|array $repeatEvents)
     {
         $this->repeatEvents = $repeatEvents;
 

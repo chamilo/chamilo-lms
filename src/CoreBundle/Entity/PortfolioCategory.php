@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'portfolio_category')]
 #[ORM\Index(name: 'user', columns: ['user_id'])]
 #[ORM\Entity]
-class PortfolioCategory
+class PortfolioCategory implements \Stringable
 {
     use UserTrait;
 
@@ -32,14 +32,14 @@ class PortfolioCategory
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\Column(name: 'is_visible', type: 'boolean', options: ['default' => true])]
     protected bool $isVisible = true;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Portfolio', mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Portfolio::class, mappedBy: 'category')]
     protected ArrayCollection $items;
 
     public function __construct()
@@ -86,10 +86,8 @@ class PortfolioCategory
 
     /**
      * Get description.
-     *
-     * @return null|string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

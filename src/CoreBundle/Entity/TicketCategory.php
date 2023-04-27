@@ -33,7 +33,7 @@ class TicketCategory
     #[ORM\Column(name: 'course_required', type: 'boolean', nullable: false)]
     protected bool $courseRequired;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketProject')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketProject::class)]
     #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id')]
     protected TicketProject $project;
 

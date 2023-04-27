@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * CAnnouncementAttachment.
  */
 #[ORM\Table(name: 'c_announcement_attachment')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository')]
-class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository::class)]
+class CAnnouncementAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -31,7 +31,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAnnouncement', inversedBy: 'attachments', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAnnouncement::class, inversedBy: 'attachments', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'announcement_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAnnouncement $announcement;
 

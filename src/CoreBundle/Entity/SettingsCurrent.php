@@ -23,7 +23,7 @@ class SettingsCurrent
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'settings', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, inversedBy: 'settings', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url', referencedColumnName: 'id')]
     protected AccessUrl $url;
 

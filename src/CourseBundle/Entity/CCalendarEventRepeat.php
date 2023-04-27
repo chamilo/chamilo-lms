@@ -21,7 +21,7 @@ class CCalendarEventRepeat
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CCalendarEvent', inversedBy: 'repeatEvents')]
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, inversedBy: 'repeatEvents')]
     #[ORM\JoinColumn(name: 'cal_id', referencedColumnName: 'iid')]
     protected CCalendarEvent $event;
 

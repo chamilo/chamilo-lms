@@ -22,14 +22,8 @@ use Exception;
  */
 class CourseListener
 {
-    protected ToolChain $toolChain;
-
-    protected SettingsManager $settingsManager;
-
-    public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
+    public function __construct(protected ToolChain $toolChain, protected SettingsManager $settingsManager)
     {
-        $this->toolChain = $toolChain;
-        $this->settingsManager = $settingsManager;
     }
 
     /**

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'extra_field_rel_tag')]
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'item', columns: ['item_id'])]
 #[ORM\Index(name: 'tag', columns: ['tag_id'])]
 #[ORM\Index(name: 'field_item_tag', columns: ['field_id', 'item_id', 'tag_id'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository')]
+#[ORM\Entity(repositoryClass: ExtraFieldRelTagRepository::class)]
 class ExtraFieldRelTag
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -21,11 +22,11 @@ class ExtraFieldRelTag
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ExtraField')]
+    #[ORM\ManyToOne(targetEntity: ExtraField::class)]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ExtraField $field;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Tag', inversedBy: 'extraFieldRelTags')]
+    #[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'extraFieldRelTags')]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Tag $tag;
 

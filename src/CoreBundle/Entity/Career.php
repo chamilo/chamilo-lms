@@ -42,7 +42,7 @@ class Career
     /**
      * @var Collection|Promotion[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Promotion', mappedBy: 'career', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'career', cascade: ['persist'])]
     protected Collection $promotions;
 
     public function __construct()

@@ -20,11 +20,11 @@ class TicketCategoryRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TicketCategory')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketCategory::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected TicketCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected TicketCategory $user;
 }

@@ -8,14 +8,15 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CCalendarEventAttachment.
  */
 #[ORM\Table(name: 'c_calendar_event_attachment')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository')]
-class CCalendarEventAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CCalendarEventAttachmentRepository::class)]
+class CCalendarEventAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

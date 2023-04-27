@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Group categories inside a course.
  */
 #[ORM\Table(name: 'c_group_category')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CGroupCategoryRepository')]
-class CGroupCategory extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CGroupCategoryRepository::class)]
+class CGroupCategory extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

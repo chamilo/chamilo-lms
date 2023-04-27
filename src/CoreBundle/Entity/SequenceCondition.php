@@ -53,9 +53,6 @@ class SequenceCondition
         return $this->description;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -86,9 +83,6 @@ class SequenceCondition
         return $this->param;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setParam(string $param): self
     {
         $this->param = $param;
@@ -104,9 +98,6 @@ class SequenceCondition
         return $this->actTrue;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setActTrue(string $actTrue): self
     {
         $this->actTrue = $actTrue;
@@ -122,9 +113,6 @@ class SequenceCondition
         return $this->actFalse;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;

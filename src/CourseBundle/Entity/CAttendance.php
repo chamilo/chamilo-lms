@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(name: 'active', columns: ['active'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CAttendanceRepository')]
-class CAttendance extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CAttendanceRepository::class)]
+class CAttendance extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -52,19 +52,19 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CAttendanceCalendar[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendanceCalendar', mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceCalendar::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $calendars;
 
     /**
      * @var Collection|CAttendanceResult[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendanceResult', mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceResult::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $results;
 
     /**
      * @var Collection|CAttendanceSheetLog[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendanceSheetLog', mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceSheetLog::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $logs;
 
     public function __construct()
@@ -202,7 +202,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @return CAttendanceSheetLog[]|Collection
      */
-    public function getLogs()
+    public function getLogs(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->logs;
     }
@@ -210,7 +210,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @param CAttendanceSheetLog[]|Collection $logs
      */
-    public function setLogs(Collection $logs): self
+    public function setLogs(array|\Doctrine\Common\Collections\Collection $logs): self
     {
         $this->logs = $logs;
 
@@ -220,7 +220,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @return CAttendanceResult[]|Collection
      */
-    public function getResults()
+    public function getResults(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->results;
     }

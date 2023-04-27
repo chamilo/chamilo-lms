@@ -24,8 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ORM\Table(name: 'skill')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\SkillRepository')]
-class Skill
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SkillRepository::class)]
+class Skill implements \Stringable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
@@ -36,38 +36,38 @@ class Skill
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Profile', inversedBy: 'skills')]
+    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 
     /**
      * @var SkillRelUser[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
      * @var Collection|SkillRelItem[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelItem', mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
 
     /**
      * @var Collection|SkillRelSkill[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelSkill', mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
      * @var Collection|SkillRelCourse[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelCourse', mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
 
     /**
      * @var Collection|SkillRelGradebook[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelGradebook', mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
 
     #[Assert\NotBlank]
@@ -91,7 +91,7 @@ class Skill
     #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: false)]
     protected string $icon;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
 
@@ -348,17 +348,15 @@ class Skill
     /**
      * @return SkillRelSkill[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
 
     /**
      * @param SkillRelSkill[]|Collection $skills
-     *
-     * @return Skill
      */
-    public function setSkills($skills): self
+    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -368,17 +366,15 @@ class Skill
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getGradeBookCategories()
+    public function getGradeBookCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
-     *
-     * @return Skill
      */
-    public function setGradeBookCategories($gradeBookCategories): self
+    public function setGradeBookCategories(array|\Doctrine\Common\Collections\Collection $gradeBookCategories): self
     {
         $this->gradeBookCategories = $gradeBookCategories;
 

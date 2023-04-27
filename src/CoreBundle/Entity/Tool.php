@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'tool')]
 #[ORM\Entity]
-class Tool
+class Tool implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -33,7 +33,7 @@ class Tool
     /**
      * @var ResourceType[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceType', mappedBy: 'tool', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
     protected Collection $resourceTypes;
 
     public function __construct()

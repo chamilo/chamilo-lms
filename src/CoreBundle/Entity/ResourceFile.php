@@ -70,7 +70,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 ])]
 #[ORM\Table(name: 'resource_file')]
 #[ORM\Entity]
-class ResourceFile
+class ResourceFile implements \Stringable
 {
     use TimestampableEntity;
 
@@ -111,20 +111,20 @@ class ResourceFile
      *     dimensions="dimensions"
      * )
      */
-//    #[Vich\UploadableField(
-//        mapping: 'resources',
-//        fileNameProperty: 'name',
-//        size: 'size',
-//        mimeType: 'mimeType',
-//        originalName: 'originalName',
-//        dimensions: 'dimensions'
-//    )]
+    //    #[Vich\UploadableField(
+    //        mapping: 'resources',
+    //        fileNameProperty: 'name',
+    //        size: 'size',
+    //        mimeType: 'mimeType',
+    //        originalName: 'originalName',
+    //        dimensions: 'dimensions'
+    //    )]
     protected ?File $file = null;
 
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', mappedBy: 'resourceFile')]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'resourceFile')]
     protected ResourceNode $resourceNode;
 
     /**
@@ -374,7 +374,7 @@ class ResourceFile
     /**
      * @param File|UploadedFile|null $file
      */
-    public function setFile(?File $file = null): self
+    public function setFile(\Symfony\Component\HttpFoundation\File\File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $file = null): self
     {
         $this->file = $file;
 

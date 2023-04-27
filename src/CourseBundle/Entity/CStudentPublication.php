@@ -20,8 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CStudentPublication.
  */
 #[ORM\Table(name: 'c_student_publication')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CStudentPublicationRepository')]
-class CStudentPublication extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationRepository::class)]
+class CStudentPublication extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -70,24 +70,24 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CStudentPublication[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', mappedBy: 'publicationParent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, mappedBy: 'publicationParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CStudentPublicationComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublicationComment', mappedBy: 'publication')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublicationComment::class, mappedBy: 'publication')]
     protected Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublicationAssignment', mappedBy: 'publication')]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublicationAssignment::class, mappedBy: 'publication')]
     protected ?CStudentPublicationAssignment $assignment = null;
 
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
@@ -477,7 +477,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @return CStudentPublication[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -516,7 +516,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @return CStudentPublicationComment[]|Collection
      */
-    public function getComments()
+    public function getComments(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->comments;
     }
@@ -524,7 +524,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @param CStudentPublicationComment[]|Collection $comments
      */
-    public function setComments(Collection $comments): self
+    public function setComments(array|\Doctrine\Common\Collections\Collection $comments): self
     {
         $this->comments = $comments;
 

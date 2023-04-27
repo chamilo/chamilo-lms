@@ -22,16 +22,16 @@ class AttemptFeedback
     protected Uuid $id;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', inversedBy: 'attemptFeedbacks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TrackEAttempt::class, inversedBy: 'attemptFeedbacks')]
     #[ORM\JoinColumn(name: 'attempt_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TrackEAttempt $attempt;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Asset $asset = null;
 

@@ -19,8 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ORM\Table(name: 'illustration')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\IllustrationRepository')]
-class Illustration extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\IllustrationRepository::class)]
+class Illustration extends AbstractResource implements ResourceInterface, \Stringable
 {
     use PersonalResourceTrait;
     use TimestampableEntity;

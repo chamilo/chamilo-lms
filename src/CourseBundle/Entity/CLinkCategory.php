@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLinkCategory.
  */
 #[ORM\Table(name: 'c_link_category')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CLinkCategoryRepository')]
-class CLinkCategory extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CLinkCategoryRepository::class)]
+class CLinkCategory extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -38,7 +38,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CLink[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CLink', mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLink::class, mappedBy: 'category')]
     protected Collection $links;
 
     public function __construct()
@@ -97,7 +97,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     /**
      * @return CLink[]|Collection
      */
-    public function getLinks()
+    public function getLinks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->links;
     }

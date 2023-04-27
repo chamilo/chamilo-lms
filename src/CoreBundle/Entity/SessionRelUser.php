@@ -68,13 +68,13 @@ class SessionRelUser
 
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'users', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'sessionsRelUser', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sessionsRelUser', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 

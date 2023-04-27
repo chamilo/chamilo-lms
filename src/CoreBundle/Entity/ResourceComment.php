@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'resource_comment')]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity(repositoryClass: 'Gedmo\Tree\Entity\Repository\NestedTreeRepository')]
+#[ORM\Entity(repositoryClass: \Gedmo\Tree\Entity\Repository\NestedTreeRepository::class)]
 class ResourceComment
 {
     use TimestampableTypedEntity;
@@ -39,12 +39,12 @@ class ResourceComment
     #[Groups(['comment:read'])]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
     #[Groups(['comment:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $author;
 
@@ -55,7 +55,7 @@ class ResourceComment
 
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, inversedBy: 'children')]
     protected ?ResourceComment $parent = null;
 
     #[Groups(['comment:read'])]
@@ -71,7 +71,7 @@ class ResourceComment
     /**
      * @var Collection|ResourceComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceComment', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
@@ -138,7 +138,7 @@ class ResourceComment
     /**
      * @return ResourceComment[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -146,7 +146,7 @@ class ResourceComment
     /**
      * @param ResourceComment[]|Collection $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
     {
         $this->children = $children;
 

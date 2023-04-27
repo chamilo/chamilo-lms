@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic')]
 #[ORM\Index(name: 'active', columns: ['active'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CThematicRepository')]
-class CThematic extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CThematicRepository::class)]
+class CThematic extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -39,7 +39,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CThematicPlan[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CThematicPlan', mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicPlan::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $plans;
 
     /**
@@ -48,7 +48,7 @@ class CThematic extends AbstractResource implements ResourceInterface
      *
      */
     #[ORM\OrderBy(['startDate' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CThematicAdvance', mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $advances;
 
     public function __construct()
@@ -135,7 +135,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CThematicPlan[]
      */
-    public function getPlans()
+    public function getPlans(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->plans;
     }
@@ -143,7 +143,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CThematicAdvance[]
      */
-    public function getAdvances()
+    public function getAdvances(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->advances;
     }

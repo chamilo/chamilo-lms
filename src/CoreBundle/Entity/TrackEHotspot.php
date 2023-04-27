@@ -29,7 +29,7 @@ class TrackEHotspot
     #[ORM\Column(name: 'hotspot_user_id', type: 'integer', nullable: false)]
     protected int $hotspotUserId;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'trackEHotspots')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'trackEHotspots')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 

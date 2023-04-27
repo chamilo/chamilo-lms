@@ -27,12 +27,12 @@ class CQuizRelQuestion
     protected int $questionOrder;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestion', inversedBy: 'relQuizzes', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, inversedBy: 'relQuizzes', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuiz', inversedBy: 'questions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuiz::class, inversedBy: 'questions', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'quiz_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuiz $quiz;
 

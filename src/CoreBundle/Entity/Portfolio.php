@@ -34,15 +34,15 @@ class Portfolio
     #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     protected Session $session;
 
@@ -55,7 +55,7 @@ class Portfolio
     #[ORM\Column(name: 'is_visible', type: 'boolean', options: ['default' => true])]
     protected bool $isVisible = true;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\PortfolioCategory', inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\PortfolioCategory::class, inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected PortfolioCategory $category;
 

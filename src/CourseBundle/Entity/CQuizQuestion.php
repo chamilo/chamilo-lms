@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,8 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_quiz_question')]
 #[ORM\Index(name: 'position', columns: ['position'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CQuizQuestionRepository')]
-class CQuizQuestion extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CQuizQuestionRepository::class)]
+class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -63,25 +64,25 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     #[ORM\JoinTable(name: 'c_quiz_question_rel_category')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'iid')]
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory', inversedBy: 'questions')]
+    #[ORM\ManyToMany(targetEntity: CQuizQuestionCategory::class, inversedBy: 'questions')]
     protected Collection $categories;
 
     /**
      * @var Collection|CQuizRelQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestion', mappedBy: 'question', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: CQuizRelQuestion::class, mappedBy: 'question', cascade: ['persist'])]
     protected Collection $relQuizzes;
 
     /**
      * @var Collection|CQuizAnswer[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizAnswer', mappedBy: 'question', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: CQuizAnswer::class, mappedBy: 'question', cascade: ['persist'])]
     protected Collection $answers;
 
     /**
      * @var Collection|CQuizQuestionOption[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestionOption', mappedBy: 'question', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: CQuizQuestionOption::class, mappedBy: 'question', cascade: ['persist'])]
     protected Collection $options;
 
     #[ORM\Column(name: 'mandatory', type: 'integer')]
@@ -297,7 +298,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @return CQuizQuestionCategory[]|Collection
      */
-    public function getCategories()
+    public function getCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->categories;
     }
@@ -305,7 +306,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @return CQuizRelQuestion[]|Collection
      */
-    public function getRelQuizzes()
+    public function getRelQuizzes(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->relQuizzes;
     }
@@ -313,7 +314,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @return CQuizAnswer[]|Collection
      */
-    public function getAnswers()
+    public function getAnswers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->answers;
     }
@@ -326,7 +327,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @return CQuizQuestionOption[]|Collection
      */
-    public function getOptions()
+    public function getOptions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->options;
     }
@@ -334,7 +335,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @param CQuizQuestionOption[]|Collection $options
      */
-    public function setOptions(Collection $options): self
+    public function setOptions(array|\Doctrine\Common\Collections\Collection $options): self
     {
         $this->options = $options;
 

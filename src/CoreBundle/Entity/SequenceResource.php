@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class SequenceResource.
  */
 #[ORM\Table(name: 'sequence_resource')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\SequenceResourceRepository')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceResourceRepository::class)]
 class SequenceResource
 {
     public const COURSE_TYPE = 1;
@@ -23,7 +23,7 @@ class SequenceResource
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Sequence')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Sequence::class)]
     #[ORM\JoinColumn(name: 'sequence_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Sequence $sequence;
 
@@ -53,8 +53,6 @@ class SequenceResource
 
     /**
      * Set the integer type.
-     *
-     * @return SequenceResource
      */
     public function setType(int $type): self
     {

@@ -46,8 +46,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => 'message:read'],
 )]
 #[ORM\Table(name: 'message_attachment')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository')]
-class MessageAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository::class)]
+class MessageAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -64,7 +64,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Message', inversedBy: 'attachments', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, inversedBy: 'attachments', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 

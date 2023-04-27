@@ -15,8 +15,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_exercise_category')]
-#[ORM\Entity(repositoryClass: 'Gedmo\Sortable\Entity\Repository\SortableRepository')]
-class CExerciseCategory extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
+class CExerciseCategory extends AbstractResource implements ResourceInterface, \Stringable
 {
     use TimestampableEntity;
 
@@ -26,7 +26,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     protected ?int $id = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 

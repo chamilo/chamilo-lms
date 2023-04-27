@@ -23,7 +23,7 @@ class CQuizAnswer
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestion', inversedBy: 'answers', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, inversedBy: 'answers', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 

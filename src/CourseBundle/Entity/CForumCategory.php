@@ -8,14 +8,15 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_forum_category')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumCategoryRepository')]
-class CForumCategory extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CForumCategoryRepository::class)]
+class CForumCategory extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -38,7 +39,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CForum[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', mappedBy: 'forumCategory')]
+    #[ORM\OneToMany(targetEntity: CForum::class, mappedBy: 'forumCategory')]
     protected Collection $forums;
 
     public function __construct()
@@ -132,7 +133,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
      *
      * @return Collection|CForum[]
      */
-    public function getForums()
+    public function getForums(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->forums;
     }

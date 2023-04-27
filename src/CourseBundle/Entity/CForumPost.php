@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,8 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'forum_id', columns: ['forum_id'])]
 #[ORM\Index(name: 'idx_forum_post_thread_id', columns: ['thread_id'])]
 #[ORM\Index(name: 'idx_forum_post_visible', columns: ['visible'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumPostRepository')]
-class CForumPost extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CForumPostRepository::class)]
+class CForumPost extends AbstractResource implements ResourceInterface, \Stringable
 {
     public const STATUS_VALIDATED = 1;
     public const STATUS_WAITING_MODERATION = 2;
@@ -55,33 +56,33 @@ class CForumPost extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'status', type: 'integer', nullable: true)]
     protected ?int $status = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumThread', inversedBy: 'posts')]
+    #[ORM\ManyToOne(targetEntity: CForumThread::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(name: 'thread_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumThread $thread = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', inversedBy: 'posts')]
+    #[ORM\ManyToOne(targetEntity: CForum::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForum $forum = null;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'poster_id', referencedColumnName: 'id')]
     protected ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: CForumPost::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'post_parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CForumPost $postParent = null;
 
     /**
      * @var Collection|CForumPost[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', mappedBy: 'postParent')]
+    #[ORM\OneToMany(targetEntity: CForumPost::class, mappedBy: 'postParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CForumAttachment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForumAttachment', mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CForumAttachment::class, mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $attachments;
 
     public function __construct()
@@ -263,7 +264,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @return CForumPost[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -271,7 +272,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @param CForumPost[]|Collection $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
     {
         $this->children = $children;
 

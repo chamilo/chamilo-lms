@@ -44,13 +44,13 @@ class MessageRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Message', inversedBy: 'receivers', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, inversedBy: 'receivers', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
     #[Assert\NotNull]
     #[Groups(['message:read', 'message:write'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', cascade: ['persist'], inversedBy: 'receivedMessages')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'], inversedBy: 'receivedMessages')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $receiver;
 
@@ -72,7 +72,7 @@ class MessageRelUser
     #[Assert\Valid]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\JoinTable(name: 'message_rel_user_rel_tags')]
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\CoreBundle\Entity\MessageTag', inversedBy: 'messageRelUsers', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageTag::class, inversedBy: 'messageRelUsers', cascade: ['persist', 'remove'])]
     protected Collection $tags;
 
     public function __construct()
@@ -91,7 +91,7 @@ class MessageRelUser
     /**
      * @return Collection|MessageTag[]
      */
-    public function getTags()
+    public function getTags(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->tags;
     }

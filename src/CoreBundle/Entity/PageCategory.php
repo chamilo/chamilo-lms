@@ -59,7 +59,7 @@ class PageCategory
     protected string $title;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
@@ -71,7 +71,7 @@ class PageCategory
     /**
      * @var Collection|Page[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Page', mappedBy: 'category', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Page::class, mappedBy: 'category', cascade: ['persist'])]
     protected Collection $pages;
 
     public function __construct()

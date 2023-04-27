@@ -18,8 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_survey')]
 #[ORM\Index(name: 'idx_survey_code', columns: ['code'])]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CSurveyRepository')]
-class CSurvey extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CSurveyRepository::class)]
+class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -107,31 +107,31 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CSurveyQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestion::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $questions;
 
     /**
      * @var Collection|CSurveyInvitation[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation', mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyInvitation::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $invitations;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CSurvey $surveyParent = null;
 
     /**
      * @var Collection|CSurvey[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', mappedBy: 'surveyParent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, mappedBy: 'surveyParent')]
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
      */
     #[ORM\OrderBy(['sort' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestionOption', mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestionOption::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $options;
 
     #[ORM\Column(name: 'survey_type', type: 'integer', nullable: false)]
@@ -602,7 +602,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @return CSurveyQuestion[]|Collection
      */
-    public function getQuestions()
+    public function getQuestions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->questions;
     }
@@ -665,17 +665,15 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @return CSurvey[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
 
     /**
      * @param CSurvey[]|Collection $children
-     *
-     * @return CSurvey
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
     {
         $this->children = $children;
 
@@ -685,7 +683,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @return CSurveyQuestionOption[]|Collection
      */
-    public function getOptions()
+    public function getOptions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->options;
     }
@@ -700,7 +698,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @return CSurveyInvitation[]|Collection
      */
-    public function getInvitations()
+    public function getInvitations(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->invitations;
     }
@@ -708,7 +706,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @param CSurveyInvitation[]|Collection $invitations
      */
-    public function setInvitations($invitations): self
+    public function setInvitations(array|\Doctrine\Common\Collections\Collection $invitations): self
     {
         $this->invitations = $invitations;
 

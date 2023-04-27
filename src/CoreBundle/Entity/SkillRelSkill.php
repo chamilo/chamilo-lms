@@ -18,11 +18,11 @@ class SkillRelSkill
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Skill', inversedBy: 'skills')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id')]
     protected Skill $skill;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Skill')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class)]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Skill $parent = null;
 

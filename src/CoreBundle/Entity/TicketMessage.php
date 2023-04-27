@@ -31,7 +31,7 @@ class TicketMessage
     #[ORM\Column(name: 'ip_address', type: 'string', nullable: false)]
     protected string $ipAddress;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Ticket')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Ticket::class)]
     #[ORM\JoinColumn(name: 'ticket_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Ticket $ticket;
 

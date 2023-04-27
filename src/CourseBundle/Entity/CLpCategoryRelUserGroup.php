@@ -26,19 +26,19 @@ class CLpCategoryRelUserGroup
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpCategory')]
+    #[ORM\ManyToOne(targetEntity: CLpCategory::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected CLpCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true)]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup')]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true)]
     protected ?Usergroup $userGroup = null;
 

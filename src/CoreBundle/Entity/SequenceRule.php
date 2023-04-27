@@ -41,9 +41,6 @@ class SequenceRule
         return $this->description;
     }
 
-    /**
-     * @return SequenceRule
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;

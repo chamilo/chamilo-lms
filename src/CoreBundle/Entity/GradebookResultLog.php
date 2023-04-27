@@ -25,11 +25,11 @@ class GradebookResultLog
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookResult')]
+    #[ORM\ManyToOne(targetEntity: GradebookResult::class)]
     #[ORM\JoinColumn(name: 'result_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookResult $result;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation')]
+    #[ORM\ManyToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'evaluation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookEvaluation $evaluation;
 
@@ -40,7 +40,7 @@ class GradebookResultLog
     #[ORM\Column(name: 'score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $score = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookResultLogs')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookResultLogs')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

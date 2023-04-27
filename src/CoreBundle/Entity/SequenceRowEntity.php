@@ -32,7 +32,7 @@ class SequenceRowEntity
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceTypeEntity')]
+    #[ORM\ManyToOne(targetEntity: SequenceTypeEntity::class)]
     #[ORM\JoinColumn(name: 'sequence_type_entity_id', referencedColumnName: 'id')]
     protected ?SequenceTypeEntity $type = null;
 
@@ -54,9 +54,6 @@ class SequenceRowEntity
         return $this->cId;
     }
 
-    /**
-     * @return SequenceRowEntity
-     */
     public function setCId(int $cId): self
     {
         $this->cId = $cId;
@@ -72,9 +69,6 @@ class SequenceRowEntity
         return $this->sessionId;
     }
 
-    /**
-     * @return SequenceRowEntity
-     */
     public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
@@ -90,9 +84,6 @@ class SequenceRowEntity
         return $this->rowId;
     }
 
-    /**
-     * @return SequenceRowEntity
-     */
     public function setRowId(int $rowId): self
     {
         $this->rowId = $rowId;
@@ -108,9 +99,6 @@ class SequenceRowEntity
         return $this->name;
     }
 
-    /**
-     * @return SequenceRowEntity
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -123,9 +111,6 @@ class SequenceRowEntity
         return $this->type;
     }
 
-    /**
-     * @return SequenceRowEntity
-     */
     public function setType(?SequenceTypeEntity $type): self
     {
         $this->type = $type;

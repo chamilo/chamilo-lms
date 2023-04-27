@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
 #[ORM\Entity]
-class ResourceLink
+class ResourceLink implements \Stringable
 {
     use TimestampableTypedEntity;
 
@@ -33,34 +33,34 @@ class ResourceLink
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceNode', inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session', inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CGroup')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Usergroup')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class)]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $user = null;
 
     /**
      * @var Collection|ResourceRight[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceRight', mappedBy: 'resourceLink', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceRight::class, mappedBy: 'resourceLink', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $resourceRights;
 
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
@@ -113,7 +113,7 @@ class ResourceLink
     /**
      * @param ResourceRight[]|Collection $rights
      */
-    public function setResourceRights($rights): self
+    public function setResourceRights(array|\Doctrine\Common\Collections\Collection $rights): self
     {
         $this->resourceRights = $rights;
 
@@ -137,7 +137,7 @@ class ResourceLink
     /**
      * @return Collection|ResourceRight[]
      */
-    public function getResourceRights()
+    public function getResourceRights(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->resourceRights;
     }
@@ -290,6 +290,6 @@ class ResourceLink
 
     public function getVisibilityName(): string
     {
-        return array_flip($this->getVisibilityList())[$this->getVisibility()];
+        return array_flip(static::getVisibilityList())[$this->getVisibility()];
     }
 }

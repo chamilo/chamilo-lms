@@ -11,6 +11,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Entity\Listener\SessionListener;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,11 +54,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
 #[ORM\Table(name: 'session')]
 #[ORM\UniqueConstraint(name: 'name', columns: ['name'])]
-#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\SessionListener'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\SessionRepository')]
+#[ORM\EntityListeners([SessionListener::class])]
+#[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('name')]
 
-class Session implements ResourceWithAccessUrlInterface
+class Session implements ResourceWithAccessUrlInterface, \Stringable
 {
     public const VISIBLE = 1;
     public const READ_ONLY = 2;
@@ -86,45 +88,45 @@ class Session implements ResourceWithAccessUrlInterface
      */
     #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     #[ORM\OrderBy(['position' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourse', mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionRelCourse::class, mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $courses;
 
     /**
      * @var Collection<int, SessionRelUser>
      */
     #[Groups(['session:read'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelUser', mappedBy: 'session', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionRelUser::class, mappedBy: 'session', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
      * @var Collection<int, SessionRelCourseRelUser>
      */
     #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionRelCourseRelUser', mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionRelCourseRelUser::class, mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection<int, SkillRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelCourse', mappedBy: 'session', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'session', cascade: ['persist', 'remove'])]
     protected Collection $skills;
 
     /**
      * @var Collection<int, SkillRelUser>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', mappedBy: 'session', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'session', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
      * @var AccessUrlRelSession[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelSession', mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelSession::class, mappedBy: 'session', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
      * @var Collection<int, ResourceLink>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceLink', mappedBy: 'session', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ResourceLink::class, mappedBy: 'session', cascade: ['remove'], orphanRemoval: true)]
     protected Collection $resourceLinks;
 
     protected AccessUrl $currentUrl;
@@ -171,7 +173,7 @@ class Session implements ResourceWithAccessUrlInterface
     #[ORM\Column(name: 'visibility', type: 'integer')]
     protected int $visibility;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Promotion', inversedBy: 'sessions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Promotion::class, inversedBy: 'sessions', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Promotion $promotion = null;
 
@@ -207,7 +209,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected int $status;
 
     #[Groups(['session:read', 'session:write', 'session_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SessionCategory', inversedBy: 'sessions')]
+    #[ORM\ManyToOne(targetEntity: SessionCategory::class, inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'session_category_id', referencedColumnName: 'id')]
     protected ?SessionCategory $category = null;
 
@@ -686,9 +688,7 @@ class Session implements ResourceWithAccessUrlInterface
     {
         return $this
             ->getGeneralCoachesSubscriptions()
-            ->map(function (SessionRelUser $subscription) {
-                return $subscription->getUser();
-            })
+            ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
         ;
     }
 
@@ -825,7 +825,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @return SessionRelCourseRelUser[]|ArrayCollection|Collection
      */
-    public function getSessionRelCourseRelUsers()
+    public function getSessionRelCourseRelUsers(): array|\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
@@ -848,10 +848,7 @@ class Session implements ResourceWithAccessUrlInterface
         }
     }
 
-    /**
-     * @return null|SessionRelCourse
-     */
-    public function getCourseSubscription(Course $course)
+    public function getCourseSubscription(Course $course): ?SessionRelCourse
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('course', $course)
@@ -917,10 +914,8 @@ class Session implements ResourceWithAccessUrlInterface
     {
         // If the session is registered in the course session list.
         $exists = $this->getCourses()->exists(
-            function ($key, $element) use ($course) {
-                /** @var SessionRelCourse $element */
-                return $course->getId() === $element->getCourse()->getId();
-            }
+            fn ($key, $element) => /** @var SessionRelCourse $element */
+$course->getId() === $element->getCourse()->getId()
         );
 
         if ($exists) {
@@ -947,7 +942,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return ArrayCollection|Collection
      */
-    public function getSessionRelCourseRelUsersByStatus(Course $course, int $status)
+    public function getSessionRelCourseRelUsersByStatus(Course $course, int $status): \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
     {
         $criteria = Criteria::create()
             ->where(
@@ -1057,9 +1052,7 @@ class Session implements ResourceWithAccessUrlInterface
     {
         return $this
             ->getGeneralAdminsSubscriptions()
-            ->map(function (SessionRelUser $subscription) {
-                return $subscription->getUser();
-            })
+            ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
         ;
     }
 
@@ -1096,7 +1089,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @return SkillRelCourse[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
@@ -1104,7 +1097,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @return ResourceLink[]|Collection
      */
-    public function getResourceLinks()
+    public function getResourceLinks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->resourceLinks;
     }

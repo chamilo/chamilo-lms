@@ -20,11 +20,11 @@ class SequenceRuleCondition
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceRule')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceRule::class)]
     #[ORM\JoinColumn(name: 'sequence_rule_id', referencedColumnName: 'id')]
     protected ?SequenceRule $rule = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceCondition')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceCondition::class)]
     #[ORM\JoinColumn(name: 'sequence_condition_id', referencedColumnName: 'id')]
     protected ?SequenceCondition $condition = null;
 

@@ -18,11 +18,11 @@ class CSurveyQuestionOption
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyQuestion', inversedBy: 'options')]
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'options')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurveyQuestion $question;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CSurvey', inversedBy: 'options')]
+    #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'options')]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 

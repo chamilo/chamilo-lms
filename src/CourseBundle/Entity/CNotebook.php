@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,15 +19,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CNotebook.
  */
 #[ORM\Table(name: 'c_notebook')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CNotebookRepository')]
-class CNotebook extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CNotebookRepository::class)]
+class CNotebook extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

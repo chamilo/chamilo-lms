@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Templates.
  */
 #[ORM\Table(name: 'templates')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\TemplatesRepository')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\TemplatesRepository::class)]
 class Templates
 {
     use UserTrait;
@@ -29,11 +29,11 @@ class Templates
     #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: false)]
     protected string $description;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'templates', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'templates', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'templates')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'templates')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

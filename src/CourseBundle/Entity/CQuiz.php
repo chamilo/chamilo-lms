@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,8 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course quizzes.
  */
 #[ORM\Table(name: 'c_quiz')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CQuizRepository')]
-class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+#[ORM\Entity(repositoryClass: CQuizRepository::class)]
+class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
     public const ALL_ON_ONE_PAGE = 1;
     public const ONE_PER_PAGE = 2;
@@ -109,7 +110,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'hide_question_title', type: 'boolean', nullable: false)]
     protected bool $hideQuestionTitle;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CExerciseCategory', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CExerciseCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'exercise_category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?CExerciseCategory $exerciseCategory = null;
 
@@ -128,19 +129,19 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @var Collection|CQuizRelQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestion', mappedBy: 'quiz', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CQuizRelQuestion::class, mappedBy: 'quiz', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $questions;
 
     /**
      * @var Collection|CQuizRelQuestionCategory[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory', mappedBy: 'quiz', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: CQuizRelQuestionCategory::class, mappedBy: 'quiz', cascade: ['persist'])]
     protected Collection $questionsCategories;
 
     /**
      * @var Collection<int, TrackEExercise>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEExercise', mappedBy: 'quiz')]
+    #[ORM\OneToMany(targetEntity: TrackEExercise::class, mappedBy: 'quiz')]
     protected Collection $attempts;
 
     public function __construct()
@@ -178,7 +179,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @return Collection|CQuizRelQuestion[]
      */
-    public function getQuestions()
+    public function getQuestions(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->questions;
     }
@@ -660,7 +661,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @return CQuizRelQuestionCategory[]|Collection
      */
-    public function getQuestionsCategories()
+    public function getQuestionsCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->questionsCategories;
     }

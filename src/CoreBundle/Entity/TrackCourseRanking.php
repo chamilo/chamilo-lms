@@ -39,7 +39,7 @@ class TrackCourseRanking
 
     #[ApiSubresource]
     #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'trackCourseRanking')]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'trackCourseRanking')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     protected Course $course;
 

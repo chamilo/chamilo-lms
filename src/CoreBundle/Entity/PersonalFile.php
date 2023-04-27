@@ -13,6 +13,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreatePersonalFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdatePersonalFileAction;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
+use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -110,10 +112,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ORM\Table(name: 'personal_file')]
-#[ORM\EntityListeners(['Chamilo\CoreBundle\Entity\Listener\ResourceListener'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\PersonalFileRepository')]
+#[ORM\EntityListeners([ResourceListener::class])]
+#[ORM\Entity(repositoryClass: PersonalFileRepository::class)]
 
-class PersonalFile extends AbstractResource implements ResourceInterface
+class PersonalFile extends AbstractResource implements ResourceInterface, \Stringable
 {
     use TimestampableEntity;
 

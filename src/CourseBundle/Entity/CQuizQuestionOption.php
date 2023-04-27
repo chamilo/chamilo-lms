@@ -28,7 +28,7 @@ class CQuizQuestionOption
     protected int $position;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuizQuestion', cascade: ['persist'], inversedBy: 'options')]
+    #[ORM\ManyToOne(targetEntity: CQuizQuestion::class, cascade: ['persist'], inversedBy: 'options')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 

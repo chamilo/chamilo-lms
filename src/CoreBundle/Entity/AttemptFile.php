@@ -22,13 +22,13 @@ class AttemptFile
     protected Uuid $id;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', inversedBy: 'attemptFiles')]
+    #[ORM\ManyToOne(targetEntity: TrackEAttempt::class, inversedBy: 'attemptFiles')]
     #[ORM\JoinColumn(name: 'attempt_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TrackEAttempt $attempt;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected ?Asset $asset;
+    protected ?Asset $asset = null;
 
     #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;

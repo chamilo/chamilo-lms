@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'access_url')]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\Node\AccessUrlRepository')]
-class AccessUrl extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: AccessUrlRepository::class)]
+class AccessUrl extends AbstractResource implements ResourceInterface, \Stringable
 {
     public const DEFAULT_ACCESS_URL = 'http://localhost/';
 
@@ -39,48 +40,48 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @var AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelCourse', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelCourse::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $courses;
 
     /**
      * @var AccessUrlRelSession[]|Collection<int, AccessUrlRelSession>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelSession', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelSession::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessions;
 
     /**
      * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelUser', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelUser::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
      * @var Collection<int, SettingsCurrent>|SettingsCurrent[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SettingsCurrent', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SettingsCurrent::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $settings;
 
     /**
      * @var Collection<int, SessionCategory>|SessionCategory[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SessionCategory', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SessionCategory::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessionCategories;
 
     /**
      * @var AccessUrlRelCourseCategory[]|Collection<int, AccessUrlRelCourseCategory>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory', mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AccessUrlRelCourseCategory::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $courseCategory;
 
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, inversedBy: 'children')]
     protected ?AccessUrl $parent = null;
 
     /**
      * @var AccessUrl[]|Collection<int, AccessUrl>
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: AccessUrl::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
@@ -97,7 +98,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected int $rgt;
 
     #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl')]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
     #[ORM\JoinColumn(name: 'tree_root', onDelete: 'CASCADE')]
     protected ?AccessUrl $root = null;
 
@@ -352,7 +353,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return Collection<int, SettingsCurrent>|SettingsCurrent[]
      */
-    public function getSettings()
+    public function getSettings(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->settings;
     }
@@ -360,7 +361,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param Collection<int, SettingsCurrent>|SettingsCurrent[] $settings
      */
-    public function setSettings(Collection $settings): self
+    public function setSettings(\Doctrine\Common\Collections\Collection|array $settings): self
     {
         $this->settings = $settings;
 
@@ -385,7 +386,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return Collection<int, AccessUrlRelCourse>|AccessUrlRelCourse[]
      */
-    public function getCourses()
+    public function getCourses(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->courses;
     }
@@ -393,7 +394,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse> $courses
      */
-    public function setCourses(Collection $courses): self
+    public function setCourses(array|\Doctrine\Common\Collections\Collection $courses): self
     {
         $this->courses = $courses;
 
@@ -403,7 +404,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return SessionCategory[]|Collection
      */
-    public function getSessionCategories()
+    public function getSessionCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sessionCategories;
     }
@@ -411,7 +412,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @param Collection<int, SessionCategory>|SessionCategory[] $sessionCategories
      */
-    public function setSessionCategories(Collection $sessionCategories): self
+    public function setSessionCategories(\Doctrine\Common\Collections\Collection|array $sessionCategories): self
     {
         $this->sessionCategories = $sessionCategories;
 
@@ -421,7 +422,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return AccessUrlRelSession[]|Collection
      */
-    public function getSessions()
+    public function getSessions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sessions;
     }
@@ -429,7 +430,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return AccessUrl[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -437,7 +438,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return AccessUrlRelUser[]|Collection
      */
-    public function getUsers()
+    public function getUsers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->users;
     }
@@ -477,7 +478,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return AccessUrlRelCourseCategory[]|Collection
      */
-    public function getCourseCategory()
+    public function getCourseCategory(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->courseCategory;
     }

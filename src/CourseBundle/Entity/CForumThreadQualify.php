@@ -24,15 +24,15 @@ class CForumThreadQualify
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumThread', inversedBy: 'qualifications')]
+    #[ORM\ManyToOne(targetEntity: CForumThread::class, inversedBy: 'qualifications')]
     #[ORM\JoinColumn(name: 'thread_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected CForumThread $thread;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'qualify_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $qualifyUser;
 

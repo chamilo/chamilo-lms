@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'group_id', columns: ['group_id'])]
 #[ORM\Index(name: 'page_id', columns: ['page_id'])]
 #[ORM\Index(name: 'session_id', columns: ['session_id'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CWikiRepository')]
-class CWiki extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CWikiRepository::class)]
+class CWiki extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

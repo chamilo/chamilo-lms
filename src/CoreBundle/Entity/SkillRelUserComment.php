@@ -19,11 +19,11 @@ class SkillRelUserComment
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelUser', inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelUser::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'skill_rel_user_id', referencedColumnName: 'id')]
     protected ?SkillRelUser $skillRelUser = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'commentedUserSkills')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'commentedUserSkills')]
     #[ORM\JoinColumn(name: 'feedback_giver_id', referencedColumnName: 'id')]
     protected ?User $feedbackGiver = null;
 
@@ -31,7 +31,7 @@ class SkillRelUserComment
     protected string $feedbackText;
 
     #[ORM\Column(name: 'feedback_value', type: 'integer', nullable: true, options: ['default' => 1])]
-    protected ?int $feedbackValue;
+    protected ?int $feedbackValue = null;
 
     #[ORM\Column(name: 'feedback_datetime', type: 'datetime', nullable: false)]
     protected DateTime $feedbackDateTime;

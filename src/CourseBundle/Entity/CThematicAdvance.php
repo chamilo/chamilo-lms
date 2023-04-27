@@ -14,18 +14,18 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_thematic_advance')]
 #[ORM\Entity]
-class CThematicAdvance //extends AbstractResource implements ResourceInterface
+class CThematicAdvance implements \Stringable //extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CThematic', inversedBy: 'advances')]
+    #[ORM\ManyToOne(targetEntity: CThematic::class, inversedBy: 'advances')]
     #[ORM\JoinColumn(name: 'thematic_id', referencedColumnName: 'iid')]
     protected CThematic $thematic;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CAttendance')]
+    #[ORM\ManyToOne(targetEntity: CAttendance::class)]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
@@ -41,7 +41,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'done_advance', type: 'boolean', nullable: false)]
     protected bool $doneAdvance;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Room')]
+    #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room = null;
 

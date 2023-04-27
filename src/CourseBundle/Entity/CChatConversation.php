@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * CChatConversation.
  */
 #[ORM\Table(name: 'c_chat_conversation')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CChatConversationRepository')]
-class CChatConversation extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CChatConversationRepository::class)]
+class CChatConversation extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

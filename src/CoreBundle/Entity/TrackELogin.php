@@ -23,7 +23,7 @@ class TrackELogin
     #[ORM\GeneratedValue]
     protected int $loginId;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'logins')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'logins')]
     #[ORM\JoinColumn(name: 'login_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
@@ -91,10 +91,8 @@ class TrackELogin
 
     /**
      * Get logoutDate.
-     *
-     * @return null|DateTime
      */
-    public function getLogoutDate()
+    public function getLogoutDate(): ?\DateTime
     {
         return $this->logoutDate;
     }

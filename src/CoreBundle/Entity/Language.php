@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Platform languages.
  */
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\LanguageRepository')]
+#[ORM\Entity(repositoryClass: LanguageRepository::class)]
 class Language
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -38,11 +39,11 @@ class Language
     #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Language', inversedBy: 'subLanguages')]
+    #[ORM\ManyToOne(targetEntity: Language::class, inversedBy: 'subLanguages')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     protected ?Language $parent = null;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Language', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: Language::class, mappedBy: 'parent')]
     protected Collection $subLanguages;
 
     public function __construct()

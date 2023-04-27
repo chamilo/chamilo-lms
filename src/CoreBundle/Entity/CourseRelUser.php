@@ -55,7 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'course_rel_user_c_id_user_id', columns: ['id', 'c_id', 'user_id'])]
 #[ORM\Entity]
 
-class CourseRelUser
+class CourseRelUser implements \Stringable
 {
     use UserTrait;
 
@@ -71,12 +71,12 @@ class CourseRelUser
 
     #[MaxDepth(1)]
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
     #[Groups(['user:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 

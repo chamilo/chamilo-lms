@@ -23,7 +23,7 @@ class Admin
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'admin')]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'admin')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

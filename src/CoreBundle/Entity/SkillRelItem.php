@@ -21,7 +21,7 @@ class SkillRelItem
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Skill', inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Skill $skill;
 
@@ -268,16 +268,11 @@ class SkillRelItem
     public function getItemResultUrl(string $cidReq): string
     {
         $url = '';
-        switch ($this->getItemType()) {
-            case ITEM_TYPE_EXERCISE:
-                $url = 'exercise/exercise_show.php?action=qualify&'.$cidReq;
-
-                break;
-            case ITEM_TYPE_STUDENT_PUBLICATION:
-                $url = 'work/view.php?'.$cidReq;
-
-                break;
-        }
+        $url = match ($this->getItemType()) {
+            ITEM_TYPE_EXERCISE => 'exercise/exercise_show.php?action=qualify&'.$cidReq,
+            ITEM_TYPE_STUDENT_PUBLICATION => 'work/view.php?'.$cidReq,
+            default => $url,
+        };
 
         return $url;
     }
@@ -285,16 +280,11 @@ class SkillRelItem
     public function getItemResultList(string $cidReq): string
     {
         $url = '';
-        switch ($this->getItemType()) {
-            case ITEM_TYPE_EXERCISE:
-                $url = 'exercise/exercise_report.php?'.$cidReq.'&id='.$this->getItemId();
-
-                break;
-            case ITEM_TYPE_STUDENT_PUBLICATION:
-                $url = 'work/work_list_all.php?'.$cidReq.'&id='.$this->getItemId();
-
-                break;
-        }
+        $url = match ($this->getItemType()) {
+            ITEM_TYPE_EXERCISE => 'exercise/exercise_report.php?'.$cidReq.'&id='.$this->getItemId(),
+            ITEM_TYPE_STUDENT_PUBLICATION => 'work/work_list_all.php?'.$cidReq.'&id='.$this->getItemId(),
+            default => $url,
+        };
 
         return $url;
     }

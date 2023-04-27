@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'course_rel_user_catalogue_user_id', columns: ['user_id'])]
 #[ORM\Index(name: 'course_rel_user_catalogue_c_id', columns: ['c_id'])]
 #[ORM\Entity]
-class CourseRelUserCatalogue
+class CourseRelUserCatalogue implements \Stringable
 {
     use UserTrait;
 
@@ -22,11 +22,11 @@ class CourseRelUserCatalogue
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 

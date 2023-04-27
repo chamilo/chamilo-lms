@@ -24,7 +24,7 @@ class UserCourseCategory
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'userCourseCategories')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userCourseCategories')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

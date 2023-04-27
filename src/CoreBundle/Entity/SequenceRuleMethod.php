@@ -23,11 +23,11 @@ class SequenceRuleMethod
     #[ORM\Column(name: 'method_order', type: 'integer')]
     protected string $methodOrder;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceRule')]
+    #[ORM\ManyToOne(targetEntity: SequenceRule::class)]
     #[ORM\JoinColumn(name: 'sequence_rule_id', referencedColumnName: 'id')]
     protected ?SequenceRule $rule = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceMethod')]
+    #[ORM\ManyToOne(targetEntity: SequenceMethod::class)]
     #[ORM\JoinColumn(name: 'sequence_method_id', referencedColumnName: 'id')]
     protected ?SequenceMethod $method = null;
 

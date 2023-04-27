@@ -10,14 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'resource_right')]
 #[ORM\Entity]
-class ResourceRight
+class ResourceRight implements \Stringable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\ResourceLink', inversedBy: 'resourceRights')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceLink::class, inversedBy: 'resourceRights')]
     #[ORM\JoinColumn(name: 'resource_link_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceLink $resourceLink = null;
 

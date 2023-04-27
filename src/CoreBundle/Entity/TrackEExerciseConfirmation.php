@@ -22,7 +22,7 @@ class TrackEExerciseConfirmation
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'trackEExerciseConfirmations')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trackEExerciseConfirmations')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

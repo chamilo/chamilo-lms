@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,8 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course learning paths (LPs).
  */
 #[ORM\Table(name: 'c_lp')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CLpRepository')]
-class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+#[ORM\Entity(repositoryClass: CLpRepository::class)]
+class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
@@ -103,7 +104,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'autolaunch', type: 'integer', nullable: false)]
     protected int $autolaunch;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpCategory', inversedBy: 'lps')]
+    #[ORM\ManyToOne(targetEntity: CLpCategory::class, inversedBy: 'lps')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected ?CLpCategory $category = null;
 
@@ -133,16 +134,16 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'accumulate_work_time', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accumulateWorkTime;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem', mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CLpItem::class, mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;
 
     /**
      * @var Collection|CForum[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CourseBundle\Entity\CForum', mappedBy: 'lp', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: CForum::class, mappedBy: 'lp', cascade: ['persist', 'remove'])]
     protected Collection $forums;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Asset', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
 
@@ -640,7 +641,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     /**
      * @return CLpItem[]|Collection
      */
-    public function getItems()
+    public function getItems(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->items;
     }
@@ -675,17 +676,15 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     /**
      * @return ArrayCollection|Collection|CForum[]
      */
-    public function getForums()
+    public function getForums(): \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection|array
     {
         return $this->forums;
     }
 
     /**
      * @param ArrayCollection|Collection $forums
-     *
-     * @return CLp
      */
-    public function setForums($forums): self
+    public function setForums(\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection $forums): self
     {
         $this->forums = $forums;
 

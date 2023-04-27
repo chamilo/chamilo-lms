@@ -165,7 +165,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'resourceNode.resourceFile.size',
     'resourceNode.updatedAt',
 ])]
-class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['document:read'])]

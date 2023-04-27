@@ -24,11 +24,11 @@ class SequenceValue
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'sequenceValues')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sequenceValues')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceRowEntity')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceRowEntity::class)]
     #[ORM\JoinColumn(name: 'sequence_row_entity_id', referencedColumnName: 'id')]
     protected ?SequenceRowEntity $entity = null;
 
@@ -71,9 +71,6 @@ class SequenceValue
         return $this->entity;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setEntity(?SequenceRowEntity $entity): self
     {
         $this->entity = $entity;
@@ -107,9 +104,6 @@ class SequenceValue
         return $this->completeItems;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setCompleteItems(int $completeItems): self
     {
         $this->completeItems = $completeItems;
@@ -125,9 +119,6 @@ class SequenceValue
         return $this->totalItems;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setTotalItems(int $totalItems): self
     {
         $this->totalItems = $totalItems;
@@ -143,9 +134,6 @@ class SequenceValue
         return $this->success;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setSuccess(int $success): self
     {
         $this->success = $success;
@@ -161,9 +149,6 @@ class SequenceValue
         return $this->successDate;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setSuccessDate(DateTime $successDate): self
     {
         $this->successDate = $successDate;
@@ -179,9 +164,6 @@ class SequenceValue
         return $this->available;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setAvailable(int $available): self
     {
         $this->available = $available;
@@ -197,9 +179,6 @@ class SequenceValue
         return $this->availableStartDate;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setAvailableStartDate(DateTime $availableStartDate): self
     {
         $this->availableStartDate = $availableStartDate;
@@ -215,9 +194,6 @@ class SequenceValue
         return $this->availableEndDate;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setAvailableEndDate(DateTime $availableEndDate): self
     {
         $this->availableEndDate = $availableEndDate;

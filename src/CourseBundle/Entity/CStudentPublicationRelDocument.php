@@ -17,11 +17,11 @@ class CStudentPublicationRelDocument
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication')]
+    #[ORM\ManyToOne(targetEntity: CStudentPublication::class)]
     #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CDocument')]
+    #[ORM\ManyToOne(targetEntity: CDocument::class)]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CDocument $document;
 

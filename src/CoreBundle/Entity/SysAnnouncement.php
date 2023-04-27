@@ -39,7 +39,7 @@ class SysAnnouncement
     #[ORM\Column(name: 'lang', type: 'string', length: 70, nullable: true)]
     protected ?string $lang = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class)]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
@@ -52,11 +52,11 @@ class SysAnnouncement
     #[ORM\Column(type: 'array')]
     protected array $roles = [];
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Career')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Career::class)]
     #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Career $career = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Promotion', inversedBy: 'announcements')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Promotion::class, inversedBy: 'announcements')]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Promotion $promotion = null;
 

@@ -11,8 +11,8 @@ use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Table(name: 'sequence')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CoreBundle\Repository\SequenceRepository')]
-class Sequence
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceRepository::class)]
+class Sequence implements \Stringable
 {
     use TimestampableEntity;
 

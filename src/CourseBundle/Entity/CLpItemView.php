@@ -22,11 +22,11 @@ class CLpItemView
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpItem')]
+    #[ORM\ManyToOne(targetEntity: CLpItem::class)]
     #[ORM\JoinColumn(name: 'lp_item_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLpItem $item;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CLpView')]
+    #[ORM\ManyToOne(targetEntity: CLpView::class)]
     #[ORM\JoinColumn(name: 'lp_view_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLpView $view;
 

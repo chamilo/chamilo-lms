@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Table(name: 'session_category')]
 #[ORM\Entity]
-class SessionCategory
+class SessionCategory implements \Stringable
 {
     #[Groups(['session_category:read', 'session_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
@@ -43,11 +43,11 @@ class SessionCategory
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\AccessUrl', inversedBy: 'sessionCategories', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, inversedBy: 'sessionCategories', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\Session', mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'category')]
     protected Collection $sessions;
 
     #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]

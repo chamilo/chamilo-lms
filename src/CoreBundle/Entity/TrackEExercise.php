@@ -83,18 +83,18 @@ class TrackEExercise
 
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'exe_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
@@ -104,9 +104,9 @@ class TrackEExercise
     protected DateTime $exeDate;
 
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CQuiz', inversedBy: 'attempts')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuiz::class, inversedBy: 'attempts')]
     #[ORM\JoinColumn(name: 'exe_exo_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
-    protected ?CQuiz $quiz;
+    protected ?CQuiz $quiz = null;
 
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
@@ -176,7 +176,7 @@ class TrackEExercise
      * @var Collection<int, TrackEAttempt>
      */
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\TrackEAttempt', mappedBy: 'trackExercise', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\TrackEAttempt::class, mappedBy: 'trackExercise', cascade: ['persist'])]
     protected Collection $attempts;
 
     public function __construct()
@@ -465,7 +465,7 @@ class TrackEExercise
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getAttempts()
+    public function getAttempts(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->attempts;
     }
@@ -473,7 +473,7 @@ class TrackEExercise
     /**
      * @param TrackEAttempt[]|Collection $attempts
      */
-    public function setAttempts($attempts): self
+    public function setAttempts(array|\Doctrine\Common\Collections\Collection $attempts): self
     {
         $this->attempts = $attempts;
 

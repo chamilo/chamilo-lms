@@ -8,12 +8,13 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_forum_attachment')]
 #[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CForumAttachmentRepository')]
-class CForumAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CForumAttachmentRepository::class)]
+class CForumAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -32,7 +33,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CForumPost', cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\ManyToOne(targetEntity: CForumPost::class, cascade: ['persist'], inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CForumPost $post;
 

@@ -32,53 +32,53 @@ class GradebookCategory
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User', inversedBy: 'gradeBookCategories')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookCategories')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Course', inversedBy: 'gradebookCategories')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', inversedBy: 'subCategories')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'subCategories')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradebookCategory $parent = null;
 
     /**
      * @var GradebookCategory[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookCategory', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, mappedBy: 'parent')]
     protected Collection $subCategories;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\Session')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var SkillRelGradebook[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\SkillRelGradebook', mappedBy: 'gradeBookCategory')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelGradebook::class, mappedBy: 'gradeBookCategory')]
     protected Collection $skills;
 
     /**
      * @var Collection|GradebookEvaluation[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookEvaluation', mappedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookEvaluation::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $evaluations;
 
     /**
      * @var Collection|GradebookLink[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookLink', mappedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookLink::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $links;
 
     /**
      * @var Collection|GradebookComment[]
      */
-    #[ORM\OneToMany(targetEntity: 'Chamilo\CoreBundle\Entity\GradebookComment', mappedBy: 'gradeBook')]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookComment::class, mappedBy: 'gradeBook')]
     protected Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\GradeModel')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradeModel::class)]
     #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradeModel $gradeModel = null;
 
@@ -359,7 +359,7 @@ class GradebookCategory
     /**
      * @return GradebookComment[]|Collection
      */
-    public function getComments()
+    public function getComments(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->comments;
     }
@@ -367,7 +367,7 @@ class GradebookCategory
     /**
      * @param GradebookComment[]|Collection $comments
      */
-    public function setComments(Collection $comments): self
+    public function setComments(array|\Doctrine\Common\Collections\Collection $comments): self
     {
         $this->comments = $comments;
 
@@ -401,7 +401,7 @@ class GradebookCategory
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getEvaluations()
+    public function getEvaluations(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->evaluations;
     }
@@ -409,7 +409,7 @@ class GradebookCategory
     /**
      * @param GradebookEvaluation[]|Collection $evaluations
      */
-    public function setEvaluations(Collection $evaluations): self
+    public function setEvaluations(array|\Doctrine\Common\Collections\Collection $evaluations): self
     {
         $this->evaluations = $evaluations;
 
@@ -419,7 +419,7 @@ class GradebookCategory
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getLinks()
+    public function getLinks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->links;
     }
@@ -427,7 +427,7 @@ class GradebookCategory
     /**
      * @param GradebookLink[]|Collection $links
      */
-    public function setLinks(Collection $links): self
+    public function setLinks(array|\Doctrine\Common\Collections\Collection $links): self
     {
         $this->links = $links;
 
@@ -437,7 +437,7 @@ class GradebookCategory
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getSubCategories()
+    public function getSubCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->subCategories;
     }
@@ -481,7 +481,7 @@ class GradebookCategory
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
@@ -489,7 +489,7 @@ class GradebookCategory
     /**
      * @param SkillRelGradebook[]|Collection $skills
      */
-    public function setSkills(Collection $skills): self
+    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
 

@@ -21,7 +21,7 @@ class Token
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\LtiBundle\Entity\ExternalTool')]
+    #[ORM\ManyToOne(targetEntity: ExternalTool::class)]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ExternalTool $tool;
     #[ORM\Column(name: 'scope', type: 'json')]
@@ -105,7 +105,7 @@ class Token
 
     public function generateHash(): static
     {
-        $this->hash = sha1(uniqid((string) mt_rand()));
+        $this->hash = sha1(uniqid((string) random_int(0, mt_getrandmax())));
 
         return $this;
     }

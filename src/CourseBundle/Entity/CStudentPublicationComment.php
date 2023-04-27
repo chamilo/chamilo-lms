@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,15 +18,15 @@ use Doctrine\ORM\Mapping as ORM;
  * CStudentPublicationComment.
  */
 #[ORM\Table(name: 'c_student_publication_comment')]
-#[ORM\Entity(repositoryClass: 'Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository')]
-class CStudentPublicationComment extends AbstractResource implements ResourceInterface
+#[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
+class CStudentPublicationComment extends AbstractResource implements ResourceInterface, \Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CourseBundle\Entity\CStudentPublication', inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: CStudentPublication::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
@@ -35,7 +36,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     #[ORM\Column(name: 'file', type: 'string', length: 255, nullable: true)]
     protected ?string $file = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

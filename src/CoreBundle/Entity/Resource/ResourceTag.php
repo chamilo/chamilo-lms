@@ -24,7 +24,7 @@ class ResourceTag
     #[ORM\Column(name: 'name', type: 'string', nullable: false)]
     protected string $name;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\User')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?User $author = null;
 }

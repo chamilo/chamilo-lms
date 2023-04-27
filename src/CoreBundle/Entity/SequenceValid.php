@@ -17,11 +17,11 @@ class SequenceValid
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceVariable')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceVariable::class)]
     #[ORM\JoinColumn(name: 'sequence_variable_id', referencedColumnName: 'id')]
     protected ?SequenceVariable $variable = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\CoreBundle\Entity\SequenceCondition')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceCondition::class)]
     #[ORM\JoinColumn(name: 'sequence_condition_id', referencedColumnName: 'id')]
     protected ?SequenceCondition $condition = null;
 
@@ -40,9 +40,6 @@ class SequenceValid
         return $this->variable;
     }
 
-    /**
-     * @return SequenceValid
-     */
     public function setVariable(?SequenceVariable $variable): self
     {
         $this->variable = $variable;
@@ -55,9 +52,6 @@ class SequenceValid
         return $this->condition;
     }
 
-    /**
-     * @return SequenceValid
-     */
     public function setCondition(?SequenceCondition $condition): self
     {
         $this->condition = $condition;

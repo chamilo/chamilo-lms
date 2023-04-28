@@ -9300,13 +9300,11 @@ class learnpath
             reset($arrLP);
         }
 
-        if ('edit' === $action) {
-            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
-                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
-            }
-            $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id, $excludeExtraFields);
+        if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+            $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
         }
+        $extraField = new ExtraField('lp_item');
+        $extraField->addElements($form, $id, $excludeExtraFields);
 
         if ($action !== 'move') {
             $arrHide = [];

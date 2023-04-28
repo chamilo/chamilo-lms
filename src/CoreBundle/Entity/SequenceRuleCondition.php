@@ -10,29 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceRuleCondition.
- *
- * @ORM\Table(name="sequence_rule_condition")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sequence_rule_condition')]
+#[ORM\Entity]
 class SequenceRuleCondition
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
-     * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceRule::class)]
+    #[ORM\JoinColumn(name: 'sequence_rule_id', referencedColumnName: 'id')]
     protected ?SequenceRule $rule = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
-     * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceCondition::class)]
+    #[ORM\JoinColumn(name: 'sequence_condition_id', referencedColumnName: 'id')]
     protected ?SequenceCondition $condition = null;
 
     /**

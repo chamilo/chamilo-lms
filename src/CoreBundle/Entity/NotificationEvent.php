@@ -8,52 +8,34 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="notification_event")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'notification_event')]
+#[ORM\Entity]
 class NotificationEvent
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $id;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected string $content;
 
-    /**
-     * @ORM\Column(name="link", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'link', type: 'text', nullable: true)]
     protected string $link;
 
-    /**
-     * @ORM\Column(name="persistent", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'persistent', type: 'integer', nullable: true)]
     protected int $persistent;
 
-    /**
-     * @ORM\Column(name="day_diff", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'day_diff', type: 'integer', nullable: true)]
     protected int $dayDiff;
 
-    /**
-     * @ORM\Column(name="event_type", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'event_type', type: 'string', length: 255, nullable: false)]
     protected string $eventType;
 
-    /**
-     * @ORM\Column(name="event_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'event_id', type: 'integer', nullable: true)]
     protected int $eventId;
 
     public function getId(): int

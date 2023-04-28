@@ -12,11 +12,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class MessageListener
 {
-    private MessageBusInterface $bus;
-
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(private MessageBusInterface $bus)
     {
-        $this->bus = $bus;
     }
 
     public function postPersist(Message $message, LifecycleEventArgs $args): void

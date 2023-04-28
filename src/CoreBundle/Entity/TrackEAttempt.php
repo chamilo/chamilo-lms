@@ -19,17 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Questions per quiz user attempts.
- *
- * @ORM\Table(
- *     name="track_e_attempt",
- *     indexes={
- *         @ORM\Index(name="exe_id", columns={"exe_id"}),
- *         @ORM\Index(name="user_id", columns={"user_id"}),
- *         @ORM\Index(name="question_id", columns={"question_id"}),
- *         @ORM\Index(name="idx_track_e_attempt_tms", columns={"tms"}),
- *     }
- * )
- * @ORM\Entity
  */
 #[ApiResource(
     collectionOperations: [
@@ -58,89 +47,71 @@ use Symfony\Component\Validator\Constraints as Assert;
         'marks' => 'exact',
     ]
 )]
+#[ORM\Table(name: 'track_e_attempt')]
+#[ORM\Index(name: 'exe_id', columns: ['exe_id'])]
+#[ORM\Index(name: 'user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'question_id', columns: ['question_id'])]
+#[ORM\Index(name: 'idx_track_e_attempt_tms', columns: ['tms'])]
+#[ORM\Entity]
 class TrackEAttempt
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercise", inversedBy="attempts")
-     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TrackEExercise::class, inversedBy: 'attempts')]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false, onDelete: 'CASCADE')]
     protected TrackEExercise $trackExercise;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_attempt:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'trackEAttempts')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['track_e_attempt:read'])]
+    #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected ?int $questionId = null;
 
-    /**
-     * @ORM\Column(name="answer", type="text", nullable=false)
-     */
     #[Groups(['track_e_attempt:read'])]
+    #[ORM\Column(name: 'answer', type: 'text', nullable: false)]
     protected string $answer;
 
-    /**
-     * @ORM\Column(name="teacher_comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'teacher_comment', type: 'text', nullable: false)]
     protected string $teacherComment;
 
-    /**
-     * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Groups(['track_e_attempt:read'])]
+    #[ORM\Column(name: 'marks', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $marks;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'position', type: 'integer', nullable: true)]
     protected ?int $position = null;
 
-    /**
-     * @ORM\Column(name="tms", type="datetime", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'tms', type: 'datetime', nullable: false)]
     protected DateTime $tms;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: true)]
     protected ?string $filename = null;
 
-    /**
-     * @ORM\Column(name="seconds_spent", type="integer")
-     */
+    #[ORM\Column(name: 'seconds_spent', type: 'integer')]
     protected int $secondsSpent;
 
     /**
      * @var Collection|AttemptFile[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFile", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AttemptFile::class, mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $attemptFiles;
 
     /**
      * @var Collection|AttemptFeedback[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFeedback", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AttemptFeedback::class, mappedBy: 'attempt', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $attemptFeedbacks;
 
     public function __construct()
@@ -324,7 +295,7 @@ class TrackEAttempt
     /**
      * @return AttemptFile[]|Collection
      */
-    public function getAttemptFiles()
+    public function getAttemptFiles(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->attemptFiles;
     }
@@ -332,7 +303,7 @@ class TrackEAttempt
     /**
      * @param AttemptFile[]|Collection $attemptFiles
      */
-    public function setAttemptFiles($attemptFiles): self
+    public function setAttemptFiles(array|\Doctrine\Common\Collections\Collection $attemptFiles): self
     {
         $this->attemptFiles = $attemptFiles;
 
@@ -342,7 +313,7 @@ class TrackEAttempt
     /**
      * @return AttemptFeedback[]|Collection
      */
-    public function getAttemptFeedbacks()
+    public function getAttemptFeedbacks(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->attemptFeedbacks;
     }
@@ -350,7 +321,7 @@ class TrackEAttempt
     /**
      * @param AttemptFeedback[]|Collection $attemptFeedbacks
      */
-    public function setAttemptFeedbacks($attemptFeedbacks): self
+    public function setAttemptFeedbacks(array|\Doctrine\Common\Collections\Collection $attemptFeedbacks): self
     {
         $this->attemptFeedbacks = $attemptFeedbacks;
 

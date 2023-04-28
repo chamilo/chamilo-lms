@@ -13,21 +13,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Course subscriptions to a session.
- *
- * @ORM\Table(name="session_rel_course",
- *      uniqueConstraints={
- *        @ORM\UniqueConstraint(name="course_session_unique",
- *            columns={"session_id", "c_id"})
- *     },
- *     indexes={
- *     @ORM\Index(name="idx_session_rel_course_course_id", columns={"c_id"})
- *     }
- * )
- * @ORM\Entity
- * @UniqueEntity(
- *     fields={"course", "session"},
- *     message="The course is already registered in this session."
- * )
  */
 #[ApiResource(
     collectionOperations: [
@@ -53,37 +38,32 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['session_rel_course:read'],
     ],
 )]
+#[ORM\Table(name: 'session_rel_course')]
+#[ORM\Index(name: 'idx_session_rel_course_course_id', columns: ['c_id'])]
+#[ORM\UniqueConstraint(name: 'course_session_unique', columns: ['session_id', 'c_id'])]
+#[ORM\Entity]
+#[UniqueEntity(fields: ['course', 'session'], message: 'The course is already registered in this session.')]
 class SessionRelCourse
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
-     */
     #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: false)]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
     #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'sessions', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'position', type: 'integer', nullable: false)]
     protected int $position;
 
-    /**
-     * @ORM\Column(name="nbr_users", type="integer")
-     */
+    #[ORM\Column(name: 'nbr_users', type: 'integer')]
     protected int $nbrUsers;
 
     public function __construct()

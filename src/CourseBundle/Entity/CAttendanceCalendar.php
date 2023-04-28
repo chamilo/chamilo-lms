@@ -10,45 +10,30 @@ use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_attendance_calendar",
- *     indexes={
- *         @ORM\Index(name="done_attendance", columns={"done_attendance"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_attendance_calendar')]
+#[ORM\Index(name: 'done_attendance', columns: ['done_attendance'])]
+#[ORM\Entity]
 class CAttendanceCalendar
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="calendars", cascade={"remove"})
-     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendance::class, inversedBy: 'calendars', cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
-    /**
-     * @ORM\Column(name="date_time", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'date_time', type: 'datetime', nullable: false)]
     protected DateTime $dateTime;
 
-    /**
-     * @ORM\Column(name="done_attendance", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'done_attendance', type: 'boolean', nullable: false)]
     protected bool $doneAttendance;
 
     /**
      * @var Collection|CAttendanceSheet[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheet", mappedBy="attendanceCalendar", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceSheet::class, mappedBy: 'attendanceCalendar', cascade: ['persist', 'remove'])]
     protected Collection $sheets;
 
     public function getIid(): int
@@ -100,7 +85,7 @@ class CAttendanceCalendar
     /**
      * @return CAttendanceSheet[]|Collection
      */
-    public function getSheets()
+    public function getSheets(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sheets;
     }
@@ -108,7 +93,7 @@ class CAttendanceCalendar
     /**
      * @param CAttendanceSheet[]|Collection $sheets
      */
-    public function setSheets(Collection $sheets): self
+    public function setSheets(array|\Doctrine\Common\Collections\Collection $sheets): self
     {
         $this->sheets = $sheets;
 

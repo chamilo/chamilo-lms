@@ -12,31 +12,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CLpCategoryUser.
- *
- * @ORM\Table(name="c_lp_category_user")
- * @ORM\Entity
  */
-class CLpCategoryUser
+#[ORM\Table(name: 'c_lp_category_user')]
+#[ORM\Entity]
+class CLpCategoryUser implements \Stringable
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="users")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategory::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected CLpCategory $category;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
     public function __toString(): string

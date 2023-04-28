@@ -14,159 +14,99 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CWiki.
- *
- * @ORM\Table(
- *     name="c_wiki",
- *     options={"row_format":"DYNAMIC"},
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="reflink", columns={"reflink"}),
- *         @ORM\Index(name="group_id", columns={"group_id"}),
- *         @ORM\Index(name="page_id", columns={"page_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CWikiRepository")
  */
-class CWiki extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_wiki', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'reflink', columns: ['reflink'])]
+#[ORM\Index(name: 'group_id', columns: ['group_id'])]
+#[ORM\Index(name: 'page_id', columns: ['page_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CWikiRepository::class)]
+class CWiki extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="page_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'page_id', type: 'integer', nullable: true)]
     protected ?int $pageId = null;
 
-    /**
-     * @ORM\Column(name="reflink", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'reflink', type: 'string', length: 255, nullable: false)]
     protected string $reflink;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="group_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'group_id', type: 'integer', nullable: true)]
     protected ?int $groupId = null;
 
-    /**
-     * @ORM\Column(name="dtime", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'dtime', type: 'datetime', nullable: true)]
     protected ?DateTime $dtime = null;
 
-    /**
-     * @ORM\Column(name="addlock", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'addlock', type: 'integer', nullable: false)]
     protected int $addlock;
 
-    /**
-     * @ORM\Column(name="editlock", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'editlock', type: 'integer', nullable: false)]
     protected int $editlock;
 
-    /**
-     * @ORM\Column(name="visibility", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'visibility', type: 'integer', nullable: false)]
     protected int $visibility;
 
-    /**
-     * @ORM\Column(name="addlock_disc", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'addlock_disc', type: 'integer', nullable: false)]
     protected int $addlockDisc;
 
-    /**
-     * @ORM\Column(name="visibility_disc", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'visibility_disc', type: 'integer', nullable: false)]
     protected int $visibilityDisc;
 
-    /**
-     * @ORM\Column(name="ratinglock_disc", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'ratinglock_disc', type: 'integer', nullable: false)]
     protected int $ratinglockDisc;
 
-    /**
-     * @ORM\Column(name="assignment", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'assignment', type: 'integer', nullable: false)]
     protected int $assignment;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
-    /**
-     * @ORM\Column(name="progress", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'progress', type: 'text', nullable: false)]
     protected string $progress;
 
-    /**
-     * @ORM\Column(name="score", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'score', type: 'integer', nullable: true)]
     protected ?int $score = null;
 
-    /**
-     * @ORM\Column(name="version", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'version', type: 'integer', nullable: true)]
     protected ?int $version = null;
 
-    /**
-     * @ORM\Column(name="is_editing", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'is_editing', type: 'integer', nullable: false)]
     protected int $isEditing;
 
-    /**
-     * @ORM\Column(name="time_edit", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'time_edit', type: 'datetime', nullable: true)]
     protected ?DateTime $timeEdit = null;
 
-    /**
-     * @ORM\Column(name="hits", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'hits', type: 'integer', nullable: true)]
     protected ?int $hits = null;
 
-    /**
-     * @ORM\Column(name="linksto", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'linksto', type: 'text', nullable: false)]
     protected string $linksto;
 
-    /**
-     * @ORM\Column(name="tag", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'tag', type: 'text', nullable: false)]
     protected string $tag;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
     public function __toString(): string

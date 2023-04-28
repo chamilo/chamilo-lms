@@ -10,62 +10,37 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Table(
- *     name="notification",
- *     indexes={
- *         @ORM\Index(name="mail_notify_sent_index", columns={"sent_at"}),
- *         @ORM\Index(
- *             name="mail_notify_freq_index",
- *             columns={"sent_at", "send_freq", "created_at"}
- *         )
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'notification')]
+#[ORM\Index(name: 'mail_notify_sent_index', columns: ['sent_at'])]
+#[ORM\Index(name: 'mail_notify_freq_index', columns: ['sent_at', 'send_freq', 'created_at'])]
+#[ORM\Entity]
 class Notification
 {
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="dest_user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'dest_user_id', type: 'integer', nullable: false)]
     protected int $destUserId;
 
-    /**
-     * @ORM\Column(name="dest_mail", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'dest_mail', type: 'string', length: 255, nullable: true)]
     protected ?string $destMail = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: true)]
     protected ?string $title = null;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    /**
-     * @ORM\Column(name="send_freq", type="smallint", nullable=true)
-     */
+    #[ORM\Column(name: 'send_freq', type: 'smallint', nullable: true)]
     protected ?int $sendFreq = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="sent_at", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'sent_at', type: 'datetime', nullable: true)]
     protected ?DateTime $sentAt = null;
 
     /**

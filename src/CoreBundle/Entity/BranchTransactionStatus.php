@@ -10,22 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * BranchTransactionStatus.
- *
- * @ORM\Table(name="branch_transaction_status")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'branch_transaction_status')]
+#[ORM\Entity]
 class BranchTransactionStatus
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false, unique=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false, unique: false)]
     protected string $title;
 
     /**

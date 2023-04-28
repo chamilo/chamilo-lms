@@ -15,31 +15,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Platform tools.
- *
- * @ORM\Table(name="tool")
- * @ORM\Entity
  */
-class Tool
+#[ORM\Table(name: 'tool')]
+#[ORM\Entity]
+class Tool implements \Stringable
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @Groups({"tool:read"})
-     * @ORM\Column(name="name", type="string", nullable=false, unique=true)
-     */
     #[Assert\NotBlank]
+    #[Groups(['tool:read'])]
+    #[ORM\Column(name: 'name', type: 'string', nullable: false, unique: true)]
     protected string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
-     *
      * @var ResourceType[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
     protected Collection $resourceTypes;
 
     public function __construct()

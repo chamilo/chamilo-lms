@@ -11,52 +11,33 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CWikiDiscuss.
- *
- * @ORM\Table(
- *     name="c_wiki_discuss",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_wiki_discuss')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Entity]
 class CWikiDiscuss
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="publication_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'publication_id', type: 'integer', nullable: false)]
     protected int $publicationId;
 
-    /**
-     * @ORM\Column(name="userc_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'userc_id', type: 'integer', nullable: false)]
     protected int $usercId;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
-    /**
-     * @ORM\Column(name="p_score", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'p_score', type: 'string', length: 255, nullable: true)]
     protected ?string $pScore = null;
 
-    /**
-     * @ORM\Column(name="dtime", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'dtime', type: 'datetime', nullable: false)]
     protected DateTime $dtime;
 
     /**

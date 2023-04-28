@@ -8,41 +8,29 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CCalendarEventAttachment.
- *
- * @ORM\Table(
- *     name="c_calendar_event_attachment",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository")
  */
-class CCalendarEventAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_calendar_event_attachment')]
+#[ORM\Entity(repositoryClass: CCalendarEventAttachmentRepository::class)]
+class CCalendarEventAttachment extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
-     * @ORM\JoinColumn(name="agenda_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: 'CCalendarEvent', cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\JoinColumn(name: 'agenda_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CCalendarEvent $event;
 
     public function __toString(): string

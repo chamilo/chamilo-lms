@@ -10,22 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserFriendRelationType.
- *
- * @ORM\Table(name="user_friend_relation_type")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'user_friend_relation_type')]
+#[ORM\Entity]
 class UserFriendRelationType
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=20, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 20, nullable: false)]
     protected string $title;
 
     /**

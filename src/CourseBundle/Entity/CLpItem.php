@@ -14,159 +14,102 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Items from a learning path (LP).
- *
- * @Gedmo\Tree(type="nested")
- * @ORM\Table(
- *     name="c_lp_item",
- *     indexes={
- *         @ORM\Index(name="lp_id", columns={"lp_id"}),
- *     }
- * )
- * @ORM\Entity
  */
-class CLpItem
+#[ORM\Table(name: 'c_lp_item')]
+#[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
+#[Gedmo\Tree(type: 'nested')]
+#[ORM\Entity]
+class CLpItem implements \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=511, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 511, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'item_type', type: 'string', length: 32, nullable: false)]
     protected string $itemType;
 
-    /**
-     * @ORM\Column(name="ref", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'ref', type: 'text', nullable: false)]
     protected string $ref;
 
-    /**
-     * @ORM\Column(name="description", type="string", length=511, nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'string', length: 511, nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="path", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'text', nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="min_score", type="float", precision=10, scale=0, nullable=false)
-     */
+    #[ORM\Column(name: 'min_score', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $minScore;
 
-    /**
-     * @ORM\Column(name="max_score", type="float", precision=10, scale=0, nullable=true, options={"default":"100"})
-     */
+    #[ORM\Column(name: 'max_score', type: 'float', precision: 10, scale: 0, nullable: true, options: ['default' => 100])]
     protected ?float $maxScore;
 
-    /**
-     * @ORM\Column(name="mastery_score", type="float", precision=10, scale=0, nullable=true)
-     */
+    #[ORM\Column(name: 'mastery_score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $masteryScore = null;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
     protected int $displayOrder;
 
-    /**
-     * @ORM\Column(name="prerequisite", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'prerequisite', type: 'text', nullable: true)]
     protected ?string $prerequisite = null;
 
-    /**
-     * @ORM\Column(name="parameters", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'parameters', type: 'text', nullable: true)]
     protected ?string $parameters = null;
 
-    /**
-     * @ORM\Column(name="launch_data", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'launch_data', type: 'text', nullable: false)]
     protected string $launchData;
 
-    /**
-     * @ORM\Column(name="max_time_allowed", type="string", length=13, nullable=true)
-     */
+    #[ORM\Column(name: 'max_time_allowed', type: 'string', length: 13, nullable: true)]
     protected ?string $maxTimeAllowed = null;
 
-    /**
-     * @ORM\Column(name="terms", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'terms', type: 'text', nullable: true)]
     protected ?string $terms = null;
 
-    /**
-     * @ORM\Column(name="search_did", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'search_did', type: 'integer', nullable: true)]
     protected ?int $searchDid = null;
 
-    /**
-     * @ORM\Column(name="audio", type="string", length=250, nullable=true)
-     */
+    #[ORM\Column(name: 'audio', type: 'string', length: 250, nullable: true)]
     protected ?string $audio = null;
 
-    /**
-     * @ORM\Column(name="prerequisite_min_score", type="float", precision=10, scale=0, nullable=true)
-     */
+    #[ORM\Column(name: 'prerequisite_min_score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $prerequisiteMinScore = null;
 
-    /**
-     * @ORM\Column(name="prerequisite_max_score", type="float", precision=10, scale=0, nullable=true)
-     */
+    #[ORM\Column(name: 'prerequisite_max_score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $prerequisiteMaxScore = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, inversedBy: 'items', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLp $lp;
 
-    /**
-     * @Gedmo\TreeRoot
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
-     * @ORM\JoinColumn(name="item_root", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[Gedmo\TreeRoot]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class)]
+    #[ORM\JoinColumn(name: 'item_root', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CLpItem $root = null;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", inversedBy="children", cascade={"persist"})
-     * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, inversedBy: 'children', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'parent_item_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CLpItem $parent = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, mappedBy: 'parent')]
     protected Collection $children;
 
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="previous_item_id", type="integer", nullable=true)
-     */
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'previous_item_id', type: 'integer', nullable: true)]
     protected ?int $previousItemId = null;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="next_item_id", type="integer", nullable=true)
-     */
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'next_item_id', type: 'integer', nullable: true)]
     protected ?int $nextItemId = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer")
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'lvl', type: 'integer')]
     protected ?int $lvl;
 
     public function __construct()
@@ -548,7 +491,7 @@ class CLpItem
     /**
      * @return CLpItem[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }
@@ -556,7 +499,7 @@ class CLpItem
     /**
      * @param CLpItem[]|Collection $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
     {
         $this->children = $children;
 

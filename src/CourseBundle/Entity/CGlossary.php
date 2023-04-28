@@ -13,35 +13,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course glossary.
- *
- * @ORM\Table(
- *     name="c_glossary"
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGlossaryRepository")
  */
-class CGlossary extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_glossary')]
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CGlossaryRepository::class)]
+class CGlossary extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: true)]
     protected ?int $displayOrder = null;
 
     public function __toString(): string

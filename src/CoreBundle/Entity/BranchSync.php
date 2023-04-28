@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,148 +15,99 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * BranchSync.
- *
- * @ORM\Table(name="branch_sync")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\BranchSyncRepository")
- * @Gedmo\Tree(type="nested")
  */
+#[ORM\Table(name: 'branch_sync')]
+#[ORM\Entity(repositoryClass: BranchSyncRepository::class)]
+#[Gedmo\Tree(type: 'nested')]
 class BranchSync
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\Column(name="unique_id", type="string", length=50, nullable=false, unique=true)
-     */
+    #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
-    /**
-     * @ORM\Column(name="branch_name", type="string", length=250)
-     */
+    #[ORM\Column(name: 'branch_name', type: 'string', length: 250)]
     protected string $branchName;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="branch_ip", type="string", length=40, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'branch_ip', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $branchIp = null;
 
-    /**
-     * @ORM\Column(name="latitude", type="decimal", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
     protected ?float $latitude = null;
 
-    /**
-     * @ORM\Column(name="longitude", type="decimal", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
     protected ?float $longitude = null;
 
-    /**
-     * @ORM\Column(name="dwn_speed", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $dwnSpeed = null;
 
-    /**
-     * @ORM\Column(name="up_speed", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'up_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $upSpeed = null;
 
-    /**
-     * @ORM\Column(name="delay", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'delay', type: 'integer', nullable: true, unique: false)]
     protected ?int $delay = null;
 
-    /**
-     * @ORM\Column(name="admin_mail", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'admin_mail', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminMail = null;
 
-    /**
-     * @ORM\Column(name="admin_name", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'admin_name', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminName = null;
 
-    /**
-     * @ORM\Column(name="admin_phone", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
-    /**
-     * @ORM\Column(name="last_sync_trans_id", type="bigint", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_sync_trans_id', type: 'bigint', nullable: true, unique: false)]
     protected ?int $lastSyncTransId = null;
 
-    /**
-     * @ORM\Column(name="last_sync_trans_date", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastSyncTransDate = null;
 
-    /**
-     * @ORM\Column(name="last_sync_type", type="string", length=20, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_sync_type', type: 'string', length: 20, nullable: true, unique: false)]
     protected ?string $lastSyncType = null;
 
-    /**
-     * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'ssl_pub_key', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $sslPubKey;
 
-    /**
-     * @ORM\Column(name="branch_type", type="string", length=250, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'branch_type', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $branchType = null;
 
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'lft', type: 'integer', nullable: true, unique: false)]
     protected ?int $lft = null;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'rgt', type: 'integer', nullable: true, unique: false)]
     protected ?int $rgt = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'lvl', type: 'integer', nullable: true, unique: false)]
     protected ?int $lvl = null;
 
-    /**
-     * @Gedmo\TreeRoot
-     * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeRoot]
+    #[ORM\Column(name: 'root', type: 'integer', nullable: true, unique: false)]
     protected ?int $root = null;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: BranchSync::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?BranchSync $parent = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", mappedBy="parent")
-     * @ORM\OrderBy({"lft"="ASC"})
      *
      * @var BranchSync[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: BranchSync::class, mappedBy: 'parent')]
+    #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 
     public function __construct()
@@ -626,7 +578,7 @@ class BranchSync
     /**
      * @return BranchSync[]|Collection
      */
-    public function getChildren()
+    public function getChildren(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->children;
     }

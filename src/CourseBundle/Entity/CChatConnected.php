@@ -11,49 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CChatConnected.
- *
- * @ORM\Table(
- *     name="c_chat_connected",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="user", columns={"user_id"}),
- *         @ORM\Index(name="char_connected_index", columns={"user_id", "session_id", "to_group_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_chat_connected')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'user', columns: ['user_id'])]
+#[ORM\Index(name: 'char_connected_index', columns: ['user_id', 'session_id', 'to_group_id'])]
+#[ORM\Entity]
 class CChatConnected
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="to_group_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'to_group_id', type: 'integer', nullable: false)]
     protected int $toGroupId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer")
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer')]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="last_connection", type="datetime")
-     */
+    #[ORM\Column(name: 'last_connection', type: 'datetime')]
     protected DateTime $lastConnection;
 
     /**

@@ -14,6 +14,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Entity\Listener\CourseListener;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use DateTime;
@@ -26,17 +29,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="course",
- *     indexes={
- *     }
- * )
- * @UniqueEntity("code")
- * @UniqueEntity("visualCode")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\CourseRepository")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
- */
 #[ApiResource(
     iri: 'https://schema.org/Course',
     attributes: [
@@ -67,8 +59,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 //#[ApiFilter(BooleanFilter::class, properties: ['isSticky'])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+#[ORM\Table(name: 'course')]
+#[UniqueEntity('code')]
+#[UniqueEntity('visualCode')]
+#[ORM\Entity(repositoryClass: CourseRepository::class)]
+#[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
 
-class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface
+class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, \Stringable
 {
     public const CLOSED = 0;
     public const REGISTERED = 1; // Only registered users in the course.
@@ -76,11 +73,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public const OPEN_WORLD = 3;
     public const HIDDEN = 4;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -90,12 +82,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_course:read',
         'track_e_exercise:read',
     ])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     /**
      * The course title.
-     *
-     * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
     #[Groups([
         'course:read',
@@ -107,37 +100,24 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_course:read',
     ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $title = null;
 
     /**
      * The course code.
      *
-     * @Assert\Length(
-     *     max = 40,
-     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
-     * )
      * @ApiProperty(iri="http://schema.org/courseCode")
      *
-     * @Gedmo\Slug(
-     *     fields={"title"},
-     *     updatable=false,
-     *     unique=true,
-     *     separator="",
-     *     style="upper"
-     * )
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
     #[Groups(['course:read', 'user:write', 'course_rel_user:read'])]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 40, maxMessage: 'Code cannot be longer than {{ limit }} characters')]
+    #[Gedmo\Slug(fields: ['title'], updatable: false, unique: true, separator: '', style: 'upper')]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false, unique: true)]
     protected string $code;
 
-    /**
-     * @Assert\Length(
-     *     max = 40,
-     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
-     * )
-     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
-     */
+    #[Assert\Length(max: 40, maxMessage: 'Code cannot be longer than {{ limit }} characters')]
+    #[ORM\Column(name: 'visual_code', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $visualCode = null;
 
     /**
@@ -146,11 +126,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     #[Groups(['course:read', 'user:read'])]
     #[ApiSubresource]
+    #[ORM\OneToMany(targetEntity: CourseRelUser::class, mappedBy: 'course', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
@@ -159,57 +138,41 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"})
      */
     #[Groups(['course:read', 'user:read'])]
+    #[ORM\OneToMany(targetEntity: CourseRelUser::class, mappedBy: 'course', cascade: ['persist'])]
     protected Collection $teachers;
 
     /**
      * @var AccessUrlRelCourse[]|Collection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse",
-     *     mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: AccessUrlRelCourse::class, mappedBy: 'course', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
      * @var Collection|SessionRelCourse[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: SessionRelCourse::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $sessions;
 
     /**
      * @var Collection|SessionRelCourseRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SessionRelCourseRelUser::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection|CTool[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CTool",
-     *     mappedBy="course",
-     *     cascade={"persist", "remove"}
-     *     )
      */
     #[Groups(['course:read'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CTool::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $tools;
 
     /**
      * @var TrackCourseRanking
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackCourseRanking",
-     *     mappedBy="course",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true)
      */
     #[Groups(['course:read'])]
+    #[ORM\OneToOne(targetEntity: TrackCourseRanking::class, mappedBy: 'course', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected TrackCourseRanking|null $trackCourseRanking = null;
     protected Session $currentSession;
 
@@ -217,217 +180,158 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var Collection|SkillRelCourse[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $skills;
 
     /**
      * @var Collection|SkillRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $issuedSkills;
 
     /**
      * @var Collection|GradebookCategory[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: GradebookCategory::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookCategories;
 
     /**
      * @var Collection|GradebookEvaluation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: GradebookEvaluation::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookEvaluations;
 
     /**
      * @var Collection|GradebookLink[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: GradebookLink::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $gradebookLinks;
 
     /**
      * @var Collection|TrackEHotspot[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: TrackEHotspot::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $trackEHotspots;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
-     *
      * @var SearchEngineRef[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: SearchEngineRef::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $searchEngineRefs;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
-     *
      * @var Templates[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: Templates::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $templates;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
      */
     //protected $specificFieldValues;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
      */
     //protected $sharedSurveys;
 
-    /**
-     * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'directory', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $directory = null;
 
-    /**
-     * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
-     */
     #[Groups(['course:read', 'session:read'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'course_language', type: 'string', length: 20, nullable: false, unique: false)]
     protected string $courseLanguage;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true, unique=false)
-     */
     #[Groups(['course:read', 'course_rel_user:read'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true, unique: false)]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="introduction", type="text", nullable=true)
-     */
     #[Groups(['course:read', 'course_rel_user:read'])]
+    #[ORM\Column(name: 'introduction', type: 'text', nullable: true)]
     protected ?string $introduction;
 
     /**
      * @var CourseCategory[]|Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinTable(
-     *     name="course_rel_category",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="course_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
-     * )
      */
     #[ApiSubresource]
     #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session:read'])]
+    #[ORM\JoinTable(name: 'course_rel_category')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'course_category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: CourseCategory::class, inversedBy: 'courses')]
     protected Collection $categories;
 
     /**
      * @var int Course visibility
-     *
-     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
     #[Assert\NotBlank]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'visibility', type: 'integer', nullable: false, unique: false)]
     protected int $visibility;
 
-    /**
-     * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'show_score', type: 'integer', nullable: true, unique: false)]
     protected ?int $showScore = null;
 
-    /**
-     * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, nullable: true, unique: false)]
     protected ?string $tutorName;
 
-    /**
-     * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
-     */
     #[Groups(['course:read'])]
+    #[ORM\Column(name: 'department_name', type: 'string', length: 30, nullable: true, unique: false)]
     protected ?string $departmentName = null;
 
-    /**
-     * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
-     */
     #[Assert\Url]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'department_url', type: 'string', length: 180, nullable: true, unique: false)]
     protected ?string $departmentUrl = null;
 
-    /**
-     * @ORM\Column(name="video_url", type="string", length=255)
-     */
     #[Assert\Url]
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'video_url', type: 'string', length: 255)]
     protected string $videoUrl;
 
-    /**
-     * @ORM\Column(name="sticky", type="boolean")
-     */
     #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'sticky', type: 'boolean')]
     protected bool $sticky;
 
-    /**
-     * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'disk_quota', type: 'bigint', nullable: true, unique: false)]
     protected ?int $diskQuota = null;
 
-    /**
-     * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_visit', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastVisit;
 
-    /**
-     * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'last_edit', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEdit;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false, unique=false)
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false, unique: false)]
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
-     */
     #[Groups(['course:read'])]
+    #[ORM\Column(name: 'expiration_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $expirationDate = null;
 
-    /**
-     * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'subscribe', type: 'boolean', nullable: false, unique: false)]
     protected bool $subscribe;
 
-    /**
-     * @ORM\Column(name="unsubscribe", type="boolean", nullable=false, unique=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'unsubscribe', type: 'boolean', nullable: false, unique: false)]
     protected bool $unsubscribe;
 
-    /**
-     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'registration_code', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $registrationCode;
 
-    /**
-     * @ORM\Column(name="legal", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'legal', type: 'text', nullable: true, unique: false)]
     protected ?string $legal;
 
-    /**
-     * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'activate_legal', type: 'integer', nullable: true, unique: false)]
     protected ?int $activateLegal;
 
-    /**
-     * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'add_teachers_to_sessions_courses', type: 'boolean', nullable: true)]
     protected ?bool $addTeachersToSessionsCourses;
 
-    /**
-     * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'course_type_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $courseTypeId;
 
     /**
@@ -435,10 +339,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     //protected $curriculumCategories;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
 
     public function __construct()
@@ -488,7 +390,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SessionRelCourse[]|ArrayCollection|Collection
      */
-    public function getSessions()
+    public function getSessions(): array|ArrayCollection|Collection
     {
         return $this->sessions;
     }
@@ -496,7 +398,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return CTool[]|ArrayCollection|Collection
      */
-    public function getTools()
+    public function getTools(): array|ArrayCollection|Collection
     {
         return $this->tools;
     }
@@ -531,7 +433,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return AccessUrlRelCourse[]|Collection
      */
-    public function getUrls()
+    public function getUrls(): array|Collection
     {
         return $this->urls;
     }
@@ -568,7 +470,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return Collection|CourseRelUser[]
      */
-    public function getUsers()
+    public function getUsers(): Collection|array
     {
         return $this->users;
     }
@@ -576,7 +478,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return Collection|CourseRelUser[]
      */
-    public function getTeachers()
+    public function getTeachers(): Collection|array
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER));
@@ -587,7 +489,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return Collection|CourseRelUser[]
      */
-    public function getStudents()
+    public function getStudents(): Collection|array
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('status', CourseRelUser::STUDENT));
@@ -777,7 +679,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return CourseCategory[]|Collection
      */
-    public function getCategories()
+    public function getCategories(): array|Collection
     {
         return $this->categories;
     }
@@ -1232,7 +1134,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SessionRelCourseRelUser[]|Collection
      */
-    public function getSessionRelCourseRelUsers()
+    public function getSessionRelCourseRelUsers(): array|Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
@@ -1247,7 +1149,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SkillRelCourse[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
@@ -1255,7 +1157,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param SkillRelCourse[]|Collection $skills
      */
-    public function setSkills(Collection $skills): self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -1265,7 +1167,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getGradebookCategories()
+    public function getGradebookCategories(): array|Collection
     {
         return $this->gradebookCategories;
     }
@@ -1273,7 +1175,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param GradebookCategory[]|Collection $gradebookCategories
      */
-    public function setGradebookCategories(Collection $gradebookCategories): self
+    public function setGradebookCategories(array|Collection $gradebookCategories): self
     {
         $this->gradebookCategories = $gradebookCategories;
 
@@ -1283,7 +1185,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getGradebookEvaluations()
+    public function getGradebookEvaluations(): array|Collection
     {
         return $this->gradebookEvaluations;
     }
@@ -1291,7 +1193,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param GradebookEvaluation[]|Collection $gradebookEvaluations
      */
-    public function setGradebookEvaluations(Collection $gradebookEvaluations): self
+    public function setGradebookEvaluations(array|Collection $gradebookEvaluations): self
     {
         $this->gradebookEvaluations = $gradebookEvaluations;
 
@@ -1301,7 +1203,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getGradebookLinks()
+    public function getGradebookLinks(): array|Collection
     {
         return $this->gradebookLinks;
     }
@@ -1309,7 +1211,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param GradebookLink[]|Collection $gradebookLinks
      */
-    public function setGradebookLinks(Collection $gradebookLinks): self
+    public function setGradebookLinks(array|Collection $gradebookLinks): self
     {
         $this->gradebookLinks = $gradebookLinks;
 
@@ -1319,7 +1221,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return TrackEHotspot[]|Collection
      */
-    public function getTrackEHotspots()
+    public function getTrackEHotspots(): array|Collection
     {
         return $this->trackEHotspots;
     }
@@ -1327,7 +1229,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param TrackEHotspot[]|Collection $trackEHotspots
      */
-    public function setTrackEHotspots(Collection $trackEHotspots): self
+    public function setTrackEHotspots(array|Collection $trackEHotspots): self
     {
         $this->trackEHotspots = $trackEHotspots;
 
@@ -1337,7 +1239,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SearchEngineRef[]|Collection
      */
-    public function getSearchEngineRefs()
+    public function getSearchEngineRefs(): array|Collection
     {
         return $this->searchEngineRefs;
     }
@@ -1345,7 +1247,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param SearchEngineRef[]|Collection $searchEngineRefs
      */
-    public function setSearchEngineRefs(Collection $searchEngineRefs): self
+    public function setSearchEngineRefs(array|Collection $searchEngineRefs): self
     {
         $this->searchEngineRefs = $searchEngineRefs;
 
@@ -1367,7 +1269,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return Templates[]|Collection
      */
-    public function getTemplates()
+    public function getTemplates(): array|Collection
     {
         return $this->templates;
     }
@@ -1375,7 +1277,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @param Templates[]|Collection $templates
      */
-    public function setTemplates(Collection $templates): self
+    public function setTemplates(array|Collection $templates): self
     {
         $this->templates = $templates;
 

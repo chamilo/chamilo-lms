@@ -8,53 +8,38 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="c_link")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLinkRepository")
- */
-class CLink extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_link')]
+#[ORM\Entity(repositoryClass: CLinkRepository::class)]
+class CLink extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="url", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'url', type: 'text', nullable: false)]
     protected string $url;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLinkCategory", inversedBy="links")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: CLinkCategory::class, inversedBy: 'links')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CLinkCategory $category = null;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
     protected int $displayOrder;
 
-    /**
-     * @ORM\Column(name="target", type="string", length=10, nullable=true)
-     */
+    #[ORM\Column(name: 'target', type: 'string', length: 10, nullable: true)]
     protected ?string $target = null;
 
     public function __construct()

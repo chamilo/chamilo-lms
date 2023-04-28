@@ -17,12 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="extra_field")
- *
- * @ORM\MappedSuperclass
- */
 #[ApiResource(
     collectionOperations:[
         'get' => [
@@ -51,6 +45,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['variable'])]
+#[ORM\Table(name: 'extra_field')]
+#[ORM\Entity]
+#[ORM\MappedSuperclass]
 class ExtraField
 {
     public const USER_FIELD_TYPE = 1;
@@ -74,106 +71,74 @@ class ExtraField
     public const PORTFOLIO_TYPE = 19;
     public const LP_VIEW_TYPE = 20;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[Groups(['extra_field:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="item_type", type="integer")
-     */
     #[Groups(['extra_field:read', 'extra_field:write'])]
+    #[ORM\Column(name: 'item_type', type: 'integer')]
     protected int $itemType;
 
-    /**
-     * @ORM\Column(name="value_type", type="integer")
-     */
     #[Groups(['extra_field:read', 'extra_field:write'])]
+    #[ORM\Column(name: 'value_type', type: 'integer')]
     protected int $valueType;
 
-    /**
-     * @ORM\Column(name="variable", type="string", length=255)
-     */
     #[Assert\NotBlank]
     #[Groups(['extra_field:read', 'extra_field:write'])]
+    #[ORM\Column(name: 'variable', type: 'string', length: 255)]
     protected string $variable;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
     #[Groups(['extra_field:read', 'extra_field:write'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['extra_field:read', 'extra_field:write'])]
+    #[Gedmo\Translatable]
+    #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $displayText = null;
 
-    /**
-     * @Gedmo\Locale
-     */
+    #[Gedmo\Locale]
     protected ?string $locale = null;
 
-    /**
-     * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'helper_text', type: 'text', nullable: true, unique: false)]
     protected ?string $helperText = null;
 
-    /**
-     * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'default_value', type: 'text', nullable: true, unique: false)]
     protected ?string $defaultValue = null;
 
-    /**
-     * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'field_order', type: 'integer', nullable: true, unique: false)]
     protected ?int $fieldOrder = null;
 
-    /**
-     * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'visible_to_self', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $visibleToSelf;
 
-    /**
-     * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'visible_to_others', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $visibleToOthers;
 
-    /**
-     * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'changeable', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $changeable = null;
 
-    /**
-     * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'filter', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $filter = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
-     *
      * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
+    #[ORM\OneToMany(targetEntity: ExtraFieldOptions::class, mappedBy: 'field')]
     protected Collection $options;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Tag", mappedBy="field")
-     *
      * @var Tag[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: Tag::class, mappedBy: 'field')]
     protected Collection $tags;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected DateTime $createdAt;
 
     public function __construct()
@@ -362,7 +327,7 @@ class ExtraField
     /**
      * @return Tag[]|Collection
      */
-    public function getTags()
+    public function getTags(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->tags;
     }
@@ -380,22 +345,15 @@ class ExtraField
             return false;
         }
 
-        return $this->tags->exists(function ($key, Tag $tag) use ($tagName) {
-            return $tagName === $tag->getTag();
-        });
+        return $this->tags->exists(fn ($key, Tag $tag) => $tagName === $tag->getTag());
     }
 
     public function getTypeToString(): string
     {
-        switch ($this->getItemType()) {
-            case \ExtraField::FIELD_TYPE_RADIO:
-            case \ExtraField::FIELD_TYPE_SELECT:
-                return 'choice';
-            case \ExtraField::FIELD_TYPE_TEXT:
-            case \ExtraField::FIELD_TYPE_TEXTAREA:
-            default:
-                return 'text';
-        }
+        return match ($this->getItemType()) {
+            \ExtraField::FIELD_TYPE_RADIO, \ExtraField::FIELD_TYPE_SELECT => 'choice',
+            default => 'text',
+        };
     }
 
     public function getHelperText(): string

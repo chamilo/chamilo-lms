@@ -20,22 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
- *
- * @ORM\Table(
- *     name="session_rel_user",
- *     uniqueConstraints={
- *        @ORM\UniqueConstraint(name="session_user_unique",
- *            columns={"session_id", "user_id", "relation_type"})
- *     },
- *     indexes={
- *         @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
- *     }
- * )
- * @ORM\Entity
- * @UniqueEntity(
- *     fields={"session", "user", "relationType"},
- *     message="The user-course-relationType is already registered in this session."
- * )
  */
 #[ApiResource(
     collectionOperations: [
@@ -70,62 +54,49 @@ use Symfony\Component\Validator\Constraints as Assert;
         'session.coachAccessEndDate' => null,
     ]
 )]
+#[ORM\Table(name: 'session_rel_user')]
+#[ORM\Index(name: 'idx_session_rel_user_id_user_moved', columns: ['user_id', 'moved_to'])]
+#[ORM\UniqueConstraint(name: 'session_user_unique', columns: ['session_id', 'user_id', 'relation_type'])]
+#[ORM\Entity]
+#[UniqueEntity(fields: ['session', 'user', 'relationType'], message: 'The user-course-relationType is already registered in this session.')]
 class SessionRelUser
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
-    protected ?Session $session;
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionsRelUser", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sessionsRelUser', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="relation_type", type="integer")
-     */
     #[Groups(['session_rel_user:read'])]
     #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
+    #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;
 
-    /**
-     * @ORM\Column(name="duration", type="integer", nullable=false)
-     */
     #[Groups(['session_rel_user:read'])]
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: false)]
     protected int $duration;
 
-    /**
-     * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'moved_to', type: 'integer', nullable: true, unique: false)]
     protected ?int $movedTo;
 
-    /**
-     * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'moved_status', type: 'integer', nullable: true, unique: false)]
     protected ?int $movedStatus;
 
-    /**
-     * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'moved_at', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $movedAt = null;
 
-    /**
-     * @ORM\Column(name="registered_at", type="datetime")
-     */
+    #[ORM\Column(name: 'registered_at', type: 'datetime')]
     protected DateTime $registeredAt;
 
     #[Groups(['session_rel_user:read'])]

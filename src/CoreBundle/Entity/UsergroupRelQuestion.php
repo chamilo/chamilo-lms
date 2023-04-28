@@ -9,34 +9,24 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="usergroup_rel_question")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'usergroup_rel_question')]
+#[ORM\Entity]
 class UsergroupRelQuestion
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class)]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="questions")
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class, inversedBy: 'questions')]
+    #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Usergroup $usergroup;
 
-    /**
-     * @ORM\Column(name="coefficient", type="float", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'coefficient', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $coefficient = null;
 
     /**

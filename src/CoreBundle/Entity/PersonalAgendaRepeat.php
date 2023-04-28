@@ -10,37 +10,26 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * PersonalAgendaRepeat.
- *
- * @ORM\Table(name="personal_agenda_repeat")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'personal_agenda_repeat')]
+#[ORM\Entity]
 class PersonalAgendaRepeat
 {
-    /**
-     * @ORM\Column(name="cal_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'cal_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $calId;
 
-    /**
-     * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'cal_type', type: 'string', length: 20, nullable: true)]
     protected ?string $calType = null;
 
-    /**
-     * @ORM\Column(name="cal_end", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'cal_end', type: 'integer', nullable: true)]
     protected ?int $calEnd = null;
 
-    /**
-     * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'cal_frequency', type: 'integer', nullable: true)]
     protected ?int $calFrequency = null;
 
-    /**
-     * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
-     */
+    #[ORM\Column(name: 'cal_days', type: 'string', length: 7, nullable: true)]
     protected ?string $calDays = null;
 
     /**

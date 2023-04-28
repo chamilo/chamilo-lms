@@ -10,42 +10,29 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SpecificFieldValues.
- *
- * @ORM\Table(name="specific_field_values")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'specific_field_values')]
+#[ORM\Entity]
 class SpecificFieldValues
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
-     */
+    #[ORM\Column(name: 'course_code', type: 'string', length: 40, nullable: false)]
     protected string $courseCode;
 
-    /**
-     * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'tool_id', type: 'string', length: 100, nullable: false)]
     protected string $toolId;
 
-    /**
-     * @ORM\Column(name="ref_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'ref_id', type: 'integer', nullable: false)]
     protected int $refId;
 
-    /**
-     * @ORM\Column(name="field_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'field_id', type: 'integer', nullable: false)]
     protected int $fieldId;
 
-    /**
-     * @ORM\Column(name="value", type="string", length=200, nullable=false)
-     */
+    #[ORM\Column(name: 'value', type: 'string', length: 200, nullable: false)]
     protected string $value;
 
     /**

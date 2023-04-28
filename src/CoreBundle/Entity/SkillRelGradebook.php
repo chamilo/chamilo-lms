@@ -8,34 +8,24 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="skill_rel_gradebook")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'skill_rel_gradebook')]
+#[ORM\Entity]
 class SkillRelGradebook
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="gradeBookCategories")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'gradeBookCategories')]
+    #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Skill $skill;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="skills")
-     * @ORM\JoinColumn(name="gradebook_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'skills')]
+    #[ORM\JoinColumn(name: 'gradebook_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $gradeBookCategory;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=10, nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'string', length: 10, nullable: false)]
     protected string $type;
 
     public function __construct()

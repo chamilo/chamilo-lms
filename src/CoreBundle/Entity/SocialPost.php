@@ -24,15 +24,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="social_post", indexes={
- *     @ORM\Index(name="idx_social_post_sender", columns={"sender_id"}),
- *     @ORM\Index(name="idx_social_post_user", columns={"user_receiver_id"}),
- *     @ORM\Index(name="idx_social_post_group", columns={"group_receiver_id"}),
- *     @ORM\Index(name="idx_social_post_type", columns={"type"})
- * })
- * @ORM\Entity(repositoryClass=SocialPostRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -81,6 +72,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['parent' => SearchFilterInterface::STRATEGY_EXACT])]
 #[ApiFilter(OrderFilter::class, properties: ['sendDate'])]
+#[ORM\Table(name: 'social_post')]
+#[ORM\Index(name: 'idx_social_post_sender', columns: ['sender_id'])]
+#[ORM\Index(name: 'idx_social_post_user', columns: ['user_receiver_id'])]
+#[ORM\Index(name: 'idx_social_post_group', columns: ['group_receiver_id'])]
+#[ORM\Index(name: 'idx_social_post_type', columns: ['type'])]
+#[ORM\Entity(repositoryClass: SocialPostRepository::class)]
 class SocialPost
 {
     public const TYPE_WALL_POST = 1;
@@ -91,96 +88,59 @@ class SocialPost
     public const STATUS_SENT = 1;
     public const STATUS_DELETED = 2;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(name="id", type="bigint")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id', type: 'bigint')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentSocialPosts")
-     * @ORM\JoinColumn(nullable=false)
-     */
     #[Groups(['social_post:read', 'social_post:write'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentSocialPosts')]
+    #[ORM\JoinColumn(nullable: false)]
     protected User $sender;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedSocialPosts")
-     * @ORM\JoinColumn(nullable=true)
-     */
     #[Groups(['social_post:read', 'social_post:write'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'receivedSocialPosts')]
+    #[ORM\JoinColumn(nullable: true)]
     protected ?User $userReceiver;
 
-    /**
-     * @ORM\Column(name="subject", type="text", nullable=true)
-     */
-    protected ?string $subject;
+    #[ORM\Column(name: 'subject', type: 'text', nullable: true)]
+    protected ?string $subject = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
     #[Groups(['social_post:read', 'social_post:write'])]
+    #[ORM\Column(type: 'text')]
     protected string $content;
 
-    /**
-     * @Assert\Choice({
-     *      SocialPost::TYPE_WALL_POST,
-     *      SocialPost::TYPE_WALL_COMMENT,
-     *      SocialPost::TYPE_GROUP_MESSAGE,
-     *      SocialPost::TYPE_PROMOTED_MESSAGE,
-     *  },
-     *  message="Choose a valid type."
-     * )
-     * @ORM\Column(type="smallint")
-     */
     #[Groups(['social_post:write', 'social_post:read'])]
+    #[Assert\Choice([SocialPost::TYPE_WALL_POST, SocialPost::TYPE_WALL_COMMENT, SocialPost::TYPE_GROUP_MESSAGE, SocialPost::TYPE_PROMOTED_MESSAGE], message: 'Choose a valid type.')]
+    #[ORM\Column(type: 'smallint')]
     protected int $type;
 
-    /**
-     * @Assert\Choice({
-     *     SocialPost::STATUS_SENT,
-     *     SocialPost::STATUS_DELETED,
-     * }, message="Choose a status.")
-     *
-     * @ORM\Column(type="smallint")
-     */
+    #[Assert\Choice([SocialPost::STATUS_SENT, SocialPost::STATUS_DELETED], message: 'Choose a status.')]
+    #[ORM\Column(type: 'smallint')]
     protected int $status;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[Groups(['social_post:read'])]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $sendDate;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPostFeedback", mappedBy="socialPost")
-     */
+    #[ORM\OneToMany(targetEntity: SocialPostFeedback::class, mappedBy: 'socialPost')]
     protected Collection $feedbacks;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
     #[Groups(['social_post:read', 'social_post:write'])]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Usergroup $groupReceiver = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: SocialPost::class, mappedBy: 'parent')]
     protected Collection $children;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Groups(['social_post:write'])]
+    #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?SocialPost $parent;
 
     #[Groups(['social_post:read', 'social_post_feedback'])]

@@ -9,28 +9,20 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="skill_profile")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'skill_profile')]
+#[ORM\Entity]
 class SkillProfile
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
     public function setName(string $name): self

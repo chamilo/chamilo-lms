@@ -15,10 +15,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="skill")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SkillRepository")
- */
 #[ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_ADMIN')",
@@ -27,115 +23,86 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['skill:read'],
     ],
 )]
-class Skill
+#[ORM\Table(name: 'skill')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SkillRepository::class)]
+class Skill implements \Stringable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
 
-    /**
-     * @Groups({"skill:read"})
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[Groups(['skill:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="skills")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
+    #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
-     *
      * @var SkillRelUser[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
-     *
      * @var Collection|SkillRelItem[]
      */
+    #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelSkill", mappedBy="skill", cascade={"persist"})
-     *
      * @var Collection|SkillRelSkill[]
      */
+    #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
-     *
      * @var Collection|SkillRelCourse[]
      */
+    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="skill", cascade={"persist"})
-     *
      * @var Collection|SkillRelGradebook[]
      */
+    #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
 
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
     protected string $shortCode;
 
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
-    /**
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
 
-    /**
-     * @ORM\Column(name="icon", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: false)]
     protected string $icon;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
 
-    /**
-     * @ORM\Column(name="criteria", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'criteria', type: 'text', nullable: true)]
     protected ?string $criteria = null;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=false, options={"default":1})
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $status;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
 
     public function __construct()
@@ -381,17 +348,15 @@ class Skill
     /**
      * @return SkillRelSkill[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
 
     /**
      * @param SkillRelSkill[]|Collection $skills
-     *
-     * @return Skill
      */
-    public function setSkills($skills): self
+    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -401,17 +366,15 @@ class Skill
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getGradeBookCategories()
+    public function getGradeBookCategories(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
-     *
-     * @return Skill
      */
-    public function setGradeBookCategories($gradeBookCategories): self
+    public function setGradeBookCategories(array|\Doctrine\Common\Collections\Collection $gradeBookCategories): self
     {
         $this->gradeBookCategories = $gradeBookCategories;
 

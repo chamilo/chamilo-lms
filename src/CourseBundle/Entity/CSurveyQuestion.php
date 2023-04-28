@@ -6,119 +6,83 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_survey_question",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyQuestionRepository")
- */
+#[ORM\Table(name: 'c_survey_question')]
+#[ORM\Entity(repositoryClass: CSurveyQuestionRepository::class)]
 class CSurveyQuestion
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="parent")
      */
+    #[ORM\OneToMany(targetEntity: CSurveyQuestion::class, mappedBy: 'parent')]
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: CSurveyQuestionOption::class, mappedBy: 'question', cascade: ['remove'])]
     protected Collection $options;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade={"remove"})
-     * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'parent_option_id', referencedColumnName: 'iid')]
     protected ?CSurveyQuestionOption $parentOption = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="questions")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'questions')]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
     /**
      * @var Collection|CSurveyAnswer[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: CSurveyAnswer::class, mappedBy: 'question', cascade: ['remove'])]
     protected Collection $answers;
 
-    /**
-     * @ORM\Column(name="survey_question", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'survey_question', type: 'text', nullable: false)]
     protected string $surveyQuestion;
 
-    /**
-     * @ORM\Column(name="survey_question_comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_question_comment', type: 'text', nullable: false)]
     protected ?string $surveyQuestionComment = null;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'type', type: 'string', length: 250, nullable: false)]
     protected string $type;
 
-    /**
-     * @ORM\Column(name="display", type="string", length=10, nullable=false)
-     */
+    #[ORM\Column(name: 'display', type: 'string', length: 10, nullable: false)]
     protected string $display;
 
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: false)]
     protected int $sort;
 
-    /**
-     * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'shared_question_id', type: 'integer', nullable: true)]
     protected ?int $sharedQuestionId = null;
 
-    /**
-     * @ORM\Column(name="max_value", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'max_value', type: 'integer', nullable: true)]
     protected ?int $maxValue = null;
 
-    /**
-     * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_pri', type: 'integer', nullable: false)]
     protected int $surveyGroupPri;
 
-    /**
-     * @ORM\Column(name="survey_group_sec1", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_sec1', type: 'integer', nullable: false)]
     protected int $surveyGroupSec1;
 
-    /**
-     * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_group_sec2', type: 'integer', nullable: false)]
     protected int $surveyGroupSec2;
 
-    /**
-     * @ORM\Column(name="is_required", type="boolean", options={"default": false})
-     */
+    #[ORM\Column(name: 'is_required', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
     public function __construct()
@@ -343,7 +307,7 @@ class CSurveyQuestion
     /**
      * @return Collection|CSurveyQuestion[]
      */
-    public function getChildren()
+    public function getChildren(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->children;
     }
@@ -351,7 +315,7 @@ class CSurveyQuestion
     /**
      * @param Collection|CSurveyQuestion[] $children
      */
-    public function setChildren(Collection $children): self
+    public function setChildren(\Doctrine\Common\Collections\Collection|array $children): self
     {
         $this->children = $children;
 
@@ -385,7 +349,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyAnswer[]|Collection
      */
-    public function getAnswers()
+    public function getAnswers(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->answers;
     }
@@ -393,7 +357,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyQuestionOption[]|Collection
      */
-    public function getOptions()
+    public function getOptions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->options;
     }
@@ -401,7 +365,7 @@ class CSurveyQuestion
     /**
      * @param CSurveyQuestionOption[]|Collection $options
      */
-    public function setOptions($options): self
+    public function setOptions(array|\Doctrine\Common\Collections\Collection $options): self
     {
         $this->options = $options;
 

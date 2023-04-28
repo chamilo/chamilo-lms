@@ -526,11 +526,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
     /**
      * @return AccessUrlRelCourseCategory[]|Collection
      */

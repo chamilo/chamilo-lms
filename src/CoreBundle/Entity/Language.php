@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,54 +14,36 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Platform languages.
- *
- * @ORM\Table(
- *     name="language",
- *     options={"row_format"="DYNAMIC"}
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\LanguageRepository")
  */
+#[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\Entity(repositoryClass: LanguageRepository::class)]
 class Language
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'original_name', type: 'string', length: 255, nullable: true)]
     protected ?string $originalName = null;
 
-    /**
-     * @ORM\Column(name="english_name", type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'english_name', type: 'string', length: 255)]
     protected string $englishName;
 
-    /**
-     * @ORM\Column(name="isocode", type="string", length=10)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'isocode', type: 'string', length: 10)]
     protected string $isocode;
 
-    /**
-     * @ORM\Column(name="available", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Language", inversedBy="subLanguages")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: Language::class, inversedBy: 'subLanguages')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     protected ?Language $parent = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Language", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: Language::class, mappedBy: 'parent')]
     protected Collection $subLanguages;
 
     public function __construct()

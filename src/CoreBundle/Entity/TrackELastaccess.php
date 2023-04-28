@@ -11,46 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackELastaccess.
- *
- * @ORM\Table(name="track_e_lastaccess", indexes={
- *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
- *     @ORM\Index(name="access_c_id", columns={"c_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_lastaccess')]
+#[ORM\Index(name: 'access_user_id', columns: ['access_user_id'])]
+#[ORM\Index(name: 'access_c_id', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackELastaccess
 {
-    /**
-     * @ORM\Column(name="access_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'access_user_id', type: 'integer', nullable: true)]
     protected int $accessUserId;
 
-    /**
-     * @ORM\Column(name="access_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'access_date', type: 'datetime', nullable: false)]
     protected DateTime $accessDate;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="access_tool", type="string", length=30, nullable=true)
-     */
+    #[ORM\Column(name: 'access_tool', type: 'string', length: 30, nullable: true)]
     protected ?string $accessTool = null;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
-    /**
-     * @ORM\Column(name="access_id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'access_id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $accessId;
 
     /**

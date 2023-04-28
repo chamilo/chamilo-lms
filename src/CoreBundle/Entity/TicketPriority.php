@@ -11,62 +11,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Priority.
- *
- * @ORM\Table(name="ticket_priority")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'ticket_priority')]
+#[ORM\Entity]
 class TicketPriority
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'code', type: 'string', length: 255, nullable: false)]
     protected string $code;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="color", type="string", nullable=false)
-     */
+    #[ORM\Column(name: 'color', type: 'string', nullable: false)]
     protected string $color;
 
-    /**
-     * @ORM\Column(name="urgency", type="string", nullable=false)
-     */
+    #[ORM\Column(name: 'urgency', type: 'string', nullable: false)]
     protected string $urgency;
 
-    /**
-     * @ORM\Column(name="sys_insert_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
 
-    /**
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
+    #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastEditUserId = null;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()

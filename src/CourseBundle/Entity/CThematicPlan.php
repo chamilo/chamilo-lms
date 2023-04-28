@@ -11,44 +11,28 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_thematic_plan",
- *     indexes={
- *         @ORM\Index(name="thematic_id", columns={"thematic_id", "description_type"})
- *     }
- * )
- * @ORM\Entity
- */
-class CThematicPlan //extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_thematic_plan')]
+#[ORM\Index(name: 'thematic_id', columns: ['thematic_id', 'description_type'])]
+#[ORM\Entity]
+class CThematicPlan implements \Stringable //extends AbstractResource implements ResourceInterface
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="plans")
-     * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CThematic::class, inversedBy: 'plans')]
+    #[ORM\JoinColumn(name: 'thematic_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CThematic $thematic;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="description_type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'description_type', type: 'integer', nullable: false)]
     protected int $descriptionType;
 
     public function __toString(): string

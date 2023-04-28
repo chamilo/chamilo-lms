@@ -13,30 +13,24 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="illustration")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\IllustrationRepository")
- */
 #[ApiResource(
     normalizationContext: [
         'groups' => ['illustration:read'],
     ],
 )]
-class Illustration extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'illustration')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\IllustrationRepository::class)]
+class Illustration extends AbstractResource implements ResourceInterface, \Stringable
 {
     use PersonalResourceTrait;
     use TimestampableEntity;
 
-    /**
-     * @ORM\Column(name="id", type="uuid")
-     * @ORM\Id
-     */
+    #[ORM\Column(name: 'id', type: 'uuid')]
+    #[ORM\Id]
     protected Uuid $id;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
     public function __construct()

@@ -16,14 +16,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="message_rel_user",
- * uniqueConstraints={
- *     @ORM\UniqueConstraint(name="message_receiver", columns={"message_id", "user_id"})
- *  },
- * )
- * @ORM\Entity()
- */
 #[UniqueEntity(
     fields: ['message', 'receiver'],
     errorPath: 'message',
@@ -38,59 +30,49 @@ use Symfony\Component\Validator\Constraints as Assert;
     'starred' => 'exact',
     'tags.tag' => 'exact',
 ])]
+#[ORM\Table(name: 'message_rel_user')]
+#[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id'])]
+#[ORM\Entity]
 class MessageRelUser
 {
     public const TYPE_TO = 1;
     public const TYPE_CC = 2;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="receivers", cascade={"persist"})
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, inversedBy: 'receivers', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"}, inversedBy="receivedMessages")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'], inversedBy: 'receivedMessages')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $receiver;
 
-    /**
-     * @ORM\Column(name="msg_read", type="boolean", nullable=false)
-     */
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'msg_read', type: 'boolean', nullable: false)]
     protected bool $read;
 
-    /**
-     * @ORM\Column(name="receiver_type", type="smallint", nullable=false)
-     */
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'receiver_type', type: 'smallint', nullable: false)]
     protected int $receiverType;
 
-    /**
-     * @ORM\Column(name="starred", type="boolean", nullable=false)
-     */
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'starred', type: 'boolean', nullable: false)]
     protected bool $starred;
 
     /**
      * @var Collection|MessageTag[]
-     *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageTag", inversedBy="messageRelUsers", cascade={"persist", "remove"})
-     * @ORM\JoinTable(name="message_rel_user_rel_tags")
      */
     #[Assert\Valid]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\JoinTable(name: 'message_rel_user_rel_tags')]
+    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageTag::class, inversedBy: 'messageRelUsers', cascade: ['persist', 'remove'])]
     protected Collection $tags;
 
     public function __construct()
@@ -109,7 +91,7 @@ class MessageRelUser
     /**
      * @return Collection|MessageTag[]
      */
-    public function getTags()
+    public function getTags(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->tags;
     }

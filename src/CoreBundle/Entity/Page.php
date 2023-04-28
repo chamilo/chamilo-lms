@@ -16,14 +16,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="page",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -61,82 +53,60 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: [
     'title',
 ])]
+#[ORM\Table(name: 'page')]
+#[ORM\Entity]
 class Page
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255)
-     */
     #[Assert\NotBlank]
     #[Groups(['page:read', 'page:write'])]
+    #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text")
-     */
     #[Groups(['page:read', 'page:write'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
 
-    /**
-     * @Gedmo\Slug(
-     *     fields={"title"},
-     *     updatable=true,
-     *     unique=true,
-     * )
-     * @ORM\Column(name="slug", type="string", length=255)
-     */
+    #[Gedmo\Slug(fields: ['title'], updatable: true, unique: true)]
+    #[ORM\Column(name: 'slug', type: 'string', length: 255)]
     protected string $slug;
 
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
     #[Groups(['page:read', 'page:write'])]
+    #[ORM\Column(name: 'enabled', type: 'boolean', nullable: false)]
     protected bool $enabled;
 
-    /**
-     * @Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer")
-     */
     #[Groups(['page:read', 'page:write'])]
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
-    /**
-     * @ORM\Column(name="locale", type="string", length=10)
-     */
     #[Groups(['page:read', 'page:write'])]
+    #[ORM\Column(name: 'locale', type: 'string', length: 10)]
     protected string $locale;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
-    /**
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PageCategory", inversedBy="pages")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="SET NULL")
-     */
     #[Groups(['page:read', 'page:write'])]
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\PageCategory::class, inversedBy: 'pages')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?PageCategory $category = null;
 
     public function __construct()

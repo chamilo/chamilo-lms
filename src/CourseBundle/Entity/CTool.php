@@ -13,22 +13,12 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(
- *     name="c_tool",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CToolRepository")
- */
 #[ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')",
@@ -40,51 +30,42 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['ctool:read'],
     ],
 )]
-class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+#[ORM\Table(name: 'c_tool')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: CToolRepository::class)]
+class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[Groups(['ctool:read'])]
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['ctool:read'])]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="visibility", type="boolean", nullable=true)
-     */
     #[Groups(['ctool:read'])]
+    #[ORM\Column(name: 'visibility', type: 'boolean', nullable: true)]
     protected ?bool $visibility = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'tools')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Tool::class)]
+    #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', nullable: false)]
     protected Tool $tool;
 
-    /**
-     * @Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer")
-     */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
     #[Groups(['ctool:read'])]

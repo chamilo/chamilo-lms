@@ -21,15 +21,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="message", indexes={
- *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
- *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_type", columns={"msg_type"})
- * })
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\MessageListener"})
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -94,6 +85,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     'receivers.tags.tag' => 'exact',
     'parent' => 'exact',
 ])]
+#[ORM\Table(name: 'message')]
+#[ORM\Index(name: 'idx_message_user_sender', columns: ['user_sender_id'])]
+#[ORM\Index(name: 'idx_message_group', columns: ['group_id'])]
+#[ORM\Index(name: 'idx_message_type', columns: ['msg_type'])]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\MessageRepository::class)]
+#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\MessageListener::class])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -108,31 +105,26 @@ class Message
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
     #[ApiProperty(identifier: true)]
     #[Groups(['message:read'])]
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
-     * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sentMessages')]
+    #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
     protected User $sender;
 
     /**
      * @var Collection|MessageRelUser[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser", mappedBy="message", cascade={"persist", "remove"})
      */
     #[Assert\Valid]
     #[Groups(['message:read', 'message:write'])]
     #[ApiSubresource]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageRelUser::class, mappedBy: 'message', cascade: ['persist', 'remove'])]
     protected array | null | Collection $receivers;
 
     /**
@@ -147,9 +139,6 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     protected array | null | Collection $receiversCc;
 
-    /**
-     * @ORM\Column(name="msg_type", type="smallint", nullable=false)
-     */
     #[Assert\NotBlank]
     // @todo use enums with PHP 8.1
     /*#[Assert\Choice([
@@ -164,74 +153,58 @@ class Message
         ],
     ])]*/
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'msg_type', type: 'smallint', nullable: false)]
     protected int $msgType;
 
-    /**
-     * @ORM\Column(name="status", type="smallint", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'status', type: 'smallint', nullable: false)]
     protected int $status;
 
-    /**
-     * @ORM\Column(name="send_date", type="datetime", nullable=false)
-     */
     #[Groups(['message:read'])]
+    #[ORM\Column(name: 'send_date', type: 'datetime', nullable: false)]
     protected DateTime $sendDate;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
     #[Groups(['message:read', 'message:write'])]
-    protected ?MessageRelUser $firstReceiver;
+    protected ?MessageRelUser $firstReceiver = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class)]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;
 
     /**
      * @var Collection|Message[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="parent")
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, mappedBy: 'parent')]
     protected Collection $children;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
     #[Groups(['message:write'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?Message $parent = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="update_date", type="datetime", nullable=true)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'update_date', type: 'datetime', nullable: true)]
     protected ?DateTime $updateDate;
 
-    /**
-     * @ORM\Column(name="votes", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'votes', type: 'integer', nullable: true)]
     protected ?int $votes;
 
     /**
      * @var Collection|MessageAttachment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message", cascade={"remove", "persist"})
      */
     #[Groups(['message:read'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageAttachment::class, mappedBy: 'message', cascade: ['remove', 'persist'])]
     protected Collection $attachments;
 
     public function __construct()
@@ -252,7 +225,7 @@ class Message
     /**
      * @return null|Collection|MessageRelUser[]
      */
-    public function getReceivers()
+    public function getReceivers(): null|\Doctrine\Common\Collections\Collection|array
     {
         return $this->receivers;
     }
@@ -336,10 +309,7 @@ class Message
         return $this;
     }
 
-    /**
-     * @param Collection|MessageRelUser $receivers
-     */
-    public function setReceivers($receivers): self
+    public function setReceivers(\Doctrine\Common\Collections\Collection|\Chamilo\CoreBundle\Entity\MessageRelUser $receivers): self
     {
         /** @var MessageRelUser $receiver */
         foreach ($receivers as $receiver) {
@@ -459,7 +429,7 @@ class Message
      *
      * @return Collection|MessageAttachment[]
      */
-    public function getAttachments()
+    public function getAttachments(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->attachments;
     }
@@ -480,7 +450,7 @@ class Message
     /**
      * @return Collection|Message[]
      */
-    public function getChildren()
+    public function getChildren(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->children;
     }
@@ -507,7 +477,7 @@ class Message
 
     public function setGroup(?Usergroup $group): self
     {
-//        $this->msgType = self::MESSAGE_TYPE_GROUP;
+        //        $this->msgType = self::MESSAGE_TYPE_GROUP;
         $this->group = $group;
 
         return $this;

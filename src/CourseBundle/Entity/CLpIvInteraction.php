@@ -10,78 +10,49 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CLpIvInteraction.
- *
- * @ORM\Table(
- *     name="c_lp_iv_interaction",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_lp_iv_interaction')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'lp_iv_id', columns: ['lp_iv_id'])]
+#[ORM\Entity]
 class CLpIvInteraction
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="order_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'order_id', type: 'integer', nullable: false)]
     protected int $orderId;
 
-    /**
-     * @ORM\Column(name="lp_iv_id", type="bigint", nullable=false)
-     */
+    #[ORM\Column(name: 'lp_iv_id', type: 'bigint', nullable: false)]
     protected int $lpIvId;
 
-    /**
-     * @ORM\Column(name="interaction_id", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'interaction_id', type: 'string', length: 255, nullable: false)]
     protected string $interactionId;
 
-    /**
-     * @ORM\Column(name="interaction_type", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'interaction_type', type: 'string', length: 255, nullable: false)]
     protected string $interactionType;
 
-    /**
-     * @ORM\Column(name="weighting", type="float", precision=10, scale=0, nullable=false)
-     */
+    #[ORM\Column(name: 'weighting', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $weighting;
 
-    /**
-     * @ORM\Column(name="completion_time", type="string", length=16, nullable=false)
-     */
+    #[ORM\Column(name: 'completion_time', type: 'string', length: 16, nullable: false)]
     protected string $completionTime;
 
-    /**
-     * @ORM\Column(name="correct_responses", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'correct_responses', type: 'text', nullable: false)]
     protected string $correctResponses;
 
-    /**
-     * @ORM\Column(name="student_response", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'student_response', type: 'text', nullable: false)]
     protected string $studentResponse;
 
-    /**
-     * @ORM\Column(name="result", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'result', type: 'string', length: 255, nullable: false)]
     protected string $result;
 
-    /**
-     * @ORM\Column(name="latency", type="string", length=16, nullable=false)
-     */
+    #[ORM\Column(name: 'latency', type: 'string', length: 16, nullable: false)]
     protected string $latency;
 
     /**

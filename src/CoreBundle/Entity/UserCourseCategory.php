@@ -11,42 +11,30 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserCourseCategory.
- *
- * @ORM\Table(name="user_course_category", indexes={
- *     @ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'user_course_category')]
+#[ORM\Index(name: 'idx_user_c_cat_uid', columns: ['user_id'])]
+#[ORM\Entity]
 class UserCourseCategory
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userCourseCategories")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userCourseCategories')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: true)]
     protected ?int $sort = null;
 
-    /**
-     * @ORM\Column(name="collapsed", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'collapsed', type: 'boolean', nullable: true)]
     protected ?bool $isCollapsed = null;
 
     /**

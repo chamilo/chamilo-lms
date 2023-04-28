@@ -11,48 +11,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CCalendarEventRepeat.
- *
- * @ORM\Table(
- *     name="c_calendar_event_repeat",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_calendar_event_repeat')]
+#[ORM\Entity]
 class CCalendarEventRepeat
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
-     * @ORM\JoinColumn(name="cal_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, inversedBy: 'repeatEvents')]
+    #[ORM\JoinColumn(name: 'cal_id', referencedColumnName: 'iid')]
     protected CCalendarEvent $event;
 
-    /**
-     * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'cal_type', type: 'string', length: 20, nullable: true)]
     protected ?string $calType = null;
 
-    /**
-     * @ORM\Column(name="cal_end", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'cal_end', type: 'integer', nullable: true)]
     protected ?int $calEnd = null;
 
-    /**
-     * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'cal_frequency', type: 'integer', nullable: true)]
     protected ?int $calFrequency = null;
 
-    /**
-     * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
-     */
+    #[ORM\Column(name: 'cal_days', type: 'string', length: 7, nullable: true)]
     protected ?string $calDays = null;
 
     public function setCalType(string $calType): self

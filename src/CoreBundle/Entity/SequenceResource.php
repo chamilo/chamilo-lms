@@ -10,36 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class SequenceResource.
- *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SequenceResourceRepository")
- * @ORM\Table(name="sequence_resource")
  */
+#[ORM\Table(name: 'sequence_resource')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceResourceRepository::class)]
 class SequenceResource
 {
     public const COURSE_TYPE = 1;
     public const SESSION_TYPE = 2;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Sequence::class)]
+    #[ORM\JoinColumn(name: 'sequence_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Sequence $sequence;
 
-    /**
-     * @ORM\Column(name="type", type="integer")
-     */
+    #[ORM\Column(name: 'type', type: 'integer')]
     protected int $type;
 
-    /**
-     * @ORM\Column(name="resource_id", type="integer")
-     */
+    #[ORM\Column(name: 'resource_id', type: 'integer')]
     protected int $resourceId;
 
     /**
@@ -62,8 +53,6 @@ class SequenceResource
 
     /**
      * Set the integer type.
-     *
-     * @return SequenceResource
      */
     public function setType(int $type): self
     {

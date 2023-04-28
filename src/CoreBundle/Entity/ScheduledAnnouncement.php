@@ -11,47 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ScheduledAnnouncement.
- *
- * @ORM\Table(name="scheduled_announcements")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'scheduled_announcements')]
+#[ORM\Entity]
 class ScheduledAnnouncement
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="subject", type="string", length=255)
-     */
+    #[ORM\Column(name: 'subject', type: 'string', length: 255)]
     protected string $subject;
 
-    /**
-     * @ORM\Column(name="message", type="text", unique=false)
-     */
+    #[ORM\Column(name: 'message', type: 'text', unique: false)]
     protected string $message;
 
-    /**
-     * @ORM\Column(name="date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date', type: 'datetime', nullable: true)]
     protected ?DateTime $date = null;
 
-    /**
-     * @ORM\Column(name="sent", type="boolean")
-     */
+    #[ORM\Column(name: 'sent', type: 'boolean')]
     protected bool $sent;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: true)]
     protected ?int $cId = null;
 
     public function __construct()

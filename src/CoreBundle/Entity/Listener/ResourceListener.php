@@ -36,21 +36,8 @@ class ResourceListener
 {
     use AccessUrlListenerTrait;
 
-    protected SlugifyInterface $slugify;
-    protected Security $security;
-    protected ToolChain $toolChain;
-    protected RequestStack $request;
-
-    public function __construct(
-        SlugifyInterface $slugify,
-        ToolChain $toolChain,
-        RequestStack $request,
-        Security $security
-    ) {
-        $this->slugify = $slugify;
-        $this->security = $security;
-        $this->toolChain = $toolChain;
-        $this->request = $request;
+    public function __construct(protected SlugifyInterface $slugify, protected ToolChain $toolChain, protected RequestStack $request, protected Security $security)
+    {
     }
 
     /**
@@ -109,7 +96,7 @@ class ResourceListener
         // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
         $resourceTypeRepo = $em->getRepository(ResourceType::class);
-        $entityClass = \get_class($eventArgs->getObject());
+        $entityClass = $eventArgs->getObject()::class;
 
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
 
@@ -170,7 +157,7 @@ class ResourceListener
                 $resourceNodeIdFromRequest = $currentRequest->get('parentResourceNodeId');
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();
-                    $contentData = json_decode($contentData, true);
+                    $contentData = json_decode($contentData, true, 512, JSON_THROW_ON_ERROR);
                     $resourceNodeIdFromRequest = $contentData['parentResourceNodeId'] ?? '';
                 }
 

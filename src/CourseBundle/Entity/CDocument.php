@@ -16,8 +16,10 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -144,16 +146,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         }
  *     },
  * )
- *
- * @ORM\Table(
- *     name="c_document",
- *     indexes={
- *         @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
- *     }
- * )
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CDocumentRepository")
  */
+#[ORM\Table(name: "c_document")]
+#[ORM\Index(name: "idx_cdoc_type", columns: ["filetype"])]
+#[ORM\Entity(repositoryClass: CDocumentRepository::class)]
+#[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
@@ -168,45 +165,33 @@ use Symfony\Component\Validator\Constraints as Assert;
     'resourceNode.resourceFile.size',
     'resourceNode.updatedAt',
 ])]
-class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[ApiProperty(identifier: true)]
     #[Groups(['document:read'])]
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Groups(['document:read', 'document:write', 'document:browse'])]
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
     #[Groups(['document:read', 'document:write'])]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
 
-    /**
-     * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
-     * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
-     */
     #[Groups(['document:read', 'document:write'])]
+    #[Assert\Choice(['folder', 'file'], message: 'Choose a valid filetype.')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
     protected string $filetype;
 
-    /**
-     * @ORM\Column(name="readonly", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'readonly', type: 'boolean', nullable: false)]
     protected bool $readonly;
 
-    /**
-     * @ORM\Column(name="template", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
 
     public function __construct()

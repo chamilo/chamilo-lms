@@ -10,61 +10,41 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-/**
- * @ORM\Table(name="track_e_exercise_confirmation")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'track_e_exercise_confirmation')]
+#[ORM\Entity]
 class TrackEExerciseConfirmation
 {
     use TimestampableEntity;
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEExerciseConfirmations")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trackEExerciseConfirmations')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="course_id", type="integer")
-     */
+    #[ORM\Column(name: 'course_id', type: 'integer')]
     private int $courseId;
 
-    /**
-     * @ORM\Column(name="attempt_id", type="integer")
-     */
+    #[ORM\Column(name: 'attempt_id', type: 'integer')]
     private int $attemptId;
 
-    /**
-     * @ORM\Column(name="quiz_id", type="integer")
-     */
+    #[ORM\Column(name: 'quiz_id', type: 'integer')]
     private int $quizId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer")
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer')]
     private int $sessionId;
 
-    /**
-     * @ORM\Column(name="confirmed", type="boolean", options={"default":false})
-     */
+    #[ORM\Column(name: 'confirmed', type: 'boolean', options: ['default' => false])]
     private bool $confirmed;
 
-    /**
-     * @ORM\Column(name="questions_count", type="integer")
-     */
+    #[ORM\Column(name: 'questions_count', type: 'integer')]
     private int $questionsCount;
 
-    /**
-     * @ORM\Column(name="saved_answers_count", type="integer")
-     */
+    #[ORM\Column(name: 'saved_answers_count', type: 'integer')]
     private int $savedAnswersCount;
 
     public function __construct()

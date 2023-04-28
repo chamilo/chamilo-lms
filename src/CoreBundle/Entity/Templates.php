@@ -11,51 +11,36 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Templates.
- *
- * @ORM\Table(name="templates")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\TemplatesRepository")
  */
+#[ORM\Table(name: 'templates')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\TemplatesRepository::class)]
 class Templates
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: false)]
     protected string $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="templates", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'templates', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="templates")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'templates')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="ref_doc", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'ref_doc', type: 'integer', nullable: false)]
     protected int $refDoc;
 
-    /**
-     * @ORM\Column(name="image", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'image', type: 'string', length: 250, nullable: false)]
     protected string $image;
 
     /**

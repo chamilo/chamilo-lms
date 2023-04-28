@@ -8,48 +8,30 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_survey_answer",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_survey_answer')]
+#[ORM\Entity]
 class CSurveyAnswer
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class)]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="answers")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestion::class, inversedBy: 'answers')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid')]
     protected CSurveyQuestion $question;
 
-    /**
-     * @ORM\Column(name="option_id", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'option_id', type: 'text', nullable: false)]
     protected string $optionId;
 
-    /**
-     * @ORM\Column(name="value", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'value', type: 'integer', nullable: false)]
     protected int $value;
 
-    /**
-     * @ORM\Column(name="user", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'user', type: 'string', length: 250, nullable: false)]
     protected string $user;
 
     public function __construct()

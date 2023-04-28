@@ -12,10 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="promotion")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'promotion')]
+#[ORM\Entity]
 class Promotion
 {
     use TimestampableEntity;
@@ -23,47 +21,35 @@ class Promotion
     public const PROMOTION_STATUS_ACTIVE = 1;
     public const PROMOTION_STATUS_INACTIVE = 0;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career", inversedBy="promotions")
-     * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Career::class, inversedBy: 'promotions')]
+    #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id')]
     protected Career $career;
 
     /**
      * @var Collection|Session[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="promotion", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, mappedBy: 'promotion', cascade: ['persist'])]
     protected Collection $sessions;
 
     /**
      * @var Collection|SysAnnouncement[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SysAnnouncement", mappedBy="promotion", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SysAnnouncement::class, mappedBy: 'promotion', cascade: ['persist'])]
     protected Collection $announcements;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: false)]
     protected int $status;
 
     public function __construct()
@@ -144,7 +130,7 @@ class Promotion
     /**
      * @return Session[]|Collection
      */
-    public function getSessions()
+    public function getSessions(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->sessions;
     }
@@ -159,7 +145,7 @@ class Promotion
     /**
      * @return SysAnnouncement[]|Collection
      */
-    public function getAnnouncements()
+    public function getAnnouncements(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->announcements;
     }
@@ -167,7 +153,7 @@ class Promotion
     /**
      * @param SysAnnouncement[]|Collection $announcements
      */
-    public function setAnnouncements($announcements): self
+    public function setAnnouncements(array|\Doctrine\Common\Collections\Collection $announcements): self
     {
         $this->announcements = $announcements;
 

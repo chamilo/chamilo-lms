@@ -11,59 +11,39 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserApiKey.
- *
- * @ORM\Table(name="user_api_key", indexes={
- *     @ORM\Index(name="idx_user_api_keys_user", columns={"user_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'user_api_key')]
+#[ORM\Index(name: 'idx_user_api_keys_user', columns: ['user_id'])]
+#[ORM\Entity]
 class UserApiKey
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="api_key", type="string", length=32, nullable=false)
-     */
+    #[ORM\Column(name: 'api_key', type: 'string', length: 32, nullable: false)]
     protected string $apiKey;
 
-    /**
-     * @ORM\Column(name="api_service", type="string", length=10, nullable=false)
-     */
+    #[ORM\Column(name: 'api_service', type: 'string', length: 10, nullable: false)]
     protected string $apiService;
 
-    /**
-     * @ORM\Column(name="api_end_point", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'api_end_point', type: 'text', nullable: true)]
     protected ?string $apiEndPoint = null;
 
-    /**
-     * @ORM\Column(name="created_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'created_date', type: 'datetime', nullable: true)]
     protected ?DateTime $createdDate = null;
 
-    /**
-     * @ORM\Column(name="validity_start_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'validity_start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $validityStartDate = null;
 
-    /**
-     * @ORM\Column(name="validity_end_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'validity_end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $validityEndDate = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**

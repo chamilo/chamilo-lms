@@ -10,37 +10,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="skill_level_profile")
- * @ORM\Entity
- */
-class Profile
+#[ORM\Table(name: 'skill_level_profile')]
+#[ORM\Entity]
+class Profile implements \Stringable
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
-     *
      * @var Skill[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, mappedBy: 'profile', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
-     * @ORM\OrderBy({"position"="ASC"})
      *
      * @var Level[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Level::class, mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $levels;
 
     public function __construct()
@@ -77,7 +70,7 @@ class Profile
     /**
      * @return Skill[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->skills;
     }
@@ -85,7 +78,7 @@ class Profile
     /**
      * @param Skill[]|Collection $skills
      */
-    public function setSkills($skills): self
+    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -95,7 +88,7 @@ class Profile
     /**
      * @return Level[]|Collection
      */
-    public function getLevels()
+    public function getLevels(): array|\Doctrine\Common\Collections\Collection
     {
         return $this->levels;
     }

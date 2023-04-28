@@ -10,57 +10,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository")
- * @ORM\Table(name="extra_field_options")
- *
- * @ORM\MappedSuperclass
- */
+#[ORM\Table(name: 'extra_field_options')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository::class)]
+#[ORM\MappedSuperclass]
 class ExtraFieldOptions
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options")
-     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
-     */
     #[Assert\NotNull]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraField::class, inversedBy: 'options')]
+    #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id')]
     protected ExtraField $field;
 
-    /**
-     * @ORM\Column(name="option_value", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'option_value', type: 'text', nullable: true)]
     protected ?string $value = null;
 
-    /**
-     * @Gedmo\Translatable
-     * @ORM\Column(name="display_text", type="string", length=255, nullable=true)
-     */
+    #[Gedmo\Translatable]
+    #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: true)]
     protected ?string $displayText = null;
 
-    /**
-     * @Gedmo\Locale
-     */
+    #[Gedmo\Locale]
     protected ?string $locale = null;
 
-    /**
-     * @ORM\Column(name="priority", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'priority', type: 'string', length: 255, nullable: true)]
     protected ?string $priority = null;
 
-    /**
-     * @ORM\Column(name="priority_message", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'priority_message', type: 'string', length: 255, nullable: true)]
     protected ?string $priorityMessage = null;
 
-    /**
-     * @ORM\Column(name="option_order", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'option_order', type: 'integer', nullable: true)]
     protected ?int $optionOrder = null;
 
     /**

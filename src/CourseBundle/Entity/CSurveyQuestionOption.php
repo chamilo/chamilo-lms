@@ -8,49 +8,31 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_survey_question_option",
- *     indexes={
- *         @ORM\Index(name="idx_survey_qo_qid", columns={"question_id"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_survey_question_option')]
+#[ORM\Index(name: 'idx_survey_qo_qid', columns: ['question_id'])]
+#[ORM\Entity]
 class CSurveyQuestionOption
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="options")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'options')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurveyQuestion $question;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="options")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'options')]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
-    /**
-     * @ORM\Column(name="option_text", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'option_text', type: 'text', nullable: false)]
     protected string $optionText;
 
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: false)]
     protected int $sort;
 
-    /**
-     * @ORM\Column(name="value", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'value', type: 'integer', nullable: false)]
     protected int $value;
 
     public function __construct()

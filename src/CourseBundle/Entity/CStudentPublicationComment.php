@@ -9,54 +9,38 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CStudentPublicationComment.
- *
- * @ORM\Table(
- *     name="c_student_publication_comment",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository")
  */
-class CStudentPublicationComment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_student_publication_comment')]
+#[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
+class CStudentPublicationComment extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="comments")
-     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CStudentPublication::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="file", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'file', type: 'string', length: 255, nullable: true)]
     protected ?string $file = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="sent_at", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'sent_at', type: 'datetime', nullable: false)]
     protected DateTime $sentAt;
 
     public function __construct()

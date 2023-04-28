@@ -18,50 +18,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Learning paths categories.
- *
- * @ORM\Table(
- *     name="c_lp_category",
- * )
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
-class CLpCategory extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_lp_category')]
+#[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
+class CLpCategory extends AbstractResource implements ResourceInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="name", type="text")
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'text')]
     protected string $name;
 
-    /**
-     * @Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer")
-     */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
     /**
      * @var Collection|CLpCategoryUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
-     *     mappedBy="category",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategoryUser::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
      * @var Collection|CLp[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, mappedBy: 'category', cascade: ['detach'])]
     protected Collection $lps;
 
     public function __construct()
@@ -113,7 +97,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     /**
      * @return Collection|CLp[]
      */
-    public function getLps()
+    public function getLps(): \Doctrine\Common\Collections\Collection|array
     {
         return $this->lps;
     }

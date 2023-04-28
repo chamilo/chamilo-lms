@@ -14,10 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Career.
- *
- * @ORM\Table(name="career")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'career')]
+#[ORM\Entity]
 class Career
 {
     use TimestampableEntity;
@@ -25,36 +24,25 @@ class Career
     public const CAREER_STATUS_ACTIVE = 1;
     public const CAREER_STATUS_INACTIVE = 0;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: false)]
     protected int $status;
 
     /**
      * @var Collection|Promotion[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Promotion", mappedBy="career", cascade={"persist"}
-     * )
      */
+    #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'career', cascade: ['persist'])]
     protected Collection $promotions;
 
     public function __construct()

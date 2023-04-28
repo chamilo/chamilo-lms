@@ -12,17 +12,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Table(
- *     name="track_course_ranking",
- *     indexes={
- *     @ORM\Index(name="idx_tcc_cid", columns={"c_id"}),
- *     @ORM\Index(name="idx_tcc_sid", columns={"session_id"}),
- *     @ORM\Index(name="idx_tcc_urlid", columns={"url_id"}),
- *     @ORM\Index(name="idx_tcc_creation_date", columns={"creation_date"})
- * })
- * @ORM\Entity
- */
 #[ApiResource(
     attributes: [
         'security' => "is_granted('ROLE_USER')",
@@ -34,57 +23,47 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['trackCourseRanking:read'],
     ],
 )]
+#[ORM\Table(name: 'track_course_ranking')]
+#[ORM\Index(name: 'idx_tcc_cid', columns: ['c_id'])]
+#[ORM\Index(name: 'idx_tcc_sid', columns: ['session_id'])]
+#[ORM\Index(name: 'idx_tcc_urlid', columns: ['url_id'])]
+#[ORM\Index(name: 'idx_tcc_creation_date', columns: ['creation_date'])]
+#[ORM\Entity]
 class TrackCourseRanking
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
     #[Groups(['course:read', 'trackCourseRanking:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackCourseRanking")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="cascade")
-     */
     #[ApiSubresource]
     #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
+    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'trackCourseRanking')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     protected Course $course;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
     #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="url_id", type="integer", nullable=false)
-     */
     #[Groups(['trackCourseRanking:read', 'trackCourseRanking:write'])]
+    #[ORM\Column(name: 'url_id', type: 'integer', nullable: false)]
     protected int $urlId;
 
-    /**
-     * @ORM\Column(name="accesses", type="integer", nullable=false)
-     */
     #[Groups(['course:read', 'trackCourseRanking:read'])]
+    #[ORM\Column(name: 'accesses', type: 'integer', nullable: false)]
     protected int $accesses;
 
-    /**
-     * @ORM\Column(name="total_score", type="integer", nullable=false)
-     */
     #[Groups(['course:read', 'trackCourseRanking:read', 'trackCourseRanking:write'])]
+    #[ORM\Column(name: 'total_score', type: 'integer', nullable: false)]
     protected int $totalScore;
 
-    /**
-     * @ORM\Column(name="users", type="integer", nullable=false)
-     */
     #[Groups(['course:read'])]
+    #[ORM\Column(name: 'users', type: 'integer', nullable: false)]
     protected int $users;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false)]
     protected DateTime $creationDate;
 
     #[Groups(['course:read', 'trackCourseRanking:read'])]

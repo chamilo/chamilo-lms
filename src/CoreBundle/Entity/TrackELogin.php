@@ -11,41 +11,29 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackELogin.
- *
- * @ORM\Table(name="track_e_login", indexes={
- *     @ORM\Index(name="login_user_id", columns={"login_user_id"}),
- *     @ORM\Index(name="idx_track_e_login_date", columns={"login_date"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_login')]
+#[ORM\Index(name: 'login_user_id', columns: ['login_user_id'])]
+#[ORM\Index(name: 'idx_track_e_login_date', columns: ['login_date'])]
+#[ORM\Entity]
 class TrackELogin
 {
-    /**
-     * @ORM\Column(name="login_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'login_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $loginId;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="logins")
-     * @ORM\JoinColumn(name="login_user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'logins')]
+    #[ORM\JoinColumn(name: 'login_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="login_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'login_date', type: 'datetime', nullable: false)]
     protected DateTime $loginDate;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
-    /**
-     * @ORM\Column(name="logout_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'logout_date', type: 'datetime', nullable: true)]
     protected ?DateTime $logoutDate = null;
 
     public function getUser(): User
@@ -103,10 +91,8 @@ class TrackELogin
 
     /**
      * Get logoutDate.
-     *
-     * @return null|DateTime
      */
-    public function getLogoutDate()
+    public function getLogoutDate(): ?\DateTime
     {
         return $this->logoutDate;
     }

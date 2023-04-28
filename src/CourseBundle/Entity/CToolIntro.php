@@ -16,14 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_tool_intro",
- *     indexes={
- *     }
- * )
- * @ORM\Entity
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -59,29 +51,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'courseTool' => 'exact',
 ])]
-class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+#[ORM\Table(name: 'c_tool_intro')]
+#[ORM\Entity]
+class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
     #[Groups(['c_tool_intro:read'])]
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="intro_text", type="text", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]
+    #[ORM\Column(name: 'intro_text', type: 'text', nullable: false)]
     protected string $introText;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool")
-     * @ORM\JoinColumn(name="c_tool_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]
+    #[ORM\ManyToOne(targetEntity: CTool::class)]
+    #[ORM\JoinColumn(name: 'c_tool_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CTool $courseTool;
 
     public function __toString(): string

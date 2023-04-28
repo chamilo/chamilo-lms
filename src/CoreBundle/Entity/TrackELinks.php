@@ -11,46 +11,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackELinks.
- *
- * @ORM\Table(name="track_e_links", indexes={
- *     @ORM\Index(name="idx_tel_c_id", columns={"c_id"}),
- *     @ORM\Index(name="idx_tel_user_id", columns={"links_user_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_links')]
+#[ORM\Index(name: 'idx_tel_c_id', columns: ['c_id'])]
+#[ORM\Index(name: 'idx_tel_user_id', columns: ['links_user_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackELinks
 {
-    /**
-     * @ORM\Column(name="links_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'links_user_id', type: 'integer', nullable: true)]
     protected ?int $linksUserId = null;
 
-    /**
-     * @ORM\Column(name="links_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'links_date', type: 'datetime', nullable: false)]
     protected DateTime $linksDate;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="links_link_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'links_link_id', type: 'integer', nullable: false)]
     protected int $linksLinkId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="links_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'links_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $linksId;
 
     /**

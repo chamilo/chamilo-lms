@@ -20,10 +20,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @Vich\Uploadable
- * @ORM\Entity
- * @ORM\Table(name="asset")
  */
-class Asset
+#[ORM\Table(name: 'asset')]
+#[ORM\Entity]
+class Asset implements \Stringable
 {
     use TimestampableEntity;
 
@@ -36,32 +36,17 @@ class Asset
     public const EXERCISE_ATTEMPT = 'exercise_attempt';
     public const EXERCISE_FEEDBACK = 'exercise_feedback';
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
     protected Uuid $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $title = null;
 
-    /**
-     * @Assert\Choice({
-     *     Asset::SCORM,
-     *     Asset::WATERMARK,
-     *     Asset::EXTRA_FIELD,
-     *     Asset::COURSE_CATEGORY,
-     *     Asset::SKILL,
-     * },
-     * message="Choose a valid category."
-     * )
-     *
-     * @ORM\Column(type="string", length=255)
-     */
     #[Assert\NotBlank]
+    #[Assert\Choice([Asset::SCORM, Asset::WATERMARK, Asset::EXTRA_FIELD, Asset::COURSE_CATEGORY, Asset::SKILL], message: 'Choose a valid category.')]
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $category = null;
 
     /**
@@ -74,64 +59,48 @@ class Asset
      *     dimensions="dimensions"
      * )
      */
-//    #[Vich\UploadableField(
-//        mapping: 'assets',
-//        fileNameProperty: 'title',
-//        size: 'size',
-//        mimeType: 'mimeType',
-//        originalName: 'originalName',
-//        dimensions: 'dimensions'
-//    )]
+    //    #[Vich\UploadableField(
+    //        mapping: 'assets',
+    //        fileNameProperty: 'title',
+    //        size: 'size',
+    //        mimeType: 'mimeType',
+    //        originalName: 'originalName',
+    //        dimensions: 'dimensions'
+    //    )]
     #[Assert\NotNull]
     protected File $file;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     protected bool $compressed;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mimeType = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $originalName = null;
 
-    /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     * @ORM\Column(type="simple_array", nullable=true)
-     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
+    #[ORM\Column(type: 'simple_array', nullable: true)]
     protected ?array $dimensions;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     protected ?int $size = null;
 
-    /**
-     * @ORM\Column(name="crop", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
+    #[ORM\Column(type: 'array', nullable: true)]
     protected ?array $metadata;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**
      * @var DateTime|DateTimeImmutable
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
      */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: 'datetime')]
     protected $updatedAt;
 
     public function __construct()
@@ -295,7 +264,7 @@ class Asset
     /**
      * @param File|UploadedFile $file
      */
-    public function setFile(File $file = null): self
+    public function setFile(File|UploadedFile $file = null): self
     {
         $this->file = $file;
 

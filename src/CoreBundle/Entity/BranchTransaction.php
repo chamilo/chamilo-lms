@@ -11,74 +11,49 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * BranchTransaction.
- *
- * @ORM\Table(name="branch_transaction")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'branch_transaction')]
+#[ORM\Entity]
 class BranchTransaction
 {
-    /**
-     * @ORM\Column(name="id", type="bigint", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'bigint', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchTransactionStatus")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: BranchTransactionStatus::class)]
+    #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected Room $branchTransactionStatus;
 
-    /**
-     * @ORM\Column(name="transaction_id", type="bigint")
-     */
+    #[ORM\Column(name: 'transaction_id', type: 'bigint')]
     protected int $externalTransactionId;
 
-    /**
-     * @ORM\Column(name="action", type="string", length=20, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'action', type: 'string', length: 20, nullable: true, unique: false)]
     protected ?string $action = null;
 
-    /**
-     * @ORM\Column(name="item_id", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'item_id', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $itemId = null;
 
-    /**
-     * @ORM\Column(name="origin", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'origin', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $origin = null;
 
-    /**
-     * @ORM\Column(name="dest_id", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'dest_id', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $destId = null;
 
-    /**
-     * @ORM\Column(name="external_info", type="string", length=255, nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'external_info', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $externalInfo = null;
 
-    /**
-     * @ORM\Column(name="time_insert", type="datetime")
-     */
+    #[ORM\Column(name: 'time_insert', type: 'datetime')]
     protected DateTime $timeInsert;
 
-    /**
-     * @ORM\Column(name="time_update", type="datetime")
-     */
+    #[ORM\Column(name: 'time_update', type: 'datetime')]
     protected DateTime $timeUpdate;
 
-    /**
-     * @ORM\Column(name="failed_attempts", type="integer")
-     */
+    #[ORM\Column(name: 'failed_attempts', type: 'integer')]
     protected int $failedAttempts;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync")
-     * @ORM\JoinColumn(name="branch_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: BranchSync::class)]
+    #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
     protected BranchSync $branch;
 
     /**

@@ -10,37 +10,26 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SystemTemplate.
- *
- * @ORM\Table(name="system_template")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'system_template')]
+#[ORM\Entity]
 class SystemTemplate
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
-    /**
-     * @ORM\Column(name="image", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'image', type: 'string', length: 250, nullable: false)]
     protected string $image;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
     public function __construct()

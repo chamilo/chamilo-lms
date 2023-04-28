@@ -31,13 +31,13 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-//            ->setAllowedTypes(
-//                array(
-//                    //'administrator_email' => array('string'),
-//                    //'administrator_name' => array('string'),
-//                    //'administrator_surname' => array('string'),
-//                )
-//            );
+        //            ->setAllowedTypes(
+        //                array(
+        //                    //'administrator_email' => array('string'),
+        //                    //'administrator_name' => array('string'),
+        //                    //'administrator_surname' => array('string'),
+        //                )
+        //            );
     }
 
     public function buildForm(FormBuilderInterface $builder): void

@@ -123,7 +123,7 @@ class CourseBuilder
         $this->course->code = $_course['code'];
         $this->course->type = $type;
         //   $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
-//        $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
+        //        $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
     }
@@ -1877,7 +1877,7 @@ class CourseBuilder
     ) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
-        $cats = Category:: load(
+        $cats = Category::load(
             null,
             null,
             $courseCode,

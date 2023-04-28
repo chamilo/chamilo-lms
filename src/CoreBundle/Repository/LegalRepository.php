@@ -147,7 +147,7 @@ class LegalRepository extends ServiceEntityRepository
             ->orderBy('l.version', Criteria::DESC)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
         if (!empty($result)) {
             $version = explode(':', $result);
 

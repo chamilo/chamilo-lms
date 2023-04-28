@@ -537,7 +537,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getChildrenInCourses(array $coursesId): Collection
     {
         return $this->children->filter(
-            fn(self $child) => \in_array($child->getCourse()->getId(), $coursesId, true)
+            fn (self $child) => \in_array($child->getCourse()->getId(), $coursesId, true)
         );
     }
 

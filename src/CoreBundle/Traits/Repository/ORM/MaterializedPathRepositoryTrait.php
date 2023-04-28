@@ -193,7 +193,8 @@ trait MaterializedPathRepositoryTrait
             }
         } elseif ($direct) {
             $expr = $qb->expr()->not(
-                $qb->expr()->like($alias.'.'.$path,
+                $qb->expr()->like(
+                    $alias.'.'.$path,
                     $qb->expr()->literal(
                         ($config['path_starts_with_separator'] ? $separator : '')
                         .'%'.$separator.'%'

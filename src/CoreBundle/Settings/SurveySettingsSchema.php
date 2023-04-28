@@ -36,11 +36,11 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-//            ->setAllowedTypes(
-//                array(
-//                    //'survey_email_sender_noreply' => array('string'),
-//                )
-//            );
+        //            ->setAllowedTypes(
+        //                array(
+        //                    //'survey_email_sender_noreply' => array('string'),
+        //                )
+        //            );
     }
 
     public function buildForm(FormBuilderInterface $builder): void

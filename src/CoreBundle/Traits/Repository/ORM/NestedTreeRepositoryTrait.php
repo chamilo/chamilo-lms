@@ -74,16 +74,16 @@ trait NestedTreeRepositoryTrait
         $siblingInPosition = null;
         if ($child !== null) {
             switch ($position) {
-            case Nested::PREV_SIBLING:
-            case Nested::NEXT_SIBLING:
-                $sibling = new EntityWrapper($child, $em);
-                $newParent = $sibling->getPropertyValue($config['parent']);
-                if (null === $newParent && isset($config['root'])) {
-                    throw new UnexpectedValueException("Cannot persist sibling for a root node, tree operation is not possible");
-                }
-                $siblingInPosition = $child;
-                $child = $newParent;
-                break;
+                case Nested::PREV_SIBLING:
+                case Nested::NEXT_SIBLING:
+                    $sibling = new EntityWrapper($child, $em);
+                    $newParent = $sibling->getPropertyValue($config['parent']);
+                    if (null === $newParent && isset($config['root'])) {
+                        throw new UnexpectedValueException("Cannot persist sibling for a root node, tree operation is not possible");
+                    }
+                    $siblingInPosition = $child;
+                    $child = $newParent;
+                    break;
             }
             $wrapped->setPropertyValue($config['parent'], $child);
         }
@@ -472,7 +472,8 @@ trait NestedTreeRepositoryTrait
         $qb = $this->getQueryBuilder();
         $qb->select('node')
             ->from($config['useObjectClass'], 'node')
-            ->where($includeSelf ?
+            ->where(
+                $includeSelf ?
                 $qb->expr()->gte('node.'.$config['left'], $left) :
                 $qb->expr()->gt('node.'.$config['left'], $left)
             )
@@ -547,7 +548,8 @@ trait NestedTreeRepositoryTrait
         $qb = $this->getQueryBuilder();
         $qb->select('node')
             ->from($config['useObjectClass'], 'node')
-            ->where($includeSelf ?
+            ->where(
+                $includeSelf ?
                 $qb->expr()->lte('node.'.$config['left'], $left) :
                 $qb->expr()->lt('node.'.$config['left'], $left)
             )

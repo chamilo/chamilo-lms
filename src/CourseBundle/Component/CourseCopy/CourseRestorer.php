@@ -376,7 +376,7 @@ class CourseRestorer
                             null,
                             false,
                             null,
-                                $session_id,
+                            $session_id,
                             0,
                             false
                         );
@@ -3497,7 +3497,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             $destinationCourseCode = $this->destination_course_info['code'];
             // Delete destination gradebook
-            $cats = Category:: load(
+            $cats = Category::load(
                 null,
                 null,
                 $destinationCourseCode,
@@ -3554,8 +3554,8 @@ class CourseRestorer
                                         $type = RESOURCE_QUIZ;
 
                                         break;
-                                    /*case LINK_DROPBOX:
-                                        break;*/
+                                        /*case LINK_DROPBOX:
+                                            break;*/
                                     case LINK_STUDENTPUBLICATION:
                                         $type = RESOURCE_WORK;
 

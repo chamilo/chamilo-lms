@@ -2596,16 +2596,16 @@ class Tracking
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
             $tableUrl = ", ".$tableUrlRelUser." as url_users";
-            $urlCondition = " AND u.login_user_id = url_users.user_id AND access_url_id = $accessUrlId";
+            $urlCondition = " AND teca.user_id = url_users.user_id AND url_users.access_url_id = $accessUrlId";
         }
 
         if (!empty($dateFrom) && !empty($dateUntil)) {
             $dateFrom = Database::escape_string($dateFrom);
             $dateUntil = Database::escape_string($dateUntil);
-            $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
+            $conditionTime = " (teca.login_course_date >= '$dateFrom' AND teca.logout_course_date <= '$dateUntil' ) ";
         }
-        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
-    	        FROM $tableTrackLogin u $tableUrl
+        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, teca.login_course_date, teca.logout_course_date)) diff
+    	        FROM $tableTrackLogin teca $tableUrl
                 WHERE $conditionTime $urlCondition";
 
         $rs = Database::query($sql);

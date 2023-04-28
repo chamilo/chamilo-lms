@@ -4563,14 +4563,18 @@ class UserManager
      * @return mixed Number of users or false on error
      */
     public static function get_number_of_users(
-        $status = 0,
-        $access_url_id = 1,
-        $active = null,
+        int $status = null,
+        int $access_url_id = null,
+        int $active = null,
         string $dateFrom = null,
         string $dateUntil = null
     ) {
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        if (empty($access_url_id)) {
+            $access_url_id = api_get_current_access_url_id();
+        }
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT count(u.id)

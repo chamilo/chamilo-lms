@@ -623,6 +623,11 @@ if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
         'url' => 'resource_sequence.php',
         'label' => get_lang('ResourcesSequencing'),
     ];
+    $items[] = [
+        'class' => 'item-export-exercise-results',
+        'url' => 'export_exercise_results.php',
+        'label' => get_lang('ExportExerciseAllResults'),
+    ];
 }
 
 $blocks['sessions']['items'] = $items;

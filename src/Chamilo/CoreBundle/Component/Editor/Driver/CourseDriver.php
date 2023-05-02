@@ -271,6 +271,9 @@ class CourseDriver extends Driver implements DriverInterface
             // check the max filesize.
             $maxFileSize = getIniMaxFileSizeInBytes();
             if ($maxFileSize > 0 && $size > $maxFileSize) {
+                $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+                $this->addError($errorUploadMessage);
+
                 return false;
             }
 

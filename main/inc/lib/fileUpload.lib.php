@@ -2183,13 +2183,22 @@ function add_all_documents_in_folder_to_database(
  *
  * @return int
  */
-function getIniMaxFileSizeInBytes($humanReadable = false)
+function getIniMaxFileSizeInBytes($humanReadable = false, $checkMessageSetting = false)
 {
     $maxSize = 0;
     $uploadMaxFilesize = ini_get('upload_max_filesize');
     $fileSizeForTeacher = getFileUploadSizeLimitForTeacher();
     if (!empty($fileSizeForTeacher)) {
         $uploadMaxFilesize = $fileSizeForTeacher.'M';
+    }
+
+    if (empty($fileSizeForTeacher) && $checkMessageSetting) {
+        $uploadMaxFilesize = api_get_setting('message_max_upload_filesize'); // in bytes
+        if ($humanReadable) {
+            $uploadMaxFilesize = format_file_size($uploadMaxFilesize);
+        }
+
+        return $uploadMaxFilesize;
     }
 
     if ($humanReadable) {

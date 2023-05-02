@@ -1822,6 +1822,7 @@ EOT;
         }
         $maxFileSize = getIniMaxFileSizeInBytes();
         $icon = Display::return_icon('file_txt.gif');
+        $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
         $this->addHtml("
         <script>
         $(function () {
@@ -1891,7 +1892,7 @@ EOT;
                 $.each(data.files, function (index, file) {
                     // check size
                     if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
-                        errs.push('Filesize is too big');
+                        errs.push('".$errorUploadMessage."');
                     } else {
                         // array for all errors
                         var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
@@ -1906,7 +1907,7 @@ EOT;
 
                 // Output errors or submit data
                 if (errs.length > 0) {
-                    alert('An error occured. ' + errs.join(' '));
+                    alert('".get_lang('AnErrorOccured')."' + errs.join(' '));
                     return false;
                 } else {
                     data.submit();

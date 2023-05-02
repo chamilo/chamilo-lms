@@ -272,7 +272,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
             sprintf(
                 get_lang('MaximunFileSizeX'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
+                getIniMaxFileSizeInBytes(true, true)
             ).')'
         );
     }
@@ -349,6 +349,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                             'confirmation',
                             false
                         ));
+                    } else {
+                        header('Location: '.api_request_uri());
+                        exit;
                     }
                 }
                 MessageManager::cleanAudioMessage();

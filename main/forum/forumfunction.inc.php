@@ -2871,16 +2871,21 @@ function store_thread(
     $has_attachment = false;
 
     $maxFileSize = getIniMaxFileSizeInBytes();
-    if (!empty($_FILES['user_upload']['name']) && !($maxFileSize > 0 && $_FILES['user_upload']['size'] > $maxFileSize)) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
-        $has_attachment = true;
+    if (!empty($_FILES['user_upload']['name'])) {
+        $upload_ok = 0;
+        $has_attachment = false;
+        if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+            $upload_ok = process_uploaded_file($_FILES['user_upload']);
+            $has_attachment = true;
+        }
     }
 
     if (!$upload_ok) {
         if ($showMessage) {
+            $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
             Display::addFlash(
                 Display::return_message(
-                    get_lang('UplNoFileUploaded'),
+                    $errorUploadMessage,
                     'error',
                     false
                 )
@@ -3318,7 +3323,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
             ['id' => 'reply-add-attachment']
         );
     } else {
-        $form->addFile('user_upload', get_lang('Attachment'));
+        $form->addFile('user_upload', get_lang('Attachment').' ('.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true).')');
     }
 
     if ($giveRevision) {
@@ -3438,12 +3443,20 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
                         $threadId = $myThread->getIid();
                         Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
                         $postId = $myThread->getThreadLastPost();
+                    } else {
+                        header('Location: '.api_request_uri());
+                        exit;
                     }
                     break;
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
                     $postId = store_reply($current_forum, $values);
+                    if (!$postId) {
+                        header('Location: '.api_request_uri());
+                        exit;
+                    }
+
                     break;
             }
 
@@ -3852,6 +3865,17 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     $upload_ok = 1;
     $new_post_id = 0;
 
+    $errMessage = get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst');
+    $maxFileSize = getIniMaxFileSizeInBytes();
+    if (!empty($_FILES['user_upload']['name'])) {
+        if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+            $upload_ok = process_uploaded_file($_FILES['user_upload']);
+        } else {
+            $upload_ok = 0;
+            $errMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+        }
+    }
+
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
         $new_post_id = Database::insert(
@@ -3957,10 +3981,12 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                $errMessage,
                 'error'
             )
         );
+
+        return false;
     }
 
     return $new_post_id;

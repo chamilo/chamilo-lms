@@ -4558,7 +4558,6 @@ class UserManager
      *
      * @param int|null $status        Status of users to be counted
      * @param int|null $access_url_id Access URL ID (optional)
-     * @param int|null $active
      *
      * @return mixed Number of users or false on error
      */

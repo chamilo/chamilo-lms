@@ -87,6 +87,7 @@ class ZoomPlugin extends Plugin
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
                         STUDENT_BOSS => get_lang('StudentBoss'),
+                        SESSIONADMIN => get_lang('SessionsAdmin'),
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],

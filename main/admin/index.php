@@ -332,23 +332,33 @@ if (api_is_platform_admin()) {
 
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
+}
 
-    /* Platform */
-    $blocks['platform']['icon'] = Display::return_icon(
+/* Platform */
+$blockPlatform = [
+    'icon' => Display::return_icon(
         'platform.png',
         get_lang('Platform'),
         [],
         ICON_SIZE_MEDIUM,
         false
-    );
-    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
-    $blocks['platform']['class'] = 'block-admin-platform';
-    $blocks['platform']['editable'] = true;
+    ),
+    'label' => api_ucfirst(get_lang('Platform')),
+    'class' => 'block-admin-platform',
+    'editable' => false,
+    'extraContent' => '',
+    'search_form' => '',
+    'items' => [],
+    'extra' => null,
+];
+
+if (api_is_platform_admin()) {
+    $blockPlatform['editable'] = true;
 
     $platformBlockExtraFile = "{$adminExtraContentDir}block-admin-platform_extra.html";
 
     if (file_exists($platformBlockExtraFile)) {
-        $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
+        $blockPlatform['extraContent'] = file_get_contents($platformBlockExtraFile);
     }
 
     $search_form = ' <form method="get" action="settings.php" class="form-inline">
@@ -363,7 +373,7 @@ if (api_is_platform_admin()) {
                 </button>
             </div>
         </form>';
-    $blocks['platform']['search_form'] = $search_form;
+    $blockPlatform['search_form'] = $search_form;
 
     $items = [];
     $items[] = [
@@ -506,8 +516,20 @@ if (api_is_platform_admin()) {
         ];
     }
 
-    $blocks['platform']['items'] = $items;
-    $blocks['platform']['extra'] = null;
+    $blockPlatform['items'] = $items;
+} elseif (api_is_session_admin() && api_get_configuration_value('session_admin_access_system_announcement')) {
+    $items = [];
+    $items[] = [
+        'class' => 'item-global-announcement',
+        'url' => 'system_announcements.php',
+        'label' => get_lang('SystemAnnouncements'),
+    ];
+
+    $blockPlatform['items'] = $items;
+}
+
+if (api_is_platform_admin(true)) {
+    $blocks['platform'] = $blockPlatform;
 }
 
 /* Sessions */

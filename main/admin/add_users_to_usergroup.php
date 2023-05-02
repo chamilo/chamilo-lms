@@ -86,9 +86,12 @@ function change_select(reset) {
 
     if (reset) {
         document.formulaire["first_letter_user"].value = "";
-        document.formulaire["form_sent"].value = "1";
+        
+        if ('.(api_get_configuration_value('usergroup_add_user_show_all_student_by_default') ? 0 : 1).') {
+            document.formulaire["form_sent"].value = "1";
 
-        return;
+            return;
+        }
     }
 
     $.post("'.api_get_self().'", $(document.formulaire).serialize(), function(data) {
@@ -316,6 +319,17 @@ if (!empty($user_list)) {
             $elements_not_in[$item['user_id']] = $person_name;
         }
     }
+}
+
+if (api_get_configuration_value('usergroup_add_user_show_all_student_by_default')
+    && empty($elements_not_in)
+    && empty($first_letter_user)
+) {
+    $initialUserList = UserManager::getUserListLike([], $order, true, 'OR');
+    $elements_not_in = array_combine(
+        array_column($initialUserList, 'id'),
+        array_column($initialUserList, 'complete_name_with_username')
+    );
 }
 
 if (ChamiloApi::isAjaxRequest()) {

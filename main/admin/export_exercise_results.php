@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * This script exports the PDF reports from a test for several students at once.
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

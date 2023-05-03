@@ -57,6 +57,10 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'gradebook_flatview_extrafields_columns' => '',
                     'gradebook_pdf_export_settings' => '',
                     'allow_gradebook_comments' => 'false',
+                    'gradebook_display_extra_stats' => '',
+                    'gradebook_hide_table' => 'false',
+                    'gradebook_hide_link_to_item_for_student' => 'false',
+                    'gradebook_enable_subcategory_skills_independant_assignement' => 'false',
                 ]
             )
         ;
@@ -159,6 +163,19 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_gradebook_comments', YesNoType::class)
+            ->add(
+                'gradebook_display_extra_stats',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Enable specific columns in gradebook table').
+                        $this->settingArrayHelpValue('gradebook_display_extra_stats'),
+                ]
+            )
+            ->add('gradebook_hide_table', YesNoType::class)
+            ->add('gradebook_hide_link_to_item_for_student', YesNoType::class)
+            ->add('gradebook_enable_subcategory_skills_independant_assignement', YesNoType::class)
+
         ;
     }
 
@@ -183,6 +200,12 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'hide_score_weight' => true,
                     'hide_feedback_textarea' => true,
                 ]
+                </pre>",
+            'gradebook_display_extra_stats' => "<pre>
+                [1] = Ranking
+                [2] = Best Score
+                [3] = Average
+                ['columns' => [1, 2, 3]]
                 </pre>",
         ];
 

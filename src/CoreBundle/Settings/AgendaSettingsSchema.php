@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AgendaSettingsSchema extends AbstractSettingsSchema
@@ -31,6 +32,11 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     'agenda_legend' => '',
                     'agenda_colors' => '',
                     'agenda_on_hover_info' => '',
+                    'agenda_collective_invitations' => 'false',
+                    'agenda_event_subscriptions' => 'false',
+                    'agenda_reminders' => 'false',
+                    'agenda_reminders_sender_id' => '0',
+                    'fullcalendar_settings' => '',
                 ]
             )
         ;
@@ -92,6 +98,21 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('agenda_on_hover_info'),
                 ]
             )
+            ->add('agenda_collective_invitations', YesNoType::class)
+            ->add('agenda_event_subscriptions', YesNoType::class)
+            ->add('agenda_reminders', YesNoType::class)
+            ->add('agenda_reminders_sender_id', TextType::class)
+            ->add(
+                'fullcalendar_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Extra settings for the agenda (FullCalendar v3)').
+                        $this->settingArrayHelpValue('fullcalendar_settings'),
+                ]
+            )
+
+
         ;
     }
 
@@ -120,6 +141,19 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     'options' => [
                         'comment' => true,
                         'description' => true,
+                    ]
+                ]
+                </pre>",
+            'fullcalendar_settings' => "<pre>
+                [
+                    'settings' => [
+                        'businessHours' => [
+                            // days of week. an array of zero-based day of week integers (0=Sunday)
+                            'dow' => [0, 1, 2, 3, 4], // Sunday - Thursday
+                            'start'  => '10:00',
+                            'end' => '18:00',
+                        ],
+                        'firstDay' => 0, // 0 = Sunday, 1 = Monday
                     ]
                 ]
                 </pre>",

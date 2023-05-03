@@ -41,6 +41,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'security_block_inactive_users_immediately' => 'false',
                 'password_requirements' => '',
                 'allow_online_users_by_status' => '',
+                'security_session_cookie_samesite_none' => 'false',
             ]
         );
         $allowedTypes = [
@@ -156,6 +157,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('allow_online_users_by_status'),
                 ]
             )
+            ->add('security_session_cookie_samesite_none', YesNoType::class)
         ;
     }
 

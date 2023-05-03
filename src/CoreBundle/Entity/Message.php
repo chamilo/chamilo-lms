@@ -207,6 +207,9 @@ class Message
     #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageAttachment::class, mappedBy: 'message', cascade: ['remove', 'persist'])]
     protected Collection $attachments;
 
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageFeedback::class, mappedBy: 'message', orphanRemoval: true)]
+    protected Collection $likes;
+
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -218,6 +221,7 @@ class Message
         $this->receivers = new ArrayCollection();
         $this->receiversCc = new ArrayCollection();
         $this->receiversTo = new ArrayCollection();
+        $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }

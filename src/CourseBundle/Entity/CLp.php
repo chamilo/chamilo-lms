@@ -134,6 +134,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'accumulate_work_time', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accumulateWorkTime;
 
+    #[ORM\Column(name: 'next_lp_id', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $nextLpId;
+
     #[ORM\OneToMany(targetEntity: CLpItem::class, mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;
 
@@ -637,6 +640,26 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     {
         return $this->maxAttempts;
     }
+
+    /**
+     * @return int
+     */
+    public function getNextLpId(): int
+    {
+        return $this->nextLpId;
+    }
+
+    /**
+     * @param int $nextLpId
+     */
+    public function setNextLpId(int $nextLpId): self
+    {
+        $this->nextLpId = $nextLpId;
+
+        return $this;
+    }
+
+
 
     /**
      * @return CLpItem[]|Collection

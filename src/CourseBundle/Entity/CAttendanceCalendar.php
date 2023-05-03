@@ -30,6 +30,9 @@ class CAttendanceCalendar
     #[ORM\Column(name: 'done_attendance', type: 'boolean', nullable: false)]
     protected bool $doneAttendance;
 
+    #[ORM\Column(name: 'blocked', type: 'boolean', nullable: false)]
+    protected bool $blocked;
+
     /**
      * @var Collection|CAttendanceSheet[]
      */
@@ -80,6 +83,18 @@ class CAttendanceCalendar
     public function getDoneAttendance(): bool
     {
         return $this->doneAttendance;
+    }
+
+    public function setBlocked($blocked): self
+    {
+        $this->blocked = $blocked;
+
+        return $this;
+    }
+
+    public function getBlocked(): bool
+    {
+        return $this->blocked;
     }
 
     /**

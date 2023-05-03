@@ -123,6 +123,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'autolaunch', type: 'boolean', nullable: true, options: ['default' => 0])]
     protected ?bool $autoLaunch;
 
+    #[ORM\Column(name: 'hide_attempts_table', type: 'boolean', nullable: false, options: ['default' => 0])]
+    protected bool $hideAttemptsTable;
+
     #[ORM\Column(name: 'page_result_configuration', type: 'array')]
     protected array $pageResultConfiguration = [];
 
@@ -654,6 +657,24 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setHideQuestionNumber(int $hideQuestionNumber): self
     {
         $this->hideQuestionNumber = $hideQuestionNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHideAttemptsTable(): bool
+    {
+        return $this->hideAttemptsTable;
+    }
+
+    /**
+     * @param bool $hideAttemptsTable
+     */
+    public function setHideAttemptsTable(bool $hideAttemptsTable): self
+    {
+        $this->hideAttemptsTable = $hideAttemptsTable;
 
         return $this;
     }

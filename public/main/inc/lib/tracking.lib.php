@@ -7740,7 +7740,7 @@ class Tracking
             $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
         }
 
-        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+        if ('true' === api_get_setting('lp.student_follow_page_add_LP_acquisition_info')) {
             $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
         }
 

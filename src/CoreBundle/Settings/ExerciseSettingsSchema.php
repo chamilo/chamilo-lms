@@ -69,6 +69,22 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'exercise_category_report_user_extra_fields' => '',
                     'score_grade_model' => '',
                     'allow_time_per_question' => 'false',
+                    'my_courses_show_pending_exercise_attempts' => 'false',
+                    'allow_quick_question_description_popup' => 'false',
+                    'exercise_hide_ip' => 'false',
+                    'tracking_my_progress_show_deleted_exercises' => 'false',
+                    'show_exercise_attempts_in_all_user_sessions' => 'false',
+                    'show_exercise_session_attempts_in_base_course' => 'false',
+                    'quiz_check_all_answers_before_end_test' => 'false',
+                    'quiz_discard_orphan_in_course_export' => 'false',
+                    'exercise_result_end_text_html_strict_filtering' => 'false',
+                    'question_exercise_html_strict_filtering' => 'false',
+                    'quiz_question_delete_automatically_when_deleting_exercise' => 'false',
+                    'quiz_question_allow_inter_course_linking' => 'false',
+                    'quiz_hide_attempts_table_on_start_page' => 'false',
+                    'quiz_hide_question_number' => 'false',
+                    'quiz_keep_alive_ping_interval' => '0',
+                    'exercise_embeddable_extra_types' => '',
                 ]
             )
         ;
@@ -182,6 +198,31 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_time_per_question', YesNoType::class)
+            ->add('my_courses_show_pending_exercise_attempts', YesNoType::class)
+            ->add('allow_quick_question_description_popup', YesNoType::class)
+            ->add('exercise_hide_ip', YesNoType::class)
+            ->add('tracking_my_progress_show_deleted_exercises', YesNoType::class)
+            ->add('show_exercise_attempts_in_all_user_sessions', YesNoType::class)
+            ->add('show_exercise_session_attempts_in_base_course', YesNoType::class)
+            ->add('quiz_check_all_answers_before_end_test', YesNoType::class)
+            ->add('quiz_discard_orphan_in_course_export', YesNoType::class)
+            ->add('exercise_result_end_text_html_strict_filtering', YesNoType::class)
+            ->add('question_exercise_html_strict_filtering', YesNoType::class)
+            ->add('quiz_question_delete_automatically_when_deleting_exercise', YesNoType::class)
+            ->add('quiz_question_allow_inter_course_linking', YesNoType::class)
+            ->add('quiz_hide_attempts_table_on_start_page', YesNoType::class)
+            ->add('quiz_hide_question_number', YesNoType::class)
+            ->add('quiz_keep_alive_ping_interval', TextType::class)
+            ->add(
+                'exercise_embeddable_extra_types',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allow extends allowed question types for embeddable exercises. By default, only the following question types are allowed: 1, 2, 17').
+                        $this->settingArrayHelpValue('exercise_embeddable_extra_types'),
+                ]
+            )
+
 
         ;
     }
@@ -249,6 +290,29 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                             ]
                         ]
                     ]
+                </pre>",
+            'exercise_embeddable_extra_types' => "<pre>
+                Add this types to allow them in embeddable exercises:
+                 1 = Multiple choice
+                 2 = Multiple answers
+                 3 = Fill blanks or form
+                 4 = Matching
+                 5 = Open question
+                 9 = Exact Selection
+                10 = Unique answer with unknown
+                11 = Multiple answer true/false/don't know
+                12 = Combination true/false/don't know
+                13 = Oral expression
+                14 = Global multiple answer
+                16 = Calculated question
+                17 = Unique answer image
+                21 = Reading comprehension
+                22 = Multiple answer true/false/degree of certainty
+                23 = Upload answer
+
+                [
+                    'types' => [],
+                ]
                 </pre>",
         ];
 

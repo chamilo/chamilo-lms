@@ -119,6 +119,9 @@ class GradebookCategory
     #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
     protected ?int $gradeBooksToValidateInDependence = null;
 
+    #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected $allowSkillsBySubcategory;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -492,6 +495,26 @@ class GradebookCategory
     public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllowSkillsBySubcategory()
+    {
+        return $this->allowSkillsBySubcategory;
+    }
+
+    /**
+     * @param int $allowSkillsBySubcategory
+     *
+     * @return GradebookCategory
+     */
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    {
+        $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
     }

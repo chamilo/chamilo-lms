@@ -33,6 +33,8 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                     'allow_mandatory_survey' => 'false',
                     'hide_survey_edition' => '',
                     'survey_additional_teacher_modify_actions' => '',
+                    'allow_survey_tool_in_lp' => 'false',
+                    'show_surveys_base_in_sessions' => 'false',
                 ]
             )
         ;
@@ -85,6 +87,8 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
                 ]
             )
+            ->add('allow_survey_tool_in_lp', YesNoType::class)
+            ->add('show_surveys_base_in_sessions', YesNoType::class)
         ;
     }
 

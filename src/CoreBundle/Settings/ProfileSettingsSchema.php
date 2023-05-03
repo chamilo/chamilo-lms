@@ -59,6 +59,9 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'required_extra_fields_in_inscription' => '',
                     'community_managers_user_list' => '',
                     'allow_social_map_fields' => '',
+                    'career_diagram_legend' => 'false',
+                    'career_diagram_disclaimer' => 'false',
+                    'linkedin_organization_id' => 'false',
                 ]
             )
             ->setTransformer(
@@ -229,6 +232,11 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('allow_social_map_fields'),
                 ]
             )
+            ->add('career_diagram_legend', YesNoType::class)
+            ->add('career_diagram_disclaimer', YesNoType::class)
+            ->add('linkedin_organization_id', YesNoType::class)
+
+
         ;
     }
 

@@ -1239,6 +1239,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Do not unsubscribe users from session when sessions are unsubscribe to class
 // $_configuration['usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'] = false;
 
+// Show all users in selector as initial list when subscribing users to class
+//$_configuration['usergroup_add_user_show_all_student_by_default'] = false;
+
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
 /*$_configuration['webservice_validation'] = [

@@ -7291,7 +7291,7 @@ $CourseCreationUsesTemplateComment = "Set this to use the same template course (
 $EnablePasswordStrengthCheckerText = "Password strength checker";
 $EnablePasswordStrengthCheckerComment = "Enable this option to add a visual indicator of password strength, when the user changes his/her password. This will NOT prevent bad passwords to be added, it only acts as a visual helper.";
 $EnableCaptchaText = "CAPTCHA";
-$EnableCaptchaComment = "Enable a CAPTCHA on the login form to avoid password hammering";
+$EnableCaptchaComment = "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering";
 $CaptchaNumberOfMistakesBeforeBlockingAccountText = "CAPTCHA mistakes allowance";
 $CaptchaNumberOfMistakesBeforeBlockingAccountComment = "The number of times a user can make a mistake on the CAPTCHA box before his account is locked out.";
 $CaptchaTimeAccountIsLockedText = "CAPTCHA account locking time";
@@ -9013,4 +9013,5 @@ $AllowSubscriptions = "Allow subscriptions";
 $MaxSubscriptions = "Maximum number of subscriptions";
 $NoMoreAccessible = "No longer available";
 $AccessibleFrom = "Available from";
+$ExportExerciseAllResults = "Export all results from an exercise";
 ?>

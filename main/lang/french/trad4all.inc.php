@@ -7243,7 +7243,7 @@ $CourseCreationUsesTemplateComment = "Configurez ce paramètre pour utiliser le 
 $EnablePasswordStrengthCheckerText = "Valider la complexité du mot de passe";
 $EnablePasswordStrengthCheckerComment = "L'activation de cette option fera apparaître un indicateur de complexité de mot de passe quand l'utilisateur modifie son mot de passe. Ceci n'empêche *PAS* l'introduction d'un mauvais mot de passe. Il s'agit seulement d'une aide visuelle.";
 $EnableCaptchaText = "CAPTCHA";
-$EnableCaptchaComment = "Activer cette option fera apparaître un CAPTCHA dans le formulaire de login pour éviter les tentatives de pénétration par force brute.";
+$EnableCaptchaComment = "Activer cette option fera apparaître un CAPTCHA dans les formulaires de login, d'inscription et de mot de passe perdu pour éviter les tentatives de pénétration par force brute.";
 $CaptchaNumberOfMistakesBeforeBlockingAccountText = "Marge d'erreur du login avec CAPTCHA";
 $CaptchaNumberOfMistakesBeforeBlockingAccountComment = "Nombre de fois qu'un utillisateur peut se tromper dans l'introduction de son nom d'utilisateur et de son mot de passe avant que son compte ne soit congelé pour un certain temps.";
 $CaptchaTimeAccountIsLockedText = "Temps de blocage CAPTCHA";
@@ -8947,4 +8947,5 @@ $AllowSubscriptions = "Autoriser les inscriptions";
 $MaxSubscriptions = "Nombre maximum d'inscriptions";
 $NoMoreAccessible = "Plus accessible";
 $AccessibleFrom = "Accessible à partir du";
+$ExportExerciseAllResults = "Exporter tous les résultats d'un exercice";
 ?>

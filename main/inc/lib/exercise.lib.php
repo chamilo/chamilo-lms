@@ -7150,4 +7150,76 @@ EOT;
 
         error_log("Exercise ping received: exe_id = $exeId. _user not found in session.");
     }
+
+    public static function saveFileExerciseResultPdf(
+        int $exeId,
+        int $courseId,
+        int $sessionId
+    ) {
+        $cinfo = api_get_course_info_by_id($courseId);
+        $courseCode = $cinfo['code'];
+        $cidReq = 'cidReq='.$courseCode.'&id_session='.$sessionId.'&gidReq=0&gradebook=0';
+
+        $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_COOKIE, session_id());
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+
+        curl_close($ch);
+    }
+
+    public static function exportExerciseAllResultsZip(
+        int $sessionId,
+        int $courseId,
+        int $exerciseId
+    ) {
+        $objExerciseTmp = new Exercise($courseId);
+        $exeResults = $objExerciseTmp->getExerciseAndResult(
+            $courseId,
+            $sessionId,
+            $exerciseId,
+            ''
+        );
+
+        if (!empty($exeResults)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            // 1. Cleans the export folder if it exists.
+            if (is_dir($exportFolderPath)) {
+                rmdirr($exportFolderPath);
+            }
+
+            // 2. Create the pdfs inside a new export folder path.
+            if (!empty($exeResults)) {
+                foreach ($exeResults as $exeResult) {
+                    $exeId = (int) $exeResult['exe_id'];
+                    ExerciseLib::saveFileExerciseResultPdf($exeId, $courseId, $sessionId);
+                }
+            }
+
+            // 3. If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (!$isFolderPathEmpty) {
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \PclZip($exportFilePath);
+                $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
+                rmdirr($exportFolderPath);
+
+                DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                exit;
+            }
+        }
+
+        return false;
+    }
 }

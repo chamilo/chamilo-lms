@@ -234,6 +234,11 @@ class Message
     #[Groups(['message:read'])]
     protected Collection $attachments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageFeedback", mappedBy="message", orphanRemoval=true)
+     */
+    protected $likes;
+
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -245,6 +250,7 @@ class Message
         $this->receivers = new ArrayCollection();
         $this->receiversCc = new ArrayCollection();
         $this->receiversTo = new ArrayCollection();
+        $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }

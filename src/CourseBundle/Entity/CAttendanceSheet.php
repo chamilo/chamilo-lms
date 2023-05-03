@@ -46,6 +46,11 @@ class CAttendanceSheet
      */
     protected CAttendanceCalendar $attendanceCalendar;
 
+    /**
+     * @ORM\Column(name="signature", type="string", nullable=true)
+     */
+    protected $signature;
+
     public function setPresence(bool $presence): self
     {
         $this->presence = $presence;
@@ -56,6 +61,28 @@ class CAttendanceSheet
     public function getPresence(): bool
     {
         return $this->presence;
+    }
+
+    /**
+     * Set signature.
+     *
+     * @return CAttendanceSheet
+     */
+    public function setSignature(string $signature)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature.
+     *
+     * @return string
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 
     public function getUser(): User

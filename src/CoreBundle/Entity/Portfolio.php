@@ -84,6 +84,47 @@ class Portfolio
      */
     protected PortfolioCategory $category;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="item")
+     */
+    private $comments;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin", type="integer", nullable=true)
+     */
+    private $origin;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin_type", type="integer", nullable=true)
+     */
+    private $originType;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_highlighted", type="boolean", options={"default": false})
+     */
+    private $isHighlighted = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
+     */
+    private $isTemplate = false;
+
     public function __construct()
     {
         $this->category = new PortfolioCategory();
@@ -266,6 +307,96 @@ class Portfolio
     public function setCategory(PortfolioCategory $category = null)
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getLastComments(int $number = 3, bool $avoidPerUserVisibility = false): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->orderBy(['date' => 'DESC'])
+            ->setMaxResults($number);
+
+        if ($avoidPerUserVisibility) {
+            $criteria->where(
+                Criteria::expr()->neq('visibility', PortfolioComment::VISIBILITY_PER_USER)
+            );
+        }
+
+        return $this->comments->matching($criteria);
+    }
+
+    public function getOrigin(): ?int
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOrigin(?int $origin): Portfolio
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getOriginType(): ?int
+    {
+        return $this->originType;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOriginType(?int $originType): Portfolio
+    {
+        $this->originType = $originType;
+
+        return $this;
+    }
+
+    public function getExcerpt(int $count = 380): string
+    {
+        return api_get_short_text_from_html($this->content, $count);
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    public function isHighlighted(): bool
+    {
+        return $this->isHighlighted;
+    }
+
+    public function setIsHighlighted(bool $isHighlighted): Portfolio
+    {
+        $this->isHighlighted = $isHighlighted;
+
+        return $this;
+    }
+
+    public function isTemplate(): bool
+    {
+        return $this->isTemplate;
+    }
+
+    public function setIsTemplate(bool $isTemplate): Portfolio
+    {
+        $this->isTemplate = $isTemplate;
 
         return $this;
     }

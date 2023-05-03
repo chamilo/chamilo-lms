@@ -27,6 +27,7 @@ class WorkSettingsSchema extends AbstractSettingsSchema
                     'considered_working_time' => 'work_time',
                     'force_download_doc_before_upload_work' => 'true',
                     'allow_redirect_to_main_page_after_work_upload' => 'false',
+                    'my_courses_show_pending_work' => 'false',
                 ]
             )
         ;
@@ -45,6 +46,8 @@ class WorkSettingsSchema extends AbstractSettingsSchema
             ->add('considered_working_time', TextType::class)
             ->add('force_download_doc_before_upload_work', YesNoType::class)
             ->add('allow_redirect_to_main_page_after_work_upload', YesNoType::class)
+            ->add('my_courses_show_pending_work', YesNoType::class)
+
         ;
     }
 }

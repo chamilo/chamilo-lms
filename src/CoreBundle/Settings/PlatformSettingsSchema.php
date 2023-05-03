@@ -72,6 +72,34 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'video_features' => '',
                     'table_row_list' => '',
                     'allow_portfolio_tool' => 'false',
+                    'session_stored_in_db_as_backup' => 'false',
+                    'memcache_server' => '',
+                    'session_stored_after_n_times' => '10',
+                    'default_template' => 'default',
+                    'aspell_bin' => '/usr/bin/hunspell',
+                    'aspell_opts' => '-a -d en_GB -H -i utf-8',
+                    'aspell_temp_dir' => './',
+                    'webservice_return_user_field' => 'oauth2_id',
+                    'multiple_url_hide_disabled_settings' => 'false',
+                    'login_max_attempt_before_blocking_account' => '0',
+                    'force_renew_password_at_first_login' => 'false',
+                    'hide_breadcrumb_if_not_allowed' => 'false',
+                    'extldap_config' => '',
+                    'update_student_expiration_x_date' => '',
+                    'user_status_show_options_enabled' => 'false',
+                    'user_status_show_option' => '',
+                    'user_number_of_days_for_default_expiration_date_per_role' => '',
+                    'user_edition_extra_field_to_check' => 'ExtrafieldLabel',
+                    'user_hide_never_expire_option' => 'false',
+                    'platform_logo_url' => 'https://chamilo.org',
+                    'use_career_external_id_as_identifier_in_diagrams' => 'false',
+                    'disable_webservices' => 'false',
+                    'webservice_enable_adminonly_api' => 'false',
+                    'plugin_settings' => '',
+                    'allow_working_time_edition' => 'false',
+                    'ticket_project_user_roles' => '',
+                    'disable_user_conditions_sender_id' => '0',
+                    'portfolio_advanced_sharing' => 'false',
                 ]
             )
             ->setTransformer(
@@ -247,6 +275,91 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_portfolio_tool', YesNoType::class)
+            ->add('session_stored_in_db_as_backup', YesNoType::class)
+            ->add(
+                'memcache_server',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Define the different memcache servers available').
+                        $this->settingArrayHelpValue('memcache_server'),
+                ]
+            )
+            ->add('session_stored_after_n_times', TextType::class)
+            ->add('default_template', TextType::class)
+            ->add('aspell_bin', TextType::class)
+            ->add('aspell_opts', TextType::class)
+            ->add('aspell_temp_dir', TextType::class)
+            ->add('webservice_return_user_field', TextType::class)
+            ->add('multiple_url_hide_disabled_settings', YesNoType::class)
+            ->add('login_max_attempt_before_blocking_account', TextType::class)
+            ->add('force_renew_password_at_first_login', YesNoType::class)
+            ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
+            ->add(
+                'extldap_config',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Overwrites the app/config/auth.conf.php settings').
+                        $this->settingArrayHelpValue('extldap_config'),
+                ]
+            )
+            ->add(
+                'update_student_expiration_x_date',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Update user expiration in x days or months when login the first time').
+                        $this->settingArrayHelpValue('update_student_expiration_x_date'),
+                ]
+            )
+            ->add('user_status_show_options_enabled', YesNoType::class)
+            ->add(
+                'user_status_show_option',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('The user status is hidden when is false, it requires user_status_show_options_enabled = true').
+                        $this->settingArrayHelpValue('user_status_show_option'),
+                ]
+            )
+            ->add(
+                'user_number_of_days_for_default_expiration_date_per_role',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Set the default expiration date when a user is created by role and days').
+                        $this->settingArrayHelpValue('user_number_of_days_for_default_expiration_date_per_role'),
+                ]
+            )
+            ->add('user_edition_extra_field_to_check', TextType::class)
+            ->add('user_hide_never_expire_option', YesNoType::class)
+            ->add('platform_logo_url', TextType::class)
+            ->add('use_career_external_id_as_identifier_in_diagrams', YesNoType::class)
+            ->add('disable_webservices', YesNoType::class)
+            ->add('webservice_enable_adminonly_api', YesNoType::class)
+            ->add(
+                'plugin_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Disables the following BBB plugin settings in the plugin form and use them in priority').
+                        $this->settingArrayHelpValue('plugin_settings'),
+                ]
+            )
+            ->add('allow_working_time_edition', YesNoType::class)
+            ->add(
+                'ticket_project_user_roles',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allow ticket projects to be access by specific chamilo roles').
+                        $this->settingArrayHelpValue('ticket_project_user_roles'),
+                ]
+            )
+            ->add('disable_user_conditions_sender_id', TextType::class)
+            ->add('portfolio_advanced_sharing', TextType::class)
+
         ;
     }
 
@@ -272,6 +385,63 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 </pre>",
             'table_row_list' => "<pre>
                 ['options' => [50, 100, 200, 500]]
+                </pre>",
+            'memcache_server' => "<pre>
+                [
+                    0 => [
+                        'host' => 'chamilo8',
+                        'port' => '11211',
+                    ],
+                    1 => [
+                        'host' => 'chamilo9',
+                        'port' => '11211',
+                    ],
+                ]
+                </pre>",
+            'extldap_config' => "<pre>
+                ['host' => '', 'port' => '']
+                </pre>",
+            'update_student_expiration_x_date' => "<pre>
+                [
+                    'days' => 0,
+                    'months' => 0,
+                ]
+                </pre>",
+            'user_status_show_option' => "<pre>
+                [
+                    'COURSEMANAGER' => true,
+                    'STUDENT' => true,
+                    'DRH' => false,
+                    'SESSIONADMIN' => false,
+                    'STUDENT_BOSS' => false,
+                    'INVITEE' => false
+                ]
+                </pre>",
+            'user_number_of_days_for_default_expiration_date_per_role' => "<pre>
+                [
+                    'COURSEMANAGER' => 365,
+                    'STUDENT' => 31,
+                    'DRH' => 31,
+                    'SESSIONADMIN' => 60,
+                    'STUDENT_BOSS' => 60,
+                    'INVITEE' => 31
+                ]
+                </pre>",
+            'plugin_settings' => "<pre>
+                [
+                    'bbb' => [
+                        'tool_enable' => 'true', // string value
+                        'host' => 'https://www.example.com',
+                        'salt' => 'abc123'
+                    ]
+                ]
+                </pre>",
+            'ticket_project_user_roles' => "<pre>
+                [
+                    'permissions' => [
+                        1 => [17] // project_id = 1, STUDENT_BOSS = 17
+                    ]
+                ]
                 </pre>",
         ];
 

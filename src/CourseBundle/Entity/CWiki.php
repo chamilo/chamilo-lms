@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -168,6 +169,16 @@ class CWiki extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected ?int $sessionId = null;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy="wikiPages")
+     * @ORM\JoinTable(
+     *     name="c_wiki_rel_category",
+     *     joinColumns={@ORM\JoinColumn(name="wiki_id", referencedColumnName="iid", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    private $categories;
 
     public function __toString(): string
     {
@@ -759,6 +770,19 @@ class CWiki extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(CWikiCategory $category): CWiki
+    {
+        $category->addWikiPage($this);
+        $this->categories->add($category);
+
+        return $this;
     }
 
     public function setResourceName(string $name): self

@@ -105,6 +105,20 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_log_hide_columns' => '',
                     'course_student_info' => '',
                     'course_catalog_settings' => '',
+                    'resource_sequence_show_dependency_in_course_intro' => 'false',
+                    'course_catalog_display_in_home' => 'false',
+                    'course_creation_form_set_course_category_mandatory' => 'false',
+                    'course_creation_form_hide_course_code' => 'false',
+                    'course_about_teacher_name_hide' => 'false',
+                    'course_visibility_change_only_admin' => 'false',
+                    'catalog_hide_public_link' => 'false',
+                    'course_log_default_extra_fields' => '',
+                    'show_courses_in_catalogue' => 'false',
+                    'courses_catalogue_show_only_category' => '',
+                    'course_creation_by_teacher_extra_fields_to_show' => '',
+                    'course_creation_form_set_extra_fields_mandatory' => '',
+                    'course_configuration_tool_extra_fields_to_show_and_edit' => '',
+                    'course_creation_user_course_extra_field_relation_to_prefill' => '',
                 ]
             )
             ->setTransformer(
@@ -312,6 +326,70 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('course_catalog_settings'),
                 ]
             )
+            ->add('resource_sequence_show_dependency_in_course_intro', YesNoType::class)
+            ->add('course_catalog_display_in_home', YesNoType::class)
+            ->add('course_creation_form_set_course_category_mandatory', YesNoType::class)
+            ->add('course_creation_form_hide_course_code', YesNoType::class)
+            ->add('course_about_teacher_name_hide', YesNoType::class)
+            ->add('course_visibility_change_only_admin', YesNoType::class)
+            ->add('catalog_hide_public_link', YesNoType::class)
+            ->add(
+                'course_log_default_extra_fields',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course log - User extra fields to show as columns for default').
+                        $this->settingArrayHelpValue('course_log_default_extra_fields'),
+                ]
+            )
+            ->add('show_courses_in_catalogue', YesNoType::class)
+            ->add(
+                'courses_catalogue_show_only_category',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allows defining one or several categories of courses that will be visible in the course catalog').
+                        $this->settingArrayHelpValue('courses_catalogue_show_only_category'),
+                ]
+            )
+            ->add(
+                'course_creation_by_teacher_extra_fields_to_show',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course extra fields to be presented on main/create_course/add_course.php').
+                        $this->settingArrayHelpValue('course_creation_by_teacher_extra_fields_to_show'),
+                ]
+            )
+            ->add(
+                'course_creation_form_set_extra_fields_mandatory',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Configuration setting to make some extra field required in course creation form').
+                        $this->settingArrayHelpValue('course_creation_form_set_extra_fields_mandatory'),
+                ]
+            )
+            ->add(
+                'course_configuration_tool_extra_fields_to_show_and_edit',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Course extra fields to be presented on course settings').
+                        $this->settingArrayHelpValue('course_configuration_tool_extra_fields_to_show_and_edit'),
+                ]
+            )
+            ->add(
+                'course_creation_user_course_extra_field_relation_to_prefill',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php').
+                        $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
+                ]
+            )
+
+
         ;
     }
 
@@ -353,6 +431,29 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         'variable5' => -1,
                         'variable6' => 1,
                     ],
+                ]
+                </pre>",
+            'course_log_default_extra_fields' => "<pre>
+                ['extra_fields' => ['office_address', 'office_phone_extension']]
+                </pre>",
+            'courses_catalogue_show_only_category' => "<pre>
+                ['Cat1','Cat2']
+                </pre>",
+            'course_creation_by_teacher_extra_fields_to_show' => "<pre>
+                ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']]
+                </pre>",
+            'course_creation_form_set_extra_fields_mandatory' => "<pre>
+                ['fields' => ['fieldLabel1','fieldLabel2']]
+                </pre>",
+            'course_configuration_tool_extra_fields_to_show_and_edit' => "<pre>
+                ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']]
+                </pre>",
+            'course_creation_user_course_extra_field_relation_to_prefill' => "<pre>
+                [
+                    'fields' => [
+                        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+                        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+                    ]
                 ]
                 </pre>",
         ];

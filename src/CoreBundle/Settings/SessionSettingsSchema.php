@@ -69,6 +69,18 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'catalog_settings' => '',
                     'allow_session_status' => 'false',
                     'tracking_columns' => '',
+                    'my_progress_session_show_all_courses' => 'false',
+                    'assignment_base_course_teacher_access_to_all_session' => 'false',
+                    'allow_session_admin_extra_access' => 'false',
+                    'hide_session_graph_in_my_progress' => 'false',
+                    'show_users_in_active_sessions_in_tracking' => 'false',
+                    'session_coach_access_after_duration_end' => 'false',
+                    'session_course_users_subscription_limited_to_session_users' => 'false',
+                    'session_classes_tab_disable' => 'false',
+                    'email_template_subscription_to_session_confirmation_username' => 'false',
+                    'email_template_subscription_to_session_confirmation_lost_password' => 'false',
+                    'session_creation_user_course_extra_field_relation_to_prefill' => '',
+                    'session_creation_form_set_extra_fields_mandatory' => '',
                 ]
             )
         ;
@@ -188,6 +200,35 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('tracking_columns'),
                 ]
             )
+            ->add('my_progress_session_show_all_courses', YesNoType::class)
+            ->add('assignment_base_course_teacher_access_to_all_session', YesNoType::class)
+            ->add('allow_session_admin_extra_access', YesNoType::class)
+            ->add('hide_session_graph_in_my_progress', YesNoType::class)
+            ->add('show_users_in_active_sessions_in_tracking', YesNoType::class)
+            ->add('session_coach_access_after_duration_end', YesNoType::class)
+            ->add('session_course_users_subscription_limited_to_session_users', YesNoType::class)
+            ->add('email_template_subscription_to_session_confirmation_username', YesNoType::class)
+            ->add('email_template_subscription_to_session_confirmation_lost_password', YesNoType::class)
+            ->add(
+                'session_creation_user_course_extra_field_relation_to_prefill',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php').
+                        $this->settingArrayHelpValue('session_creation_user_course_extra_field_relation_to_prefill'),
+                ]
+            )
+            ->add(
+                'session_creation_form_set_extra_fields_mandatory',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Configuration setting to make some extra field required in session creation form on main/session/session_add.php').
+                        $this->settingArrayHelpValue('session_creation_form_set_extra_fields_mandatory'),
+                ]
+            )
+
+
         ;
     }
 
@@ -260,6 +301,17 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                         'details' => true
                     ]
                 ]
+                </pre>",
+            'session_creation_user_course_extra_field_relation_to_prefill' => "<pre>
+                [
+                    'fields' => [
+                        'client' => 'client',
+                        'region' => 'region',
+                    ]
+                ]
+                </pre>",
+            'session_creation_form_set_extra_fields_mandatory' => "<pre>
+                ['fields' => ['client','region']]
                 </pre>",
         ];
 

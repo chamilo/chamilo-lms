@@ -27,6 +27,9 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                     'hide_announcement_sent_to_users_info' => 'false',
                     'send_all_emails_to' => '',
                     'allow_careers_in_global_announcements' => 'false',
+                    'announcements_hide_send_to_hrm_users' => 'false',
+                    'allow_coach_to_edit_announcements' => 'false',
+                    'course_announcement_scheduled_by_date' => 'false',
                 ]
             )
         ;
@@ -59,6 +62,9 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_careers_in_global_announcements', YesNoType::class)
+            ->add('announcements_hide_send_to_hrm_users', YesNoType::class)
+            ->add('allow_coach_to_edit_announcements', YesNoType::class)
+            ->add('course_announcement_scheduled_by_date', YesNoType::class)
 
         ;
     }

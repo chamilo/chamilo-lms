@@ -171,6 +171,11 @@ class GradebookCategory
      */
     protected ?int $gradeBooksToValidateInDependence = null;
 
+    /**
+     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=true, options={"default": 1})
+     */
+    protected $allowSkillsBySubcategory;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -544,6 +549,26 @@ class GradebookCategory
     public function setSkills(Collection $skills): self
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllowSkillsBySubcategory()
+    {
+        return $this->allowSkillsBySubcategory;
+    }
+
+    /**
+     * @param int $allowSkillsBySubcategory
+     *
+     * @return GradebookCategory
+     */
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    {
+        $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
     }

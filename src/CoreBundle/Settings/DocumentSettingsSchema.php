@@ -66,6 +66,9 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'group_category_document_access' => 'false',
                     'allow_compilatio_tool' => 'false',
                     'compilatio_tool' => '',
+                    'documents_hide_download_icon' => 'false',
+                    'enable_x_sendfile_headers' => 'false',
+                    'documents_custom_cloud_link_list' => '',
                 ]
             )
             ->setTransformer(
@@ -189,6 +192,19 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('compilatio_tool'),
                 ]
             )
+            ->add('documents_hide_download_icon', YesNoType::class)
+            ->add('enable_x_sendfile_headers', YesNoType::class)
+            ->add(
+                'documents_custom_cloud_link_list',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Custom cloud link URLS, this requires enable_add_file_link = true').
+                        $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
+                ]
+            )
+
+
         ;
     }
 
@@ -209,6 +225,9 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'wget_password' => '',
                     ]
                 ]
+                </pre>",
+            'documents_custom_cloud_link_list' => "<pre>
+                ['links' => ['example.com', 'example2.com']]
                 </pre>",
         ];
 

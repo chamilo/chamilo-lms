@@ -167,6 +167,11 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     protected bool $hideQuestionTitle;
 
     /**
+     * @ORM\Column(name="hide_attempts_table", type="boolean", nullable=false)
+     */
+    protected bool $hideAttemptsTable;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -723,6 +728,24 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setHideQuestionNumber(int $hideQuestionNumber): self
     {
         $this->hideQuestionNumber = $hideQuestionNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHideAttemptsTable(): bool
+    {
+        return $this->hideAttemptsTable;
+    }
+
+    /**
+     * @param bool $hideAttemptsTable
+     */
+    public function setHideAttemptsTable(bool $hideAttemptsTable): self
+    {
+        $this->hideAttemptsTable = $hideAttemptsTable;
 
         return $this;
     }

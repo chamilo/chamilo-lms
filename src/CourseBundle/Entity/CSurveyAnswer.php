@@ -52,6 +52,16 @@ class CSurveyAnswer
      */
     protected string $user;
 
+    /**
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     */
+    protected $sessionId;
+
+    /**
+     * @ORM\Column(name="c_lp_item_id", type="integer", nullable=false)
+     */
+    protected $lpItemId;
+
     public function __construct()
     {
     }
@@ -127,6 +137,52 @@ class CSurveyAnswer
     public function setOptionId(string $optionId): self
     {
         $this->optionId = $optionId;
+
+        return $this;
+    }
+
+    /**
+     * Get session Id.
+     *
+     * @return int
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * Set session Id.
+     *
+     * @param int $sessionId
+     *
+     * @return CSurveyAnswer
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    /**
+     * Get the lp item Id.
+     *
+     * @return int
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
+    }
+
+    /**
+     * Set lp item Id.
+     *
+     * @return CSurveyAnswer
+     */
+    public function setLpItemId(int $lpItemId)
+    {
+        $this->lpItemId = $lpItemId;
 
         return $this;
     }

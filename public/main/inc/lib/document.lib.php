@@ -367,7 +367,7 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-        $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
+        $sendFileHeaders = ('true' === api_get_setting('document.enable_x_sendfile_headers'));
 
         // Allows chrome to make videos and audios seekable
         header('Accept-Ranges: bytes');

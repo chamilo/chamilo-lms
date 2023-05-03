@@ -1,3 +1,0 @@
-<?php
-
-Mobidico::create()->uninstall();

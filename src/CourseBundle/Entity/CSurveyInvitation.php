@@ -87,6 +87,11 @@ class CSurveyInvitation
      */
     protected ?DateTime $answeredAt = null;
 
+    /**
+     * @ORM\Column(name="c_lp_item_id", type="integer", nullable=false)
+     */
+    protected $lpItemId;
+
     public function __construct()
     {
         $this->answered = 0;
@@ -231,5 +236,29 @@ class CSurveyInvitation
         $this->group = $group;
 
         return $this;
+    }
+
+    /**
+     * Set LpItemId.
+     *
+     * @param int $lpItemId
+     *
+     * @return CSurveyInvitation
+     */
+    public function setLpItemId($lpItemId)
+    {
+        $this->lpItemId = $lpItemId;
+
+        return $this;
+    }
+
+    /**
+     * Get LpItemId.
+     *
+     * @return int
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
     }
 }

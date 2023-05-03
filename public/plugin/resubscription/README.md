@@ -1,4 +1,0 @@
-Resubscription
-==============
-
-Limit session resubscriptions

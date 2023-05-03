@@ -45,6 +45,11 @@ class CAttendanceCalendar
     protected bool $doneAttendance;
 
     /**
+     * @ORM\Column(name="blocked", type="boolean", nullable=true)
+     */
+    protected $blocked;
+
+    /**
      * @var Collection|CAttendanceSheet[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheet", mappedBy="attendanceCalendar", cascade={"persist", "remove"})
@@ -95,6 +100,30 @@ class CAttendanceCalendar
     public function getDoneAttendance(): bool
     {
         return $this->doneAttendance;
+    }
+
+    /**
+     * Set blocked.
+     *
+     * @param bool $blocked
+     *
+     * @return CAttendanceCalendar
+     */
+    public function setBlocked($blocked)
+    {
+        $this->blocked = $blocked;
+
+        return $this;
+    }
+
+    /**
+     * Get blocked.
+     *
+     * @return bool
+     */
+    public function getBlocked()
+    {
+        return $this->blocked;
     }
 
     /**

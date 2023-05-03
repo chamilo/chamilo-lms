@@ -48,6 +48,26 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     'lp_view_settings' => '',
                     'download_files_after_all_lp_finished' => '',
                     'allow_lp_subscription_to_usergroups' => 'false',
+                    'lp_fixed_encoding' => 'false',
+                    'lp_prerequisite_use_last_attempt_only' => 'false',
+                    'show_invisible_exercise_in_lp_list' => 'false',
+                    'force_edit_exercise_in_lp' => 'false',
+                    'student_follow_page_add_LP_subscription_info' => 'false',
+                    'lp_show_max_progress_instead_of_average' => 'false',
+                    'lp_show_max_progress_or_average_enable_course_level_redefinition' => 'false',
+                    'lp_allow_export_to_students' => 'false',
+                    'show_invisible_lp_in_course_home' => 'false',
+                    'lp_start_and_end_date_visible_in_student_view' => 'false',
+                    'scorm_lms_update_sco_status_all_time' => 'false',
+                    'scorm_upload_from_cache' => 'false',
+                    'lp_prerequisit_on_quiz_unblock_if_max_attempt_reached' => 'false',
+                    'student_follow_page_hide_lp_tests_average' => 'false',
+                    'student_follow_page_add_LP_acquisition_info' => 'false',
+                    'student_follow_page_add_LP_invisible_checkbox' => 'false',
+                    'student_follow_page_include_not_subscribed_lp_students' => 'false',
+                    'my_progress_course_tools_order' => '',
+                    'lp_enable_flow' => 'false',
+                    'lp_item_prerequisite_dates' => 'false',
                 ]
             )
         ;
@@ -129,6 +149,34 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_lp_subscription_to_usergroups', YesNoType::class)
+            ->add('lp_fixed_encoding', YesNoType::class)
+            ->add('lp_prerequisite_use_last_attempt_only', YesNoType::class)
+            ->add('show_invisible_exercise_in_lp_list', YesNoType::class)
+            ->add('force_edit_exercise_in_lp', YesNoType::class)
+            ->add('student_follow_page_add_LP_subscription_info', YesNoType::class)
+            ->add('lp_show_max_progress_instead_of_average', YesNoType::class)
+            ->add('lp_show_max_progress_or_average_enable_course_level_redefinition', YesNoType::class)
+            ->add('lp_allow_export_to_students', YesNoType::class)
+            ->add('show_invisible_lp_in_course_home', YesNoType::class)
+            ->add('lp_start_and_end_date_visible_in_student_view', YesNoType::class)
+            ->add('scorm_lms_update_sco_status_all_time', YesNoType::class)
+            ->add('scorm_upload_from_cache', YesNoType::class)
+            ->add('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached', YesNoType::class)
+            ->add('student_follow_page_hide_lp_tests_average', YesNoType::class)
+            ->add('student_follow_page_add_LP_acquisition_info', YesNoType::class)
+            ->add('student_follow_page_add_LP_invisible_checkbox', YesNoType::class)
+            ->add('student_follow_page_include_not_subscribed_lp_students', YesNoType::class)
+            ->add(
+                'my_progress_course_tools_order',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allow change the order to show the tools in "My progress" page').
+                        $this->settingArrayHelpValue('my_progress_course_tools_order'),
+                ]
+            )
+            ->add('lp_enable_flow', YesNoType::class)
+            ->add('lp_item_prerequisite_dates', YesNoType::class)
         ;
     }
 
@@ -155,6 +203,11 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 </pre>",
             'download_files_after_all_lp_finished' => "<pre>
                 ['courses' => ['ABC' => [1, 100]]]
+                </pre>",
+            'my_progress_course_tools_order' => "<pre>
+                [
+                    'order' => ['quizzes', 'learning_paths', 'skills'],
+                ]
                 </pre>",
         ];
 

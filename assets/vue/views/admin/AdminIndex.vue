@@ -1,14 +1,90 @@
 <template>
   <div class="space-y-4 admin-index">
+    <div v-if="isLoadingBlocks" class="space-y-4">
+      <Skeleton v-for="i in 9" :key="`skeleton-${i}`" height="10rem" />
+    </div>
+
     <AdminBlock
-      v-for="(block, index) in blocks"
-      :key="index"
-      :class="block.className"
-      :description="block.description"
-      :icon="block.icon"
-      :items="block.items"
-      :search-url="block.searchUrl"
-      :title="block.title"
+      v-if="blockUsers"
+      :description="t('Here you can manage registered users within your platform')"
+      :items="blockUsers.items"
+      :search-url="blockUsers.searchUrl"
+      :title="t('User management')"
+      class="block-admin-users"
+      icon="account"
+    />
+
+    <AdminBlock
+      v-if="blockCourses"
+      :description="t('Create and manage your courses in a simple way')"
+      :items="blockCourses.items"
+      :search-url="blockCourses.searchUrl"
+      :title="t('Course management')"
+      class="block-admin-courses"
+      icon="book-open-page-variant"
+    />
+
+    <AdminBlock
+      v-if="blockSessions"
+      :description="t('Create course packages for a certain time with training sessions')"
+      :items="blockSessions.items"
+      :search-url="blockSessions.searchUrl"
+      :title="t('Sessions management')"
+      class="block-admin-sessions"
+      icon="google-classroom"
+    />
+
+    <AdminBlock
+      v-if="blockGradebook"
+      :items="blockGradebook.items"
+      :title="t('Assessments')"
+      class="block-admin-gradebook"
+      icon="certificate"
+    />
+
+    <AdminBlock
+      v-if="blockSkills"
+      :description="t('Manage the skills of your users, through courses and badges')"
+      :items="blockSkills.items"
+      :title="t('Skills')"
+      class="block-admin-skills"
+      icon="certificate"
+    />
+
+    <AdminBlock
+      v-if="blockPrivacy"
+      :items="blockPrivacy.items"
+      :title="t('Personal data protection')"
+      class="block-admin-privacy"
+      icon="incognito"
+    />
+
+    <AdminBlock
+      v-if="blockSettings"
+      :description="t('View the status of your server, perform performance tests')"
+      :items="blockSettings.items"
+      :title="t('System')"
+      class="block-admin-settings"
+      icon="tools"
+    />
+
+    <AdminBlock
+      v-if="blockPlatform"
+      :description="t('Configure your platform, view reports, publish and send announcements globally')"
+      :items="blockPlatform.items"
+      :search-url="blockPlatform.searchUrl"
+      :title="t('Platform management')"
+      class="block-admin-platform"
+      icon="cogs"
+    />
+
+    <AdminBlock
+      v-if="blockChamilo"
+      :description="t('Learn more about Chamilo and its use, official references links')"
+      :items="blockChamilo.items"
+      class="block-admin-chamilo"
+      icon="cogs"
+      title="Chamilo.org"
     />
 
     <div v-if="isAdmin" class="block-admin-version p-4 rounded-lg shadow-lg space-y-3">
@@ -55,18 +131,11 @@ import { useStore } from "vuex";
 import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
+import Skeleton from "primevue/skeleton";
 import AdminBlock from "../../components/admin/AdminBlock";
 import axios from "axios";
 
 import { usePlatformConfig } from "../../store/platformConfig";
-
-import { useBlockUsersItems } from "../../components/admin/items/blockUsersItems";
-import { useBlockSkillsItems } from "../../components/admin/items/blockSkillsItems";
-import { useBlockCoursesItems } from "../../components/admin/items/blockCoursesItems";
-import { useBlockChamiloItems } from "../../components/admin/items/blockChamiloItems";
-import { useBlockPlatformItems } from "../../components/admin/items/blockPlatformItems";
-import { useBlockSessionsItems } from "../../components/admin/items/blockSessionsItems";
-import { useBlockSettingsItems } from "../../components/admin/items/blockSettingsItems";
 
 const { t } = useI18n();
 
@@ -76,98 +145,6 @@ const platformConfigurationStore = usePlatformConfig();
 const toast = useToast();
 
 const isAdmin = computed(() => store.getters["security/isAdmin"]);
-
-const blocks = ref([]);
-
-// Users
-blocks.value.push({
-  className: "block-admin-users",
-  icon: "account",
-  title: t("User management"),
-  description: t("Here you can manage registered users within your platform"),
-  searchUrl: "/main/admin/user_list.php",
-  editable: isAdmin.value,
-  items: useBlockUsersItems(),
-});
-
-if (isAdmin.value) {
-  // Courses
-  blocks.value.push({
-    className: "block-admin-courses",
-    icon: "book-open-page-variant",
-    title: t("Course management"),
-    description: t("Create and manage your courses in a simple way"),
-    searchUrl: "/main/admin/course_list.php",
-    editable: true,
-    items: useBlockCoursesItems(),
-  });
-}
-
-// Sessions
-blocks.value.push({
-  className: "block-admin-sessions",
-  icon: "google-classroom",
-  title: t("Sessions management"),
-  description: t("Create course packages for a certain time with training sessions"),
-  searchUrl: "/main/session/session_list.php",
-  editable: isAdmin.value,
-  items: useBlockSessionsItems(),
-});
-
-if (isAdmin.value) {
-  // SKills
-  if ("true" === platformConfigurationStore.getSetting("skill.allow_skills_tool")) {
-    blocks.value.push({
-      className: "block-admin-skills",
-      icon: "certificate",
-      title: t("Skills and gradebook"),
-      description: t("Manage the skills of your users, through courses and badges"),
-      editable: false,
-      items: useBlockSkillsItems(),
-    });
-  }
-
-  if ("true" === platformConfigurationStore.getSetting("gradebook.gradebook_dependency")) {
-    blocks.value.push({
-      className: "block-admin-gradebook",
-      icon: "certificate",
-      title: t("Assessments"),
-      editable: false,
-      items: [],
-    });
-  }
-
-  // Platform
-  blocks.value.push({
-    className: "block-admin-platform",
-    icon: "cogs",
-    title: t("Platform management"),
-    description: t("Configure your platform, view reports, publish and send announcements globally"),
-    searchUrl: "/admin/settings/search_settings/",
-    editable: true,
-    items: useBlockPlatformItems(),
-  });
-
-  // Settings
-  blocks.value.push({
-    className: "block-admin-settings",
-    icon: "tools",
-    title: t("System"),
-    description: t("View the status of your server, perform performance tests"),
-    editable: false,
-    items: useBlockSettingsItems(),
-  });
-
-  // Chamilo.org
-  blocks.value.push({
-    className: "block-admin-chamilo",
-    icon: "cogs",
-    title: "Chamilo.org",
-    description: t("Learn more about Chamilo and its use, official references links"),
-    editable: false,
-    items: useBlockChamiloItems(),
-  });
-}
 
 const doNotListCampus = ref(false);
 
@@ -187,16 +164,43 @@ function checkVersionOnSubmit() {
 const blockAdminVersionCheck = ref();
 
 onMounted(() => {
-  if ("false" === platformConfigurationStore.getSetting("admin.admin_chamilo_announcements_disable")) {
-    axios
-      .get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
-      .then(({ data }) => toast.add({ severity: "info", detail: data }));
-  }
-
-  axios.get("/main/inc/ajax/admin.ajax.php?a=version").then(({ data }) => {
-    if (blockAdminVersionCheck.value) {
-      blockAdminVersionCheck.value.innerHTML += data;
+  if (isAdmin.value) {
+    if ("false" === platformConfigurationStore.getSetting("admin.admin_chamilo_announcements_disable")) {
+      axios
+        .get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
+        .then(({ data }) => toast.add({ severity: "info", detail: data }));
     }
-  });
+
+    axios.get("/main/inc/ajax/admin.ajax.php?a=version").then(({ data }) => {
+      if (blockAdminVersionCheck.value) {
+        blockAdminVersionCheck.value.innerHTML += data;
+      }
+    });
+  }
+});
+
+const isLoadingBlocks = ref(true);
+const blockUsers = ref(null);
+const blockCourses = ref(null);
+const blockSessions = ref(null);
+const blockGradebook = ref(null);
+const blockSkills = ref(null);
+const blockPrivacy = ref(null);
+const blockSettings = ref(null);
+const blockPlatform = ref(null);
+const blockChamilo = ref(null);
+
+axios.get("/admin/index").then(({ data }) => {
+  isLoadingBlocks.value = false;
+
+  blockUsers.value = data.users;
+  blockCourses.value = data.courses;
+  blockSessions.value = data.sessions;
+  blockGradebook.value = data.gradebook;
+  blockSkills.value = data.skills;
+  blockPrivacy.value = data.data_privacy;
+  blockSettings.value = data.settings;
+  blockPlatform.value = data.platform;
+  blockChamilo.value = data.chamilo;
 });
 </script>

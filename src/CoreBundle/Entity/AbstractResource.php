@@ -92,9 +92,9 @@ abstract class AbstractResource
     public ?UploadedFile $uploadFile = null;
 
     /**
-     * @var AbstractResource|ResourceInterface
+     * @var AbstractResource|ResourceInterface|null
      */
-    public AbstractResource|ResourceInterface $parentResource;
+    public $parentResource;
 
     #[Groups(['resource_node:read', 'document:read'])]
     public ?array $resourceLinkListFromEntity = null;
@@ -214,7 +214,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function getParent(): ResourceInterface|AbstractResource
+    public function getParent()
     {
         return $this->parentResource;
     }

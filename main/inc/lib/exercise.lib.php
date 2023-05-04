@@ -7169,8 +7169,15 @@ EOT;
         curl_setopt($ch, CURLOPT_FAILONERROR, false);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
         curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
         $result = curl_exec($ch);
+
+        if (false === $result) {
+            error_log('saveFileExerciseResultPdf error: '.curl_error($ch));
+        }
 
         curl_close($ch);
     }
@@ -7209,15 +7216,30 @@ EOT;
 
             // 3. If export folder is not empty will be zipped.
             $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
-            if (!$isFolderPathEmpty) {
+            if (is_dir($isFolderPathEmpty) && !$isFolderPathEmpty) {
                 $exportFilePath = $baseDir.$exportName.'.zip';
                 $zip = new \PclZip($exportFilePath);
                 $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
                 rmdirr($exportFolderPath);
 
                 DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
-                exit;
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ExportExerciseNoResult'),
+                        'warning',
+                        false
+                    )
+                );
             }
+        } else {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
         }
 
         return false;

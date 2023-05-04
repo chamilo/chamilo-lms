@@ -560,15 +560,23 @@ class PDF
 
         if ($saveInFile) {
             $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
-            @$this->pdf->Output(
-                $fileToSave,
-                $outputMode
-            ); // F to save the pdf in a file
+            try {
+                @$this->pdf->Output(
+                    $fileToSave,
+                    $outputMode
+                ); // F to save the pdf in a file
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         } else {
-            @$this->pdf->Output(
-                $output_file,
-                $outputMode
-            ); // F to save the pdf in a file
+            try {
+                @$this->pdf->Output(
+                    $output_file,
+                    $outputMode
+                ); // F to save the pdf in a file
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         }
 
         if ($outputMode != 'F') {

@@ -7195,6 +7195,7 @@ EOT;
             ''
         );
 
+        $exportOk = false;
         if (!empty($exeResults)) {
             $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
             $baseDir = api_get_path(SYS_ARCHIVE_PATH);
@@ -7216,23 +7217,19 @@ EOT;
 
             // 3. If export folder is not empty will be zipped.
             $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
-            if (is_dir($isFolderPathEmpty) && !$isFolderPathEmpty) {
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
                 $exportFilePath = $baseDir.$exportName.'.zip';
                 $zip = new \PclZip($exportFilePath);
                 $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
                 rmdirr($exportFolderPath);
 
                 DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
-            } else {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('ExportExerciseNoResult'),
-                        'warning',
-                        false
-                    )
-                );
+                exit;
             }
-        } else {
+        }
+
+        if (!$exportOk) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('ExportExerciseNoResult'),

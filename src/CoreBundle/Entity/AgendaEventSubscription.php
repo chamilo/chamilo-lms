@@ -6,19 +6,15 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class AgendaEventSubscription extends AgendaEventInvitation
 {
     public const SUBSCRIPTION_NO = 0;
     public const SUBSCRIPTION_ALL = 1;
     public const SUBSCRIPTION_CLASS = 2;
 
-    /**
-     * @ORM\Column(name="max_attendees", type="integer", nullable=false, options={"default": 0})
-     */
-    protected $maxAttendees = 0;
+    #[ORM\Column(name: "max_attendees", type: "integer", nullable: false, options: ["default" => 0])]
+    protected int $maxAttendees = 0;
 
     public function getMaxAttendees(): int
     {

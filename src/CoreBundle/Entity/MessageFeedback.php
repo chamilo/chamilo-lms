@@ -22,148 +22,94 @@ use Doctrine\ORM\Mapping\Index;
  */
 class MessageFeedback
 {
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    private $id;
+    #[ORM\Column(name: "id", type: "bigint")]
+    #[ORM\Id()]
+    #[ORM\GeneratedValue()]
+    private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="likes")
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $message;
+    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\Message", inversedBy: "likes")]
+    #[ORM\JoinColumn(name: "message_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+    private Message $message;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\User")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+    private User $user;
 
-    /**
-     * @ORM\Column(name="liked", type="boolean", options={"default": false})
-     */
-    private $liked;
+    #[ORM\Column(name: "liked", type: "boolean", options: ["default" => false])]
+    private bool $liked = false;
 
-    /**
-     * @ORM\Column(name="disliked", type="boolean", options={"default": false})
-     */
-    private $disliked;
+    #[ORM\Column(name: "disliked", type: "boolean", options: ["default" => false])]
+    private bool $disliked = false;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    private $updatedAt;
+    #[ORM\Column(name: "updated_at", type: "datetime", nullable: false)]
+    private \DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return MessageFeedback
-     */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return Message
-     */
-    public function getMessage()
+    public function getMessage(): Message
     {
         return $this->message;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setMessage(Message $message)
+    public function setMessage(Message $message): self
     {
         $this->message = $message;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isLiked()
+    public function isLiked(): bool
     {
         return $this->liked;
     }
 
-    /**
-     * @param bool $liked
-     *
-     * @return MessageFeedback
-     */
-    public function setLiked($liked)
+    public function setLiked(bool $liked): self
     {
         $this->liked = $liked;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDisliked()
+    public function isDisliked(): bool
     {
         return $this->disliked;
     }
 
-    /**
-     * @param bool $disliked
-     *
-     * @return MessageFeedback
-     */
-    public function setDisliked($disliked)
+    public function setDisliked(bool $disliked): self
     {
         $this->disliked = $disliked;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

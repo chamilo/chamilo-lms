@@ -19,180 +19,103 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CAttendanceResultComment
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $iid;
+    #[ORM\Column(name: "iid", type: "integer")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected int $iid;
 
-    /**
-     * @ORM\Column(name="attendance_sheet_id", type="integer", nullable=false)
-     */
-    protected $attendanceSheetId;
+    #[ORM\Column(name: "attendance_sheet_id", type: "integer", nullable: false)]
+    protected int $attendanceSheetId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
+    #[ORM\Column(name: "user_id", type: "integer", nullable: false)]
+    protected int $userId;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    protected $comment;
+    #[ORM\Column(name: "comment", type: "text", nullable: true)]
+    protected ?string $comment;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
+    #[ORM\Column(name: "created_at", type: "datetime", nullable: false)]
+    protected \DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    protected $updatedAt;
+    #[ORM\Column(name: "updated_at", type: "datetime", nullable: false)]
+    protected \DateTime $updatedAt;
 
-    /**
-     * @ORM\Column(name="author_user_id", type="integer", nullable=false)
-     */
-    protected $authorUserId;
+    #[ORM\Column(name: "author_user_id", type: "integer", nullable: false)]
+    protected int $authorUserId;
 
-    /**
-     * Project constructor.
-     */
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * Get attendanceSheetId.
-     */
     public function getAttendanceSheetId(): int
     {
         return $this->attendanceSheetId;
     }
 
-    /**
-     * Set attendanceSheetId.
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setAttendanceSheetId(int $attendanceSheetId)
+    public function setAttendanceSheetId(int $attendanceSheetId): self
     {
         $this->attendanceSheetId = $attendanceSheetId;
 
         return $this;
     }
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setUserId($userId)
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setComment($comment)
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    /**
-     * Set authorUserId.
-     *
-     * @param int $authorUserId
-     *
-     * @return CAttendanceResultComment
-     */
-    public function setAuthorUserId($authorUserId)
+    public function setAuthorUserId(int $authorUserId): self
     {
         $this->authorUserId = $authorUserId;
 
         return $this;
     }
 
-    /**
-     * Get authorUserId.
-     *
-     * @return int
-     */
-    public function getAuthorUserId()
+    public function getAuthorUserId(): int
     {
         return $this->authorUserId;
     }

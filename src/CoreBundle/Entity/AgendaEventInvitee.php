@@ -8,50 +8,42 @@ use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="agenda_event_invitee")
- * @ORM\Entity()
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *     "invitee" = "Chamilo\CoreBundle\Entity\AgendaEventInvitee",
- *     "subscriber" = "Chamilo\CoreBundle\Entity\AgendaEventSubscriber"
- * })
- */
+#[ORM\Entity]
+#[ORM\Table(name: "agenda_event_invitee")]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'invitee' => AgendaEventInvitee::class,
+    'subscriber' => AgendaEventSubscriber::class,
+])]
 class AgendaEventInvitee
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Id()
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue]
+    private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AgendaEventInvitation", inversedBy="invitees")
-     * @ORM\JoinColumn(name="invitation_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $invitation;
+    #[ORM\ManyToOne(targetEntity: AgendaEventInvitation::class, inversedBy: 'invitees')]
+    #[ORM\JoinColumn(name: 'invitation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private AgendaEventInvitation $invitation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
-    protected $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user;
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getInvitation(): ?AgendaEventInvitation
+    public function getInvitation(): AgendaEventInvitation
     {
         return $this->invitation;
     }
 
-    public function setInvitation(?AgendaEventInvitation $invitation): AgendaEventInvitee
+    public function setInvitation(AgendaEventInvitation $invitation): self
     {
         $this->invitation = $invitation;
 
@@ -63,7 +55,7 @@ class AgendaEventInvitee
         return $this->user;
     }
 
-    public function setUser(?User $user): AgendaEventInvitee
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

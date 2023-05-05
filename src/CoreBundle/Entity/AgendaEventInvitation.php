@@ -10,38 +10,29 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="agenda_event_invitation")
- * @ORM\Entity()
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *     "invitation" = "Chamilo\CoreBundle\Entity\AgendaEventInvitation",
- *     "subscription" = "Chamilo\CoreBundle\Entity\AgendaEventSubscription"
- * })
- */
+#[ORM\Table(name: "agenda_event_invitation")]
+#[ORM\Entity()]
+#[ORM\InheritanceType("SINGLE_TABLE")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap([
+    'invitation' => 'Chamilo\CoreBundle\Entity\AgendaEventInvitation',
+    'subscription' => 'Chamilo\CoreBundle\Entity\AgendaEventSubscription'
+])]
 class AgendaEventInvitation
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Id()
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: "bigint")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    protected int $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AgendaEventInvitee", mappedBy="invitation", cascade={"persist", "remove"},
-     *                                                   orphanRemoval=true)
-     */
-    protected $invitees;
+    #[ORM\OneToMany(targetEntity: "AgendaEventInvitee", mappedBy: "invitation", cascade: ["persist", "remove"], orphanRemoval: true)]
+    protected Collection $invitees;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
-    protected $creator;
+    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\User", inversedBy: "resourceNodes")]
+    #[ORM\JoinColumn(name: "creator_id", referencedColumnName: "id", nullable: true, onDelete: "CASCADE")]
+    protected User $creator;
 
     public function __construct()
     {
@@ -58,14 +49,14 @@ class AgendaEventInvitation
         return $this->invitees;
     }
 
-    public function setInvitees(Collection $invitees): AgendaEventInvitation
+    public function setInvitees(Collection $invitees): self
     {
         $this->invitees = $invitees;
 
         return $this;
     }
 
-    public function addInvitee(AgendaEventInvitee $invitee): AgendaEventInvitation
+    public function addInvitee(AgendaEventInvitee $invitee): self
     {
         $invitee->setInvitation($this);
         $this->invitees->add($invitee);
@@ -73,7 +64,7 @@ class AgendaEventInvitation
         return $this;
     }
 
-    public function removeInviteeUser(User $user): AgendaEventInvitation
+    public function removeInviteeUser(User $user): self
     {
         /** @var AgendaEventInvitee $invitee */
         $invitee = $this

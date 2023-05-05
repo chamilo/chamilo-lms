@@ -19,42 +19,28 @@ class PortfolioAttachment
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    private int $id;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255)
-     */
-    protected $path;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $path;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    protected $comment;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $comment;
 
-    /**
-     * @ORM\Column(name="size", type="integer")
-     */
-    protected $size;
+    #[ORM\Column(type: 'integer')]
+    private int $size;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255)
-     */
-    protected $filename;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $filename;
 
-    /**
-     * @ORM\Column(name="origin_id", type="integer")
-     */
-    private $origin;
+    #[ORM\Column(name: 'origin_id', type: 'integer')]
+    private int $origin;
 
-    /**
-     * @ORM\Column(name="origin_type", type="integer")
-     */
-    private $originType;
+    #[ORM\Column(name: 'origin_type', type: 'integer')]
+    private int $originType;
 
     public function getId(): int
     {

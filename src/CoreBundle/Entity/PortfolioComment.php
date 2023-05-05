@@ -15,102 +15,69 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @package Chamilo\CoreBundle\Entity
  *
- * @Gedmo\Tree(type="nested")
- * @ORM\Table(name="portfolio_comment")
- * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioCommentRepository")
  */
+
+#[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
+#[ORM\Table(name: "portfolio_comment")]
+#[Gedmo\Tree(type: "nested")]
 class PortfolioComment
 {
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
 
-    /**
-     * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
-     */
-    protected $visibility = 1;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private int $id;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+    private User $author;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $author;
+    #[ORM\ManyToOne(targetEntity: Portfolio::class, inversedBy: "comments")]
+    #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+    private Portfolio $item;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", inversedBy="comments")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $item;
+    #[ORM\Column(type: "text")]
+    private string $content;
 
-    /**
-     * @ORM\Column(name="content", type="text")
-     */
-    private $content;
+    #[ORM\Column(type: "datetime")]
+    private DateTime $date;
 
-    /**
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
+    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    private bool $isImportant;
 
-    /**
-     * @ORM\Column(name="is_important", type="boolean", options={"default":false})
-     */
-    private $isImportant;
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(type: "integer")]
+    private int $lft;
 
-    /**
-     * @Gedmo\TreeLeft()
-     * @ORM\Column(name="lft", type="integer")
-     */
-    private $lft;
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(type: "integer")]
+    private int $lvl;
 
-    /**
-     * @Gedmo\TreeLevel()
-     * @ORM\Column(name="lvl", type="integer")
-     */
-    private $lvl;
+    #[Gedmo\TreeRight]
+    #[ORM\Column(type: "integer")]
+    private int $rgt;
 
-    /**
-     * @Gedmo\TreeRight()
-     * @ORM\Column(name="rgt", type="integer")
-     */
-    private $rgt;
+    #[Gedmo\TreeRoot]
+    #[ORM\ManyToOne(targetEntity: PortfolioComment::class)]
+    #[ORM\JoinColumn(name: "tree_root", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?PortfolioComment $root;
 
-    /**
-     * @Gedmo\TreeRoot()
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment")
-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $root;
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: PortfolioComment::class, inversedBy: "children")]
+    #[ORM\JoinColumn(name: "parent_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?PortfolioComment $parent;
 
-    /**
-     * @Gedmo\TreeParent()
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $parent;
+    #[ORM\OneToMany(targetEntity: PortfolioComment::class, mappedBy: "parent")]
+    #[ORM\OrderBy(["lft" => "DESC"])]
+    private ArrayCollection $children;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="parent")
-     * @ORM\OrderBy({"lft"="DESC"})
-     */
-    private $children;
+    #[ORM\Column(type: "float", nullable: true)]
+    private ?float $score;
 
-    /**
-     * @ORM\Column(name="score", type="float", nullable=true)
-     */
-    private $score;
-
-    /**
-     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
-     */
-    private $isTemplate = false;
+    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    private bool $isTemplate = false;
 
     /**
      * PortfolioComment constructor.

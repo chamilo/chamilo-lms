@@ -7,40 +7,27 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="agenda_reminder")
- *
- * @ORM\Entity()
- */
+#[ORM\Entity]
+#[ORM\Table(name: "agenda_reminder")]
 class AgendaReminder
 {
     use TimestampableTypedEntity;
 
-    /**
-     * @ORM\Id()
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: "bigint")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     protected $id;
 
-    /**
-     * @ORM\Column(name="type", type="string")
-     */
+    #[ORM\Column(type: "string", name: "type")]
     protected $type;
 
-    /**
-     * @ORM\Column(name="event_id", type="integer")
-     */
+    #[ORM\Column(type: "integer", name: "event_id")]
     protected $eventId;
 
-    /**
-     * @ORM\Column(name="date_interval", type="dateinterval")
-     */
+    #[ORM\Column(type: "dateinterval", name: "date_interval")]
     protected $dateInterval;
 
-    /**
-     * @ORM\Column(name="sent", type="boolean")
-     */
+    #[ORM\Column(type: "boolean", name: "sent")]
     protected $sent;
 
     public function __construct()

@@ -9039,4 +9039,7 @@ $MaxSubscriptions = "Cantidad máxima permitida de suscripciones";
 $NoMoreAccessible = "No mas accesible";
 $AccessibleFrom = "Accesible desde el";
 $ExportExerciseAllResults = "Exportar todos los resultados de un ejercicio";
+$ExportExerciseNoResult = "No hay resultados para exportar en este ejercicio.";
+$UserXChangedToYToCancelClickZ = "El usuario %s ha sido cambiado a %s. Para anular, dar clic <a href='%s'>aquí</a>.";
+$Exlearner = "Ex-estudiante";
 ?>

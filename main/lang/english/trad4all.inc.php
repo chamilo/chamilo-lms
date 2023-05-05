@@ -9014,4 +9014,7 @@ $MaxSubscriptions = "Maximum number of subscriptions";
 $NoMoreAccessible = "No longer available";
 $AccessibleFrom = "Available from";
 $ExportExerciseAllResults = "Export all results from an exercise";
+$ExportExerciseNoResult = "No result found for export in this test.";
+$UserXChangedToYToCancelClickZ = "User %s has been changed to %s. To cancel, click <a href='%s'>here</a>.";
+$Exlearner = "Ex-learner";
 ?>

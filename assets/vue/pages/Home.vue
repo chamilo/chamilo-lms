@@ -21,6 +21,7 @@ const store = useStore();
 const announcements = ref([]);
 const pages = ref([]);
 
+/*
 axios
   .get("/news/list")
   .then((response) => {
@@ -43,4 +44,5 @@ store
   .then((response) => {
     pages.value = response;
   });
+*/
 </script>

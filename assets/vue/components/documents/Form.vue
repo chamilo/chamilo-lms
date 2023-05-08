@@ -41,7 +41,7 @@ import Button from 'primevue/button';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useI18n } from 'vue-i18n';
-import { computed, defineEmits, defineProps } from 'vue';
+import { computed } from 'vue';
 
 const { t } = useI18n();
 

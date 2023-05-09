@@ -430,10 +430,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
         return $this;
     }
-    /**
-     * @return AccessUrlRelCourse[]|Collection
-     */
-    public function getUrls(): array|Collection
+
+    public function getUrls(): Collection
     {
         return $this->urls;
     }
@@ -456,7 +454,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function addAccessUrl(AccessUrl $url): self
+    public function addAccessUrl(?AccessUrl $url): self
     {
         $urlRelCourse = (new AccessUrlRelCourse())
             ->setCourse($this)

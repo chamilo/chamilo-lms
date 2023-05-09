@@ -30,7 +30,7 @@ class AccessUrlRelUser implements EntityAccessUrlInterface, Stringable
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
-    protected AccessUrl $url;
+    protected ?AccessUrl $url;
 
     public function __toString(): string
     {
@@ -42,12 +42,12 @@ class AccessUrlRelUser implements EntityAccessUrlInterface, Stringable
         return $this->id;
     }
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

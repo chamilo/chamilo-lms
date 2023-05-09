@@ -22,18 +22,18 @@ class AccessUrlRelCourseCategory implements EntityAccessUrlInterface
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'courseCategory')]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
-    protected AccessUrl $url;
+    protected ?AccessUrl $url;
 
     #[ORM\ManyToOne(targetEntity: CourseCategory::class, cascade: ['persist'], inversedBy: 'urls')]
     #[ORM\JoinColumn(name: 'course_category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected CourseCategory $courseCategory;
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

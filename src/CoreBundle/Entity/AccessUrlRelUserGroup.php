@@ -22,7 +22,7 @@ class AccessUrlRelUserGroup implements EntityAccessUrlInterface
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
-    protected AccessUrl $url;
+    protected ?AccessUrl $url;
 
     #[ORM\ManyToOne(targetEntity: Usergroup::class, inversedBy: 'urls', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -36,12 +36,12 @@ class AccessUrlRelUserGroup implements EntityAccessUrlInterface
         return $this->id;
     }
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

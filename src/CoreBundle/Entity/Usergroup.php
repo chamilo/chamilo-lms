@@ -116,20 +116,17 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @return UsergroupRelUser[]|Collection
      */
-    public function getUsers(): array|\Doctrine\Common\Collections\Collection
+    public function getUsers(): array|Collection
     {
         return $this->users;
     }
 
-    /**
-     * @return AccessUrlRelUserGroup[]|Collection
-     */
-    public function getUrls(): array|\Doctrine\Common\Collections\Collection
+    public function getUrls() : Collection
     {
         return $this->urls;
     }
 
-    public function addAccessUrl(AccessUrl $url): self
+    public function addAccessUrl(?AccessUrl $url): self
     {
         $urlRelUsergroup = new AccessUrlRelUserGroup();
         $urlRelUsergroup->setUserGroup($this);
@@ -273,7 +270,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @return UsergroupRelCourse[]|Collection
      */
-    public function getCourses(): array|\Doctrine\Common\Collections\Collection
+    public function getCourses(): array|Collection
     {
         return $this->courses;
     }
@@ -288,7 +285,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @return UsergroupRelSession[]|Collection
      */
-    public function getSessions(): array|\Doctrine\Common\Collections\Collection
+    public function getSessions(): array|Collection
     {
         return $this->sessions;
     }
@@ -303,7 +300,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @return UsergroupRelQuestion[]|Collection
      */
-    public function getQuestions(): array|\Doctrine\Common\Collections\Collection
+    public function getQuestions(): array|Collection
     {
         return $this->questions;
     }

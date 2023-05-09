@@ -38,14 +38,14 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
         return $this->id;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }

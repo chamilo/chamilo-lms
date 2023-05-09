@@ -82,9 +82,9 @@ class CourseCategory implements \Stringable
     protected ?string $description = null;
 
     /**
-     * @var AccessUrlRelCourseCategory[]|Collection
+     * @var Collection<int, AccessUrlRelCourseCategory>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory::class, mappedBy: 'courseCategory', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'courseCategory', targetEntity: AccessUrlRelCourseCategory::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $urls;
 
     /**
@@ -281,10 +281,7 @@ class CourseCategory implements \Stringable
         $this->courses[] = $course;
     }
 
-    /**
-     * @return AccessUrlRelCourseCategory[]|Collection
-     */
-    public function getUrls(): array|\Doctrine\Common\Collections\Collection
+    public function getUrls(): array|Collection
     {
         return $this->urls;
     }
@@ -292,7 +289,7 @@ class CourseCategory implements \Stringable
     /**
      * @param AccessUrlRelCourseCategory[]|Collection $urls
      */
-    public function setUrls(array|\Doctrine\Common\Collections\Collection $urls): self
+    public function setUrls(array|Collection $urls): self
     {
         $this->urls = $urls;
 

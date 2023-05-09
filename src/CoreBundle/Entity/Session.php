@@ -983,10 +983,7 @@ $course->getId() === $element->getCourse()->getId()
         return $this->currentUrl;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getUrls()
+    public  function getUrls(): Collection
     {
         return $this->urls;
     }
@@ -1002,7 +999,7 @@ $course->getId() === $element->getCourse()->getId()
         return $this;
     }
 
-    public function addAccessUrl(AccessUrl $url): self
+    public function addAccessUrl(?AccessUrl $url): self
     {
         $accessUrlRelSession = new AccessUrlRelSession();
         $accessUrlRelSession->setUrl($url);

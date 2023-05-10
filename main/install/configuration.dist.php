@@ -2448,6 +2448,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 //Hides the link to the course catalog in the menu when the catalog is public.
 // $_configuration['catalog_hide_public_link'] = false;
 
+// Display the Portal News link in the admin page to session admin users
+//$_configuration['session_admin_access_system_announcement'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

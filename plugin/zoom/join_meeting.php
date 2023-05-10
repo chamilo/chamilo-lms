@@ -63,7 +63,9 @@ try {
         $detailsURL = api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?meetingId='.$meeting->getMeetingId();
     }
 
-    if (api_is_platform_admin()) {
+    $allowAnnouncementsToSessionAdmin = api_get_configuration_value('session_admin_access_system_announcement');
+
+    if (api_is_platform_admin($allowAnnouncementsToSessionAdmin)) {
         $announcementUrl = '';
 
         if ($announcement = $meeting->getSysAnnouncement()) {

@@ -15,20 +15,20 @@ if (empty($urlId)) {
 }
 require_once '../../main/inc/global.inc.php';
 
-$accessUrlRelCourseTable = Database::get_course_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$accessUrlRelUserTable = Database::get_course_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$accessUrlRelSessionTable = Database::get_course_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+$accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$accessUrlRelSessionTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-$sqlCoursesToDelete = "select c_id from $accessUrlRelCourseTable where access_url_id = $urlId and c_id not in (select c_id from $accessUrlRelCourseTable where access_url_id != $urlId)"
-$sqlUsersToDelete = "select user_id from $accessUrlRelUserTable where access_url_id = $urlId and user_id not in (select user_id from $accessUrlRelUserTable where access_url_id != $urlId)"
-$sqlSessionsToDelete = "select session_id from $accessUrlRelSessionTable where access_url_id = $urlId and session_id not in (select user_id from $accessUrlRelUserTable where access_url_id != $urlId)"
+$sqlCoursesToDelete = "select c_id from $accessUrlRelCourseTable where access_url_id = $urlId and c_id not in (select c_id from $accessUrlRelCourseTable where access_url_id != $urlId)";
+$sqlUsersToDelete = "select user_id from $accessUrlRelUserTable where access_url_id = $urlId and user_id not in (select user_id from $accessUrlRelUserTable where access_url_id != $urlId)";
+$sqlSessionsToDelete = "select session_id from $accessUrlRelSessionTable where access_url_id = $urlId and session_id not in (select session_id from $accessUrlRelSessionTable where access_url_id != $urlId)";
 
 
 echo "Initiating sessions deletion".PHP_EOL;
 $resSessionsToDelete = Database::query($sqlSessionsToDelete);
 while ($data = Database::fetch_array($resSessionsToDelete)) {
     echo "deleting session with id = " . $data['session_id'] . ".".PHP_EOL;
-    if (!SessionManager::delete($data['session_id'])) {
+    if (!SessionManager::delete($data['session_id'],true)) {
         echo "Session " . $data['session_id'] . " not deleted".PHP_EOL;
     }
 }

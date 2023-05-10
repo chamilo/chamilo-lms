@@ -82,29 +82,34 @@
         </small>
       </h2>
 
-      <Button
+      <BaseButton
         v-if="course && isCurrentTeacher"
         :label="t('See as student')"
-        class="p-button-outlined p-button-plain"
-        icon="pi pi-eye"
-        type="button"
+        icon="eye"
+        type="outlined"
       />
 
-      <Button
+      <BaseButton
+        v-if="showUpdateIntroductionButton"
+        :label="t('Edit introduction')"
+        icon="pencil"
+        type="outlined"
+        @click="updateIntro(intro)"
+      />
+
+      <BaseButton
         v-if="course && isCurrentTeacher"
-        aria-controls="course-tmenu"
-        aria-haspopup="true"
-        class="p-button-text p-button-plain"
-        icon="mdi mdi-cog"
-        type="button"
+        id="course-tmenu-button"
+        popup-identifier="course-tmenu"
+        icon="cog"
+        type="text"
         @click="toggleCourseTMenu"
       />
 
-      <TieredMenu
+      <BaseMenu
         id="course-tmenu"
         ref="courseTMenu"
         :model="courseItems"
-        :popup="true"
       />
     </div>
 
@@ -123,13 +128,6 @@
           class="p-button-outlined ml-auto"
           icon="mdi mdi-plus"
           @click="addIntro(course, introTool)"
-        />
-        <Button
-          v-else
-          :label="t('Update')"
-          class="p-button-outlined ml-auto"
-          icon="mdi mdi-pencil"
-          @click="updateIntro(intro)"
         />
       </div>
       <EmptyState
@@ -243,12 +241,13 @@ import axios from "axios";
 import { ENTRYPOINT } from "../../config/entrypoint";
 import Button from "primevue/button";
 import ToggleButton from "primevue/togglebutton";
-import TieredMenu from "primevue/tieredmenu";
 import CourseToolList from "../../components/course/CourseToolList.vue";
 import ShortCutList from "../../components/course/ShortCutList.vue";
 import translateHtml from "../../../js/translatehtml.js";
 import EmptyState from "../../components/EmptyState";
 import Skeleton from "primevue/skeleton";
+import BaseButton from "../../components/BaseButton.vue";
+import BaseMenu from "../../components/BaseMenu.vue";
 
 const route = useRoute();
 const store = useStore();
@@ -268,6 +267,9 @@ let sessionId = route.query.sid ?? 0;
 
 const isCourseLoading = ref(true);
 
+const showUpdateIntroductionButton = computed(() => {
+  return course.value && isCurrentTeacher.value && intro.value && !(createInSession.value && introTool.value)
+})
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 
 const isSorting = ref(false);

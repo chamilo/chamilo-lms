@@ -37,7 +37,7 @@
         }
     },
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -117,7 +117,7 @@
         "symfony/cache": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/expression-language": "5.4.*",
-        "symfony/flex": "1.17.*",
+        "symfony/flex": "*",
         "symfony/form": "5.4.*",
         "symfony/framework-bundle": "5.4.*",
         "symfony/http-client": "5.4.*",
@@ -203,7 +203,8 @@
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-intl-icu": "*",
         "symfony/polyfill-mbstring": "*",
-        "symfony/polyfill-php80": "*"
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*"
     },
     "scripts": {
         "auto-scripts": {

@@ -625,9 +625,9 @@ class Plugin
         $sql = "DELETE FROM $t_tool
                 WHERE c_id = $courseId AND
                 (
-                  name = '$pluginName' OR
-                  name = '$pluginName:student' OR
-                  name = '$pluginName:teacher'
+                  title = '$pluginName' OR
+                  title = '$pluginName:student' OR
+                  title = '$pluginName:teacher'
                 )";
         Database::query($sql);
     }
@@ -1068,7 +1068,7 @@ class Plugin
         $tool = $em
             ->getRepository(CTool::class)
             ->findOneBy([
-                'name' => $name,
+                'title' => $name,
                 'course' => $courseId,
                 'category' => 'plugin',
             ]);
@@ -1080,7 +1080,7 @@ class Plugin
             $tool = new CTool();
             $tool
                 ->setCourse(api_get_course_entity($courseId))
-                ->setName($name.$visibilityPerStatus)
+                ->setTitle($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
                 ->setVisibility($visibility)

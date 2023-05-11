@@ -92,7 +92,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $sql = "SELECT
                 id AS col0,
                code AS col1,
-               title AS col2,
+               course.title AS col2,
                course_category.code AS col3,
                tutor_name AS col4,
                request_date AS col5,
@@ -103,7 +103,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 
     if ('' != $keyword) {
         $sql .= " AND (
-                title LIKE '%".$keyword."%' OR
+                course.title LIKE '%".$keyword."%' OR
                 code LIKE '%".$keyword."%' OR
                 visual_code LIKE '%".$keyword."%'
             )";

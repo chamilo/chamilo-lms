@@ -29,8 +29,8 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text')]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text')]
+    protected string $title;
 
     #[Gedmo\SortablePosition]
     #[ORM\Column(name: 'position', type: 'integer')]
@@ -56,7 +56,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function getIid(): ?int
@@ -64,9 +64,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
         return $this->iid;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -74,9 +74,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
     /**
      * Get category name.
      */
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setPosition(int $position): self
@@ -174,11 +174,11 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

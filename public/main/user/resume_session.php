@@ -101,7 +101,7 @@ if ('true' === $allowTutors) {
         Display::return_icon(
             'session.png',
             get_lang('Session')
-        ).' '.$session->getName()
+        ).' '.$session->getTitle()
     );
     echo Display::page_subheader(get_lang('General properties').$url); ?>
     <!-- General properties -->
@@ -119,7 +119,7 @@ if ('true' === $allowTutors) {
     <?php if ($session->getCategory()) { ?>
     <tr>
         <td><?php echo get_lang('Sessions categories'); ?></td>
-        <td><?php echo $session->getCategory()->getName(); ?></td>
+        <td><?php echo $session->getCategory()->getTitle(); ?></td>
     </tr>
     <?php } ?>
 

@@ -561,12 +561,12 @@ class AddCourse
             $course_code = $courseInfo['code'];
             // father gradebook
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                "INSERT INTO $TABLEGRADEBOOK (title, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$certificateId)"
             );
             $gbid = Database::insert_id();
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                "INSERT INTO $TABLEGRADEBOOK (title, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$certificateId)"
             );
             $gbid = Database:: insert_id();

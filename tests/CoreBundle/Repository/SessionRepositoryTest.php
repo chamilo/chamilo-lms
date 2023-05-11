@@ -51,7 +51,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(SessionRepository::class);
 
         $session = (new Session())
-            ->setName($name)
+            ->setTitle($name)
             ->addGeneralCoach($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
         ;
@@ -486,7 +486,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $coach = $this->createUser('coach');
 
         $category = (new SessionCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime())
             ->setUrl($this->getAccessUrl())
@@ -501,7 +501,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertNotNull($category->getUrl());
 
         $session = ($sessionRepo->create())
-            ->setName('session 1')
+            ->setTitle('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)
             ->setCategory($category)
@@ -550,7 +550,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
 
         $session = ($sessionRepo->create())
-            ->setName('session 1')
+            ->setTitle('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)
             ->setVisibility(Session::INVISIBLE)

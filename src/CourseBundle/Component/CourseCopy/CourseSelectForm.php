@@ -609,7 +609,7 @@ class CourseSelectForm
                                     continue;
                                 }
                                 $forum_id = $obj->obj->forum_id;
-                                $title = $obj->obj->thread_title;
+                                $title = $obj->obj->title;
                                 foreach ($posts as $post_id => $post) {
                                     if ($post->obj->thread_id == $thread_id &&
                                         $forum_id == $post->obj->forum_id &&

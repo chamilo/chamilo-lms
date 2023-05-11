@@ -697,7 +697,7 @@ class LearningCalendarPlugin extends Plugin
         $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = "SELECT DISTINCT e.name, e.id
+        $sql = "SELECT DISTINCT e.title, e.id
                 FROM $tableEvaluation e
                 INNER JOIN $tableCourse c
                 ON (course_code = c.code)

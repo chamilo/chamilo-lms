@@ -2291,7 +2291,7 @@ class Display
         if (!empty($idAccordion)) {
             $headerClass = $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
-            $contentClass = 'panel-collapse collapse ';
+            $contentClass = 'panel-collapse collapse2 ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
 

@@ -33,8 +33,8 @@ class BranchSync
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
-    #[ORM\Column(name: 'branch_name', type: 'string', length: 250)]
-    protected string $branchName;
+    #[ORM\Column(name: 'title', type: 'string', length: 250)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
@@ -129,21 +129,21 @@ class BranchSync
         return $this->id;
     }
 
-    public function setBranchName(string $branchName): self
+    public function setTitle(string $title): self
     {
-        $this->branchName = $branchName;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get branchName.
+     * Get title.
      *
      * @return string
      */
-    public function getBranchName()
+    public function getTitle()
     {
-        return $this->branchName;
+        return $this->title;
     }
 
     public function setBranchIp(string $branchIp): self

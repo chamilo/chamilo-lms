@@ -41,7 +41,7 @@ class GlossaryManager
         foreach ($glossaries as $item) {
             $glossaryData[] = [
                 'id' => $item->getIid(),
-                'name' => $item->getName(),
+                'name' => $item->getTitle(),
                 'description' => $item->getDescription(),
             ];
         }
@@ -137,9 +137,9 @@ class GlossaryManager
 		        WHERE
 		            c_id = $course_id AND
 		            (
-		                name LIKE '".Database::escape_string($glossaryName)."'
+		                title LIKE '".Database::escape_string($glossaryName)."'
 		                OR
-		                name LIKE '".Database::escape_string($parsed)."'
+		                title LIKE '".Database::escape_string($parsed)."'
                     )
                     $sessionCondition
                 LIMIT 1
@@ -189,7 +189,7 @@ class GlossaryManager
             $sessionId = api_get_session_id();
 
             $glossary
-                ->setName($values['name'])
+                ->setTitle($values['name'])
                 ->setDescription($values['description'])
                 ->setDisplayOrder($max_glossary_item + 1)
             ;
@@ -248,7 +248,7 @@ class GlossaryManager
             $glossary = $repo->find($values['glossary_id']);
             if (null !== $glossary) {
                 $glossary
-                    ->setName($values['name'])
+                    ->setTitle($values['name'])
                     ->setDescription($values['description']);
                 $repo->update($glossary);
             }
@@ -366,7 +366,7 @@ class GlossaryManager
 
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
-            if ($term == $item->getName() && $not_id != $item->getIid()) {
+            if ($term == $item->getTitle() && $not_id != $item->getIid()) {
                 return true;
             }
         }
@@ -430,7 +430,7 @@ class GlossaryManager
         if ($showMessage) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('Term removed').': '.Security::remove_XSS($glossary->getName()),
+                    get_lang('Term removed').': '.Security::remove_XSS($glossary->getTitle()),
                     'normal',
                     false
                 )
@@ -704,7 +704,7 @@ class GlossaryManager
         /** @var CGlossary $glossary */
         foreach ($glossaries as $glossary) {
             $decoration = $repo->addTitleDecoration($glossary, $course, $session);
-            $array[0] = $glossary->getName().$decoration;
+            $array[0] = $glossary->getTitle().$decoration;
             if (!$view || 'table' === $view) {
                 $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $glossary->getDescription());
             } else {
@@ -819,7 +819,7 @@ class GlossaryManager
         $repo = Container::getGlossaryRepository();
         /** @var CGlossary $glossaryData */
         $glossaryData = $repo->find($glossary_id);
-        $glossaryTerm = Security::remove_XSS(strip_tags($glossaryData->getName()));
+        $glossaryTerm = Security::remove_XSS(strip_tags($glossaryData->getTitle()));
         if (api_is_allowed_to_edit(null, true)) {
             $return .= '<a
                 href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'"

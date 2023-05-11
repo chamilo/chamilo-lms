@@ -212,7 +212,7 @@ class SequenceFixtures extends Fixture
         $variables = [];
         foreach ($list as $item) {
             $sequenceVariable = (new SequenceVariable())
-                ->setName($item['name'])
+                ->setTitle($item['name'])
                 ->setDescription($item['description'])
                 ->setDefaultValue($item['default_val'])
             ;
@@ -315,7 +315,7 @@ class SequenceFixtures extends Fixture
 
         foreach ($list as $item) {
             $sequenceType = (new SequenceTypeEntity())
-                ->setName($item['name'])
+                ->setTitle($item['name'])
                 ->setDescription($item['description'])
                 ->setEntityTable($item['entity_table'])
             ;

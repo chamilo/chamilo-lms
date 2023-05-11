@@ -21,8 +21,8 @@ class CQuizQuestionOption
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'position', type: 'integer', nullable: false)]
     protected int $position;
@@ -32,9 +32,9 @@ class CQuizQuestionOption
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -44,9 +44,9 @@ class CQuizQuestionOption
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setPosition(int $position): self

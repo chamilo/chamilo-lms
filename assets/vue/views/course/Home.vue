@@ -367,11 +367,11 @@ function updateIntro(intro) {
 }
 
 function goToSettingCourseTool(course, tool) {
-  return "/course/" + courseId + "/settings/" + tool.tool.name + "?sid=" + sessionId;
+  return "/course/" + courseId + "/settings/" + tool.tool.title + "?sid=" + sessionId;
 }
 
 function goToCourseTool(course, tool) {
-  return "/course/" + courseId + "/tool/" + tool.tool.name + "?sid=" + sessionId;
+  return "/course/" + courseId + "/tool/" + tool.tool.title + "?sid=" + sessionId;
 }
 
 function goToShortCut(shortcut) {

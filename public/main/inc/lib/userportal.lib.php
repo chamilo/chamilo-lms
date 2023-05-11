@@ -304,7 +304,7 @@ class IndexManager
                         WHERE
                             access_url_id = $url_access_id AND
                             course_category.code = '$category'
-                        ORDER BY title, UPPER(visual_code)";
+                        ORDER BY course.title, UPPER(visual_code)";
                 }
             }
         }

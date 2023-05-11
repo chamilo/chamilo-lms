@@ -19,7 +19,7 @@ class survey_question
      */
     public function addParentMenu($formData, FormValidator $form, $surveyData)
     {
-        $surveyId = $surveyData['survey_id'];
+        $surveyId = $surveyData['iid'];
         $questionId = isset($formData['question_id']) ? $formData['question_id'] : 0;
         $parentId = isset($formData['parent_id']) ? $formData['parent_id'] : 0;
         $optionId = isset($formData['parent_option_id']) ? $formData['parent_option_id'] : 0;
@@ -248,7 +248,7 @@ class survey_question
         // When survey type = 1??
         if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
+            $sql = 'SELECT id, title FROM '.$table_survey_question_group.'
                     WHERE survey_id = '.$surveyId.'
                     ORDER BY name';
             $rs = Database::query($sql);

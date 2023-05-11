@@ -1865,7 +1865,7 @@ class Exercise
             if (!empty($categories)) {
                 /** @var CExerciseCategory $category */
                 foreach ($categories as $category) {
-                    $options[$category->getId()] = $category->getName();
+                    $options[$category->getId()] = $category->getTitle();
                 }
             }
 
@@ -9933,7 +9933,7 @@ class Exercise
         $courseId = (int) $courseId;
 
         $sql = "SELECT
-                    lp.name,
+                    lp.title,
                     lpi.lp_id,
                     lpi.max_score
                 FROM $tableLpItem lpi

@@ -211,7 +211,7 @@ class CourseController extends ToolBaseController
 
         /** @var CTool $item */
         foreach ($result as $item) {
-            if (\in_array($item->getName(), $skipTools, true)) {
+            if (\in_array($item->getTitle(), $skipTools, true)) {
                 continue;
             }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
@@ -319,7 +319,7 @@ class CourseController extends ToolBaseController
     {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
-            'name' => $toolName,
+            'title' => $toolName,
         ]);
 
         if (null === $tool) {

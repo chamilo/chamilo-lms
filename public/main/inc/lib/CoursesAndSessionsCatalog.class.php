@@ -930,7 +930,7 @@ class CoursesAndSessionsCatalog
                 'url.sessionId = s.id'
             )
             ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
-            ->andWhere('s.name LIKE :keyword')
+            ->andWhere('s.title LIKE :keyword')
             ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
             ->setParameter('keyword', "%$keyword%")
         ;
@@ -1630,7 +1630,7 @@ class CoursesAndSessionsCatalog
                 $cat = null;
                 $catName = '';
             } else {
-                $catName = $cat->getName();
+                $catName = $cat->getTitle();
             }
 
             $actions = null;
@@ -1643,7 +1643,7 @@ class CoursesAndSessionsCatalog
 
             $sessionsBlock = [
                 'id' => $session->getId(),
-                'name' => $session->getName(),
+                'name' => $session->getTitle(),
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
@@ -1661,12 +1661,12 @@ class CoursesAndSessionsCatalog
                     $session->getId(),
                     $userId
                 ),
-                'icon' => self::getSessionIcon($session->getName()),
+                'icon' => self::getSessionIcon($session->getTitle()),
                 'date' => $sessionDates['display'],
                 'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',
                 'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : self::getRegisteredInSessionButton(
                     $session->getId(),
-                    $session->getName(),
+                    $session->getTitle(),
                     $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),

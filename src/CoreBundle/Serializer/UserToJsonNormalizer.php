@@ -361,7 +361,7 @@ final class UserToJsonNormalizer
         foreach ($result as $item) {
             $date = $item->getPostDate()->format($dateFormat);
             $list = [
-                'Title: '.$item->getPostTitle(),
+                'Title: '.$item->getTitle(),
                 'Creation date: '.$date,
             ];
             $cForumPostList[] = implode(', ', $list);
@@ -377,7 +377,7 @@ final class UserToJsonNormalizer
         foreach ($result as $item) {
             $date = $item->getThreadDate()->format($dateFormat);
             $list = [
-                'Title: '.$item->getThreadTitle(),
+                'Title: '.$item->getTitle(),
                 'Creation date: '.$date,
             ];
             $cForumThreadList[] = implode(', ', $list);

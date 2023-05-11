@@ -161,7 +161,7 @@ $attendance_list = $attendance->getAttendanceList($course, $session);
 $attendance_select = [];
 $attendance_select[0] = get_lang('Select an attendance');
 foreach ($attendance_list as $attendanceEntity) {
-    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getName();
+    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getTitle();
 }
 
 $token = Security::get_token();

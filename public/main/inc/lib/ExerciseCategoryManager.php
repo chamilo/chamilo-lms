@@ -56,7 +56,7 @@ class ExerciseCategoryManager extends Model
         if (!empty($categories)) {
             /** @var CExerciseCategory $category */
             foreach ($categories as $category) {
-                $options[$category->getId()] = $category->getName();
+                $options[$category->getId()] = $category->getTitle();
             }
         }
 
@@ -115,7 +115,7 @@ class ExerciseCategoryManager extends Model
 
         if ($category) {
             $category
-                ->setName($params['name'])
+                ->setTitle($params['name'])
                 ->setDescription($params['description'])
             ;
 
@@ -141,7 +141,7 @@ class ExerciseCategoryManager extends Model
         $repo = Container::getExerciseCategoryRepository();
         $category = new CExerciseCategory();
         $category
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setCourse($course)
             ->setDescription($params['description'])
             ->setParent($course)

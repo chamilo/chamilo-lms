@@ -1248,8 +1248,8 @@ class Template
                     // If we are on a session "about" screen, publish info about the session
                     $session = api_get_session_entity($sessionId);
 
-                    $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
-                    $socialMeta .= '<meta property="twitter:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:title" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="twitter:title" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/".'" />'."\n";
 
                     $sessionValues = new ExtraFieldValue('session');
@@ -1261,7 +1261,7 @@ class Template
                         if (!empty($sessionImagePath)) {
                             $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
                             $socialMeta .= '<meta property="twitter:image" content="'.$sessionImagePath.'" />'."\n";
-                            $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                            $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
                         }
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath($metaTitle);

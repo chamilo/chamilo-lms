@@ -23,7 +23,7 @@ class GradeModel extends Model
         return Database::select(
             '*',
             $this->table,
-            ['where' => $options, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'title ASC']
         );
     }
 
@@ -274,7 +274,7 @@ class GradeModel extends Model
             $grade_model_options = ['-1' => get_lang('none')];
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
-                    $grade_model_options[$item['id']] = $item['name'];
+                    $grade_model_options[$item['id']] = $item['title'];
                 }
             }
             $form->addSelect($name, get_lang('Grading model'), $grade_model_options);

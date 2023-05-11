@@ -300,7 +300,7 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
     $forum_categories = get_forum_categories();
     $forum_categories_titles = [];
     foreach ($forum_categories as $value) {
-        $forum_categories_titles[$value->getIid()] = $value->getCatTitle();
+        $forum_categories_titles[$value->getIid()] = $value->getTitle();
     }
     $form->addSelect(
         'forum_category',
@@ -435,7 +435,7 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
     } else {
         // the default values when editing = the data in the table
         $defaults['forum_id'] = $forum->getIid();
-        $defaults['forum_title'] = prepare4display($forum->getForumTitle());
+        $defaults['forum_title'] = prepare4display($forum->getTitle());
         $defaults['forum_comment'] = prepare4display($forum->getForumComment());
         $defaults['start_time'] = api_get_local_time($forum->getStartTime());
         $defaults['end_time'] = api_get_local_time($forum->getEndTime());
@@ -539,7 +539,7 @@ function editForumCategoryForm(CForumCategory $category): string
 
     // Setting the default values.
     $defaultvalues['forum_category_id'] = $categoryId;
-    $defaultvalues['forum_category_title'] = $category->getCatTitle();
+    $defaultvalues['forum_category_title'] = $category->getTitle();
     $defaultvalues['forum_category_comment'] = $category->getCatComment();
     $form->setDefaults($defaultvalues);
 
@@ -585,7 +585,7 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
         $category = $repo->find($values['forum_category_id']);
         $category
             ->setCatComment($values['forum_category_comment'] ?? '')
-            ->setCatTitle($values['forum_category_title'])
+            ->setTitle($values['forum_category_title'])
         ;
         $repo->update($category);
         $message = get_lang('The forum category has been modified');
@@ -605,7 +605,7 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
 
         $category = new CForumCategory();
         $category
-            ->setCatTitle($clean_cat_title)
+            ->setTitle($clean_cat_title)
             ->setCatComment($values['forum_category_comment'] ?? '')
             ->setCatOrder($new_max)
             ->setParent($course)
@@ -733,7 +733,7 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
     }
 
     $forum
-        ->setForumTitle($values['forum_title'])
+        ->setTitle($values['forum_title'])
         ->setForumComment($values['forum_comment'] ?? '')
         ->setForumCategory($forumCategory)
         ->setAllowAnonymous($values['allow_anonymous_group']['allow_anonymous'] ?? 0)
@@ -1282,7 +1282,7 @@ function getThreadInfo(int $threadId): Array
     if ($forumThread) {
         $thread['iid'] = $forumThread->getIid();
         $thread['threadId'] = $forumThread->getIid();
-        $thread['threadTitle'] = $forumThread->getThreadTitle();
+        $thread['threadTitle'] = $forumThread->getTitle();
         $thread['forumId'] = $forumThread->getForum() ? $forumThread->getForum()->getIid() : 0;
         //$thread['sessionId'] = $forumThread->getSessionId();
         $thread['threadSticky'] = $forumThread->getThreadSticky();
@@ -1381,7 +1381,7 @@ function getPosts(
         $postInfo = [
             'iid' => $post->getIid(),
             'post_id' => $post->getIid(),
-            'post_title' => $post->getPostTitle(),
+            'post_title' => $post->getTitle(),
             'post_text' => $post->getPostText(),
             'threadId' => $post->getThread() ? $post->getThread()->getIid() : 0,
             'forum_id' => $post->getForum()->getIid(),
@@ -1681,7 +1681,7 @@ function updateThread($values)
 
     // Simple update + set gradebook values to null
     $params = [
-        'thread_title' => $values['thread_title'],
+        'title' => $values['thread_title'],
         'thread_sticky' => $values['thread_sticky'] ?? 0,
     ];
     $where = ['iid = ?' => [$values['threadId']]];
@@ -1789,7 +1789,7 @@ function saveThread(
     // We first store an entry in the forum_thread table because the threadId is used in the forum_post table.
     $thread = new CForumThread();
     $thread
-        ->setThreadTitle($clean_post_title)
+        ->setTitle($clean_post_title)
         ->setForum($forum)
         ->setUser($user)
         ->setThreadDate($post_date)
@@ -1847,7 +1847,7 @@ function saveThread(
     // We now store the content in the table_post table.
     $post = new CForumPost();
     $post
-        ->setPostTitle($clean_post_title)
+        ->setTitle($clean_post_title)
         ->setPostText($values['post_text'])
         ->setThread($thread)
         ->setForum($forum)
@@ -2111,7 +2111,7 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
         $form->addHidden('post_parent_id', $post->getIid());
         // If we are replying or are quoting then we display a default title.
         $posterName = UserManager::formatUserFullName($post->getUser());
-        $defaults['post_title'] = get_lang('Re:').api_html_entity_decode($post->getPostTitle(), ENT_QUOTES);
+        $defaults['post_title'] = get_lang('Re:').api_html_entity_decode($post->getTitle(), ENT_QUOTES);
         // When we are quoting a message then we have to put that message into the wysiwyg editor.
         // Note: The style has to be hardcoded here because using class="quote" didn't work.
         if ('quote' === $action) {
@@ -2802,7 +2802,7 @@ function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0
         $post = new CForumPost();
         $text = empty($values['post_text']) ? '' : $values['post_text'];
         $post
-            ->setPostTitle($values['post_title'])
+            ->setTitle($values['post_title'])
             ->setPostText($text)
             ->setThread($thread)
             ->setForum($forum)
@@ -3020,7 +3020,7 @@ function show_edit_post_form(
     $form->addButtonUpdate(get_lang('Edit'), 'SubmitPost');
 
     // Setting the default values for the form elements.
-    $defaults['post_title'] = $post->getPostTitle();
+    $defaults['post_title'] = $post->getTitle();
     $defaults['post_text'] = $post->getPostText();
 
     if (1 == $post->getPostNotification()) {
@@ -3088,7 +3088,7 @@ function store_edit_post(CForum $forum, $values)
     if (!empty($first_post) && $first_post['post_id'] == $values['post_id']) {
         // Simple edit
         $params = [
-            'thread_title' => $values['post_title'],
+            'title' => $values['post_title'],
             'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
         ];
         $where = ['iid = ?' => [$values['threadId']]];
@@ -3113,7 +3113,7 @@ function store_edit_post(CForum $forum, $values)
     $post = $repo->find($postId);
     if ($post) {
         $post
-            ->setPostTitle($values['post_title'])
+            ->setTitle($values['post_title'])
             ->setPostText($values['post_text'])
             ->setPostNotification(isset($values['post_notification']))
         ;
@@ -3429,16 +3429,16 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
     $email_body = get_lang('Dear').' '.
         api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
     $email_body .= get_lang('New Post in the forum').
-        ': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+        ': '.$forum->getTitle().' - '.$thread->getTitle()." <br />\n";
 
     $courseId = (int) api_get_setting('forum.global_forums_course_id');
     $subject = get_lang('New Post in the forum').' - '.
-        $_course['official_code'].': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+        $_course['official_code'].': '.$forum->getTitle().' - '.$thread->getTitle()." <br />\n";
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId) {
         $subject = get_lang('New Post in the forum').': '.
-            $forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+            $forum->getTitle().' - '.$thread->getTitle()." <br />\n";
         $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;
@@ -3500,10 +3500,10 @@ function move_thread_form()
         <div class="formw">';
     $htmlcontent .= '<select name="forum">';
     foreach ($forum_categories as $category) {
-        $htmlcontent .= '<optgroup label="'.$category->getCatTitle().'">';
+        $htmlcontent .= '<optgroup label="'.$category->getTitle().'">';
         $forums = $category->getForums();
         foreach ($forums as $forum) {
-            $htmlcontent .= '<option value="'.$forum->getIid().'">'.$forum->getForumTitle().'</option>';
+            $htmlcontent .= '<option value="'.$forum->getIid().'">'.$forum->getTitle().'</option>';
         }
         $htmlcontent .= '</optgroup>';
     }
@@ -3552,7 +3552,7 @@ function move_post_form()
     $threads = get_threads($_GET['forum']);
     $threads_list[0] = get_lang('A new thread');
     foreach ($threads as $thread) {
-        $threads_list[$thread->getIid()] = $thread->getThreadTitle();
+        $threads_list[$thread->getIid()] = $thread->getTitle();
     }
     $form->addSelect('thread', get_lang('Move toThread'), $threads_list);
     $form->applyFilter('thread', 'html_filter');
@@ -3598,7 +3598,7 @@ function store_move_post($values)
 
         $thread = new CForumThread();
         $thread
-            ->setThreadTitle($post->getPostTitle())
+            ->setTitle($post->getTitle())
             ->setForum($post->getForum())
             ->setUser($post->getUser())
             ->setThreadLastPost($post)
@@ -4639,7 +4639,7 @@ function get_name_thread_by_id($thread_id)
 {
     $t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT thread_title
+    $sql = "SELECT title
             FROM $t_forum_thread
             WHERE c_id = $course_id AND iid = '".(int) $thread_id."' ";
     $result = Database::query($sql);
@@ -4696,7 +4696,7 @@ function get_all_post_from_user(int $user_id, int $courseId): string
                                 '',
                                 ICON_SIZE_MEDIUM
                             );
-                            $hand_forums .= '&nbsp;'.Security::remove_XSS($thread->getThreadTitle(), STUDENT);
+                            $hand_forums .= '&nbsp;'.Security::remove_XSS($thread->getTitle(), STUDENT);
                             $hand_forums .= '</div>';
 
                             foreach ($post_list as $posts) {
@@ -4714,7 +4714,7 @@ function get_all_post_from_user(int $user_id, int $courseId): string
                 $forum_results .= '<div id="social-forum">';
                 $forum_results .= '<div class="clear"></div><br />';
                 $forum_results .= '<div id="social-forum-title">'.
-                    Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getForumTitle(), STUDENT).
+                    Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getTitle(), STUDENT).
                     '<div style="float:right;margin-top:-35px">
                         <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum->getIid().' " >'.
                     get_lang('See forum').'
@@ -4797,7 +4797,7 @@ function getForumCreatedByUser($userId, $courseInfo, $sessionId)
         /** @var CForum $forum */
         foreach ($items as $forum) {
             $forumList[] = [
-                $forum->getForumTitle(),
+                $forum->getTitle(),
                 api_get_local_time($forum->getResourceNode()->getCreatedAt()),
                 api_get_local_time($forum->getResourceNode()->getUpdatedAt()),
             ];
@@ -5486,7 +5486,7 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
         $url = api_get_path(WEB_CODE_PATH).
             'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
         $postLink = Display::url(
-            $post->getPostTitle(),
+            $post->getTitle(),
             $url
         );
         $subject = get_lang('Post reported');
@@ -5494,7 +5494,7 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
             get_lang('User %s has reported the message %s in the forum %s'),
             $currentUser['complete_name'],
             $postLink,
-            $forumInfo->getForumTitle()
+            $forumInfo->getTitle()
         );
         foreach ($users as $userId) {
             MessageManager::send_message_simple($userId, $subject, $content);

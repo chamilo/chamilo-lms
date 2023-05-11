@@ -30,8 +30,8 @@ class Career
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
@@ -62,16 +62,16 @@ class Career
         return $this->id;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(string $description): self

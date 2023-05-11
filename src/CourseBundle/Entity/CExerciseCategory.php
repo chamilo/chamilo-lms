@@ -31,8 +31,8 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, \
     protected Course $course;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
@@ -49,7 +49,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, \
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     /**
@@ -60,14 +60,14 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, \
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -115,11 +115,11 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, \
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

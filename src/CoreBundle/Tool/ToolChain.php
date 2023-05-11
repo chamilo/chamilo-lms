@@ -185,7 +185,7 @@ class ToolChain
 
             $courseTool = (new CTool())
                 ->setTool($toolEntity)
-                ->setName($tool->getName())
+                ->setTitle($tool->getName())
                 ->setPosition($position)
                 ->setVisibility($visibility)
                 ->setParent($course)

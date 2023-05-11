@@ -104,7 +104,7 @@ if (!empty($careers)) {
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
             $career_item['id'],
-            'name ASC'
+            'title ASC'
         );
         $career_content = '';
         $promotion_array = [];
@@ -128,13 +128,13 @@ if (!empty($careers)) {
                 }
                 $promotion_array[$promotion_item['id']] = [
                     'id' => $promotion_item['id'],
-                    'name' => $promotion_item['name'],
+                    'name' => $promotion_item['title'],
                     'sessions' => $session_list,
                 ];
             }
         }
         $career_array[$career_item['id']] = [
-            'name' => $career_item['name'],
+            'name' => $career_item['title'],
             'promotions' => $promotion_array,
         ];
         $careerList = [

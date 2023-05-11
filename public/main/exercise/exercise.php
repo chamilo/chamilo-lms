@@ -437,7 +437,7 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }
             }
-            echo Display::page_subheader($category->getName().$up.$down);
+            echo Display::page_subheader($category->getTitle().$up.$down);
             echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }
     } else {

@@ -253,7 +253,7 @@ class MultipleAnswerTrueFalse extends Question
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $optionData->setName($optionData);
+                $optionData->setTitle($optionData);
             }
         } else {
             for ($i = 1; $i <= 3; $i++) {

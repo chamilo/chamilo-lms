@@ -27,8 +27,8 @@ class GradebookEvaluation
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
@@ -87,21 +87,21 @@ class GradebookEvaluation
         $this->visible = 1;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get name.
+     * Get title.
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(?string $description): self

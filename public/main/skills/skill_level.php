@@ -66,7 +66,7 @@ switch ($action) {
                 $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
                 if ($profile) {
                     $item = new Level();
-                    $item->setName($values['name']);
+                    $item->setTitle($values['name']);
                     $item->setShortName($values['short_name']);
                     $item->setProfile($profile);
                     $em->persist($item);
@@ -108,7 +108,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $item->setName($values['name']);
+            $item->setTitle($values['name']);
             $item->setShortName($values['short_name']);
             $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
             if ($profile) {

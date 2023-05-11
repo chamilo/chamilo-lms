@@ -319,7 +319,7 @@ if (is_array($forumCategories)) {
         //$categorySessionId = $forumCategory->getSessionId();
         $categorySessionId = 0;
         $forumCategoryInfo['id'] = $categoryId;
-        $forumCategoryInfo['title'] = $forumCategory->getCatTitle();
+        $forumCategoryInfo['title'] = $forumCategory->getTitle();
         /*
         if (empty($forumCategory['cat_title'])) {
             $forumCategoryInfo['title'] = get_lang('Without category');
@@ -427,7 +427,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $forumInfo['id'] = $forumId;
                         $forumInfo['forum_of_group'] = $forum->getForumOfGroup();
-                        $forumInfo['title'] = $forum->getForumTitle();
+                        $forumInfo['title'] = $forum->getTitle();
                         $forumInfo['forum_image'] = null;
                         // Showing the image
                         /*if (!empty($forum['forum_image'])) {
@@ -466,7 +466,7 @@ if (is_array($forumCategories)) {
                         if (!empty($forum->getStartTime()) && !empty($forum->getEndTime())) {
                             $res = api_is_date_in_date_range($forum->getStartTime(), $forum->getEndTime());
                             if (!$res) {
-                                $linkForum = $forum->getForumTitle();
+                                $linkForum = $forum->getTitle();
                             }
                         }
 

@@ -1036,7 +1036,7 @@ switch ($action) {
         foreach ($items as $item) {
             $result[] = [
                 'id' => $item->getId(),
-                'name' => $item->getName(),
+                'name' => $item->getTitle(),
             ];
         }
         /*$result = $manager->get_all([
@@ -1945,7 +1945,7 @@ switch ($action) {
                 $result = SessionManager::get_sessions_admin_complete(
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => "$sidx $sord, s.title",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ]
@@ -1957,7 +1957,7 @@ switch ($action) {
                     api_get_user_id(),
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => "$sidx $sord, s.title",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],
@@ -1974,7 +1974,7 @@ switch ($action) {
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,
-                        'order' => "s.access_start_date, s.name",
+                        'order' => "s.access_start_date, s.title",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],
@@ -2280,7 +2280,7 @@ switch ($action) {
         }
 
         $result = Database::select(
-            'p.id,p.name, p.description, c.name as career, p.status',
+            'p.id,p.name, p.description, c.title as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );

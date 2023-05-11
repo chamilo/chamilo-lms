@@ -487,7 +487,7 @@ if ('true' === $allowTutors) {
             } ?>" style="margin:0px;" <?php if ($ajax_search) {
                 echo ' onsubmit="valide();"';
             } ?>>
-    <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
+    <?php echo '<legend>'.$tool_name.' ('.$session->getTitle().') </legend>'; ?>
     <?php
     if ('multiple' === $add_type) {
         if (is_array($extra_field_list)) {

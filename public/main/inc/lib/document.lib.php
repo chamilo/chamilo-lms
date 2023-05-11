@@ -906,6 +906,7 @@ class DocumentManager
         $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
+
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);

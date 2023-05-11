@@ -49,8 +49,8 @@ class CourseCategory implements \Stringable
 
     #[Assert\NotBlank]
     #[Groups(['course_category:read', 'course_category:write', 'course:read', 'session:read'])]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[Assert\NotBlank]
     #[Groups(['course_category:read', 'course_category:write', 'course:read'])]
@@ -105,7 +105,7 @@ class CourseCategory implements \Stringable
 
     public function __toString(): string
     {
-        $name = strip_tags($this->name);
+        $name = strip_tags($this->title);
 
         return sprintf('%s (%s)', $name, $this->code);
     }
@@ -148,16 +148,16 @@ class CourseCategory implements \Stringable
         return $this;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setCode(string $code): self

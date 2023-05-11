@@ -225,7 +225,7 @@ if (!empty($courseList)) {
         }
 
         $sql = "SELECT visibility FROM $toolTable
-                WHERE c_id = $courseId AND name = 'quiz'";
+                WHERE c_id = $courseId AND title = 'quiz'";
         $result = Database::query($sql);
 
         // If main tool is visible.

@@ -53,7 +53,7 @@ $form->addButtonUpdate(get_lang('Edit this session'));
 $formDefaults = [
     'id' => $session->getId(),
     'session_category' => $session->getCategory()?->getId(),
-    'name' => $session->getName(),
+    'name' => $session->getTitle(),
     'description' => $session->getDescription(),
     'show_description' => $session->getShowDescription(),
     'duration' => $session->getDuration(),

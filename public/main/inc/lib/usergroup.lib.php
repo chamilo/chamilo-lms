@@ -1530,7 +1530,7 @@ class UserGroupModel extends Model
             $userGroup = new Usergroup();
             $repo = Container::getUsergroupRepository();
             $userGroup
-                ->setName(trim($params['name']))
+                ->setTitle(trim($params['name']))
                 ->setDescription($params['description'])
                 ->setUrl($params['url'])
                 ->setVisibility($params['visibility'])

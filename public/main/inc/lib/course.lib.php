@@ -637,7 +637,7 @@ class CourseManager
                 $endDate = new DateTime();
                 $endDate->add($duration);
                 $session = new SessionEntity();
-                $session->setName(
+                $session->setTitle(
                     sprintf(get_lang('FirstnameLastnameCourses'), $user->getFirstname(), $user->getLastname())
                 );
                 $session->setAccessEndDate($endDate);
@@ -4103,7 +4103,7 @@ class CourseManager
 
             $output['skill'] = null;
             if ($skill) {
-                $output['skill']['name'] = $skill->getName();
+                $output['skill']['name'] = $skill->getTitle();
                 $output['skill']['icon'] = $skill->getIcon();
             }
         }
@@ -5834,7 +5834,7 @@ class CourseManager
                             'disabled' => $userDisabled,
                             'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$thisGroup->getName()." - ".$userCount." ".$userLabel,
+                            'content' => " G: ".$thisGroup->getTitle()." - ".$userCount." ".$userLabel,
                         ];
                     }
                 }

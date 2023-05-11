@@ -199,7 +199,7 @@ switch ($action) {
             $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
             $default = [
                 'glossary_id' => $glossaryData->getIid(),
-                'name' => $glossaryData->getName(),
+                'name' => $glossaryData->getTitle(),
                 'description' => $glossaryData->getDescription(),
             ];
             $form->setDefaults($default);

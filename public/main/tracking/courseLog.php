@@ -1054,7 +1054,7 @@ if ($export_csv) {
         $sessionDates = SessionManager::parseSessionDates($session);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('Session name'), $session->getName()]);
+        array_unshift($csvContentInSession, [get_lang('Session name'), $session->getTitle()]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');

@@ -92,7 +92,7 @@ switch ($action) {
         $item = TicketManager::getPriority($_GET['id']);
         $form->setDefaults(
             [
-                'name' => $item->getName(),
+                'name' => $item->getTitle(),
                 'description' => $item->getDescription(),
             ]
         );

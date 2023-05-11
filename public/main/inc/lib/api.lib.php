@@ -5322,7 +5322,7 @@ function api_get_tool_information_by_name($name)
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT id FROM tool
-            WHERE name = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($name)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {

@@ -44,7 +44,7 @@ if (empty($skillLevels)) {
     ]);
     /** @var Skill $skill */
     foreach ($skills as $skill) {
-        $skillsOptions[$skill->getId()] = $skill->getName();
+        $skillsOptions[$skill->getId()] = $skill->getTitle();
     }
 } else {
     // Get only root elements
@@ -134,7 +134,7 @@ if ($profile) {
     ]);
     $profileLevels = [];
     foreach ($levels as $level) {
-        $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
+        $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
     }
 
     ksort($profileLevels); // Sort the array by Position.
@@ -178,7 +178,7 @@ if (!empty($skillIdFromGet)) {
         }
         $skillsOptions = [];
         if ($oldSkill) {
-            $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getName()];
+            $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getTitle()];
         }
 
         if ($counter < count($subSkillList) - 1) {
@@ -275,7 +275,7 @@ if ($form->validate()) {
                 sprintf(
                     get_lang('The user %s has already achieved the skill %s'),
                     UserManager::formatUserFullName($user),
-                    $skill->getName()
+                    $skill->getTitle()
                 ),
                 'warning'
             )

@@ -116,7 +116,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $fileName = 'works_in_session_'.api_get_local_time();
 
     $dataToExport = [];
-    $dataToExport[] = [$toolName, $session->getName()];
+    $dataToExport[] = [$toolName, $session->getTitle()];
     $dataToExport['headers'][] = get_lang('Code');
     $dataToExport['headers'][] = get_lang('Learner name');
     $dataToExport['headers'][] = get_lang('Time spent in portal');
@@ -166,7 +166,7 @@ $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
 if ($session) {
-    $view->assign('session', ['name' => $session->getName()]);
+    $view->assign('session', ['name' => $session->getTitle()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
 }

@@ -39,8 +39,8 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
@@ -110,7 +110,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     /**
@@ -183,16 +183,16 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->id;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -334,11 +334,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

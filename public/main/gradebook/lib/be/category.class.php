@@ -556,7 +556,7 @@ class Category implements GradebookItem
             }
 
             $category = new GradebookCategory();
-            $category->setName($this->name);
+            $category->setTitle($this->name);
             $category->setDescription($this->description);
             $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
@@ -647,7 +647,7 @@ class Category implements GradebookItem
         }
         $course = api_get_course_entity();
 
-        $category->setName($this->name);
+        $category->setTitle($this->name);
         $category->setDescription($this->description);
         $category->setUser(api_get_user_entity($this->user_id));
         $category->setCourse($course);
@@ -2554,7 +2554,7 @@ class Category implements GradebookItem
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
-            $cat->set_name($data['name']);
+            $cat->set_name($data['title']);
             $cat->set_description($data['description']);
             $cat->set_user_id($data['user_id']);
             $courseInfo = api_get_course_info_by_id($data['c_id']);

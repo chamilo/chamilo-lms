@@ -39,8 +39,8 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected int $lpType;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'ref', type: 'text', nullable: true)]
     protected ?string $ref = null;
@@ -182,7 +182,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setLpType(int $lpType): self
@@ -202,16 +202,16 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this->lpType;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setRef(string $ref): self
@@ -715,11 +715,11 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

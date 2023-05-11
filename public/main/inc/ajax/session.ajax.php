@@ -46,7 +46,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $sessions = SessionManager::get_sessions_list(
                 [
-                    's.name' => [
+                    's.title' => [
                         'operator' => 'LIKE',
                         'value' => "%".$_REQUEST['q']."%",
                     ],
@@ -76,7 +76,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $results = SessionManager::get_sessions_list(
                 [
-                    's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
+                    's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
                     'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );
@@ -105,7 +105,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $results = SessionManager::get_sessions_list(
                 [
-                    's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
+                    's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
                     'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );

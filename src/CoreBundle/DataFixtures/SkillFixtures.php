@@ -19,7 +19,7 @@ class SkillFixtures extends Fixture
 
         // @todo check if we still need skill_rel_skill
         $skill = (new Skill())
-            ->setName('Root')
+            ->setTitle('Root')
             ->setShortCode('root')
             ->setAccessUrlId(1)
         ;

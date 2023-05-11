@@ -334,7 +334,7 @@ class Evaluation implements GradebookItem
             $evaluation
                 ->setDescription($this->description)
                 ->setCourse(api_get_course_entity($courseId))
-                ->setName($this->get_name())
+                ->setTitle($this->get_name())
                 ->setCategory($category)
                 ->setUser(api_get_user_entity($this->get_user_id()))
                 ->setWeight(api_float_val($this->get_weight()))
@@ -369,7 +369,7 @@ class Evaluation implements GradebookItem
                 $current_date = api_get_utc_datetime();
                 $params = [
                     'id_linkeval_log' => $arreval['id'],
-                    'name' => $arreval['name'],
+                    'title' => $arreval['name'],
                     'description' => $arreval['description'],
                     'created_at' => $current_date,
                     'weight' => $row_old_weight['weight'],
@@ -389,7 +389,7 @@ class Evaluation implements GradebookItem
     {
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'UPDATE '.$tbl_grade_evaluations
-            ." SET name = '".Database::escape_string($this->get_name())."'"
+            ." SET title = '".Database::escape_string($this->get_name())."'"
             .', description = ';
         if (isset($this->description)) {
             $sql .= "'".Database::escape_string($this->get_description())."'";
@@ -947,7 +947,7 @@ class Evaluation implements GradebookItem
             while ($data = Database::fetch_array($result)) {
                 $eval = new Evaluation();
                 $eval->set_id($data['id']);
-                $eval->set_name($data['name']);
+                $eval->set_name($data['title']);
                 $eval->set_description($data['description']);
                 $eval->set_user_id($data['user_id']);
                 $eval->setCourseId($data['c_id']);

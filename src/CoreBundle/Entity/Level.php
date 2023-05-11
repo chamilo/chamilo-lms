@@ -21,8 +21,8 @@ class Level implements \Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[Gedmo\SortablePosition]
     #[ORM\Column(name: 'position', type: 'integer')]
@@ -38,7 +38,7 @@ class Level implements \Stringable
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     /**
@@ -52,14 +52,14 @@ class Level implements \Stringable
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

@@ -121,7 +121,7 @@ switch ($action) {
                 }
                 $category = new GradebookCategory();
                 $category
-                    ->setName($values['name'])
+                    ->setTitle($values['name'])
                     ->setWeight($values['weight'])
                     ->setVisible(1)
                     ->setLocked(0)
@@ -221,7 +221,7 @@ switch ($action) {
 
             $form->addButtonSave(get_lang('Edit'));
             $defaults = [
-                'name' => $category->getName(),
+                'name' => $category->getTitle(),
                 'weight' => $category->getWeight(),
                 'gradebooks_to_validate_in_dependence' => $categoryData['gradebooks_to_validate_in_dependence'],
                 'depends' => array_keys($options),
@@ -231,7 +231,7 @@ switch ($action) {
             $contentForm = $form->returnForm();
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
-                $category->setName($values['name']);
+                $category->setTitle($values['name']);
                 $category->setWeight($values['weight']);
                 $em->persist($category);
                 $em->flush();

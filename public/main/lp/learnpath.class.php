@@ -133,7 +133,7 @@ class learnpath
             //$this->entity = $entity;
             $this->lp_id = $lp_id;
             $this->type = $entity->getLpType();
-            $this->name = stripslashes($entity->getName());
+            $this->name = stripslashes($entity->getTitle());
             $this->proximity = $entity->getContentLocal();
             $this->theme = $entity->getTheme();
             $this->maker = $entity->getContentLocal();
@@ -609,7 +609,7 @@ class learnpath
 
                 $lp = (new CLp())
                     ->setLpType($type)
-                    ->setName($name)
+                    ->setTitle($name)
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setCategory($category)
@@ -3392,7 +3392,7 @@ class learnpath
             ")
             ->setParameters([
                 'course' => $courseId,
-                'name' => strip_tags($category->getName()),
+                'name' => strip_tags($category->getTitle()),
                 'link' => "$link%",
             ])
             ->getResult();
@@ -6243,7 +6243,7 @@ class learnpath
             if ($myLpId == $lp_id) {
                 continue;
             }
-            $items[$myLpId] = $lp->getName();
+            $items[$myLpId] = $lp->getTitle();
             /*$return .= '<option
                 value="'.$myLpId.'" '.(($myLpId == $prerequisiteId) ? ' selected ' : '').'>'.
                 $lp->getName().
@@ -6542,7 +6542,7 @@ class learnpath
                 $categories[0] = get_lang('Uncategorized');
             } else {
                 $category = $link->getCategory();
-                $categories[$categoryId] = $category->getCategoryTitle();
+                $categories[$categoryId] = $category->getTitle();
             }
             $categorizedLinks[$categoryId][$link->getIid()] = $link;
         }
@@ -6746,7 +6746,7 @@ class learnpath
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         foreach ($a_forums as $forum) {
             $forumId = $forum->getIid();
-            $title = Security::remove_XSS($forum->getForumTitle());
+            $title = Security::remove_XSS($forum->getTitle());
             $link = Display::url(
                 Display::return_icon('preview_view.png', get_lang('Preview')),
                 api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
@@ -6809,10 +6809,10 @@ class learnpath
                         class="moved link_with_id"
                         data-id="'.$threadId.'"
                         data_type="'.TOOL_THREAD.'"
-                        title="'.$thread->getThreadTitle().'"
+                        title="'.$thread->getTitle().'"
                         href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'"
                         >'.
-                        Security::remove_XSS($thread->getThreadTitle()).' '.$link.'</a>';
+                        Security::remove_XSS($thread->getTitle()).' '.$link.'</a>';
                     $return .= '</li>';
                 }
             }
@@ -7061,7 +7061,7 @@ class learnpath
 
         $item = new CLpCategory();
         $item
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setParent($courseEntity)
             ->addCourseLink($courseEntity, api_get_session_entity())
         ;
@@ -7081,7 +7081,7 @@ class learnpath
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $params['id']);
         if ($item) {
-            $item->setName($params['name']);
+            $item->setTitle($params['name']);
             $em->persist($item);
             $em->flush();
         }
@@ -7218,7 +7218,7 @@ class learnpath
 
         if (!empty($items)) {
             foreach ($items as $cat) {
-                $cats[$cat->getIid()] = $cat->getName();
+                $cats[$cat->getIid()] = $cat->getTitle();
             }
         }
 
@@ -7982,7 +7982,7 @@ class learnpath
                 $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
                 $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id = $id");
                 $myrow = Database::fetch_array($result);
-                $output = $myrow['forum_name'];
+                $output = $myrow['title'];
                 break;
             case TOOL_THREAD:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -7990,14 +7990,14 @@ class learnpath
                 $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
                 $result_title = Database::query($sql_title);
                 $myrow_title = Database::fetch_array($result_title);
-                $output = $myrow_title['post_title'];
+                $output = $myrow_title['title'];
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
                 $result = Database::query($sql);
                 $post = Database::fetch_array($result);
-                $output = $post['post_title'];
+                $output = $post['title'];
                 break;
             case 'dir':
             case TOOL_DOCUMENT:

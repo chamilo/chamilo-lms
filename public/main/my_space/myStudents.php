@@ -1612,7 +1612,7 @@ if (empty($details)) {
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
-        $categoryTest->setName(get_lang('Without category'));
+        $categoryTest->setTitle(get_lang('Without category'));
         $categoryTest->setPosition(0);
         $categories = [
             $categoryTest,

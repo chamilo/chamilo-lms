@@ -1261,7 +1261,7 @@ class TicketManager
 
                         $row['lp_url'] = '<a
                             href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.
-                            $lp->getName().
+                            $lp->getTitle().
                         '</a>';
                     }
                 }
@@ -1873,7 +1873,7 @@ class TicketManager
         $list = [];
         /** @var TicketStatus $row */
         foreach ($items as $row) {
-            $list[$row->getId()] = $row->getName();
+            $list[$row->getId()] = $row->getTitle();
         }
 
         return $list;
@@ -1924,7 +1924,7 @@ class TicketManager
         $list = [];
         /** @var TicketPriority $row */
         foreach ($projects as $row) {
-            $list[$row->getId()] = $row->getName();
+            $list[$row->getId()] = $row->getTitle();
         }
 
         return $list;
@@ -1943,7 +1943,7 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -1965,7 +1965,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url(
-                    $row->getName(),
+                    $row->getTitle(),
                     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
                 ),
                 '2' => $row->getDescription(),
@@ -1992,7 +1992,7 @@ class TicketManager
     public static function addProject($params)
     {
         $project = new TicketProject();
-        $project->setName($params['name']);
+        $project->setTitle($params['name']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
 
@@ -2017,7 +2017,7 @@ class TicketManager
     public static function updateProject($id, $params)
     {
         $project = self::getProject($id);
-        $project->setName($params['name']);
+        $project->setTitle($params['name']);
         $project->setDescription($params['description']);
         $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
         $project->setLastEditUserId($params['sys_lastedit_user_id']);
@@ -2066,7 +2066,7 @@ class TicketManager
                 'id' => $row->getId(),
                 'code' => $row->getCode(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -2113,7 +2113,7 @@ class TicketManager
     {
         $item = new TicketStatus();
         $item->setCode(URLify::filter($params['name']));
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2137,7 +2137,7 @@ class TicketManager
     public static function updateStatus($id, $params)
     {
         $item = self::getStatus($id);
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2185,7 +2185,7 @@ class TicketManager
                 'id' => $row->getId(),
                 'code' => $row->getCode(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -2213,7 +2213,7 @@ class TicketManager
         $item = new TicketPriority();
         $item
             ->setCode(URLify::filter($params['name']))
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setDescription($params['description'])
             ->setColor('')
             ->setInsertUserId(api_get_user_id())
@@ -2241,7 +2241,7 @@ class TicketManager
     public static function updatePriority($id, $params)
     {
         $item = self::getPriority($id);
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);

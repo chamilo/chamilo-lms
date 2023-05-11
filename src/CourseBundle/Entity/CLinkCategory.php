@@ -26,8 +26,8 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, \Stri
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'category_title', type: 'string', length: 255, nullable: false)]
-    protected string $categoryTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
@@ -50,7 +50,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, \Stri
 
     public function __toString(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function getIid(): int
@@ -58,16 +58,16 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, \Stri
         return $this->iid;
     }
 
-    public function setCategoryTitle(string $categoryTitle): self
+    public function setTitle(string $title): self
     {
-        $this->categoryTitle = $categoryTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getCategoryTitle(): string
+    public function getTitle(): string
     {
-        return $this->categoryTitle;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -109,11 +109,11 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, \Stri
 
     public function getResourceName(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setCategoryTitle($name);
+        return $this->setTitle($name);
     }
 }

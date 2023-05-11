@@ -115,7 +115,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -123,7 +123,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $forumRepo->create($forum);
 
         $forum2 = (new CForum())
-            ->setForumTitle('forum2')
+            ->setTitle('forum2')
             ->setParent($course2)
             ->setCreator($teacher)
             ->addCourseLink($course)

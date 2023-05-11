@@ -2523,7 +2523,7 @@ class UserManager
         if (!$getCount) {
             $dqlSelect = " DISTINCT
                 s.id,
-                s.name,
+                s.title,
                 s.accessStartDate AS access_start_date,
                 s.accessEndDate AS access_end_date,
                 s.duration,
@@ -2557,7 +2557,7 @@ class UserManager
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
-        $order = 'ORDER BY sc.name, s.name';
+        $order = 'ORDER BY sc.name, s.title';
 
         // Order by date if showing all sessions
         $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
@@ -2588,7 +2588,7 @@ class UserManager
                     }
                     break;
                 case 'name':
-                    $order = " ORDER BY s.name $orderSetting ";
+                    $order = " ORDER BY s.title $orderSetting ";
                     break;
             }
         }
@@ -2897,14 +2897,14 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT
-                s.id, s.name, s.access_start_date, s.access_end_date
+                s.id, s.title, s.access_start_date, s.access_end_date
                 FROM $tbl_session s
                 INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
                 WHERE (
                     sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 )
                 $coachCourseConditions
-                ORDER BY s.access_start_date, s.access_end_date, s.name";
+                ORDER BY s.access_start_date, s.access_end_date, s.title";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -2960,7 +2960,7 @@ class UserManager
                     $result_row['access_start_date'] = $session->getAccessStartDate()?->format('Y-m-d H:i:s');
                     $result_row['access_end_date'] = $session->getAccessEndDate()?->format('Y-m-d H:i:s');
                     $result_row['session_id'] = $session->getId();
-                    $result_row['session_name'] = $session->getName();
+                    $result_row['session_name'] = $session->getTitle();
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
                     $personal_course_list[$key] = $result_row;
@@ -5986,7 +5986,7 @@ SQL;
         $tableCareer = Database::get_main_table(TABLE_CAREER);
         $userId = (int) $userId;
 
-        $sql = "SELECT c.id, c.name
+        $sql = "SELECT c.id, c.title
                 FROM $table uc
                 INNER JOIN $tableCareer c
                 ON uc.career_id = c.id

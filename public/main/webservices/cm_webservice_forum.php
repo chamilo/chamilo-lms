@@ -100,7 +100,7 @@ class WSCMForum extends WSCM
             switch ($field) {
                 case 'title':
                     $htmlcode = true;
-                    $field_table = "thread_title";
+                    $field_table = "title";
                     break;
                 case 'date':
                     $field_table = "thread_date";
@@ -143,7 +143,7 @@ class WSCMForum extends WSCM
             $thread_info = Database::fetch_array($result);
 
             $htmlcode = true;
-            $field_table = "thread_title";
+            $field_table = "title";
 
             return $thread_info[$field_table];
         } else {
@@ -271,7 +271,7 @@ class WSCMForum extends WSCM
             $postDate = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
             $post = new \Chamilo\CourseBundle\Entity\CForumPost();
             $post
-                ->setPostTitle($title)
+                ->setTitle($title)
                 ->setPostText(isset($content) ? (api_html_entity_decode($content)) : null)
                 ->setThread($thread_id)
                 ->setForumId($forum_id)

@@ -154,11 +154,11 @@ if ('group' === $origin && $group_id) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getName(),
+        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
-        'name' => prepare4display($forum->getForumTitle()),
+        'name' => prepare4display($forum->getTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 } else {
@@ -168,15 +168,15 @@ if ('group' === $origin && $group_id) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
-        'name' => prepare4display($category->getCatTitle()),
+        'name' => prepare4display($category->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => prepare4display($forum->getForumTitle()),
+        'name' => prepare4display($forum->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) ($_GET['thread']),
-        'name' => prepare4display($thread->getThreadTitle()),
+        'name' => prepare4display($thread->getTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 }
@@ -286,7 +286,7 @@ if ('learnpath' !== $origin) {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($forum->getForumTitle()),
+    prepare4display($forum->getTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
         'forum' => $forum->getIid(),

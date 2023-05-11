@@ -381,7 +381,7 @@ if (api_is_platform_admin()) {
     );
 }
 
-echo Display::tag('h1', $session->getName().$editLink);
+echo Display::tag('h1', $session->getTitle().$editLink);
 echo Display::tag('i', $dates);
 $allow = 'true' === api_get_setting('show_session_description');
 

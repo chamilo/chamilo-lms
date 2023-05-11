@@ -36,8 +36,8 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'post_title', type: 'string', length: 250, nullable: false)]
-    protected string $postTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'post_text', type: 'text', nullable: true)]
     protected ?string $postText = null;
@@ -95,19 +95,19 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
 
     public function __toString(): string
     {
-        return $this->getPostTitle();
+        return $this->getTitle();
     }
 
-    public function setPostTitle(string $postTitle): self
+    public function setTitle(string $title): self
     {
-        $this->postTitle = $postTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getPostTitle(): string
+    public function getTitle(): string
     {
-        return $this->postTitle;
+        return $this->title;
     }
 
     public function setPostText(string $postText): self
@@ -286,11 +286,11 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
 
     public function getResourceName(): string
     {
-        return $this->getPostTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setPostTitle($name);
+        return $this->setTitle($name);
     }
 }

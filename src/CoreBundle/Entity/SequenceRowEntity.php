@@ -29,8 +29,8 @@ class SequenceRowEntity
     #[ORM\Column(name: 'row_id', type: 'integer')]
     protected int $rowId;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\ManyToOne(targetEntity: SequenceTypeEntity::class)]
     #[ORM\JoinColumn(name: 'sequence_type_entity_id', referencedColumnName: 'id')]
@@ -94,14 +94,14 @@ class SequenceRowEntity
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

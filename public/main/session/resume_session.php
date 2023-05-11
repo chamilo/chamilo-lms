@@ -108,7 +108,7 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$session->getName(),
+    Display::return_icon('session.png', get_lang('Session')).' '.$session->getTitle(),
     null,
     'h3'
 );

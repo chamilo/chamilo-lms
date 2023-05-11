@@ -31,7 +31,7 @@ if (null === $groupEntity) {
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getTitle()];
 $groupMember = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!$groupMember && !api_is_allowed_to_edit(false, true)) {

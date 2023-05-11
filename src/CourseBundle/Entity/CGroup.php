@@ -46,9 +46,9 @@ class CGroup extends AbstractResource implements ResourceInterface, \Stringable
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
     #[Groups(['group:read', 'group:write'])]
-    protected string $name;
+    protected string $title;
 
     #[Assert\NotNull]
     #[ORM\Column(name: 'status', type: 'boolean', nullable: false)]
@@ -131,7 +131,7 @@ class CGroup extends AbstractResource implements ResourceInterface, \Stringable
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     /**
@@ -144,16 +144,16 @@ class CGroup extends AbstractResource implements ResourceInterface, \Stringable
         return $this->iid;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setStatus(bool $status): self
@@ -439,11 +439,11 @@ class CGroup extends AbstractResource implements ResourceInterface, \Stringable
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

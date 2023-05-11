@@ -298,7 +298,7 @@ class Promotion extends Model
         $em = Database::getManager();
         $repo = $em->getRepository(\Chamilo\CoreBundle\Entity\Career::class);
         $promotion
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setStatus($params['status'])
             ->setDescription($params['description'])
             ->setCareer($repo->find($params['career_id']))

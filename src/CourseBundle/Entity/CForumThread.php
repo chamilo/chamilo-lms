@@ -29,8 +29,8 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'thread_title', type: 'string', length: 255, nullable: false)]
-    protected string $threadTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\ManyToOne(targetEntity: CForum::class, inversedBy: 'threads')]
     #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
@@ -111,7 +111,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
 
     public function __toString(): string
     {
-        return $this->getThreadTitle();
+        return $this->getTitle();
     }
 
     public function isThreadPeerQualify(): bool
@@ -126,16 +126,16 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
         return $this;
     }
 
-    public function setThreadTitle(string $threadTitle): self
+    public function setTitle(string $title): self
     {
-        $this->threadTitle = $threadTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getThreadTitle(): string
+    public function getTitle(): string
     {
-        return $this->threadTitle;
+        return $this->title;
     }
 
     public function setForum(CForum $forum = null): self
@@ -375,11 +375,11 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
 
     public function getResourceName(): string
     {
-        return $this->getThreadTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setThreadTitle($name);
+        return $this->setTitle($name);
     }
 }

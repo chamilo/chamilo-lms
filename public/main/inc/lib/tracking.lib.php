@@ -109,7 +109,7 @@ class Tracking
 
                 $groupItem = [
                     'id' => $group->getIid(),
-                    'name' => $group->getName(),
+                    'name' => $group->getTitle(),
                     'time' => api_time_to_hms($time),
                     'progress' => $averageProgress,
                     'score' => $averageScore,
@@ -2404,7 +2404,7 @@ class Tracking
                     if (!empty($row['lp_id'])) {
                         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
                         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-                        $sql = "SELECT lp.name
+                        $sql = "SELECT lp.title
                                 FROM $tbl_lp as lp, $tbl_course as c
                                 WHERE
                                     c.code = '$course_code' AND

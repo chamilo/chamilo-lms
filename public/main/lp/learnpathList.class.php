@@ -55,7 +55,7 @@ class LearnpathList
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 
-        $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
+        $order = ' ORDER BY lp.displayOrder ASC, lp.title ASC';
         if (isset($order_by)) {
             $order = Database::parse_conditions(['order' => $order_by]);
         }
@@ -138,7 +138,7 @@ class LearnpathList
             $this->list[$lp->getIid()] = [
                 'lp_type' => $lp->getLpType(),
                 'lp_session' => 0,
-                'lp_name' => stripslashes($lp->getName()),
+                'lp_name' => stripslashes($lp->getTitle()),
                 'lp_desc' => stripslashes($lp->getDescription()),
                 'lp_path' => $lp->getPath(),
                 'lp_view_mode' => $lp->getDefaultViewMod(),
@@ -164,7 +164,7 @@ class LearnpathList
                 'prerequisite' => $lp->getPrerequisite(),
                 'entity' => $lp,
             ];
-            $names[$lp->getName()] = $lp->getIid();
+            $names[$lp->getTitle()] = $lp->getIid();
         }
         asort($names);
         $this->alpha_list = $names;

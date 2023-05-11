@@ -403,7 +403,7 @@ $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
 $headers[] = get_lang('Username');
 foreach ($lps as $lp) {
-    $lpName = $lp->getName();
+    $lpName = $lp->getTitle();
     $headers[] = get_lang('Progress').': '.$lpName;
     $headers[] = get_lang('FirstAccess').': '.$lpName;
     $headers[] = get_lang('LastAccess').': '.$lpName;

@@ -392,7 +392,7 @@ if ($form->validate()) {
 
     // Check if the session image will be copied from the template
     $importImageFromSession = false;
-    $sessionIdToImport = explode('::', $params['extra_image_crop_result']);
+    $sessionIdToImport = !empty($params['extra_image_crop_result']) ? explode('::', $params['extra_image_crop_result']) : [];
     $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
     if (!empty($sessionIdToImport)) {
         $extraField = new ExtraField('session');

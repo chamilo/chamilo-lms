@@ -72,7 +72,7 @@ if ($form->validate()) {
         $item = $repo->find($id);
         $defaults = [
             'id' => $item->getIid(),
-            'name' => $item->getName(),
+            'name' => $item->getTitle(),
         ];
         $form->setDefaults($defaults);
     }

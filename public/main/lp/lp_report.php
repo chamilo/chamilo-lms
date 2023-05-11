@@ -168,7 +168,7 @@ if (!empty($groups)) {
     $courseGroups = [];
     foreach ($groups as $group) {
         $option = [
-            'text' => $group['name'],
+            'text' => $group['title'],
             'value' => "group:".$group['iid'],
         ];
         $courseGroups[] = $option;
@@ -189,7 +189,7 @@ if (!empty($groups)) {
         $options = [];
         foreach ($classes as $group) {
             $option = [
-                'text' => $group['name'],
+                'text' => $group['title'],
                 'value' => "class:".$group['id'],
             ];
             $options[] = $option;
@@ -319,7 +319,7 @@ if (!empty($users)) {
             if (!empty($groupsByUser)) {
                 $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                 foreach ($groupsByUser as $group) {
-                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gid='.$group['iid']).'&nbsp;';
+                    $userGroupList .= Display::url($icon.$group['title'], $groupUrl.'&gid='.$group['iid']).'&nbsp;';
                 }
             }
         }
@@ -450,7 +450,7 @@ $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
 $template->assign('url_base', $urlBase);
-$template->assign('header', $entity->getName());
+$template->assign('header', $entity->getTitle());
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
 $template->assign('content', $result);

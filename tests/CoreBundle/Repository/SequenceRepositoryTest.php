@@ -21,7 +21,7 @@ class SequenceRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(SequenceRepository::class);
 
         $sequence = (new Sequence())
-            ->setName('Sequence 1')
+            ->setTitle('Sequence 1')
             ->setGraph('')
         ;
         $this->assertHasNoEntityViolations($sequence);

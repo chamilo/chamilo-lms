@@ -268,7 +268,7 @@ class GroupManager
 
         /** @var CGroup $group */
         $group = (new CGroup())
-            ->setName($name)
+            ->setTitle($name)
             ->setCategory($category)
             ->setMaxStudent($places)
             ->setDocState($docState)
@@ -525,7 +525,7 @@ class GroupManager
         if ($db_object) {
             $result['id'] = $db_object->iid;
             $result['iid'] = $db_object->iid;
-            $result['name'] = $db_object->name;
+            $result['name'] = $db_object->title;
             $result['status'] = $db_object->status;
             $result['description'] = $db_object->description;
             $result['maximum_number_of_students'] = $db_object->max_student;
@@ -645,7 +645,7 @@ class GroupManager
         }
 
         $group
-            ->setName($name)
+            ->setTitle($name)
             ->setCategory($category)
             ->setMaxStudent($maxStudent)
             ->setDocState($docState)
@@ -1026,7 +1026,7 @@ class GroupManager
             foreach ($groups as $group) {
                 self::set_group_properties(
                     $group['iid'],
-                    $group['name'],
+                    $group['title'],
                     $group['description'],
                     $maximum_number_of_students,
                     $doc_state,
@@ -2041,7 +2041,7 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT name
+        $sql = "SELECT title
                 FROM $table_group g
                 INNER JOIN $table_group_user gu
                 ON (gu.group_id = g.iid)
@@ -2050,7 +2050,7 @@ class GroupManager
         $res = Database::query($sql);
         $groups = [];
         while ($group = Database::fetch_array($res)) {
-            $groups[] .= $group['name'];
+            $groups[] .= $group['title'];
         }
 
         return $groups;
@@ -2148,13 +2148,13 @@ class GroupManager
                 $group_name = '<a
                     class="'.$groupNameClass.'"
                     href="group_space.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'">'.
-                    Security::remove_XSS($group->getName()).'</a> ';
+                    Security::remove_XSS($group->getTitle()).'</a> ';
 
                 $group_name2 = '';
                 if (api_get_configuration_value('extra')) {
                     $group_name2 = '<a
                         href="group_space_tracking.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'">'.
-                        get_lang('suivi_de').''.stripslashes($group->getName()).'</a>';
+                        get_lang('suivi_de').''.stripslashes($group->getTitle()).'</a>';
                 }
 
                 /*
@@ -2174,7 +2174,7 @@ class GroupManager
                 if ('true' === $hideGroup) {
                     continue;
                 }
-                $row[] = $group->getName().'<br />'.stripslashes(trim($group->getDescription()));
+                $row[] = $group->getTitle().'<br />'.stripslashes(trim($group->getDescription()));
             }
 
             // Tutor name
@@ -2765,7 +2765,7 @@ class GroupManager
         $content .= Display::tag(
             'h3',
             Display::url(
-                Security::remove_XSS($group['name']),
+                Security::remove_XSS($group['title']),
                 $url.'&gid='.$groupId
             )
         );

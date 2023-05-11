@@ -24,8 +24,8 @@ class CForumCategory extends AbstractResource implements ResourceInterface, \Str
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'cat_title', type: 'string', length: 255, nullable: false)]
-    protected string $catTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'cat_comment', type: 'text', nullable: true)]
     protected ?string $catComment;
@@ -52,7 +52,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, \Str
 
     public function __toString(): string
     {
-        return $this->getCatTitle();
+        return $this->getTitle();
     }
 
     /**
@@ -65,21 +65,21 @@ class CForumCategory extends AbstractResource implements ResourceInterface, \Str
         return $this->iid;
     }
 
-    public function setCatTitle(string $catTitle): self
+    public function setTitle(string $title): self
     {
-        $this->catTitle = $catTitle;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get catTitle.
+     * Get title.
      *
      * @return string
      */
-    public function getCatTitle()
+    public function getTitle()
     {
-        return $this->catTitle;
+        return $this->title;
     }
 
     public function setCatComment(string $catComment): self
@@ -145,11 +145,11 @@ class CForumCategory extends AbstractResource implements ResourceInterface, \Str
 
     public function getResourceName(): string
     {
-        return $this->getCatTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setCatTitle($name);
+        return $this->setTitle($name);
     }
 }

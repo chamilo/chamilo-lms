@@ -46,7 +46,7 @@ class LearnpathLink extends AbstractLink
         $list = [];
         /** @var CLp $lp */
         foreach ($lps as $lp) {
-            $list[] = [$lp->getIid(), $lp->getName()];
+            $list[] = [$lp->getIid(), $lp->getTitle()];
         }
 
         return $list;

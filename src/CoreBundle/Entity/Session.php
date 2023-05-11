@@ -49,14 +49,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['session:read'],
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
 #[ORM\Table(name: 'session')]
-#[ORM\UniqueConstraint(name: 'name', columns: ['name'])]
+#[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
-#[UniqueEntity('name')]
+#[UniqueEntity('title')]
 
 class Session implements ResourceWithAccessUrlInterface, \Stringable
 {
@@ -142,8 +142,8 @@ class Session implements ResourceWithAccessUrlInterface, \Stringable
         'session_rel_user:read',
         'course:read',
     ])]
-    #[ORM\Column(name: 'name', type: 'string', length: 150)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 150)]
+    protected string $title;
 
     #[Groups(['session:read', 'session:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true, unique: false)]
@@ -249,7 +249,7 @@ class Session implements ResourceWithAccessUrlInterface, \Stringable
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public static function getRelationTypeList(): array
@@ -528,16 +528,16 @@ class Session implements ResourceWithAccessUrlInterface, \Stringable
         return $this->sessionRelCourseRelUsers->matching($criteria);
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(string $description): self

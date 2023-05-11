@@ -49,9 +49,7 @@ class TwigListener
         if (null !== $token) {
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
-                /** @var User $userClone */
-                $userClone = clone $user;
-                $data = $this->serializer->serialize($userClone, 'jsonld', [
+                $data = $this->serializer->serialize($user, 'jsonld', [
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;

@@ -6,31 +6,29 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Message;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 final class UserRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-    private Security $security;
 
-    public function __construct(Security $security)
+    public function __construct()
     {
-        $this->security = $security;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
-    {
-        //error_log('applyToItem');
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
@@ -42,7 +40,6 @@ final class UserRelUserExtension implements QueryCollectionExtensionInterface //
         /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }*/
-
         /*$user = $this->security->getUser();
         $alias = $queryBuilder->getRootAliases()[0];
 
@@ -63,5 +60,17 @@ final class UserRelUserExtension implements QueryCollectionExtensionInterface //
             'wallPost' => Message::MESSAGE_TYPE_WALL,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);*/
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //error_log('applyToItem');
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 }

@@ -6,28 +6,32 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 final class MessageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-    private Security $security;
 
-    public function __construct(Security $security)
+    public function __construct(private readonly Security $security)
     {
-        $this->security = $security;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }*/
@@ -43,12 +47,6 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         }*/
 
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
-    {
-        //error_log('applyToItem1');
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -82,7 +80,8 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             ),
         );*/
 
-        $qb->andWhere("
+        $qb->andWhere(
+            "
             ($alias.sender = :current AND $alias.status <> :deleted) OR 
                 ($alias.sender <> :current AND r.receiver = :current AND (
                     ($alias.msgType = :inbox) OR
@@ -90,7 +89,8 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
                     ($alias.msgType = :conversation)
                 ) 
             )
-        ");
+        "
+        );
 
         $qb->setParameters([
             'current' => $user,
@@ -101,5 +101,17 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             'invitation' => Message::MESSAGE_TYPE_INVITATION,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //error_log('applyToItem1');
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 }

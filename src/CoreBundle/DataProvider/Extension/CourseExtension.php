@@ -6,31 +6,33 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 /**
  * Extension is called when loading api/courses.json.
  */
 final class CourseExtension implements QueryCollectionExtensionInterface
 {
-    private Security $security;
-    private RequestStack $requestStack;
 
-    public function __construct(Security $security, RequestStack $request)
+    public function __construct(private readonly Security $security)
     {
-        $this->security = $security;
-        $this->requestStack = $request;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -58,11 +60,9 @@ final class CourseExtension implements QueryCollectionExtensionInterface
 
         $queryBuilder
             ->andWhere(sprintf('%s.visibility <> :visibility_hidden', $rootAlias))
-            ->setParameter('visibility_hidden', Course::HIDDEN)
-        ;
+            ->setParameter('visibility_hidden', Course::HIDDEN);
         $queryBuilder
             ->andWhere(sprintf('%s.visibility <> :visibility_closed', $rootAlias))
-            ->setParameter('visibility_closed', Course::CLOSED)
-        ;
+            ->setParameter('visibility_closed', Course::CLOSED);
     }
 }

@@ -6,31 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
+//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+
 /**
  * Extension is called when loading api/personal_files.json.
  */
 final class PersonalFileExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-    private Security $security;
-    private RequestStack $requestStack;
 
-    public function __construct(Security $security, RequestStack $request)
+    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
     {
-        $this->security = $security;
-        $this->requestStack = $request;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -60,8 +63,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node')
-        ;
+            ->innerJoin("$rootAlias.resourceNode", 'node');
 
         if ($isShared) {
             $queryBuilder->leftJoin('node.resourceLinks', 'links');
@@ -73,13 +75,11 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
             $queryBuilder
                 ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-            ;
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED);
 
             $queryBuilder
                 ->andWhere('links.user = :userLink')
-                ->setParameter('userLink', $user)
-            ;
+                ->setParameter('userLink', $user);
         } else {
             $queryBuilder->orWhere('node.creator = :current');
             $queryBuilder->setParameter('current', $user);

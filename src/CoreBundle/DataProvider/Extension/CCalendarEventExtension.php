@@ -6,32 +6,32 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use Chamilo\CoreBundle\Entity\Message;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 final class CCalendarEventExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-    private Security $security;
-    private RequestStack $requestStack;
 
-    public function __construct(Security $security, RequestStack $request)
+    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
     {
-        $this->security = $security;
-        $this->requestStack = $request;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }*/
@@ -47,11 +47,6 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         }*/
 
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
-    {
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -70,8 +65,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 
         $qb
             ->innerJoin("$alias.resourceNode", 'node')
-            ->leftJoin('node.resourceLinks', 'links')
-        ;
+            ->leftJoin('node.resourceLinks', 'links');
 
         $request = $this->requestStack->getCurrentRequest();
         $courseId = $request->query->get('cid');
@@ -90,28 +84,24 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             );
             $qb
                 ->setParameter('start', $startDate)
-                ->setParameter('end', $endDate)
-            ;
+                ->setParameter('end', $endDate);
         }
 
         if (empty($courseId)) {
             $qb
                 ->andWhere('links.user = :user OR node.creator = :user')
-                ->setParameter('user', $user)
-            ;
+                ->setParameter('user', $user);
         } else {
             $qb
                 ->andWhere('links.course = :course')
-                ->setParameter('course', $courseId)
-            ;
+                ->setParameter('course', $courseId);
 
             if (empty($sessionId)) {
                 $qb->andWhere('links.session IS NULL');
             } else {
                 $qb
                     ->andWhere('links.session = :session')
-                    ->setParameter('session', $sessionId)
-                ;
+                    ->setParameter('session', $sessionId);
             }
 
             if (empty($groupId)) {
@@ -119,8 +109,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             } else {
                 $qb
                     ->andWhere('links.group = :group')
-                    ->setParameter('group', $groupId)
-                ;
+                    ->setParameter('group', $groupId);
             }
         }
 
@@ -139,6 +128,17 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                 )
             ),
         );*/
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     /*public function generateBetweenRange($qb, $alias, $field, $range)

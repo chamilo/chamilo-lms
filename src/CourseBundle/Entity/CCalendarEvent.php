@@ -1,16 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -21,6 +25,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,52 +33,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Calendar events.
  */
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            //'security' => "is_granted('VIEW', object)",  // the get collection is also filtered by MessageExtension.php
-            'security' => "is_granted('ROLE_USER')",
-        ],
-        'post' => [
-            'controller' => CreateCCalendarEventAction::class,
-            'security_post_denormalize' => "is_granted('CREATE', object)",
-        ],
+    operations: [
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(
+            controller: UpdateCCalendarEventAction::class,
+            security: "is_granted('EDIT', object)",
+            deserialize: false
+        ),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(security: 'is_granted(\'ROLE_USER\')'),
+        new Post(controller: CreateCCalendarEventAction::class, securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
-    itemOperations: [
-        'get' => [
-            'security' => "is_granted('VIEW', object)",
-        ],
-        'put' => [
-            'controller' => UpdateCCalendarEventAction::class,
-            'deserialize' => false,
-            'security' => "is_granted('EDIT', object)",
-        ],
-        'delete' => [
-            'security' => "is_granted('DELETE', object)",
-        ],
-    ],
-    attributes: [
-        'security' => "is_granted('ROLE_USER')",
-    ],
-    denormalizationContext: [
-        'groups' => ['calendar_event:write'],
-    ],
-    normalizationContext: [
-        'groups' => ['calendar_event:read', 'resource_node:read'],
-    ],
+    normalizationContext: ['groups' => ['calendar_event:read', 'resource_node:read']],
+    denormalizationContext: ['groups' => ['calendar_event:write']],
+    security: "is_granted('ROLE_USER')"
 )]
-
-#[ApiFilter(SearchFilter::class, properties: [
-    //'startDate' => 'exact',
-    //'endDate' => 'exact',
-    'allDay' => 'boolean',
-])]
-
-//#[ApiFilter(RangeFilter::class, properties: ['startDate', 'endDate'])]
-#[ApiFilter(DateFilter::class, strategy: DateFilter::EXCLUDE_NULL)]
 #[ORM\Table(name: 'c_calendar_event')]
 #[ORM\Entity(repositoryClass: CCalendarEventRepository::class)]
-
-class CCalendarEvent extends AbstractResource implements ResourceInterface, \Stringable
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['allDay' => 'boolean'])]
+#[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
+class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
 {
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -99,44 +78,38 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEvent::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_event_id', referencedColumnName: 'iid')]
     protected ?CCalendarEvent $parentEvent = null;
 
     /**
      * @var Collection|CCalendarEvent[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEvent::class, mappedBy: 'parentEvent')]
+    #[ORM\OneToMany(targetEntity: CCalendarEvent::class, mappedBy: 'parentEvent')]
     protected Collection $children;
 
     /**
      * @var Collection|CCalendarEventRepeat[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CCalendarEventRepeat::class, mappedBy: 'event', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CCalendarEventRepeat::class, mappedBy: 'event', cascade: ['persist'], orphanRemoval: true)]
     protected Collection $repeatEvents;
-
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'all_day', type: 'boolean', nullable: false)]
     protected bool $allDay;
-
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
-
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
-
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Room::class)]
+    #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room = null;
-
     /**
      * @var Collection|CCalendarEventAttachment[]
      */
     #[ORM\OneToMany(targetEntity: 'CCalendarEventAttachment', mappedBy: 'event', cascade: ['persist', 'remove'])]
     protected Collection $attachments;
-
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean', nullable: false)]
@@ -156,21 +129,14 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
         return $this->getTitle();
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setContent(string $content): self
+    public function setTitle(string $title): self
     {
-        $this->content = $content;
+        $this->title = $title;
 
         return $this;
     }
@@ -180,9 +146,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
         return $this->content;
     }
 
-    public function setStartDate(?DateTime $startDate): self
+    public function setContent(string $content): self
     {
-        $this->startDate = $startDate;
+        $this->content = $content;
 
         return $this;
     }
@@ -197,9 +163,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
         return $this->startDate;
     }
 
-    public function setEndDate(?DateTime $endDate): self
+    public function setStartDate(?DateTime $startDate): self
     {
-        $this->endDate = $endDate;
+        $this->startDate = $startDate;
 
         return $this;
     }
@@ -214,9 +180,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
         return $this->endDate;
     }
 
-    public function setParentEvent(self $parent): self
+    public function setEndDate(?DateTime $endDate): self
     {
-        $this->parentEvent = $parent;
+        $this->endDate = $endDate;
 
         return $this;
     }
@@ -226,12 +192,11 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
         return $this->parentEvent;
     }
 
-    /**
-     * @return Collection|CCalendarEvent[]
-     */
-    public function getChildren(): \Doctrine\Common\Collections\Collection|array
+    public function setParentEvent(self $parent): self
     {
-        return $this->children;
+        $this->parentEvent = $parent;
+
+        return $this;
     }
 
     public function addChild(self $event): self
@@ -244,9 +209,17 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
     }
 
     /**
+     * @return Collection|CCalendarEvent[]
+     */
+    public function getChildren(): Collection|array
+    {
+        return $this->children;
+    }
+
+    /**
      * @param Collection|CCalendarEvent[] $children
      */
-    public function setChildren(\Doctrine\Common\Collections\Collection|array $children): self
+    public function setChildren(Collection|array $children): self
     {
         $this->children = $children;
 
@@ -308,14 +281,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
     }
 
     /**
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
-    }
-
-    /**
      * @return Collection
      */
     public function getAttachments()
@@ -340,7 +305,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
     /**
      * @return Collection|CCalendarEventRepeat[]
      */
-    public function getRepeatEvents(): \Doctrine\Common\Collections\Collection|array
+    public function getRepeatEvents(): Collection|array
     {
         return $this->repeatEvents;
     }
@@ -350,7 +315,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
      *
      * @return CCalendarEvent
      */
-    public function setRepeatEvents(\Doctrine\Common\Collections\Collection|array $repeatEvents)
+    public function setRepeatEvents(Collection|array $repeatEvents)
     {
         $this->repeatEvents = $repeatEvents;
 
@@ -360,6 +325,14 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, \Str
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 
     public function getResourceName(): string

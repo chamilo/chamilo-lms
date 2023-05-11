@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="agenda_event_invitation")
  * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
- * @ORM\Entity()
+ * ORM\Entity()
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({

@@ -49,7 +49,11 @@ function bigUpload () {
 		'maxFileSize': 2147483648,
 		
 		//CidReq
-		'cidReq': ''
+		'cidReq': '',
+
+		// Message error upload filesize
+		'errMessageFileSize': '',
+
 	};
 
 	//Upload specific variables
@@ -133,7 +137,8 @@ function bigUpload () {
 		//But this should be good enough to catch any immediate errors
 		var fileSize = this.uploadData.file.size;
 		if(fileSize > this.settings.maxFileSize) {
-			this.printResponse('The file you have chosen is too large.', true);
+			this.printResponse(this.settings.errMessageFileSize, true);
+			this.$(this.settings.submitButton).disabled = false;
 			return;
 		}
 

@@ -749,7 +749,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     // Forum images
     $has_attachment = false;
     $image_moved = true;
-    if (!empty($_FILES['picture']['name'])) {
+
+    $maxFileSize = getIniMaxFileSizeInBytes();
+    if (!empty($_FILES['picture']['name']) && !($maxFileSize > 0 && $_FILES['picture']['size'] > $maxFileSize)) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
     }
@@ -822,7 +824,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         // Move groups from one group to another
         if (isset($values['group_forum'])) {
             $forumData = get_forums($values['forum_id']);
-            $currentGroupId = $forumData['forum_of_group'];
+            $currentGroupId = $forumData['forum_of_group'] ?? 0;
             if ($currentGroupId != $values['group_forum']) {
                 $threads = get_threads($values['forum_id']);
                 $toGroupId = 'NULL';
@@ -2868,16 +2870,22 @@ function store_thread(
     $upload_ok = 1;
     $has_attachment = false;
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
-        $has_attachment = true;
+        $upload_ok = 0;
+        $has_attachment = false;
+        if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+            $upload_ok = process_uploaded_file($_FILES['user_upload']);
+            $has_attachment = true;
+        }
     }
 
     if (!$upload_ok) {
         if ($showMessage) {
+            $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
             Display::addFlash(
                 Display::return_message(
-                    get_lang('UplNoFileUploaded'),
+                    $errorUploadMessage,
                     'error',
                     false
                 )
@@ -3314,8 +3322,10 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
             null,
             ['id' => 'reply-add-attachment']
         );
+        $form->addRule('user_upload[]', get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true), 'maxfilesize', getIniMaxFileSizeInBytes());
     } else {
-        $form->addFile('user_upload', get_lang('Attachment'));
+        $form->addFile('user_upload', get_lang('Attachment').' ('.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true).')');
+        $form->addRule('user_upload', get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true), 'maxfilesize', getIniMaxFileSizeInBytes());
     }
 
     if ($giveRevision) {
@@ -3435,12 +3445,20 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
                         $threadId = $myThread->getIid();
                         Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
                         $postId = $myThread->getThreadLastPost();
+                    } else {
+                        header('Location: '.api_request_uri());
+                        exit;
                     }
                     break;
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
                     $postId = store_reply($current_forum, $values);
+                    if (!$postId) {
+                        header('Location: '.api_request_uri());
+                        exit;
+                    }
+
                     break;
             }
 
@@ -3849,6 +3867,29 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     $upload_ok = 1;
     $new_post_id = 0;
 
+    $errMessage = get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst');
+    $maxFileSize = getIniMaxFileSizeInBytes();
+
+    if (!empty($_FILES['user_upload']['name'])) {
+        if (is_array($_FILES['user_upload']['name'])) {
+            $totalFileSize = 0;
+            for ($i = 0; $i < count($_FILES['user_upload']['name']); $i++) {
+                $totalFileSize += $_FILES['user_upload']['size'][$i];
+            }
+            if ($totalFileSize > $maxFileSize) {
+                $upload_ok = 0;
+                $errMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+            }
+        } else {
+            if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+                $upload_ok = process_uploaded_file($_FILES['user_upload']);
+            } else {
+                $upload_ok = 0;
+                $errMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+            }
+        }
+    }
+
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
         $new_post_id = Database::insert(
@@ -3954,10 +3995,12 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                $errMessage,
                 'error'
             )
         );
+
+        return false;
     }
 
     return $new_post_id;
@@ -5251,8 +5294,13 @@ function add_forum_attachment_file($file_comment, $last_id)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
+            continue;
+        }
+
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
             continue;
         }
 
@@ -5347,13 +5395,17 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
             continue;
         }
 
-        $upload_ok = process_uploaded_file($attachment);
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
+            continue;
+        }
 
+        $upload_ok = process_uploaded_file($attachment);
         if (!$upload_ok) {
             continue;
         }

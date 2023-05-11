@@ -666,13 +666,9 @@ class MessageManager
             );
 
             return false;
-        } elseif ($totalFileSize > (int) api_get_setting('message_max_upload_filesize')) {
-            $warning = sprintf(
-                get_lang('FilesSizeExceedsX'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
-            );
-
-            Display::addFlash(Display::return_message($warning, 'warning'));
+        } elseif ($totalFileSize > (int) getIniMaxFileSizeInBytes(false, true)) {
+            $warning = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true, true);
+            Display::addFlash(Display::return_message($warning, 'error'));
 
             return false;
         }

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Traits;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use Chamilo\CoreBundle\Filter\UserExtraFieldFilter;
 
 trait UserExtraFieldFilterTrait

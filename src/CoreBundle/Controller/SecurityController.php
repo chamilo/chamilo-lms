@@ -8,29 +8,25 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
 {
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly TrackELoginRecordRepository $trackELoginRecordRepository
+    ) {
     }
 
-    /**
-     * @Route("/login_json", name="login_json")
-     */
-    public function loginJson(AuthenticationUtils $authenticationUtils): Response
+    #[Route('/login_json', name: 'login_json', methods: ['POST'])]
+    public function loginJson(): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->json(
@@ -54,14 +50,11 @@ class SecurityController extends AbstractController
                 ->setUsername($user->getUsername())
                 ->setLoginDate(new DateTime())
                 ->setUserIp(api_get_real_ip())
-                ->setSuccess(true)
-            ;
-            $repo = Container::getTrackELoginRecordRepository();
-            $repo->create($trackELoginRecord);
+                ->setSuccess(true);
 
-            $userClone = clone $user;
-            $userClone->setPassword('');
-            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+            $this->trackELoginRecordRepository->create($trackELoginRecord);
+
+            $data = $this->serializer->serialize($user, JsonEncoder::FORMAT, ['groups' => ['user:read']]);
         }
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);

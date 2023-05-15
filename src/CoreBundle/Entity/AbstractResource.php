@@ -6,8 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Metadata\ApiProperty;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
@@ -25,17 +24,14 @@ abstract class AbstractResource
 {
     use UserCreatorTrait;
 
-    /**
-     * @ApiProperty(iri="https://schema.org/contentUrl")
-     */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
-     *
-     * @ApiProperty(iri="https://schema.org/contentUrl")
      */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $downloadUrl = null;
 
@@ -47,9 +43,8 @@ abstract class AbstractResource
 
     /**
      * Resource illustration URL - Property set by ResourceNormalizer.php.
-     *
-     * @ApiProperty(iri="https://schema.org/contentUrl")
      */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups([
         'resource_node:read',
         'document:read',
@@ -86,9 +81,7 @@ abstract class AbstractResource
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     public ?int $parentResourceNode = 0;
 
-    /**
-     * @ApiProperty(iri="https://schema.org/image")
-     */
+    #[ApiProperty(types: ['https://schema.org/image'])]
     public ?UploadedFile $uploadFile = null;
 
     /**

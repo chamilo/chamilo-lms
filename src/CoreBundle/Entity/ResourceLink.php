@@ -24,6 +24,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
 #[ORM\Entity]
@@ -64,19 +65,19 @@ class ResourceLink implements \Stringable
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
     #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class)]
+    #[ORM\ManyToOne(targetEntity: CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class)]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
     #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]

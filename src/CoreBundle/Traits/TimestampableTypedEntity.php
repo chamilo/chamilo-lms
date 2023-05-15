@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Traits;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Metadata\ApiProperty;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

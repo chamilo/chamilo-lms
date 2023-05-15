@@ -6,15 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Filter;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractContextAwareFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\PropertyInfo\Type;
 
-class UserExtraFieldFilter extends AbstractContextAwareFilter
+class UserExtraFieldFilter extends AbstractFilter
 {
     public function getDescription(string $resourceClass): array
     {
@@ -46,7 +47,8 @@ class UserExtraFieldFilter extends AbstractContextAwareFilter
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        string $operationName = null
+        Operation $operation = null,
+        array $context = []
     ): void {
         if (!$this->isPropertyEnabled($property, $resourceClass)) {
             return;
@@ -65,13 +67,11 @@ class UserExtraFieldFilter extends AbstractContextAwareFilter
                     )
                     ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'efv.field = ef.id')
                     ->andWhere('ef.itemType = :itemType')
-                    ->andWhere('ef.variable = :variable')
-                ;
+                    ->andWhere('ef.variable = :variable');
 
                 $queryBuilder
                     ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
-                    ->setParameter('variable', $value)
-                ;
+                    ->setParameter('variable', $value);
 
                 break;
             case 'userExtraFieldValue':

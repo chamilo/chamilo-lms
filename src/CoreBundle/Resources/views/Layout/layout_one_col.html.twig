@@ -2,9 +2,9 @@
 {%- block page_content %}
     {% if from_vue %}
         <script src="{{ url('index') ~ 'build/runtime.js' }}"></script>
-        <script src="{{ url('index') ~ 'build/app.js' }}"></script>
-        <link rel="stylesheet" href="{{ url('index') ~ 'build/css/app.css' }}"/>
-        <link rel="stylesheet" href="{{ url('index') ~ 'build/vue.css' }}"/>
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_link_tags('css/app') }}
+        {{ encore_entry_link_tags('vue') }}
 
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}
@@ -79,6 +79,6 @@
     {% endautoescape -%}
 
     {% if not from_vue %}
-    <script src="{{ url('index') ~ 'build/vue.js' }}"></script>
+        {{ encore_entry_script_tags('vue') }}
     {% endif %}
 {% endblock -%}

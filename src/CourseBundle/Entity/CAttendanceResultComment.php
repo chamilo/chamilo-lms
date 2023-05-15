@@ -1,51 +1,54 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CAttendanceResultComment.
  *
  * @ORM\Table(
- *  name="c_attendance_result_comment",
- *  indexes={
- *      @ORM\Index(name="attendance_sheet_id", columns={"attendance_sheet_id"}),
- *      @ORM\Index(name="user_id", columns={"user_id"})
- *  }
+ *     name="c_attendance_result_comment",
+ *     indexes={
+ *         @ORM\Index(name="attendance_sheet_id", columns={"attendance_sheet_id"}),
+ *         @ORM\Index(name="user_id", columns={"user_id"})
+ *     }
  * )
  * @ORM\Entity
  */
 class CAttendanceResultComment
 {
-    #[ORM\Column(name: "iid", type: "integer")]
+    #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\Column(name: "attendance_sheet_id", type: "integer", nullable: false)]
+    #[ORM\Column(name: 'attendance_sheet_id', type: 'integer', nullable: false)]
     protected int $attendanceSheetId;
 
-    #[ORM\Column(name: "user_id", type: "integer", nullable: false)]
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    #[ORM\Column(name: "comment", type: "text", nullable: true)]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
 
-    #[ORM\Column(name: "created_at", type: "datetime", nullable: false)]
-    protected \DateTime $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    protected DateTime $createdAt;
 
-    #[ORM\Column(name: "updated_at", type: "datetime", nullable: false)]
-    protected \DateTime $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
+    protected DateTime $updatedAt;
 
-    #[ORM\Column(name: "author_user_id", type: "integer", nullable: false)]
+    #[ORM\Column(name: 'author_user_id', type: 'integer', nullable: false)]
     protected int $authorUserId;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getAttendanceSheetId(): int
@@ -72,26 +75,26 @@ class CAttendanceResultComment
         return $this->userId;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

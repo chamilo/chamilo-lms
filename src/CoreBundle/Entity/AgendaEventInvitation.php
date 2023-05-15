@@ -1,37 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table(name: "agenda_event_invitation")]
+#[ORM\Table(name: 'agenda_event_invitation')]
 #[ORM\Entity()]
-#[ORM\InheritanceType("SINGLE_TABLE")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
 #[ORM\DiscriminatorMap([
     'invitation' => 'Chamilo\CoreBundle\Entity\AgendaEventInvitation',
-    'subscription' => 'Chamilo\CoreBundle\Entity\AgendaEventSubscription'
+    'subscription' => 'Chamilo\CoreBundle\Entity\AgendaEventSubscription',
 ])]
 class AgendaEventInvitation
 {
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: "bigint")]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
 
-    #[ORM\OneToMany(targetEntity: "AgendaEventInvitee", mappedBy: "invitation", cascade: ["persist", "remove"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: 'AgendaEventInvitee', mappedBy: 'invitation', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $invitees;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "resourceNodes")]
-    #[ORM\JoinColumn(name: "creator_id", referencedColumnName: "id", nullable: true, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resourceNodes')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
     public function __construct()
@@ -72,7 +73,8 @@ class AgendaEventInvitation
             ->filter(function (AgendaEventInvitee $invitee) use ($user) {
                 return $invitee->getUser() === $user;
             })
-            ->first();
+            ->first()
+        ;
 
         if ($invitee) {
             $this->invitees->removeElement($invitee);
@@ -116,7 +118,7 @@ class AgendaEventInvitation
 
         /** @var AgendaEventInvitee $invitee */
         foreach ($this->invitees as $key => $invitee) {
-            if (!in_array($invitee->getUser()->getId(), $idList)) {
+            if (!\in_array($invitee->getUser()->getId(), $idList, true)) {
                 $toRemove[] = $key;
             }
         }

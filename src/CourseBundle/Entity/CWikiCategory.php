@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -11,53 +13,53 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-#[ORM\Table(name: "c_wiki_category")]
-#[ORM\Entity(repositoryClass: "Chamilo\CourseBundle\Entity\Repository\CWikiCategoryRepository")]
-#[Gedmo\Tree(type: "nested")]
+#[ORM\Table(name: 'c_wiki_category')]
+#[ORM\Entity(repositoryClass: 'Chamilo\\CourseBundle\\Entity\\Repository\\CWikiCategoryRepository')]
+#[Gedmo\Tree(type: 'nested')]
 class CWikiCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id", type: "integer")]
+    #[ORM\Column(name: 'id', type: 'integer')]
     private int $id;
 
-    #[ORM\Column(name: "name", type: "string")]
+    #[ORM\Column(name: 'name', type: 'string')]
     private string $name;
 
-    #[ORM\ManyToMany(targetEntity: "Chamilo\CourseBundle\Entity\CWiki", mappedBy: "categories")]
+    #[ORM\ManyToMany(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWiki', mappedBy: 'categories')]
     private Collection $wikiPages;
 
-    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\Course")]
-    #[ORM\JoinColumn(name: "c_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Course')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Course $course;
 
-    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\Session")]
-    #[ORM\JoinColumn(name: "session_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Session')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Session $session;
 
     #[Gedmo\TreeLeft]
-    #[ORM\Column(name: "lft", type: "integer")]
+    #[ORM\Column(name: 'lft', type: 'integer')]
     private int $lft;
 
     #[Gedmo\TreeLevel]
-    #[ORM\Column(name: "lvl", type: "integer")]
+    #[ORM\Column(name: 'lvl', type: 'integer')]
     private int $lvl;
 
     #[Gedmo\TreeRight]
-    #[ORM\Column(name: "rgt", type: "integer")]
+    #[ORM\Column(name: 'rgt', type: 'integer')]
     private int $rgt;
 
-    #[ORM\ManyToOne(targetEntity: "Chamilo\CourseBundle\Entity\CWikiCategory")]
-    #[ORM\JoinColumn(name: "tree_root", referencedColumnName: "id", onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory')]
+    #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $root;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: "Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy: "children")]
-    #[ORM\JoinColumn(name: "parent_id", referencedColumnName: "id", onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $parent;
 
-    #[ORM\OneToMany(targetEntity: "Chamilo\CourseBundle\Entity\CWikiCategory", mappedBy: "parent")]
-    #[ORM\OrderBy(["lft" => "ASC"])]
+    #[ORM\OneToMany(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory', mappedBy: 'parent')]
+    #[ORM\OrderBy(['lft' => 'ASC'])]
     private Collection $children;
 
     public function __construct()
@@ -84,7 +86,7 @@ class CWikiCategory
 
     public function getNodeName(): string
     {
-        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl) . $this->name;
+        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
     }
 
     public function setName(string $name): self

@@ -1,33 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use DateInterval;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "agenda_reminder")]
+#[ORM\Table(name: 'agenda_reminder')]
 class AgendaReminder
 {
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: "bigint")]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
-    #[ORM\Column(type: "string", name: "type")]
+    #[ORM\Column(type: 'string', name: 'type')]
     protected $type;
 
-    #[ORM\Column(type: "integer", name: "event_id")]
+    #[ORM\Column(type: 'integer', name: 'event_id')]
     protected $eventId;
 
-    #[ORM\Column(type: "dateinterval", name: "date_interval")]
+    #[ORM\Column(type: 'dateinterval', name: 'date_interval')]
     protected $dateInterval;
 
-    #[ORM\Column(type: "boolean", name: "sent")]
+    #[ORM\Column(type: 'boolean', name: 'sent')]
     protected $sent;
 
     public function __construct()
@@ -45,7 +48,7 @@ class AgendaReminder
         return $this->type;
     }
 
-    public function setType(string $type): AgendaReminder
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -57,19 +60,19 @@ class AgendaReminder
         return $this->eventId;
     }
 
-    public function setEventId(int $eventId): AgendaReminder
+    public function setEventId(int $eventId): self
     {
         $this->eventId = $eventId;
 
         return $this;
     }
 
-    public function getDateInterval(): \DateInterval
+    public function getDateInterval(): DateInterval
     {
         return $this->dateInterval;
     }
 
-    public function setDateInterval(\DateInterval $dateInterval): AgendaReminder
+    public function setDateInterval(DateInterval $dateInterval): self
     {
         $this->dateInterval = $dateInterval;
 
@@ -81,7 +84,7 @@ class AgendaReminder
         return $this->sent;
     }
 
-    public function setSent(bool $sent): AgendaReminder
+    public function setSent(bool $sent): self
     {
         $this->sent = $sent;
 

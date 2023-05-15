@@ -662,17 +662,11 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHideAttemptsTable(): bool
     {
         return $this->hideAttemptsTable;
     }
 
-    /**
-     * @param bool $hideAttemptsTable
-     */
     public function setHideAttemptsTable(bool $hideAttemptsTable): self
     {
         $this->hideAttemptsTable = $hideAttemptsTable;

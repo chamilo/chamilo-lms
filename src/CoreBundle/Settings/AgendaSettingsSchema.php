@@ -112,7 +112,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

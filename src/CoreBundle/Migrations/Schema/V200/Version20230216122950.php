@@ -204,7 +204,6 @@ final class Version20230216122950 extends AbstractMigrationChamilo
                 'ALTER TABLE c_lp ADD next_lp_id INT DEFAULT 0 NOT NULL'
             );
         }
-
     }
 
     public function down(Schema $schema): void

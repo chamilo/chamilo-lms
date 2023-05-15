@@ -111,7 +111,6 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

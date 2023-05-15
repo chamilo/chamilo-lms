@@ -532,7 +532,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (2, 3, 'show_in_catalogue', 'Show in catalogue', 1, 1, 0, NOW())"
             );
             $this->addSql(
-                "SET @ef_id = LAST_INSERT_ID()"
+                'SET @ef_id = LAST_INSERT_ID()'
             );
             $this->addSql(
                 "INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES (@ef_id, '1', 'Yes', NULL, NULL, 1), (@ef_id, '0', 'No', NULL, NULL, 2)"
@@ -610,7 +610,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (20, 3, 'acquisition', 'Acquisition', 1, 1, 0, NOW())"
             );
             $this->addSql(
-                "SET @ef_id = LAST_INSERT_ID()"
+                'SET @ef_id = LAST_INSERT_ID()'
             );
             $this->addSql(
                 "INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES (@ef_id, '1', 'Acquired', NULL, NULL, 1), (@ef_id, '2', 'In the process of acquisition', NULL, NULL, 2), (@ef_id, '3', 'Not acquired', NULL, NULL, 3)"
@@ -652,7 +652,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (7, 7, 'end_date', 'EndDate', 1, 1, 1, NOW())"
             );
         }
-
     }
 
     public function down(Schema $schema): void
@@ -1242,7 +1241,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "DELETE FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
             );
         }
-
     }
 
     public function getConfigurationSelectedValue(string $variable): string

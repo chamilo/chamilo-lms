@@ -228,7 +228,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

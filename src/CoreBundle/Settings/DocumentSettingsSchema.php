@@ -204,7 +204,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

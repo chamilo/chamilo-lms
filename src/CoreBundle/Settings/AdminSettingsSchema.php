@@ -81,8 +81,6 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
-
         ;
     }
 

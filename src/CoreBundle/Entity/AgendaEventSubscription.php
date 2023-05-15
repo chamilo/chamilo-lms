@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -13,7 +15,7 @@ class AgendaEventSubscription extends AgendaEventInvitation
     public const SUBSCRIPTION_ALL = 1;
     public const SUBSCRIPTION_CLASS = 2;
 
-    #[ORM\Column(name: "max_attendees", type: "integer", nullable: false, options: ["default" => 0])]
+    #[ORM\Column(name: 'max_attendees', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $maxAttendees = 0;
 
     public function getMaxAttendees(): int

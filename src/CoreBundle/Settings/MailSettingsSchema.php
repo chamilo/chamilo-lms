@@ -84,7 +84,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

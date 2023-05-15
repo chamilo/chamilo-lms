@@ -270,7 +270,8 @@ class Portfolio
         $criteria = Criteria::create();
         $criteria
             ->orderBy(['date' => 'DESC'])
-            ->setMaxResults($number);
+            ->setMaxResults($number)
+        ;
 
         if ($avoidPerUserVisibility) {
             $criteria->where(
@@ -286,10 +287,7 @@ class Portfolio
         return $this->origin;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Portfolio
-     */
-    public function setOrigin(?int $origin): Portfolio
+    public function setOrigin(?int $origin): self
     {
         $this->origin = $origin;
 
@@ -301,10 +299,7 @@ class Portfolio
         return $this->originType;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Portfolio
-     */
-    public function setOriginType(?int $originType): Portfolio
+    public function setOriginType(?int $originType): self
     {
         $this->originType = $originType;
 
@@ -331,7 +326,7 @@ class Portfolio
         return $this->isHighlighted;
     }
 
-    public function setIsHighlighted(bool $isHighlighted): Portfolio
+    public function setIsHighlighted(bool $isHighlighted): self
     {
         $this->isHighlighted = $isHighlighted;
 
@@ -343,7 +338,7 @@ class Portfolio
         return $this->isTemplate;
     }
 
-    public function setIsTemplate(bool $isTemplate): Portfolio
+    public function setIsTemplate(bool $isTemplate): self
     {
         $this->isTemplate = $isTemplate;
 

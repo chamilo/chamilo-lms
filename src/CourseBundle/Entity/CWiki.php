@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -718,7 +717,7 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
         return $this->categories;
     }
 
-    public function addCategory(CWikiCategory $category): CWiki
+    public function addCategory(CWikiCategory $category): self
     {
         $category->addWikiPage($this);
         $this->categories->add($category);

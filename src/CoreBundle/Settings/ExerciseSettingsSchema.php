@@ -223,7 +223,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

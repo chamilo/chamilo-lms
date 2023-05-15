@@ -118,17 +118,11 @@ class SystemTemplate
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     */
     public function setLanguage(string $language): self
     {
         $this->language = $language;

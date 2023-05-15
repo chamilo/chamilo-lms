@@ -389,7 +389,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ]
             )
 
-
         ;
     }
 

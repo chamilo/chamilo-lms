@@ -642,25 +642,17 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this->maxAttempts;
     }
 
-    /**
-     * @return int
-     */
     public function getNextLpId(): int
     {
         return $this->nextLpId;
     }
 
-    /**
-     * @param int $nextLpId
-     */
     public function setNextLpId(int $nextLpId): self
     {
         $this->nextLpId = $nextLpId;
 
         return $this;
     }
-
-
 
     /**
      * @return CLpItem[]|Collection

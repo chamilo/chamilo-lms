@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -8,13 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class PortfolioAttachment.
- *
- * @package Chamilo\CoreBundle\Entity
- *
  */
-
-#[ORM\Table(name: "portfolio_attachment")]
-#[ORM\Entity(repositoryClass: "Chamilo\CoreBundle\Entity\Repository\PortfolioAttachmentRepository")]
+#[ORM\Table(name: 'portfolio_attachment')]
+#[ORM\Entity(repositoryClass: 'Chamilo\\CoreBundle\\Entity\\Repository\\PortfolioAttachmentRepository')]
 class PortfolioAttachment
 {
     public const TYPE_ITEM = 1;
@@ -53,7 +51,7 @@ class PortfolioAttachment
         return $this->path;
     }
 
-    public function setPath(string $path): PortfolioAttachment
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -65,7 +63,7 @@ class PortfolioAttachment
         return $this->comment;
     }
 
-    public function setComment(?string $comment): PortfolioAttachment
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
 
@@ -77,7 +75,7 @@ class PortfolioAttachment
         return $this->size;
     }
 
-    public function setSize(int $size): PortfolioAttachment
+    public function setSize(int $size): self
     {
         $this->size = $size;
 
@@ -89,7 +87,7 @@ class PortfolioAttachment
         return $this->filename;
     }
 
-    public function setFilename(string $filename): PortfolioAttachment
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -101,7 +99,7 @@ class PortfolioAttachment
         return $this->origin;
     }
 
-    public function setOrigin(int $origin): PortfolioAttachment
+    public function setOrigin(int $origin): self
     {
         $this->origin = $origin;
 
@@ -113,7 +111,7 @@ class PortfolioAttachment
         return $this->originType;
     }
 
-    public function setOriginType(int $originType): PortfolioAttachment
+    public function setOriginType(int $originType): self
     {
         $this->originType = $originType;
 

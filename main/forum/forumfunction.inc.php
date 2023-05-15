@@ -3403,6 +3403,15 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
         }
     }
 
+    if (isset($_REQUEST['action']) && 'replythread' === $_REQUEST['action']) {
+        if (isset($_REQUEST['post_title'])) {
+            $defaults['post_title'] = $_REQUEST['post_title'];
+        }
+
+        if (isset($_REQUEST['post_text'])) {
+            $defaults['post_text'] = $_REQUEST['post_text'];
+        }
+    }
     $form->setDefaults(isset($defaults) ? $defaults : []);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
@@ -3454,11 +3463,6 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
                 case 'replythread':
                 case 'replymessage':
                     $postId = store_reply($current_forum, $values);
-                    if (!$postId) {
-                        header('Location: '.api_request_uri());
-                        exit;
-                    }
-
                     break;
             }
 

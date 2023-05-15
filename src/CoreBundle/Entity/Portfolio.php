@@ -8,6 +8,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'portfolio')]
@@ -56,8 +59,8 @@ class Portfolio
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected PortfolioCategory $category;
 
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\PortfolioComment::class)]
-    private $comments;
+    #[ORM\OneToMany(mappedBy: 'item', targetEntity: PortfolioComment::class)]
+    private Collection $comments;
 
     #[ORM\Column(name: 'origin', type: 'integer', nullable: true)]
     private int $origin;
@@ -77,6 +80,7 @@ class Portfolio
     public function __construct()
     {
         $this->category = new PortfolioCategory();
+        $this->comments = new ArrayCollection();
     }
 
     /**

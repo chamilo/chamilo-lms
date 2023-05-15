@@ -12,14 +12,16 @@ use Doctrine\ORM\Mapping\Index;
  *
  * @package Chamilo\CoreBundle\Entity
  *
- * @ORM\Table(
- *     name="message_feedback",
- *     indexes={
- *         @Index(name="idx_message_feedback_uid_mid", columns={"message_id", "user_id"})
- *     }
- * )
- * @ORM\Entity()
  */
+
+#[ORM\Table(
+    name: "message_feedback"
+)]
+#[ORM\Index(
+    name: "idx_message_feedback_uid_mid",
+    columns: ["message_id", "user_id"]
+)]
+#[ORM\Entity]
 class MessageFeedback
 {
     #[ORM\Column(name: "id", type: "bigint")]

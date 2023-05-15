@@ -30,7 +30,7 @@ class AgendaEventInvitation
     #[ORM\OneToMany(targetEntity: "AgendaEventInvitee", mappedBy: "invitation", cascade: ["persist", "remove"], orphanRemoval: true)]
     protected Collection $invitees;
 
-    #[ORM\ManyToOne(targetEntity: "Chamilo\CoreBundle\Entity\User", inversedBy: "resourceNodes")]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "resourceNodes")]
     #[ORM\JoinColumn(name: "creator_id", referencedColumnName: "id", nullable: true, onDelete: "CASCADE")]
     protected User $creator;
 

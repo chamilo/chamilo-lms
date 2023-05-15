@@ -185,8 +185,3 @@ services:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
-
-    chamilo_core.settings.wiki:
-        class: Chamilo\CoreBundle\Settings\WikiSettingsSchema
-        tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.wiki, namespace: wiki }

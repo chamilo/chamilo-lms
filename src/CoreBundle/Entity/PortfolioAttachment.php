@@ -11,9 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @package Chamilo\CoreBundle\Entity
  *
- * @ORM\Table(name="portfolio_attachment")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioAttachmentRepository")
  */
+
+#[ORM\Table(name: "portfolio_attachment")]
+#[ORM\Entity(repositoryClass: "Chamilo\CoreBundle\Entity\Repository\PortfolioAttachmentRepository")]
 class PortfolioAttachment
 {
     public const TYPE_ITEM = 1;

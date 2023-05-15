@@ -155,7 +155,7 @@ Encore
 ;
 
 //Encore.addPlugin(new VueLoaderPlugin);
-Encore.addPlugin(new VuetifyLoaderPlugin());
+// Encore.addPlugin(new VuetifyLoaderPlugin());
 Encore.addPlugin(new CopyPlugin({
         patterns: [
             {

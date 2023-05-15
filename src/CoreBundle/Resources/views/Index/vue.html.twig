@@ -2,6 +2,5 @@
 
 {%- block content %}
     {% include '@ChamiloCore/Layout/vue_setup.html.twig' %}
-    {#    {{ encore_entry_script_tags('vue') }}#}
-    <script src="{{ url('index') ~ 'build/vue.js' }}"></script>
+    {{ encore_entry_script_tags('vue') }}
 {% endblock %}

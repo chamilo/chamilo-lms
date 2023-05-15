@@ -22,9 +22,10 @@ use Symfony\Component\Security\Core\Security;
  */
 final class PersonalFileExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function applyToCollection(
@@ -63,7 +64,8 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node');
+            ->innerJoin("$rootAlias.resourceNode", 'node')
+        ;
 
         if ($isShared) {
             $queryBuilder->leftJoin('node.resourceLinks', 'links');
@@ -75,11 +77,13 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
             $queryBuilder
                 ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED);
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ;
 
             $queryBuilder
                 ->andWhere('links.user = :userLink')
-                ->setParameter('userLink', $user);
+                ->setParameter('userLink', $user)
+            ;
         } else {
             $queryBuilder->orWhere('node.creator = :current');
             $queryBuilder->setParameter('current', $user);

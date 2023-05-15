@@ -12,11 +12,12 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_quiz_question_category')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository::class)]
-class CQuizQuestionCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
+class CQuizQuestionCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -103,7 +104,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @return Collection|CQuizQuestion[]
      */
-    public function getQuestions(): \Doctrine\Common\Collections\Collection|array
+    public function getQuestions(): Collection|array
     {
         return $this->questions;
     }
@@ -111,7 +112,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @param Collection|CQuizQuestion[] $questions
      */
-    public function setQuestions(\Doctrine\Common\Collections\Collection|array $questions): self
+    public function setQuestions(Collection|array $questions): self
     {
         $this->questions = $questions;
 

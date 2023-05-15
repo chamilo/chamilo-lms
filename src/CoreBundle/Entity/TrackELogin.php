@@ -89,10 +89,7 @@ class TrackELogin
         return $this;
     }
 
-    /**
-     * Get logoutDate.
-     */
-    public function getLogoutDate(): ?\DateTime
+    public function getLogoutDate(): ?DateTime
     {
         return $this->logoutDate;
     }

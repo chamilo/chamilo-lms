@@ -19,9 +19,10 @@ use Symfony\Component\Security\Core\Security;
 
 final class PageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function applyToCollection(
@@ -32,6 +33,17 @@ final class PageExtension implements QueryCollectionExtensionInterface //, Query
         array $context = []
     ): void {
         $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -48,21 +60,11 @@ final class PageExtension implements QueryCollectionExtensionInterface //, Query
         // Url filter by default.
         $qb
             ->andWhere("$alias.url = :url")
-            ->setParameter('url', $urlId);
+            ->setParameter('url', $urlId)
+        ;
 
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $qb->andWhere("$alias.enabled = 1");
         }
-    }
-
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        string $operationName = null,
-        array $context = []
-    ): void {
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 }

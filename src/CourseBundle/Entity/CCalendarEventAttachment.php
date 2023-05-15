@@ -10,13 +10,14 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CCalendarEventAttachment.
  */
 #[ORM\Table(name: 'c_calendar_event_attachment')]
 #[ORM\Entity(repositoryClass: CCalendarEventAttachmentRepository::class)]
-class CCalendarEventAttachment extends AbstractResource implements ResourceInterface, \Stringable
+class CCalendarEventAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

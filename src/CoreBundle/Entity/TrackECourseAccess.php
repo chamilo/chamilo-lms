@@ -107,10 +107,7 @@ class TrackECourseAccess
         return $this;
     }
 
-    /**
-     * Get logoutCourseDate.
-     */
-    public function getLogoutCourseDate(): ?\DateTime
+    public function getLogoutCourseDate(): ?DateTime
     {
         return $this->logoutCourseDate;
     }

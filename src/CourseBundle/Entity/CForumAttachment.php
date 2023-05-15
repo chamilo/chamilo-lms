@@ -10,11 +10,12 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'c_forum_attachment')]
 #[ORM\Index(name: 'course', columns: ['c_id'])]
 #[ORM\Entity(repositoryClass: CForumAttachmentRepository::class)]
-class CForumAttachment extends AbstractResource implements ResourceInterface, \Stringable
+class CForumAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

@@ -9,10 +9,11 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 
 #[ORM\Table(name: 'sequence')]
 #[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceRepository::class)]
-class Sequence implements \Stringable
+class Sequence implements Stringable
 {
     use TimestampableEntity;
 

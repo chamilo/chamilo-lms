@@ -37,9 +37,6 @@ class AccessUrlRelCourse implements EntityAccessUrlInterface, Stringable
         return '-';
     }
 
-    /**
-     * Get id.
-     */
     public function getId(): ?int
     {
         return $this->id;

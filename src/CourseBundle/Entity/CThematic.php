@@ -11,12 +11,13 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic')]
 #[ORM\Index(name: 'active', columns: ['active'])]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CThematicRepository::class)]
-class CThematic extends AbstractResource implements ResourceInterface, \Stringable
+class CThematic extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -44,8 +45,6 @@ class CThematic extends AbstractResource implements ResourceInterface, \Stringab
 
     /**
      * @var Collection|CThematicAdvance[]
-     *
-     *
      */
     #[ORM\OrderBy(['startDate' => 'ASC'])]
     #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -135,7 +134,7 @@ class CThematic extends AbstractResource implements ResourceInterface, \Stringab
     /**
      * @return Collection|CThematicPlan[]
      */
-    public function getPlans(): \Doctrine\Common\Collections\Collection|array
+    public function getPlans(): Collection|array
     {
         return $this->plans;
     }
@@ -143,7 +142,7 @@ class CThematic extends AbstractResource implements ResourceInterface, \Stringab
     /**
      * @return Collection|CThematicAdvance[]
      */
-    public function getAdvances(): \Doctrine\Common\Collections\Collection|array
+    public function getAdvances(): Collection|array
     {
         return $this->advances;
     }

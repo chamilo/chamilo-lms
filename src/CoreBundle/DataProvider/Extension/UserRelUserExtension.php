@@ -16,7 +16,6 @@ use Doctrine\ORM\QueryBuilder;
 
 final class UserRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
     public function __construct()
     {
     }
@@ -29,6 +28,18 @@ final class UserRelUserExtension implements QueryCollectionExtensionInterface //
         array $context = []
     ): void {
         $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //error_log('applyToItem');
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
@@ -60,17 +71,5 @@ final class UserRelUserExtension implements QueryCollectionExtensionInterface //
             'wallPost' => Message::MESSAGE_TYPE_WALL,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);*/
-    }
-
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        string $operationName = null,
-        array $context = []
-    ): void {
-        //error_log('applyToItem');
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 }

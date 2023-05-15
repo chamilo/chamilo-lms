@@ -10,12 +10,13 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_shortcut')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CShortcutRepository::class)]
-class CShortcut extends AbstractResource implements ResourceInterface, \Stringable
+class CShortcut extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

@@ -1,29 +1,23 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
 use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(normalizationContext: ['groups' => ['illustration:read']])]
 #[ORM\Table(name: 'illustration')]
 #[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\IllustrationRepository::class)]
-class Illustration extends AbstractResource implements ResourceInterface, \Stringable
+class Illustration extends AbstractResource implements ResourceInterface, Stringable
 {
     use PersonalResourceTrait;
     use TimestampableEntity;
@@ -38,32 +32,33 @@ class Illustration extends AbstractResource implements ResourceInterface, \Strin
         $this->id = Uuid::v4();
         $this->name = 'illustration';
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getName();
     }
-    public function getId() : Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    public function getResourceIdentifier() : Uuid
+    public function getResourceIdentifier(): Uuid
     {
         return $this->getId();
     }
-    public function getResourceName() : string
+    public function getResourceName(): string
     {
         return $this->getName();
     }
-    public function setResourceName(string $name) : self
+    public function setResourceName(string $name): self
     {
         return $this->setName($name);
     }

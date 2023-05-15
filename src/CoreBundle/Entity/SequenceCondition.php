@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class SequenceCondition.
- */
 #[ORM\Table(name: 'sequence_condition')]
 #[ORM\Entity]
 class SequenceCondition

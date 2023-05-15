@@ -67,11 +67,13 @@ class UserExtraFieldFilter extends AbstractFilter
                     )
                     ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'efv.field = ef.id')
                     ->andWhere('ef.itemType = :itemType')
-                    ->andWhere('ef.variable = :variable');
+                    ->andWhere('ef.variable = :variable')
+                ;
 
                 $queryBuilder
                     ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
-                    ->setParameter('variable', $value);
+                    ->setParameter('variable', $value)
+                ;
 
                 break;
             case 'userExtraFieldValue':

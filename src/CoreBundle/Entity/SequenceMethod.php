@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class SequenceMethod.
- */
 #[ORM\Table(name: 'sequence_method')]
 #[ORM\Entity]
 class SequenceMethod

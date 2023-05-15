@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity]
-class CLpItem implements \Stringable
+class CLpItem implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -88,16 +89,16 @@ class CLpItem implements \Stringable
     protected CLp $lp;
 
     #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'item_root', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CLpItem $root = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, inversedBy: 'children', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'parent_item_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CLpItem $parent = null;
 
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpItem::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[Gedmo\TreeLeft]
@@ -491,7 +492,7 @@ class CLpItem implements \Stringable
     /**
      * @return CLpItem[]|Collection
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }
@@ -499,7 +500,7 @@ class CLpItem implements \Stringable
     /**
      * @param CLpItem[]|Collection $children
      */
-    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
+    public function setChildren(array|Collection $children): self
     {
         $this->children = $children;
 

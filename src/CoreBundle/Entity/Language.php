@@ -39,11 +39,11 @@ class Language
     #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
-    #[ORM\ManyToOne(targetEntity: Language::class, inversedBy: 'subLanguages')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subLanguages')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     protected ?Language $parent = null;
 
-    #[ORM\OneToMany(targetEntity: Language::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $subLanguages;
 
     public function __construct()

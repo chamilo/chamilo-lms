@@ -36,8 +36,12 @@ class ResourceListener
 {
     use AccessUrlListenerTrait;
 
-    public function __construct(protected SlugifyInterface $slugify, protected ToolChain $toolChain, protected RequestStack $request, protected Security $security)
-    {
+    public function __construct(
+        protected SlugifyInterface $slugify,
+        protected ToolChain $toolChain,
+        protected RequestStack $request,
+        protected Security $security
+    ) {
     }
 
     /**

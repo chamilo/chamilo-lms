@@ -21,9 +21,9 @@ use Symfony\Component\Security\Core\Security;
  */
 final class CourseExtension implements QueryCollectionExtensionInterface
 {
-
-    public function __construct(private readonly Security $security)
-    {
+    public function __construct(
+        private readonly Security $security
+    ) {
     }
 
     public function applyToCollection(
@@ -60,9 +60,11 @@ final class CourseExtension implements QueryCollectionExtensionInterface
 
         $queryBuilder
             ->andWhere(sprintf('%s.visibility <> :visibility_hidden', $rootAlias))
-            ->setParameter('visibility_hidden', Course::HIDDEN);
+            ->setParameter('visibility_hidden', Course::HIDDEN)
+        ;
         $queryBuilder
             ->andWhere(sprintf('%s.visibility <> :visibility_closed', $rootAlias))
-            ->setParameter('visibility_closed', Course::CLOSED);
+            ->setParameter('visibility_closed', Course::CLOSED)
+        ;
     }
 }

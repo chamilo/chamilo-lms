@@ -15,8 +15,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SocialPostExtension implements QueryCollectionExtensionInterface
 {
-    public function __construct(private readonly SettingsManager $settingsManager)
-    {
+    public function __construct(
+        private readonly SettingsManager $settingsManager
+    ) {
     }
 
     public function applyToCollection(

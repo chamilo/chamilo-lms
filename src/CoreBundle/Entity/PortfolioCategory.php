@@ -10,14 +10,12 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-/**
- * Class PortfolioCategory.
- */
 #[ORM\Table(name: 'portfolio_category')]
-#[ORM\Index(name: 'user', columns: ['user_id'])]
+#[ORM\Index(columns: ['user_id'], name: 'user')]
 #[ORM\Entity]
-class PortfolioCategory implements \Stringable
+class PortfolioCategory implements Stringable
 {
     use UserTrait;
 
@@ -84,9 +82,6 @@ class PortfolioCategory implements \Stringable
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;

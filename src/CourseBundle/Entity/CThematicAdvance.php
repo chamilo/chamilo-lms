@@ -11,10 +11,11 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'c_thematic_advance')]
 #[ORM\Entity]
-class CThematicAdvance implements \Stringable //extends AbstractResource implements ResourceInterface
+class CThematicAdvance implements Stringable //extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

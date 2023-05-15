@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_link_category')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CLinkCategoryRepository::class)]
-class CLinkCategory extends AbstractResource implements ResourceInterface, \Stringable
+class CLinkCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -97,7 +98,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @return CLink[]|Collection
      */
-    public function getLinks(): array|\Doctrine\Common\Collections\Collection
+    public function getLinks(): array|Collection
     {
         return $this->links;
     }

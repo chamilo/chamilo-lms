@@ -1,18 +1,17 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Traits\UserExtraFieldFilterTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
@@ -22,6 +21,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Quiz user attempts.
  */
@@ -131,9 +131,10 @@ class TrackEExercise
         $this->exeDate = new DateTime();
         $this->startDate = new DateTime();
     }
-    public function setExeDate(DateTime $exeDate) : self
+    public function setExeDate(DateTime $exeDate): self
     {
         $this->exeDate = $exeDate;
+
         return $this;
     }
     /**
@@ -145,18 +146,20 @@ class TrackEExercise
     {
         return $this->exeDate;
     }
-    public function setQuiz(CQuiz $cQuiz) : self
+    public function setQuiz(CQuiz $cQuiz): self
     {
         $this->quiz = $cQuiz;
+
         return $this;
     }
-    public function getQuiz() : ?CQuiz
+    public function getQuiz(): ?CQuiz
     {
         return $this->quiz;
     }
-    public function setUserIp(string $userIp) : self
+    public function setUserIp(string $userIp): self
     {
         $this->userIp = $userIp;
+
         return $this;
     }
     /**
@@ -168,9 +171,10 @@ class TrackEExercise
     {
         return $this->userIp;
     }
-    public function setStatus(string $status) : self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
     /**
@@ -182,9 +186,10 @@ class TrackEExercise
     {
         return $this->status;
     }
-    public function setDataTracking(string $dataTracking) : self
+    public function setDataTracking(string $dataTracking): self
     {
         $this->dataTracking = $dataTracking;
+
         return $this;
     }
     /**
@@ -196,9 +201,10 @@ class TrackEExercise
     {
         return $this->dataTracking;
     }
-    public function setStartDate(DateTime $startDate) : self
+    public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
+
         return $this;
     }
     /**
@@ -210,9 +216,10 @@ class TrackEExercise
     {
         return $this->startDate;
     }
-    public function setStepsCounter(int $stepsCounter) : self
+    public function setStepsCounter(int $stepsCounter): self
     {
         $this->stepsCounter = $stepsCounter;
+
         return $this;
     }
     /**
@@ -224,9 +231,10 @@ class TrackEExercise
     {
         return $this->stepsCounter;
     }
-    public function setOrigLpId(int $origLpId) : self
+    public function setOrigLpId(int $origLpId): self
     {
         $this->origLpId = $origLpId;
+
         return $this;
     }
     /**
@@ -238,9 +246,10 @@ class TrackEExercise
     {
         return $this->origLpId;
     }
-    public function setOrigLpItemId(int $origLpItemId) : self
+    public function setOrigLpItemId(int $origLpItemId): self
     {
         $this->origLpItemId = $origLpItemId;
+
         return $this;
     }
     /**
@@ -252,9 +261,10 @@ class TrackEExercise
     {
         return $this->origLpItemId;
     }
-    public function setExeDuration(int $exeDuration) : self
+    public function setExeDuration(int $exeDuration): self
     {
         $this->exeDuration = $exeDuration;
+
         return $this;
     }
     /**
@@ -266,18 +276,20 @@ class TrackEExercise
     {
         return $this->exeDuration;
     }
-    public function setExpiredTimeControl(?DateTime $expiredTimeControl) : self
+    public function setExpiredTimeControl(?DateTime $expiredTimeControl): self
     {
         $this->expiredTimeControl = $expiredTimeControl;
+
         return $this;
     }
-    public function getExpiredTimeControl() : ?DateTime
+    public function getExpiredTimeControl(): ?DateTime
     {
         return $this->expiredTimeControl;
     }
-    public function setOrigLpItemViewId(int $origLpItemViewId) : self
+    public function setOrigLpItemViewId(int $origLpItemViewId): self
     {
         $this->origLpItemViewId = $origLpItemViewId;
+
         return $this;
     }
     /**
@@ -289,9 +301,10 @@ class TrackEExercise
     {
         return $this->origLpItemViewId;
     }
-    public function setQuestionsToCheck(string $questionsToCheck) : self
+    public function setQuestionsToCheck(string $questionsToCheck): self
     {
         $this->questionsToCheck = $questionsToCheck;
+
         return $this;
     }
     /**
@@ -312,75 +325,82 @@ class TrackEExercise
     {
         return $this->exeId;
     }
-    public function getScore() : float
+    public function getScore(): float
     {
         return $this->score;
     }
-    public function setScore(float $score) : self
+    public function setScore(float $score): self
     {
         $this->score = $score;
+
         return $this;
     }
-    public function getMaxScore() : float
+    public function getMaxScore(): float
     {
         return $this->maxScore;
     }
-    public function setMaxScore(float $maxScore) : self
+    public function setMaxScore(float $maxScore): self
     {
         $this->maxScore = $maxScore;
+
         return $this;
     }
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
-    public function getCourse() : Course
+    public function getCourse(): Course
     {
         return $this->course;
     }
-    public function setCourse(Course $course) : self
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
+
         return $this;
     }
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getAttempts() : array|\Doctrine\Common\Collections\Collection
+    public function getAttempts(): array|Collection
     {
         return $this->attempts;
     }
     /**
      * @param TrackEAttempt[]|Collection $attempts
      */
-    public function setAttempts(array|\Doctrine\Common\Collections\Collection $attempts) : self
+    public function setAttempts(array|Collection $attempts): self
     {
         $this->attempts = $attempts;
+
         return $this;
     }
-    public function addAttempt(TrackEAttempt $attempt) : self
+    public function addAttempt(TrackEAttempt $attempt): self
     {
         if (!$this->attempts->contains($attempt)) {
             $this->attempts[] = $attempt;
             $attempt->setTrackEExercise($this);
         }
+
         return $this;
     }
-    public function getSession() : ?Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
-    public function setSession(?Session $session) : self
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
+
         return $this;
     }
-    public function getAttemptByQuestionId(int $questionId) : ?TrackEAttempt
+    public function getAttemptByQuestionId(int $questionId): ?TrackEAttempt
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('questionId', $questionId))->setMaxResults(1);
@@ -389,6 +409,7 @@ class TrackEExercise
         if (!empty($attempt)) {
             return $attempt;
         }
+
         return null;
     }
 }

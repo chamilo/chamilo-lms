@@ -2,21 +2,19 @@
 
 /* For licensing terms, see /license.txt */
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\DislikeSocialPostController;
 use Chamilo\CoreBundle\Controller\Api\LikeSocialPostController;
 use Chamilo\CoreBundle\Filter\SocialWallFilter;
@@ -29,6 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new Post(uriTemplate: '/social_posts/{id}/like', controller: LikeSocialPostController::class, denormalizationContext: ['groups' => []], normalizationContext: ['groups' => ['social_post_feedback']], security: 'is_granted(\'ROLE_USER\')'), new Post(uriTemplate: '/social_posts/{id}/dislike', controller: DislikeSocialPostController::class, denormalizationContext: ['groups' => []], normalizationContext: ['groups' => ['social_post_feedback']], security: 'is_granted(\'ROLE_USER\')'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], security: 'is_granted(\'ROLE_USER\')', denormalizationContext: ['groups' => ['social_post:write']], normalizationContext: ['groups' => ['social_post:read']])]
 #[ORM\Table(name: 'social_post')]
 #[ORM\Index(name: 'idx_social_post_sender', columns: ['sender_id'])]
@@ -64,10 +63,10 @@ class SocialPost
     #[ORM\Column(type: 'text')]
     protected string $content;
     #[Groups(['social_post:write', 'social_post:read'])]
-    #[Assert\Choice([SocialPost::TYPE_WALL_POST, SocialPost::TYPE_WALL_COMMENT, SocialPost::TYPE_GROUP_MESSAGE, SocialPost::TYPE_PROMOTED_MESSAGE], message: 'Choose a valid type.')]
+    #[Assert\Choice([self::TYPE_WALL_POST, self::TYPE_WALL_COMMENT, self::TYPE_GROUP_MESSAGE, self::TYPE_PROMOTED_MESSAGE], message: 'Choose a valid type.')]
     #[ORM\Column(type: 'smallint')]
     protected int $type;
-    #[Assert\Choice([SocialPost::STATUS_SENT, SocialPost::STATUS_DELETED], message: 'Choose a status.')]
+    #[Assert\Choice([self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
     #[ORM\Column(type: 'smallint')]
     protected int $status;
     #[Groups(['social_post:read'])]
@@ -82,10 +81,10 @@ class SocialPost
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Usergroup $groupReceiver = null;
-    #[ORM\OneToMany(targetEntity: SocialPost::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
     #[Groups(['social_post:write'])]
-    #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?SocialPost $parent;
     #[Groups(['social_post:read', 'social_post_feedback'])]
@@ -107,145 +106,161 @@ class SocialPost
         $this->countFeedbackLikes = 0;
         $this->countFeedbackDislikes = 0;
     }
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
-    public function setId(int $id) : self
+    public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
-    public function getSender() : User
+    public function getSender(): User
     {
         return $this->sender;
     }
-    public function setSender(User $sender) : self
+    public function setSender(User $sender): self
     {
         $this->sender = $sender;
+
         return $this;
     }
-    public function getUserReceiver() : ?User
+    public function getUserReceiver(): ?User
     {
         return $this->userReceiver;
     }
-    public function setUserReceiver(?User $userReceiver) : self
+    public function setUserReceiver(?User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
+
         return $this;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
-    public function setStatus(int $status) : self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
+
         return $this;
     }
-    public function getSendDate() : DateTime
+    public function getSendDate(): DateTime
     {
         return $this->sendDate;
     }
-    public function setSendDate(DateTime $sendDate) : self
+    public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
+
         return $this;
     }
-    public function getSubject() : ?string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
-    public function setSubject(?string $subject) : self
+    public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
+
         return $this;
     }
-    public function getContent() : string
+    public function getContent(): string
     {
         return $this->content;
     }
-    public function setContent(string $content) : self
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
-    public function getUpdatedAt() : DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
-    public function setUpdatedAt(DateTime $updatedAt) : self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
-    public function getFeedbacks() : Collection
+    public function getFeedbacks(): Collection
     {
         return $this->feedbacks;
     }
-    public function setFeedbacks(Collection $feedbacks) : self
+    public function setFeedbacks(Collection $feedbacks): self
     {
         $this->feedbacks = $feedbacks;
+
         return $this;
     }
-    public function addFeedback(SocialPostFeedback $feedback) : self
+    public function addFeedback(SocialPostFeedback $feedback): self
     {
         if (!$this->feedbacks->contains($feedback)) {
             $this->feedbacks[] = $feedback;
             $feedback->setSocialPost($this);
         }
+
         return $this;
     }
-    public function getCountFeedbackLikes() : int
+    public function getCountFeedbackLikes(): int
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('liked', true));
+
         return $this->feedbacks->matching($criteria)->count();
     }
-    public function getCountFeedbackDislikes() : int
+    public function getCountFeedbackDislikes(): int
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('disliked', true));
+
         return $this->feedbacks->matching($criteria)->count();
     }
-    public function getParent() : ?self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
-    public function setParent(self $parent = null) : self
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
+
         return $this;
     }
     /**
      * @return Collection<int, SocialPost>
      */
-    public function getChildren() : Collection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
-    public function addChild(self $child) : self
+    public function addChild(self $child): self
     {
         $this->children[] = $child;
         $child->setParent($this);
+
         return $this;
     }
-    public function getGroupReceiver() : ?Usergroup
+    public function getGroupReceiver(): ?Usergroup
     {
         return $this->groupReceiver;
     }
-    public function setGroupReceiver(?Usergroup $groupReceiver) : self
+    public function setGroupReceiver(?Usergroup $groupReceiver): self
     {
         $this->groupReceiver = $groupReceiver;
+
         return $this;
     }
-    public function getType() : int
+    public function getType(): int
     {
         return $this->type;
     }
-    public function setType(int $type) : self
+    public function setType(int $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 }

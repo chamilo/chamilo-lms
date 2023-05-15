@@ -1,21 +1,20 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * Course subscriptions to a session.
  */
@@ -57,38 +56,41 @@ class SessionRelCourse
     {
         return $this->id;
     }
-    public function setSession(Session $session) : self
+    public function setSession(Session $session): self
     {
         $this->session = $session;
+
         return $this;
     }
-    public function getCourse() : Course
+    public function getCourse(): Course
     {
         return $this->course;
     }
-    public function setCourse(Course $course) : self
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
+
         return $this;
     }
-    public function getSession() : Session
+    public function getSession(): Session
     {
         return $this->session;
     }
-    public function setNbrUsers(int $nbrUsers) : self
+    public function setNbrUsers(int $nbrUsers): self
     {
         $this->nbrUsers = $nbrUsers;
+
         return $this;
     }
-    public function getNbrUsers() : int
+    public function getNbrUsers(): int
     {
         return $this->nbrUsers;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function setPosition(int $position) : void
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }

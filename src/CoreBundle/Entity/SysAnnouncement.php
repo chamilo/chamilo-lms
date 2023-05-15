@@ -46,7 +46,6 @@ class SysAnnouncement
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     *
      * @var string[]
      */
     #[ORM\Column(type: 'array')]

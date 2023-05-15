@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_forum_thread')]
 #[ORM\Entity(repositoryClass: CForumThreadRepository::class)]
-class CForumThread extends AbstractResource implements ResourceInterface, \Stringable
+class CForumThread extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -321,7 +322,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
     /**
      * @return Collection|CForumPost[]
      */
-    public function getPosts(): \Doctrine\Common\Collections\Collection|array
+    public function getPosts(): Collection|array
     {
         return $this->posts;
     }
@@ -341,7 +342,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
     /**
      * @return CForumThreadQualify[]|Collection
      */
-    public function getQualifications(): array|\Doctrine\Common\Collections\Collection
+    public function getQualifications(): array|Collection
     {
         return $this->qualifications;
     }
@@ -349,7 +350,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, \Strin
     /**
      * @param CForumThreadQualify[]|Collection $qualifications
      */
-    public function setQualifications(array|\Doctrine\Common\Collections\Collection $qualifications): self
+    public function setQualifications(array|Collection $qualifications): self
     {
         $this->qualifications = $qualifications;
 

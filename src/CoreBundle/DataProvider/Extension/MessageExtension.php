@@ -20,9 +20,9 @@ use Symfony\Component\Security\Core\Security;
 
 final class MessageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security)
-    {
+    public function __construct(
+        private readonly Security $security
+    ) {
     }
 
     public function applyToCollection(
@@ -47,6 +47,18 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         }*/
 
         $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ): void {
+        //error_log('applyToItem1');
+        //$this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -101,17 +113,5 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             'invitation' => Message::MESSAGE_TYPE_INVITATION,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);
-    }
-
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        string $operationName = null,
-        array $context = []
-    ): void {
-        //error_log('applyToItem1');
-        //$this->addWhere($queryBuilder, $resourceClass);
     }
 }

@@ -8,10 +8,11 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'ticket_message_attachments')]
 #[ORM\Entity]
-class TicketMessageAttachment extends AbstractResource implements ResourceInterface, \Stringable
+class TicketMessageAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

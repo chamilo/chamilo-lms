@@ -13,13 +13,14 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CStudentPublicationComment.
  */
 #[ORM\Table(name: 'c_student_publication_comment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
-class CStudentPublicationComment extends AbstractResource implements ResourceInterface, \Stringable
+class CStudentPublicationComment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

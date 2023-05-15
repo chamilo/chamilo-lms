@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
@@ -18,8 +18,6 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- */
 #[ApiResource(
     normalizationContext: [
         'groups' => ['access_url:read'],
@@ -73,12 +71,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     protected Collection $courseCategory;
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: AccessUrl::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     protected ?AccessUrl $parent = null;
     /**
      * @var AccessUrl[]|Collection<int, AccessUrl>
      */
-    #[ORM\OneToMany(targetEntity: AccessUrl::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
     #[Gedmo\TreeLeft]
@@ -91,7 +89,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'rgt', type: 'integer')]
     protected int $rgt;
     #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', onDelete: 'CASCADE')]
     protected ?AccessUrl $root = null;
     #[Assert\NotBlank]

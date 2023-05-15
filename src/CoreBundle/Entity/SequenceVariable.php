@@ -9,9 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class SequenceVariable.
- */
 #[ORM\Table(name: 'sequence_variable')]
 #[ORM\Entity]
 class SequenceVariable

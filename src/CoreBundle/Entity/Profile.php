@@ -9,10 +9,11 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'skill_level_profile')]
 #[ORM\Entity]
-class Profile implements \Stringable
+class Profile implements Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -23,16 +24,15 @@ class Profile implements \Stringable
     protected string $name;
 
     /**
-     * @var Skill[]|Collection
+     * @var Collection<int, Skill>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'profile', targetEntity: Skill::class, cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     *
-     * @var Level[]|Collection
+     * @var Collection<int, Level>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Level::class, mappedBy: 'profile', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'profile', targetEntity: Level::class, cascade: ['persist'])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $levels;
 
@@ -70,7 +70,7 @@ class Profile implements \Stringable
     /**
      * @return Skill[]|Collection
      */
-    public function getSkills(): array|\Doctrine\Common\Collections\Collection
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
@@ -78,7 +78,7 @@ class Profile implements \Stringable
     /**
      * @param Skill[]|Collection $skills
      */
-    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -88,7 +88,7 @@ class Profile implements \Stringable
     /**
      * @return Level[]|Collection
      */
-    public function getLevels(): array|\Doctrine\Common\Collections\Collection
+    public function getLevels(): array|Collection
     {
         return $this->levels;
     }

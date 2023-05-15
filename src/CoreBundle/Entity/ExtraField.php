@@ -1,19 +1,18 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(operations: [new Get(security: 'is_granted(\'ROLE_ADMIN\')'), new Put(security: 'is_granted(\'ROLE_ADMIN\')'), new GetCollection(security: 'is_granted(\'ROLE_ADMIN\')'), new Post(security: 'is_granted(\'ROLE_ADMIN\')')], security: 'is_granted(\'ROLE_ADMIN\')', denormalizationContext: ['groups' => ['extra_field:write']], normalizationContext: ['groups' => ['extra_field:read']])]
 #[ORM\Table(name: 'extra_field')]
 #[ORM\Entity]
@@ -120,22 +120,24 @@ class ExtraField
     {
         return $this->id;
     }
-    public function getItemType() : int
+    public function getItemType(): int
     {
         return $this->itemType;
     }
-    public function setItemType(int $itemType) : self
+    public function setItemType(int $itemType): self
     {
         $this->itemType = $itemType;
+
         return $this;
     }
-    public function getValueType() : int
+    public function getValueType(): int
     {
         return $this->valueType;
     }
-    public function setValueType(int $valueType) : self
+    public function setValueType(int $valueType): self
     {
         $this->valueType = $valueType;
+
         return $this;
     }
     /**
@@ -145,9 +147,10 @@ class ExtraField
     {
         return $this->variable;
     }
-    public function setVariable(string $variable) : self
+    public function setVariable(string $variable): self
     {
         $this->variable = $variable;
+
         return $this;
     }
     /**
@@ -157,9 +160,10 @@ class ExtraField
     {
         return $this->displayText;
     }
-    public function setDisplayText(string $displayText) : self
+    public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
+
         return $this;
     }
     /**
@@ -169,9 +173,10 @@ class ExtraField
     {
         return $this->defaultValue;
     }
-    public function setDefaultValue(string $defaultValue) : self
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
+
         return $this;
     }
     /**
@@ -181,9 +186,10 @@ class ExtraField
     {
         return $this->fieldOrder;
     }
-    public function setFieldOrder(int $fieldOrder) : self
+    public function setFieldOrder(int $fieldOrder): self
     {
         $this->fieldOrder = $fieldOrder;
+
         return $this;
     }
     /**
@@ -193,97 +199,107 @@ class ExtraField
     {
         return $this->changeable;
     }
-    public function setChangeable(bool $changeable) : self
+    public function setChangeable(bool $changeable): self
     {
         $this->changeable = $changeable;
+
         return $this;
     }
-    public function isFilter() : bool
+    public function isFilter(): bool
     {
         return $this->filter;
     }
-    public function setFilter(bool $filter) : self
+    public function setFilter(bool $filter): self
     {
         $this->filter = $filter;
+
         return $this;
     }
-    public function isVisibleToSelf() : bool
+    public function isVisibleToSelf(): bool
     {
         return $this->visibleToSelf;
     }
-    public function setVisibleToSelf(bool $visibleToSelf) : self
+    public function setVisibleToSelf(bool $visibleToSelf): self
     {
         $this->visibleToSelf = $visibleToSelf;
+
         return $this;
     }
-    public function isVisibleToOthers() : bool
+    public function isVisibleToOthers(): bool
     {
         return $this->visibleToOthers;
     }
-    public function setVisibleToOthers(bool $visibleToOthers) : self
+    public function setVisibleToOthers(bool $visibleToOthers): self
     {
         $this->visibleToOthers = $visibleToOthers;
+
         return $this;
     }
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
-    public function setDescription(string $description) : self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
     /**
      * @return Collection<int, ExtraFieldOptions>
      */
-    public function getOptions() : Collection
+    public function getOptions(): Collection
     {
         return $this->options;
     }
-    public function setOptions(Collection $options) : self
+    public function setOptions(Collection $options): self
     {
         $this->options = $options;
+
         return $this;
     }
     /**
      * @return Tag[]|Collection
      */
-    public function getTags() : array|\Doctrine\Common\Collections\Collection
+    public function getTags(): array|Collection
     {
         return $this->tags;
     }
-    public function setTags(Collection $tags) : self
+    public function setTags(Collection $tags): self
     {
         $this->tags = $tags;
+
         return $this;
     }
-    public function hasTag(string $tagName) : bool
+    public function hasTag(string $tagName): bool
     {
         if (0 === $this->tags->count()) {
             return false;
         }
-        return $this->tags->exists(fn($key, Tag $tag) => $tagName === $tag->getTag());
+
+        return $this->tags->exists(fn ($key, Tag $tag) => $tagName === $tag->getTag());
     }
-    public function getTypeToString() : string
+    public function getTypeToString(): string
     {
         return match ($this->getItemType()) {
             \ExtraField::FIELD_TYPE_RADIO, \ExtraField::FIELD_TYPE_SELECT => 'choice',
             default => 'text',
         };
     }
-    public function getHelperText() : string
+    public function getHelperText(): string
     {
         return $this->helperText;
     }
-    public function setHelperText(string $helperText) : self
+    public function setHelperText(string $helperText): self
     {
         $this->helperText = $helperText;
+
         return $this;
     }
     public function setTranslatableLocale($locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
     public function getTranslatableLocale()

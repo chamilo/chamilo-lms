@@ -11,9 +11,6 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class LineItem.
- */
 #[ORM\Table(name: 'lti_lineitem')]
 #[ORM\Entity]
 class LineItem

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
@@ -31,8 +31,6 @@ use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-
-use function in_array;
 
 #[ApiResource(
     types: ['https://schema.org/Course'],
@@ -66,11 +64,13 @@ use function in_array;
     operations: [new Get()],
     uriVariables: [
         'id' => new Link(
-            fromClass: TrackCourseRanking::class, identifiers: ['id']
+            fromClass: TrackCourseRanking::class,
+            identifiers: ['id']
         ),
-    ], status: 200,
+    ],
+    status: 200,
     normalizationContext: [
-        'groups' => ['course:read']
+        'groups' => ['course:read'],
     ],
     filters: [
         'course.sticky_boolean_filter',
@@ -79,8 +79,7 @@ use function in_array;
         'annotated_chamilo_core_bundle_entity_course_api_platform_core_bridge_doctrine_orm_filter_order_filter',
     ]
 )]
-class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface,
-                                                 ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
+class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;
@@ -119,7 +118,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $title = null;
     /**
      * The course code.
-     *
      */
     #[ApiProperty(iris: ['http://schema.org/courseCode'])]
     #[Groups(['course:read', 'user:write', 'course_rel_user:read'])]
@@ -233,11 +231,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\OneToMany(targetEntity: Templates::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     protected Collection $templates;
     /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course").
      */
     //protected $specificFieldValues;
     /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course").
      */
     //protected $sharedSurveys;
     #[ORM\Column(name: 'directory', type: 'string', length: 40, nullable: true, unique: false)]
@@ -359,6 +357,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         //$this->sharedSurveys = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     public static function getStatusList(): array
     {
         return [
@@ -368,11 +371,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             self::OPEN_WORLD => 'Open world',
             self::HIDDEN => 'Hidden',
         ];
-    }
-
-    public function __toString(): string
-    {
-        return $this->getTitle();
     }
 
     public function getTitle(): string
@@ -964,7 +962,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $activeVisibilityList = [self::REGISTERED, self::OPEN_PLATFORM, self::OPEN_WORLD];
 
-        return in_array($this->visibility, $activeVisibilityList, true);
+        return \in_array($this->visibility, $activeVisibilityList, true);
     }
 
     /**
@@ -999,6 +997,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($list as $item) {
             if ($item->getSession()->getId() === $session->getId()) {
                 $this->currentSession = $session;
+
                 break;
             }
         }
@@ -1029,6 +1028,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() === $url->getId()) {
                 $this->currentUrl = $url;
+
                 break;
             }
         }

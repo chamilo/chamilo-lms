@@ -23,8 +23,10 @@ class SessionListener
 {
     use AccessUrlListenerTrait;
 
-    public function __construct(protected RequestStack $request, protected Security $security)
-    {
+    public function __construct(
+        protected RequestStack $request,
+        protected Security $security
+    ) {
     }
 
     /**

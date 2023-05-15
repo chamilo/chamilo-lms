@@ -9,13 +9,14 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CAnnouncementAttachment.
  */
 #[ORM\Table(name: 'c_announcement_attachment')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository::class)]
-class CAnnouncementAttachment extends AbstractResource implements ResourceInterface, \Stringable
+class CAnnouncementAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

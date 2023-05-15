@@ -1,30 +1,30 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(operations: [new Get(), new Put(), new Patch(), new Delete(), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(security: 'is_granted(\'ROLE_ADMIN\')')], security: 'is_granted(\'ROLE_USER\')', denormalizationContext: ['groups' => ['session_category:write']], normalizationContext: ['groups' => ['session_category:read']])]
 #[ORM\Table(name: 'session_category')]
 #[ORM\Entity]
-class SessionCategory implements \Stringable
+class SessionCategory implements Stringable
 {
     #[Groups(['session_category:read', 'session_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
@@ -48,16 +48,17 @@ class SessionCategory implements \Stringable
     {
         $this->sessions = new ArrayCollection();
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->name;
     }
-    public function setUrl(AccessUrl $url) : self
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
+
         return $this;
     }
-    public function getUrl() : AccessUrl
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }
@@ -70,18 +71,20 @@ class SessionCategory implements \Stringable
     {
         return $this->id;
     }
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setDateStart(DateTime $dateStart) : self
+    public function setDateStart(DateTime $dateStart): self
     {
         $this->dateStart = $dateStart;
+
         return $this;
     }
     /**
@@ -93,9 +96,10 @@ class SessionCategory implements \Stringable
     {
         return $this->dateStart;
     }
-    public function setDateEnd(DateTime $dateEnd) : self
+    public function setDateEnd(DateTime $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
+
         return $this;
     }
     /**

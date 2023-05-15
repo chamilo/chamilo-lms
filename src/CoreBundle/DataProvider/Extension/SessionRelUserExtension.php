@@ -21,9 +21,10 @@ use Symfony\Component\Security\Core\Security;
 
 final class SessionRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function applyToCollection(

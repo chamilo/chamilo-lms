@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
@@ -23,9 +22,10 @@ use Symfony\Component\Security\Core\Security;
  */
 final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function applyToCollection(
@@ -78,12 +78,14 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
 
         $queryBuilder
             ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links');
+            ->innerJoin('node.resourceLinks', 'links')
+        ;
 
         // Do not show deleted resources.
         $queryBuilder
             ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED);
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+        ;
 
         $allowDraft =
             $this->security->isGranted('ROLE_ADMIN') ||
@@ -92,19 +94,22 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         if (!$allowDraft) {
             $queryBuilder
                 ->andWhere('links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT);
+                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
+            ;
         }
 
         $queryBuilder
             ->andWhere('links.course = :course')
-            ->setParameter('course', $courseId);
+            ->setParameter('course', $courseId)
+        ;
 
         if (empty($sessionId)) {
             $queryBuilder->andWhere('links.session IS NULL');
         } else {
             $queryBuilder
                 ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId);
+                ->setParameter('session', $sessionId)
+            ;
         }
 
         if (empty($groupId)) {
@@ -112,7 +117,8 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         } else {
             $queryBuilder
                 ->andWhere('links.group = :group')
-                ->setParameter('group', $groupId);
+                ->setParameter('group', $groupId)
+            ;
         }
 
         /*$queryBuilder->

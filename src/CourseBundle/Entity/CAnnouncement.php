@@ -13,11 +13,12 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_announcement')]
 #[ORM\Entity(repositoryClass: CAnnouncementRepository::class)]
-class CAnnouncement extends AbstractResource implements ResourceInterface, \Stringable
+class CAnnouncement extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

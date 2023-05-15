@@ -22,8 +22,10 @@ use Exception;
  */
 class CourseListener
 {
-    public function __construct(protected ToolChain $toolChain, protected SettingsManager $settingsManager)
-    {
+    public function __construct(
+        protected ToolChain $toolChain,
+        protected SettingsManager $settingsManager
+    ) {
     }
 
     /**

@@ -28,13 +28,13 @@ class MailSettingsSchema extends AbstractSettingsSchema
                     'allow_email_editor_for_anonymous' => 'true',
                     'messages_hide_mail_content' => 'false',
                     'send_inscription_msg_to_inbox' => 'false',
-                    'allow_user_message_tracking' => 'false',
                     'send_two_inscription_confirmation_mail' => 'false',
                     'show_user_email_in_notification' => 'false',
                     'send_notification_score_in_percentage' => 'false',
                     'mail_template_system' => 'false',
                     'cron_notification_mails' => '',
                     'cron_notification_help_desk' => '',
+                    'notifications_extended_footer_message' => '',
                 ]
             )
         ;
@@ -52,7 +52,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('allow_email_editor_for_anonymous', YesNoType::class)
             ->add('messages_hide_mail_content', YesNoType::class)
             ->add('send_inscription_msg_to_inbox', YesNoType::class)
-            ->add('allow_user_message_tracking', YesNoType::class)
             ->add('send_two_inscription_confirmation_mail', YesNoType::class)
             ->add('show_user_email_in_notification', YesNoType::class)
             ->add('send_notification_score_in_percentage', YesNoType::class)
@@ -75,6 +74,16 @@ class MailSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('cron_notification_help_desk'),
                 ]
             )
+            ->add(
+                'notifications_extended_footer_message',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Add a custom extra footer for notificacions emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added').
+                        $this->settingArrayHelpValue('notifications_extended_footer_message'),
+                ]
+            )
+
 
         ;
     }
@@ -86,7 +95,12 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 ['email@example.com', 'email2@example.com']
                 </pre>",
             'cron_notification_help_desk' => "<pre>
-                    ['email@example.com', 'email2@example.com']
+                ['email@example.com', 'email2@example.com']
+                </pre>",
+            'notifications_extended_footer_message' => "<pre>
+                ['english' => ['paragraphs' => [
+                    'Change or delete this paragraph or add another one'
+                ]]]
                 </pre>",
         ];
 

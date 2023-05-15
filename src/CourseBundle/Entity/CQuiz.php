@@ -15,6 +15,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_quiz')]
 #[ORM\Entity(repositoryClass: CQuizRepository::class)]
-class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
+class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     public const ALL_ON_ONE_PAGE = 1;
     public const ONE_PER_PAGE = 2;
@@ -123,6 +124,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'autolaunch', type: 'boolean', nullable: true, options: ['default' => 0])]
     protected ?bool $autoLaunch;
 
+    #[ORM\Column(name: 'hide_attempts_table', type: 'boolean', nullable: false, options: ['default' => 0])]
+    protected bool $hideAttemptsTable;
+
     #[ORM\Column(name: 'page_result_configuration', type: 'array')]
     protected array $pageResultConfiguration = [];
 
@@ -179,7 +183,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @return Collection|CQuizRelQuestion[]
      */
-    public function getQuestions(): \Doctrine\Common\Collections\Collection|array
+    public function getQuestions(): Collection|array
     {
         return $this->questions;
     }
@@ -659,9 +663,27 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     }
 
     /**
+     * @return bool
+     */
+    public function isHideAttemptsTable(): bool
+    {
+        return $this->hideAttemptsTable;
+    }
+
+    /**
+     * @param bool $hideAttemptsTable
+     */
+    public function setHideAttemptsTable(bool $hideAttemptsTable): self
+    {
+        $this->hideAttemptsTable = $hideAttemptsTable;
+
+        return $this;
+    }
+
+    /**
      * @return CQuizRelQuestionCategory[]|Collection
      */
-    public function getQuestionsCategories(): array|\Doctrine\Common\Collections\Collection
+    public function getQuestionsCategories(): array|Collection
     {
         return $this->questionsCategories;
     }

@@ -1,24 +1,24 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(operations: [new Get(security: 'is_granted(\'ROLE_ADMIN\')'), new Put(security: 'is_granted(\'ROLE_ADMIN\')'), new GetCollection(security: 'is_granted(\'ROLE_ADMIN\')'), new Post(security: 'is_granted(\'ROLE_ADMIN\')')], security: 'is_granted(\'ROLE_ADMIN\')', denormalizationContext: ['groups' => ['extra_field_values:write']], normalizationContext: ['groups' => ['extra_field_values:read']])]
 #[ORM\Table(name: 'extra_field_values')]
 #[ORM\Index(name: 'idx_efv_fiii', columns: ['field_id', 'item_id'])]
@@ -59,30 +59,33 @@ class ExtraFieldValues
     {
         $this->comment = '';
     }
-    public function getField() : ExtraField
+    public function getField(): ExtraField
     {
         return $this->field;
     }
-    public function setField(ExtraField $field) : self
+    public function setField(ExtraField $field): self
     {
         $this->field = $field;
+
         return $this;
     }
-    public function getItemId() : int
+    public function getItemId(): int
     {
         return $this->itemId;
     }
-    public function setItemId(int $itemId) : self
+    public function setItemId(int $itemId): self
     {
         $this->itemId = $itemId;
+
         return $this;
     }
-    public function setComment(string $comment) : self
+    public function setComment(string $comment): self
     {
         $this->comment = $comment;
+
         return $this;
     }
-    public function getComment() : ?string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -95,22 +98,24 @@ class ExtraFieldValues
     {
         return $this->id;
     }
-    public function getFieldValue() : ?string
+    public function getFieldValue(): ?string
     {
         return $this->fieldValue;
     }
-    public function setFieldValue(?string $fieldValue) : self
+    public function setFieldValue(?string $fieldValue): self
     {
         $this->fieldValue = $fieldValue;
+
         return $this;
     }
-    public function getAsset() : ?Asset
+    public function getAsset(): ?Asset
     {
         return $this->asset;
     }
-    public function setAsset(?Asset $asset) : self
+    public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
+
         return $this;
     }
 }

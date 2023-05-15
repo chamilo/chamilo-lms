@@ -8,13 +8,14 @@ namespace Chamilo\CourseBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CStudentPublicationAssignment.
  */
 #[ORM\Table(name: 'c_student_publication_assignment')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository::class)]
-class CStudentPublicationAssignment implements \Stringable
+class CStudentPublicationAssignment implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

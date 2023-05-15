@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_student_publication')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationRepository::class)]
-class CStudentPublication extends AbstractResource implements ResourceInterface, \Stringable
+class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -70,7 +71,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     /**
      * @var Collection|CStudentPublication[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, mappedBy: 'publicationParent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'publicationParent')]
     protected Collection $children;
 
     /**
@@ -79,7 +80,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublicationComment::class, mappedBy: 'publication')]
     protected Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
@@ -477,7 +478,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     /**
      * @return CStudentPublication[]|Collection
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }
@@ -516,7 +517,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     /**
      * @return CStudentPublicationComment[]|Collection
      */
-    public function getComments(): array|\Doctrine\Common\Collections\Collection
+    public function getComments(): array|Collection
     {
         return $this->comments;
     }
@@ -524,7 +525,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     /**
      * @param CStudentPublicationComment[]|Collection $comments
      */
-    public function setComments(array|\Doctrine\Common\Collections\Collection $comments): self
+    public function setComments(array|Collection $comments): self
     {
         $this->comments = $comments;
 

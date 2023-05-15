@@ -15,8 +15,10 @@ use Symfony\Component\Security\Core\Security;
 
 class UserListener
 {
-    public function __construct(private UserRepository $userRepository, private Security $security)
-    {
+    public function __construct(
+        private UserRepository $userRepository,
+        private Security $security
+    ) {
     }
 
     /**

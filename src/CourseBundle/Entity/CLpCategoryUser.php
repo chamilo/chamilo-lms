@@ -9,13 +9,14 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CLpCategoryUser.
  */
 #[ORM\Table(name: 'c_lp_category_user')]
 #[ORM\Entity]
-class CLpCategoryUser implements \Stringable
+class CLpCategoryUser implements Stringable
 {
     use UserTrait;
 

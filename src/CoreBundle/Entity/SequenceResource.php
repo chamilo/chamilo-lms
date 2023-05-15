@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class SequenceResource.
- */
 #[ORM\Table(name: 'sequence_resource')]
 #[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceResourceRepository::class)]
 class SequenceResource

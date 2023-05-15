@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,7 +24,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 #[ORM\Table(name: 'asset')]
 #[ORM\Entity]
-class Asset implements \Stringable
+class Asset implements Stringable
 {
     use TimestampableEntity;
 
@@ -45,7 +46,7 @@ class Asset implements \Stringable
     protected ?string $title = null;
 
     #[Assert\NotBlank]
-    #[Assert\Choice([Asset::SCORM, Asset::WATERMARK, Asset::EXTRA_FIELD, Asset::COURSE_CATEGORY, Asset::SKILL], message: 'Choose a valid category.')]
+    #[Assert\Choice([self::SCORM, self::WATERMARK, self::EXTRA_FIELD, self::COURSE_CATEGORY, self::SKILL], message: 'Choose a valid category.')]
     #[ORM\Column(type: 'string', length: 255)]
     protected ?string $category = null;
 
@@ -261,9 +262,6 @@ class Asset implements \Stringable
         return $this->file;
     }
 
-    /**
-     * @param File|UploadedFile $file
-     */
     public function setFile(File|UploadedFile $file = null): self
     {
         $this->file = $file;

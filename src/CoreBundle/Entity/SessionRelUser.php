@@ -1,19 +1,18 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
  */
@@ -73,35 +73,38 @@ class SessionRelUser
         $this->movedStatus = null;
         $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
     }
-    public function getCourses() : Collection
+    public function getCourses(): Collection
     {
         return $this->session->getSessionRelCourseByUser($this->getUser());
     }
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function setSession(?Session $session) : self
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
+
         return $this;
     }
-    public function getSession() : ?Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
-    public function setRelationType(int $relationType) : self
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
+
         return $this;
     }
-    public function getRelationType() : int
+    public function getRelationType(): int
     {
         return $this->relationType;
     }
-    public function setMovedTo(int $movedTo) : self
+    public function setMovedTo(int $movedTo): self
     {
         $this->movedTo = $movedTo;
+
         return $this;
     }
     /**
@@ -113,9 +116,10 @@ class SessionRelUser
     {
         return $this->movedTo;
     }
-    public function setMovedStatus(int $movedStatus) : self
+    public function setMovedStatus(int $movedStatus): self
     {
         $this->movedStatus = $movedStatus;
+
         return $this;
     }
     /**
@@ -127,9 +131,10 @@ class SessionRelUser
     {
         return $this->movedStatus;
     }
-    public function setMovedAt(DateTime $movedAt) : self
+    public function setMovedAt(DateTime $movedAt): self
     {
         $this->movedAt = $movedAt;
+
         return $this;
     }
     /**
@@ -141,9 +146,10 @@ class SessionRelUser
     {
         return $this->movedAt;
     }
-    public function setRegisteredAt(DateTime $registeredAt) : self
+    public function setRegisteredAt(DateTime $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
+
         return $this;
     }
     /**
@@ -162,19 +168,21 @@ class SessionRelUser
     {
         return $this->duration;
     }
-    public function setDuration(int $duration) : self
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
         return $this;
     }
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         $user->addSessionRelUser($this);
         $this->user = $user;
+
         return $this;
     }
 }

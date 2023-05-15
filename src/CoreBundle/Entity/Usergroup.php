@@ -1,32 +1,27 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\Get;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Classes and social groups.
  */
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['usergroup:read']])]
 #[ORM\Table(name: 'usergroup')]
 #[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\UsergroupRepository::class)]
-class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface, \Stringable
+class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface, Stringable
 {
     use TimestampableEntity;
     public const SOCIAL_CLASS = 1;
@@ -91,49 +86,52 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         $this->sessions = new ArrayCollection();
         $this->questions = new ArrayCollection();
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getName();
     }
     /**
      * @return UsergroupRelUser[]|Collection
      */
-    public function getUsers() : array|Collection
+    public function getUsers(): array|Collection
     {
         return $this->users;
     }
-    public function getUrls() : Collection
+    public function getUrls(): Collection
     {
         return $this->urls;
     }
-    public function addAccessUrl(?AccessUrl $url) : self
+    public function addAccessUrl(?AccessUrl $url): self
     {
         $urlRelUsergroup = new AccessUrlRelUserGroup();
         $urlRelUsergroup->setUserGroup($this);
         $urlRelUsergroup->setUrl($url);
         $this->addUrlRelUsergroup($urlRelUsergroup);
+
         return $this;
     }
-    public function addUrlRelUsergroup(AccessUrlRelUserGroup $urlRelUsergroup) : self
+    public function addUrlRelUsergroup(AccessUrlRelUserGroup $urlRelUsergroup): self
     {
         $urlRelUsergroup->setUserGroup($this);
         $this->urls[] = $urlRelUsergroup;
+
         return $this;
     }
-    public function setUsers(Collection $users) : void
+    public function setUsers(Collection $users): void
     {
         $this->users = new ArrayCollection();
         foreach ($users as $user) {
             $this->addUsers($user);
         }
     }
-    public function addUsers(UsergroupRelUser $user) : self
+    public function addUsers(UsergroupRelUser $user): self
     {
         $user->setUsergroup($this);
         $this->users[] = $user;
+
         return $this;
     }
-    public function removeUsers(UsergroupRelUser $user) : void
+    public function removeUsers(UsergroupRelUser $user): void
     {
         foreach ($this->users as $key => $value) {
             if ($value->getId() === $user->getId()) {
@@ -150,21 +148,23 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->id;
     }
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setDescription(string $description) : self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -175,101 +175,110 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->groupType;
     }
-    public function setGroupType(int $groupType) : self
+    public function setGroupType(int $groupType): self
     {
         $this->groupType = $groupType;
+
         return $this;
     }
-    public function getVisibility() : string
+    public function getVisibility(): string
     {
         return $this->visibility;
     }
-    public function setVisibility(string $visibility) : self
+    public function setVisibility(string $visibility): self
     {
         $this->visibility = $visibility;
+
         return $this;
     }
-    public function getUrl() : ?string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
-    public function setUrl(?string $url) : self
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
+
         return $this;
     }
-    public function getAuthorId() : string
+    public function getAuthorId(): string
     {
         return $this->authorId;
     }
-    public function setAuthorId(string $authorId) : self
+    public function setAuthorId(string $authorId): self
     {
         $this->authorId = $authorId;
+
         return $this;
     }
-    public function getAllowMembersToLeaveGroup() : int
+    public function getAllowMembersToLeaveGroup(): int
     {
         return $this->allowMembersToLeaveGroup;
     }
-    public function setAllowMembersToLeaveGroup(int $allowMembersToLeaveGroup) : self
+    public function setAllowMembersToLeaveGroup(int $allowMembersToLeaveGroup): self
     {
         $this->allowMembersToLeaveGroup = $allowMembersToLeaveGroup;
+
         return $this;
     }
     /**
      * @return UsergroupRelCourse[]|Collection
      */
-    public function getCourses() : array|Collection
+    public function getCourses(): array|Collection
     {
         return $this->courses;
     }
-    public function setCourses(Collection $courses) : self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
+
         return $this;
     }
     /**
      * @return UsergroupRelSession[]|Collection
      */
-    public function getSessions() : array|Collection
+    public function getSessions(): array|Collection
     {
         return $this->sessions;
     }
-    public function setSessions(Collection $sessions) : self
+    public function setSessions(Collection $sessions): self
     {
         $this->sessions = $sessions;
+
         return $this;
     }
     /**
      * @return UsergroupRelQuestion[]|Collection
      */
-    public function getQuestions() : array|Collection
+    public function getQuestions(): array|Collection
     {
         return $this->questions;
     }
-    public function setQuestions(Collection $questions) : self
+    public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
+
         return $this;
     }
-    public function getPicture() : ?string
+    public function getPicture(): ?string
     {
         return $this->picture;
     }
-    public function getDefaultIllustration(int $size) : string
+    public function getDefaultIllustration(int $size): string
     {
         $size = empty($size) ? 32 : $size;
+
         return sprintf('/img/icons/%s/group_na.png', $size);
     }
-    public function getResourceIdentifier() : int
+    public function getResourceIdentifier(): int
     {
         return $this->getId();
     }
-    public function getResourceName() : string
+    public function getResourceName(): string
     {
         return $this->getName();
     }
-    public function setResourceName(string $name) : self
+    public function setResourceName(string $name): self
     {
         return $this->setName($name);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
+use ArrayObject;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
@@ -34,7 +35,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         $this->illustrationRepository = $illustrationRepository;
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): float|int|bool|\ArrayObject|array|string|null
+    public function normalize($object, ?string $format = null, array $context = []): float|int|bool|ArrayObject|array|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 

@@ -15,14 +15,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use UnserializeApi;
 
-/**
- * Class ExternalTool.
- */
 #[ORM\Table(name: 'lti_external_tool')]
 #[ORM\Entity]
-class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface, \Stringable
+class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface, Stringable
 {
     public const V_1P1 = 'lti1p1';
     public const V_1P3 = 'lti1p3';
@@ -64,11 +62,11 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     #[ORM\JoinColumn(name: 'gradebook_eval_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?GradebookEvaluation $gradebookEval;
 
-    #[ORM\ManyToOne(targetEntity: ExternalTool::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?ExternalTool $parent;
 
-    #[ORM\OneToMany(targetEntity: ExternalTool::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[ORM\Column(name: 'client_id', type: 'string', nullable: true)]

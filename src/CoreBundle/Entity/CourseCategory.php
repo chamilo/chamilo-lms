@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
@@ -22,8 +22,6 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- */
 #[ApiResource(
     normalizationContext: [
         'groups' => ['course_category:read', 'course:read'],
@@ -99,7 +97,7 @@ class CourseCategory implements Stringable
     /**
      * @var Collection|CourseCategory[]
      */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CourseCategory::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
     #[Assert\NotBlank]
     #[Groups(['course_category:read', 'course_category:write', 'course:read', 'session:read'])]
@@ -109,7 +107,7 @@ class CourseCategory implements Stringable
     #[Groups(['course_category:read', 'course_category:write', 'course:read'])]
     #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
-    #[ORM\ManyToOne(targetEntity: CourseCategory::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?CourseCategory $parent = null;
     #[ORM\Column(name: 'tree_pos', type: 'integer', nullable: true)]

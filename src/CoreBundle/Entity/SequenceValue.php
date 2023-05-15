@@ -10,9 +10,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Sequence.
- */
 #[ORM\Table(name: 'sequence_value')]
 #[ORM\Entity]
 class SequenceValue

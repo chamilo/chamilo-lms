@@ -3,7 +3,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$allow = ('true' === api_get_setting('mail.allow_user_message_tracking'));
+$allow = ('true' === api_get_setting('message.allow_user_message_tracking'));
 
 if (!$allow) {
     api_not_allowed(true);

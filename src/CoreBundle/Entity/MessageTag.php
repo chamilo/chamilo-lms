@@ -1,20 +1,19 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,6 +22,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], security: 'is_granted("ROLE_USER") or object.user == user', denormalizationContext: ['groups' => ['message_tag:write']], normalizationContext: ['groups' => ['message_tag:read']])]
 #[UniqueEntity(fields: ['user', 'tag'], errorPath: 'tag', message: 'This user-tag relation is already used.')]
 #[ORM\Table(name: 'message_tag')]
@@ -64,64 +64,70 @@ class MessageTag
         $this->color = 'blue';
         $this->messageRelUsers = new ArrayCollection();
     }
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
-    public function getTag() : string
+    public function getTag(): string
     {
         return $this->tag;
     }
-    public function setTag(string $tag) : self
+    public function setTag(string $tag): self
     {
         $this->tag = $tag;
+
         return $this;
     }
-    public function getColor() : string
+    public function getColor(): string
     {
         return $this->color;
     }
-    public function setColor(string $color) : self
+    public function setColor(string $color): self
     {
         $this->color = $color;
+
         return $this;
     }
-    public function setPosition(int $position) : self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
+
         return $this;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function getMessages() : Collection
+    public function getMessages(): Collection
     {
         return $this->messageRelUsers;
     }
-    public function addMessage(MessageRelUser $message) : self
+    public function addMessage(MessageRelUser $message): self
     {
         if (!$this->messageRelUsers->contains($message)) {
             $this->messageRelUsers->add($message);
             $message->addTag($this);
         }
+
         return $this;
     }
-    public function removeMessage(MessageRelUser $message) : self
+    public function removeMessage(MessageRelUser $message): self
     {
         if ($this->messageRelUsers->contains($message)) {
             $this->messageRelUsers->removeElement($message);
             $message->removeTag($this);
         }
+
         return $this;
     }
 }

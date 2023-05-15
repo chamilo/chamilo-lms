@@ -1,17 +1,16 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,6 +18,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Questions per quiz user attempts.
  */
@@ -84,9 +84,10 @@ class TrackEAttempt
         $this->teacherComment = '';
         $this->secondsSpent = 0;
     }
-    public function setQuestionId(int $questionId) : self
+    public function setQuestionId(int $questionId): self
     {
         $this->questionId = $questionId;
+
         return $this;
     }
     /**
@@ -98,9 +99,10 @@ class TrackEAttempt
     {
         return $this->questionId;
     }
-    public function setAnswer(string $answer) : self
+    public function setAnswer(string $answer): self
     {
         $this->answer = $answer;
+
         return $this;
     }
     /**
@@ -112,9 +114,10 @@ class TrackEAttempt
     {
         return $this->answer;
     }
-    public function setTeacherComment(string $teacherComment) : self
+    public function setTeacherComment(string $teacherComment): self
     {
         $this->teacherComment = $teacherComment;
+
         return $this;
     }
     /**
@@ -126,9 +129,10 @@ class TrackEAttempt
     {
         return $this->teacherComment;
     }
-    public function setMarks(float $marks) : self
+    public function setMarks(float $marks): self
     {
         $this->marks = $marks;
+
         return $this;
     }
     /**
@@ -140,9 +144,10 @@ class TrackEAttempt
     {
         return $this->marks;
     }
-    public function setPosition(int $position) : self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
+
         return $this;
     }
     /**
@@ -154,9 +159,10 @@ class TrackEAttempt
     {
         return $this->position;
     }
-    public function setTms(DateTime $tms) : self
+    public function setTms(DateTime $tms): self
     {
         $this->tms = $tms;
+
         return $this;
     }
     /**
@@ -176,6 +182,7 @@ class TrackEAttempt
     public function setFilename(string $filename)
     {
         $this->filename = $filename;
+
         return $this;
     }
     /**
@@ -196,77 +203,84 @@ class TrackEAttempt
     {
         return $this->id;
     }
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
-    public function getTrackEExercise() : TrackEExercise
+    public function getTrackEExercise(): TrackEExercise
     {
         return $this->trackExercise;
     }
-    public function setTrackEExercise(TrackEExercise $trackExercise) : self
+    public function setTrackEExercise(TrackEExercise $trackExercise): self
     {
         $this->trackExercise = $trackExercise;
+
         return $this;
     }
-    public function getSecondsSpent() : int
+    public function getSecondsSpent(): int
     {
         return $this->secondsSpent;
     }
-    public function setSecondsSpent(int $secondsSpent) : self
+    public function setSecondsSpent(int $secondsSpent): self
     {
         $this->secondsSpent = $secondsSpent;
+
         return $this;
     }
     /**
      * @return AttemptFile[]|Collection
      */
-    public function getAttemptFiles() : array|\Doctrine\Common\Collections\Collection
+    public function getAttemptFiles(): array|Collection
     {
         return $this->attemptFiles;
     }
     /**
      * @param AttemptFile[]|Collection $attemptFiles
      */
-    public function setAttemptFiles(array|\Doctrine\Common\Collections\Collection $attemptFiles) : self
+    public function setAttemptFiles(array|Collection $attemptFiles): self
     {
         $this->attemptFiles = $attemptFiles;
+
         return $this;
     }
     /**
      * @return AttemptFeedback[]|Collection
      */
-    public function getAttemptFeedbacks() : array|\Doctrine\Common\Collections\Collection
+    public function getAttemptFeedbacks(): array|Collection
     {
         return $this->attemptFeedbacks;
     }
     /**
      * @param AttemptFeedback[]|Collection $attemptFeedbacks
      */
-    public function setAttemptFeedbacks(array|\Doctrine\Common\Collections\Collection $attemptFeedbacks) : self
+    public function setAttemptFeedbacks(array|Collection $attemptFeedbacks): self
     {
         $this->attemptFeedbacks = $attemptFeedbacks;
+
         return $this;
     }
-    public function addAttemptFeedback(AttemptFeedback $attemptFeedback) : self
+    public function addAttemptFeedback(AttemptFeedback $attemptFeedback): self
     {
         if (!$this->attemptFeedbacks->contains($attemptFeedback)) {
             $this->attemptFeedbacks[] = $attemptFeedback;
             $attemptFeedback->setAttempt($this);
         }
+
         return $this;
     }
-    public function addAttemptFile(AttemptFile $attemptFile) : self
+    public function addAttemptFile(AttemptFile $attemptFile): self
     {
         if (!$this->attemptFiles->contains($attemptFile)) {
             $this->attemptFiles[] = $attemptFile;
             $attemptFile->setAttempt($this);
         }
+
         return $this;
     }
 }

@@ -98,15 +98,14 @@ class BranchSync
     protected ?int $root = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: BranchSync::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?BranchSync $parent = null;
 
     /**
-     *
      * @var BranchSync[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: BranchSync::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 
@@ -578,7 +577,7 @@ class BranchSync
     /**
      * @return BranchSync[]|Collection
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }

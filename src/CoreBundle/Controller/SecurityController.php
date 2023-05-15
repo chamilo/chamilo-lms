@@ -50,7 +50,8 @@ class SecurityController extends AbstractController
                 ->setUsername($user->getUsername())
                 ->setLoginDate(new DateTime())
                 ->setUserIp(api_get_real_ip())
-                ->setSuccess(true);
+                ->setSuccess(true)
+            ;
 
             $this->trackELoginRecordRepository->create($trackELoginRecord);
 

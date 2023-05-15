@@ -1,43 +1,84 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 //
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @Vich\Uploadable
  */
-#[ApiResource(operations: [new Get(), new Post(controller: CreateResourceFileAction::class, deserialize: false, security: 'is_granted(\'ROLE_USER\')', validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']], openapiContext: ['requestBody' => ['content' => ['multipart/form-data' => ['schema' => ['type' => 'object', 'properties' => ['file' => ['type' => 'string', 'format' => 'binary']]]]]]]), new GetCollection()], types: ['http://schema.org/MediaObject'], normalizationContext: ['groups' => ['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read']])]
+#[ApiResource(
+    types: ['http://schema.org/MediaObject'],
+    operations: [
+        new Get(),
+        new Post(
+            controller: CreateResourceFileAction::class,
+            openapiContext: [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            security: 'is_granted(\'ROLE_USER\')',
+            validationContext: [
+                'groups' => ['Default', 'media_object_create', 'document:write'],
+            ],
+            deserialize: false
+        ),
+        new GetCollection(),
+    ],
+    normalizationContext: [
+        'groups' => [
+            'resource_file:read',
+            'resource_node:read',
+            'document:read',
+            'media_object_read',
+            'message:read',
+        ],
+    ]
+)]
 #[ORM\Table(name: 'resource_file')]
 #[ORM\Entity]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['name' => 'partial'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'name', 'size', 'updatedAt'])]
-class ResourceFile implements \Stringable
+class ResourceFile implements Stringable
 {
     use TimestampableEntity;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
@@ -82,7 +123,7 @@ class ResourceFile implements \Stringable
     protected ?File $file = null;
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
-    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'resourceFile')]
+    #[ORM\OneToOne(mappedBy: 'resourceFile', targetEntity: ResourceNode::class)]
     protected ResourceNode $resourceNode;
     /**
      * @var string[]
@@ -111,87 +152,89 @@ class ResourceFile implements \Stringable
         $this->metadata = [];
         $this->dimensions = [];
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getOriginalName();
     }
-    public function isText() : bool
+    public function isText(): bool
     {
         $mimeType = $this->getMimeType();
+
         return str_contains($mimeType, 'text');
     }
-    public function isImage() : bool
+    public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
+
         return str_contains($mimeType, 'image');
     }
-    public function isVideo() : bool
+    public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
+
         return str_contains($mimeType, 'video');
     }
-    public function isAudio() : bool
+    public function isAudio(): bool
     {
         $mimeType = $this->getMimeType();
+
         return str_contains($mimeType, 'audio');
     }
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    /**
-     * @return string
-     */
-    public function getCrop()
+    public function getCrop(): ?string
     {
         return $this->crop;
     }
     /**
      * $crop example: 100,100,100,100 = width,height,x,y.
      */
-    public function setCrop(string $crop) : self
+    public function setCrop(string $crop): self
     {
         $this->crop = $crop;
+
         return $this;
     }
-    public function getSize() : ?int
+    public function getSize(): ?int
     {
         return $this->size;
     }
-    public function setSize(?int $size) : self
+    public function setSize(?int $size): self
     {
         $this->size = $size;
+
         return $this;
     }
-    public function getResourceNode() : ResourceNode
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
-    public function setResourceNode(ResourceNode $resourceNode) : self
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
+
         return $this;
     }
     /*public function isEnabled(): bool
         {
             return $this->enabled;
         }
-    
+
         public function setEnabled(bool $enabled): self
         {
             $this->enabled = $enabled;
-    
+
             return $this;
         }*/
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -199,84 +242,89 @@ class ResourceFile implements \Stringable
         {
             return $this->description;
         }
-    
+
         public function setDescription(string $description): self
         {
             $this->description = $description;
-    
+
             return $this;
         }*/
-    public function getMimeType() : ?string
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
-    public function setMimeType(?string $mimeType) : self
+    public function setMimeType(?string $mimeType): self
     {
         $this->mimeType = $mimeType;
+
         return $this;
     }
-    public function getOriginalName() : string
+    public function getOriginalName(): string
     {
         return $this->originalName;
     }
-    public function setOriginalName(?string $originalName) : self
+    public function setOriginalName(?string $originalName): self
     {
         $this->originalName = $originalName;
+
         return $this;
     }
-    public function getDimensions() : array
+    public function getDimensions(): array
     {
         return $this->dimensions;
     }
-    public function setDimensions(?array $dimensions) : self
+    public function setDimensions(?array $dimensions): self
     {
         $this->dimensions = $dimensions;
+
         return $this;
     }
-    public function getWidth() : int
+    public function getWidth(): int
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
             //$data = explode(',', $data);
             return (int) $data[0];
         }
+
         return 0;
     }
-    public function getHeight() : int
+    public function getHeight(): int
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
             //$data = explode(',', $data);
             return (int) $data[1];
         }
+
         return 0;
     }
-    public function getMetadata() : array
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
-    public function setMetadata(array $metadata) : self
+    public function setMetadata(array $metadata): self
     {
         $this->metadata = $metadata;
+
         return $this;
     }
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
-    public function setDescription(string $description) : self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
-    public function getFile() : ?File
+    public function getFile(): ?File
     {
         return $this->file;
     }
-    /**
-     * @param File|UploadedFile|null $file
-     */
-    public function setFile(\Symfony\Component\HttpFoundation\File\File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $file = null) : self
+
+    public function setFile(File|UploadedFile|null $file = null): self
     {
         $this->file = $file;
         if (null !== $file) {
@@ -284,6 +332,7 @@ class ResourceFile implements \Stringable
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new DateTimeImmutable();
         }
+
         return $this;
     }
 }

@@ -130,7 +130,7 @@ class Promotion
     /**
      * @return Session[]|Collection
      */
-    public function getSessions(): array|\Doctrine\Common\Collections\Collection
+    public function getSessions(): array|Collection
     {
         return $this->sessions;
     }
@@ -145,7 +145,7 @@ class Promotion
     /**
      * @return SysAnnouncement[]|Collection
      */
-    public function getAnnouncements(): array|\Doctrine\Common\Collections\Collection
+    public function getAnnouncements(): array|Collection
     {
         return $this->announcements;
     }
@@ -153,7 +153,7 @@ class Promotion
     /**
      * @param SysAnnouncement[]|Collection $announcements
      */
-    public function setAnnouncements(array|\Doctrine\Common\Collections\Collection $announcements): self
+    public function setAnnouncements(array|Collection $announcements): self
     {
         $this->announcements = $announcements;
 

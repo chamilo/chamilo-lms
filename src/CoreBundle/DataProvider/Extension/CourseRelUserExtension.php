@@ -18,9 +18,9 @@ use Symfony\Component\Security\Core\Security;
 
 final class CourseRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
-
-    public function __construct(private readonly Security $security)
-    {
+    public function __construct(
+        private readonly Security $security
+    ) {
     }
 
     public function applyToCollection(

@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_notebook')]
 #[ORM\Entity(repositoryClass: CNotebookRepository::class)]
-class CNotebook extends AbstractResource implements ResourceInterface, \Stringable
+class CNotebook extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

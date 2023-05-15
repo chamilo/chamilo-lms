@@ -10,11 +10,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'resource_type')]
 #[ORM\Entity]
-class ResourceType implements \Stringable
+class ResourceType implements Stringable
 {
     use TimestampableEntity;
 
@@ -79,7 +80,7 @@ class ResourceType implements \Stringable
     /**
      * @return ResourceNode[]|Collection
      */
-    public function getResourceNodes(): array|\Doctrine\Common\Collections\Collection
+    public function getResourceNodes(): array|Collection
     {
         return $this->resourceNodes;
     }
@@ -87,7 +88,7 @@ class ResourceType implements \Stringable
     /**
      * @param ResourceNode[]|Collection $resourceNodes
      */
-    public function setResourceNodes(array|\Doctrine\Common\Collections\Collection $resourceNodes): self
+    public function setResourceNodes(array|Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 

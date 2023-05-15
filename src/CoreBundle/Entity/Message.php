@@ -1,21 +1,23 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Entity\Listener\MessageListener;
+use Chamilo\CoreBundle\Repository\MessageRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,13 +26,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-#[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], security: 'is_granted(\'ROLE_USER\')', denormalizationContext: ['groups' => ['message:write']], normalizationContext: ['groups' => ['message:read']])]
+
+#[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], normalizationContext: ['groups' => ['message:read']], denormalizationContext: ['groups' => ['message:write']], security: 'is_granted(\'ROLE_USER\')')]
 #[ORM\Table(name: 'message')]
-#[ORM\Index(name: 'idx_message_user_sender', columns: ['user_sender_id'])]
-#[ORM\Index(name: 'idx_message_group', columns: ['group_id'])]
-#[ORM\Index(name: 'idx_message_type', columns: ['msg_type'])]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\MessageRepository::class)]
-#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\MessageListener::class])]
+#[ORM\Index(columns: ['user_sender_id'], name: 'idx_message_user_sender')]
+#[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
+#[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
+#[ORM\EntityListeners([MessageListener::class])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['msgType' => 'exact', 'status' => 'exact', 'sender' => 'exact', 'receivers.receiver' => 'exact', 'receivers.tags.tag' => 'exact', 'parent' => 'exact'])]
 class Message
@@ -53,7 +56,7 @@ class Message
     protected ?int $id = null;
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sentMessages')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentMessages')]
     #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
     protected User $sender;
     /**
@@ -61,7 +64,7 @@ class Message
      */
     #[Assert\Valid]
     #[Groups(['message:read', 'message:write'])]
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageRelUser::class, mappedBy: 'message', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageRelUser::class, cascade: ['persist', 'remove'])]
     protected array|null|Collection $receivers;
     /**
      * @var Collection|MessageRelUser[]
@@ -94,16 +97,16 @@ class Message
     protected string $content;
     #[Groups(['message:read', 'message:write'])]
     protected ?MessageRelUser $firstReceiver = null;
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Usergroup::class)]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;
     /**
-     * @var Collection|Message[]
+     * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
     #[Groups(['message:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Message::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?Message $parent = null;
     #[Gedmo\Timestampable(on: 'update')]
@@ -112,11 +115,15 @@ class Message
     #[ORM\Column(name: 'votes', type: 'integer', nullable: true)]
     protected ?int $votes;
     /**
-     * @var Collection|MessageAttachment[]
+     * @var Collection<int, MessageAttachment>
      */
     #[Groups(['message:read'])]
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\MessageAttachment::class, mappedBy: 'message', cascade: ['remove', 'persist'])]
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageAttachment::class, cascade: ['remove', 'persist'])]
     protected Collection $attachments;
+
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageFeedback::class, orphanRemoval: true)]
+    protected Collection $likes;
+
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -128,20 +135,21 @@ class Message
         $this->receivers = new ArrayCollection();
         $this->receiversCc = new ArrayCollection();
         $this->receiversTo = new ArrayCollection();
+        $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }
     /**
      * @return null|Collection|MessageRelUser[]
      */
-    public function getReceivers() : null|\Doctrine\Common\Collections\Collection|array
+    public function getReceivers(): null|Collection|array
     {
         return $this->receivers;
     }
     /**
      * @return MessageRelUser[]
      */
-    public function getReceiversTo()
+    public function getReceiversTo(): array
     {
         /*return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
               return MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType();
@@ -152,12 +160,13 @@ class Message
                 $list[] = $receiver;
             }
         }
+
         return $list;
     }
     /**
-     * @return MessageRelUser[]
+     * @return array<int, MessageRelUser>
      */
-    public function getReceiversCc()
+    public function getReceiversCc(): array
     {
         $list = [];
         foreach ($this->receivers as $receiver) {
@@ -174,174 +183,174 @@ class Message
         */
         return $list;
     }
-    public function getFirstReceiver() : ?MessageRelUser
+    public function getFirstReceiver(): ?MessageRelUser
     {
         if ($this->receivers->count() > 0) {
             return $this->receivers->first();
         }
+
         return null;
     }
-    public function hasReceiver(User $receiver)
+    public function hasReceiver(User $receiver): bool
     {
         if ($this->receivers->count()) {
             $criteria = Criteria::create()->where(Criteria::expr()->eq('receiver', $receiver))->andWhere(Criteria::expr()->eq('message', $this));
+
             return $this->receivers->matching($criteria)->count() > 0;
         }
+
         return false;
     }
-    public function addReceiver(User $receiver, int $receiverType = MessageRelUser::TYPE_TO) : self
+    public function addReceiver(User $receiver, int $receiverType = MessageRelUser::TYPE_TO): self
     {
         $messageRelUser = (new MessageRelUser())->setReceiver($receiver)->setReceiverType($receiverType)->setMessage($this);
         if (!$this->receivers->contains($messageRelUser)) {
             $this->receivers->add($messageRelUser);
         }
+
         return $this;
     }
-    public function setReceivers(\Doctrine\Common\Collections\Collection|\Chamilo\CoreBundle\Entity\MessageRelUser $receivers) : self
+    public function setReceivers(Collection|MessageRelUser $receivers): self
     {
         /** @var MessageRelUser $receiver */
         foreach ($receivers as $receiver) {
             $receiver->setMessage($this);
         }
         $this->receivers = $receivers;
+
         return $this;
     }
-    public function setSender(User $sender) : self
+    public function setSender(User $sender): self
     {
         $this->sender = $sender;
+
         return $this;
     }
-    public function getSender() : User
+    public function getSender(): User
     {
         return $this->sender;
     }
-    public function setMsgType(int $msgType) : self
+    public function setMsgType(int $msgType): self
     {
         $this->msgType = $msgType;
+
         return $this;
     }
-    public function getMsgType() : int
+    public function getMsgType(): int
     {
         return $this->msgType;
     }
-    public function setSendDate(DateTime $sendDate) : self
+    public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
+
         return $this;
     }
-    /**
-     * Get sendDate.
-     *
-     * @return DateTime
-     */
-    public function getSendDate()
+    public function getSendDate(): DateTime
     {
         return $this->sendDate;
     }
-    public function setTitle(string $title) : self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
-    public function setContent(string $content) : self
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
-    public function getContent() : string
+    public function getContent(): string
     {
         return $this->content;
     }
-    public function setUpdateDate(DateTime $updateDate) : self
+    public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
+
         return $this;
     }
-    /**
-     * Get updateDate.
-     *
-     * @return DateTime
-     */
-    public function getUpdateDate()
+    public function getUpdateDate(): ?DateTime
     {
         return $this->updateDate;
     }
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function setVotes(int $votes) : self
+    public function setVotes(int $votes): self
     {
         $this->votes = $votes;
+
         return $this;
     }
-    public function getVotes() : int
+    public function getVotes(): int
     {
         return $this->votes;
     }
     /**
-     * Get attachments.
-     *
-     * @return Collection|MessageAttachment[]
+     * @return Collection<int, MessageAttachment>
      */
-    public function getAttachments() : \Doctrine\Common\Collections\Collection|array
+    public function getAttachments(): Collection
     {
         return $this->attachments;
     }
-    public function addAttachment(MessageAttachment $attachment) : self
+    public function addAttachment(MessageAttachment $attachment): self
     {
         $this->attachments->add($attachment);
         $attachment->setMessage($this);
+
         return $this;
     }
-    public function getParent() : ?self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
     /**
-     * @return Collection|Message[]
+     * @return Collection<int, Message>
      */
-    public function getChildren() : \Doctrine\Common\Collections\Collection|array
+    public function getChildren(): Collection
     {
         return $this->children;
     }
-    public function addChild(self $child) : self
+    public function addChild(self $child): self
     {
         $this->children[] = $child;
         $child->setParent($this);
+
         return $this;
     }
-    public function setParent(self $parent = null) : self
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
+
         return $this;
     }
-    public function getGroup() : ?Usergroup
+    public function getGroup(): ?Usergroup
     {
         return $this->group;
     }
-    public function setGroup(?Usergroup $group) : self
+    public function setGroup(?Usergroup $group): self
     {
         //        $this->msgType = self::MESSAGE_TYPE_GROUP;
         $this->group = $group;
+
         return $this;
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
-    public function setStatus(int $status) : self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 }

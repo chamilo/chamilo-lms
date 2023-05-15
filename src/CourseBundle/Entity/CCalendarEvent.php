@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
@@ -78,14 +78,14 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_event_id', referencedColumnName: 'iid')]
     protected ?CCalendarEvent $parentEvent = null;
 
     /**
      * @var Collection|CCalendarEvent[]
      */
-    #[ORM\OneToMany(targetEntity: CCalendarEvent::class, mappedBy: 'parentEvent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentEvent')]
     protected Collection $children;
 
     /**

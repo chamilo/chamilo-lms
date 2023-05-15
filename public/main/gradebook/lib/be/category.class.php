@@ -2196,7 +2196,7 @@ class Category implements GradebookItem
         $params['bottom'] = 0;
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
-        if (api_get_configuration_value('add_certificate_pdf_footer')) {
+        if ('true' === api_get_setting('certificate.add_certificate_pdf_footer')) {
             $pdf->setCertificateFooter();
         }
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);

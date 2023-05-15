@@ -40,14 +40,14 @@ class GradebookCategory
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'subCategories')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subCategories')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradebookCategory $parent = null;
 
     /**
      * @var GradebookCategory[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $subCategories;
 
     #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
@@ -118,6 +118,9 @@ class GradebookCategory
 
     #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
     protected ?int $gradeBooksToValidateInDependence = null;
+
+    #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected $allowSkillsBySubcategory;
 
     public function __construct()
     {
@@ -359,7 +362,7 @@ class GradebookCategory
     /**
      * @return GradebookComment[]|Collection
      */
-    public function getComments(): array|\Doctrine\Common\Collections\Collection
+    public function getComments(): array|Collection
     {
         return $this->comments;
     }
@@ -367,7 +370,7 @@ class GradebookCategory
     /**
      * @param GradebookComment[]|Collection $comments
      */
-    public function setComments(array|\Doctrine\Common\Collections\Collection $comments): self
+    public function setComments(array|Collection $comments): self
     {
         $this->comments = $comments;
 
@@ -401,7 +404,7 @@ class GradebookCategory
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getEvaluations(): array|\Doctrine\Common\Collections\Collection
+    public function getEvaluations(): array|Collection
     {
         return $this->evaluations;
     }
@@ -409,7 +412,7 @@ class GradebookCategory
     /**
      * @param GradebookEvaluation[]|Collection $evaluations
      */
-    public function setEvaluations(array|\Doctrine\Common\Collections\Collection $evaluations): self
+    public function setEvaluations(array|Collection $evaluations): self
     {
         $this->evaluations = $evaluations;
 
@@ -419,7 +422,7 @@ class GradebookCategory
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getLinks(): array|\Doctrine\Common\Collections\Collection
+    public function getLinks(): array|Collection
     {
         return $this->links;
     }
@@ -427,7 +430,7 @@ class GradebookCategory
     /**
      * @param GradebookLink[]|Collection $links
      */
-    public function setLinks(array|\Doctrine\Common\Collections\Collection $links): self
+    public function setLinks(array|Collection $links): self
     {
         $this->links = $links;
 
@@ -437,7 +440,7 @@ class GradebookCategory
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getSubCategories(): array|\Doctrine\Common\Collections\Collection
+    public function getSubCategories(): array|Collection
     {
         return $this->subCategories;
     }
@@ -481,7 +484,7 @@ class GradebookCategory
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getSkills(): array|\Doctrine\Common\Collections\Collection
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
@@ -489,9 +492,29 @@ class GradebookCategory
     /**
      * @param SkillRelGradebook[]|Collection $skills
      */
-    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills): self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllowSkillsBySubcategory()
+    {
+        return $this->allowSkillsBySubcategory;
+    }
+
+    /**
+     * @param int $allowSkillsBySubcategory
+     *
+     * @return GradebookCategory
+     */
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    {
+        $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
     }

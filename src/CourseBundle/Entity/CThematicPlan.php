@@ -9,12 +9,13 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic_plan')]
 #[ORM\Index(name: 'thematic_id', columns: ['thematic_id', 'description_type'])]
 #[ORM\Entity]
-class CThematicPlan implements \Stringable //extends AbstractResource implements ResourceInterface
+class CThematicPlan implements Stringable //extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

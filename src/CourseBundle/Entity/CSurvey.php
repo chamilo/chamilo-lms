@@ -13,13 +13,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_survey')]
 #[ORM\Index(name: 'idx_survey_code', columns: ['code'])]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CSurveyRepository::class)]
-class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
+class CSurvey extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -117,14 +118,14 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     protected Collection $invitations;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CSurvey $surveyParent = null;
 
     /**
      * @var Collection|CSurvey[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, mappedBy: 'surveyParent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'surveyParent')]
     protected Collection $children;
 
     /**
@@ -602,7 +603,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @return CSurveyQuestion[]|Collection
      */
-    public function getQuestions(): array|\Doctrine\Common\Collections\Collection
+    public function getQuestions(): array|Collection
     {
         return $this->questions;
     }
@@ -665,7 +666,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @return CSurvey[]|Collection
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }
@@ -673,7 +674,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @param CSurvey[]|Collection $children
      */
-    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
+    public function setChildren(array|Collection $children): self
     {
         $this->children = $children;
 
@@ -683,7 +684,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @return CSurveyQuestionOption[]|Collection
      */
-    public function getOptions(): array|\Doctrine\Common\Collections\Collection
+    public function getOptions(): array|Collection
     {
         return $this->options;
     }
@@ -698,7 +699,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @return CSurveyInvitation[]|Collection
      */
-    public function getInvitations(): array|\Doctrine\Common\Collections\Collection
+    public function getInvitations(): array|Collection
     {
         return $this->invitations;
     }
@@ -706,7 +707,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @param CSurveyInvitation[]|Collection $invitations
      */
-    public function setInvitations(array|\Doctrine\Common\Collections\Collection $invitations): self
+    public function setInvitations(array|Collection $invitations): self
     {
         $this->invitations = $invitations;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -19,8 +20,10 @@ class IndexBlocksController extends BaseController
     private bool $isAdmin = false;
     private bool $isSessionAdmin = false;
 
-    public function __construct(private TranslatorInterface $translator, private SettingsManager $settingsManager)
-    {
+    public function __construct(
+        private TranslatorInterface $translator,
+        private SettingsManager $settingsManager
+    ) {
     }
 
     public function __invoke(): JsonResponse
@@ -130,7 +133,7 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Anonymise users list'),
             ];
 
-            if (isset($extAuthSource, $extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
+            if (isset($extAuthSource, $extAuthSource['extldap']) && \count($extAuthSource['extldap']) > 0) {
                 $items[] = [
                     'class' => 'item-user-ldap-list',
                     'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_users_list.php']),
@@ -172,7 +175,7 @@ class IndexBlocksController extends BaseController
                 $items = array_filter($items, function (array $item) {
                     $urls = ['user_list.php', 'user_add.php'];
 
-                    return in_array($item['url'], $urls);
+                    return \in_array($item['url'], $urls, true);
                 });
             }
 
@@ -180,7 +183,7 @@ class IndexBlocksController extends BaseController
                 $items = array_filter($items, function (array $item) {
                     $urls = ['user_list.php'];
 
-                    return !in_array($item['url'], $urls);
+                    return !\in_array($item['url'], $urls, true);
                 });
             }
 
@@ -271,7 +274,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (isset($extAuthSource, $extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+        if (isset($extAuthSource, $extAuthSource['ldap']) && \count($extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students.php']),
@@ -422,7 +425,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
 
         if ($allowJustification) {
             $items[] = [
@@ -469,7 +472,7 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import_drh.php']),
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
-        if (isset($extAuthSource, $extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+        if (isset($extAuthSource, $extAuthSource['ldap']) && \count($extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students_to_session.php']),

@@ -8,9 +8,6 @@ namespace Chamilo\LtiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Token.
- */
 #[ORM\Table(name: 'lti_token')]
 #[ORM\Entity]
 class Token

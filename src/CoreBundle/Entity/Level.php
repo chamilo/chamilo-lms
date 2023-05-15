@@ -8,13 +8,14 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 
 /**
  * Skill level.
  */
 #[ORM\Table(name: 'skill_level')]
 #[ORM\Entity]
-class Level implements \Stringable
+class Level implements Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

@@ -8,9 +8,6 @@ namespace Chamilo\LtiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Platform.
- */
 #[ORM\Table(name: 'lti_platform')]
 #[ORM\Entity]
 class Platform

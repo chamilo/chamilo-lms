@@ -7,10 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'resource_right')]
 #[ORM\Entity]
-class ResourceRight implements \Stringable
+class ResourceRight implements Stringable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]

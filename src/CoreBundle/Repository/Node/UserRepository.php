@@ -494,15 +494,15 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             // All users
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
-                /*$dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
-                        WITH U = R.user
-                        WHERE
-                            U.active = 1 AND
-                            U.status != 6  AND
-                            U.id != {$currentUserId} AND
-                            R.url = {$accessUrlId}";*/
+            /*$dql = "SELECT DISTINCT U
+                    FROM ChamiloCoreBundle:User U
+                    LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                    WITH U = R.user
+                    WHERE
+                        U.active = 1 AND
+                        U.status != 6  AND
+                        U.id != {$currentUserId} AND
+                        R.url = {$accessUrlId}";*/
             } else {
                 $this->addOnlyMyFriendsQueryBuilder($currentUserId, $qb);
                 /*$dql = 'SELECT DISTINCT U

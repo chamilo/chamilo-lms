@@ -12,11 +12,12 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_forum_category')]
 #[ORM\Entity(repositoryClass: CForumCategoryRepository::class)]
-class CForumCategory extends AbstractResource implements ResourceInterface, \Stringable
+class CForumCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -133,7 +134,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, \Str
      *
      * @return Collection|CForum[]
      */
-    public function getForums(): \Doctrine\Common\Collections\Collection|array
+    public function getForums(): Collection|array
     {
         return $this->forums;
     }

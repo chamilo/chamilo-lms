@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Gedmo\Tree\Traits\NestedSetEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'resource_comment')]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity(repositoryClass: \Gedmo\Tree\Entity\Repository\NestedTreeRepository::class)]
+#[ORM\Entity(repositoryClass: NestedTreeRepository::class)]
 class ResourceComment
 {
     use TimestampableTypedEntity;
@@ -39,12 +40,12 @@ class ResourceComment
     #[Groups(['comment:read'])]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
     #[Groups(['comment:read'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $author;
 
@@ -55,7 +56,7 @@ class ResourceComment
 
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     protected ?ResourceComment $parent = null;
 
     #[Groups(['comment:read'])]
@@ -69,9 +70,9 @@ class ResourceComment
     protected DateTime $updatedAt;
 
     /**
-     * @var Collection|ResourceComment[]
+     * @var Collection<int, ResourceComment>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
@@ -136,17 +137,14 @@ class ResourceComment
     }
 
     /**
-     * @return ResourceComment[]|Collection
+     * @return Collection<int, ResourceComment>
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * @param ResourceComment[]|Collection $children
-     */
-    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

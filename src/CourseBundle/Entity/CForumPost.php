@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_forum_post_thread_id', columns: ['thread_id'])]
 #[ORM\Index(name: 'idx_forum_post_visible', columns: ['visible'])]
 #[ORM\Entity(repositoryClass: CForumPostRepository::class)]
-class CForumPost extends AbstractResource implements ResourceInterface, \Stringable
+class CForumPost extends AbstractResource implements ResourceInterface, Stringable
 {
     public const STATUS_VALIDATED = 1;
     public const STATUS_WAITING_MODERATION = 2;
@@ -69,14 +70,14 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
     #[ORM\JoinColumn(name: 'poster_id', referencedColumnName: 'id')]
     protected ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: CForumPost::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'post_parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CForumPost $postParent = null;
 
     /**
      * @var Collection|CForumPost[]
      */
-    #[ORM\OneToMany(targetEntity: CForumPost::class, mappedBy: 'postParent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'postParent')]
     protected Collection $children;
 
     /**
@@ -264,7 +265,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
     /**
      * @return CForumPost[]|Collection
      */
-    public function getChildren(): array|\Doctrine\Common\Collections\Collection
+    public function getChildren(): array|Collection
     {
         return $this->children;
     }
@@ -272,7 +273,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, \Stringa
     /**
      * @param CForumPost[]|Collection $children
      */
-    public function setChildren(array|\Doctrine\Common\Collections\Collection $children): self
+    public function setChildren(array|Collection $children): self
     {
         $this->children = $children;
 

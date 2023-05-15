@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'fos_group')]
 #[ORM\Entity]
-class Group implements \Stringable
+class Group implements Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -33,11 +34,14 @@ class Group implements \Stringable
     #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\User::class, mappedBy: 'groups')]
     protected Collection $users;
 
-    public function __construct(#[Assert\NotBlank]
-        #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false, unique: true)]
-        protected string $name, #[ORM\Column(name: 'roles', type: 'array')]
-        protected array $roles = [])
-    {
+    public function __construct(
+        #[Assert\NotBlank]
+        #[ORM\Column(name: 'name', type: 'string', length: 255, unique: true, nullable: false)]
+        protected string $name,
+        #[ORM\Column(name: 'roles', type: 'array')]
+        protected array $roles = [
+        ]
+    ) {
         $this->users = new ArrayCollection();
     }
 
@@ -107,7 +111,7 @@ class Group implements \Stringable
     /**
      * @return User[]|Collection
      */
-    public function getUsers(): array|\Doctrine\Common\Collections\Collection
+    public function getUsers(): array|Collection
     {
         return $this->users;
     }

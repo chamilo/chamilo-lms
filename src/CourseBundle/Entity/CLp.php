@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_lp')]
 #[ORM\Entity(repositoryClass: CLpRepository::class)]
-class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
+class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
@@ -133,6 +134,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     #[ORM\Column(name: 'accumulate_work_time', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accumulateWorkTime;
+
+    #[ORM\Column(name: 'next_lp_id', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $nextLpId;
 
     #[ORM\OneToMany(targetEntity: CLpItem::class, mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;
@@ -639,9 +643,29 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     }
 
     /**
+     * @return int
+     */
+    public function getNextLpId(): int
+    {
+        return $this->nextLpId;
+    }
+
+    /**
+     * @param int $nextLpId
+     */
+    public function setNextLpId(int $nextLpId): self
+    {
+        $this->nextLpId = $nextLpId;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return CLpItem[]|Collection
      */
-    public function getItems(): array|\Doctrine\Common\Collections\Collection
+    public function getItems(): array|Collection
     {
         return $this->items;
     }
@@ -676,15 +700,12 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     /**
      * @return ArrayCollection|Collection|CForum[]
      */
-    public function getForums(): \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection|array
+    public function getForums(): ArrayCollection|Collection|array
     {
         return $this->forums;
     }
 
-    /**
-     * @param ArrayCollection|Collection $forums
-     */
-    public function setForums(\Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection $forums): self
+    public function setForums(ArrayCollection|Collection $forums): self
     {
         $this->forums = $forums;
 

@@ -21,14 +21,14 @@ class CSurveyQuestion
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: CSurveyQuestion::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
 
     /**
@@ -307,7 +307,7 @@ class CSurveyQuestion
     /**
      * @return Collection|CSurveyQuestion[]
      */
-    public function getChildren(): \Doctrine\Common\Collections\Collection|array
+    public function getChildren(): Collection|array
     {
         return $this->children;
     }
@@ -315,7 +315,7 @@ class CSurveyQuestion
     /**
      * @param Collection|CSurveyQuestion[] $children
      */
-    public function setChildren(\Doctrine\Common\Collections\Collection|array $children): self
+    public function setChildren(Collection|array $children): self
     {
         $this->children = $children;
 
@@ -349,7 +349,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyAnswer[]|Collection
      */
-    public function getAnswers(): array|\Doctrine\Common\Collections\Collection
+    public function getAnswers(): array|Collection
     {
         return $this->answers;
     }
@@ -357,7 +357,7 @@ class CSurveyQuestion
     /**
      * @return CSurveyQuestionOption[]|Collection
      */
-    public function getOptions(): array|\Doctrine\Common\Collections\Collection
+    public function getOptions(): array|Collection
     {
         return $this->options;
     }
@@ -365,7 +365,7 @@ class CSurveyQuestion
     /**
      * @param CSurveyQuestionOption[]|Collection $options
      */
-    public function setOptions(array|\Doctrine\Common\Collections\Collection $options): self
+    public function setOptions(array|Collection $options): self
     {
         $this->options = $options;
 

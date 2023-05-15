@@ -1,23 +1,22 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CShortcut;
@@ -27,17 +26,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
+use Stringable;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
+
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * Base entity for all resources.
- *
- *
- *
  */
 #[ApiResource(operations: [new Get(), new Put(), new Patch(), new Delete(), new GetCollection()], denormalizationContext: ['groups' => ['resource_node:write', 'document:write']], normalizationContext: ['groups' => ['resource_node:read', 'document:read']])]
 #[ORM\Table(name: 'resource_node')]
@@ -73,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(uriTemplate: '/c_tools/{iid}/resource_node/parent.{_format}', uriVariables: ['iid' => new Link(fromClass: \Chamilo\CourseBundle\Entity\CTool::class, identifiers: ['iid']), 'resourceNode' => new Link(fromClass: self::class, identifiers: [], expandedValue: 'resource_node')], status: 200, filters: ['annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_order_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_serializer_filter_property_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_search_filter'], normalizationContext: ['groups' => ['resource_node:read', 'document:read']], operations: [new Get()])]
 #[ApiResource(uriTemplate: '/c_tool_intros/{iid}/resource_node.{_format}', uriVariables: ['iid' => new Link(fromClass: \Chamilo\CourseBundle\Entity\CToolIntro::class, identifiers: ['iid'])], status: 200, filters: ['annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_order_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_serializer_filter_property_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_search_filter'], normalizationContext: ['groups' => ['resource_node:read', 'document:read']], operations: [new Get()])]
 #[ApiResource(uriTemplate: '/c_tool_intros/{iid}/resource_node/parent.{_format}', uriVariables: ['iid' => new Link(fromClass: \Chamilo\CourseBundle\Entity\CToolIntro::class, identifiers: ['iid']), 'resourceNode' => new Link(fromClass: self::class, identifiers: [], expandedValue: 'resource_node')], status: 200, filters: ['annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_order_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_serializer_filter_property_filter', 'annotated_chamilo_core_bundle_entity_resource_node_api_platform_core_bridge_doctrine_orm_filter_search_filter'], normalizationContext: ['groups' => ['resource_node:read', 'document:read']], operations: [new Get()])]
-class ResourceNode implements \Stringable
+class ResourceNode implements Stringable
 {
     use TimestampableTypedEntity;
     use TimestampableAgoTrait;
@@ -116,12 +114,12 @@ class ResourceNode implements \Stringable
     protected User $creator;
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     protected ?ResourceNode $parent = null;
     /**
      * @var Collection|ResourceNode[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
     #[Gedmo\TreeLevel]
@@ -172,11 +170,11 @@ class ResourceNode implements \Stringable
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getPathForDisplay();
     }
-    public function getUuid() : ?UuidV4
+    public function getUuid(): ?UuidV4
     {
         return $this->uuid;
     }
@@ -189,17 +187,18 @@ class ResourceNode implements \Stringable
     {
         return $this->id;
     }
-    public function hasCreator() : bool
+    public function hasCreator(): bool
     {
         return null !== $this->creator;
     }
-    public function getCreator() : ?User
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
-    public function setCreator(User $creator) : self
+    public function setCreator(User $creator): self
     {
         $this->creator = $creator;
+
         return $this;
     }
     /**
@@ -207,29 +206,30 @@ class ResourceNode implements \Stringable
      *
      * @return Collection|ResourceNode[]
      */
-    public function getChildren() : \Doctrine\Common\Collections\Collection|array
+    public function getChildren(): Collection|array
     {
         return $this->children;
     }
     /**
      * Sets the parent resource.
      */
-    public function setParent(self $parent = null) : self
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
+
         return $this;
     }
     /**
      * Returns the parent resource.
      */
-    public function getParent() : ?\Chamilo\CoreBundle\Entity\ResourceNode
+    public function getParent(): ?self
     {
         return $this->parent;
     }
     /**
      * Return the lvl value of the resource in the tree.
      */
-    public function getLevel() : int
+    public function getLevel(): int
     {
         return $this->level;
     }
@@ -247,26 +247,27 @@ class ResourceNode implements \Stringable
     /**
      * @return Collection|ResourceComment[]
      */
-    public function getComments() : \Doctrine\Common\Collections\Collection|array
+    public function getComments(): Collection|array
     {
         return $this->comments;
     }
-    public function addComment(ResourceComment $comment) : self
+    public function addComment(ResourceComment $comment): self
     {
         $comment->setResourceNode($this);
         $this->comments->add($comment);
+
         return $this;
     }
     /**
      * Returns the path cleaned from its ids.
      * Eg.: "Root/subdir/file.txt".
      */
-    public function getPathForDisplay() : string
+    public function getPathForDisplay(): string
     {
         return $this->path;
         //return $this->convertPathForDisplay($this->path);
     }
-    public function getPathForDisplayToArray(?int $baseRoot = null) : array
+    public function getPathForDisplayToArray(?int $baseRoot = null): array
     {
         $parts = explode(self::PATH_SEPARATOR, $this->path);
         $list = [];
@@ -282,40 +283,45 @@ class ResourceNode implements \Stringable
             }
             $list[$id] = $value;
         }
+
         return $list;
     }
-    public function getPathForDisplayRemoveBase(string $base) : string
+    public function getPathForDisplayRemoveBase(string $base): string
     {
         $path = str_replace($base, '', $this->path);
+
         return $this->convertPathForDisplay($path);
     }
-    public function getSlug() : string
+    public function getSlug(): string
     {
         return $this->slug;
     }
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
-    public function setTitle(string $title) : self
+    public function setTitle(string $title): self
     {
         $title = str_replace('/', '-', $title);
         $this->title = $title;
+
         return $this;
     }
-    public function setSlug(string $slug) : self
+    public function setSlug(string $slug): self
     {
         if (str_contains(self::PATH_SEPARATOR, $slug)) {
-            $message = 'Invalid character "' . self::PATH_SEPARATOR . '" in resource name';
+            $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
+
             throw new InvalidArgumentException($message);
         }
         $this->slug = $slug;
+
         return $this;
     }
     /**
      * Convert a path for display: remove ids.
      */
-    public function convertPathForDisplay(string $path) : string
+    public function convertPathForDisplay(string $path): string
     {
         /*$pathForDisplay = preg_replace(
               '/-\d+'.self::PATH_SEPARATOR.'/',
@@ -326,45 +332,49 @@ class ResourceNode implements \Stringable
               $pathForDisplay = substr_replace($pathForDisplay, '', -3);
           }
           */
-        $pathForDisplay = preg_replace('/-\\d+\\' . self::PATH_SEPARATOR . '/', '/', $path);
+        $pathForDisplay = preg_replace('/-\\d+\\'.self::PATH_SEPARATOR.'/', '/', $path);
         if (null !== $pathForDisplay && '' !== $pathForDisplay) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }
+
         return $pathForDisplay;
     }
-    public function getResourceType() : ResourceType
+    public function getResourceType(): ResourceType
     {
         return $this->resourceType;
     }
-    public function setResourceType(ResourceType $resourceType) : self
+    public function setResourceType(ResourceType $resourceType): self
     {
         $this->resourceType = $resourceType;
+
         return $this;
     }
-    public function getResourceLinks() : Collection
+    public function getResourceLinks(): Collection
     {
         return $this->resourceLinks;
     }
-    public function addResourceLink(ResourceLink $link) : self
+    public function addResourceLink(ResourceLink $link): self
     {
         $link->setResourceNode($this);
         $this->resourceLinks->add($link);
+
         return $this;
     }
-    public function setResourceLinks(Collection $resourceLinks) : self
+    public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
+
         return $this;
     }
-    public function hasResourceFile() : bool
+    public function hasResourceFile(): bool
     {
         return null !== $this->resourceFile;
     }
-    public function getResourceFile() : ?ResourceFile
+    public function getResourceFile(): ?ResourceFile
     {
         return $this->resourceFile;
     }
-    public function hasEditableTextContent() : bool
+    public function hasEditableTextContent(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -372,9 +382,10 @@ class ResourceNode implements \Stringable
                 return true;
             }
         }
+
         return false;
     }
-    public function isResourceFileAnImage() : bool
+    public function isResourceFileAnImage(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -382,9 +393,10 @@ class ResourceNode implements \Stringable
                 return true;
             }
         }
+
         return false;
     }
-    public function isResourceFileAVideo() : bool
+    public function isResourceFileAVideo(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -392,17 +404,19 @@ class ResourceNode implements \Stringable
                 return true;
             }
         }
+
         return false;
     }
-    public function setResourceFile(?ResourceFile $resourceFile = null) : self
+    public function setResourceFile(?ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
         if (null !== $resourceFile) {
             $resourceFile->setResourceNode($this);
         }
+
         return $this;
     }
-    public function getIcon() : string
+    public function getIcon(): string
     {
         $class = 'fa fa-folder';
         if ($this->hasResourceFile()) {
@@ -414,9 +428,10 @@ class ResourceNode implements \Stringable
                 $class = 'far fa-file-video';
             }
         }
-        return '<i class="' . $class . '"></i>';
+
+        return '<i class="'.$class.'"></i>';
     }
-    public function getThumbnail(RouterInterface $router) : string
+    public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
         $class = sprintf('fa fa-folder %s', $size);
@@ -424,41 +439,51 @@ class ResourceNode implements \Stringable
             $class = sprintf('far fa-file %s', $size);
             if ($this->isResourceFileAnImage()) {
                 $class = sprintf('far fa-file-image %s', $size);
-                $params = ['id' => $this->getId(), 'tool' => $this->getResourceType()->getTool(), 'type' => $this->getResourceType()->getName(), 'filter' => 'editor_thumbnail'];
+                $params = [
+                    'id' => $this->getId(),
+                    'tool' => $this->getResourceType()->getTool(),
+                    'type' => $this->getResourceType()->getName(),
+                    'filter' => 'editor_thumbnail',
+                ];
                 $url = $router->generate('chamilo_core_resource_view', $params);
+
                 return sprintf("<img src='%s'/>", $url);
             }
             if ($this->isResourceFileAVideo()) {
                 $class = sprintf('far fa-file-video %s', $size);
             }
         }
-        return '<i class="' . $class . '"></i>';
+
+        return '<i class="'.$class.'"></i>';
     }
-    public function getContent() : ?string
+    public function getContent(): ?string
     {
         return $this->content;
     }
-    public function setContent(string $content) : self
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
-    public function getShortCut() : ?CShortcut
+    public function getShortCut(): ?CShortcut
     {
         return $this->shortCut;
     }
-    public function setShortCut(?CShortcut $shortCut) : self
+    public function setShortCut(?CShortcut $shortCut): self
     {
         $this->shortCut = $shortCut;
+
         return $this;
     }
-    public function isPublic() : bool
+    public function isPublic(): bool
     {
         return $this->public;
     }
-    public function setPublic(bool $public) : self
+    public function setPublic(bool $public): self
     {
         $this->public = $public;
+
         return $this;
     }
 }

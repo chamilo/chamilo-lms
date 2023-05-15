@@ -1,26 +1,26 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Associations between users.
  */
@@ -72,30 +72,33 @@ class UserRelUser
     {
         $this->relationType = self::USER_RELATION_TYPE_FRIEND;
     }
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->user;
     }
-    public function setUser(User $user) : self
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
-    public function getFriend() : User
+    public function getFriend(): User
     {
         return $this->friend;
     }
-    public function setFriend(User $friend) : self
+    public function setFriend(User $friend): self
     {
         $this->friend = $friend;
+
         return $this;
     }
-    public function setRelationType(int $relationType) : self
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
+
         return $this;
     }
-    public function getRelationType() : ?int
+    public function getRelationType(): ?int
     {
         return $this->relationType;
     }

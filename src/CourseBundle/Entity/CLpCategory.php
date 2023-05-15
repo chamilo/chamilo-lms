@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_lp_category')]
 #[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
-class CLpCategory extends AbstractResource implements ResourceInterface, \Stringable
+class CLpCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -97,7 +98,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, \String
     /**
      * @return Collection|CLp[]
      */
-    public function getLps(): \Doctrine\Common\Collections\Collection|array
+    public function getLps(): Collection|array
     {
         return $this->lps;
     }

@@ -11,12 +11,13 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(name: 'active', columns: ['active'])]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CAttendanceRepository::class)]
-class CAttendance extends AbstractResource implements ResourceInterface, \Stringable
+class CAttendance extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -202,7 +203,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, \String
     /**
      * @return CAttendanceSheetLog[]|Collection
      */
-    public function getLogs(): array|\Doctrine\Common\Collections\Collection
+    public function getLogs(): array|Collection
     {
         return $this->logs;
     }
@@ -210,7 +211,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, \String
     /**
      * @param CAttendanceSheetLog[]|Collection $logs
      */
-    public function setLogs(array|\Doctrine\Common\Collections\Collection $logs): self
+    public function setLogs(array|Collection $logs): self
     {
         $this->logs = $logs;
 
@@ -220,7 +221,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, \String
     /**
      * @return CAttendanceResult[]|Collection
      */
-    public function getResults(): array|\Doctrine\Common\Collections\Collection
+    public function getResults(): array|Collection
     {
         return $this->results;
     }

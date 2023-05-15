@@ -603,7 +603,7 @@ class CourseController extends ToolBaseController
 
     private function variableSubstitution(
         array $params,
-        array &$customParams,
+        array & $customParams,
         User $user,
         Course $course,
         Session $session = null
@@ -757,7 +757,7 @@ class CourseController extends ToolBaseController
         ];
     }
 
-    private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
+    private function createLtiLink(array & $contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
         $newTool->setToolParent($baseTool);

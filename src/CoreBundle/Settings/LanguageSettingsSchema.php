@@ -32,6 +32,8 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'user_name_order' => '',
                     'user_name_sort' => '',
                     'language_flags_by_country' => 'false',
+                    'allow_course_multiple_languages' => 'false',
+                    'template_activate_language_filter' => 'false',
                 ]
             )
         ;
@@ -92,6 +94,8 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             ->add('hide_dltt_markup')
             ->add('show_language_selector_in_menu', YesNoType::class)
             ->add('language_flags_by_country', YesNoType::class)
+            ->add('allow_course_multiple_languages', YesNoType::class)
+            ->add('template_activate_language_filter', YesNoType::class)
         ;
 
         $choices = [

@@ -1,20 +1,12 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -24,15 +16,17 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_CURRENT_COURSE_TEACHER\')', denormalizationContext: ['groups' => ['ctool:write']], normalizationContext: ['groups' => ['ctool:read']])]
 #[ORM\Table(name: 'c_tool')]
 #[ORM\Index(name: 'course', columns: ['c_id'])]
 #[ORM\Index(name: 'session_id', columns: ['session_id'])]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CToolRepository::class)]
-class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, \Stringable
+class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[Groups(['ctool:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -65,81 +59,87 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->visibility = true;
         $this->position = 0;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getName();
     }
-    public function getNameToTranslate() : string
+    public function getNameToTranslate(): string
     {
         return ucfirst(str_replace('_', ' ', $this->name));
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    public function getIid() : ?int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
-    public function setCourse(Course $course) : self
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
+
         return $this;
     }
-    public function getCourse() : Course
+    public function getCourse(): Course
     {
         return $this->course;
     }
-    public function getSession() : ?Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
-    public function setSession(Session $session = null) : self
+    public function setSession(Session $session = null): self
     {
         $this->session = $session;
+
         return $this;
     }
-    public function setVisibility(bool $visibility) : self
+    public function setVisibility(bool $visibility): self
     {
         $this->visibility = $visibility;
+
         return $this;
     }
-    public function getVisibility() : ?bool
+    public function getVisibility(): ?bool
     {
         return $this->visibility;
     }
-    public function getTool() : Tool
+    public function getTool(): Tool
     {
         return $this->tool;
     }
-    public function setTool(Tool $tool) : self
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
+
         return $this;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function setPosition(int $position) : self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
+
         return $this;
     }
-    public function getResourceIdentifier() : int
+    public function getResourceIdentifier(): int
     {
         return $this->iid;
     }
-    public function getResourceName() : string
+    public function getResourceName(): string
     {
         return $this->getName();
     }
-    public function setResourceName(string $name) : self
+    public function setResourceName(string $name): self
     {
         return $this->setName($name);
     }

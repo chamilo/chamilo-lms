@@ -1,31 +1,26 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
-use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\Get;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SkillRepository::class)]
-class Skill implements \Stringable
+class Skill implements Stringable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
@@ -99,34 +94,37 @@ class Skill implements \Stringable
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getName();
     }
-    public function setName(string $name) : self
+    public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
-    public function getShortCode() : string
+    public function getShortCode(): string
     {
         return $this->shortCode;
     }
-    public function setShortCode(string $shortCode) : self
+    public function setShortCode(string $shortCode): self
     {
         $this->shortCode = $shortCode;
+
         return $this;
     }
-    public function setDescription(string $description) : self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -138,6 +136,7 @@ class Skill implements \Stringable
     public function setAccessUrlId(int $accessUrlId)
     {
         $this->accessUrlId = $accessUrlId;
+
         return $this;
     }
     /**
@@ -149,9 +148,10 @@ class Skill implements \Stringable
     {
         return $this->accessUrlId;
     }
-    public function setIcon(string $icon) : self
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
+
         return $this;
     }
     /**
@@ -163,9 +163,10 @@ class Skill implements \Stringable
     {
         return $this->icon;
     }
-    public function setCriteria(string $criteria) : self
+    public function setCriteria(string $criteria): self
     {
         $this->criteria = $criteria;
+
         return $this;
     }
     /**
@@ -177,9 +178,10 @@ class Skill implements \Stringable
     {
         return $this->criteria;
     }
-    public function setStatus(int $status) : self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
+
         return $this;
     }
     /**
@@ -201,6 +203,7 @@ class Skill implements \Stringable
     public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
     /**
@@ -228,9 +231,10 @@ class Skill implements \Stringable
     {
         return $this->profile;
     }
-    public function setProfile(Profile $profile) : self
+    public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
+
         return $this;
     }
     /**
@@ -249,12 +253,13 @@ class Skill implements \Stringable
     {
         return $this->items;
     }
-    public function setItems(ArrayCollection $items) : self
+    public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
+
         return $this;
     }
-    public function hasItem(int $typeId, int $itemId) : bool
+    public function hasItem(int $typeId, int $itemId): bool
     {
         if (0 !== $this->getItems()->count()) {
             $found = false;
@@ -262,14 +267,17 @@ class Skill implements \Stringable
             foreach ($this->getItems() as $item) {
                 if ($item->getItemId() === $itemId && $item->getItemType() === $typeId) {
                     $found = true;
+
                     break;
                 }
             }
+
             return $found;
         }
+
         return false;
     }
-    public function addItem(SkillRelItem $skillRelItem) : void
+    public function addItem(SkillRelItem $skillRelItem): void
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
@@ -281,55 +289,59 @@ class Skill implements \Stringable
     {
         return $this->courses;
     }
-    public function setCourses(ArrayCollection $courses) : self
+    public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
+
         return $this;
     }
     /**
      * @return SkillRelSkill[]|Collection
      */
-    public function getSkills() : array|\Doctrine\Common\Collections\Collection
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
     /**
      * @param SkillRelSkill[]|Collection $skills
      */
-    public function setSkills(array|\Doctrine\Common\Collections\Collection $skills) : self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
+
         return $this;
     }
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getGradeBookCategories() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookCategories(): array|Collection
     {
         return $this->gradeBookCategories;
     }
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
      */
-    public function setGradeBookCategories(array|\Doctrine\Common\Collections\Collection $gradeBookCategories) : self
+    public function setGradeBookCategories(array|Collection $gradeBookCategories): self
     {
         $this->gradeBookCategories = $gradeBookCategories;
+
         return $this;
     }
-    public function hasAsset() : bool
+    public function hasAsset(): bool
     {
         return null !== $this->asset;
     }
-    public function getAsset() : ?Asset
+    public function getAsset(): ?Asset
     {
         return $this->asset;
     }
-    public function setAsset(?Asset $asset) : self
+    public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
+
         return $this;
     }
-    public function hasCourseAndSession(SkillRelCourse $searchItem) : bool
+    public function hasCourseAndSession(SkillRelCourse $searchItem): bool
     {
         if (0 !== $this->getCourses()->count()) {
             $found = false;
@@ -344,14 +356,17 @@ class Skill implements \Stringable
                 }
                 if ($item->getCourse()->getId() === $searchItem->getCourse()->getId() && $sessionPassFilter) {
                     $found = true;
+
                     break;
                 }
             }
+
             return $found;
         }
+
         return false;
     }
-    public function addToCourse(SkillRelCourse $item) : void
+    public function addToCourse(SkillRelCourse $item): void
     {
         $item->setSkill($this);
         $this->courses[] = $item;

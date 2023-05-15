@@ -19,8 +19,13 @@ class ResourceNodeListener
 {
     //protected $accessUrl;
 
-    public function __construct(protected SlugifyInterface $slugify, protected ToolChain $toolChain, protected RequestStack $request, protected Security $security, protected ResourceNodeRepository $resourceNodeRepository)
-    {
+    public function __construct(
+        protected SlugifyInterface $slugify,
+        protected ToolChain $toolChain,
+        protected RequestStack $request,
+        protected Security $security,
+        protected ResourceNodeRepository $resourceNodeRepository
+    ) {
     }
 
     /*public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)

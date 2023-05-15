@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'c_forum_forum')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CForumRepository::class)]
-class CForum extends AbstractResource implements ResourceInterface, \Stringable
+class CForum extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -193,10 +194,7 @@ class CForum extends AbstractResource implements ResourceInterface, \Stringable
         return $this;
     }
 
-    /**
-     * Get forumCategory.
-     */
-    public function getForumCategory(): ?\Chamilo\CourseBundle\Entity\CForumCategory
+    public function getForumCategory(): ?CForumCategory
     {
         return $this->forumCategory;
     }
@@ -447,7 +445,7 @@ class CForum extends AbstractResource implements ResourceInterface, \Stringable
      *
      * @return Collection|CForumThread[]
      */
-    public function getThreads(): \Doctrine\Common\Collections\Collection|array
+    public function getThreads(): Collection|array
     {
         return $this->threads;
     }
@@ -479,7 +477,7 @@ class CForum extends AbstractResource implements ResourceInterface, \Stringable
     /**
      * @return Collection|CForumPost[]
      */
-    public function getPosts(): \Doctrine\Common\Collections\Collection|array
+    public function getPosts(): Collection|array
     {
         return $this->posts;
     }

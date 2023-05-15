@@ -12,11 +12,12 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_exercise_category')]
 #[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
-class CExerciseCategory extends AbstractResource implements ResourceInterface, \Stringable
+class CExerciseCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     use TimestampableEntity;
 

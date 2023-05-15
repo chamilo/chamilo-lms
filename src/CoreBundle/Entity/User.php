@@ -1,21 +1,21 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
@@ -48,10 +49,10 @@ use UserManager;
     types: ['http://schema.org/Person'],
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
-        new Put(security: 'is_granted(\'EDIT\', object)'),
-        new Delete(security: 'is_granted(\'DELETE\', object)'),
-        new GetCollection(security: 'is_granted(\'ROLE_USER\')'),
-        new Post(security: 'is_granted(\'ROLE_ADMIN\')')
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
@@ -64,7 +65,7 @@ use UserManager;
 #[ORM\EntityListeners([UserListener::class])]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['username' => 'partial', 'firstname' => 'partial', 'lastname' => 'partial'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, \Stringable
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -83,7 +84,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public ?ResourceNode $resourceNode = null;
     /**
      * Resource illustration URL - Property set by ResourceNormalizer.php.
-     *
      */
     #[ApiProperty(iris: ['http://schema.org/contentUrl'])]
     #[Groups(['user_export', 'user:read', 'resource_node:read', 'document:read', 'media_object_read', 'course:read', 'course_rel_user:read', 'user_json:read', 'message:read', 'user_rel_user:read', 'social_post:read'])]
@@ -99,8 +99,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $username;
     #[ORM\Column(name: 'api_token', type: 'string', unique: true, nullable: true)]
     protected ?string $apiToken = null;
-    /**
-     */
+
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
     #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read'])]
@@ -193,7 +192,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     *
      * @var mixed[]|string[]
      */
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
@@ -202,7 +200,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'profile_completed', type: 'boolean', nullable: true)]
     protected ?bool $profileCompleted = null;
     /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
      */
     //protected $jurySubscriptions;
     /**
@@ -510,11 +508,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->receivedSocialPosts = new ArrayCollection();
         $this->socialPostsFeedbacks = new ArrayCollection();
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->username;
     }
-    public static function getPasswordConstraints() : array
+    public static function getPasswordConstraints(): array
     {
         return [
             new Assert\Length(['min' => 5]),
@@ -529,7 +527,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             new Assert\Regex(['pattern' => '/[0-9]{2}/', 'htmlPattern' => '/[0-9]{2}/']),
         ];
     }
-    public static function loadValidatorMetadata(ClassMetadata $metadata) : void
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
         //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
         //$metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
@@ -552,47 +550,51 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
               ))
           );*/
     }
-    public function getUuid() : UuidV4
+    public function getUuid(): UuidV4
     {
         return $this->uuid;
     }
-    public function setUuid(UuidV4 $uuid) : self
+    public function setUuid(UuidV4 $uuid): self
     {
         $this->uuid = $uuid;
+
         return $this;
     }
-    public function getResourceNode() : ?ResourceNode
+    public function getResourceNode(): ?ResourceNode
     {
         return $this->resourceNode;
     }
-    public function setResourceNode(ResourceNode $resourceNode) : self
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
+
         return $this;
     }
-    public function hasResourceNode() : bool
+    public function hasResourceNode(): bool
     {
         return $this->resourceNode instanceof ResourceNode;
     }
-    public function getResourceNodes() : Collection
+    public function getResourceNodes(): Collection
     {
         return $this->resourceNodes;
     }
     /**
      * @param Collection<int, ResourceNode>|ResourceNode[] $resourceNodes
      */
-    public function setResourceNodes(\Doctrine\Common\Collections\Collection|array $resourceNodes) : self
+    public function setResourceNodes(Collection|array $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
+
         return $this;
     }
-    public function getDropBoxSentFiles() : Collection
+    public function getDropBoxSentFiles(): Collection
     {
         return $this->dropBoxSentFiles;
     }
-    public function setDropBoxSentFiles(Collection $value) : self
+    public function setDropBoxSentFiles(Collection $value): self
     {
         $this->dropBoxSentFiles = $value;
+
         return $this;
     }
     /*public function getDropBoxReceivedFiles()
@@ -604,21 +606,23 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         {
             $this->dropBoxReceivedFiles = $value;
         }*/
-    public function getCourses() : Collection
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
     /**
      * @param Collection<int, CourseRelUser>|CourseRelUser[] $courses
      */
-    public function setCourses(\Doctrine\Common\Collections\Collection|array $courses) : self
+    public function setCourses(Collection|array $courses): self
     {
         $this->courses = $courses;
+
         return $this;
     }
-    public function setPortal(AccessUrlRelUser $portal) : self
+    public function setPortal(AccessUrlRelUser $portal): self
     {
         $this->portals->add($portal);
+
         return $this;
     }
     /*public function getCurriculumItems(): Collection
@@ -632,32 +636,34 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
             return $this;
         }*/
-    public function getIsActive() : bool
+    public function getIsActive(): bool
     {
         return $this->active;
     }
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->isActive();
     }
-    public function setEnabled(bool $boolean) : self
+    public function setEnabled(bool $boolean): self
     {
         $this->enabled = $boolean;
+
         return $this;
     }
-    public function getSalt() : ?string
+    public function getSalt(): ?string
     {
         return $this->salt;
     }
-    public function setSalt(string $salt) : self
+    public function setSalt(string $salt): self
     {
         $this->salt = $salt;
+
         return $this;
     }
     /**
      * Returns the list of classes for the user.
      */
-    public function getCompleteNameWithClasses() : string
+    public function getCompleteNameWithClasses(): string
     {
         $classSubscription = $this->getClasses();
         $classList = [];
@@ -666,367 +672,402 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $class = $subscription->getUsergroup();
             $classList[] = $class->getName();
         }
-        $classString = empty($classList) ? null : ' [' . implode(', ', $classList) . ']';
-        return UserManager::formatUserFullName($this) . $classString;
+        $classString = empty($classList) ? null : ' ['.implode(', ', $classList).']';
+
+        return UserManager::formatUserFullName($this).$classString;
     }
-    public function getClasses() : Collection
+    public function getClasses(): Collection
     {
         return $this->classes;
     }
     /**
      * @param Collection<int, UsergroupRelUser>|UsergroupRelUser[] $classes
      */
-    public function setClasses(\Doctrine\Common\Collections\Collection|array $classes) : self
+    public function setClasses(Collection|array $classes): self
     {
         $this->classes = $classes;
+
         return $this;
     }
-    public function getPassword() : ?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
-    public function setPassword(string $password) : self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
         return $this;
     }
-    public function getAuthSource() : ?string
+    public function getAuthSource(): ?string
     {
         return $this->authSource;
     }
-    public function setAuthSource(string $authSource) : self
+    public function setAuthSource(string $authSource): self
     {
         $this->authSource = $authSource;
+
         return $this;
     }
-    public function getEmail() : string
+    public function getEmail(): string
     {
         return $this->email;
     }
-    public function setEmail(string $email) : self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
-    public function getOfficialCode() : ?string
+    public function getOfficialCode(): ?string
     {
         return $this->officialCode;
     }
-    public function setOfficialCode(?string $officialCode) : self
+    public function setOfficialCode(?string $officialCode): self
     {
         $this->officialCode = $officialCode;
+
         return $this;
     }
-    public function getPhone() : ?string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
-    public function setPhone(?string $phone) : self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
         return $this;
     }
-    public function getAddress() : ?string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
-    public function setAddress(?string $address) : self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
+
         return $this;
     }
-    public function getCreatorId() : ?int
+    public function getCreatorId(): ?int
     {
         return $this->creatorId;
     }
-    public function setCreatorId(int $creatorId) : self
+    public function setCreatorId(int $creatorId): self
     {
         $this->creatorId = $creatorId;
+
         return $this;
     }
-    public function getCompetences() : ?string
+    public function getCompetences(): ?string
     {
         return $this->competences;
     }
-    public function setCompetences(?string $competences) : self
+    public function setCompetences(?string $competences): self
     {
         $this->competences = $competences;
+
         return $this;
     }
-    public function getDiplomas() : ?string
+    public function getDiplomas(): ?string
     {
         return $this->diplomas;
     }
-    public function setDiplomas(?string $diplomas) : self
+    public function setDiplomas(?string $diplomas): self
     {
         $this->diplomas = $diplomas;
+
         return $this;
     }
-    public function getOpenarea() : ?string
+    public function getOpenarea(): ?string
     {
         return $this->openarea;
     }
-    public function setOpenarea(?string $openarea) : self
+    public function setOpenarea(?string $openarea): self
     {
         $this->openarea = $openarea;
+
         return $this;
     }
-    public function getTeach() : ?string
+    public function getTeach(): ?string
     {
         return $this->teach;
     }
-    public function setTeach(?string $teach) : self
+    public function setTeach(?string $teach): self
     {
         $this->teach = $teach;
+
         return $this;
     }
-    public function getProductions() : ?string
+    public function getProductions(): ?string
     {
         return $this->productions;
     }
-    public function setProductions(?string $productions) : self
+    public function setProductions(?string $productions): self
     {
         $this->productions = $productions;
+
         return $this;
     }
-    public function getRegistrationDate() : DateTime
+    public function getRegistrationDate(): DateTime
     {
         return $this->registrationDate;
     }
-    public function setRegistrationDate(DateTime $registrationDate) : self
+    public function setRegistrationDate(DateTime $registrationDate): self
     {
         $this->registrationDate = $registrationDate;
+
         return $this;
     }
-    public function getExpirationDate() : ?DateTime
+    public function getExpirationDate(): ?DateTime
     {
         return $this->expirationDate;
     }
-    public function setExpirationDate(?DateTime $expirationDate) : self
+    public function setExpirationDate(?DateTime $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
+
         return $this;
     }
-    public function getActive() : bool
+    public function getActive(): bool
     {
         return $this->active;
     }
-    public function isActive() : bool
+    public function isActive(): bool
     {
         return $this->getIsActive();
     }
-    public function setActive(bool $active) : self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
+
         return $this;
     }
-    public function getOpenid() : ?string
+    public function getOpenid(): ?string
     {
         return $this->openid;
     }
-    public function setOpenid(string $openid) : self
+    public function setOpenid(string $openid): self
     {
         $this->openid = $openid;
+
         return $this;
     }
-    public function getTheme() : ?string
+    public function getTheme(): ?string
     {
         return $this->theme;
     }
-    public function setTheme(string $theme) : self
+    public function setTheme(string $theme): self
     {
         $this->theme = $theme;
+
         return $this;
     }
-    public function getHrDeptId() : ?int
+    public function getHrDeptId(): ?int
     {
         return $this->hrDeptId;
     }
-    public function setHrDeptId(int $hrDeptId) : self
+    public function setHrDeptId(int $hrDeptId): self
     {
         $this->hrDeptId = $hrDeptId;
+
         return $this;
     }
-    public function getMemberSince() : DateTime
+    public function getMemberSince(): DateTime
     {
         return $this->registrationDate;
     }
-    public function isOnline() : bool
+    public function isOnline(): bool
     {
         return false;
     }
-    public function getIdentifier() : int
+    public function getIdentifier(): int
     {
         return $this->getId();
     }
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function getIri() : ?string
+    public function getIri(): ?string
     {
         if (null === $this->id) {
             return null;
         }
-        return '/api/users/' . $this->getId();
+
+        return '/api/users/'.$this->getId();
     }
-    public function getSlug() : string
+    public function getSlug(): string
     {
         return $this->getUsername();
     }
-    public function getUsername() : string
+    public function getUsername(): string
     {
         return $this->username;
     }
-    public function getUserIdentifier() : string
+    public function getUserIdentifier(): string
     {
         return $this->username;
     }
-    public function setUsername(string $username) : self
+    public function setUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
-    public function setSlug(string $slug) : self
+    public function setSlug(string $slug): self
     {
         return $this->setUsername($slug);
     }
-    public function getLastLogin() : ?DateTime
+    public function getLastLogin(): ?DateTime
     {
         return $this->lastLogin;
     }
-    public function setLastLogin(DateTime $lastLogin = null) : self
+    public function setLastLogin(DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
+
         return $this;
     }
-    public function getConfirmationToken() : ?string
+    public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
-    public function setConfirmationToken(string $confirmationToken) : self
+    public function setConfirmationToken(string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+
         return $this;
     }
-    public function isPasswordRequestNonExpired(int $ttl) : bool
+    public function isPasswordRequestNonExpired(int $ttl): bool
     {
         return $this->getPasswordRequestedAt() instanceof DateTime && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
-    public function getPasswordRequestedAt() : ?DateTime
+    public function getPasswordRequestedAt(): ?DateTime
     {
         return $this->passwordRequestedAt;
     }
-    public function setPasswordRequestedAt(DateTime $date = null) : self
+    public function setPasswordRequestedAt(DateTime $date = null): self
     {
         $this->passwordRequestedAt = $date;
+
         return $this;
     }
-    public function getPlainPassword() : ?string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
-    public function setPlainPassword(string $password) : self
+    public function setPlainPassword(string $password): self
     {
         $this->plainPassword = $password;
         // forces the object to look "dirty" to Doctrine. Avoids
         // Doctrine *not* saving this entity, if only plainPassword changes
         $this->password = '';
+
         return $this;
     }
     /**
      * Returns the expiration date.
      */
-    public function getExpiresAt() : ?DateTime
+    public function getExpiresAt(): ?DateTime
     {
         return $this->expiresAt;
     }
-    public function setExpiresAt(DateTime $date) : self
+    public function setExpiresAt(DateTime $date): self
     {
         $this->expiresAt = $date;
+
         return $this;
     }
     /**
      * Returns the credentials expiration date.
      */
-    public function getCredentialsExpireAt() : ?DateTime
+    public function getCredentialsExpireAt(): ?DateTime
     {
         return $this->credentialsExpireAt;
     }
     /**
      * Sets the credentials expiration date.
      */
-    public function setCredentialsExpireAt(DateTime $date = null) : self
+    public function setCredentialsExpireAt(DateTime $date = null): self
     {
         $this->credentialsExpireAt = $date;
+
         return $this;
     }
-    public function getFullname() : string
+    public function getFullname(): string
     {
         if (empty($this->fullName)) {
             return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
         }
+
         return $this->fullName;
     }
-    public function getFirstname() : ?string
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
-    public function setFirstname(string $firstname) : self
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
+
         return $this;
     }
-    public function getLastname() : ?string
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
-    public function setLastname(string $lastname) : self
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
         return $this;
     }
-    public function hasGroup(string $name) : bool
+    public function hasGroup(string $name): bool
     {
         return \in_array($name, $this->getGroupNames(), true);
     }
-    public function getGroupNames() : array
+    public function getGroupNames(): array
     {
         $names = [];
         foreach ($this->getGroups() as $group) {
             $names[] = $group->getName();
         }
+
         return $names;
     }
-    public function getGroups() : Collection
+    public function getGroups(): Collection
     {
         return $this->groups;
     }
     /**
      * Sets the user groups.
      */
-    public function setGroups(Collection $groups) : self
+    public function setGroups(Collection $groups): self
     {
         foreach ($groups as $group) {
             $this->addGroup($group);
         }
+
         return $this;
     }
-    public function addGroup(Group $group) : self
+    public function addGroup(Group $group): self
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
         }
+
         return $this;
     }
-    public function removeGroup(Group $group) : self
+    public function removeGroup(Group $group): self
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
         }
+
         return $this;
     }
-    public function isAccountNonExpired() : bool
+    public function isAccountNonExpired(): bool
     {
         /*if (true === $this->expired) {
                     return false;
@@ -1037,12 +1078,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 }*/
         return true;
     }
-    public function isAccountNonLocked() : bool
+    public function isAccountNonLocked(): bool
     {
         return true;
         //return !$this->locked;
     }
-    public function isCredentialsNonExpired() : bool
+    public function isCredentialsNonExpired(): bool
     {
         /*if (true === $this->credentialsExpired) {
                     return false;
@@ -1053,34 +1094,37 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 }*/
         return true;
     }
-    public function getCredentialsExpired() : bool
+    public function getCredentialsExpired(): bool
     {
         return $this->credentialsExpired;
     }
-    public function setCredentialsExpired(bool $boolean) : self
+    public function setCredentialsExpired(bool $boolean): self
     {
         $this->credentialsExpired = $boolean;
+
         return $this;
     }
-    public function getExpired() : bool
+    public function getExpired(): bool
     {
         return $this->expired;
     }
     /**
      * Sets this user to expired.
      */
-    public function setExpired(bool $boolean) : self
+    public function setExpired(bool $boolean): self
     {
         $this->expired = $boolean;
+
         return $this;
     }
-    public function getLocked() : bool
+    public function getLocked(): bool
     {
         return $this->locked;
     }
-    public function setLocked(bool $boolean) : self
+    public function setLocked(bool $boolean): self
     {
         $this->locked = $boolean;
+
         return $this;
     }
     /**
@@ -1088,80 +1132,86 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @param Skill $skill The skill
      */
-    public function hasSkill(Skill $skill) : bool
+    public function hasSkill(Skill $skill): bool
     {
         $achievedSkills = $this->getAchievedSkills();
         foreach ($achievedSkills as $userSkill) {
             if ($userSkill->getSkill()->getId() !== $skill->getId()) {
                 continue;
             }
+
             return true;
         }
+
         return false;
     }
-    public function getAchievedSkills() : Collection
+    public function getAchievedSkills(): Collection
     {
         return $this->achievedSkills;
     }
     /**
      * @param Collection<int, SkillRelUser>|SkillRelUser[] $value
      */
-    public function setAchievedSkills(\Doctrine\Common\Collections\Collection|array $value) : self
+    public function setAchievedSkills(Collection|array $value): self
     {
         $this->achievedSkills = $value;
+
         return $this;
     }
-    public function isProfileCompleted() : ?bool
+    public function isProfileCompleted(): ?bool
     {
         return $this->profileCompleted;
     }
-    public function setProfileCompleted(?bool $profileCompleted) : self
+    public function setProfileCompleted(?bool $profileCompleted): self
     {
         $this->profileCompleted = $profileCompleted;
+
         return $this;
     }
-    public function getCurrentUrl() : ?AccessUrl
+    public function getCurrentUrl(): ?AccessUrl
     {
         return $this->currentUrl;
     }
-    public function setCurrentUrl(AccessUrl $url) : self
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $accessUrlRelUser = (new AccessUrlRelUser())->setUrl($url)->setUser($this);
         $this->getPortals()->add($accessUrlRelUser);
+
         return $this;
     }
-    public function getPortals() : Collection
+    public function getPortals(): Collection
     {
         return $this->portals;
     }
     /**
      * @param AccessUrlRelUser[]|Collection<int, AccessUrlRelUser> $value
      */
-    public function setPortals(array|\Doctrine\Common\Collections\Collection $value) : void
+    public function setPortals(array|Collection $value): void
     {
         $this->portals = $value;
     }
-    public function getSessionsAsGeneralCoach() : array
+    public function getSessionsAsGeneralCoach(): array
     {
         return $this->getSessions(Session::GENERAL_COACH);
     }
-    public function getSessionsAsAdmin() : array
+    public function getSessionsAsAdmin(): array
     {
         return $this->getSessions(Session::SESSION_ADMIN);
     }
-    public function getCommentedUserSkills() : Collection
+    public function getCommentedUserSkills(): Collection
     {
         return $this->commentedUserSkills;
     }
     /**
      * @param Collection<int, SkillRelUserComment>|SkillRelUserComment[] $commentedUserSkills
      */
-    public function setCommentedUserSkills(\Doctrine\Common\Collections\Collection|array $commentedUserSkills) : self
+    public function setCommentedUserSkills(Collection|array $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
+
         return $this;
     }
-    public function isEqualTo(UserInterface $user) : bool
+    public function isEqualTo(UserInterface $user): bool
     {
         if ($this->password !== $user->getPassword()) {
             return false;
@@ -1172,39 +1222,41 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         if ($this->username !== $user->getUserIdentifier()) {
             return false;
         }
+
         return true;
     }
-    public function getSentMessages() : Collection
+    public function getSentMessages(): Collection
     {
         return $this->sentMessages;
     }
-    public function getReceivedMessages() : Collection
+    public function getReceivedMessages(): Collection
     {
         return $this->receivedMessages;
     }
-    public function getCourseGroupsAsMember() : Collection
+    public function getCourseGroupsAsMember(): Collection
     {
         return $this->courseGroupsAsMember;
     }
-    public function getCourseGroupsAsTutor() : Collection
+    public function getCourseGroupsAsTutor(): Collection
     {
         return $this->courseGroupsAsTutor;
     }
-    public function getCourseGroupsAsMemberFromCourse(Course $course) : Collection
+    public function getCourseGroupsAsMemberFromCourse(Course $course): Collection
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('cId', $course));
+
         return $this->courseGroupsAsMember->matching($criteria);
     }
-    public function eraseCredentials() : void
+    public function eraseCredentials(): void
     {
         $this->plainPassword = null;
     }
-    public function isSuperAdmin() : bool
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole('ROLE_SUPER_ADMIN');
     }
-    public static function getRoleFromStatus(int $status) : string
+    public static function getRoleFromStatus(int $status): string
     {
         return match ($status) {
             COURSEMANAGER => 'ROLE_TEACHER',
@@ -1216,19 +1268,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             default => 'ROLE_USER',
         };
     }
-    public function setRoleFromStatus(int $status) : void
+    public function setRoleFromStatus(int $status): void
     {
         $role = self::getRoleFromStatus($status);
         $this->addRole($role);
     }
-    public function hasRole(string $role) : bool
+    public function hasRole(string $role): bool
     {
         return \in_array(strtoupper($role), $this->getRoles(), true);
     }
     /**
      * Returns the user roles.
      */
-    public function getRoles() : array
+    public function getRoles(): array
     {
         $roles = $this->roles;
         foreach ($this->getGroups() as $group) {
@@ -1236,17 +1288,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
         // we need to make sure to have at least one role
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
-    public function setRoles(array $roles) : self
+    public function setRoles(array $roles): self
     {
         $this->roles = [];
         foreach ($roles as $role) {
             $this->addRole($role);
         }
+
         return $this;
     }
-    public function addRole(string $role) : self
+    public function addRole(string $role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT || empty($role)) {
@@ -1255,244 +1309,259 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
+
         return $this;
     }
-    public function removeRole(string $role) : self
+    public function removeRole(string $role): self
     {
         if (false !== ($key = array_search(strtoupper($role), $this->roles, true))) {
             unset($this->roles[$key]);
             $this->roles = array_values($this->roles);
         }
+
         return $this;
     }
-    public function getUsernameCanonical() : string
+    public function getUsernameCanonical(): string
     {
         return $this->usernameCanonical;
     }
-    public function setUsernameCanonical(string $usernameCanonical) : self
+    public function setUsernameCanonical(string $usernameCanonical): self
     {
         $this->usernameCanonical = $usernameCanonical;
+
         return $this;
     }
-    public function getEmailCanonical() : string
+    public function getEmailCanonical(): string
     {
         return $this->emailCanonical;
     }
-    public function setEmailCanonical(string $emailCanonical) : self
+    public function setEmailCanonical(string $emailCanonical): self
     {
         $this->emailCanonical = $emailCanonical;
+
         return $this;
     }
-    public function getTimezone() : string
+    public function getTimezone(): string
     {
         return $this->timezone;
     }
-    public function setTimezone(string $timezone) : self
+    public function setTimezone(string $timezone): self
     {
         $this->timezone = $timezone;
+
         return $this;
     }
-    public function getLocale() : string
+    public function getLocale(): string
     {
         return $this->locale;
     }
-    public function setLocale(string $locale) : self
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
+
         return $this;
     }
-    public function getApiToken() : ?string
+    public function getApiToken(): ?string
     {
         return $this->apiToken;
     }
-    public function setApiToken(string $apiToken) : self
+    public function setApiToken(string $apiToken): self
     {
         $this->apiToken = $apiToken;
+
         return $this;
     }
-    public function getWebsite() : ?string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
-    public function setWebsite(string $website) : self
+    public function setWebsite(string $website): self
     {
         $this->website = $website;
+
         return $this;
     }
-    public function getBiography() : ?string
+    public function getBiography(): ?string
     {
         return $this->biography;
     }
-    public function setBiography(string $biography) : self
+    public function setBiography(string $biography): self
     {
         $this->biography = $biography;
+
         return $this;
     }
-    public function getDateOfBirth() : ?DateTime
+    public function getDateOfBirth(): ?DateTime
     {
         return $this->dateOfBirth;
     }
-    public function setDateOfBirth(DateTime $dateOfBirth = null) : self
+    public function setDateOfBirth(DateTime $dateOfBirth = null): self
     {
         $this->dateOfBirth = $dateOfBirth;
+
         return $this;
     }
-    public function getProfileUrl() : string
+    public function getProfileUrl(): string
     {
-        return '/main/social/profile.php?u=' . $this->id;
+        return '/main/social/profile.php?u='.$this->id;
     }
-    public function getIconStatus() : string
+    public function getIconStatus(): string
     {
         $hasCertificates = $this->getGradeBookCertificates()->count() > 0;
         $urlImg = '/img/';
         if ($this->isStudent()) {
-            $iconStatus = $urlImg . 'icons/svg/identifier_student.svg';
+            $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
             if ($hasCertificates) {
-                $iconStatus = $urlImg . 'icons/svg/identifier_graduated.svg';
+                $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
             }
+
             return $iconStatus;
         }
         if ($this->isTeacher()) {
-            $iconStatus = $urlImg . 'icons/svg/identifier_teacher.svg';
+            $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
             if ($this->isAdmin()) {
-                $iconStatus = $urlImg . 'icons/svg/identifier_admin.svg';
+                $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
             }
+
             return $iconStatus;
         }
         if ($this->isStudentBoss()) {
-            return $urlImg . 'icons/svg/identifier_teacher.svg';
+            return $urlImg.'icons/svg/identifier_teacher.svg';
         }
+
         return '';
     }
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
-    public function setStatus(int $status) : self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
+
         return $this;
     }
-    public function getPictureUri() : ?string
+    public function getPictureUri(): ?string
     {
         return $this->pictureUri;
     }
-    public function getGradeBookCertificates() : Collection
+    public function getGradeBookCertificates(): Collection
     {
         return $this->gradeBookCertificates;
     }
     /**
      * @param Collection<int, GradebookCertificate>|GradebookCertificate[] $gradeBookCertificates
      */
-    public function setGradeBookCertificates(\Doctrine\Common\Collections\Collection|array $gradeBookCertificates) : self
+    public function setGradeBookCertificates(Collection|array $gradeBookCertificates): self
     {
         $this->gradeBookCertificates = $gradeBookCertificates;
+
         return $this;
     }
-    public function isStudent() : bool
+    public function isStudent(): bool
     {
         return $this->hasRole('ROLE_STUDENT');
     }
-    public function isStudentBoss() : bool
+    public function isStudentBoss(): bool
     {
         return $this->hasRole('ROLE_STUDENT_BOSS');
     }
-    public function isTeacher() : bool
+    public function isTeacher(): bool
     {
         return $this->hasRole('ROLE_TEACHER');
     }
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return $this->hasRole('ROLE_ADMIN');
     }
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getGradeBookCategories() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookCategories(): array|Collection
     {
         return $this->gradeBookCategories;
     }
     /**
      * @return GradebookComment[]|Collection
      */
-    public function getGradeBookComments() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookComments(): array|Collection
     {
         return $this->gradeBookComments;
     }
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getGradeBookEvaluations() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookEvaluations(): array|Collection
     {
         return $this->gradeBookEvaluations;
     }
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getGradeBookLinks() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookLinks(): array|Collection
     {
         return $this->gradeBookLinks;
     }
     /**
      * @return GradebookResult[]|Collection
      */
-    public function getGradeBookResults() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookResults(): array|Collection
     {
         return $this->gradeBookResults;
     }
     /**
      * @return GradebookResultLog[]|Collection
      */
-    public function getGradeBookResultLogs() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookResultLogs(): array|Collection
     {
         return $this->gradeBookResultLogs;
     }
     /**
      * @return GradebookScoreLog[]|Collection
      */
-    public function getGradeBookScoreLogs() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookScoreLogs(): array|Collection
     {
         return $this->gradeBookScoreLogs;
     }
     /**
      * @return GradebookLinkevalLog[]|Collection
      */
-    public function getGradeBookLinkEvalLogs() : array|\Doctrine\Common\Collections\Collection
+    public function getGradeBookLinkEvalLogs(): array|Collection
     {
         return $this->gradeBookLinkEvalLogs;
     }
     /**
      * @return UserRelCourseVote[]|Collection
      */
-    public function getUserRelCourseVotes() : array|\Doctrine\Common\Collections\Collection
+    public function getUserRelCourseVotes(): array|Collection
     {
         return $this->userRelCourseVotes;
     }
     /**
      * @return UserRelTag[]|Collection
      */
-    public function getUserRelTags() : array|\Doctrine\Common\Collections\Collection
+    public function getUserRelTags(): array|Collection
     {
         return $this->userRelTags;
     }
     /**
      * @return PersonalAgenda[]|Collection
      */
-    public function getPersonalAgendas() : array|\Doctrine\Common\Collections\Collection
+    public function getPersonalAgendas(): array|Collection
     {
         return $this->personalAgendas;
     }
     /**
      * @return Collection|mixed[]
      */
-    public function getCurriculumItems() : \Doctrine\Common\Collections\Collection|array
+    public function getCurriculumItems(): Collection|array
     {
         return $this->curriculumItems;
     }
     /**
      * @return UserRelUser[]|Collection
      */
-    public function getFriends() : array|\Doctrine\Common\Collections\Collection
+    public function getFriends(): array|Collection
     {
         return $this->friends;
     }
@@ -1501,89 +1570,89 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Collection<int, UserRelUser>
      */
-    public function getFriendsByRelationType(int $relationType) : Collection
+    public function getFriendsByRelationType(int $relationType): Collection
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('relationType', $relationType));
+
         return $this->friends->matching($criteria);
     }
     /**
      * @return UserRelUser[]|Collection
      */
-    public function getFriendsWithMe() : array|\Doctrine\Common\Collections\Collection
+    public function getFriendsWithMe(): array|Collection
     {
         return $this->friendsWithMe;
     }
-    public function addFriend(self $friend) : self
+    public function addFriend(self $friend): self
     {
         return $this->addUserRelUser($friend, UserRelUser::USER_RELATION_TYPE_FRIEND);
     }
-    public function addUserRelUser(self $friend, int $relationType) : self
+    public function addUserRelUser(self $friend, int $relationType): self
     {
         $userRelUser = (new UserRelUser())->setUser($this)->setFriend($friend)->setRelationType($relationType);
         $this->friends->add($userRelUser);
+
         return $this;
     }
     /**
      * @return Templates[]|Collection
      */
-    public function getTemplates() : array|\Doctrine\Common\Collections\Collection
+    public function getTemplates(): array|Collection
     {
         return $this->templates;
     }
-    /**
-     * @return ArrayCollection|Collection
-     */
-    public function getDropBoxReceivedFiles() : \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
+    public function getDropBoxReceivedFiles(): ArrayCollection|Collection
     {
         return $this->dropBoxReceivedFiles;
     }
     /**
      * @return SequenceValue[]|Collection
      */
-    public function getSequenceValues() : array|\Doctrine\Common\Collections\Collection
+    public function getSequenceValues(): array|Collection
     {
         return $this->sequenceValues;
     }
     /**
      * @return TrackEExerciseConfirmation[]|Collection
      */
-    public function getTrackEExerciseConfirmations() : array|\Doctrine\Common\Collections\Collection
+    public function getTrackEExerciseConfirmations(): array|Collection
     {
         return $this->trackEExerciseConfirmations;
     }
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getTrackEAccessCompleteList() : array|\Doctrine\Common\Collections\Collection
+    public function getTrackEAccessCompleteList(): array|Collection
     {
         return $this->trackEAccessCompleteList;
     }
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getTrackEAttempts() : array|\Doctrine\Common\Collections\Collection
+    public function getTrackEAttempts(): array|Collection
     {
         return $this->trackEAttempts;
     }
     /**
      * @return TrackECourseAccess[]|Collection
      */
-    public function getTrackECourseAccess() : array|\Doctrine\Common\Collections\Collection
+    public function getTrackECourseAccess(): array|Collection
     {
         return $this->trackECourseAccess;
     }
     /**
      * @return UserCourseCategory[]|Collection
      */
-    public function getUserCourseCategories() : array|\Doctrine\Common\Collections\Collection
+    public function getUserCourseCategories(): array|Collection
     {
         return $this->userCourseCategories;
     }
-    public function getCourseGroupsAsTutorFromCourse(Course $course) : Collection
+    public function getCourseGroupsAsTutorFromCourse(Course $course): Collection
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('cId', $course->getId()));
+
         return $this->courseGroupsAsTutor->matching($criteria);
     }
     /**
@@ -1591,29 +1660,31 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getSessionsAsStudent() : array
+    public function getSessionsAsStudent(): array
     {
         return $this->getSessions(Session::STUDENT);
     }
     /**
      * @return SessionRelUser[]|Collection
      */
-    public function getSessionsRelUser() : array|\Doctrine\Common\Collections\Collection
+    public function getSessionsRelUser(): array|Collection
     {
         return $this->sessionsRelUser;
     }
-    public function addSessionRelUser(SessionRelUser $sessionSubscription) : static
+    public function addSessionRelUser(SessionRelUser $sessionSubscription): static
     {
         $this->sessionsRelUser->add($sessionSubscription);
+
         return $this;
     }
-    public function isSkipResourceNode() : bool
+    public function isSkipResourceNode(): bool
     {
         return $this->skipResourceNode;
     }
-    public function setSkipResourceNode(bool $skipResourceNode) : self
+    public function setSkipResourceNode(bool $skipResourceNode): self
     {
         $this->skipResourceNode = $skipResourceNode;
+
         return $this;
     }
     /**
@@ -1621,7 +1692,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getSessions(int $relationType) : array
+    public function getSessions(int $relationType): array
     {
         $sessions = [];
         foreach ($this->getSessionsRelUser() as $sessionRelUser) {
@@ -1629,6 +1700,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 $sessions[] = $sessionRelUser->getSession();
             }
         }
+
         return $sessions;
     }
     /**
@@ -1636,7 +1708,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getDRHSessions() : array
+    public function getDRHSessions(): array
     {
         return $this->getSessions(Session::DRH);
     }
@@ -1645,7 +1717,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getCurrentlyAccessibleSessions(int $relationType = Session::STUDENT) : array
+    public function getCurrentlyAccessibleSessions(int $relationType = Session::STUDENT): array
     {
         $sessions = [];
         foreach ($this->getSessions($relationType) as $session) {
@@ -1653,38 +1725,41 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 $sessions[] = $session;
             }
         }
+
         return $sessions;
     }
-    public function getResourceIdentifier() : int
+    public function getResourceIdentifier(): int
     {
         return $this->id;
     }
-    public function getResourceName() : string
+    public function getResourceName(): string
     {
         return $this->getUsername();
     }
-    public function setResourceName(string $name) : void
+    public function setResourceName(string $name): void
     {
         $this->setUsername($name);
     }
-    public function setParent(AbstractResource $parent) : void
+    public function setParent(AbstractResource $parent): void
     {
     }
-    public function getDefaultIllustration(int $size) : string
+    public function getDefaultIllustration(int $size): string
     {
         $size = empty($size) ? 32 : $size;
+
         return sprintf('/img/icons/%s/unknown.png', $size);
     }
-    public function getAdmin() : ?Admin
+    public function getAdmin(): ?Admin
     {
         return $this->admin;
     }
-    public function setAdmin(?Admin $admin) : self
+    public function setAdmin(?Admin $admin): self
     {
         $this->admin = $admin;
+
         return $this;
     }
-    public function addUserAsAdmin() : self
+    public function addUserAsAdmin(): self
     {
         if (null === $this->admin) {
             $admin = new Admin();
@@ -1692,74 +1767,81 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $this->setAdmin($admin);
             $this->addRole('ROLE_ADMIN');
         }
+
         return $this;
     }
-    public function getSessionsByStatusInCourseSubscription(int $status) : Collection
+    public function getSessionsByStatusInCourseSubscription(int $status): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
-        return $this->getSessionRelCourseRelUsers()->matching($criteria)->map(fn(SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession());
+
+        return $this->getSessionRelCourseRelUsers()->matching($criteria)->map(fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession());
     }
     /**
      * @return SessionRelCourseRelUser[]|Collection
      */
-    public function getSessionRelCourseRelUsers() : array|\Doctrine\Common\Collections\Collection
+    public function getSessionRelCourseRelUsers(): array|Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
     /**
      * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
      */
-    public function setSessionRelCourseRelUsers(array|\Doctrine\Common\Collections\Collection $sessionRelCourseRelUsers) : self
+    public function setSessionRelCourseRelUsers(array|Collection $sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
+
         return $this;
     }
-    public function getGender() : ?string
+    public function getGender(): ?string
     {
         return $this->gender;
     }
-    public function setGender(?string $gender) : self
+    public function setGender(?string $gender): self
     {
         $this->gender = $gender;
+
         return $this;
     }
     /**
      * @return CSurveyInvitation[]|Collection
      */
-    public function getSurveyInvitations() : array|\Doctrine\Common\Collections\Collection
+    public function getSurveyInvitations(): array|Collection
     {
         return $this->surveyInvitations;
     }
-    public function setSurveyInvitations(Collection $surveyInvitations) : self
+    public function setSurveyInvitations(Collection $surveyInvitations): self
     {
         $this->surveyInvitations = $surveyInvitations;
+
         return $this;
     }
     /**
      * @return TrackELogin[]|Collection
      */
-    public function getLogins() : array|\Doctrine\Common\Collections\Collection
+    public function getLogins(): array|Collection
     {
         return $this->logins;
     }
-    public function setLogins(Collection $logins) : self
+    public function setLogins(Collection $logins): self
     {
         $this->logins = $logins;
+
         return $this;
     }
     /**
      * @return MessageTag[]|Collection
      */
-    public function getMessageTags() : array|\Doctrine\Common\Collections\Collection
+    public function getMessageTags(): array|Collection
     {
         return $this->messageTags;
     }
     /**
      * @param MessageTag[]|Collection $messageTags
      */
-    public function setMessageTags(array|\Doctrine\Common\Collections\Collection $messageTags) : self
+    public function setMessageTags(array|Collection $messageTags): self
     {
         $this->messageTags = $messageTags;
+
         return $this;
     }
     /**
@@ -1773,72 +1855,79 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @param null|UserCourseCategory $userCourseCategory the user_course_category
      */
-    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null) : int
+    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))->andWhere(Criteria::expr()->eq('userCourseCat', $userCourseCategory)));
-        return $categoryCourses->isEmpty() ? 0 : max($categoryCourses->map(fn($courseRelUser) => $courseRelUser->getSort())->toArray());
+
+        return $categoryCourses->isEmpty() ? 0 : max($categoryCourses->map(fn ($courseRelUser) => $courseRelUser->getSort())->toArray());
     }
-    public function setFullName(string $fullName) : self
+    public function setFullName(string $fullName): self
     {
         $this->fullName = $fullName;
+
         return $this;
     }
-    public function hasFriendWithRelationType(self $friend, int $relationType) : bool
+    public function hasFriendWithRelationType(self $friend, int $relationType): bool
     {
         $friends = $this->getFriendsByRelationType($relationType);
-        return $friends->exists(fn(int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
+
+        return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
     }
     /**
      * @return Collection<int, SocialPost>
      */
-    public function getSentSocialPosts() : Collection
+    public function getSentSocialPosts(): Collection
     {
         return $this->sentSocialPosts;
     }
-    public function addSentSocialPost(SocialPost $sentSocialPost) : self
+    public function addSentSocialPost(SocialPost $sentSocialPost): self
     {
         if (!$this->sentSocialPosts->contains($sentSocialPost)) {
             $this->sentSocialPosts[] = $sentSocialPost;
             $sentSocialPost->setSender($this);
         }
+
         return $this;
     }
     /**
      * @return Collection<int, SocialPost>
      */
-    public function getReceivedSocialPosts() : Collection
+    public function getReceivedSocialPosts(): Collection
     {
         return $this->receivedSocialPosts;
     }
-    public function addReceivedSocialPost(SocialPost $receivedSocialPost) : self
+    public function addReceivedSocialPost(SocialPost $receivedSocialPost): self
     {
         if (!$this->receivedSocialPosts->contains($receivedSocialPost)) {
             $this->receivedSocialPosts[] = $receivedSocialPost;
             $receivedSocialPost->setUserReceiver($this);
         }
+
         return $this;
     }
     /**
      * @return Collection<int, SocialPostFeedback>
      */
-    public function getSocialPostsFeedbacks() : Collection
+    public function getSocialPostsFeedbacks(): Collection
     {
         return $this->socialPostsFeedbacks;
     }
-    public function getSocialPostFeedbackBySocialPost(SocialPost $post) : ?SocialPostFeedback
+    public function getSocialPostFeedbackBySocialPost(SocialPost $post): ?SocialPostFeedback
     {
-        $filtered = $this->getSocialPostsFeedbacks()->filter(fn(SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post);
+        $filtered = $this->getSocialPostsFeedbacks()->filter(fn (SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post);
         if ($filtered->count() > 0) {
             return $filtered->first();
         }
+
         return null;
     }
-    public function addSocialPostFeedback(SocialPostFeedback $socialPostFeedback) : self
+    public function addSocialPostFeedback(SocialPostFeedback $socialPostFeedback): self
     {
         if (!$this->socialPostsFeedbacks->contains($socialPostFeedback)) {
             $this->socialPostsFeedbacks[] = $socialPostFeedback;
             $socialPostFeedback->setUser($this);
         }
+
         return $this;
     }
 }

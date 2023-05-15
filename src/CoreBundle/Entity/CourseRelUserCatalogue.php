@@ -8,12 +8,13 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Table(name: 'course_rel_user_catalogue')]
 #[ORM\Index(name: 'course_rel_user_catalogue_user_id', columns: ['user_id'])]
 #[ORM\Index(name: 'course_rel_user_catalogue_c_id', columns: ['c_id'])]
 #[ORM\Entity]
-class CourseRelUserCatalogue implements \Stringable
+class CourseRelUserCatalogue implements Stringable
 {
     use UserTrait;
 

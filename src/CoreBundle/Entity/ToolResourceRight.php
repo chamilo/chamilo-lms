@@ -8,13 +8,14 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * ToolResourceRight.
  */
 #[ORM\Table(name: 'tool_resource_right')]
 #[ORM\Entity]
-class ToolResourceRight implements \Stringable
+class ToolResourceRight implements Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -31,9 +32,6 @@ class ToolResourceRight implements \Stringable
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected ?Tool $tool = null;
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string) $this->getMask();

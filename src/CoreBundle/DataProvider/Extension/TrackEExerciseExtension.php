@@ -17,8 +17,9 @@ use Symfony\Component\Security\Core\Security;
 
 final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {
-    public function __construct(private readonly Security $security)
-    {
+    public function __construct(
+        private readonly Security $security
+    ) {
     }
 
     public function applyToCollection(

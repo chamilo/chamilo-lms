@@ -1,27 +1,27 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource(
     operations: [
         new Get(security: 'is_granted(\'ROLE_USER\')'),
@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['page:read', 'timestampable_created:read', 'timestampable_updated:read'],
     ],
     denormalizationContext: [
-        'groups' => ['page:write']
+        'groups' => ['page:write'],
     ]
 )]
 #[ORM\Table(name: 'page')]
@@ -97,89 +97,98 @@ class Page
     {
         $this->enabled = false;
     }
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
-    public function setTitle(string $title) : self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
-    public function getContent() : string
+    public function getContent(): string
     {
         return $this->content;
     }
-    public function setContent(string $content) : self
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
         return $this;
     }
-    public function getSlug() : string
+    public function getSlug(): string
     {
         return $this->slug;
     }
-    public function setSlug(string $slug) : self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
         return $this;
     }
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
-    public function setEnabled(bool $enabled) : self
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
         return $this;
     }
-    public function getLocale() : string
+    public function getLocale(): string
     {
         return $this->locale;
     }
-    public function setLocale(string $locale) : self
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
+
         return $this;
     }
-    public function getUrl() : AccessUrl
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }
-    public function setUrl(AccessUrl $url) : self
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
+
         return $this;
     }
-    public function getCreator() : User
+    public function getCreator(): User
     {
         return $this->creator;
     }
-    public function setCreator(User $creator) : self
+    public function setCreator(User $creator): self
     {
         $this->creator = $creator;
+
         return $this;
     }
-    public function getPosition() : int
+    public function getPosition(): int
     {
         return $this->position;
     }
-    public function setPosition(int $position) : self
+    public function setPosition(int $position): self
     {
         $this->position = $position;
+
         return $this;
     }
-    public function getCategory() : ?PageCategory
+    public function getCategory(): ?PageCategory
     {
         return $this->category;
     }
-    public function setCategory(PageCategory $category) : self
+    public function setCategory(PageCategory $category): self
     {
         $this->category = $category;
+
         return $this;
     }
 }

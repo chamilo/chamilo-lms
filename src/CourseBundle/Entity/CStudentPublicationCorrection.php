@@ -10,11 +10,12 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication_correction')]
 #[ORM\Entity(repositoryClass: CStudentPublicationCorrectionRepository::class)]
-class CStudentPublicationCorrection extends AbstractResource implements ResourceInterface, \Stringable
+class CStudentPublicationCorrection extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

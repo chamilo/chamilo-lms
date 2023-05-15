@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_quiz_question')]
 #[ORM\Index(name: 'position', columns: ['position'])]
 #[ORM\Entity(repositoryClass: CQuizQuestionRepository::class)]
-class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stringable
+class CQuizQuestion extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -298,7 +299,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @return CQuizQuestionCategory[]|Collection
      */
-    public function getCategories(): array|\Doctrine\Common\Collections\Collection
+    public function getCategories(): array|Collection
     {
         return $this->categories;
     }
@@ -306,7 +307,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @return CQuizRelQuestion[]|Collection
      */
-    public function getRelQuizzes(): array|\Doctrine\Common\Collections\Collection
+    public function getRelQuizzes(): array|Collection
     {
         return $this->relQuizzes;
     }
@@ -314,7 +315,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @return CQuizAnswer[]|Collection
      */
-    public function getAnswers(): array|\Doctrine\Common\Collections\Collection
+    public function getAnswers(): array|Collection
     {
         return $this->answers;
     }
@@ -327,7 +328,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @return CQuizQuestionOption[]|Collection
      */
-    public function getOptions(): array|\Doctrine\Common\Collections\Collection
+    public function getOptions(): array|Collection
     {
         return $this->options;
     }
@@ -335,7 +336,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, \Stri
     /**
      * @param CQuizQuestionOption[]|Collection $options
      */
-    public function setOptions(array|\Doctrine\Common\Collections\Collection $options): self
+    public function setOptions(array|Collection $options): self
     {
         $this->options = $options;
 

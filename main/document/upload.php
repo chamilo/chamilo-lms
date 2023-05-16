@@ -257,7 +257,7 @@ $form->addElement('hidden', 'curdirpath', $path);
 
 $courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
 $label =
-    get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
+    get_lang('MaxFileSize').': '.getIniMaxFileSizeInBytes(true).'<br/>'.
     get_lang('DocumentQuota').': '.$courseQuota;
 
 $form->addElement('BigUpload', 'file', [get_lang('File'), $label], ['id' => 'bigUploadFile', 'data-origin' => 'document']);

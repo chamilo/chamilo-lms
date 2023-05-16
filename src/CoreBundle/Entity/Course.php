@@ -58,27 +58,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
-#[ApiResource(
-    uriTemplate: '/track_course_rankings/{id}/course.{_format}',
-    types: ['https://schema.org/Course'],
-    operations: [new Get()],
-    uriVariables: [
-        'id' => new Link(
-            fromClass: TrackCourseRanking::class,
-            identifiers: ['id']
-        ),
-    ],
-    status: 200,
-    normalizationContext: [
-        'groups' => ['course:read'],
-    ],
-    filters: [
-        'course.sticky_boolean_filter',
-        'annotated_chamilo_core_bundle_entity_course_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-        'annotated_chamilo_core_bundle_entity_course_api_platform_serializer_filter_property_filter',
-        'annotated_chamilo_core_bundle_entity_course_api_platform_core_bridge_doctrine_orm_filter_order_filter',
-    ]
-)]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;

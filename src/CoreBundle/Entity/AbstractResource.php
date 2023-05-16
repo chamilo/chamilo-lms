@@ -59,7 +59,6 @@ abstract class AbstractResource
     public ?string $illustrationUrl = null;
 
     #[Assert\Valid]
-    #[ApiSubresource]
     #[Groups([
         'resource_node:read',
         'resource_node:write',

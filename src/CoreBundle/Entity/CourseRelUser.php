@@ -62,33 +62,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: [
         'groups' => ['course_rel_user:read', 'user:read'],
     ],
-    filters: [
-        'annotated_chamilo_core_bundle_entity_course_rel_user_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-    ]
-)]
-#[ApiResource(
-    uriTemplate: '/track_course_rankings/{id}/course/users.{_format}',
-    operations: [
-        new GetCollection(),
-    ],
-    uriVariables: [
-        'id' => new Link(
-            fromClass: TrackCourseRanking::class,
-            identifiers: ['id']
-        ),
-        'course' => new Link(
-            fromClass: Course::class,
-            identifiers: [],
-            expandedValue: 'course'
-        ),
-    ],
-    status: 200,
-    normalizationContext: [
-        'groups' => ['course_rel_user:read', 'user:read'],
-    ],
-    filters: [
-        'annotated_chamilo_core_bundle_entity_course_rel_user_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-    ]
 )]
 #[ApiResource(
     uriTemplate: '/users/{id}/courses.{_format}',
@@ -105,9 +78,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: [
         'groups' => ['course_rel_user:read', 'user:read'],
     ],
-    filters: [
-        'annotated_chamilo_core_bundle_entity_course_rel_user_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-    ]
 )]
 class CourseRelUser implements Stringable
 {

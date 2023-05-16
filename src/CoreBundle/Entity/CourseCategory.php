@@ -55,37 +55,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: [
         'groups' => ['course_category:read', 'course:read'],
     ],
-    filters: [
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_serializer_filter_property_filter',
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_core_bridge_doctrine_orm_filter_order_filter',
-    ]
-)]
-#[ApiResource(
-    uriTemplate: '/track_course_rankings/{id}/course/categories.{_format}',
-    operations: [
-        new GetCollection(),
-    ],
-    uriVariables: [
-        'id' => new Link(
-            fromClass: TrackCourseRanking::class,
-            identifiers: ['id']
-        ),
-        'course' => new Link(
-            fromClass: Course::class,
-            identifiers: [],
-            expandedValue: 'course'
-        ),
-    ],
-    status: 200,
-    normalizationContext: [
-        'groups' => ['course_category:read', 'course:read'],
-    ],
-    filters: [
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_core_bridge_doctrine_orm_filter_search_filter',
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_serializer_filter_property_filter',
-        'annotated_chamilo_core_bundle_entity_course_category_api_platform_core_bridge_doctrine_orm_filter_order_filter',
-    ]
 )]
 class CourseCategory implements Stringable
 {

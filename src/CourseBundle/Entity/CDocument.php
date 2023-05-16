@@ -30,14 +30,124 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(shortName: 'Documents', operations: [new Put(controller: UpdateDocumentFileAction::class, deserialize: false, security: 'is_granted(\'EDIT\', object.resourceNode)', validationContext: ['groups' => ['media_object_create', 'document:write']]), new Put(deserialize: false, security: 'is_granted(\'EDIT\', object.resourceNode)', uriTemplate: '/documents/{iid}/toggle_visibility', controller: UpdateVisibilityDocument::class), new Get(security: 'is_granted(\'VIEW\', object.resourceNode)'), new Delete(security: 'is_granted(\'DELETE\', object.resourceNode)'), new Post(controller: CreateDocumentFileAction::class, deserialize: false, security: 'is_granted(\'ROLE_CURRENT_COURSE_TEACHER\') or is_granted(\'ROLE_CURRENT_COURSE_SESSION_TEACHER\')', validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']], openapiContext: ['requestBody' => ['content' => ['multipart/form-data' => ['schema' => ['type' => 'object', 'properties' => ['title' => ['type' => 'string'], 'filetype' => ['type' => 'string', 'enum' => ['folder', 'file']], 'comment' => ['type' => 'string'], 'contentFile' => ['type' => 'string'], 'uploadFile' => ['type' => 'string', 'format' => 'binary'], 'parentResourceNodeId' => ['type' => 'integer'], 'resourceLinkList' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => ['visibility' => ['type' => 'integer'], 'cid' => ['type' => 'integer'], 'gid' => ['type' => 'integer'], 'sid' => ['type' => 'integer']]]]]]]]]]), new GetCollection(openapiContext: ['parameters' => [['name' => 'resourceNode.parent', 'in' => 'query', 'required' => true, 'description' => 'Resource node Parent', 'schema' => ['type' => 'integer']], ['name' => 'cid', 'in' => 'query', 'required' => true, 'description' => 'Course id', 'schema' => ['type' => 'integer']], ['name' => 'sid', 'in' => 'query', 'required' => false, 'description' => 'Session id', 'schema' => ['type' => 'integer']]]])], normalizationContext: ['groups' => ['document:read', 'resource_node:read']], denormalizationContext: ['groups' => ['document:write']])]
+#[ApiResource(
+    shortName: 'Documents',
+    operations: [
+        new Put(
+            controller: UpdateDocumentFileAction::class,
+            security: "is_granted('EDIT', object.resourceNode)",
+            validationContext: [
+                'groups' => ['media_object_create', 'document:write']
+            ],
+            deserialize: false
+        ),
+        new Put(
+            uriTemplate: '/documents/{iid}/toggle_visibility',
+            controller: UpdateVisibilityDocument::class,
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false
+        ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Post(
+            controller: CreateDocumentFileAction::class,
+            openapiContext: [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'title' => ['type' => 'string'],
+                                    'filetype' => [
+                                        'type' => 'string',
+                                        'enum' => ['folder', 'file']
+                                    ],
+                                    'comment' => ['type' => 'string'],
+                                    'contentFile' => ['type' => 'string'],
+                                    'uploadFile' => [
+                                        'type' => 'string',
+                                        'format' => 'binary'
+                                    ],
+                                    'parentResourceNodeId' => ['type' => 'integer'],
+                                    'resourceLinkList' => [
+                                        'type' => 'array',
+                                        'items' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'visibility' => ['type' => 'integer'],
+                                                'cid' => ['type' => 'integer'],
+                                                'gid' => ['type' => 'integer'],
+                                                'sid' => ['type' => 'integer']
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
+            deserialize: false
+        ),
+        new GetCollection(
+            openapiContext: [
+                'parameters' => [
+                    [
+                        'name' => 'resourceNode.parent',
+                        'in' => 'query',
+                        'required' => true,
+                        'description' => 'Resource node Parent',
+                        'schema' => ['type' => 'integer']
+                    ],
+                    [
+                        'name' => 'cid',
+                        'in' => 'query',
+                        'required' => true,
+                        'description' => 'Course id',
+                        'schema' => [
+                            'type' => 'integer'
+                        ]
+                    ],
+                    [
+                        'name' => 'sid',
+                        'in' => 'query',
+                        'required' => false,
+                        'description' => 'Session id',
+                        'schema' => [
+                            'type' => 'integer'
+                        ]
+                    ]
+                ]
+            ]
+        )
+    ],
+    normalizationContext: [
+        'groups' => ['document:read', 'resource_node:read']
+    ],
+    denormalizationContext: [
+        'groups' => ['document:write']
+    ]
+)]
 #[ORM\Table(name: 'c_document')]
 #[ORM\Index(columns: ['filetype'], name: 'idx_cdoc_type')]
 #[ORM\Entity(repositoryClass: CDocumentRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['iid', 'filetype', 'resourceNode.title', 'resourceNode.createdAt', 'resourceNode.resourceFile.size', 'resourceNode.updatedAt'])]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: [
+        'iid',
+        'filetype',
+        'resourceNode.title',
+        'resourceNode.createdAt',
+        'resourceNode.resourceFile.size',
+        'resourceNode.updatedAt'
+    ]
+)]
 class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]

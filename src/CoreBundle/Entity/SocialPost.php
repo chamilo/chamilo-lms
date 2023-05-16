@@ -28,13 +28,38 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new Post(uriTemplate: '/social_posts/{id}/like', controller: LikeSocialPostController::class, denormalizationContext: ['groups' => []], normalizationContext: ['groups' => ['social_post_feedback']], security: 'is_granted(\'ROLE_USER\')'), new Post(uriTemplate: '/social_posts/{id}/dislike', controller: DislikeSocialPostController::class, denormalizationContext: ['groups' => []], normalizationContext: ['groups' => ['social_post_feedback']], security: 'is_granted(\'ROLE_USER\')'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], security: 'is_granted(\'ROLE_USER\')', denormalizationContext: ['groups' => ['social_post:write']], normalizationContext: ['groups' => ['social_post:read']])]
 #[ORM\Table(name: 'social_post')]
-#[ORM\Index(name: 'idx_social_post_sender', columns: ['sender_id'])]
-#[ORM\Index(name: 'idx_social_post_user', columns: ['user_receiver_id'])]
-#[ORM\Index(name: 'idx_social_post_group', columns: ['group_receiver_id'])]
-#[ORM\Index(name: 'idx_social_post_type', columns: ['type'])]
+#[ORM\Index(columns: ['sender_id'], name: 'idx_social_post_sender')]
+#[ORM\Index(columns: ['user_receiver_id'], name: 'idx_social_post_user')]
+#[ORM\Index(columns: ['group_receiver_id'], name: 'idx_social_post_group')]
+#[ORM\Index(columns: ['type'], name: 'idx_social_post_type')]
 #[ORM\Entity(repositoryClass: SocialPostRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
+        new Post(
+            uriTemplate: '/social_posts/{id}/like',
+            controller: LikeSocialPostController::class,
+            normalizationContext: ['groups' => ['social_post_feedback']],
+            denormalizationContext: ['groups' => []],
+            security: "is_granted('ROLE_USER')"
+        ),
+        new Post(
+            uriTemplate: '/social_posts/{id}/dislike',
+            controller: DislikeSocialPostController::class,
+            normalizationContext: ['groups' => ['social_post_feedback']],
+            denormalizationContext: ['groups' => []],
+            security: "is_granted('ROLE_USER')"
+        ),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+    ],
+    normalizationContext: ['groups' => ['social_post:read']],
+    denormalizationContext: ['groups' => ['social_post:write']],
+    security: "is_granted('ROLE_USER')"
+)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['parent' => 'exact'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['sendDate'])]
 class SocialPost

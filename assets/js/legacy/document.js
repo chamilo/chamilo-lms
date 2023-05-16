@@ -2,5 +2,5 @@
 
 import translateHtml from './../translatehtml.js';
 document.addEventListener('DOMContentLoaded', function () {
-  // translateHtml();
+  translateHtml();
 });

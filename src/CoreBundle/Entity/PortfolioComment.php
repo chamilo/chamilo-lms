@@ -11,9 +11,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Class PortfolioComment.
- */
 #[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
 #[ORM\Table(name: 'portfolio_comment')]
 #[Gedmo\Tree(type: 'nested')]
@@ -76,7 +73,6 @@ class PortfolioComment
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isTemplate = false;
 
-    
     public function __construct()
     {
         $this->isImportant = false;

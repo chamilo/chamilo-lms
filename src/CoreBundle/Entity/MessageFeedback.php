@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class MessageFeedback.
- */
 #[ORM\Table(
     name: 'message_feedback'
 )]

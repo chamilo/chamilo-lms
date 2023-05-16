@@ -120,7 +120,7 @@ class GradebookCategory
     protected ?int $gradeBooksToValidateInDependence = null;
 
     #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
-    protected $allowSkillsBySubcategory;
+    protected ?int $allowSkillsBySubcategory;
 
     public function __construct()
     {

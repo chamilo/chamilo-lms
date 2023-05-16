@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class PortfolioAttachment.
- */
 #[ORM\Table(name: 'portfolio_attachment')]
 #[ORM\Entity(repositoryClass: 'Chamilo\\CoreBundle\\Entity\\Repository\\PortfolioAttachmentRepository')]
 class PortfolioAttachment

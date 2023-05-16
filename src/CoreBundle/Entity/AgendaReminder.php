@@ -19,19 +19,19 @@ class AgendaReminder
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    protected int $id;
 
-    #[ORM\Column(type: 'string', name: 'type')]
-    protected $type;
+    #[ORM\Column(name: 'type', type: 'string')]
+    protected string $type;
 
-    #[ORM\Column(type: 'integer', name: 'event_id')]
-    protected $eventId;
+    #[ORM\Column(name: 'event_id', type: 'integer')]
+    protected int $eventId;
 
-    #[ORM\Column(type: 'dateinterval', name: 'date_interval')]
-    protected $dateInterval;
+    #[ORM\Column(name: 'date_interval', type: 'dateinterval')]
+    protected DateInterval $dateInterval;
 
-    #[ORM\Column(type: 'boolean', name: 'sent')]
-    protected $sent;
+    #[ORM\Column(name: 'sent', type: 'boolean')]
+    protected bool $sent;
 
     public function __construct()
     {

@@ -13,7 +13,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
@@ -21,12 +20,7 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
-use Chamilo\CourseBundle\Entity\CCalendarEvent;
-use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
-use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -55,19 +49,19 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(),
         new Patch(),
         new Delete(),
-        new GetCollection()
+        new GetCollection(),
     ],
     normalizationContext: [
         'groups' => [
             'resource_node:read',
-            'document:read'
-        ]
+            'document:read',
+        ],
     ],
     denormalizationContext: [
         'groups' => [
             'resource_node:write',
-            'document:write'
-        ]
+            'document:write',
+        ],
     ]
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'resourceFile', 'createdAt', 'updatedAt'])]

@@ -39,7 +39,7 @@
     {{ encore_entry_script_tags('legacy_app') }}
     {# Add third party js libraries that can't be loaded using webpack #}
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
-    <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
+    {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {# Check chamilo_js key in assetic.yml #}
     {% block javascripts %}

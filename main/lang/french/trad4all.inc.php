@@ -8951,4 +8951,6 @@ $ExportExerciseAllResults = "Exporter tous les résultats d'un exercice";
 $ExportExerciseNoResult = "Aucun résultat à exporter dans cet exercice.";
 $UserXChangedToYToCancelClickZ = "L'utilisateur %s a été changé en %s. Pour annuler, cliquez <a href='%s'>ici</a>.";
 $Exlearner = "Ex-étudiant";
+$FileSizeIsTooBig = "La taille du fichier est trop grande";
+$AnErrorOccured = "Une erreur s'est produite";
 ?>

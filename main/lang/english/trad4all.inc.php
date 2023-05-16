@@ -9017,4 +9017,6 @@ $ExportExerciseAllResults = "Export all results from an exercise";
 $ExportExerciseNoResult = "No result found for export in this test.";
 $UserXChangedToYToCancelClickZ = "User %s has been changed to %s. To cancel, click <a href='%s'>here</a>.";
 $Exlearner = "Ex-learner";
+$FileSizeIsTooBig = "File size is too big";
+$AnErrorOccured = "An error occured";
 ?>

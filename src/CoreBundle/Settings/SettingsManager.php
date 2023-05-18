@@ -397,59 +397,59 @@ class SettingsManager implements SettingsManagerInterface
 
         $this->manager->flush();
 
-//        $schemaAlias = $settings->getSchemaAlias();
-//        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
-//
-//        $schema = $this->schemaRegistry->get($schemaAlias);
-//
-//        $settingsBuilder = new SettingsBuilder();
-//        $schema->buildSettings($settingsBuilder);
-//
-//        $parameters = $settingsBuilder->resolve($settings->getParameters());
-//
-//        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-//            if (array_key_exists($parameter, $parameters)) {
-//                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-//            }
-//        }
-//
-//        /** @var \Sylius\Bundle\SettingsBundle\Event\SettingsEvent $event */
-//        $event = $this->eventDispatcher->dispatch(
-//            SettingsEvent::PRE_SAVE,
-//            new SettingsEvent($settings)
-//        );
-//
-//        /** @var SettingsCurrent $url */
-//        $url = $event->getSettings()->getAccessUrl();
-//
-//        foreach ($parameters as $name => $value) {
-//            if (isset($persistedParametersMap[$name])) {
-//                if ($value instanceof Course) {
-//                    $value = $value->getId();
-//                }
-//                $persistedParametersMap[$name]->setValue($value);
-//            } else {
-//                $setting = new Settings();
-//                $setting->setSchemaAlias($schemaAlias);
-//
-//                $setting
-//                    ->setNamespace($schemaAliasChamilo)
-//                    ->setName($name)
-//                    ->setValue($value)
-//                    ->setUrl($url)
-//                    ->setAccessUrlLocked(0)
-//                    ->setAccessUrlChangeable(1)
-//                ;
-//
-//                /** @var ConstraintViolationListInterface $errors */
-//                /*$errors = $this->->validate($parameter);
-//                if (0 < $errors->count()) {
-//                    throw new ValidatorException($errors->get(0)->getMessage());
-//                }*/
-//                $this->manager->persist($setting);
-//                $this->manager->flush();
-//            }
-//        }
+        //        $schemaAlias = $settings->getSchemaAlias();
+        //        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
+        //
+        //        $schema = $this->schemaRegistry->get($schemaAlias);
+        //
+        //        $settingsBuilder = new SettingsBuilder();
+        //        $schema->buildSettings($settingsBuilder);
+        //
+        //        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        //
+        //        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+        //            if (array_key_exists($parameter, $parameters)) {
+        //                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
+        //            }
+        //        }
+        //
+        //        /** @var \Sylius\Bundle\SettingsBundle\Event\SettingsEvent $event */
+        //        $event = $this->eventDispatcher->dispatch(
+        //            SettingsEvent::PRE_SAVE,
+        //            new SettingsEvent($settings)
+        //        );
+        //
+        //        /** @var SettingsCurrent $url */
+        //        $url = $event->getSettings()->getAccessUrl();
+        //
+        //        foreach ($parameters as $name => $value) {
+        //            if (isset($persistedParametersMap[$name])) {
+        //                if ($value instanceof Course) {
+        //                    $value = $value->getId();
+        //                }
+        //                $persistedParametersMap[$name]->setValue($value);
+        //            } else {
+        //                $setting = new Settings();
+        //                $setting->setSchemaAlias($schemaAlias);
+        //
+        //                $setting
+        //                    ->setNamespace($schemaAliasChamilo)
+        //                    ->setName($name)
+        //                    ->setValue($value)
+        //                    ->setUrl($url)
+        //                    ->setAccessUrlLocked(0)
+        //                    ->setAccessUrlChangeable(1)
+        //                ;
+        //
+        //                /** @var ConstraintViolationListInterface $errors */
+        //                /*$errors = $this->->validate($parameter);
+        //                if (0 < $errors->count()) {
+        //                    throw new ValidatorException($errors->get(0)->getMessage());
+        //                }*/
+        //                $this->manager->persist($setting);
+        //                $this->manager->flush();
+        //            }
+        //        }
         /*$parameters = $settingsBuilder->resolve($settings->getParameters());
         $settings->setParameters($parameters);
 

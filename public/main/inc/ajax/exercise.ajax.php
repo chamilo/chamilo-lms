@@ -689,7 +689,7 @@ switch ($action) {
             }
 
             $questionDuration = 0;
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $extraFieldValue = new ExtraFieldValue('question');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
                 if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
@@ -827,7 +827,7 @@ switch ($action) {
                 $remind_list
             );
 
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $questionStart = Session::read('question_start', []);
                 if (!empty($questionStart)) {
                     if (isset($questionStart[$my_question_id])) {
@@ -919,7 +919,7 @@ switch ($action) {
         $objExercise->read($exerciseId);
         $objQuestion = Question::read($questionId);
         $id = '';
-        if (api_get_configuration_value('show_question_id')) {
+        if ('true' === api_get_setting('exercise.show_question_id')) {
             $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
         }
         echo $id;
@@ -982,7 +982,7 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'browser_test':
-        $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+        $quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_button_enable'));
 
         if ($quizCheckButtonEnabled) {
             if (isset($_POST['sleep'])) {
@@ -994,7 +994,7 @@ switch ($action) {
 
         break;
     case 'quiz_confirm_saved_answers':
-        if (false === api_get_configuration_value('quiz_confirm_saved_answers')) {
+        if ('true' !== api_get_setting('exercise.quiz_confirm_saved_answers')) {
             break;
         }
 

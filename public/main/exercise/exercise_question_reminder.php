@@ -7,7 +7,7 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
-if (false === api_get_configuration_value('block_category_questions')) {
+if ('false' === api_get_setting('exercise.block_category_questions')) {
     api_not_allowed(true);
 }
 

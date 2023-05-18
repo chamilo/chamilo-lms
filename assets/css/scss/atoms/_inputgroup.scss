@@ -1,0 +1,69 @@
+.p-inputgroup-addon {
+  //background: $inputGroupBg;
+  //color: $inputGroupTextColor;
+  //border-top: $inputBorder;
+  //border-left: $inputBorder;
+  //border-bottom: $inputBorder;
+  //padding: $inputPadding;
+  //min-width: $inputGroupAddOnMinWidth;
+
+  &:last-child {
+    //border-right: $inputBorder;
+  }
+}
+
+.p-inputgroup {
+  > .p-component,
+  > .p-inputwrapper > .p-inputtext,
+  > .p-float-label > .p-component {
+    @apply rounded-none m-0;
+
+    + .p-inputgroup-addon {
+      @apply border-l-0;
+    }
+
+    &:focus {
+      @apply z-10;
+
+      ~ label {
+        @apply z-10;
+      }
+    }
+  }
+}
+
+.p-inputgroup-addon:first-child,
+.p-inputgroup button:first-child,
+.p-inputgroup input:first-child,
+.p-inputgroup > .p-inputwrapper:first-child,
+.p-inputgroup > .p-inputwrapper:first-child > .p-inputtext {
+  @apply rounded-l-lg;
+}
+
+.p-inputgroup .p-float-label:first-child input {
+  @apply rounded-l-lg;
+}
+
+.p-inputgroup-addon:last-child,
+.p-inputgroup button:last-child,
+.p-inputgroup input:last-child,
+.p-inputgroup > .p-inputwrapper:last-child,
+.p-inputgroup > .p-inputwrapper:last-child > .p-inputtext {
+  @apply rounded-r-lg;
+}
+
+.p-inputgroup .p-float-label:last-child input {
+  @apply rounded-r-lg;
+}
+
+.p-fluid {
+  .p-inputgroup {
+    .p-button {
+      @apply w-auto;
+
+      &.p-button-icon-only {
+        @apply w-2.5;
+      }
+    }
+  }
+}

@@ -10,28 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CategoryRelUser.
- *
- * @ORM\Table(name="ticket_category_rel_user")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'ticket_category_rel_user')]
+#[ORM\Entity]
 class TicketCategoryRelUser
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketCategory")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketCategory::class)]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     protected TicketCategory $category;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected TicketCategory $user;
 }

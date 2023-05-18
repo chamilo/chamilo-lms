@@ -11,59 +11,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEHotspot.
- *
- * @ORM\Table(name="track_e_hotspot", indexes={
- *     @ORM\Index(name="hotspot_user_id", columns={"hotspot_user_id"}),
- *     @ORM\Index(name="hotspot_exe_id", columns={"hotspot_exe_id"}),
- *     @ORM\Index(name="hotspot_question_id", columns={"hotspot_question_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_hotspot')]
+#[ORM\Index(name: 'hotspot_user_id', columns: ['hotspot_user_id'])]
+#[ORM\Index(name: 'hotspot_exe_id', columns: ['hotspot_exe_id'])]
+#[ORM\Index(name: 'hotspot_question_id', columns: ['hotspot_question_id'])]
+#[ORM\Entity]
 class TrackEHotspot
 {
     use CourseTrait;
 
-    /**
-     * @ORM\Column(name="hotspot_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'hotspot_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $hotspotId;
 
-    /**
-     * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_user_id', type: 'integer', nullable: false)]
     protected int $hotspotUserId;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEHotspots")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'trackEHotspots')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\Column(name="hotspot_exe_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_exe_id', type: 'integer', nullable: false)]
     protected int $hotspotExeId;
 
-    /**
-     * @ORM\Column(name="hotspot_question_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_question_id', type: 'integer', nullable: false)]
     protected int $hotspotQuestionId;
 
-    /**
-     * @ORM\Column(name="hotspot_answer_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_answer_id', type: 'integer', nullable: false)]
     protected int $hotspotAnswerId;
 
-    /**
-     * @ORM\Column(name="hotspot_correct", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_correct', type: 'boolean', nullable: false)]
     protected bool $hotspotCorrect;
 
-    /**
-     * @ORM\Column(name="hotspot_coordinate", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'hotspot_coordinate', type: 'text', nullable: false)]
     protected string $hotspotCoordinate;
 
     /**

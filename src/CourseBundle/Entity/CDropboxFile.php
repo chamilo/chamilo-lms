@@ -11,82 +11,50 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxFile.
- *
- * @ORM\Table(
- *     name="c_dropbox_file",
- *     options={"row_format":"DYNAMIC"},
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="UN_filename", columns={"filename"})
- *     },
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_dropbox_file', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\UniqueConstraint(name: 'UN_filename', columns: ['filename'])]
+#[ORM\Entity]
 class CDropboxFile
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="uploader_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'uploader_id', type: 'integer', nullable: false)]
     protected int $uploaderId;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=190, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 190, nullable: false)]
     protected string $filename;
 
-    /**
-     * @ORM\Column(name="filesize", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'filesize', type: 'integer', nullable: false)]
     protected int $filesize;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="string", length=250, nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="author", type="string", length=250, nullable=true)
-     */
+    #[ORM\Column(name: 'author', type: 'string', length: 250, nullable: true)]
     protected ?string $author = null;
 
-    /**
-     * @ORM\Column(name="upload_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'upload_date', type: 'datetime', nullable: false)]
     protected DateTime $uploadDate;
 
-    /**
-     * @ORM\Column(name="last_upload_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'last_upload_date', type: 'datetime', nullable: false)]
     protected DateTime $lastUploadDate;
 
-    /**
-     * @ORM\Column(name="cat_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'cat_id', type: 'integer', nullable: false)]
     protected int $catId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
     /**

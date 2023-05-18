@@ -203,7 +203,7 @@ $form->addGroup(
     false
 );
 
-$allowDocumentGroupAccess = api_get_configuration_value('group_category_document_access');
+$allowDocumentGroupAccess = ('true' === api_get_setting('document.group_category_document_access'));
 if ($allowDocumentGroupAccess) {
     $form->addElement('html', '</div>');
     $form->addElement('html', '<div class="col-md-6">');

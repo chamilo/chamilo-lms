@@ -15,7 +15,7 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 class ArrayToIdentifierTransformer implements DataTransformerInterface
 {
-    public function transform($value)
+    public function transform($value): string
     {
         if (!\is_array($value)) {
             return '';
@@ -24,7 +24,7 @@ class ArrayToIdentifierTransformer implements DataTransformerInterface
         return implode(',', $value);
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): array
     {
         if (empty($value)) {
             return [];

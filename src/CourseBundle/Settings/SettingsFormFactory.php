@@ -10,6 +10,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaFormOptionsInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 final class SettingsFormFactory implements SettingsFormFactoryInterface
 {
@@ -23,7 +24,7 @@ final class SettingsFormFactory implements SettingsFormFactoryInterface
         $this->formFactory = $formFactory;
     }
 
-    public function create($schemaAlias, $data = null, array $options = [])
+    public function create($schemaAlias, $data = null, array $options = []): FormInterface
     {
         /** @var SchemaInterface $schema */
         $schema = $this->schemaRegistry->get($schemaAlias);

@@ -63,7 +63,7 @@ $interbreadcrumb[] = [
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
-if (api_get_configuration_value('quiz_prevent_copy_paste')) {
+if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
@@ -208,7 +208,7 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage,
     $allowSignature,
-    api_get_configuration_value('quiz_results_answers_report'),
+    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
     false
 );
 $pageContent .= ob_get_contents();
@@ -226,7 +226,7 @@ $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     false,
     $remainingMessage,
     $allowSignature,
-    api_get_configuration_value('quiz_results_answers_report'),
+    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
     false
 );
 ob_end_clean();

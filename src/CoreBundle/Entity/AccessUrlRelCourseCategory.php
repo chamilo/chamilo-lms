@@ -10,37 +10,30 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AccessUrlRelCourseCategory.
- *
- * @ORM\Table(name="access_url_rel_course_category")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'access_url_rel_course_category')]
+#[ORM\Entity]
 class AccessUrlRelCourseCategory implements EntityAccessUrlInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="courseCategory", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
-     */
-    protected AccessUrl $url;
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'courseCategory')]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
+    protected ?AccessUrl $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="urls", cascade={"persist"})
-     * @ORM\JoinColumn(name="course_category_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CourseCategory::class, cascade: ['persist'], inversedBy: 'urls')]
+    #[ORM\JoinColumn(name: 'course_category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected CourseCategory $courseCategory;
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

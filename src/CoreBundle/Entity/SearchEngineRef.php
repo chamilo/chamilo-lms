@@ -10,43 +10,30 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SearchEngineRef.
- *
- * @ORM\Table(name="search_engine_ref")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'search_engine_ref')]
+#[ORM\Entity]
 class SearchEngineRef
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="searchEngineRefs")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'searchEngineRefs')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\Column(name="tool_id", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'tool_id', type: 'string', length: 100, nullable: false)]
     protected string $toolId;
 
-    /**
-     * @ORM\Column(name="ref_id_high_level", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'ref_id_high_level', type: 'integer', nullable: false)]
     protected int $refIdHighLevel;
 
-    /**
-     * @ORM\Column(name="ref_id_second_level", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'ref_id_second_level', type: 'integer', nullable: true)]
     protected ?int $refIdSecondLevel = null;
 
-    /**
-     * @ORM\Column(name="search_did", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'search_did', type: 'integer', nullable: false)]
     protected int $searchDid;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
     /**

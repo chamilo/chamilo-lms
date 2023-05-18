@@ -92,7 +92,7 @@ if ($show_headers) {
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
-$allowExportPdf = api_get_configuration_value('quiz_results_answers_report');
+$allowExportPdf = ('true' === api_get_setting('exercise.quiz_results_answers_report'));
 ob_start();
 $stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,

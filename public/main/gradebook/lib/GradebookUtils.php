@@ -402,7 +402,7 @@ class GradebookUtils
                     ).
                     '</a>';
 
-                $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
                 if ($allowStats) {
                     $modify_icons .= Display::url(
                         Display::return_icon('reload.png', get_lang('Generate statistics')),
@@ -493,7 +493,7 @@ class GradebookUtils
                 ).
                 '</a>';
 
-            $allowStats = api_get_configuration_value('allow_gradebook_stats');
+            $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
             if ($allowStats && LINK_EXERCISE == $link->get_type()) {
                 $modify_icons .= Display::url(
                     Display::return_icon('reload.png', get_lang('Generate statistics')),
@@ -1574,7 +1574,7 @@ class GradebookUtils
         if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
             $loadStats = [1, 2, 3];
         } else {
-            if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
+            if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
                 $loadStats = [2];
             }
         }
@@ -1631,7 +1631,7 @@ class GradebookUtils
 
         $pdf->params['student_info'] = $userInfo;
         $extraRows = [];
-        if (api_get_configuration_value('allow_gradebook_comments')) {
+        if ('true' === api_get_setting('gradebook.allow_gradebook_comments')) {
             $commentInfo = self::getComment($cat->get_id(), $userId);
             if ($commentInfo) {
                 $extraRows[] = [
@@ -1643,7 +1643,7 @@ class GradebookUtils
 
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
             $showFeedBack = false;

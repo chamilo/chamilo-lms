@@ -340,7 +340,7 @@ $returnParams = $extraField->addElements(
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
-$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+$allowEmailTemplate = ('true' === api_get_setting('mail.mail_template_system'));
 if ($allowEmailTemplate) {
     $form->addEmailTemplate(['user_edit_content.tpl']);
 }
@@ -353,7 +353,7 @@ $(function () {
 </script>';
 
 // Freeze user conditions, admin cannot updated them
-$extraConditions = api_get_configuration_value('show_conditions_to_user');
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];

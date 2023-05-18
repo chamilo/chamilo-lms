@@ -786,7 +786,7 @@ function deleteDirWork($id)
     $check = true;
 
     if ($check) {
-        $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+        $consideredWorkingTime = api_get_setting('work.considered_working_time');
         if (!empty($consideredWorkingTime)) {
             $fieldValue = new ExtraFieldValue('work');
             $resultExtra = $fieldValue->getAllValuesForAnItem(
@@ -1625,7 +1625,7 @@ function getWorkListTeacher(
         $studentPublications = $qb->getQuery()->getResult();
 
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
-        $blockEdition = api_get_configuration_value('block_student_publication_edition');
+        $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
 
         //while ($work = Database::fetch_array($result, 'ASSOC')) {
         $icon = Display::return_icon('work.png');
@@ -2006,7 +2006,7 @@ function get_work_user_list(
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $compilation = null;
-    if (api_get_configuration_value('allow_compilatio_tool')) {
+    if ('true' === api_get_setting('document.allow_compilatio_tool')) {
         $compilation = new Compilatio();
     }
 
@@ -2132,7 +2132,7 @@ function get_work_user_list(
         }*/
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
-        $unoconv = api_get_configuration_value('unoconv.binaries');
+        $unoconv = api_get_setting('platform.unoconv_binaries');
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded.'));
         $failsUploadText = addslashes(get_lang('No file was uploaded..'));
@@ -2170,8 +2170,8 @@ function get_work_user_list(
             ICON_SIZE_SMALL
         );
 
-        $blockEdition = api_get_configuration_value('block_student_publication_edition');
-        $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+        $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
+        $blockScoreEdition = ('true' === api_get_setting('work.block_student_publication_score_edition'));
         $loading = Display::getMdiIcon('loading', 'animate-spin');
         $router = Container::getRouter();
         $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication');
@@ -2663,7 +2663,7 @@ function getAllWork(
     }
 
     $url = api_get_path(WEB_CODE_PATH).'work/';
-    $unoconv = api_get_configuration_value('unoconv.binaries');
+    $unoconv = api_get_setting('platform.unoconv_binaries');
     $loadingText = addslashes(get_lang('Loading'));
     $uploadedText = addslashes(get_lang('Uploaded'));
     $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
@@ -2701,8 +2701,8 @@ function getAllWork(
         ICON_SIZE_SMALL
     );
     $parentList = [];
-    $blockEdition = api_get_configuration_value('block_student_publication_edition');
-    $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
+    $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
+    $blockScoreEdition = ('true' === api_get_setting('work.block_student_publication_score_edition'));
     $loading = Display::getMdiIcon('loading', 'animate-spin');
     $qualification_exists = true;
     $repo = Container::getStudentPublicationRepository();
@@ -4264,7 +4264,7 @@ function getWorkCommentForm(CStudentPublication $work, $workParent)
     if ($isCourseManager) {
         $allowEdition = true;
         if (!empty($work->getQualification()) &&
-            api_get_configuration_value('block_student_publication_score_edition')
+            ('true' === api_get_setting('work.block_student_publication_score_edition'))
         ) {
             $allowEdition = false;
         }
@@ -4819,7 +4819,7 @@ function processWorkForm(
             // handing it in Chamilo, adding this time to the student total
             // course use time, as a register of time spent *before* his
             // connection to the platform to hand the work in.
-            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+            $consideredWorkingTime = api_get_setting('work.considered_working_time');
 
             if (!empty($consideredWorkingTime)) {
                 // Get the "considered work time" defined for this work
@@ -5329,7 +5329,7 @@ function deleteWorkItem($item_id, Course $course)
         if ($count > 0) {
             // If the "considered_working_time" option is enabled, check
             // whether some time should be removed from track_e_course_access
-            $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+            $consideredWorkingTime = api_get_setting('work.considered_working_time');
             if ($consideredWorkingTime) {
                 $userWorks = get_work_user_list(
                     0,

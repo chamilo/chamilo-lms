@@ -25,7 +25,7 @@
       >
         <div
           v-t="'Administrator login'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -39,7 +39,7 @@
       >
         <div
           v-t="'Administrator password'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -54,7 +54,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator first name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -65,7 +65,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator last name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -76,7 +76,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator e-mail'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -87,7 +87,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator telephone'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -102,7 +102,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Your portal name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -113,7 +113,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Main language'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -124,7 +124,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Allow self-registration'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -135,7 +135,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Your company short name'"
-          class="field text-body-2-bold"
+          class="field text-body-2font-semibold"
         />
         <div
           class="field text-body-2"
@@ -146,7 +146,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'URL of this company'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -157,7 +157,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Encryption method'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -172,7 +172,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Host'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -183,7 +183,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Port'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -194,7 +194,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Login'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -205,7 +205,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Password'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -216,14 +216,14 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
           v-text="installerData.stepData.dbNameForm"
         />
       </div>
-      
+
       <Message
         v-if="'new' === installerData.installType"
         :closable="false"

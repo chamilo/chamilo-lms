@@ -6,61 +6,80 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a course.
- *
- * @ORM\Table(
- *     name="course_rel_user",
- *     indexes={
- *         @ORM\Index(name="course_rel_user_user_id", columns={"id", "user_id"}),
- *         @ORM\Index(name="course_rel_user_c_id_user_id", columns={"id", "c_id", "user_id"})
- *     }
- * )
- * @ORM\Entity
  */
 #[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_USER')",
-    ],
-    collectionOperations: [
-        'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
-        ],
-        'post' => [
-            'security' => "is_granted('ROLE_ADMIN')",
-        ],
-    ],
-    itemOperations: [
-        'get' => [
-            'security' => "is_granted('ROLE_ADMIN') or object.user == user",
-        ],
-    ],
-    subresourceOperations: [
-        'api_users_courses_get_subresource' => [
-            'security' => "is_granted('ROLE_USER')",
-        ],
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN') or object.user == user"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: [
         'groups' => ['course_rel_user:read', 'user:read'],
         'enable_max_depth' => true,
     ],
+    security: "is_granted('ROLE_USER')"
 )]
-#[ApiFilter(SearchFilter::class, properties: [
-    'status' => 'exact',
-    'user' => 'exact',
-    'user.username' => 'partial',
-])]
-
-class CourseRelUser
+#[ORM\Table(name: 'course_rel_user')]
+#[ORM\Index(name: 'course_rel_user_user_id', columns: ['id', 'user_id'])]
+#[ORM\Index(name: 'course_rel_user_c_id_user_id', columns: ['id', 'c_id', 'user_id'])]
+#[ORM\Entity]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: [
+        'status' => 'exact',
+        'user' => 'exact',
+        'user.username' => 'partial',
+    ]
+)]
+#[ApiResource(
+    uriTemplate: '/courses/{id}/users.{_format}',
+    operations: [
+        new GetCollection(),
+    ],
+    uriVariables: [
+        'id' => new Link(
+            fromClass: Course::class,
+            identifiers: ['id']
+        ),
+    ],
+    status: 200,
+    normalizationContext: [
+        'groups' => ['course_rel_user:read', 'user:read'],
+    ],
+)]
+#[ApiResource(
+    uriTemplate: '/users/{id}/courses.{_format}',
+    operations: [
+        new GetCollection(),
+    ],
+    uriVariables: [
+        'id' => new Link(
+            fromClass: User::class,
+            identifiers: ['id']
+        ),
+    ],
+    status: 200,
+    normalizationContext: [
+        'groups' => ['course_rel_user:read', 'user:read'],
+    ],
+)]
+class CourseRelUser implements Stringable
 {
     use UserTrait;
 
@@ -68,70 +87,36 @@ class CourseRelUser
     //public const SESSION_ADMIN = 3;
     //public const DRH = 4;
     public const STUDENT = 5;
-
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
     #[MaxDepth(1)]
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
     #[Groups(['user:read'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
-
-    /**
-     * @ORM\Column(name="relation_type", type="integer")
-     */
     #[Groups(['course:read', 'user:read'])]
+    #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;
-
-    /**
-     * @ORM\Column(name="status", type="integer")
-     */
     #[Groups(['user:read'])]
+    #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
-
-    /**
-     * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'is_tutor', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $tutor;
-
-    /**
-     * @ORM\Column(name="sort", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sort', type: 'integer', nullable: true, unique: false)]
     protected ?int $sort;
-
-    /**
-     * @ORM\Column(name="user_course_cat", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'user_course_cat', type: 'integer', nullable: true, unique: false)]
     protected ?int $userCourseCat;
-
-    /**
-     * @ORM\Column(name="legal_agreement", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'legal_agreement', type: 'integer', nullable: true, unique: false)]
     protected ?int $legalAgreement = null;
-
-    /**
-     * @Assert\Range(
-     *     min = 0,
-     *     max = 100,
-     *     notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
-     * )
-     * @ORM\Column(name="progress", type="integer")
-     */
     #[Groups(['course:read', 'user:read'])]
+    #[Assert\Range(min: 0, max: 100, notInRangeMessage: 'Progress from {{ min }} to {{ max }} only')]
+    #[ORM\Column(name: 'progress', type: 'integer')]
     protected int $progress;
 
     public function __construct()
@@ -149,9 +134,9 @@ class CourseRelUser
         return $this->getCourse()->getCode();
     }
 
-    public function getId(): ?int
+    public function getCourse(): Course
     {
-        return $this->id;
+        return $this->course;
     }
 
     public function setCourse(Course $course): self
@@ -161,9 +146,14 @@ class CourseRelUser
         return $this;
     }
 
-    public function getCourse(): Course
+    public function getId(): ?int
     {
-        return $this->course;
+        return $this->id;
+    }
+
+    public function getRelationType(): int
+    {
+        return $this->relationType;
     }
 
     public function setRelationType(int $relationType): self
@@ -173,9 +163,9 @@ class CourseRelUser
         return $this;
     }
 
-    public function getRelationType(): int
+    public function getStatus(): int
     {
-        return $this->relationType;
+        return $this->status;
     }
 
     public function setStatus(int $status): self
@@ -185,9 +175,9 @@ class CourseRelUser
         return $this;
     }
 
-    public function getStatus(): int
+    public function getSort(): ?int
     {
-        return $this->status;
+        return $this->sort;
     }
 
     public function setSort(int $sort): self
@@ -195,11 +185,6 @@ class CourseRelUser
         $this->sort = $sort;
 
         return $this;
-    }
-
-    public function getSort(): ?int
-    {
-        return $this->sort;
     }
 
     public function isTutor(): ?bool
@@ -214,6 +199,11 @@ class CourseRelUser
         return $this;
     }
 
+    public function getUserCourseCat(): ?int
+    {
+        return $this->userCourseCat;
+    }
+
     public function setUserCourseCat(int $userCourseCat): self
     {
         $this->userCourseCat = $userCourseCat;
@@ -221,9 +211,9 @@ class CourseRelUser
         return $this;
     }
 
-    public function getUserCourseCat(): ?int
+    public function getLegalAgreement(): ?int
     {
-        return $this->userCourseCat;
+        return $this->legalAgreement;
     }
 
     public function setLegalAgreement(int $legalAgreement): self
@@ -231,11 +221,6 @@ class CourseRelUser
         $this->legalAgreement = $legalAgreement;
 
         return $this;
-    }
-
-    public function getLegalAgreement(): ?int
-    {
-        return $this->legalAgreement;
     }
 
     public function getUser(): User

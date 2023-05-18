@@ -93,7 +93,7 @@ class Certificate extends Model
             $this->html_file = $this->certificate_data['path_certificate'];
             $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         } else {
-            if (api_get_configuration_value('allow_general_certificate')) {
+            if ('true' === api_get_setting('document.allow_general_certificate')) {
                 $container = Container::getResourceNodeRepository();
                 $filesystem = $container->getFileSystem();
                 // General certificate
@@ -851,7 +851,7 @@ class Certificate extends Model
      */
     public function generatePdfFromCustomCertificate()
     {
-        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+        $orientation = api_get_setting('document.certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
         if (!empty($orientation)) {

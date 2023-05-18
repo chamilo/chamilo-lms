@@ -178,10 +178,10 @@ class ExtraField extends Model
             'lp_view',
         ];
 
-        if (api_get_configuration_value('allow_scheduled_announcements')) {
+        if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
-        if (api_get_configuration_value('allow_portfolio_tool')) {
+        if ('true' === api_get_setting('platform.allow_portfolio_tool')) {
             $result[] = 'portfolio';
         }
         sort($result);

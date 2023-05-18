@@ -37,7 +37,7 @@ class MessageDataPersister implements ContextAwareDataPersisterInterface, Resuma
         if ($data instanceof Message && (
             ($context['collection_operation_name'] ?? null) === 'post' ||
                 ($context['graphql_operation_name'] ?? null) === 'create'
-                //($context['item_operation_name'] ?? null) === 'put' // on update
+            //($context['item_operation_name'] ?? null) === 'put' // on update
         )
         ) {
             /*if (Message::MESSAGE_TYPE_INBOX === $result->getMsgType()) {

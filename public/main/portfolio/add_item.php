@@ -10,7 +10,7 @@ $categories = $em
     ]);
 
 $form = new FormValidator('add_portfolio', 'post', $baseUrl.'action=add_item');
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
 } else {
     $form->addText('title', get_lang('Title'));

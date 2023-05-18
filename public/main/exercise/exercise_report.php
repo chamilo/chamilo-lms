@@ -33,7 +33,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
     api_protect_course_script(true, false, true);
 }
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 $allowClean = Exercise::allowAction('clean_results');
 
 if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -318,7 +318,7 @@ if (isset($_REQUEST['comments']) &&
             false,
             false,
             false,
-            api_get_configuration_value('quiz_results_answers_report'),
+            ('true' === api_get_setting('exercise.quiz_results_answers_report')),
             false
         );
         $objExerciseTmp->results_disabled = $oldResultDisabled;
@@ -334,7 +334,7 @@ if (isset($_REQUEST['comments']) &&
             false,
             false,
             false,
-            api_get_configuration_value('quiz_results_answers_report'),
+            ('true' === api_get_setting('exercise.quiz_results_answers_report')),
             false
         );
         ob_end_clean();
@@ -685,7 +685,7 @@ if ($is_allowedToEdit || $is_tutor) {
             'width' => '40',
             'align' => 'left',
             'search' => 'true',
-            'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
+            'hidden' => ('true' === api_get_setting('exercise.exercise_attempts_report_show_username')) ? 'false' : 'true',
         ],
         [
             'name' => 'group_name',

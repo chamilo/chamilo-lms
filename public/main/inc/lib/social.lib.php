@@ -101,7 +101,7 @@ class SocialManager extends UserManager
 
             return (int) $row['id'];
         } else {
-            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+            if ('true' === api_get_setting('social.social_make_teachers_friend_all')) {
                 $adminsList = UserManager::get_all_administrators();
                 foreach ($adminsList as $admin) {
                     if (api_get_user_id() == $admin['user_id']) {
@@ -587,7 +587,7 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
-        $hide = api_get_configuration_value('hide_complete_name_in_whoisonline');
+        $hide = ('true' === api_get_setting('platform.hide_complete_name_in_whoisonline'));
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
@@ -1037,7 +1037,7 @@ class SocialManager extends UserManager
             $userRelationType = self::get_relation_between_contacts($currentUserId, $userId);
         }
 
-        $options = api_get_configuration_value('profile_fields_visibility');
+        $options = api_get_setting('profile.profile_fields_visibility', true);
         if (isset($options['options'])) {
             $options = $options['options'];
         }
@@ -1087,7 +1087,7 @@ class SocialManager extends UserManager
         }
 
         $extraFieldBlock = self::getExtraFieldBlock($userId, true);
-        $showLanguageFlag = api_get_configuration_value('social_show_language_flag_in_profile');
+        $showLanguageFlag = ('true' === api_get_setting('social.social_show_language_flag_in_profile'));
 
         $template->assign('user', $userInfo);
         $template->assign('show_language_flag', $showLanguageFlag);
@@ -1318,7 +1318,7 @@ class SocialManager extends UserManager
      */
     public static function getExtraFieldBlock($user_id, $isArray = false)
     {
-        $fieldVisibility = api_get_configuration_value('profile_fields_visibility');
+        $fieldVisibility = api_get_setting('profile.profile_fields_visibility', true);
         $fieldVisibilityKeys = [];
         if (isset($fieldVisibility['options'])) {
             $fieldVisibility = $fieldVisibility['options'];
@@ -1729,7 +1729,7 @@ class SocialManager extends UserManager
     public static function getThreadList($userId)
     {
         return [];
-        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+        $forumCourseId = (int) api_get_setting('forum.global_forums_course_id');
 
         $threads = [];
         if (!empty($forumCourseId)) {
@@ -1782,7 +1782,7 @@ class SocialManager extends UserManager
         $threadList = self::getThreadList($userId);
         $userGroup = new UserGroupModel();
 
-        $forumCourseId = api_get_configuration_value('global_forums_course_id');
+        $forumCourseId = (int) api_get_setting('forum.global_forums_course_id');
         $courseInfo = null;
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);

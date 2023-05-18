@@ -11,58 +11,37 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CForumThreadQualifyLog.
- *
- * @ORM\Table(
- *     name="c_forum_thread_qualify_log",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="user_id", columns={"user_id", "thread_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_forum_thread_qualify_log')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'user_id', columns: ['user_id', 'thread_id'])]
+#[ORM\Entity]
 class CForumThreadQualifyLog
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="thread_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'thread_id', type: 'integer', nullable: false)]
     protected int $threadId;
 
-    /**
-     * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\Column(name: 'qualify', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $qualify;
 
-    /**
-     * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'qualify_user_id', type: 'integer', nullable: true)]
     protected ?int $qualifyUserId = null;
 
-    /**
-     * @ORM\Column(name="qualify_time", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'qualify_time', type: 'datetime', nullable: true)]
     protected ?DateTime $qualifyTime = null;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
     /**

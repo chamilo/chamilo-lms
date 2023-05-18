@@ -30,13 +30,13 @@ $loadStats = [];
 if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
     $loadStats = [1, 2, 3];
 } else {
-    if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
+    if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
         $loadStats = [2];
     }
 }
 
 /*Session::write('use_gradebook_cache', false);
-$useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+$useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
 $cacheAvailable = api_get_configuration_value('apc') && $useCache;
 
 if ($cacheAvailable) {
@@ -210,7 +210,7 @@ if (count($userList) > 0) {
 }
 echo '</div>';
 
-$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+$allowSkillRelItem = ('true' === api_get_setting('skill.allow_skill_rel_items'));
 
 if (0 == count($userList)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
@@ -223,7 +223,7 @@ if (0 == count($userList)) {
     echo '<th>';
     echo get_lang('Action');
     echo '</th></tr>';
-    $allowComments = api_get_configuration_value('allow_gradebook_comments');
+    $allowComments = ('true' === api_get_setting('gradebook.allow_gradebook_comments'));
     foreach ($userList as $index => $value) {
         $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>

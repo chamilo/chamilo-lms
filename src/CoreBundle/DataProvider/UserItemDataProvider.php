@@ -15,8 +15,8 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 class UserItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     public function __construct(
-        private UserRepository $repository,
-        private NameConvention $nameConvention
+        private readonly UserRepository $repository,
+        private readonly NameConvention $nameConvention
     ) {
     }
 

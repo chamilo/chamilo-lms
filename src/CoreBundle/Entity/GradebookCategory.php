@@ -51,100 +51,77 @@ class GradebookCategory
      * @ORM\GeneratedValue
      */
     #[Groups(['document:read', 'gradebookCategory:read'])]
+
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCategories")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookCategories')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookCategories')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[Groups(['gradebookCategory:read'])]
+
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="subCategories")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subCategories')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradebookCategory $parent = null;
 
     /**
      * @var GradebookCategory[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="parent")
      */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $subCategories;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var SkillRelGradebook[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="gradeBookCategory")
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelGradebook::class, mappedBy: 'gradeBookCategory')]
     protected Collection $skills;
 
     /**
      * @var Collection|GradebookEvaluation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookEvaluation::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $evaluations;
 
     /**
      * @var Collection|GradebookLink[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="category", cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookLink::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $links;
 
     /**
      * @var Collection|GradebookComment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookComment", mappedBy="gradeBook")
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookComment::class, mappedBy: 'gradeBook')]
     protected Collection $comments;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
-     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradeModel::class)]
+    #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradeModel $gradeModel = null;
 
-    /**
-     * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'weight', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $weight;
 
-    /**
-     * @ORM\Column(name="visible", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'visible', type: 'boolean', nullable: false)]
     protected bool $visible;
 
-    /**
-     * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
     /**
@@ -155,47 +132,31 @@ class GradebookCategory
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     protected ?CDocument $document = null;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected ?int $locked;
 
-    /**
-     * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'default_lowest_eval_exclude', type: 'boolean', nullable: true)]
     protected ?bool $defaultLowestEvalExclude = null;
 
-    /**
-     * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
     protected bool $generateCertificates;
 
-    /**
-     * @ORM\Column(
-     *     name="is_requirement",
-     *     type="boolean",
-     *     nullable=false,
-     *     options={"default":0 }
-     * )
-     */
+    #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $isRequirement;
 
-    /**
-     * @ORM\Column(name="depends", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'depends', type: 'text', nullable: true)]
     protected ?string $depends = null;
 
-    /**
-     * @ORM\Column(name="minimum_to_validate", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'minimum_to_validate', type: 'integer', nullable: true)]
     protected ?int $minimumToValidate = null;
 
-    /**
-     * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
     protected ?int $gradeBooksToValidateInDependence = null;
+
+    #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected ?int $allowSkillsBySubcategory;
 
     public function __construct()
     {
@@ -437,7 +398,7 @@ class GradebookCategory
     /**
      * @return GradebookComment[]|Collection
      */
-    public function getComments()
+    public function getComments(): array|Collection
     {
         return $this->comments;
     }
@@ -445,7 +406,7 @@ class GradebookCategory
     /**
      * @param GradebookComment[]|Collection $comments
      */
-    public function setComments(Collection $comments): self
+    public function setComments(array|Collection $comments): self
     {
         $this->comments = $comments;
 
@@ -479,7 +440,7 @@ class GradebookCategory
     /**
      * @return GradebookEvaluation[]|Collection
      */
-    public function getEvaluations()
+    public function getEvaluations(): array|Collection
     {
         return $this->evaluations;
     }
@@ -487,7 +448,7 @@ class GradebookCategory
     /**
      * @param GradebookEvaluation[]|Collection $evaluations
      */
-    public function setEvaluations(Collection $evaluations): self
+    public function setEvaluations(array|Collection $evaluations): self
     {
         $this->evaluations = $evaluations;
 
@@ -497,7 +458,7 @@ class GradebookCategory
     /**
      * @return GradebookLink[]|Collection
      */
-    public function getLinks()
+    public function getLinks(): array|Collection
     {
         return $this->links;
     }
@@ -505,7 +466,7 @@ class GradebookCategory
     /**
      * @param GradebookLink[]|Collection $links
      */
-    public function setLinks(Collection $links): self
+    public function setLinks(array|Collection $links): self
     {
         $this->links = $links;
 
@@ -515,7 +476,7 @@ class GradebookCategory
     /**
      * @return GradebookCategory[]|Collection
      */
-    public function getSubCategories()
+    public function getSubCategories(): array|Collection
     {
         return $this->subCategories;
     }
@@ -559,7 +520,7 @@ class GradebookCategory
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
@@ -567,9 +528,29 @@ class GradebookCategory
     /**
      * @param SkillRelGradebook[]|Collection $skills
      */
-    public function setSkills(Collection $skills): self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllowSkillsBySubcategory()
+    {
+        return $this->allowSkillsBySubcategory;
+    }
+
+    /**
+     * @param int $allowSkillsBySubcategory
+     *
+     * @return GradebookCategory
+     */
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    {
+        $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
     }

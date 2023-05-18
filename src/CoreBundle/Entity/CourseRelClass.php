@@ -10,24 +10,19 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Course subscriptions to a class.
- *
- * @ORM\Table(name="course_rel_class")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'course_rel_class')]
+#[ORM\Entity]
 class CourseRelClass
 {
-    /**
-     * @ORM\Column(name="course_code", type="string", length=40)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Column(name: 'course_code', type: 'string', length: 40)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $courseCode;
 
-    /**
-     * @ORM\Column(name="class_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Column(name: 'class_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected int $classId;
 
     /**

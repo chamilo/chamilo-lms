@@ -14,11 +14,9 @@ use Symfony\Component\Security\Core\Security;
 
 class UserRelUserListener
 {
-    private Security $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
+    public function __construct(
+        private Security $security
+    ) {
     }
 
     public function prePersist(UserRelUser $userRelUser, LifecycleEventArgs $args): void

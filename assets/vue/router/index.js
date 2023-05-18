@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import adminRoutes from './admin';
 import courseRoutes from './course';
 import accountRoutes from './account';
 import personalFileRoutes from './personalfile';
@@ -116,6 +117,7 @@ const router = createRouter({
             ],
             meta: {requiresAuth: true},
         },
+        adminRoutes,
         courseRoutes,
         //courseCategoryRoutes,
         documents,

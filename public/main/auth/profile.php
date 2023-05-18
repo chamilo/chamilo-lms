@@ -353,7 +353,7 @@ if ('true' === api_get_setting('profile.is_editable')) {
 }
 
 // Student cannot modified their user conditions
-$extraConditions = api_get_configuration_value('show_conditions_to_user');
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {

@@ -329,7 +329,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if (1 == $form_sent) {
-        $notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+        $notEmptyList = ('true' === api_get_setting('session.session_multiple_subscription_students_list_avoid_emptying'));
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(

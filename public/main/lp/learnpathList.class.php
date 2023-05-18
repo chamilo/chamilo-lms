@@ -94,7 +94,7 @@ class LearnpathList
                     $order
                 ";*/
         //$learningPaths = Database::getManager()->createQuery($dql)->getResult();
-        $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+        $showBlockedPrerequisite = ('true' === api_get_setting('lp.show_prerequisite_as_blocked'));
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
         $learningPaths = $qb->getQuery()->getResult();

@@ -5,7 +5,7 @@
     @apply border border-solid border-gray-50 bg-white h-4 rounded w-4 transition-none;
 
     .p-checkbox-icon {
-      @apply text-caption-bold text-white;
+      @apply text-caption font-semibold text-white;
     }
 
     &.p-highlight {

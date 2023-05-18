@@ -98,7 +98,7 @@ class CourseRestorer
         $this->set_tools_invisible_by_default = false;
         $this->skip_content = [];
 
-        $forceImport = api_get_configuration_value('allow_import_scorm_package_in_course_builder');
+        $forceImport = ('true' === api_get_setting('lp.allow_import_scorm_package_in_course_builder'));
         if ($forceImport) {
             $this->tools_to_restore[] = 'scorm_documents';
         }
@@ -376,7 +376,7 @@ class CourseRestorer
                             null,
                             false,
                             null,
-                                $session_id,
+                            $session_id,
                             0,
                             false
                         );
@@ -1894,7 +1894,7 @@ class CourseRestorer
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
                     ];
 
-                    $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+                    $allow = ('true' === api_get_setting('exercise.allow_notification_setting_per_exercise'));
                     if ($allow) {
                         $params['notifications'] = isset($quiz->notifications) ? $quiz->notifications : '';
                     }
@@ -2590,7 +2590,7 @@ class CourseRestorer
                 'shared_question_id' => self::DBUTF8($question->shared_question_id),
                 'max_value' => self::DBUTF8($question->max_value),
             ];
-            if (api_get_configuration_value('allow_required_survey_questions')) {
+            if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
                 if (isset($question->is_required)) {
                     $params['is_required'] = $question->is_required;
                 }
@@ -3497,7 +3497,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             $destinationCourseCode = $this->destination_course_info['code'];
             // Delete destination gradebook
-            $cats = Category:: load(
+            $cats = Category::load(
                 null,
                 null,
                 $destinationCourseCode,
@@ -3554,8 +3554,8 @@ class CourseRestorer
                                         $type = RESOURCE_QUIZ;
 
                                         break;
-                                    /*case LINK_DROPBOX:
-                                        break;*/
+                                        /*case LINK_DROPBOX:
+                                            break;*/
                                     case LINK_STUDENTPUBLICATION:
                                         $type = RESOURCE_WORK;
 

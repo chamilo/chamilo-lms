@@ -10,33 +10,26 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="c_shortcut")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CShortcutRepository")
- */
-class CShortcut extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_shortcut')]
+#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CShortcutRepository::class)]
+class CShortcut extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['cshortcut:read'])]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="shortCut")
-     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'shortCut')]
+    #[ORM\JoinColumn(name: 'shortcut_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $shortCutNode;
 
     #[Groups(['cshortcut:read'])]

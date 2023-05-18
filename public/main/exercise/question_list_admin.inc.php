@@ -11,7 +11,7 @@ use ChamiloSession as Session;
  *    This script allows to manage the question list
  *    It is included from the script admin.php
  */
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
@@ -132,9 +132,9 @@ if (!$inATest) {
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
-        $showPagination = api_get_configuration_value('show_question_pagination');
+        $showPagination = api_get_setting('exercise.show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $length = api_get_configuration_value('question_pagination_length');
+            $length = api_get_setting('exercise.question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
             $allowQuestionOrdering = false;

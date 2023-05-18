@@ -11,45 +11,31 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Chat.
- *
- * @ORM\Table(name="chat", indexes={
- *     @ORM\Index(name="idx_chat_to_user", columns={"to_user"}),
- *     @ORM\Index(name="idx_chat_from_user", columns={"from_user"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'chat')]
+#[ORM\Index(name: 'idx_chat_to_user', columns: ['to_user'])]
+#[ORM\Index(name: 'idx_chat_from_user', columns: ['from_user'])]
+#[ORM\Entity]
 class Chat
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="from_user", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'from_user', type: 'integer', nullable: true)]
     protected ?int $fromUser = null;
 
-    /**
-     * @ORM\Column(name="to_user", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'to_user', type: 'integer', nullable: true)]
     protected ?int $toUser = null;
 
-    /**
-     * @ORM\Column(name="message", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'message', type: 'text', nullable: false)]
     protected string $message;
 
-    /**
-     * @ORM\Column(name="sent", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'sent', type: 'datetime', nullable: false)]
     protected DateTime $sent;
 
-    /**
-     * @ORM\Column(name="recd", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'recd', type: 'integer', nullable: false)]
     protected int $recd;
 
     /**

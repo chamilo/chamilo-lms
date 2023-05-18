@@ -60,37 +60,37 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
-import { computed, inject } from 'vue';
+import { useStore } from "vuex";
+import { computed, inject } from "vue";
 
 const store = useStore();
 
-const isSorting = inject('isSorting');
-const isCustomizing = inject('isCustomizing');
+const isSorting = inject("isSorting");
+const isCustomizing = inject("isCustomizing");
 
 // eslint-disable-next-line no-undef
 defineProps({
   course: {
     type: Object,
-    required: true,
+    required: true
   },
   tool: {
     type: Object,
-    required: true,
+    required: true
   },
   goToCourseTool: {
     type: Function,
-    required: true,
+    required: true
   },
   changeVisibility: {
     type: Function,
-    required: true,
+    required: true
   },
   goToSettingCourseTool: {
     type: Function,
-    required: true,
-  },
+    required: true
+  }
 });
 
-const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 </script>

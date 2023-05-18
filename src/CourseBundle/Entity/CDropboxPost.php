@@ -11,59 +11,38 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxPost.
- *
- * @ORM\Table(
- *     name="c_dropbox_post",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="dest_user", columns={"dest_user_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_dropbox_post')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'dest_user', columns: ['dest_user_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class CDropboxPost
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'feedback_date', type: 'datetime', nullable: false)]
     protected DateTime $feedbackDate;
 
-    /**
-     * @ORM\Column(name="feedback", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'feedback', type: 'text', nullable: true)]
     protected ?string $feedback = null;
 
-    /**
-     * @ORM\Column(name="cat_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'cat_id', type: 'integer', nullable: false)]
     protected int $catId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="file_id", type="integer")
-     */
+    #[ORM\Column(name: 'file_id', type: 'integer')]
     protected int $fileId;
 
-    /**
-     * @ORM\Column(name="dest_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'dest_user_id', type: 'integer')]
     protected int $destUserId;
 
     /**

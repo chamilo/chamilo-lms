@@ -30,9 +30,9 @@ class UserRelUserDataPersister implements ContextAwareDataPersisterInterface
     {
         $result = $this->decorated->persist($data, $context);
         if ($data instanceof UserRelUser && (
-                //($context['collection_operation_name'] ?? null) === 'post' ||
-                //($context['graphql_operation_name'] ?? null) === 'create'
-                ($context['item_operation_name'] ?? null) === 'put' // on update
+            //($context['collection_operation_name'] ?? null) === 'post' ||
+            //($context['graphql_operation_name'] ?? null) === 'create'
+            ($context['item_operation_name'] ?? null) === 'put' // on update
         )
         ) {
             if (UserRelUser::USER_RELATION_TYPE_FRIEND === $data->getRelationType()) {

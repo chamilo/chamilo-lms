@@ -17,7 +17,7 @@ if (empty($workId)) {
     api_not_allowed(true);
 }
 
-$blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
+$blockAddDocuments = ('true' === api_get_setting('work.block_student_publication_add_documents'));
 if ($blockAddDocuments) {
     api_not_allowed(true);
 }

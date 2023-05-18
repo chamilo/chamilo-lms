@@ -33,7 +33,7 @@
     {{ form_content }}
     {{ search_filter }}
 
-    {% set fold_forum_categories = 'forum_fold_categories'|api_get_configuration_value %}
+    {% set fold_forum_categories = chamilo_settings_get('forum.forum_fold_categories') %}
 
     {% if categories is not empty %}
         {% for item in categories %}

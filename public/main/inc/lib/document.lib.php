@@ -367,7 +367,7 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-        $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
+        $sendFileHeaders = ('true' === api_get_setting('document.enable_x_sendfile_headers'));
 
         // Allows chrome to make videos and audios seekable
         header('Accept-Ranges: bytes');
@@ -3451,7 +3451,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if ($document) {
-            $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+            $allowNotification = ('true' === api_get_setting('document.send_notification_when_document_added'));
             if ($sendNotification && $allowNotification) {
                 $courseTitle = $courseEntity->getTitle();
                 if (!empty($sessionId)) {

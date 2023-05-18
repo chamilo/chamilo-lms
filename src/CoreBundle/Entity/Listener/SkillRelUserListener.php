@@ -18,21 +18,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SkillRelUserListener
 {
-    protected Security $security;
-    private SettingsManager $settingsManager;
-    private RouterInterface $router;
-    private TranslatorInterface $translator;
-
     public function __construct(
-        SettingsManager $settingsManager,
-        RouterInterface $router,
-        TranslatorInterface $translator,
-        Security $security
+        private SettingsManager $settingsManager,
+        private RouterInterface $router,
+        private TranslatorInterface $translator,
+        protected Security $security
     ) {
-        $this->settingsManager = $settingsManager;
-        $this->router = $router;
-        $this->translator = $translator;
-        $this->security = $security;
     }
 
     public function postPersist(SkillRelUser $skillRelUser, LifecycleEventArgs $event): void

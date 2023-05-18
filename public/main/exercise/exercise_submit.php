@@ -40,7 +40,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$allowTimePerQuestion = api_get_configuration_value('allow_time_per_question');
+$allowTimePerQuestion = ('true' === api_get_setting('exercise.allow_time_per_question'));
 if ($allowTimePerQuestion) {
     $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
 }
@@ -71,7 +71,7 @@ if ($showGlossary) {
 $htmlHeadXtra[] = api_get_build_js('exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
-if (api_get_configuration_value('quiz_prevent_copy_paste')) {
+if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
@@ -80,7 +80,7 @@ if ('true' === api_get_setting('enable_record_audio')) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+$zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
@@ -380,7 +380,7 @@ $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed(
 Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
-    $disable = api_get_configuration_value('exercises_disable_new_attempts');
+    $disable = ('true' === api_get_setting('exercise.exercises_disable_new_attempts'));
     if ($disable) {
         api_not_allowed(true);
     }
@@ -481,7 +481,7 @@ $questionListInSession = Session::read('questionList');
 $selectionType = $objExercise->getQuestionSelectionType();
 
 $allowBlockCategory = false;
-if (api_get_configuration_value('block_category_questions')) {
+if ('true' === api_get_setting('exercise.block_category_questions')) {
     $extraFieldValue = new ExtraFieldValue('exercise');
     $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
     if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {

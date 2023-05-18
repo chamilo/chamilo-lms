@@ -35,7 +35,7 @@ switch ($action) {
                 'left' => 0,
             ];
 
-            $orientation = api_get_configuration_value('certificate_pdf_orientation');
+            $orientation = api_get_setting('document.certificate_pdf_orientation');
             $pdfParams['orientation'] = 'landscape';
             if (!empty($orientation)) {
                 $pdfParams['orientation'] = $orientation;

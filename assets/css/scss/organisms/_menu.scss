@@ -35,3 +35,14 @@
     }
   }
 }
+
+.admin-index {
+  .p-menu {
+    @apply border-none p-0 w-full;
+  }
+
+  .p-menu-list {
+    @apply flex flex-wrap gap-x-2 gap-y-1 justify-center
+           lg:justify-start;
+  }
+}

@@ -96,7 +96,7 @@ class Utils
         return implode(',', $scope);
     }
 
-    public static function trimParams(array &$params): void
+    public static function trimParams(array & $params): void
     {
         foreach ($params as $key => $value) {
             $newValue = preg_replace('/\s+/', ' ', (string) $value);
@@ -108,7 +108,7 @@ class Utils
     /**
      * @return array
      */
-    public static function removeQueryParamsFromLaunchUrl(ExternalTool $tool, array &$params)
+    public static function removeQueryParamsFromLaunchUrl(ExternalTool $tool, array & $params)
     {
         $urlQuery = parse_url($tool->getLaunchUrl(), PHP_URL_QUERY);
 

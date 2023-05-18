@@ -11,54 +11,35 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEOnline.
- *
- * @ORM\Table(
- *     name="track_e_online",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="login_user_id", columns={"login_user_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_online')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'login_user_id', columns: ['login_user_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackEOnline
 {
-    /**
-     * @ORM\Column(name="login_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'login_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $loginId;
 
-    /**
-     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'login_user_id', type: 'integer', nullable: false)]
     protected int $loginUserId;
 
-    /**
-     * @ORM\Column(name="login_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'login_date', type: 'datetime', nullable: false)]
     protected DateTime $loginDate;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
 
     /**

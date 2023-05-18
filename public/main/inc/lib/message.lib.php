@@ -1409,7 +1409,7 @@ class MessageManager
         );
         $layoutContent = '';
         $emailbody = '';
-        if (true == api_get_configuration_value('mail_template_system')) {
+        if ('true' === api_get_setting('mail.mail_template_system')) {
             $mailTemplateManager = new MailTemplateManager();
             $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
             if (empty($templateText)) {
@@ -1426,7 +1426,7 @@ class MessageManager
 
         $emailsubject = '['.get_lang('ApprovalForNewAccount').'] '.$user->getUsername();
 
-        if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
+        if ('true' === api_get_setting('admin.send_inscription_notification_to_general_admin_only')) {
             $email = api_get_setting('emailAdministrator');
             $firstname = api_get_setting('administratorSurname');
             $lastname = api_get_setting('administratorName');

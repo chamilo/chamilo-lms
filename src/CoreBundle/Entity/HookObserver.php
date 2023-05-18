@@ -10,38 +10,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * HookObserver.
- *
- * @ORM\Table(
- *     name="hook_observer",
- *     options={"row_format"="DYNAMIC"},
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="class_name", columns={"class_name"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'hook_observer', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\UniqueConstraint(name: 'class_name', columns: ['class_name'])]
+#[ORM\Entity]
 class HookObserver
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="class_name", type="string", length=190, nullable=true)
-     */
+    #[ORM\Column(name: 'class_name', type: 'string', length: 190, nullable: true)]
     protected ?string $className = null;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="plugin_name", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'plugin_name', type: 'string', length: 255, nullable: true)]
     protected ?string $pluginName = null;
 
     /**

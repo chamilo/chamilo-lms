@@ -26,7 +26,7 @@ $allowedFields = [
     'address',
 ];
 
-$allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
+$allowedFieldsConfiguration = api_get_setting('profile.allow_fields_inscription', true);
 if (false !== $allowedFieldsConfiguration) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
@@ -105,14 +105,12 @@ $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = 'false' === api_get_setting('allow_terms_conditions') &&
-    'false' === api_get_setting('allow_registration');
-
+$isNotAllowedHere = ('false' === api_get_setting('allow_terms_conditions') && 'false' === api_get_setting('allow_registration'));
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
 }
 
-$extraConditions = api_get_configuration_value('show_conditions_to_user');
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 if ($extraConditions && isset($extraConditions['conditions'])) {
     // Create user extra fields for the conditions
     $userExtraField = new ExtraField('user');
@@ -153,7 +151,7 @@ $sessionId = Session::read('sessionId');
 $sessionRedirect = isset($_REQUEST['s']) && !empty($_REQUEST['s']) ? $_REQUEST['s'] : null;
 $onlyOneCourseSessionRedirect = isset($_REQUEST['cr']) && !empty($_REQUEST['cr']) ? $_REQUEST['cr'] : null;
 
-if (api_get_configuration_value('allow_redirect_to_session_after_inscription_about')) {
+if ('true' === api_get_setting('session.allow_redirect_to_session_after_inscription_about')) {
     if (!empty($sessionRedirect)) {
         Session::write('session_redirect', $sessionRedirect);
         Session::write('only_one_course_session_redirect', $onlyOneCourseSessionRedirect);
@@ -199,7 +197,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 
     $LastnameLabel = get_lang('LastName');
-    if (true == api_get_configuration_value('registration_add_helptext_for_2_names')) {
+    if ('true' === api_get_setting('profile.registration_add_helptext_for_2_names')) {
         $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
     }
     if (api_is_western_name_order()) {
@@ -453,7 +451,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
-        $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
+        $requiredFields = api_get_setting('profile.required_extra_fields_in_inscription', true);
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }
@@ -753,7 +751,7 @@ if ($blockButton) {
         );
     }
 } else {
-    $allow = api_get_configuration_value('allow_double_validation_in_registration');
+    $allow = ('true' === api_get_setting('platform.allow_double_validation_in_registration'));
 
     if (false === $allow && $termActivated) {
         $htmlHeadXtra[] = '<script>

@@ -12,64 +12,42 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * TrackEAttemptRecording.
- *
- * @ORM\Table(name="track_e_attempt_recording",
- *     indexes={
- *         @ORM\Index(name="exe_id", columns={"exe_id"}),
- *         @ORM\Index(name="question_id", columns={"question_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     })
- *     @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_attempt_recording')]
+#[ORM\Index(name: 'exe_id', columns: ['exe_id'])]
+#[ORM\Index(name: 'question_id', columns: ['question_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
 class TrackEAttemptRecording
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="exe_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'exe_id', type: 'integer', nullable: false)]
     protected int $exeId;
 
-    /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected int $questionId;
 
-    /**
-     * @ORM\Column(name="marks", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'marks', type: 'integer', nullable: false)]
     protected int $marks;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="insert_date", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'insert_date', type: 'datetime', nullable: false)]
     protected DateTime $insertDate;
 
-    /**
-     * @ORM\Column(name="author", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'author', type: 'integer', nullable: false)]
     protected int $author;
 
-    /**
-     * @ORM\Column(name="teacher_comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'teacher_comment', type: 'text', nullable: false)]
     protected string $teacherComment;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="answer", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'answer', type: 'text', nullable: true)]
     protected ?string $answer;
 
     public function __construct()

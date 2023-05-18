@@ -11,59 +11,38 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEDefault.
- *
- * @ORM\Table(
- *     name="track_e_default",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="session", columns={"session_id"}),
- *         @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_default')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'session', columns: ['session_id'])]
+#[ORM\Index(name: 'idx_default_user_id', columns: ['default_user_id'])]
+#[ORM\Entity]
 class TrackEDefault
 {
-    /**
-     * @ORM\Column(name="default_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'default_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $defaultId;
 
-    /**
-     * @ORM\Column(name="default_user_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'default_user_id', type: 'integer', nullable: false)]
     protected int $defaultUserId;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: true)]
     protected ?int $cId = null;
 
-    /**
-     * @ORM\Column(name="default_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'default_date', type: 'datetime', nullable: false)]
     protected DateTime $defaultDate;
 
-    /**
-     * @ORM\Column(name="default_event_type", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'default_event_type', type: 'string', length: 255, nullable: false)]
     protected string $defaultEventType;
 
-    /**
-     * @ORM\Column(name="default_value_type", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'default_value_type', type: 'string', length: 255, nullable: false)]
     protected string $defaultValueType;
 
-    /**
-     * @ORM\Column(name="default_value", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'default_value', type: 'text', nullable: false)]
     protected string $defaultValue;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
     /**

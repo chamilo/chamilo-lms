@@ -6,10 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Traits\UserExtraFieldFilterTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
@@ -22,206 +24,100 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Quiz user attempts.
- *
- * @ORM\Table(name="track_e_exercises", indexes={
- *     @ORM\Index(name="idx_tee_user_id", columns={"exe_user_id"}),
- *     @ORM\Index(name="idx_tee_c_id", columns={"c_id"}),
- *     @ORM\Index(name="session_id", columns={"session_id"})
- * })
- * @ORM\Entity
  */
-#[ApiResource(
-    collectionOperations: [
-        'get' => [
-            'security' => 'is_granted("ROLE_USER")',
-        ],
-    ],
-    itemOperations: [
-        'get' => [
-            'security' => 'is_granted("VIEW", object)',
-        ],
-    ],
-    attributes: [
-        'security' => 'is_granted("ROLE_USER")',
-    ],
-    denormalizationContext: [
-        'groups' => ['track_e_exercise:write'],
-    ],
-    normalizationContext: [
-        'groups' => ['track_e_exercise:read'],
-    ],
-)]
-#[ApiFilter(
-    SearchFilter::class,
-    properties: [
-        'user' => 'exact',
-        'quiz' => 'exact',
-        'course' => 'exact',
-        'session' => 'exact',
-    ]
-)]
-#[ApiFilter(
-    OrderFilter::class,
-    properties: [
-        'user.username',
-        'user.fisrname',
-        'user.lastname',
-        'startDate',
-        'exeDate',
-        'exeDuration',
-        'score',
-        'status',
-        'userIp',
-    ]
-)]
+#[ApiResource(operations: [new Get(security: 'is_granted("VIEW", object)'), new GetCollection(security: 'is_granted("ROLE_USER")')], security: 'is_granted("ROLE_USER")', denormalizationContext: ['groups' => ['track_e_exercise:write']], normalizationContext: ['groups' => ['track_e_exercise:read']])]
+#[ORM\Table(name: 'track_e_exercises')]
+#[ORM\Index(name: 'idx_tee_user_id', columns: ['exe_user_id'])]
+#[ORM\Index(name: 'idx_tee_c_id', columns: ['c_id'])]
+#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Entity]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['user' => 'exact', 'quiz' => 'exact', 'course' => 'exact', 'session' => 'exact'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['user.username', 'user.fisrname', 'user.lastname', 'startDate', 'exeDate', 'exeDuration', 'score', 'status', 'userIp'])]
 class TrackEExercise
 {
     use UserExtraFieldFilterTrait;
-
-    /**
-     * @ORM\Column(name="exe_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'exe_id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $exeId;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'exe_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
-
-    /**
-     * @ORM\Column(name="exe_date", type="datetime", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'exe_date', type: 'datetime', nullable: false)]
     protected DateTime $exeDate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuiz", inversedBy="attempts")
-     * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
-     */
     #[Groups(['track_e_exercise:read'])]
-    protected ?CQuiz $quiz;
-
-    /**
-     * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuiz::class, inversedBy: 'attempts')]
+    #[ORM\JoinColumn(name: 'exe_exo_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
+    protected ?CQuiz $quiz = null;
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'score', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $score;
-
-    /**
-     * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'max_score', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $maxScore;
-
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
-
-    /**
-     * @ORM\Column(name="status", type="string", length=20, nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'status', type: 'string', length: 20, nullable: false)]
     protected string $status;
-
-    /**
-     * @ORM\Column(name="data_tracking", type="text", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'data_tracking', type: 'text', nullable: false)]
     protected string $dataTracking;
-
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: false)]
     protected DateTime $startDate;
-
-    /**
-     * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'steps_counter', type: 'smallint', nullable: false)]
     protected int $stepsCounter;
-
-    /**
-     * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_id', type: 'integer', nullable: false)]
     protected int $origLpId;
-
-    /**
-     * @ORM\Column(name="orig_lp_item_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_item_id', type: 'integer', nullable: false)]
     protected int $origLpItemId;
-
-    /**
-     * @ORM\Column(name="exe_duration", type="integer", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'exe_duration', type: 'integer', nullable: false)]
     protected int $exeDuration;
-
-    /**
-     * @ORM\Column(name="expired_time_control", type="datetime", nullable=true)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'expired_time_control', type: 'datetime', nullable: true)]
     protected ?DateTime $expiredTimeControl = null;
-
-    /**
-     * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'orig_lp_item_view_id', type: 'integer', nullable: false)]
     protected int $origLpItemViewId;
-
-    /**
-     * @ORM\Column(name="questions_to_check", type="text", nullable=false)
-     */
     #[Groups(['track_e_exercise:read'])]
     #[Assert\NotNull]
+    #[ORM\Column(name: 'questions_to_check', type: 'text', nullable: false)]
     protected string $questionsToCheck;
-
-    /**
-     * @ORM\Column(name="blocked_categories", type="text", nullable=true)
-     */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\Column(name: 'blocked_categories', type: 'text', nullable: true)]
     protected ?string $blockedCategories;
-
     /**
      * @var Collection<int, TrackEAttempt>
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="trackExercise", cascade={"persist"})
      */
     #[Groups(['track_e_exercise:read'])]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\TrackEAttempt::class, mappedBy: 'trackExercise', cascade: ['persist'])]
     protected Collection $attempts;
-
     public function __construct()
     {
         $this->attempts = new ArrayCollection();
@@ -235,14 +131,12 @@ class TrackEExercise
         $this->exeDate = new DateTime();
         $this->startDate = new DateTime();
     }
-
     public function setExeDate(DateTime $exeDate): self
     {
         $this->exeDate = $exeDate;
 
         return $this;
     }
-
     /**
      * Get exeDate.
      *
@@ -252,26 +146,22 @@ class TrackEExercise
     {
         return $this->exeDate;
     }
-
     public function setQuiz(CQuiz $cQuiz): self
     {
         $this->quiz = $cQuiz;
 
         return $this;
     }
-
     public function getQuiz(): ?CQuiz
     {
         return $this->quiz;
     }
-
     public function setUserIp(string $userIp): self
     {
         $this->userIp = $userIp;
 
         return $this;
     }
-
     /**
      * Get userIp.
      *
@@ -281,14 +171,12 @@ class TrackEExercise
     {
         return $this->userIp;
     }
-
     public function setStatus(string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
-
     /**
      * Get status.
      *
@@ -298,14 +186,12 @@ class TrackEExercise
     {
         return $this->status;
     }
-
     public function setDataTracking(string $dataTracking): self
     {
         $this->dataTracking = $dataTracking;
 
         return $this;
     }
-
     /**
      * Get dataTracking.
      *
@@ -315,14 +201,12 @@ class TrackEExercise
     {
         return $this->dataTracking;
     }
-
     public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
         return $this;
     }
-
     /**
      * Get startDate.
      *
@@ -332,14 +216,12 @@ class TrackEExercise
     {
         return $this->startDate;
     }
-
     public function setStepsCounter(int $stepsCounter): self
     {
         $this->stepsCounter = $stepsCounter;
 
         return $this;
     }
-
     /**
      * Get stepsCounter.
      *
@@ -349,14 +231,12 @@ class TrackEExercise
     {
         return $this->stepsCounter;
     }
-
     public function setOrigLpId(int $origLpId): self
     {
         $this->origLpId = $origLpId;
 
         return $this;
     }
-
     /**
      * Get origLpId.
      *
@@ -366,14 +246,12 @@ class TrackEExercise
     {
         return $this->origLpId;
     }
-
     public function setOrigLpItemId(int $origLpItemId): self
     {
         $this->origLpItemId = $origLpItemId;
 
         return $this;
     }
-
     /**
      * Get origLpItemId.
      *
@@ -383,14 +261,12 @@ class TrackEExercise
     {
         return $this->origLpItemId;
     }
-
     public function setExeDuration(int $exeDuration): self
     {
         $this->exeDuration = $exeDuration;
 
         return $this;
     }
-
     /**
      * Get exeDuration.
      *
@@ -400,26 +276,22 @@ class TrackEExercise
     {
         return $this->exeDuration;
     }
-
     public function setExpiredTimeControl(?DateTime $expiredTimeControl): self
     {
         $this->expiredTimeControl = $expiredTimeControl;
 
         return $this;
     }
-
     public function getExpiredTimeControl(): ?DateTime
     {
         return $this->expiredTimeControl;
     }
-
     public function setOrigLpItemViewId(int $origLpItemViewId): self
     {
         $this->origLpItemViewId = $origLpItemViewId;
 
         return $this;
     }
-
     /**
      * Get origLpItemViewId.
      *
@@ -429,14 +301,12 @@ class TrackEExercise
     {
         return $this->origLpItemViewId;
     }
-
     public function setQuestionsToCheck(string $questionsToCheck): self
     {
         $this->questionsToCheck = $questionsToCheck;
 
         return $this;
     }
-
     /**
      * Get questionsToCheck.
      *
@@ -446,7 +316,6 @@ class TrackEExercise
     {
         return $this->questionsToCheck;
     }
-
     /**
      * Get exeId.
      *
@@ -456,73 +325,62 @@ class TrackEExercise
     {
         return $this->exeId;
     }
-
     public function getScore(): float
     {
         return $this->score;
     }
-
     public function setScore(float $score): self
     {
         $this->score = $score;
 
         return $this;
     }
-
     public function getMaxScore(): float
     {
         return $this->maxScore;
     }
-
     public function setMaxScore(float $maxScore): self
     {
         $this->maxScore = $maxScore;
 
         return $this;
     }
-
     public function getUser(): User
     {
         return $this->user;
     }
-
     public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
-
     public function getCourse(): Course
     {
         return $this->course;
     }
-
     public function setCourse(Course $course): self
     {
         $this->course = $course;
 
         return $this;
     }
-
     /**
      * @return TrackEAttempt[]|Collection
      */
-    public function getAttempts()
+    public function getAttempts(): array|Collection
     {
         return $this->attempts;
     }
-
     /**
      * @param TrackEAttempt[]|Collection $attempts
      */
-    public function setAttempts($attempts): self
+    public function setAttempts(array|Collection $attempts): self
     {
         $this->attempts = $attempts;
 
         return $this;
     }
-
     public function addAttempt(TrackEAttempt $attempt): self
     {
         if (!$this->attempts->contains($attempt)) {
@@ -532,32 +390,22 @@ class TrackEExercise
 
         return $this;
     }
-
     public function getSession(): ?Session
     {
         return $this->session;
     }
-
     public function setSession(?Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
-
     public function getAttemptByQuestionId(int $questionId): ?TrackEAttempt
     {
         $criteria = Criteria::create();
-        $criteria
-            ->where(
-                Criteria::expr()->eq('questionId', $questionId)
-            )
-            ->setMaxResults(1)
-        ;
-
+        $criteria->where(Criteria::expr()->eq('questionId', $questionId))->setMaxResults(1);
         /** @var TrackEAttempt $attempt */
         $attempt = $this->attempts->matching($criteria)->first();
-
         if (!empty($attempt)) {
             return $attempt;
         }

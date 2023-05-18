@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  */
 function isTotalPortalSizeBiggerThanLimit($debug = true)
 {
-    $sizeLimit = api_get_configuration_value('hosting_total_size_limit');
+    $sizeLimit = (int) api_get_setting('mail.hosting_total_size_limit');
     if (empty($sizeLimit)) {
         return true;
     }

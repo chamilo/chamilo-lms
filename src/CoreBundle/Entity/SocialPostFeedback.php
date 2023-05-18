@@ -12,53 +12,34 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Table(
- *     name="social_post_feedback",
- *     indexes={
- *         @Index(name="idx_social_post_uid_spid", columns={"social_post_id", "user_id"})
- *     }
- * )
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'social_post_feedback')]
+#[Index(name: 'idx_social_post_uid_spid', columns: ['social_post_id', 'user_id'])]
+#[ORM\Entity]
 class SocialPostFeedback
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", inversedBy="feedbacks")
-     * @ORM\JoinColumn(name="social_post_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SocialPost::class, inversedBy: 'feedbacks')]
+    #[ORM\JoinColumn(name: 'social_post_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected SocialPost $socialPost;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="socialPostsFeedbacks")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'socialPostsFeedbacks')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="liked", type="boolean", options={"default":false})
-     */
+    #[ORM\Column(name: 'liked', type: 'boolean', options: ['default' => false])]
     protected bool $liked;
 
-    /**
-     * @ORM\Column(name="disliked", type="boolean", options={"default":false})
-     */
+    #[ORM\Column(name: 'disliked', type: 'boolean', options: ['default' => false])]
     protected bool $disliked;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
 
     public function __construct()

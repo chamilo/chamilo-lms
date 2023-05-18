@@ -152,7 +152,7 @@ if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('Use default maximum score of 100'));
 }
 
-if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
+if ('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) {
     $form->addElement('checkbox', 'allow_htaccess', null, get_lang('Allow htaccess in the SCORM import'));
 }
 

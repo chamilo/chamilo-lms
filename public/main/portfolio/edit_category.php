@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $form = new FormValidator('edit_category', 'post', $baseUrl."action=edit_category&id={$category->getId()}");
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
 } else {
     $form->addText('title', get_lang('Title'));

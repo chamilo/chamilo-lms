@@ -11,37 +11,26 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Track Login Record.
- *
- * @ORM\Table(name="track_e_login_record")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_login_record')]
+#[ORM\Entity]
 class TrackELoginRecord
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $id;
 
-    /**
-     * @ORM\Column(name="username", type="string", length=100, nullable=false)
-     */
+    #[ORM\Column(name: 'username', type: 'string', length: 100, nullable: false)]
     protected string $username;
 
-    /**
-     * @ORM\Column(name="login_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'login_date', type: 'datetime', nullable: false)]
     protected DateTime $loginDate;
 
-    /**
-     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'user_ip', type: 'string', length: 45, nullable: false)]
     protected string $userIp;
 
-    /**
-     * @ORM\Column(name="success", type="boolean")
-     */
+    #[ORM\Column(name: 'success', type: 'boolean')]
     protected bool $success;
 
     /**

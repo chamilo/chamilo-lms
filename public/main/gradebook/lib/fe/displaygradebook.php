@@ -67,7 +67,7 @@ class DisplayGradebook
                         get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT)
                     );
 
-                    $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+                    $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
                     if ($allowMultipleAttempts) {
                         $results = Result::load(null, api_get_user_id(), $evalobj->get_id());
                         if (!empty($results)) {

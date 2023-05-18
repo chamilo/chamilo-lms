@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoNumericType;
+use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,6 +19,8 @@ class WikiCourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults([
                 'enabled' => 1,
+                'wiki_categories_enabled' => 'false',
+                'wiki_html_strict_filtering' => 'false',
             ])
         ;
     }
@@ -26,6 +29,8 @@ class WikiCourseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('enabled', YesNoNumericType::class)
+            ->add('wiki_categories_enabled', YesNoType::class)
+            ->add('wiki_html_strict_filtering', YesNoType::class)
         ;
     }
 }

@@ -13,7 +13,7 @@
   }
 
   th {
-    @apply text-body-2-bold;
+    @apply text-body-2 font-semibold;
   }
 
   td {
@@ -21,7 +21,7 @@
 
     strong,
     b {
-      @apply text-body-2-bold;
+      @apply text-body-2 font-semibold;
     }
   }
 }

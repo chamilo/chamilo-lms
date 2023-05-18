@@ -164,7 +164,7 @@ $visibleResults = [
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone'),
 ];
 
-if (api_get_configuration_value('hide_survey_reporting_button')) {
+if ('true' === api_get_setting('survey.hide_survey_reporting_button')) {
     $form->addLabel(get_lang('Results visibility'), get_lang('Feature disabled by administrator'));
 } else {
     $form->addSelect('visible_results', get_lang('Results visibility'), $visibleResults);

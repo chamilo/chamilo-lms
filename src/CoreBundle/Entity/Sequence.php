@@ -9,30 +9,23 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
 
-/**
- * @ORM\Table(name="sequence")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SequenceRepository")
- */
-class Sequence
+#[ORM\Table(name: 'sequence')]
+#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceRepository::class)]
+class Sequence implements Stringable
 {
     use TimestampableEntity;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string")
-     */
+    #[ORM\Column(name: 'name', type: 'string')]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="graph", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'graph', type: 'text', nullable: true)]
     protected ?string $graph = null;
 
     public function __toString(): string

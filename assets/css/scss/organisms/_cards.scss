@@ -2,7 +2,7 @@
   @apply rounded-lg shadow-lg;
 
   .p-card-body {
-    @apply flex flex-col gap-4 p-4;
+    @apply flex flex-col space-y-4 p-4;
   }
 
   .p-card-header {
@@ -12,11 +12,11 @@
   }
 
   .p-card-title {
-    @apply text-body-2-bold line-clamp-2 min-h-[2rem];
+    @apply text-body-2 font-semibold line-clamp-2;
   }
 
   .p-card-subtitle {
-    @apply text-body-1 text-gray-50;
+    @apply text-body-2 text-gray-50;
   }
 
   .p-card-content {

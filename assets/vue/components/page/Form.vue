@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import InputText from 'primevue/inputtext';
 import Checkbox from 'primevue/checkbox';

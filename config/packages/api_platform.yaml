@@ -48,6 +48,8 @@ api_platform:
         Doctrine\ORM\OptimisticLockException: 409
         Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
 
+    metadata_backward_compatibility_layer: false
+
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'
 

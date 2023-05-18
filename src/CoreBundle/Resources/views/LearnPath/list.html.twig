@@ -10,7 +10,7 @@
             }
         }
     </script>
-    {% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
+    {% set configuration = chamilo_settings_get('lp.lp_category_accordion') %}
     <div class="lp-accordion panel-group my-8" id="lp-accordion" role="tablist" aria-multiselectable="true">
         {% for lp_data in data %}
             {% set show_category = true %}

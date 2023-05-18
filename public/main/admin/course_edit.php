@@ -139,11 +139,11 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-
+$allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
 $categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
     $urlId,
     $courseId,
-    api_get_configuration_value('allow_base_course_category')
+    $allowBaseCourseCategory
 );
 
 $courseCategoryNames = [];
@@ -186,7 +186,7 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     );
 }
 
-$allowEditSessionCoaches = false === api_get_configuration_value('disabled_edit_session_coaches_course_editing_course');
+$allowEditSessionCoaches = ('false' === api_get_setting('course.disabled_edit_session_coaches_course_editing_course'));
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($coursesInSession) && $allowEditSessionCoaches) {
     foreach ($coursesInSession as $session) {
@@ -265,7 +265,7 @@ $extra = $extraField->addElements(
     true
 );
 
-if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
+if ('true' === api_get_setting('course.multiple_access_url_show_shared_course_marker')) {
     $urls = UrlManager::get_access_url_from_course($courseId);
     $urlToString = '';
     foreach ($urls as $url) {

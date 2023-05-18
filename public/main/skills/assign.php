@@ -32,7 +32,7 @@ $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillR
 $skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
-$skillLevels = api_get_configuration_value('skill_levels_names');
+$skillLevels = api_get_setting('skill.skill_levels_names', true);
 
 $skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = ['' => get_lang('none')];
@@ -227,7 +227,7 @@ $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('Required field'), 'required');
 
-$showLevels = false; // === api_get_configuration_value('hide_skill_levels');
+$showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
 if ($showLevels) {
     $form->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);

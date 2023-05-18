@@ -994,7 +994,7 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
 
-        $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
+        $allowDocumentAccess = ('true' === api_get_setting('document.group_category_document_access'));
         $documentCondition = '';
         if ($allowDocumentAccess) {
             $documentAccess = (int) $documentAccess;
@@ -2932,7 +2932,7 @@ class GroupManager
         }*/
 
         // Check group document access
-        $allow = api_get_configuration_value('group_document_access');
+        $allow = ('true' === api_get_setting('document.group_document_access'));
         if ($allow) {
             $documentAccess = $group->getDocumentAccess();
         }

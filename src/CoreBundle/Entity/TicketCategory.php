@@ -11,63 +11,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Category.
- *
- * @ORM\Table(name="ticket_category")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'ticket_category')]
+#[ORM\Entity]
 class TicketCategory
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="total_tickets", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'total_tickets', type: 'integer', nullable: false)]
     protected int $totalTickets;
 
-    /**
-     * @ORM\Column(name="course_required", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'course_required', type: 'boolean', nullable: false)]
     protected bool $courseRequired;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\TicketProject::class)]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id')]
     protected TicketProject $project;
 
-    /**
-     * @ORM\Column(name="sys_insert_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
 
-    /**
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
+    #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastEditUserId = null;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()

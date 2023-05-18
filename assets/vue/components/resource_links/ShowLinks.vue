@@ -9,7 +9,7 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book" />
-      {{ t('Course: {0}', [ link.course.resourceNode.title ]) }}
+      {{ t('Course: {course}', { 'course': link.course.resourceNode.title }) }}
     </div>
 
     <div
@@ -17,7 +17,7 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book-open" />
-      {{ t('Session: {0}', [ link.session.name ]) }}
+      {{ t('Session: {session}', {'session': link.session.name }) }}
     </div>
 
     <div
@@ -44,11 +44,9 @@
       {{ link.user.username }}
     </div>
 
-    <div
-      v-if="showStatus"
-      v-t="{ path: 'Status: {0}', args: [link.visibilityName] }"
-    />
-
+    <div v-if="showStatus">
+      {{ t('Status: {status}', {'status': link.visibilityName }) }}
+    </div>
     <div
       v-if="editStatus"
     >

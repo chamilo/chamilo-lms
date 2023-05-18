@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -210,6 +211,15 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
      */
     protected bool $template;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory",
+     *     mappedBy="document",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true)
+     */
+    #[Groups(['document:read'])]
+    protected GradebookCategory|null $gradebookCategory = null;
+
     public function __construct()
     {
         $this->comment = '';
@@ -304,5 +314,10 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    public function getGradebookCategory(): GradebookCategory|null
+    {
+        return $this->gradebookCategory;
     }
 }

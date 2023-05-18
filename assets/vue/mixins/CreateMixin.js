@@ -9,9 +9,9 @@ export default {
     formatDateTime,
     onCreated(item) {
       if (item['resourceNode']) {
-        this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
+        this.showMessage(this.$t('{resource} created', {'resource': item['resourceNode'].title}));
       } else {
-        this.showMessage(this.$i18n.t('{resource} created', {'resource': item.title}));
+        this.showMessage(this.$t('{resource} created', {'resource': item.title}));
       }
 
       let folderParams = this.$route.query;

@@ -220,6 +220,7 @@ class BaseResourceFileAction
         $resource->setParentResourceNode($parentResourceNodeId);
 
         switch ($fileType) {
+            case 'certificate':
             case 'file':
                 $content = '';
                 if ($request->request->has('contentFile')) {

@@ -481,12 +481,14 @@ class GradebookTable extends SortableTable
                     $totalResult = [];
                     if (isset($data['result_score'])) {
                         $totalResult = [
-                            $data['result_score'][0],
-                            $data['result_score'][1],
+                            $data['result_score'][0] ?? 0,
+                            $data['result_score'][1] ?? 0,
                         ];
                     }
 
                     if (empty($model)) {
+                        $data['best_score'][0] = $data['best_score'][0] ?? 0;
+                        $data['best_score'][1] = $data['best_score'][1] ?? 0;
                         $totalBest = [
                             $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
                             $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
@@ -538,7 +540,7 @@ class GradebookTable extends SortableTable
 
                     $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                     $this->dataForGraph['average'][] = floatval($totalAverageValue);
-                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
+                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0] ?? 0;
 
                     if (empty($model)) {
                         // Ranking

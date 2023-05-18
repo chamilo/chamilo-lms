@@ -9740,7 +9740,7 @@ class Exercise
             $sessionId = (int) $sessionId;
 
             foreach ($this->lpList as $lp) {
-                if ((int) $lp['session_id'] == $sessionId) {
+                if (isset($lp['session_id']) && (int) $lp['session_id'] == $sessionId) {
                     return $lp;
                 }
             }

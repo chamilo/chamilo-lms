@@ -56,6 +56,7 @@ export default {
     const parentResourceNodeId = ref(null);
     const resourceLinkList = ref(null);
     const route = useRoute();
+    const filetype = route.query.cert === '1' ? 'certificate' : 'file';
 
     parentResourceNodeId.value = Number(route.params.node);
     resourceLinkList.value = JSON.stringify([{
@@ -67,7 +68,6 @@ export default {
 
     let uppy = ref();
     uppy.value = new Uppy()
-        .use(Webcam)
         .use(ImageEditor, {
           cropperOptions: {
             viewMode: 1,
@@ -97,11 +97,16 @@ export default {
     ;
 
     uppy.value.setMeta({
-      filetype: 'file',
+      filetype: filetype,
       parentResourceNodeId: parentResourceNodeId.value,
       resourceLinkList: resourceLinkList.value,
     });
 
+    if (filetype === 'certificate') {
+        uppy.value.opts.restrictions.allowedFileTypes = ['.html']
+    } else {
+        uppy.value.use(Webcam)
+    }
     return {
       createForm,
       uppy
@@ -131,12 +136,12 @@ export default {
   methods: {
     async processFiles(files) {
       return new Promise((resolve) => {
-        for (let i = 0; i < files.length; i++) {
-          files[i].title = files[i].name;
-          files[i].parentResourceNodeId = this.parentResourceNodeId;
-          files[i].resourceLinkList = this.resourceLinkList;
-          files[i].uploadFile = files[i];
-          this.createFile(files[i]);
+        for (const element of files) {
+            element.title = element.name;
+            element.parentResourceNodeId = this.parentResourceNodeId;
+            element.resourceLinkList = this.resourceLinkList;
+            element.uploadFile = element;
+            this.createFile(element);
         }
 
         resolve(files);

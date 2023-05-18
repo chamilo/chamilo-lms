@@ -230,7 +230,7 @@ class ExerciseLink extends AbstractLink
                                 $lpList[] = $lpData['lp_id'];
                             }
                         } else {
-                            if ((int) $lpData['session_id'] == $sessionId) {
+                            if (in_array('session_id', $lpData) && (int) $lpData['session_id'] == $sessionId) {
                                 $lpList[] = $lpData['lp_id'];
                             }
                         }
@@ -567,7 +567,6 @@ class ExerciseLink extends AbstractLink
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
                     WHERE
-                        c_id = '.$this->course_id.' AND
                         iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);

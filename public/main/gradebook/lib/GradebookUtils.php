@@ -818,7 +818,7 @@ class GradebookUtils
         // Generate document HTML
         $content_html = DocumentManager::replace_user_info_into_html(
             $user_id,
-            api_get_course_info($course_code),
+            api_get_course_info_by_id($course_code),
             $sessionId,
             $is_preview
         );

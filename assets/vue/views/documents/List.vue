@@ -124,6 +124,13 @@
           />
 
           <Button
+            v-if="isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
+            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
+            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
+          />
+
+          <Button
             v-if="isAuthenticated && isCurrentTeacher"
             class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
             icon="mdi mdi-pencil"
@@ -253,12 +260,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Toolbar from 'primevue/toolbar'
 import Dialog from 'primevue/dialog'
-import { computed, onMounted, ref, watch } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import { useCidReq } from '../../composables/cidReq'
 import { useDatatableList } from '../../composables/datatableList'
 import { useRelativeDatetime } from '../../composables/formatDate'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast';
+import {ENTRYPOINT} from "../../config/entrypoint";
 
 const store = useStore()
 const route = useRoute()
@@ -470,6 +478,38 @@ function btnChangeVisibilityOnClick (item) {
       item.resourceLinkListFromEntity = response.data.resourceLinkListFromEntity;
     })
   ;
+}
+
+function btnChangeAttachedCertificateOnClick (item) {
+    const folderParams = route.query;
+
+    folderParams.id = item['@id'];
+    if (null === item.gradebookCategory) {
+      axios
+        .get(ENTRYPOINT + 'gradebook_categories?course=' + cid)
+        .then(response => {
+            if (200 === response.status){
+                item.gradebookCategory = updateAttachedCertificate(response.data['hydra:member'][0]['id'], folderParams.id);
+            }
+        })
+      ;
+    } else {
+        item.gradebookCategory  = updateAttachedCertificate(item.gradebookCategory['id'], folderParams.id);
+    }
+}
+
+function updateAttachedCertificate(gradebookCertificateId, documentId){
+
+    axios
+        .patch(ENTRYPOINT + 'gradebook_categories/' + gradebookCertificateId,
+            {"document": documentId},
+            {headers: {'Content-Type': 'application/merge-patch+json'}}
+        )
+        .then(response => {
+            return response.data;
+        })
+    ;
+
 }
 
 function btnEditOnClick (item) {

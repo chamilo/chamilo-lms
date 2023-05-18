@@ -6,11 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +25,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }))
  *     @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['gradebookCategory:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['gradebookCategory:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'course' => 'exact',
+])]
+
 class GradebookCategory
 {
     use UserTrait;
@@ -29,6 +50,7 @@ class GradebookCategory
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['document:read', 'gradebookCategory:read'])]
     protected ?int $id = null;
 
     /**
@@ -52,6 +74,7 @@ class GradebookCategory
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Groups(['gradebookCategory:read'])]
     protected Course $course;
 
     /**
@@ -125,9 +148,12 @@ class GradebookCategory
     protected ?int $certifMinScore = null;
 
     /**
-     * @ORM\Column(name="document_id", type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CDocument", inversedBy="gradebookCategory")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="iid", nullable=false, onDelete="cascade")
      */
-    protected ?int $documentId = null;
+    #[ApiSubresource]
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    protected ?CDocument $document = null;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
@@ -275,9 +301,9 @@ class GradebookCategory
      *
      * @return GradebookCategory
      */
-    public function setDocumentId(int $documentId)
+    public function setDocument($document)
     {
-        $this->documentId = $documentId;
+        $this->document = $document;
 
         return $this;
     }
@@ -285,11 +311,11 @@ class GradebookCategory
     /**
      * Get documentId.
      *
-     * @return int
+     * @return CDocument|null
      */
-    public function getDocumentId()
+    public function getDocument()
     {
-        return $this->documentId;
+        return $this->document;
     }
 
     public function setLocked(int $locked): self

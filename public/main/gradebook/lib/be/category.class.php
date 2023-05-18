@@ -2054,10 +2054,7 @@ class Category implements GradebookItem
         $user_id = (int) $user_id;
         $categoryId = $category->getId();
         $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
-        $courseCode = $category->getCourse()->getId();
-        $courseInfo = api_get_course_info($courseCode);
-        $courseId = $courseInfo['real_id'];
-
+        $courseId = $category->getCourse()->getId();
         $userFinishedCourse = self::userFinishedCourse($user_id, $category, true);
         if (!$userFinishedCourse) {
             return false;
@@ -2116,10 +2113,14 @@ class Category implements GradebookItem
 
         $html = [];
         if (!empty($my_certificate)) {
+            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFile()->getFile()->getPathname();
+
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
                 0,
-                $sendNotification
+                $sendNotification,
+                true,
+                $pathToCertificate
             );
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();

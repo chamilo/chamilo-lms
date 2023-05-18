@@ -9,7 +9,7 @@ require_once '../main/inc/global.inc.php';
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
-$certificate = new Certificate($_GET['id'], $userId);
+$certificate = new Certificate($_GET['id'], $userId, false, false);
 
 CustomCertificatePlugin::redirectCheck($certificate, $_GET['id'], $userId);
 

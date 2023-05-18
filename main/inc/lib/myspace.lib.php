@@ -3618,9 +3618,10 @@ class MySpace
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
                     get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
                     api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
-
-                MessageManager::send_message_simple($user['id'], $emailsubject, $emailbody);
-
+                
+                $emailbody = nl2br($emailbody);
+                MessageManager::send_message_simple($user['id'], $emailsubject, $emailbody, 0, false, false, array(), false);
+                
                 $userInfo = api_get_user_info($user['id']);
 
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {

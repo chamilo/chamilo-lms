@@ -214,7 +214,7 @@
                     <!--- end old view -->
                 {% else %}
                     <!-- new view block accordeon -->
-                    {% if lp_data.category.id == 0 %}
+                    {% if lp_data.category.iid == 0 %}
                         {% if is_allowed_to_edit %}
                             {% if lp_data.lp_list %}
                                 <div class="table-responsive">

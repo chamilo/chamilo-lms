@@ -8,7 +8,7 @@ const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const glob = require('glob-all');
 const path = require('path');
 
-const { VuetifyLoaderPlugin } = require('vuetify-loader')
+// const { VuetifyLoaderPlugin } = require('vuetify-loader')
 const CopyPlugin = require('copy-webpack-plugin');
 
 Encore

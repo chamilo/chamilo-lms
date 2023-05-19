@@ -1740,6 +1740,7 @@ class Display
                 class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
                 aria-expanded="false"
                 aria-haspopup="true"
+                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
             >
               '.$title.'
               <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -1771,19 +1772,7 @@ class Display
             </div>
             </div>
             </div>
-            <script>
-             document.addEventListener("DOMContentLoaded", function() {
-                const button = document.querySelector("#'.$id.'");
-                    button.addEventListener("click", (e) => {
-                    let menu = document.querySelector("#'.$id.'_menu");
-                    if (menu.classList.contains("hidden")) {
-                        menu.classList.remove("hidden");
-                    } else {
-                        menu.classList.add("hidden");
-                    }
-                });
-            });
-            </script>';
+        ';
 
         return $html;
     }

@@ -5832,7 +5832,7 @@ $Item = "Item";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $Never = "Never";
-$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $SessionFields = "Session fields";
@@ -8007,11 +8007,11 @@ $SpecificDate = "Specific dispatch date";
 $BaseDate = "Dispatch based on the session's start/end dates";
 $AfterOrBefore = "After or before";
 $Before = "Before";
-$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.
+$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session. 
 
-There are two types of announcements that can be sent:
+There are two types of announcements that can be sent: 
 
-Specific date: In this case a specific day is selected to make the announcement.
+Specific date: In this case a specific day is selected to make the announcement. 
 
 Based on the start / end date of the session: in this case the number of days to pass before sending the announcement must be indicated. And those days can be associated to before or after the start / end date. For example: 3 days after the start date.";
 $MandatorySurveyNoAnswered = "A mandatory survey is waiting your answer. To enter the course, you must first complete the survey.";
@@ -9019,4 +9019,9 @@ $UserXChangedToYToCancelClickZ = "User %s has been changed to %s. To cancel, cli
 $Exlearner = "Ex-learner";
 $FileSizeIsTooBig = "File size is too big";
 $AnErrorOccured = "An error occured";
+$EmailPicture = "Image for headers";
+$AddEmailPicture = "Add picture for headers";
+$AddEmailPictureComment = "This picture will be used in the course header and in the e-mails sent and PDFs generated from this course. The picture will have a ratio of 25:7. You can crop the picture you upload.";
+$DeleteEmailPicture = "Delete picture for headers";
+$AddPictureComment = "The final picture must be in a 16:9 ratio, but you can crop the picture you upload.";
 ?>

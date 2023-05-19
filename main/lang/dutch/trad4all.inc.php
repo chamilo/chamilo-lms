@@ -6905,4 +6905,9 @@ $NumberOfQuestionsLimitedFromXToY = "Het aantal vragen is beperkt tot tussen %d 
 $AddTestAfterEachPage = "Voeg na elke pagina een test toe";
 $HiddenButVisibleForMe = "Verborgen maar zichtbaar voor mij";
 $EndOfLearningPath = "Conclusie";
+$EmailPicture = "Site & e-mail banner";
+$AddEmailPicture = "Voeg site & e-mail banner toe";
+$AddEmailPictureComment = "De foto moet een minimale verhouding hebben van 25/7, u kunt de foto die u uploadt bijsnijden.";
+$DeleteEmailPicture = "Verwijder site & e-mail banner";
+$AddPictureComment = "De afbeelding moet een verhouding van 16/9 hebben, u kunt de afbeelding die u uploadt bijsnijden.";
 ?>

@@ -1,6 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
+  important: true,
   content: [
     "./assets/**/*.{js,vue}",
     "./public/main/**/*.{php,twig}",
@@ -12,7 +13,10 @@ module.exports = {
         DEFAULT: "#2e75a3",
         gradient: "#9CC2DA",
       },
-      secondary: "#fd6600",
+      secondary: {
+        DEFAULT: "#F37E2F",
+        gradient: "#e06410",
+      },
       gray: {
         5: "#fcfcfc",
         10: "#fafafa",

@@ -6,7 +6,7 @@
       <template #start>
         <img
           alt="Chamilo LMS"
-          src="/build/css/themes/chamilo/images/header-logo.svg"
+          :src="headerLogo"
         >
       </template>
     </Menubar>
@@ -16,6 +16,7 @@
 <script setup>
 import {ref} from 'vue';
 import Menubar from 'primevue/menubar';
+import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
 
 function setLanguage(event) {
   const {label} = event.item;
@@ -51,4 +52,6 @@ const menuItems = ref([
     ],
   }
 ]);
+
+const headerLogo = headerLogoPath;
 </script>

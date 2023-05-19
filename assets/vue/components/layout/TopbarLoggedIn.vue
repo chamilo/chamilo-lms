@@ -3,7 +3,7 @@
     <template #start>
       <img
         alt="Chamilo LMS"
-        src="/build/css/themes/chamilo/images/header-logo.svg"
+        :src="headerLogo"
       />
     </template>
 
@@ -51,6 +51,8 @@ import MegaMenu from "primevue/megamenu";
 import Avatar from "primevue/avatar";
 import Menu from "primevue/menu";
 import { usePlatformConfig } from "../../store/platformConfig";
+
+import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -113,4 +115,6 @@ const userSubmenuItems = [
 function toogleUserMenu(event) {
   elUserSubmenu.value.toggle(event);
 }
+
+const headerLogo = headerLogoPath;
 </script>

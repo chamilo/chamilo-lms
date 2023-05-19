@@ -285,7 +285,7 @@ app
     .use(Quasar, quasarUserOptions)
     .use(VueFlatPickr)
     //.use(VuelidatePlugin)
-    .use(vuetify)
+    // .use(vuetify)
     .use(router)
     .use(store)
     .use(pinia)

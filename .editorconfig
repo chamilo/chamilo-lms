@@ -16,3 +16,9 @@ ij_php_space_after_type_cast = true
 
 [*.vue]
 indent_size = 2
+
+[*.js]
+indent_size = 2
+
+[*.vue]
+indent_size = 2

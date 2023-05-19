@@ -2454,10 +2454,10 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
 //$_configuration['file_upload_size_limit_for_teacher'] = 0;
 
-// KEEP THIS AT THE END
-// -------- Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
-// ------ (End) Custom DB changes
+
+// Enable use of a custom course logo in mail & PDF headers
+// $_configuration['mail_header_from_custom_course_logo'] = false;

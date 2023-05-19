@@ -213,6 +213,28 @@ function return_logo($theme = '', $responsive = true)
         $class = '';
     }
 
+    if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+        // check if current page is a course page
+        $courseCode = api_get_course_id();
+
+        if (!empty($courseCode)) {
+            $course = api_get_course_info($courseCode);
+            if (!empty($course) && !empty($course['course_email_image_large'])) {
+                $image = \Display::img(
+                    $course['course_email_image_large'],
+                    $course['name'],
+                    [
+                        'title' => $course['name'],
+                        'class' => $class,
+                        'id'    => 'header-logo',
+                    ]
+                );
+
+                return \Display::url($image, $course['course_public_url']);
+            }
+        }
+    }
+
     return ChamiloApi::getPlatformLogo(
         $theme,
         [

@@ -55,7 +55,7 @@ class SecurityController extends AbstractController
 
             $this->trackELoginRecordRepository->create($trackELoginRecord);
 
-            $data = $this->serializer->serialize($user, JsonEncoder::FORMAT, ['groups' => ['user:read']]);
+            $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user:read']]);
         }
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);

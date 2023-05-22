@@ -7055,7 +7055,6 @@ EOT;
                                             continue;
                                         }
 
-
                                         api_mail_html(
                                             null,
                                             $email,
@@ -7191,17 +7190,75 @@ EOT;
         curl_close($ch);
     }
 
+    public static function exportAllExercisesResultsZip(
+        int $sessionId,
+        int $courseId,
+        $filterDates = []
+    ) {
+        $exercises = self::get_all_exercises_for_course_id(
+            null,
+            $sessionId,
+            $courseId,
+            true
+        );
+
+        $exportOk = false;
+        if (!empty($exercises)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-ALL';
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            if (!is_dir($exportFolderPath)) {
+                @mkdir($exportFolderPath);
+            }
+
+            foreach ($exercises as $exercise) {
+                $exerciseId = $exercise['iid'];
+                self::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, [], $exportFolderPath);
+            }
+
+            // If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \PclZip($exportFilePath);
+                $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
+                rmdirr($exportFolderPath);
+
+                DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                exit;
+            }
+        }
+
+        if (!$exportOk) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return false;
+    }
+
     public static function exportExerciseAllResultsZip(
         int $sessionId,
         int $courseId,
-        int $exerciseId
+        int $exerciseId,
+        $filterDates = [],
+        string $mainPath = ''
     ) {
         $objExerciseTmp = new Exercise($courseId);
         $exeResults = $objExerciseTmp->getExerciseAndResult(
             $courseId,
             $sessionId,
             $exerciseId,
-            ''
+            true,
+            $filterDates
         );
 
         $exportOk = false;
@@ -7233,8 +7290,12 @@ EOT;
                 $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
                 rmdirr($exportFolderPath);
 
-                DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
-                exit;
+                if (!empty($mainPath) && file_exists($exportFilePath)) {
+                    @rename($exportFilePath, $mainPath.'/'.$exportName.'.zip');
+                } else {
+                    DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                    exit;
+                }
             }
         }
 

@@ -660,6 +660,11 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
         );
     }
 
+    $actionsLeft .= Display::url(
+        Display::return_icon('export_pdf.png', get_lang('ExportExerciseAllResults'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=export_all_exercises_results'
+    );
+
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {
             $actionsLeft .= $cleanAll;

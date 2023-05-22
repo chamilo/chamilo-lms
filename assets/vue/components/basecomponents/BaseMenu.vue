@@ -2,7 +2,7 @@
   <Menu
     :id="id"
     ref="menu"
-    :model="innerModel"
+    :model="model"
     :popup="true"
     class="app-topbar__user-submenu"
   />
@@ -11,9 +11,9 @@
 
 <script setup>
 import Menu from "primevue/menu";
-import {ref, computed} from "vue";
+import {ref} from "vue";
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     required: true,
@@ -22,16 +22,7 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-})
-
-const innerModel = computed(() => {
-  return props.model.map(e => {
-    return {
-      ...e,
-      'class': 'text-primary',
-    };
-  });
-})
+});
 
 const menu = ref(null);
 

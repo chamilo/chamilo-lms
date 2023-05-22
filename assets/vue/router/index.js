@@ -25,7 +25,7 @@ import MyCoursesLayout from '../layouts/MyCourses.vue';
 
 import CourseCatalog from '../views/course/Catalog.vue';
 import SessionCatalog from '../views/course/CatalogSession.vue';
-import CourseHome from '../views/course/Home.vue';
+import CourseHome from '../views/course/CourseHome.vue';
 
 import Index from '../pages/Index.vue';
 import Home from '../pages/Home.vue';

@@ -6,7 +6,7 @@
       :href="data.contentUrl"
       :data-type="dataType"
     >
-      <ResourceIcon class="mr-2" :file-type="data.filetype" />
+      <ResourceIcon class="mr-2" :resource-data="data" />
       {{ data.title }}
     </a>
   </div>
@@ -19,7 +19,7 @@
         query: folderParams,
       }"
     >
-      <ResourceIcon class="mr-2" file-type="folder"/>
+      <ResourceIcon class="mr-2" :resource-data="data"/>
       <b>{{ data.resourceNode.title }}</b>
     </RouterLink>
   </div>
@@ -37,10 +37,14 @@ const props = defineProps({
 });
 
 const dataType = computed(() => {
-  if (props.data.resourceNode.resourceFile.image) {
+  let resourceFile = props.data.resourceNode.resourceFile;
+  if (resourceFile === null) {
+    return '';
+  }
+  if (resourceFile.image) {
     return 'image';
   }
-  if (props.data.resourceNode.resourceFile.video) {
+  if (resourceFile.video) {
     return 'video';
   }
 

@@ -4,7 +4,7 @@
       :href="resource.contentUrl"
       :data-type="getDataType"
   >
-    <ResourceIcon :file="resource.resourceNode.resourceFile" />
+    <ResourceIcon :resource-data="resource" />
     {{ resource.title }}
   </a>
 </template>
@@ -29,7 +29,10 @@ export default {
     }
   },
   props: {
-    resource: Object
+    resource: {
+      type: Object,
+      required: true,
+    }
   },
 };
 </script>

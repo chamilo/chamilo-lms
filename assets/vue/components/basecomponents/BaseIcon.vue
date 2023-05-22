@@ -1,5 +1,5 @@
 <template>
-  <i class="text-xl/4" :class="iconClass"/>
+  <i :class="iconClass"/>
 </template>
 
 <script setup>
@@ -18,9 +18,31 @@ const props = defineProps({
       return Object.keys(chamiloIconToClass).includes(value)
     }
   },
+  size: {
+    type: String,
+    default: "normal",
+    validator: (value) => {
+      if (typeof (value) !== "string") {
+        return false
+      }
+      return [
+        "normal",
+        "small",
+      ].includes(value);
+    }
+  }
 });
 
 const iconClass = computed(() => {
-  return chamiloIconToClass[props.icon];
+  let iconClass = chamiloIconToClass[props.icon] + " ";
+  switch (props.size) {
+    case "normal":
+      iconClass += "text-xl/4 ";
+      break;
+    case "small":
+      iconClass += "text-base/4 ";
+      break;
+  }
+  return iconClass;
 });
 </script>

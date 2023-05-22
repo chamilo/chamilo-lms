@@ -86,14 +86,14 @@
         v-if="course && isCurrentTeacher"
         type="black"
         :label="t('See as student')"
-        icon="eye"
+        icon="eye-on"
       />
 
       <BaseButton
         v-if="showUpdateIntroductionButton"
         type="black"
         :label="t('Edit introduction')"
-        icon="pencil"
+        icon="edit"
         @click="updateIntro(intro)"
       />
 

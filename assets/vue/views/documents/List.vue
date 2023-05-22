@@ -67,18 +67,10 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
-          <ResourceFileLink :resource="slotProps.data" />
-        </div>
-        <div v-else>
-          <Button
-            v-if="slotProps.data"
-            :label="slotProps.data.resourceNode.title"
-            class="p-button-text p-button-plain"
-            icon="mdi mdi-folder"
-            @click="btnFolderOnClick(slotProps.data)"
-          />
-        </div>
+        <DocumentEntry
+          v-if="slotProps.data"
+          :data="slotProps.data"
+        />
       </template>
     </Column>
 
@@ -109,30 +101,34 @@
     >
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
-          <Button
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-information"
+          <BaseButton
+            type="black"
+            icon="information"
+            size="small"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye-off' : '')"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            type="black"
+            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-on' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-off' : '')"
+            size="small"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-pencil"
+            type="black"
+            icon="edit"
+            size="small"
             @click="btnEditOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-            icon="mdi mdi-delete"
+            type="danger"
+            icon="delete"
+            size="small"
             @click="confirmDeleteItem(slotProps.data)"
           />
         </div>
@@ -245,7 +241,6 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import ResourceFileLink from '../../components/documents/ResourceFileLink.vue'
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from '../../components/resource_links/visibility'
 import { isEmpty } from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
@@ -258,6 +253,8 @@ import { useDatatableList } from '../../composables/datatableList'
 import { useRelativeDatetime } from '../../composables/formatDate'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast';
+import DocumentEntry from "../../components/documents/DocumentEntry.vue";
+import BaseButton from "../../components/basecomponents/BaseButton.vue";
 
 const store = useStore()
 const route = useRoute()
@@ -425,23 +422,6 @@ function goToUploadFile () {
     name: 'DocumentsUploadFile',
     query: route.query
   })
-}
-
-function btnFolderOnClick (item) {
-  const folderParams = route.query;
-  const resourceId = item.resourceNode.id;
-
-  if (!resourceId) {
-    return;
-  }
-
-  filters.value['resourceNode.parent'] = resourceId;
-
-  router.push({
-    name: 'DocumentsList',
-    params: { node: resourceId },
-    query: folderParams,
-  });
 }
 
 function btnShowInformationOnClick (item) {

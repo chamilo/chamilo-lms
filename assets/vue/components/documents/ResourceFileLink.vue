@@ -4,17 +4,17 @@
       :href="resource.contentUrl"
       :data-type="getDataType"
   >
-    <ResourceFileIcon :file="resource.resourceNode.resourceFile" />
+    <ResourceIcon :file="resource.resourceNode.resourceFile" />
     {{ resource.title }}
   </a>
 </template>
 
 <script>
-import ResourceFileIcon from './ResourceFileIcon.vue';
+import ResourceIcon from './ResourceIcon.vue';
 export default {
   name: 'ResourceFileLink',
   components: {
-    ResourceFileIcon
+    ResourceIcon
   },
   computed: {
     getDataType() {

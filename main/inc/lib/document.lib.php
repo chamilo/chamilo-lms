@@ -5684,6 +5684,8 @@ class DocumentManager
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
 
+        $secToken = Security::getTokenFromSession();
+
         if ($type == 'link') {
             $parent_id = self::get_document_id(
                 api_get_course_info(),
@@ -5766,7 +5768,7 @@ class DocumentManager
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
                     $modify_icons[] = Display::url(
                         Display::return_icon('wizard.png', get_lang('AddAsTemplate')),
-                        api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
+                        api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id&sec_token=$secToken"
                     );
                 }
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') || $is_certificate_mode) {//allow attach certificate to course
@@ -5783,12 +5785,12 @@ class DocumentManager
                     if (isset($_GET['selectcat'])) {
                         $modify_icons[] = Display::url(
                             Display::return_icon($visibility_icon_certificate.'.png', $certificate),
-                            api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id"
+                            api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id&sec_token=$secToken"
                         );
                         if ($is_preview) {
                             $modify_icons[] = Display::url(
                                 Display::return_icon('preview_view.png', $preview),
-                                api_get_self()."?$courseParams&curdirpath=$curdirpath&set_preview=$id"
+                                api_get_self()."?$courseParams&curdirpath=$curdirpath&set_preview=$id&sec_token=$secToken"
                             );
                         }
                     }
@@ -5796,13 +5798,13 @@ class DocumentManager
             } else {
                 $modify_icons[] = Display::url(
                     Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate')),
-                    api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id"
+                    api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id&sec_token=$secToken"
                 );
             }
 
             $modify_icons[] = Display::url(
                 Display::return_icon('pdf.png', get_lang('Export2PDF')),
-                api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
+                api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath&sec_token=$secToken"
             );
         }
         if ($type == 'file') {
@@ -5818,7 +5820,7 @@ class DocumentManager
             $form = new FormValidator(
                 'upload',
                 'POST',
-                api_get_self().'?'.api_get_cidreq(),
+                api_get_self().'?'.api_get_cidreq()."&sec_token=$secToken",
                 '',
                 ['enctype' => 'multipart/form-data']
             );
@@ -7376,7 +7378,11 @@ class DocumentManager
             }
         }
 
-        $urlMoveParams = http_build_query(['id' => $parentId, 'move' => $document_id]);
+        $urlMoveParams = http_build_query([
+            'id' => $parentId,
+            'move' => $document_id,
+            'sec_token' => Security::getTokenFromSession(),
+        ]);
 
         return Display::url(
             $iconEn,
@@ -7419,10 +7425,11 @@ class DocumentManager
 
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
             $tip_visibility = $visibility_icon == 'invisible' ? get_lang('Show') : get_lang('Hide');
+            $secToken = Security::getTokenFromSession();
 
             return Display::url(
                 Display::return_icon($visibility_icon.'.png', $tip_visibility),
-                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}"
+                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}&sec_token=$secToken"
             );
         }
 
@@ -7466,6 +7473,7 @@ class DocumentManager
             'action' => 'delete_item',
             'id' => $parentId,
             'deleteid' => $documentData['id'],
+            'sec_token' => Security::getTokenFromSession(),
         ]);
 
         $btn = Display::url(

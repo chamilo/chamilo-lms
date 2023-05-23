@@ -77,6 +77,7 @@ class EvalForm extends FormValidator
                 $this->build_add_user_to_eval();
                 break;
         }
+        $this->protect();
         $this->setDefaults();
     }
 

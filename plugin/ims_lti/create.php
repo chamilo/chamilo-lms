@@ -60,6 +60,8 @@ if ($form->validate()) {
             ->setJwksUrl($formValues['jwks_url'])
             ->publicKey = $formValues['public_key'];
     } else {
+        $externalTool->setVersion(ImsLti::V_1P1);
+
         if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
             try {
                 $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);

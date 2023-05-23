@@ -213,6 +213,28 @@ function return_logo($theme = '', $responsive = true)
         $class = '';
     }
 
+    if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+        // check if current page is a course page
+        $courseCode = api_get_course_id();
+
+        if (!empty($courseCode)) {
+            $course = api_get_course_info($courseCode);
+            if (!empty($course) && !empty($course['course_email_image_large'])) {
+                $image = \Display::img(
+                    $course['course_email_image_large'],
+                    $course['name'],
+                    [
+                        'title' => $course['name'],
+                        'class' => $class,
+                        'id'    => 'header-logo',
+                    ]
+                );
+
+                return \Display::url($image, $course['course_public_url']);
+            }
+        }
+    }
+
     return ChamiloApi::getPlatformLogo(
         $theme,
         [
@@ -344,7 +366,9 @@ function return_navigation_array()
     }
 
     if (api_get_setting('course_catalog_published') == 'true' && api_is_anonymous()) {
-        $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
+        if (true !== api_get_configuration_value('catalog_hide_public_link')) {
+            $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
+        }
     }
 
     if (api_get_user_id() && !api_is_anonymous()) {

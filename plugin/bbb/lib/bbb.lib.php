@@ -638,9 +638,8 @@ class bbb
             $this->table,
             array(
                 'where' => array(
-                    'meeting_name = ? AND status = 1 AND access_url = ?' => array(
+                    'meeting_name = ? AND status = 1' => array(
                         $meetingName,
-                        $this->accessUrl,
                     ),
                 ),
             ),
@@ -917,9 +916,8 @@ class bbb
         $sessionId = api_get_session_id();
         $conditions = array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
-                    array($courseId, $sessionId, $meetingName, $this->accessUrl),
-            ),
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1' =>
+                 array($courseId, $sessionId, $meetingName),
         );
 
         if ($this->hasGroupSupport()) {

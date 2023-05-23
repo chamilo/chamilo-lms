@@ -65,7 +65,7 @@ class PortfolioCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @ORM\Column(name="parent_id", type="integer", nullable=false, options={"default": 0})
      */
     protected $parentId = 0;
 

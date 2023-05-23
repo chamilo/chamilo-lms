@@ -148,9 +148,9 @@ class HTML_QuickForm_RuleRegistry
             'date' => 'HTML_QuickForm_Rule_Date',
             'compare_datetime_text' => 'HTML_QuickForm_Rule_CompareDateTimeText',
             'uploadedfile' => 'HTML_QuickForm_Rule_UploadFile',
-            'maxfilesize', 'HTML_QuickForm_Rule_MaxFileSize',
-            'mimetype', 'HTML_QuickForm_Rule_MimeType',
-            'filename', 'HTML_QuickForm_Rule_FileName',
+            'maxfilesize'=> 'HTML_QuickForm_Rule_MaxFileSize',
+            'mimetype' => 'HTML_QuickForm_Rule_MimeType',
+            'filename' => 'HTML_QuickForm_Rule_FileName',
             'validquestiontype' => 'HTML_QuickForm_Rule_QuestionType',
             'mintext' => 'Html_Quickform_Rule_MinText'
         );

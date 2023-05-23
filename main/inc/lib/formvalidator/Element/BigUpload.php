@@ -26,6 +26,7 @@ class BigUpload extends HTML_QuickForm_file
         $origin = $this->getAttribute('data-origin');
         $id = $this->getAttribute('id');
         $maxSize = getIniMaxFileSizeInBytes();
+        $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
         $html = parent::toHtml();
         $html .= '<div id="'.$id.'-bigUploadProgressBarContainer">
             <div id="'.$id.'-bigUploadProgressBarFilled"></div>
@@ -67,12 +68,16 @@ class BigUpload extends HTML_QuickForm_file
                 bigUpload.settings.progressBarColorError = "#da4f49";
                 //Path to the php script for handling the uploads
                 bigUpload.settings.scriptPath = "'.api_get_path(WEB_LIBRARY_JS_PATH).'bigupload/inc/bigUpload.php";
+                //cid Req
+                bigUpload.settings.cidReq = "'.api_get_cidreq().'";
                 //Set the origin upload
                 bigUpload.settings.origin = "'.$origin.'";
                 //The parameters from the upload form
                 bigUpload.settings.formParams = uploadForm.serialize();
                 //Max file size allowed
                 bigUpload.settings.maxFileSize = "'.$maxSize.'";
+                // Message error upload filesize
+                bigUpload.settings.errMessageFileSize = "'.$errorUploadMessage.'";
             }
         </script>';
 

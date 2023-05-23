@@ -1579,6 +1579,8 @@ class Rest extends WebService
     }
 
     /**
+     * Returns an array of users with id, firstname, lastname, email and username
+     * @param array $params An array of parameters to filter the results (currently only supports 'status' and 'id_campus')
      * @throws Exception
      */
     public function getUsersCampus(array $params): array
@@ -1597,6 +1599,7 @@ class Rest extends WebService
                 'firstname' => $item['firstname'],
                 'lastname' => $item['lastname'],
                 'email' => $item['email'],
+                'username' => $item['username'],
             ];
             $list[] = $listTemp;
         }

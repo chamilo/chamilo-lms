@@ -5235,6 +5235,8 @@ class DocumentManager
         global $dbl_click_id;
         $www = $documentWebPath;
 
+        $secToken = Security::getTokenFromSession();
+
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
         $webODFList = self::get_web_odf_extension_list();
@@ -5266,8 +5268,8 @@ class DocumentManager
         if (!$show_as_icon) {
             // Build download link (icon)
             $forcedownload_link = $filetype === 'folder'
-                ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
-                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+                ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id'].'&sec_token='.$secToken
+                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'].'&sec_token='.$secToken;
             // Folder download or file download?
             $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
@@ -5380,7 +5382,7 @@ class DocumentManager
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
             ) {
-                $copy_myfiles_link = $filetype === 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
+                $copy_myfiles_link = $filetype === 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'].'&sec_token='.$secToken : api_get_self().'?'.$courseParams.'&sec_token='.$secToken;
                 if ($filetype === 'file') {
                     $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
@@ -5397,7 +5399,7 @@ class DocumentManager
                 api_get_setting('students_export2pdf') == 'true' &&
                 in_array($extension, ['html', 'htm'])
             ) {
-                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
+                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&sec_token='.$secToken.'&curdirpath='.$curdirpath.'">'.
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
             }
 

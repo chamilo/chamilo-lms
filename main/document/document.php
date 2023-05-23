@@ -550,7 +550,7 @@ if ($action && Security::check_token('get')) {
                         }
                     }
                 } else {
-                    if (!copy($file, $copyfile)) {
+                    if (!@copy($file, $copyfile)) {
                         Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
                     } else {
                         Display::addFlash(
@@ -637,6 +637,7 @@ if ($action && Security::check_token('get')) {
     Security::clear_token();
 }
 
+$secToken = Security::get_token();
 // If no actions we proceed to show the document (Hack in order to use document.php?id=X)
 if (isset($document_id) && empty($action)) {
     // Get the document data from the ID
@@ -2071,7 +2072,7 @@ if (!empty($documentAndFolders)) {
                     ICON_SIZE_MEDIUM
                 ),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'
-                    .api_get_cidreq().'&action=downloadfolder&id='.$document_id
+                    .api_get_cidreq().'&action=downloadfolder&id='.$document_id.'&sec_token='.$secToken
             );
         }
     }
@@ -2162,7 +2163,7 @@ if ($groupId) {
 $queryVars['cidReq'] = api_get_course_id();
 $queryVars['id_session'] = api_get_session_id();
 $queryVars['id'] = $document_id;
-$queryVars['sec_token'] = Security::get_token();
+$queryVars['sec_token'] = $secToken;
 $table->set_additional_parameters($queryVars);
 $column = 0;
 

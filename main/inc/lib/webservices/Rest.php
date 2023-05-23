@@ -1156,10 +1156,12 @@ class Rest extends WebService
 
     /**
      * Get the list of users from extra field.
-     *
+     * @param string $fieldName The name of the extra_field (as in extra_field.variable) we want to filter on.
+     * @param string $fieldValue The value of the extra_field we want to filter on. If a user doesn't have the given extra_field set to that value, it will not be returned.
+     * @param int   $active Additional filter. If 1, only return active users. Otherwise, return them all.
      * @throws Exception
      */
-    public function getUsersProfilesByExtraField(string $fieldName, string $fieldValue): array
+    public function getUsersProfilesByExtraField(string $fieldName, string $fieldValue, int $active = 0): array
     {
         self::protectAdminEndpoint();
         $users = [];
@@ -1171,6 +1173,10 @@ class Rest extends WebService
             foreach ($extraValues as $value) {
                 $userId = (int) $value;
                 $user = api_get_user_entity($userId);
+                if ($active && !$user->getActive()) {
+                    // If this user is not active, and we only asked for active users, skip to next user.
+                    continue;
+                }
                 $pictureInfo = UserManager::get_user_picture_path_by_id($user->getId(), 'web');
                 $users[$userId] = [
                     'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
@@ -1180,7 +1186,7 @@ class Rest extends WebService
                     'username' => $user->getUsername(),
                     'officialCode' => $user->getOfficialCode(),
                     'phone' => $user->getPhone(),
-                    'extra' => [],
+                    //'extra' => [],
                 ];
             }
         }

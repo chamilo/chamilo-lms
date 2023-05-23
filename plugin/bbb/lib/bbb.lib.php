@@ -918,7 +918,7 @@ class bbb
             'where' => array(
                 'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1' =>
                  array($courseId, $sessionId, $meetingName),
-        );
+        ));
 
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();

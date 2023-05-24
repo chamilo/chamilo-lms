@@ -2075,7 +2075,6 @@ class Template
                 $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
-
             if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
                 // check if current page is a course page
                 $courseId = api_get_course_int_id();

@@ -226,7 +226,7 @@ function return_logo($theme = '', $responsive = true)
                     [
                         'title' => $course['name'],
                         'class' => $class,
-                        'id'    => 'header-logo',
+                        'id' => 'header-logo',
                     ]
                 );
 

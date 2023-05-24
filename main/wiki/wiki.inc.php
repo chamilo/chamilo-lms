@@ -2253,7 +2253,6 @@ class Wiki
         }
         ///make and send email
         if ($allow_send_mail) {
-
             $extraParameters = [];
             if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
                 $extraParameters = ['logo' => CourseManager::getCourseEmailPicture($_course)];

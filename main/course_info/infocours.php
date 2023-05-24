@@ -174,7 +174,6 @@ $form->addRule(
 );
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
-
 // Email Picture
 $form->addFile(
     'email_picture',
@@ -190,7 +189,6 @@ $form->addRule(
     $allowed_picture_types
     );
 $form->addElement('checkbox', 'delete_email_picture', null, get_lang('DeleteEmailPicture'));
-
 
 if (api_get_setting('pdf_export_watermark_by_course') === 'true') {
     $url = PDF::get_watermark($course_code);

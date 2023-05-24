@@ -7055,7 +7055,6 @@ EOT;
                                             continue;
                                         }
 
-
                                         api_mail_html(
                                             null,
                                             $email,

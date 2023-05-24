@@ -7326,6 +7326,108 @@ class CourseManager
     }
 
     /**
+     * Update course email picture.
+     *
+     * @param string $sourceFile     the full system name of the image from which course picture will be created
+     * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
+     *
+     * @return bool Returns the resulting. In case of internal error or negative validation returns FALSE.
+     */
+    public static function updateCourseEmailPicture(
+        array $courseInfo,
+        string $sourceFile = null,
+        string $cropParameters = null
+        ): bool {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        // Course path
+        $store_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
+        // Image name for courses
+        $course_image = $store_path.'/course-email-pic.png';
+        $course_medium_image = $store_path.'/course-email-pic-cropped.png';
+
+        if (file_exists($course_image)) {
+            unlink($course_image);
+        }
+        if (file_exists($course_medium_image)) {
+            unlink($course_medium_image);
+        }
+
+        //Crop the image to adjust 4:3 ratio
+        $image = new Image($sourceFile);
+        $image->crop($cropParameters);
+
+        //Resize the images in two formats
+        $medium = new Image($sourceFile);
+        $medium->resize(85);
+        $medium->send_image($course_medium_image, -1, 'png');
+        $normal = new Image($sourceFile);
+        $normal->resize(250);
+        $normal->send_image($course_image, -1, 'png');
+
+        return $medium && $normal; //if both ops were ok, return true, otherwise false
+    }
+
+    /**
+     * Deletes the course email picture.
+     */
+    public static function deleteCourseEmailPicture(string $courseCode): void
+    {
+        $course_info = api_get_course_info($courseCode);
+        // course path
+        $storePath = api_get_path(SYS_COURSE_PATH).$course_info['path'];
+        // image name for courses
+        $courseImage = $storePath.'/course-email-pic.png';
+        $courseMediumImage = $storePath.'/course-email-pic-cropped.png';
+
+        if (file_exists($courseImage)) {
+            unlink($courseImage);
+        }
+        if (file_exists($courseMediumImage)) {
+            unlink($courseMediumImage);
+        }
+    }
+
+    /**
+     * Get the course logo.
+     *
+     * @param array $course     array containing course info, @see api_get_course_info()
+     * @param array $attributes Array containing extra attributes for the image tag
+     *
+     * @return string|null
+     */
+    public static function getCourseEmailPicture($course, $attributes = null)
+    {
+        $logo = null;
+        if (!empty($course)
+            && !empty($course['course_email_image_large_source'])
+            && file_exists($course['course_email_image_large_source'])
+        ) {
+            if (is_null($attributes)) {
+                $attributes = [
+                    'title' => $course['name'],
+                    'class' => 'img-responsive',
+                    'id' => 'header-logo',
+                    'width' => 250,
+                ];
+            }
+
+            $logo = \Display::url(
+                \Display::img(
+                    $course['course_email_image_large'],
+                    $course['name'],
+                    $attributes
+                ),
+                api_get_path(WEB_PATH).'index.php'
+            );
+        }
+
+        return $logo;
+    }
+
+    /**
      * Check if a specific access-url-related setting is a problem or not.
      *
      * @param array  $_configuration The $_configuration array
@@ -7402,109 +7504,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-    /**
-     * Update course email picture.
-     *
-     * @param array  $courseInfo
-     * @param string $sourceFile the full system name of the image from which course picture will be created
-     * @param string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
-     *
-     * @return bool Returns the resulting. In case of internal error or negative validation returns FALSE.
-     */
-    public static function updateCourseEmailPicture(
-        array $courseInfo,
-        string $sourceFile = null,
-        string $cropParameters = null
-        ): bool {
-            if (empty($courseInfo)) {
-                return false;
-            }
-
-            // Course path
-            $store_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
-            // Image name for courses
-            $course_image = $store_path.'/course-email-pic.png';
-            $course_medium_image = $store_path.'/course-email-pic-cropped.png';
-
-            if (file_exists($course_image)) {
-                unlink($course_image);
-            }
-            if (file_exists($course_medium_image)) {
-                unlink($course_medium_image);
-            }
-
-            //Crop the image to adjust 4:3 ratio
-            $image = new Image($sourceFile);
-            $image->crop($cropParameters);
-
-            //Resize the images in two formats
-            $medium = new Image($sourceFile);
-            $medium->resize(85);
-            $medium->send_image($course_medium_image, -1, 'png');
-            $normal = new Image($sourceFile);
-            $normal->resize(250);
-            $normal->send_image($course_image, -1, 'png');
-
-            return $medium && $normal; //if both ops were ok, return true, otherwise false
-    }
-
-    /**
-     * Deletes the course email picture.
-     *
-     * @param string $courseCode
-     */
-    public static function deleteCourseEmailPicture(string $courseCode): void
-    {
-        $course_info = api_get_course_info($courseCode);
-        // course path
-        $storePath = api_get_path(SYS_COURSE_PATH).$course_info['path'];
-        // image name for courses
-        $courseImage = $storePath.'/course-email-pic.png';
-        $courseMediumImage = $storePath.'/course-email-pic-cropped.png';
-
-        if (file_exists($courseImage)) {
-            unlink($courseImage);
-        }
-        if (file_exists($courseMediumImage)) {
-            unlink($courseMediumImage);
-        }
-    }
-
-    /**
-     * Get the course logo
-     *
-     * @param array $course array containing course info, @see api_get_course_info()
-     * @param array $attributes Array containing extra attributes for the image tag
-     *
-     * @return string|null
-     */
-    public static function getCourseEmailPicture($course, $attributes = null)
-    {
-        $logo = null;
-        if (!empty($course)
-            && !empty($course['course_email_image_large_source'])
-            && file_exists($course['course_email_image_large_source'])
-        ) {
-            if (is_null($attributes)) {
-                $attributes = [
-                    'title' => $course['name'],
-                    'class' => 'img-responsive',
-                    'id'    => 'header-logo',
-                    'width' => 250,
-                ];
-            }
-
-            $logo = \Display::url(
-                \Display::img(
-                    $course['course_email_image_large'],
-                    $course['name'],
-                    $attributes
-                ),
-                api_get_path(WEB_PATH) . 'index.php'
-            );
-        }
-
-        return $logo;
     }
 }

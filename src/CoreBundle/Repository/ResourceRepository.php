@@ -266,12 +266,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function addVisibilityQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    public function addVisibilityQueryBuilder(QueryBuilder $qb = null, bool $checkStudentView = false): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
+        $sessionStudentView = $this->getRequest()->getSession()->get('studentview');
+
         $checker = $this->getAuthorizationChecker();
-        $isAdmin =
+        $isAdminOrTeacher =
             $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
@@ -281,7 +283,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
         ;
 
-        if (!$isAdmin) {
+        if (!$isAdminOrTeacher
+            || ($checkStudentView && 'studentview' === $sessionStudentView)
+        ) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
@@ -382,7 +386,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
-        $this->addVisibilityQueryBuilder($qb);
+        $this->addVisibilityQueryBuilder($qb, true);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         return $qb;

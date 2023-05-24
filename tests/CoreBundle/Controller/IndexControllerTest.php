@@ -73,20 +73,6 @@ class IndexControllerTest extends WebTestCase
         $this->assertStringContainsString('lang="fr_FR"', $client->getResponse()->getContent());
     }
 
-    public function testToggleStudentViewAction(): void
-    {
-        $client = static::createClient();
-
-        // retrieve the admin
-        $admin = $this->getUser('admin');
-
-        // simulate $testUser being logged in
-        $client->loginUser($admin);
-
-        $client->request('GET', '/toggle_student_view');
-        $this->assertResponseIsSuccessful();
-    }
-
     public function testLogout(): void
     {
         $client = static::createClient();

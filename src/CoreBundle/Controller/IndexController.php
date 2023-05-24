@@ -37,30 +37,6 @@ class IndexController extends BaseController
     }
 
     /**
-     * Toggle the student view action.
-     *
-     * @Route("/toggle_student_view", methods={"GET"})
-     *
-     * @Security("is_granted('ROLE_TEACHER')")
-     */
-    public function toggleStudentViewAction(Request $request): Response
-    {
-        if (!api_is_allowed_to_edit(false, false, false, false)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $studentView = $request->getSession()->get('studentview');
-        if (empty($studentView) || 'studentview' === $studentView) {
-            $content = 'teacherview';
-        } else {
-            $content = 'studentview';
-        }
-        $request->getSession()->set('studentview', $content);
-
-        return new Response($content);
-    }
-
-    /**
      * Use only in PHPUnit tests.
      */
     public function classic($name): Response

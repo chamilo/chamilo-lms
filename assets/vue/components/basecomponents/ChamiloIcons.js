@@ -53,3 +53,11 @@ export const chamiloIconToClass = {
     "cog": "mdi mdi-cog",
     "plus": "mdi mdi-plus",
 };
+
+export const validator = (value) => {
+    if (typeof (value) !== "string") {
+        return false;
+    }
+
+    return Object.keys(chamiloIconToClass).includes(value);
+};

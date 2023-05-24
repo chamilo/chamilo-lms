@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +18,16 @@ use TicketManager;
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
 {
+    use ControllerTrait;
+
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(SettingsManager $settingsManager): Response
     {
+        $requestSession = $this->getRequest()->getSession();
+
         $configuration = [
             'settings' => [],
+            'studentview' => $requestSession->get('studentview'),
         ];
         $variables = [];
 
@@ -57,6 +64,7 @@ class PlatformConfigurationController extends AbstractController
                 'gradebook.gradebook_dependency',
 
                 'course.course_validation',
+                'course.student_view_enabled',
 
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',

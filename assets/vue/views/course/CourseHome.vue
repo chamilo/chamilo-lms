@@ -29,7 +29,7 @@
         <small v-if="session"> ({{ session.name }}) </small>
       </h2>
 
-      <BaseButton v-if="course && isCurrentTeacher" :label="t('See as student')" icon="eye" type="black" />
+      <StudentViewButton v-if="course" />
 
       <BaseButton
         v-if="showUpdateIntroductionButton"
@@ -180,6 +180,7 @@ import EmptyState from "../../components/EmptyState";
 import Skeleton from "primevue/skeleton";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
+import StudentViewButton from "../../components/StudentViewButton.vue";
 
 const route = useRoute();
 const store = useStore();

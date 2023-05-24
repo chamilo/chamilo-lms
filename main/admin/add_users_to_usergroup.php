@@ -86,7 +86,7 @@ function change_select(reset) {
 
     if (reset) {
         document.formulaire["first_letter_user"].value = "";
-        
+
         if ('.(api_get_configuration_value('usergroup_add_user_show_all_student_by_default') ? 0 : 1).') {
             document.formulaire["form_sent"].value = "1";
 
@@ -235,8 +235,8 @@ if (api_is_western_name_order()) {
     $order = ['firstname'];
 }
 
-$orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-if ($orderListByOfficialCode === 'true') {
+$orderListByOfficialCode = 'true' === api_get_setting('order_user_list_by_official_code');
+if ($orderListByOfficialCode) {
     $order = ['official_code', 'lastname'];
 }
 
@@ -266,15 +266,7 @@ $elements_not_in = $elements_in = [];
 foreach ($list_in as $listedUserId) {
     $userInfo = api_get_user_info($listedUserId);
 
-    $person_name = $userInfo['complete_name_with_username']." {$userInfo['official_code']}";
-
-    if ($orderListByOfficialCode === 'true') {
-        $officialCode = !empty($userInfo['official_code']) ? $userInfo['official_code'].' - ' : '? - ';
-
-        $person_name = $officialCode.$userInfo['complete_name_with_username'];
-    }
-
-    $elements_in[$listedUserId] = $person_name;
+    $elements_in[$listedUserId] = formatCompleteName($userInfo, $orderListByOfficialCode);
 }
 
 $user_with_any_group = !empty($_REQUEST['user_with_any_group']);
@@ -307,16 +299,8 @@ if (!empty($user_list)) {
             continue;
         }
 
-        $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
-        $person_name = $item['complete_name_with_username']." $officialCode";
-
-        if ($orderListByOfficialCode === 'true') {
-            $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
-            $person_name = $officialCode.$item['complete_name_with_username'];
-        }
-
         if (!in_array($item['user_id'], $list_in)) {
-            $elements_not_in[$item['user_id']] = $person_name;
+            $elements_not_in[$item['user_id']] = formatCompleteName($item, $orderListByOfficialCode);
         }
     }
 }
@@ -326,10 +310,25 @@ if (api_get_configuration_value('usergroup_add_user_show_all_student_by_default'
     && empty($first_letter_user)
 ) {
     $initialUserList = UserManager::getUserListLike([], $order, true, 'OR');
-    $elements_not_in = array_combine(
-        array_column($initialUserList, 'id'),
-        array_column($initialUserList, 'complete_name_with_username')
-    );
+    $elements_not_in = [];
+
+    foreach ($initialUserList as $userInfo) {
+        if (!in_array($userInfo['id'], $list_in)) {
+            $elements_not_in[$userInfo['id']] = formatCompleteName($userInfo, $orderListByOfficialCode);
+        }
+    }
+}
+
+function formatCompleteName(array $userInfo, bool $orderListByOfficialCode): string
+{
+    if ($orderListByOfficialCode) {
+        $officialCode = !empty($userInfo['official_code']) ? $userInfo['official_code'].' - ' : '? - ';
+        return  $officialCode.$userInfo['complete_name_with_username'];
+    }
+
+    $officialCode = !empty($userInfo['official_code']) ? ' - '.$userInfo['official_code'] : null;
+
+    return $userInfo['complete_name_with_username']." $officialCode";
 }
 
 if (ChamiloApi::isAjaxRequest()) {

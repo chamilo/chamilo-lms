@@ -1917,19 +1917,19 @@ class Statistics
         $usersInfo = [];
 
         while ($rowStat = Database::fetch_assoc($result)) {
-            $sql = "SELECT id, email, registration_date, status, active
+            $subsql = "SELECT id, email, registration_date, status, active
                 FROM user WHERE firstname = '{$rowStat['firstname']}' AND lastname = '{$rowStat['lastname']}'"
             ;
 
-            $result = Database::query($sql);
+            $subResult = Database::query($subsql);
 
-            if (1 > Database::num_rows($result)) {
+            if (1 > Database::num_rows($subResult)) {
                 continue;
             }
 
             $objExtraValue = new ExtraFieldValue('user');
 
-            while ($rowUser = Database::fetch_assoc($result)) {
+            while ($rowUser = Database::fetch_assoc($subResult)) {
                 $studentId = $rowUser['id'];
 
                 $studentInfo = [];

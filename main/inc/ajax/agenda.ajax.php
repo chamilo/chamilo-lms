@@ -51,6 +51,8 @@ switch ($action) {
         $notificationPeriod = $_REQUEST['notification_period'] ?? [];
         $careerId = $_REQUEST['career_id'] ?? 0;
         $promotionId = $_REQUEST['promotion_id'] ?? 0;
+        $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+        $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
         $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -71,7 +73,9 @@ switch ($action) {
             $isCollective,
             $reminders,
             (int) $careerId,
-            (int) $promotionId
+            (int) $promotionId,
+            $subscriptionVisibility,
+            $maxSubscriptions
         );
 
         echo $eventId;
@@ -223,6 +227,32 @@ switch ($action) {
                 false
             );
         }
+        break;
+    case 'event_subscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->subscribeCurrentUserToEvent($id);
+        break;
+    case 'event_unsubscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->unsubscribeCurrentUserToEvent($id);
         break;
     default:
         echo '';

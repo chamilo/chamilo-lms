@@ -71,16 +71,28 @@ $(function () {
         _historySize: -1,
         usersOnline: 0,
         currentFriend: 0,
+        xToken: '{{ course_chat_sec_token }}',
         call: false,
         track: function () {
             return $
-                .get(ChChat._ajaxUrl, {
-                    action: 'track',
-                    size: ChChat._historySize,
-                    users_online: ChChat.usersOnline,
-                    friend: ChChat.currentFriend
+                .ajax({
+                    url: ChChat._ajaxUrl,
+                    method: 'GET',
+                    headers: { 'x-token': ChChat.xToken },
+                    data: {
+                        action: 'track',
+                        size: ChChat._historySize,
+                        users_online: ChChat.usersOnline,
+                        friend: ChChat.currentFriend
+                    }
                 })
-                .done(function (response) {
+                .done(function (response, textStatus, jqXhr) {
+                    ChChat.xToken = jqXhr.getResponseHeader('x-token');
+
+                    if (!response.status) {
+                        return;
+                    }
+
                     try {
                         if (response.data.history) {
                             ChChat._historySize = response.data.oldFileSize;
@@ -140,11 +152,18 @@ $(function () {
             $('#chat-users').html(html);
         },
         onPreviewListener: function () {
-            $.post(ChChat._ajaxUrl, {
-                action: 'preview',
-                'message': $('textarea#chat-writer').val()
+            $.ajax({
+                url: ChChat._ajaxUrl,
+                method: 'POST',
+                headers: { 'x-token': ChChat.xToken },
+                data: {
+                    action: 'preview',
+                    'message': $('textarea#chat-writer').val()
+                }
             })
-            .done(function (response) {
+            .done(function (response, textStatus, jqXhr) {
+                ChChat.xToken = jqXhr.getResponseHeader('x-token');
+
                 if (!response.status) {
                     return;
                 }
@@ -164,20 +183,29 @@ $(function () {
             var self = this;
             self.disabled = true;
 
-            $.post(ChChat._ajaxUrl, {
-                action: 'write',
-                message: textarea.val(),
-                friend: ChChat.currentFriend
+            $.ajax({
+                method: 'POST',
+                url: ChChat._ajaxUrl,
+                headers: { 'x-token': ChChat.xToken },
+                data: {
+                    action: 'write',
+                    message: textarea.val(),
+                    friend: ChChat.currentFriend
+                }
             })
-            .done(function (response) {
+            .done(function (response, textStatus, jqXhr) {
                 self.disabled = false;
+
+                ChChat.xToken = jqXhr.getResponseHeader('x-token');
+
+                textarea.prop('disabled', false);
+                $(".emoji-wysiwyg-editor").prop('contenteditable', 'true');
 
                 if (!response.status) {
                     return;
                 }
-                textarea.prop('disabled', false);
+
                 textarea.val('');
-                $(".emoji-wysiwyg-editor").prop('contenteditable', 'true');
                 $(".emoji-wysiwyg-editor").html('');
             });
         },
@@ -186,11 +214,18 @@ $(function () {
                 e.preventDefault();
                 return;
             }
-            $.get(ChChat._ajaxUrl, {
-                action: 'reset',
-                friend: ChChat.currentFriend
+            $.ajax({
+                url: ChChat._ajaxUrl,
+                method: 'GET',
+                headers: { 'x-token': ChChat.xToken },
+                data: {
+                    action: 'reset',
+                        friend: ChChat.currentFriend
+                }
             })
-            .done(function (response) {
+            .done(function (response, textStatus, jqXhr) {
+                ChChat.xToken = jqXhr.getResponseHeader('x-token');
+
                 if (!response.status) {
                     return;
                 }

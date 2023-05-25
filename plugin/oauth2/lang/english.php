@@ -130,3 +130,5 @@ $strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on th
 $strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';
 $strings['IssuerNotFound'] = 'Issuer not found';
 $strings['AuthorizeUrlNotAllowed'] = 'Authorize URL not allowed';
+
+$strings['MessageInfoAboutRedirectToProvider'] = 'You are getting redirected to the common authentication system. Your credentials there are the ones that you typically use for other applications of your organisation. These might be different from the ones you used here previously.';

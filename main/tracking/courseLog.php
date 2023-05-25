@@ -1027,8 +1027,8 @@ if ($export_csv) {
 
     $csv_headers[] = get_lang('FirstLoginInCourse');
     $csv_headers[] = get_lang('LatestLoginInCourse');
-    $csv_headers[] = get_lang('QuizFinalizationDate');
     $csv_headers[] = get_lang('LpFinalizationDate');
+    $csv_headers[] = get_lang('QuizFinalizationDate');
 
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {

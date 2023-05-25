@@ -706,7 +706,7 @@ sudo /etc/init.d/apache2 restart
   Nota: Este paso requiere un servidor dedicado o un servidor dedicado virtual ya que los paquetes involucrados
   no están disponibles en la mayoría de soluciones de hosting compartido. (Consulte con su proveedor):
 </p>
-En Debian o Ubuntu 11.10 y superior, instale LibreOffice.org v3 (o v4) e iniciarlo como un servidor en segundo plano:
+En Debian o Ubuntu 22.04 y superior, instale LibreOffice v7 (o superior) e inícielo como un servidor en segundo plano:
 <pre>
 sudo apt-get install libreoffice screen
 sudo adduser rapid
@@ -714,9 +714,11 @@ sudo adduser rapid www-data
 screen
 sudo -s
 su - rapid
-soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"
 CTRL+a, CTRL+d
 </pre>
+En versiones previas de LibreOffice, el comando anterior era más complejo. Si lo necesita, verifique versiones anteriores de esta guía de instalación.
+
 Tenga en cuenta que esto ejecutará LibreOffice en modo "headless" (gracias a la opción --headless), en un terminal
 "headless" (gracias a la pantalla). Tu puedes posteriormente regresar a tu terminal "headless" ejecutando:
 <pre>
@@ -883,7 +885,6 @@ servidor web y agregar esta línea. Debería ver una diferencia notable en el ti
   RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
   RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
   RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
-  RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
   RewriteRule ^(tests|.git) - [F,L,NC]
 &lt;/Directory&gt;
 
@@ -1107,10 +1108,6 @@ que se colocarán dentro de un bloque de servidor {}, ya que otras configuracion
                     &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v23" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$" /&gt;
-                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
-                &lt;/rule&gt;
-                &lt;rule name="rule v24" stopProcessing="true"&gt;
                     &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
                     &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;

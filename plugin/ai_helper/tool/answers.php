@@ -30,7 +30,7 @@ switch ($apiName) {
         $topic = (string) $_REQUEST['quiz_name'];
         $questionType = $questionTypes[$_REQUEST['question_type']] ?? $questionTypes['multiple_choice'];
 
-        $prompt = 'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
+        $prompt = 'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.';
         $prompt = sprintf($prompt, $nQ, $questionType, $lang, $topic);
 
         $resultText = $plugin->openAiGetCompletionText($prompt, 'quiz');

@@ -195,7 +195,9 @@ try {
             break;
         case Rest::GET_PROFILES_BY_EXTRA_FIELD:
             Event::addEvent(LOG_WS.$action, 'extra_field_name', $_POST['field_name']);
-            $users = $restApi->getUsersProfilesByExtraField($_POST['field_name'], $_POST['field_value']);
+            $active = !empty($_POST['active']) && $_POST['active'] == 1 ? 1 : 0;
+            // If "active" is set, will drop inactive users (user.active = 0) from the response
+            $users = $restApi->getUsersProfilesByExtraField($_POST['field_name'], $_POST['field_value'], $active);
             $restResponse->setData($users);
             break;
         case Rest::GET_COURSES_DETAILS_BY_EXTRA_FIELD:

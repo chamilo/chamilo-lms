@@ -1098,6 +1098,10 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             'trim'
                         );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'html_filter'
+                        );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1239,7 +1243,10 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
 
-                        $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        $defaults = [];
+                        if (EntityExtraField::LP_ITEM_FIELD_TYPE !== (int) $field_details['extra_field_type']) {
+                            $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        }
                         if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
                             $form->setDefaults($defaults);
                         }
@@ -1520,6 +1527,7 @@ class ExtraField extends Model
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1534,6 +1542,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         $form->addRule(
                             'extra_'.$field_details['variable'],
                             get_lang('MobilePhoneNumberWrong'),

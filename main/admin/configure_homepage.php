@@ -7,6 +7,8 @@
  * @package chamilo.admin
  */
 
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 /**
  * Creates menu tabs for logged and anonymous users.
  *
@@ -57,6 +59,8 @@ $_SESSION['this_section'] = $this_section;
 $this_page = '';
 
 api_protect_admin_script();
+
+$httpRequest = HttpRequest::createFromGlobals();
 
 $htmlHeadXtra[] = '<script>
 $(function() {
@@ -382,14 +386,14 @@ if (!empty($action)) {
             case 'edit_tabs':
             case 'insert_link':
             case 'edit_link':
-                $link_index = (isset($_POST['link_index']) ? intval($_POST['link_index']) : 0);
-                $insert_where = (isset($_POST['insert_where']) ? intval($_POST['insert_where']) : 0);
-                $link_name = trim(stripslashes($_POST['link_name']));
-                $link_url = trim(stripslashes($_POST['link_url']));
-                $add_in_tab = (isset($_POST['add_in_tab']) ? intval($_POST['add_in_tab']) : 0);
-                $link_html = trim(stripslashes($_POST['link_html']));
-                $filename = trim(stripslashes($_POST['filename']));
-                $target_blank = isset($_POST['target_blank']);
+                $link_index = $httpRequest->request->getInt('link_index');
+                $insert_where = $httpRequest->request->getInt('insert_where');
+                $link_name = Security::remove_XSS($httpRequest->request->get('link_name'));
+                $link_url = Security::remove_XSS($_POST['link_url']);
+                $add_in_tab = $httpRequest->request->getInt('add_in_tab');
+                $link_html = Security::remove_XSS($_POST['link_html']);
+                $filename = Security::remove_XSS($_POST['filename']);
+                $target_blank = $httpRequest->request->has('target_blank');
 
                 if ($link_url == 'http://' || $link_url == 'https://') {
                     $link_url = '';
@@ -895,12 +899,14 @@ switch ($action) {
         $form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? (!empty($filename) ? $filename : '') : '');
 
         $form->addElement('text', 'link_name', get_lang('LinkName'), ['size' => '30', 'maxlength' => '50']);
+        $form->applyFilter('text', 'html_filter');
         if (!empty($link_name)) {
             $default['link_name'] = $link_name;
         }
         $default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
         $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
         $form->addElement('text', 'link_url', [get_lang('LinkURL'), $linkUrlComment], ['size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;']);
+        $form->applyFilter('link_url', 'html_filter');
 
         $options = ['-1' => get_lang('FirstPlace')];
 
@@ -1139,12 +1145,32 @@ switch ($action) {
                                             $home_menu = explode("\n", $home_menu);
                                         }
                                         $i = 0;
+
+                                        $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
+                                        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
+
                                         foreach ($home_menu as $enreg) {
                                             $enreg = trim($enreg);
                                             if (!empty($enreg)) {
-                                                $edit_link = '<a href="'.$selfUrl.'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>';
-                                                $delete_link = '<a href="'.$selfUrl.'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-                                                echo str_replace(['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'], ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.' '.$delete_link.'</li>'], $enreg);
+                                                $edit_link = Display::url(
+                                                    $editIcon,
+                                                    "$selfUrl?".http_build_query(['action' => 'edit_link', 'link_index' => $i])
+                                                );
+                                                $delete_link = Display::url(
+                                                    $deleteIcon,
+                                                    "$selfUrl?".http_build_query(['action' => 'delete_link', 'link_index' => $i]),
+                                                    [
+                                                        'onclick' => 'javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;',
+                                                    ]
+                                                );
+                                                echo str_replace(
+                                                    ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
+                                                    [
+                                                        'href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=',
+                                                        $edit_link.PHP_EOL.$delete_link.PHP_EOL.'</li>',
+                                                    ],
+                                                    $enreg
+                                                );
                                                 $i++;
                                             }
                                         }

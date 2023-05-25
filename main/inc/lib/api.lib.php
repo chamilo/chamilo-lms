@@ -302,7 +302,7 @@ define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 
 define('LOG_WS', 'access_ws_');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.@\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -749,7 +749,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * a slash too, so an additional check about presence of leading system server base is implemented. For example, the function is
  * able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  * 3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
- * no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
+ * no mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  * It has not been identified as needed yet.
  * 4. Also, resolving the meta-symbols "." and ".." within paths has not been implemented, it is to be identified as needed.
  *
@@ -2535,6 +2535,28 @@ function api_format_course_array($course_data)
 
     $_course['course_image_large'] = $url_image;
 
+    // email pictures
+    // Course image
+    $url_image = null;
+    $_course['course_email_image_source'] = '';
+    $mailPicture = $courseSys.'/course-email-pic-cropped.png';
+    if (file_exists($mailPicture)) {
+        $url_image = $webCourseHome.'/course-email-pic-cropped.png';
+        $_course['course_email_image_source'] = $mailPicture;
+    }
+    $_course['course_email_image'] = $url_image;
+
+    // Course large image
+    $url_image = null;
+    $_course['course_email_image_large_source'] = '';
+    $mailPicture = $courseSys.'/course-email-pic.png';
+    if (file_exists($mailPicture)) {
+        $url_image = $webCourseHome.'/course-email-pic.png';
+        $_course['course_email_image_large_source'] = $mailPicture;
+    }
+
+    $_course['course_email_image_large'] = $url_image;
+
     return $_course;
 }
 
@@ -2973,7 +2995,7 @@ function api_get_session_visibility(
  * the user is not a student.
  *
  * @param int $sessionId
- * @param int $statusId  User status id - if 5 (student), will return empty
+ * @param int $statusId  User status id - if 5 (student) or in student view, will return empty
  *
  * @return string Session icon
  */
@@ -2981,7 +3003,8 @@ function api_get_session_image($sessionId, $statusId)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if ($statusId != STUDENT) {
+    $studentView = !empty($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview';
+    if ($statusId != STUDENT && !$studentView) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(
@@ -6463,10 +6486,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
     $apcVar = [];
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable) {
-        $apcVarName = api_get_configuration_value('apc_prefix').
-            'settings_'.
-            $access_url
-        ;
+        $apcVarName = api_get_configuration_value('apc_prefix').'settings';
         $catName = (empty($cat) ? 'global' : $cat);
 
         if (apcu_exists($apcVarName)) {
@@ -9127,7 +9147,22 @@ function api_get_configuration_value($variable)
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {
-        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled()) {
+        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled() && is_int(array_keys($_configuration[$variable])[0])) {
+            // It has been configured for at least one sub URL so we will not return the complete variable
+            /*
+         * The idea is that if the first level key of the configuration variable is an int
+         * then it is a multiURL configuration and if it's a string then it's a configuration that is not multiURL.
+         * For example if in app/config/configuration.php you have set :
+         * $_configuration['ticket_project_user_roles'] = [
+         *     'permissions' => [
+         *         1 => [17] // project_id = 1, STUDENT_BOSS = 17
+         *     ]
+         * ];
+         * You do not want to enter in this bloc even if multiURL is activated because the option is configured globaly
+         * and you want to return the full array.
+         * The is_int is to consider only the option that are array and configured for multiURL
+         * which means there is an int as the first level key of the array.
+         */
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
@@ -9143,6 +9178,37 @@ function api_get_configuration_value($variable)
         }
 
         return $_configuration[$variable];
+    }
+
+    return false;
+}
+
+/**
+ * Gets value of a variable from app/config/mail.conf.php.
+ *
+ * @param string $variable
+ *
+ * @return bool|mixed
+ */
+function api_get_mail_configuration_value($variable)
+{
+    global $_configuration;
+    global $platform_email;
+
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    $variable = trim($variable);
+
+    // Check if variable exists for the sub portal
+    if (api_is_multiple_url_enabled() && isset($platform_email[$urlId]) && isset($platform_email[$urlId][$variable])) {
+        return $platform_email[$urlId][$variable];
+    } elseif (isset($platform_email[1]) && isset($platform_email[1][$variable])) {
+        // Try to find element with id = 1 (master portal)
+        return $platform_email[1][$variable];
+    } elseif (isset($platform_email[$variable])) {
+        // If variable is not found for the sub portal or master portal, try to find the default element
+        return $platform_email[$variable];
     }
 
     return false;
@@ -9462,52 +9528,50 @@ function api_mail_html(
     $additionalParameters = [],
     $sendErrorTo = ''
 ) {
-    global $platform_email;
-
     if (true === api_get_configuration_value('disable_send_mail')) {
         return true;
     }
 
     $mail = new PHPMailer();
 
-    if (!empty($platform_email['XOAUTH2_METHOD'])) {
+    if (!empty(api_get_mail_configuration_value('XOAUTH2_METHOD'))) {
         $provider = new GenericProvider([
-            'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
-            'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
-            'urlAuthorize' => $platform_email['XOAUTH2_URL_AUTHORIZE'],
-            'urlAccessToken' => $platform_email['XOAUTH2_URL_ACCES_TOKEN'],
-            'urlResourceOwnerDetails' => $platform_email['XOAUTH2_URL_RESOURCE_OWNER_DETAILS'],
-            'scopes' => $platform_email['XOAUTH2_SCOPES'],
+            'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+            'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+            'urlAuthorize' => api_get_mail_configuration_value('XOAUTH2_URL_AUTHORIZE'),
+            'urlAccessToken' => api_get_mail_configuration_value('XOAUTH2_URL_ACCES_TOKEN'),
+            'urlResourceOwnerDetails' => api_get_mail_configuration_value('XOAUTH2_URL_RESOURCE_OWNER_DETAILS'),
+            'scopes' => api_get_mail_configuration_value('XOAUTH2_SCOPES'),
         ]);
         $mail->AuthType = 'XOAUTH2';
         $mail->setOAuth(
             new OAuth([
                 'provider' => $provider,
-                'clientId' => $platform_email['XOAUTH2_CLIENT_ID'],
-                'clientSecret' => $platform_email['XOAUTH2_CLIENT_SECRET'],
-                'refreshToken' => $platform_email['XOAUTH2_REFRESH_TOKEN'],
-                'userName' => $platform_email['SMTP_USER'],
+                'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+                'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+                'refreshToken' => api_get_mail_configuration_value('XOAUTH2_REFRESH_TOKEN'),
+                'userName' => api_get_mail_configuration_value('SMTP_USER'),
             ])
         );
     }
 
-    $mail->Mailer = $platform_email['SMTP_MAILER'];
-    $mail->Host = $platform_email['SMTP_HOST'];
-    $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
+    $mail->Mailer = api_get_mail_configuration_value('SMTP_MAILER');
+    $mail->Host = api_get_mail_configuration_value('SMTP_HOST');
+    $mail->Port = api_get_mail_configuration_value('SMTP_PORT');
+    $mail->CharSet = api_get_mail_configuration_value('SMTP_CHARSET') ? api_get_mail_configuration_value('SMTP_CHARSET') : 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
-    $mail->SMTPOptions = $platform_email['SMTPOptions'] ?? [];
+    $mail->SMTPOptions = api_get_mail_configuration_value('SMTPOptions') ?? [];
 
-    if ($platform_email['SMTP_AUTH']) {
+    if (api_get_mail_configuration_value('SMTP_AUTH')) {
         $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-        if (isset($platform_email['SMTP_SECURE'])) {
-            $mail->SMTPSecure = $platform_email['SMTP_SECURE'];
+        $mail->Username = api_get_mail_configuration_value('SMTP_USER');
+        $mail->Password = api_get_mail_configuration_value('SMTP_PASS');
+        if (api_get_mail_configuration_value('SMTP_SECURE')) {
+            $mail->SMTPSecure = api_get_mail_configuration_value('SMTP_SECURE');
         }
     }
-    $mail->SMTPDebug = isset($platform_email['SMTP_DEBUG']) ? $platform_email['SMTP_DEBUG'] : 0;
+    $mail->SMTPDebug = api_get_mail_configuration_value('SMTP_DEBUG') ? api_get_mail_configuration_value('SMTP_DEBUG') : 0;
 
     // 5 = low, 1 = high
     $mail->Priority = 3;
@@ -9594,9 +9658,12 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
+    if (isset($additionalParameters['logo'])) {
+        $mailView->assign('logo', $additionalParameters['logo']);
+    }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
-    $mailView->assign('include_ldjson', (empty($platform_email['EXCLUDE_JSON']) ? true : false));
+    $mailView->assign('include_ldjson', (empty(api_get_mail_configuration_value('EXCLUDE_JSON')) ? true : false));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
@@ -9673,17 +9740,17 @@ function api_mail_html(
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
 
-    if (!empty($platform_email['DKIM']) &&
-        !empty($platform_email['DKIM_SELECTOR']) &&
-        !empty($platform_email['DKIM_DOMAIN']) &&
-        (!empty($platform_email['DKIM_PRIVATE_KEY_STRING']) || !empty($platform_email['DKIM_PRIVATE_KEY']))) {
-        $mail->DKIM_selector = $platform_email['DKIM_SELECTOR'];
-        $mail->DKIM_domain = $platform_email['DKIM_DOMAIN'];
-        if (!empty($platform_email['SMTP_UNIQUE_SENDER'])) {
-            $mail->DKIM_identity = $platform_email['SMTP_FROM_EMAIL'];
+    if (!empty(api_get_mail_configuration_value('DKIM')) &&
+        !empty(api_get_mail_configuration_value('DKIM_SELECTOR')) &&
+        !empty(api_get_mail_configuration_value('DKIM_DOMAIN')) &&
+        (!empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING')) || !empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY')))) {
+        $mail->DKIM_selector = api_get_mail_configuration_value('DKIM_SELECTOR');
+        $mail->DKIM_domain = api_get_mail_configuration_value('DKIM_DOMAIN');
+        if (!empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER'))) {
+            $mail->DKIM_identity = api_get_mail_configuration_value('SMTP_FROM_EMAIL');
         }
-        $mail->DKIM_private_string = $platform_email['DKIM_PRIVATE_KEY_STRING'];
-        $mail->DKIM_private = $platform_email['DKIM_PRIVATE_KEY'];
+        $mail->DKIM_private_string = api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING');
+        $mail->DKIM_private = api_get_mail_configuration_value('DKIM_PRIVATE_KEY');
     }
 
     // Send the mail message.
@@ -10488,13 +10555,14 @@ function api_calculate_increment_percent(int $newValue, int $oldValue)
  */
 function api_flush_settings_cache(int $url_id): bool
 {
+    global $_configuration;
     $cacheAvailable = api_get_configuration_value('apc');
     if (!$cacheAvailable) {
         return false;
     }
-    $apcRootVarName = api_get_configuration_value('apc_prefix').'settings_';
+    $apcRootVarName = api_get_configuration_value('apc_prefix');
     // Delete the APCu-stored settings array, if present
-    $apcVarName = $apcRootVarName.$url_id;
+    $apcVarName = $apcRootVarName.'settings';
     apcu_delete($apcVarName);
     if (api_is_multiple_url_enabled() && $url_id === 1) {
         // if we are on the main URL of a multi-url portal, we must
@@ -10505,7 +10573,7 @@ function api_flush_settings_cache(int $url_id): bool
             if ($row['id'] == 1) {
                 continue;
             }
-            $apcVarName = $apcRootVarName.$row['id'];
+            $apcVarName = $_configuration['main_database'].'_'.$row['id'].'_settings';
             apcu_delete($apcVarName);
         }
     }

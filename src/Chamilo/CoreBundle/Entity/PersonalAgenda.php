@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\EventCollectiveTrait;
+use Chamilo\CoreBundle\Traits\EventSubscribableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +17,9 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgenda
 {
     // Uncomment next line when activating the agenda_collective_invitations configuration setting.
-    use EventCollectiveTrait;
+    //use EventCollectiveTrait;
+    // Uncomment next line when activating the agenda_event_subscriptions configuration setting.
+    //use EventSubscribableTrait;
 
     /**
      * @var int

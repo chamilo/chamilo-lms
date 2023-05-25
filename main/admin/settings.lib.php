@@ -1680,6 +1680,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
+    $hideCompletely = api_get_configuration_value('multiple_url_hide_disabled_settings');
     /*
     if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
@@ -1692,6 +1693,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $url_info = api_get_access_url($url_id);
     $i = 0;
     $addedSettings = [];
+    $globalAdmin = api_is_global_platform_admin();
+
     foreach ($settings as $row) {
         if (in_array($row['variable'], array_keys($settings_to_avoid))) {
             continue;
@@ -1701,10 +1704,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
             continue;
         }
 
-        $addedSettings[] = $row['variable'];
-
         if (!empty($_configuration['multiple_access_urls'])) {
-            if (api_is_global_platform_admin()) {
+            if ($globalAdmin) {
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {
                         if ($row['access_url_changeable'] == '1') {
@@ -1747,6 +1748,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
                 $hideme = ['disabled'];
+                if ($hideCompletely && !$globalAdmin) {
+                    continue;
+                }
             } elseif ($url_info['active'] == 1) {
                 // We show the elements.
                 if (empty($row['variable'])) {
@@ -1770,6 +1774,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
         }
+
+        $addedSettings[] = $row['variable'];
 
         switch ($row['type']) {
             case 'textfield':
@@ -1890,7 +1896,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
             case 'checkbox':
                 // 1. We collect all the options of this variable.
                 $sql = "SELECT * FROM $table_settings_current
-                        WHERE variable='".$row['variable']."' AND access_url =  1";
+                        WHERE variable = '".$row['variable']."' AND access_url =  1";
 
                 $result = Database::query($sql);
                 $group = [];

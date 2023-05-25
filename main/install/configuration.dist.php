@@ -462,6 +462,24 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
+
+// It allows to other users to subscribe for events.
+// Requires enable agenda_collective_invitations before.
+// Requires DB changes:
+/*
+ALTER TABLE personal_agenda ADD subscription_visibility INT DEFAULT 0 NOT NULL, ADD subscription_item_id INT DEFAULT NULL;
+ALTER TABLE agenda_event_invitee ADD type VARCHAR(255) NOT NULL;
+ALTER TABLE agenda_event_invitation ADD type VARCHAR(255) NOT NULL, ADD max_attendees INT DEFAULT 0;
+UPDATE agenda_event_invitation SET type = 'invitation';
+UPDATE agenda_event_invitee SET type = 'invitee';
+*/
+// Then uncomment the "use EventSubscribableTrait;" line in the PersonalAgenda class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitation class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscription class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitee class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscriber class.
+//$_configuration['agenda_event_subscriptions'] = false;
+
 // Enable reminders for agenda events. Requires database changes:
 /*
  CREATE TABLE agenda_reminder (id BIGINT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT '(DC2Type:dateinterval)', sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
@@ -1220,6 +1238,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Do not unsubscribe users from session when sessions are unsubscribe to class
 // $_configuration['usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'] = false;
+
+// Show all users in selector as initial list when subscribing users to class
+//$_configuration['usergroup_add_user_show_all_student_by_default'] = false;
 
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
@@ -2306,7 +2327,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Hide IP in exercises reports
 // $_configuration['exercise_hide_ip'] = false;
 
-// Enable sign in attendance sheet for users
+// Enable signature in attendance sheet for users
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
 // ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
@@ -2377,6 +2398,27 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // 3. Add an "@" before "ORM\Entity" in the "CWikiCategory" class definition (in src/Chamilo/CourseBundle/Entity/CWikiCategory.php)
 //$_configuration['wiki_categories_enabled'] = false;
 
+// Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php
+/*$_configuration['session_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'client' => 'client',
+        'region' => 'region',
+    ]
+];*/
+
+// It adds option to define prerequisites with start and end dates for learnpath items.
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'start_date', 'StartDate', '', 0, 1, 0, 1, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'end_date', 'EndDate', '', 0, 1, 0, 1, 0, NOW());
+*/
+//$_configuration['lp_item_prerequisite_dates'] = false;
+
+// Configuration setting to make some extra field required in session creation form on main/session/session_add.php.
+// $_configuration['session_creation_form_set_extra_fields_mandatory'] = ['fields' => ['client','region']];
+
 // Ask REST webservices (v2.php) to return another identifier for fields related to user ID.
 // This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps
 // the external system match the user data return with some external data that is know to Chamilo. For example, if
@@ -2394,8 +2436,38 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes
+// Set to true to hide settings completely in a sub-URL if the setting is disabled in the
+// main URL (where the access_url_changeable field = 0)
+// $_configuration['multiple_url_hide_disabled_settings'] = false;
+
+// Only courses with this option will be visible in catalogue
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(2, 3, 'show_in_catalogue', 'Show in catalogue', '', 0, 1, 1, 1, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Yes', NULL, NULL, 1),
+(@ef_id, '0', 'No', NULL, NULL, 2);
+*/
+//$_configuration['show_courses_in_catalogue'] = false;
+
+// Allows defining one or several categories of courses that will be visible in the course catalog
+// $_configuration['courses_catalogue_show_only_category'] = ['Cat1','Cat2'];
+
+//Hides the link to the course catalog in the menu when the catalog is public.
+// $_configuration['catalog_hide_public_link'] = false;
+
+// Display the Portal News link in the admin page to session admin users
+//$_configuration['session_admin_access_system_announcement'] = false;
+
+// File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
+//$_configuration['file_upload_size_limit_for_teacher'] = 0;
+
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
-// ------ (End) Custom DB changes
+
+// Enable use of a custom course logo in mail & PDF headers
+// $_configuration['mail_header_from_custom_course_logo'] = false;

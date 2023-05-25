@@ -109,7 +109,9 @@ class PDF
         $saveToFile = false,
         $returnHtml = false,
         $addDefaultCss = false,
-        $extraRows = []
+        $extraRows = [],
+        $outputMode = 'D',
+        $fileToSave = null
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false, false, true, false);
@@ -173,9 +175,9 @@ class PDF
             $css,
             $this->params['filename'],
             $this->params['course_code'],
-            'D',
+            $outputMode,
             $saveToFile,
-            null,
+            $fileToSave,
             $returnHtml,
             $addDefaultCss
         );
@@ -558,15 +560,23 @@ class PDF
 
         if ($saveInFile) {
             $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
-            @$this->pdf->Output(
-                $fileToSave,
-                $outputMode
-            ); // F to save the pdf in a file
+            try {
+                @$this->pdf->Output(
+                    $fileToSave,
+                    $outputMode
+                ); // F to save the pdf in a file
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         } else {
-            @$this->pdf->Output(
-                $output_file,
-                $outputMode
-            ); // F to save the pdf in a file
+            try {
+                @$this->pdf->Output(
+                    $output_file,
+                    $outputMode
+                ); // F to save the pdf in a file
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         }
 
         if ($outputMode != 'F') {
@@ -738,7 +748,17 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo('', [], true, true);
+            $organization = null;
+
+            // try getting the course logo
+            if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+                $organization = CourseManager::getCourseEmailPicture($courseInfo, []);
+            }
+            // only show platform logo in mail if no course photo available
+            if (empty($organization)) {
+                $organization = ChamiloApi::getPlatformLogo('', [], false, true);
+            }
+
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');
             if ($pdfLogo === 'true') {

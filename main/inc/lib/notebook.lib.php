@@ -117,6 +117,7 @@ class NotebookManager
         $notebook_id = (int) $notebook_id;
 
         $sql = "SELECT
+                user_id,
                 notebook_id 		AS notebook_id,
                 title				AS note_title,
                 description 		AS note_comment,
@@ -233,6 +234,7 @@ class NotebookManager
      */
     public static function display_notes()
     {
+        $cidReq = api_get_cidreq();
         $sessionId = api_get_session_id();
         $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
@@ -250,16 +252,16 @@ class NotebookManager
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
             if ($sessionId == 0 || api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
+                echo '<a href="index.php?'.$cidReq.'&action=addnote">'.
                     Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
             }
         }
 
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
+        echo '<a href="index.php?'.$cidReq.'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
             Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32').'</a>';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
+        echo '<a href="index.php?'.$cidReq.'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
             Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32').'</a>';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
+        echo '<a href="index.php?'.$cidReq.'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
             Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32').'</a>';
         echo '</div>';
 
@@ -290,6 +292,8 @@ class NotebookManager
                     $cond_extra $order_by
                 ";
         $result = Database::query($sql);
+        $iconEdit = Display::return_icon('edit.png', get_lang('Edit'));
+        $iconDelete = Display::return_icon('delete.png', get_lang('Delete'));
         while ($row = Database::fetch_array($result)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $_user['status']);
@@ -298,10 +302,15 @@ class NotebookManager
                 $updateValue = ', '.get_lang('UpdateDate').': '.Display::dateToStringAgoAndLongDate($row['update_date']);
             }
 
-            $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
-                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+            $actions = Display::url(
+                $iconEdit,
+                api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'&'.$cidReq
+            );
+            $actions .= Display::url(
+                $iconDelete,
+                api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'&'.$cidReq,
+                ['onclick' => 'return confirmation(\''.$row['title'].'\');']
+            );
 
             echo Display::panel(
                 Security::remove_XSS($row['description']),

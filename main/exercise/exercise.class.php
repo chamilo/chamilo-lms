@@ -8426,7 +8426,7 @@ class Exercise
      *
      * @return array exercises
      */
-    public function getExerciseAndResult($courseId, $sessionId, $quizId = [])
+    public function getExerciseAndResult($courseId, $sessionId, $quizId = [], $status = null)
     {
         if (empty($quizId)) {
             return [];
@@ -8439,22 +8439,30 @@ class Exercise
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $condition = '';
+        if (isset($status)) {
+            $condition .= " AND te.status = '$status' ";
+        }
+
         if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
-              WHERE
-              te.id = %s AND
-              te.session_id = %s AND
-              cq.iid IN (%s)
+                    INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
+                    WHERE
+                    te.c_id = %s AND
+                    te.session_id = %s AND
+                    cq.iid IN (%s)
+                    $condition
               ORDER BY cq.iid";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
-              WHERE
-              te.id = %s AND
-              cq.iid IN (%s)
+                INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
+                WHERE
+                te.c_id = %s AND
+                cq.iid IN (%s)
+                $condition
               ORDER BY cq.iid";
             $sql = sprintf($sql, $courseId, $ids);
         }
@@ -9960,7 +9968,7 @@ class Exercise
                                     'href' => '#!',
                                     'onclick' => 'showUserToSendNotificacion(this)',
                                     'data-link' => 'exercise.php?'.api_get_cidreq()
-                                        .'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
+                                        .'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['iid'],
                                 ]
                             );
                         }
@@ -11387,7 +11395,7 @@ class Exercise
                 if (!isset($usersArray[$userId])) {
                     $usersArray[$userId] = api_get_user_info($userId);
                 }
-                $usersArray['user_id'] = $userId;
+                $usersArray[$userId]['user_id'] = $userId;
                 $userData = $usersArray[$userId];
                 $data[$index]['user_name'] = $userData['complete_name'];
                 $return[] = $data[$index];

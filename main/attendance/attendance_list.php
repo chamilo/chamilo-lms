@@ -24,8 +24,8 @@ if ($attendance->getNumberOfAttendances() == 0) {
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
 }
-$default_column = isset($default_column) ? $default_column : null;
-$parameters = isset($parameters) ? $parameters : null;
+$default_column = $default_column ?? null;
+$parameters = $parameters ?? [];
 $table = new SortableTable(
     'attendance_list',
     ['Attendance', 'getNumberOfAttendances'],
@@ -34,8 +34,8 @@ $table = new SortableTable(
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, ['style' => 'width:20px;']);
-$table->set_header(1, get_lang('Name'), true);
-$table->set_header(2, get_lang('Description'), true);
+$table->set_header(1, get_lang('Name'));
+$table->set_header(2, get_lang('Description'));
 $table->set_header(3, get_lang('CountDoneAttendance'), true, ['style' => 'width:90px;']);
 
 if (api_is_allowed_to_edit(null, true)) {

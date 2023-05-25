@@ -87,6 +87,7 @@ class ZoomPlugin extends Plugin
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
                         STUDENT_BOSS => get_lang('StudentBoss'),
+                        SESSIONADMIN => get_lang('SessionsAdmin'),
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],
@@ -1321,9 +1322,12 @@ class ZoomPlugin extends Plugin
         return Database::getManager()->getRepository(Recording::class);
     }
 
-    public function getToolbar($returnUrl = '')
+    public function getToolbar(string $returnUrl = ''): string
     {
-        if (!api_is_platform_admin()) {
+        $isPlatformOrSessionAdmin = api_is_platform_admin(true);
+        $isSessionAdmin = api_is_session_admin();
+
+        if (!$isPlatformOrSessionAdmin) {
             return '';
         }
 
@@ -1351,19 +1355,19 @@ class ZoomPlugin extends Plugin
             );
         }
 
-        if (api_is_platform_admin()) {
+        if (!$isSessionAdmin) {
             $actionsLeft .= Display::url(
                 Display::return_icon('agenda.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
                 'calendar.php'
             );
-            $actionsLeft .=
-                Display::url(
-                    Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
-                ).$back;
+
+            $actionsLeft .= Display::url(
+                Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+            );
         }
 
-        return Display::toolbarAction('toolbar', [$actionsLeft]);
+        return Display::toolbarAction('toolbar', [$back.PHP_EOL.$actionsLeft]);
     }
 
     public function getRecordingSetting()

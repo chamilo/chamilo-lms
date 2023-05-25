@@ -64,7 +64,9 @@ class BigUploadResponse
             $this->tempName = $value;
         } else {
             if ('learnpath' === $_REQUEST['origin'] && !empty($_REQUEST['name'])) {
-                $this->tempName = $_REQUEST['name'];
+                $this->tempName = disable_dangerous_file(
+                    api_replace_dangerous_char($_REQUEST['name'])
+                );
             } else {
                 $this->tempName = mt_rand().'.tmp';
             }

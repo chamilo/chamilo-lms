@@ -772,19 +772,13 @@ class learnpath
         if (empty($publicated_on)) {
             $publicated_on = null;
         } else {
-            $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
+            $publicated_on = api_get_utc_datetime($publicated_on, false, true);
         }
 
         if (empty($expired_on)) {
             $expired_on = null;
         } else {
             $expired_on = api_get_utc_datetime($expired_on, false, true);
-        }
-
-        if (empty($publicated_on)) {
-            $publicated_on = null;
-        } else {
-            $publicated_on = api_get_utc_datetime($publicated_on, false, true);
         }
 
         $check_name = "SELECT * FROM $tbl_lp
@@ -4413,8 +4407,10 @@ class learnpath
                 if ($debug > 0) {
                     error_log('Found prereq_string is empty return true');
                 }
+                // checks the dates values as prerequisites
+                $result = $this->prerequistesDatesMatch($itemId);
 
-                return true;
+                return $result;
             }
 
             // Clean spaces.
@@ -4446,7 +4442,57 @@ class learnpath
             error_log('End of prerequisites_match(). Error message is now '.$this->error);
         }
 
+        if (true === $result && $itemId) {
+            // checks the dates values as prerequisites
+            $result = $this->prerequistesDatesMatch($itemId);
+        }
+
         return $result;
+    }
+
+    public function prerequistesDatesMatch(int $itemId)
+    {
+        if (true === api_get_configuration_value('lp_item_prerequisite_dates')) {
+            $extraFieldValue = new ExtraFieldValue('lp_item');
+            $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $itemId,
+                'start_date'
+            );
+            $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $itemId,
+                'end_date'
+            );
+
+            $now = time();
+            $start = !empty($startDate['value']) ? api_strtotime($startDate['value']) : 0;
+            $end = !empty($endDate['value']) ? api_strtotime($endDate['value']) : 0;
+            $result = false;
+
+            if (($start == 0 && $end == 0) ||
+                (($start > 0 && $end == 0) && $now > $start) ||
+                (($start == 0 && $end > 0) && $now < $end) ||
+                (($start > 0 && $end > 0) && ($now > $start && $now < $end))
+            ) {
+                $result = true;
+            }
+
+            if (!$result) {
+                $errMsg = get_lang('ItemCanNotBeAccessedPrerequisiteDates');
+                if ($start > 0 && $start > $now) {
+                    $errMsg = get_lang('AccessibleFrom').' '.api_format_date($start, DATE_TIME_FORMAT_LONG);
+                }
+                if ($end > 0 && $end < $now) {
+                    $errMsg = get_lang('NoMoreAccessible');
+                }
+                $this->set_error_msg($errMsg);
+                $currentItem = $this->getItem($itemId);
+                $currentItem->prereq_alert = $errMsg;
+            }
+
+            return $result;
+        }
+
+        return true;
     }
 
     /**
@@ -5070,6 +5116,7 @@ class learnpath
                         WHERE
                             c_id = $courseId AND
                             lp_id = ".$this->get_id()." AND
+                            progress < $progress AND
                             user_id = ".$userId." ".$sessionCondition;
             // Ignore errors as some tables might not have the progress field just yet.
             Database::query($sql);
@@ -7945,6 +7992,9 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
+            }
             $extraField = new ExtraField('lp_item');
             $extraField->addElements($form, $id, $excludeExtraFields);
         }
@@ -8297,6 +8347,9 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
+            }
             $extraField = new ExtraField('lp_item');
             $extraField->addElements($form, $id, $excludeExtraFields);
         }
@@ -8493,6 +8546,9 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
+            }
             $extraField = new ExtraField('lp_item');
             $extraField->addElements($form, $id, $excludeExtraFields);
         }
@@ -8701,8 +8757,12 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            $excludeExtraFields = [];
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = ['start_date', 'end_date'];
+            }
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $excludeExtraFields);
         }
 
         $form->addButtonSave(get_lang('Ok'), 'submit_button');
@@ -9240,10 +9300,11 @@ class learnpath
             reset($arrLP);
         }
 
-        if ('edit' === $action) {
-            $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id, $excludeExtraFields);
+        if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+            $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
         }
+        $extraField = new ExtraField('lp_item');
+        $extraField->addElements($form, $id, $excludeExtraFields);
 
         if ($action !== 'move') {
             $arrHide = [];
@@ -9597,8 +9658,12 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            $excludeExtraFields = [];
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = ['start_date', 'end_date'];
+            }
             $extraField = new ExtraField('lp_item');
-            $extraField->addElements($form, $id);
+            $extraField->addElements($form, $id, $excludeExtraFields);
         }
 
         $arrHide = [];
@@ -9989,6 +10054,9 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
+            }
             $extraField = new ExtraField('lp_item');
             $extraField->addElements($form, $id, $excludeExtraFields);
         }
@@ -10161,6 +10229,9 @@ class learnpath
         }
 
         if ('edit' === $action) {
+            if (true !== api_get_configuration_value('lp_item_prerequisite_dates')) {
+                $excludeExtraFields = array_merge($excludeExtraFields, ['start_date', 'end_date']);
+            }
             $extraField = new ExtraField('lp_item');
             $extraField->addElements($form, $id, $excludeExtraFields);
         }
@@ -10185,7 +10256,7 @@ class learnpath
         $form->addHidden('type', TOOL_STUDENTPUBLICATION);
         $form->addHidden('post_time', time());
         $this->setAuthorLpItem($form);
-        $form->setDefaults(['title' => $item_title]);
+        $form->setDefaults(['title' => $item_title, 'start_date' => null]);
 
         $return = '<div class="sectioncomment">';
         $return .= $form->returnForm();

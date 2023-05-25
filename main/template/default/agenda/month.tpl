@@ -1,4 +1,5 @@
 {% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
+{% set agenda_event_subscriptions = 'agenda_event_subscriptions'|api_get_configuration_value %}
 {% set agenda_reminders = 'agenda_reminders'|api_get_configuration_value %}
 {% set career_in_global_events = 'allow_careers_in_global_agenda'|api_get_configuration_value %}
 
@@ -340,6 +341,15 @@ $(function() {
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
+
+                $('#add_event_form').get(0).reset();
+
+                {% if agenda_event_subscriptions and 'personal' == type and api_is_platform_admin() %}
+                    $('#form_subscription_visibility').trigger('change').selectpicker('refresh');
+                    $('#form_subscriptions_container').show('');
+                    $('#form_subscriptions_edit').hide().html('');
+                {% endif %}
+
 				$("#dialog-form").dialog("open");
 				$("#dialog-form").dialog({
 					buttons: {
@@ -582,6 +592,13 @@ $(function() {
                     }
                 {% endif %}
 
+                {% if agenda_event_subscriptions and 'personal' == type and api_is_platform_admin() %}
+                    $('#form_subscriptions_container').hide();
+                    $('#form_subscriptions_edit')
+                        .html(showSubcriptionsContainer(calEvent))
+                        .show();
+                {% endif %}
+
                 {% if agenda_reminders %}
                     $('#notification_list').html('').next('.form-group').hide();
 
@@ -651,7 +668,7 @@ $(function() {
                 {% if career_in_global_events %}
                     var $careerFieldParent = $('#career_id').parents('.col-sm-8');
                     var $promotionFieldParent = $('#promotion_id').parents('.col-sm-8');
-                    
+
                     if ($careerFieldParent.find('#form_career_id_edit').length === 0) {
                         $careerFieldParent.append('<p id="form_career_id_edit" class="form-control-static"></p>');
                     }
@@ -941,19 +958,51 @@ $(function() {
                 };
 
                 {% if agenda_collective_invitations and 'personal' == type %}
-                    buttons['{{ "Delete"|get_lang }}'] = function () {
-                        $.ajax({
-                            url: delete_url,
-                            success:function() {
-                                calendar.fullCalendar('removeEvents',
-                                    calEvent
-                                );
-                                calendar.fullCalendar('refetchEvents');
-                                calendar.fullCalendar('rerenderEvents');
-                                $("#simple-dialog-form").dialog('close');
+                    if (!calEvent.subscription_visibility) {
+                        buttons['{{ "Delete"|get_lang }}'] = function () {
+                            $.ajax({
+                                url: delete_url,
+                                success:function() {
+                                    calendar.fullCalendar('removeEvents',
+                                        calEvent
+                                    );
+                                    calendar.fullCalendar('refetchEvents');
+                                    calendar.fullCalendar('rerenderEvents');
+                                    $("#simple-dialog-form").dialog('close');
+                                }
+                            });
+                        };
+                    }
+                {% endif %}
+
+                {% if agenda_event_subscriptions and 'personal' == type %}
+                    $('#simple_subscriptions').html(showSubcriptionsContainer(calEvent));
+
+                    if (calEvent.subscription_visibility > 0) {
+                        if (calEvent.user_is_subscribed) {
+                            buttons["{{ 'Unsubscribe'|get_lang }}"] = function () {
+                                $.ajax({
+                                    url: '{{ web_agenda_ajax_url }}&a=event_unsubscribe&id=' + calEvent.id,
+                                    success:function() {
+                                        calendar.fullCalendar('refetchEvents');
+                                        //calendar.fullCalendar('rerenderEvents');
+                                        $("#simple-dialog-form").dialog('close');
+                                    }
+                                });
+                            };
+                        } else if (calEvent.can_subscribe) {
+                            buttons["{{ 'Subscribe'|get_lang }}"] = function () {
+                                $.ajax({
+                                    url: '{{ web_agenda_ajax_url }}&a=event_subscribe&id=' + calEvent.id,
+                                    success:function() {
+                                        calendar.fullCalendar('refetchEvents');
+                                        //calendar.fullCalendar('rerenderEvents');
+                                        $("#simple-dialog-form").dialog('close');
+                                    }
+                                });
                             }
-                        });
-                    };
+                        }
+                    }
                 {% endif %}
 
                 if ('session_subscription' === calEvent.type) {
@@ -1004,6 +1053,48 @@ $(function() {
 	});
 
     {{ agenda_reminders_js }}
+
+    function showSubcriptionsContainer (calEvent) {
+        if ((calEvent.invitees && calEvent.invitees.length)
+            || !calEvent.subscription_visibility
+        ) {
+            return '';
+        }
+
+        var html = '';
+        html += '<dl class="dl-horizontal">';
+        html += "<dt>{{ 'AllowSubscriptions'|get_lang }}</dt>";
+        html += '<dd>';
+
+        if (1 === calEvent.subscription_visibility) {
+            html += "{{ 'AllUsersOfThePlatform'|get_lang }}";
+        }
+
+        if (2 === calEvent.subscription_visibility) {
+            html += "{{ 'UsersInsideClass'|get_lang }}<br>" + calEvent.usergroup;
+        }
+
+        html += '</dd>';
+
+        if (calEvent.max_subscriptions) {
+            html += "<dt>{{ 'MaxSubscriptions'|get_lang }}</dt>";
+            html += '<dd>' + calEvent.max_subscriptions + '</dd>';
+        }
+
+        html += "<dt>{{ 'Subscriptions'|get_lang }}</dt><dd>" + calEvent.count_subscribers + "</dd>";
+
+        if (calEvent.subscribers) {
+            html += '<dt>{{ 'Subscribers'|get_lang }}</dt><dd>';
+            html += calEvent.subscribers
+                .map(function (invitee) { return invitee.name; })
+                .join('<br>');
+            html += '</dd>'
+        }
+
+        html += '</dl>';
+
+        return html;
+    }
 });
 </script>
 {{ actions_div }}
@@ -1089,6 +1180,10 @@ $(function() {
                     <p class="form-control-static" id="simple_promotion"></p>
                 </div>
             </div>
+        {% endif %}
+
+        {% if agenda_event_subscriptions and 'personal' == type %}
+            <div class="form-group" id="simple_subscriptions"></div>
         {% endif %}
     </form>
 </div>

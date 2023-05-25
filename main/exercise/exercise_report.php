@@ -149,6 +149,16 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+switch ($action) {
+    case 'export_all_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
+
+        break;
+}
+
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] === 'update' &&
@@ -436,6 +446,11 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
         $actions .= Display::url(
             Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+
+        $actions .= Display::url(
+            Display::return_icon('export_pdf.png', get_lang('ExportExerciseAllResults'), [], ICON_SIZE_MEDIUM),
+            api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
         // clean result before a selected date icon

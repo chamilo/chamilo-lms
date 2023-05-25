@@ -459,7 +459,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             header('Location: resume_session.php?id_session='.$session_id);
             exit;
         } else {
-            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message));
+            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message, 'normal', false));
             header('Location: session_list.php');
             exit;
         }

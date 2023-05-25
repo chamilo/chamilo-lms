@@ -46,7 +46,14 @@ function bigUpload () {
 
 		//Max file size allowed
 		//Default: 2GB
-		'maxFileSize': 2147483648
+		'maxFileSize': 2147483648,
+		
+		//CidReq
+		'cidReq': '',
+
+		// Message error upload filesize
+		'errMessageFileSize': '',
+
 	};
 
 	//Upload specific variables
@@ -130,7 +137,8 @@ function bigUpload () {
 		//But this should be good enough to catch any immediate errors
 		var fileSize = this.uploadData.file.size;
 		if(fileSize > this.settings.maxFileSize) {
-			this.printResponse('The file you have chosen is too large.', true);
+			this.printResponse(this.settings.errMessageFileSize, true);
+			this.$(this.settings.submitButton).disabled = false;
 			return;
 		}
 
@@ -175,7 +183,7 @@ function bigUpload () {
 			//this.uploadData.key is then populated with the filename to use for subsequent requests
 			//When this method sends a valid filename (i.e. key != 0), the server will just append the data being sent to that file.
 			xhr = new XMLHttpRequest();
-			xhr.open("POST", parent.settings.scriptPath + '?action=upload' + '&key=' + parent.uploadData.key + '&origin=' + parent.settings.origin + (parent.uploadData.key ? '' : '&name=' + parent.uploadData.file.name), true);
+			xhr.open("POST", parent.settings.scriptPath + '?' + parent.settings.cidReq + '&action=upload' + '&key=' + parent.uploadData.key + '&origin=' + parent.settings.origin + (parent.uploadData.key ? '' : '&name=' + parent.uploadData.file.name), true);
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 			xhr.onreadystatechange = function() {
@@ -224,7 +232,7 @@ function bigUpload () {
 	this.sendFileData = function() {
 		var data = 'key=' + this.uploadData.key + '&name=' + this.uploadData.file.name + '&type=' + this.uploadData.file.type + '&size=' + this.uploadData.file.size + '&origin=' + parent.settings.origin + '&' + parent.settings.formParams;
 		xhr = new XMLHttpRequest();
-		xhr.open("POST", parent.settings.scriptPath + '?action=finish', true);
+		xhr.open("POST", parent.settings.scriptPath + '?' + parent.settings.cidReq + '&action=finish', true);
 		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 		xhr.onreadystatechange = function() {
@@ -262,7 +270,7 @@ function bigUpload () {
 		this.uploadData.aborted = true;
 		var data = 'key=' + this.uploadData.key;
 		xhr = new XMLHttpRequest();
-		xhr.open("POST", this.settings.scriptPath + '?action=abort', true);
+		xhr.open("POST", this.settings.scriptPath + '?' + this.settings.cidReq + '&action=abort', true);
 		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 		xhr.onreadystatechange = function() {

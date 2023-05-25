@@ -34,6 +34,17 @@ if (isset($_GET['error'])) {
                 $message = Display::return_message(Security::remove_XSS($prerequisiteMessage), 'warning');
             }
 
+            // Validates and display error message for prerequisite dates.
+            /** @var learnpath $lp */
+            $lp = Session::read('oLP');
+            $itemId = $lp->get_current_item_id();
+            $datesMatch = $lp->prerequistesDatesMatch($itemId);
+            if (!$datesMatch) {
+                $currentItem = $lp->getItem($itemId);
+                if (!empty($currentItem->prereq_alert)) {
+                    $message = Display::return_message($currentItem->prereq_alert, 'warning');
+                }
+            }
             break;
         case 'document_not_found':
             $message = Display::return_message(get_lang('FileNotFound'), 'warning');

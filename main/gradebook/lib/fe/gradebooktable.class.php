@@ -88,7 +88,7 @@ class GradebookTable extends SortableTable
         }
 
         if (isset($addparams)) {
-            $this->set_additional_parameters($addparams);
+            $this->set_additional_parameters($addparams ?: []);
         }
 
         $column = 0;

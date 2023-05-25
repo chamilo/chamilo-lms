@@ -58,7 +58,7 @@ class Statistics
                     FROM $courseTable AS c
                     WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE c.category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
             }
         }
 
@@ -1785,6 +1785,92 @@ class Statistics
         return $results;
     }
 
+    public static function returnDuplicatedUsersTable(array $additionalExtraFieldsInfo): SortableTableFromArray
+    {
+        $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
+
+        $column = 0;
+
+        $table = new SortableTableFromArray($usersInfo);
+        $table->set_additional_parameters([
+            'report' => 'duplicated_users',
+            'additional_profile_field' => array_keys($additionalExtraFieldsInfo),
+        ]);
+        $table->set_header($column++, get_lang('Id'));
+
+        if (api_is_western_name_order()) {
+            $table->set_header($column++, get_lang('FirstName'));
+            $table->set_header($column++, get_lang('LastName'));
+        } else {
+            $table->set_header($column++, get_lang('LastName'));
+            $table->set_header($column++, get_lang('FirstName'));
+        }
+
+        $table->set_header($column++, get_lang('Email'));
+        $table->set_header($column++, get_lang('RegistrationDate'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                return api_convert_and_format_date($value, DATE_TIME_FORMAT_LONG);
+            }
+        );
+        $table->set_header($column++, get_lang('FirstLoginInPlatform'));
+        $table->set_header($column++, get_lang('LatestLoginInPlatform'));
+        $table->set_header($column++, get_lang('Role'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                return api_get_status_langvars()[$value];
+            }
+        );
+        $table->set_header(
+            $column++,
+            get_lang('Courses').' <small class="block">'.get_lang('SubscriptionCount').'<small>'
+        );
+        $table->set_header(
+            $column++,
+            get_lang('Sessions').' <small class="block">'.get_lang('SubscriptionCount').'<small>'
+        );
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $table->set_header($column++, $fieldInfo['display_text']);
+        }
+
+        $table->set_header($column++, get_lang('Active'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                if ('1' == $value) {
+                    return get_lang('Active');
+                }
+
+                if ('0' == $value) {
+                    return get_lang('Inactive');
+                }
+
+                return get_lang('ActionNotAllowed');
+            }
+        );
+        $table->set_header($column, get_lang('Actions'));
+        $table->set_column_filter(
+            $column,
+            [UserManager::class, 'getActiveFilterForTable']
+        );
+        $table->setHideColumn(0);
+        $table->actionButtons = [
+            'export_excel' => [
+                'label' => get_lang('ExportAsXLS'),
+                'icon' => Display::return_icon('export_excel.png'),
+            ],
+            'export_csv' => [
+                'label' => get_lang('ExportAsCSV'),
+                'icon' => Display::return_icon('export_csv.png'),
+            ],
+        ];
+
+        return $table;
+    }
+
     /**
      * It gets lti learnpath results by date.
      *
@@ -1811,5 +1897,80 @@ class Statistics
         $result = $plugin->getToolLearnPathResult($startDate, $endDate);
 
         return $result;
+    }
+
+    private static function getDuplicatedUsers(array $additionalExtraFieldsInfo): array
+    {
+        $sql = "SELECT firstname, lastname, COUNT(*) as count
+            FROM user
+            GROUP BY firstname, lastname
+            HAVING count > 1
+            ORDER BY lastname, firstname"
+        ;
+
+        $result = Database::query($sql);
+
+        if (1 > Database::num_rows($result)) {
+            return [];
+        }
+
+        $usersInfo = [];
+
+        while ($rowStat = Database::fetch_assoc($result)) {
+            $subsql = "SELECT id, email, registration_date, status, active
+                FROM user WHERE firstname = '{$rowStat['firstname']}' AND lastname = '{$rowStat['lastname']}'"
+            ;
+
+            $subResult = Database::query($subsql);
+
+            if (1 > Database::num_rows($subResult)) {
+                continue;
+            }
+
+            $objExtraValue = new ExtraFieldValue('user');
+
+            while ($rowUser = Database::fetch_assoc($subResult)) {
+                $studentId = $rowUser['id'];
+
+                $studentInfo = [];
+                $studentInfo[] = $rowUser['id'];
+
+                if (api_is_western_name_order()) {
+                    $studentInfo[] = $rowStat['firstname'];
+                    $studentInfo[] = $rowStat['lastname'];
+                } else {
+                    $studentInfo[] = $rowStat['lastname'];
+                    $studentInfo[] = $rowStat['firstname'];
+                }
+
+                $studentInfo[] = $rowUser['email'];
+                $studentInfo[] = $rowUser['registration_date'];
+                $studentInfo[] = Tracking::get_first_connection_date(
+                    $studentId,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = Tracking::get_last_connection_date(
+                    $studentId,
+                    true,
+                    false,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = $rowUser['status'];
+                $studentInfo[] = Tracking::count_course_per_student($studentId);
+                $studentInfo[] = Tracking::countSessionsPerStudent($studentId);
+
+                foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+                    $extraValue = $objExtraValue->get_values_by_handler_and_field_id($studentId, $fieldInfo['id'], true);
+                    $studentInfo[] = $extraValue['value'] ?? null;
+                }
+
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
+
+                $usersInfo[] = $studentInfo;
+            }
+        }
+
+        return $usersInfo;
     }
 }

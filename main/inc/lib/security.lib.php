@@ -624,6 +624,17 @@ class Security
         return $output;
     }
 
+    /**
+     * Sanitize a string, so it can be used in the exec() command without
+     * "jail-breaking" to execute other commands.
+     *
+     * @param string $param The string to filter
+     */
+    public static function sanitizeExecParam(string $param): string
+    {
+        return preg_replace('/[`;&|]/', '', $param);
+    }
+
     private static function generateSecTokenVariable(string $prefix = ''): string
     {
         if (empty($prefix)) {

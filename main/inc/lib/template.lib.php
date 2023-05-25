@@ -200,6 +200,7 @@ class Template
         $functions = [
             ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
             ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames'],
+            ['name' => 'api_is_platform_admin', 'callable' => 'api_is_platform_admin'],
         ];
 
         foreach ($functions as $function) {
@@ -2074,11 +2075,26 @@ class Template
                 $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
-            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
-            if (!empty($logo)) {
-                $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+            if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+                // check if current page is a course page
+                $courseId = api_get_course_int_id();
+
+                if (!empty($courseId)) {
+                    $course = api_get_course_info_by_id($courseId);
+                    if (!empty($course) && !empty($course['course_email_image_large'])) {
+                        $portalImageMeta = '<meta property="og:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                    }
+                }
+            }
+            if (empty($portalImageMeta)) {
+                $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+                if (!empty($logo)) {
+                    $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                }
             }
         }
 

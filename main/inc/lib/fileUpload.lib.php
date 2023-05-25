@@ -2183,10 +2183,29 @@ function add_all_documents_in_folder_to_database(
  *
  * @return int
  */
-function getIniMaxFileSizeInBytes()
+function getIniMaxFileSizeInBytes($humanReadable = false, $checkMessageSetting = false)
 {
     $maxSize = 0;
-    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
+    $uploadMaxFilesize = ini_get('upload_max_filesize');
+    $fileSizeForTeacher = getFileUploadSizeLimitForTeacher();
+    if (!empty($fileSizeForTeacher)) {
+        $uploadMaxFilesize = $fileSizeForTeacher.'M';
+    }
+
+    if (empty($fileSizeForTeacher) && $checkMessageSetting) {
+        $uploadMaxFilesize = api_get_setting('message_max_upload_filesize'); // in bytes
+        if ($humanReadable) {
+            $uploadMaxFilesize = format_file_size($uploadMaxFilesize);
+        }
+
+        return $uploadMaxFilesize;
+    }
+
+    if ($humanReadable) {
+        return $uploadMaxFilesize;
+    }
+
+    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', $uploadMaxFilesize, $matches)) {
         // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
         switch (strtoupper($matches['2'])) {
             case 'G':
@@ -2205,4 +2224,20 @@ function getIniMaxFileSizeInBytes()
     $maxSize = (int) $maxSize;
 
     return $maxSize;
+}
+
+/**
+ * Get the uploax max filesize from configuration.php for trainers in bytes.
+ *
+ * @return int
+ */
+function getFileUploadSizeLimitForTeacher()
+{
+    $size = 0;
+    $settingValue = (int) api_get_configuration_value('file_upload_size_limit_for_teacher'); // setting value in MB
+    if ($settingValue > 0 && (api_is_allowed_to_create_course() && !api_is_platform_admin())) {
+        $size = $settingValue;
+    }
+
+    return $size;
 }

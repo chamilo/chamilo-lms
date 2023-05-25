@@ -355,11 +355,31 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
-    public function toArray()
+    public function toArray($applyFilters = false, $stripTags = false)
     {
         $headers = array_column($this->getHeaders(), 'label');
 
-        return array_merge([$headers], $this->table_data);
+        if ($stripTags) {
+            $headers = array_map('strip_tags', $headers);
+        }
+
+        if ($applyFilters) {
+            $data = [];
+
+            foreach ($this->table_data as $row) {
+                $filtered = $this->filter_data($row);
+
+                if ($stripTags) {
+                    $filtered = array_map('strip_tags', $filtered);
+                }
+
+                $data[] = $filtered;
+            }
+        } else {
+            $data = $this->table_data;
+        }
+
+        return array_merge([$headers], $data);
     }
 
     /**
@@ -955,7 +975,10 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $result = http_build_query($this->additional_parameters);
+        $result = '';
+        if (is_array($this->additional_parameters)) {
+            $result = http_build_query($this->additional_parameters);
+        }
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
@@ -976,7 +999,7 @@ class SortableTable extends HTML_Table
                 $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
             }
             if (count($param) > 0) {
-                $result .= '&'.http_build_query($param);
+                $result .= (strlen($result) > 0 ? '&' : '').http_build_query($param);
             }
         }
 

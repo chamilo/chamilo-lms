@@ -425,8 +425,12 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo)
     if ('ASCII' === $detect) {
         $data = explode("\n", $aikenText);
     } else {
-        $text = str_ireplace(["\x0D", "\r\n"], "\n", $aikenText); // Removes ^M char from win files.
-        $data = explode("\n\n", $text);
+        if (false !== stripos($aikenText, "\x0D") || false !== stripos($aikenText, "\r\n")) {
+            $text = str_ireplace(["\x0D", "\r\n"], "\n", $aikenText); // Removes ^M char from win files.
+            $data = explode("\n\n", $text);
+        } else {
+            $data = explode("\n", $aikenText);
+        }
     }
 
     $questionIndex = 0;

@@ -601,7 +601,7 @@ Note: Xapian's licensing for the PHP extension is a bit different than what is n
 <h2><a name="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
-On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
+On Debian or Ubuntu 22.04 and superior, install LibreOffice v7 (or superior) and start it as a headless server:
 <pre>
 sudo apt-get install libreoffice screen
 sudo adduser rapid
@@ -609,9 +609,11 @@ sudo adduser rapid www-data
 screen
 sudo -s
 su - rapid
-soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"
 CTRL+a, CTRL+d
 </pre>
+In previous versions of LibreOffice, the command above was more complex. If you still need it, please check previous versions of this installation guide.
+
 Please note that this will effectively launch LibreOffice in a "headless" mode (thanks to the --headless option), in a "headless" terminal (thanks to screen). You can later get back into your "headless" terminal by launching:
 <pre>
 sudo screen -r
@@ -751,7 +753,6 @@ If you have issues with files taking a long time to download, make sure you reco
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
     RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
     RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
-    RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
 
@@ -970,10 +971,6 @@ If you have issues with files taking a long time to download, make sure you reco
                     &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v23" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$" /&gt;
-                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
-                &lt;/rule&gt;
-                &lt;rule name="rule v24" stopProcessing="true"&gt;
                     &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
                     &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;

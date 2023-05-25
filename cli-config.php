@@ -22,6 +22,7 @@ if (!is_file($configurationFile)) {
     exit();
 }
 
+require_once __DIR__.'/main/inc/global.inc.php';
 require_once $configurationFile;
 
 $database = new \Database();

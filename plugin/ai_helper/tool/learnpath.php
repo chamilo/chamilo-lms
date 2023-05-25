@@ -4,6 +4,9 @@
 /**
 Create a learnpath with contents based on existing knowledge.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/../AiHelperPlugin.php';
 require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
@@ -30,7 +33,7 @@ switch ($apiName) {
         $addTests = ('true' === $_REQUEST['add_tests']);
         $nQ = ($addTests ? (int) $_REQUEST['nro_questions'] : 0);
 
-        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number';
+        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number. Do not include a conclusion chapter.';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
 
@@ -44,6 +47,13 @@ switch ($apiName) {
 
         $lpItems = [];
         if (!empty($resultText)) {
+            $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
+            $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
+            $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
+            $style .= api_get_css_asset('ckeditor/plugins/codesnippet/lib/highlight/styles/default.css');
+            $style .= api_get_asset('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js');
+            $style .= '<script>hljs.initHighlightingOnLoad();</script>';
+
             $items = explode(',', $resultText);
             $position = 1;
             foreach ($items as $item) {
@@ -54,7 +64,13 @@ switch ($apiName) {
                     $messageGetItemContent = 'In the context of "%s", generate a document with HTML tags in "%s" with %d words of content or less, about "%s"';
                     $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title);
                     $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
-                    $lpItems[$position]['content'] = (!empty($resultContentText) ? trim($resultContentText) : '');
+                    $lpItemContent = (!empty($resultContentText) ? trim($resultContentText) : '');
+                    if (false !== stripos($lpItemContent, '</head>')) {
+                        $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $lpItemContent);
+                    } else {
+                        $lpItemContent = '<html><head><title>'.trim($title).'</title>'.$style.'</head><body>'.$lpItemContent.'</body></html>';
+                    }
+                    $lpItems[$position]['content'] = $lpItemContent;
                     $position++;
                 }
             }
@@ -107,15 +123,15 @@ switch ($apiName) {
                         $lpItemsIds[$order]['item_id'] = $lpItemId;
                         $lpItemsIds[$order]['item_type'] = 'document';
                         if ($addTests && !empty($lpItemId)) {
-                            $promptQuiz = 'Generate %d "multiple choice" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The response line must not be separated from the last answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix. Each answer must not be quoted.';
-                            $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title']);
+                            $promptQuiz = 'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question. Show the question directly without any prefix.';
+                            $promptQuiz = sprintf($promptQuiz, $nQ, $courseLanguage, $item['title'], $topic);
                             $resultQuizText = $plugin->openAiGetCompletionText($promptQuiz, 'quiz');
                             if (!empty($resultQuizText)) {
                                 $request = [];
                                 $request['quiz_name'] = get_lang('Exercise').': '.$item['title'];
                                 $request['nro_questions'] = $nQ;
                                 $request['course_id'] = api_get_course_int_id($courseCode);
-                                $request['aiken_format'] = $resultQuizText;
+                                $request['aiken_format'] = trim($resultQuizText);
                                 $exerciseId = aikenImportExercise(null, $request);
                                 if (!empty($exerciseId)) {
                                     $order++;

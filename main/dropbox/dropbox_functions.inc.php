@@ -540,7 +540,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $form->addElement('hidden', 'sec_token', $token);
     $form->addElement('hidden', 'origin', $origin);
     if ('add' == $action) {
-        $maxFileSize = api_get_setting('dropbox_max_filesize');
+        $maxFileSize = getIniMaxFileSizeInBytes();
         $form->addElement('hidden', 'MAX_FILE_SIZE', $maxFileSize);
         $form->addElement(
             'file',
@@ -1070,7 +1070,7 @@ function store_add_dropbox($file = [], $work = null)
         $dropbox_filetmpname = $file['tmp_name'];
 
         // check if the filesize does not exceed the allowed size.
-        $maxFileSize = api_get_setting('dropbox_max_filesize');
+        $maxFileSize = getIniMaxFileSizeInBytes();
         if ($dropbox_filesize <= 0 || $dropbox_filesize > $maxFileSize) {
             Display::addFlash(Display::return_message(get_lang('DropboxFileTooBig'), 'warning'));
 

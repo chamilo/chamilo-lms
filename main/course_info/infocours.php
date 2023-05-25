@@ -85,14 +85,22 @@ $form->addHtml('
         <div class="panel-body">
 ');
 
+// Display regular image
 $image = '';
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository; // course path
-if (file_exists($course_path.'/course-pic85x85.png')) {
+if (file_exists($course_path.'/course-pic85x85.png') || file_exists($course_path.'/course-email-pic-cropped.png')) {
+    $image = '<div class="row">';
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository; // course web path
-    $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
-    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                    <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
+    if (file_exists($course_path.'/course-pic85x85.png')) {
+        $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // resized image
+        $image .= '<label class="col-md-2 control-label">'.get_lang('Image').'</label><div class="col-md-4"><img src="'.$course_medium_image.'" /></div>';
+    }
+    if (file_exists($course_path.'/course-email-pic-cropped.png')) {
+        $course_medium_image = $course_web_path.'/course-email-pic-cropped.png?'.rand(1, 1000); // redimensioned image
+        $image .= '<label class="col-md-2 control-label">'.get_lang('EmailPicture').'</label><div class="col-md-4"><img src="'.$course_medium_image.'" /></div>';
+    }
+    $image .= '</div>';
 }
 $form->addHtml($image);
 $form->addText('title', get_lang('Title'), true);
@@ -153,7 +161,7 @@ $(function() {
 // Picture
 $form->addFile(
     'picture',
-    get_lang('AddPicture'),
+    [get_lang('AddPicture'), get_lang('AddPictureComment')],
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
 );
 
@@ -165,6 +173,22 @@ $form->addRule(
     $allowed_picture_types
 );
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
+
+// Email Picture
+$form->addFile(
+    'email_picture',
+    [get_lang('AddEmailPicture'), get_lang('AddEmailPictureComment')],
+    ['id' => 'email_picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_min_ratio' => '250 / 70', 'crop_max_ratio' => '10']
+);
+
+$allowed_picture_types = api_get_supported_image_extensions(false);
+$form->addRule(
+    'email_picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
+    );
+$form->addElement('checkbox', 'delete_email_picture', null, get_lang('DeleteEmailPicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') === 'true') {
     $url = PDF::get_watermark($course_code);
@@ -1111,6 +1135,22 @@ if ($form->validate() && is_settings_editable()) {
         );
     }
 
+    // update email picture
+    $emailPicture = $_FILES['email_picture'];
+    if (!empty($emailPicture['name'])) {
+        CourseManager::updateCourseEmailPicture(
+            $_course,
+            $emailPicture['tmp_name'],
+            $updateValues['email_picture_crop_result']
+            );
+
+        Event::addEvent(
+            LOG_COURSE_SETTINGS_CHANGED,
+            'course_email_picture',
+            $emailPicture['name']
+            );
+    }
+
     if ($visibilityChangeable && isset($updateValues['visibility'])) {
         $visibility = $updateValues['visibility'];
     } else {
@@ -1122,6 +1162,11 @@ if ($form->validate() && is_settings_editable()) {
         CourseManager::deleteCoursePicture($course_code);
     }
 
+    $deleteEmailPicture = isset($updateValues['delete_email_picture']) ? $updateValues['delete_email_picture'] : '';
+
+    if ($deleteEmailPicture) {
+        CourseManager::deleteCourseEmailPicture($course_code);
+    }
     global $_configuration;
     $urlId = api_get_current_access_url_id();
     if (isset($_configuration[$urlId]) &&

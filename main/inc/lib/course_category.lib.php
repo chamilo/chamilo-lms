@@ -647,7 +647,8 @@ class CourseCategory
         $avoidCourses = true,
         $checkHidePrivate = true,
         $conditions = [],
-        $courseLanguageFilter = null
+        $courseLanguageFilter = null,
+        $filterShowInCatalogue = false
     ) {
         return self::getCoursesInCategory(
             $category_code,
@@ -656,7 +657,8 @@ class CourseCategory
             $checkHidePrivate,
             $conditions,
             true,
-            $courseLanguageFilter
+            $courseLanguageFilter,
+            $filterShowInCatalogue
         );
     }
 
@@ -667,7 +669,8 @@ class CourseCategory
         $checkHidePrivate = true,
         $conditions = [],
         $getCount = false,
-        $courseLanguageFilter = null
+        $courseLanguageFilter = null,
+        $filterShowInCatalogue = false
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
@@ -678,6 +681,11 @@ class CourseCategory
             $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         }
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $checkHidePrivate);
+
+        $showInCatalogueCondition = '';
+        if ($filterShowInCatalogue) {
+            $showInCatalogueCondition = CoursesAndSessionsCatalog::getCoursesToShowInCatalogueCondition();
+        }
 
         $sqlInjectJoins = '';
         $courseLanguageWhere = '';
@@ -732,6 +740,7 @@ class CourseCategory
                     $categoryFilter
                     $searchFilter
                     $avoidCoursesCondition
+                    $showInCatalogueCondition
                     $visibilityCondition
                     $where
                     $sqlInjectWhere

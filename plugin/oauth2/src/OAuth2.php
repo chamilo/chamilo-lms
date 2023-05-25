@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\TrackELogin;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -333,6 +335,39 @@ class OAuth2 extends Plugin
             $this->get_lang('OAuth2Id'),
             ''
         );
+    }
+
+    public static function isFirstLoginAfterAuthSource(int $userId): bool
+    {
+        $em = Database::getManager();
+
+        $lastLogin = $em
+            ->getRepository(TrackELogin::class)
+            ->findOneBy(
+                ['loginUserId' => $userId],
+                ['loginDate' => 'DESC']
+            )
+        ;
+
+        if (!$lastLogin) {
+            return false;
+        }
+
+        $objExtraField = new ExtraField('user');
+        $field = $objExtraField->getHandlerEntityByFieldVariable(self::EXTRA_FIELD_OAUTH2_ID);
+
+        $fieldValue = $em
+            ->getRepository(ExtraFieldValues::class)
+            ->findOneBy(
+                ['itemId' => $userId, 'field' => $field]
+            )
+        ;
+
+        if (!$fieldValue) {
+            return false;
+        }
+
+        return $fieldValue->getCreatedAt() >= $lastLogin->getLoginDate();
     }
 
     /**

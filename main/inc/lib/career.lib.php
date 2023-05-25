@@ -16,6 +16,7 @@ class Career extends Model
         'name',
         'description',
         'status',
+        'parent_id',
         'created_at',
         'updated_at',
     ];
@@ -100,6 +101,34 @@ class Career extends Model
     }
 
     /**
+     * Order the careers by its hierarchy
+     *
+     * @param $careers
+     * @return array
+     */
+    public function orderCareersByHierarchy($careers): array
+    {
+        $orderedCareers = array();
+        foreach ($careers as &$career) {
+            if (is_null($career['parent_id'])) {
+                $orderedCareers[] = &$career;
+            } else {
+                $pid = $career['parent_id'];
+                if (!isset($careers[$pid])) {
+                    // Orphan child
+                    break;
+                } else {
+                    if (!isset($careers[$pid]['children'])) {
+                        $careers[$pid]['children'] = array();
+                    }
+                    $careers[$pid]['children'][] = &$career;
+                }
+            }
+        }
+
+        return $orderedCareers;
+    }
+    /**
      * Update all promotion status by career.
      *
      * @param int $career_id
@@ -151,6 +180,22 @@ class Career extends Model
     }
 
     /**
+     * Return the name of the careers that are parents of others
+     */
+    public function getHierarchies(): array
+    {
+        $return = [];
+        $result = Database::select('name, id', $this->table, [ 'order' => 'id ASC']);
+        foreach ($result as $item) {
+            $return[$item['id']] = $item['name'];
+        }
+        array_unshift($return, '--');
+
+        return $return;
+
+    }
+
+    /**
      * Returns a Form validator Obj.
      *
      * @todo the form should be auto generated
@@ -186,6 +231,11 @@ class Career extends Model
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
+
+        if (api_get_configuration_value('career_hierarchy_enable')) {
+            $hierarchyList = $this->getHierarchies();
+            $form->addElement('select', 'parent_id', get_lang('ParentCareer'), $hierarchyList);
+        }
 
         if ($action == 'edit') {
             $extraField = new ExtraField('career');

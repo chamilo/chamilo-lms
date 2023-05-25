@@ -2384,6 +2384,14 @@ ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (pare
 // external authentication system rather than user.id.
 // $_configuration['webservice_return_user_field'] = 'oauth2_id';
 
+// Add support for careers hierarchy - refs BT#20711
+// 1. This requires the following DB change:
+// ALTER TABLE career add parent_id INT
+// ALTER TABLE career add constraint career_career_id_fk foreign key (parent_id) references career (id);
+// 2. Add an "@" before "var int" and "ORM\Column..." in the "Career::$parentId" property definition (in src/Chamilo/CoreBundle/Entity/Career.php)
+// 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
+// $_configuration['career_hierarchy_enable'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

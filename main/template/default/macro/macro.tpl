@@ -117,6 +117,50 @@
     </div>
 {% endmacro %}
 
+{% macro careers_panel(content, admin) %}
+    {% import _self as display %}
+
+    {% for item in content %}
+        <div id="career-{{ item.id }}" class="career panel panel-default" style="padding: 20px">
+            <div  class="panel-heading">
+                <h4>
+                    {% if admin %}
+                        <a href="{{ _p.web }}main/admin/careers.php?action=edit&id={{ item.id }}">
+                            {{ item.name }}
+                        </a>
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="panel-body">
+                {{ item.description }}
+                <table class="table promotions">
+                    <thead class="title">
+                        <th>{{ 'Promotions' | get_lang }}</th>
+                    </thead>
+                    {% for promotions in item.career %}
+                        {% for prom in promotions %}
+                        <tr>
+                            <td class="promo" rowspan="{{ line }}">
+                                <h4 id="promotion-id-{{ prom.id }}">
+                                    <a title="{{ prom.name }}" href="{{ _p.web }}main/admin/promotions.php?action=edit&id={{ prom.id }}">
+                                        {{ prom.name }}
+                                    </a>
+                                </h4>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+            </div>
+            {% if item.children is defined %}
+                {{ display.careers_panel(item.children, admin) }}
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endmacro %}
+
 {% macro box_widget(name, content, icon) %}
     <div class="card box-widget">
         <div class="card-body">

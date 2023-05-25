@@ -2347,7 +2347,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions', 'external_career_id'];
+        $columns = ['name', 'description', 'parent_id', 'actions', 'external_career_id'];
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }

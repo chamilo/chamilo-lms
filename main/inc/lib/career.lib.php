@@ -190,8 +190,8 @@ class Career extends Model
             $return[$item['id']] = $item['name'];
         }
         array_unshift($return, '--');
-        return $return;
 
+        return $return;
     }
 
     /**

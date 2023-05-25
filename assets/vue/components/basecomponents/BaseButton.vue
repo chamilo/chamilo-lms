@@ -6,12 +6,12 @@
     :class="buttonClass"
     :outlined="primeOutlinedProperty"
     :text="primeTextProperty"
-    :severity="primeSeverityProperty"
+    :size="size"
     @click="$emit('click', $event)"
   >
-    <BaseIcon class="text-inherit" :icon="icon"/>
+    <BaseIcon class="text-inherit" :icon="icon" :size="size" />
     <span
-      v-if="!props.onlyIcon"
+      v-if="!onlyIcon && label"
       class="hidden md:block text-inherit"
     >
       {{ label }}
@@ -45,9 +45,14 @@ const props = defineProps({
     required: true,
     validator: (value) => {
       if (typeof (value) !== "string") {
-        return false
+        return false;
       }
-      return ["primary", "secondary", "black"].includes(value);
+      return [
+        "primary",
+        "secondary",
+        "black",
+        "danger",
+      ].includes(value);
     }
   },
   // associate this button to a popup through its identifier, this will make this button toggle the popup
@@ -58,7 +63,20 @@ const props = defineProps({
   onlyIcon: {
     type: Boolean,
     default: false,
-  }
+  },
+  size: {
+    type: String,
+    default: "normal",
+    validator: (value) => {
+      if (typeof (value) !== "string") {
+        return false
+      }
+      return [
+        "normal",
+        "small",
+      ].includes(value);
+    }
+  },
 });
 
 defineEmits(["click"]);
@@ -67,14 +85,23 @@ const buttonClass = computed(() => {
   if (props.onlyIcon) {
     return "p-3";
   }
-  let result = "py-2.5 px-4 ";
+  let result =""
+  switch (props.size) {
+    case "normal":
+      result += "py-2.5 px-4 ";
+      break;
+    case "small":
+      result += "py-2 px-3.5 "
+  }
   switch (props.type) {
     case "primary":
-      result += "border-primary hover:bg-primary text-primary hover:text-white";
+      result += "border-primary hover:bg-primary text-primary hover:text-white ";
       break;
     case "secondary":
-      result += "bg-secondary hover:bg-secondary-gradient text-white";
+      result += "bg-secondary hover:bg-secondary-gradient text-white ";
       break;
+    case "danger":
+      result += "border-error hover:bg-error text-error hover:text-white ";
   }
   return result;
 });
@@ -86,7 +113,7 @@ const primeOutlinedProperty = computed(() => {
   }
   switch (props.type) {
     case "primary":
-      return true;
+    case "danger":
     case "black":
       return true;
     default:
@@ -97,18 +124,5 @@ const primeOutlinedProperty = computed(() => {
 // https://primevue.org/button/#text
 const primeTextProperty = computed(() => {
   return props.onlyIcon;
-});
-
-// https://primevue.org/button/#severity primary and secondary modified by chamilo
-const primeSeverityProperty = computed(() => {
-  if (props.onlyIcon) {
-    return "primary";
-  }
-  switch (props.type) {
-    case "secondary":
-      return "danger";
-    default:
-      return "primary";
-  }
 });
 </script>

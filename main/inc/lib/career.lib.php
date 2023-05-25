@@ -101,14 +101,13 @@ class Career extends Model
     }
 
     /**
-     * Order the careers by its hierarchy
+     * Order the careers by its hierarchy.
      *
      * @param $careers
-     * @return array
      */
     public function orderCareersByHierarchy($careers): array
     {
-        $orderedCareers = array();
+        $orderedCareers = [];
         foreach ($careers as &$career) {
             if (is_null($career['parent_id'])) {
                 $orderedCareers[] = &$career;
@@ -119,7 +118,7 @@ class Career extends Model
                     break;
                 } else {
                     if (!isset($careers[$pid]['children'])) {
-                        $careers[$pid]['children'] = array();
+                        $careers[$pid]['children'] = [];
                     }
                     $careers[$pid]['children'][] = &$career;
                 }
@@ -128,6 +127,7 @@ class Career extends Model
 
         return $orderedCareers;
     }
+
     /**
      * Update all promotion status by career.
      *
@@ -180,17 +180,16 @@ class Career extends Model
     }
 
     /**
-     * Return the name of the careers that are parents of others
+     * Return the name of the careers that are parents of others.
      */
     public function getHierarchies(): array
     {
         $return = [];
-        $result = Database::select('name, id', $this->table, [ 'order' => 'id ASC']);
+        $result = Database::select('name, id', $this->table, ['order' => 'id ASC']);
         foreach ($result as $item) {
             $return[$item['id']] = $item['name'];
         }
         array_unshift($return, '--');
-
         return $return;
 
     }

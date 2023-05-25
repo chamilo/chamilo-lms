@@ -204,7 +204,7 @@ switch ($action) {
         api_protect_admin_script();
         // Action handling: delete
         if ($check) {
-            $childCareers = $career->get_all(['parent_id' =>  $_GET['id']]);
+            $childCareers = $career->get_all(['parent_id' => $_GET['id']]);
             if (!empty($childCareers)) {
                 Display::addFlash(
                     Display::return_message(get_lang('CareerCannotBeDeletedAsItHasChildren'), 'warning')

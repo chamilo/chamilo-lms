@@ -1589,7 +1589,7 @@ class Rest extends WebService
     /**
      * Returns an array of users with id, firstname, lastname, email and username.
      *
-     * @param array $params An array of parameters to filter the results (currently only supports 'status' and 'id_campus')
+     * @param array $params An array of parameters to filter the results (currently supports 'status', 'id_campus' and 'extra_fields')
      *
      * @throws Exception
      */
@@ -1601,6 +1601,11 @@ class Rest extends WebService
             'status' => $params['status'],
         ];
         $idCampus = !empty($params['id_campus']) ?? 1;
+        $fields = [];
+        if (!empty($params['extra_fields'])) {
+            //extra_fields must be sent as a comma-separated list of extra_field variable names
+            $fields = explode(',', $params['extra_fields']);
+        }
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
         $list = [];
         foreach ($users as $item) {
@@ -1611,6 +1616,13 @@ class Rest extends WebService
                 'email' => $item['email'],
                 'username' => $item['username'],
             ];
+            foreach ($fields as $field) {
+                $field = trim($field);
+                $value = UserManager::get_extra_user_data_by_field($item['user_id'], $field);
+                if (!empty($value)) {
+                    $listTemp[$field] = $value[$field];
+                }
+            }
             $list[] = $listTemp;
         }
 

@@ -34,8 +34,7 @@
       <BaseButton
         v-if="showUpdateIntroductionButton"
         :label="t('Edit introduction')"
-        icon="pencil"
-        type="black"
+        icon="edit"
         @click="updateIntro(intro)"
       />
 

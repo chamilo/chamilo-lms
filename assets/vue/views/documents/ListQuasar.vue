@@ -84,7 +84,7 @@ import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
+import ResourceIcon from '../../components/documents/ResourceIcon.vue';
 import { useRoute } from 'vue-router'
 import moment from 'moment'
 
@@ -96,7 +96,7 @@ export default {
   components: {
     Toolbar,
     ActionCell,
-    ResourceFileIcon,
+    ResourceIcon,
   },
   setup() {
     //this.moment = moment;

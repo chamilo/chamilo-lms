@@ -103,7 +103,7 @@ import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
 //import Toolbar from '../../components/Toolbar.vue';
-import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
+import ResourceIcon from '../../components/documents/ResourceIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 
 import { useRoute } from 'vue-router'
@@ -121,7 +121,7 @@ export default {
   components: {
     //8Toolbar,
     ActionCell,
-    ResourceFileIcon,
+    ResourceIcon,
     ResourceFileLink,
     DocumentsFilterForm,
     DataFilter

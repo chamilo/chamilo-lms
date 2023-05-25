@@ -11,10 +11,10 @@ module.exports = {
     colors: {
       primary: {
         DEFAULT: "#2e75a3",
-        gradient: "#9CC2DA",
+        gradient: "#9cc2da",
       },
       secondary: {
-        DEFAULT: "#F37E2F",
+        DEFAULT: "#f37e2f",
         gradient: "#e06410",
       },
       gray: {

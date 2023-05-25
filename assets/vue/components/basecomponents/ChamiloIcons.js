@@ -5,8 +5,8 @@
  * to the classes needed for represent every icon
 */
 export const chamiloIconToClass = {
-    "pencil": "mdi mdi-pencil",
-    "delete": "",
+    "edit": "mdi mdi-pencil",
+    "delete": "mdi mdi-delete",
     "hammer-wrench": "",
     "download": "",
     "download-box": "",
@@ -21,13 +21,11 @@ export const chamiloIconToClass = {
     "arrow-right-bold": "",
     "magnify-plus-outline": "",
     "archive-arrow-up": "",
-    "folder-multiple-plus": "",
-    "folder-plus": "",
     "alert": "",
     "checkbox-marked": "",
     "pencil-off": "",
-    "eye": "mdi mdi-eye",
-    "eye-off": "",
+    "eye-on": "mdi mdi-eye",
+    "eye-off": "mdi mdi-eye-off",
     "checkbox-multiple-blank": "",
     "checkbox-multiple-blank-outline": "",
     "sync": "",
@@ -48,10 +46,18 @@ export const chamiloIconToClass = {
     "file-plus": "",
     "cloud-upload": "",
     "dots-vertical": "",
-    "information": "",
+    "information": "mdi mdi-information",
     "account-key": "",
     "cog": "mdi mdi-cog",
     "plus": "mdi mdi-plus",
+    "file-generic": "mdi mdi-file",
+    "file-image": "mdi mdi-file-image",
+    "file-video": "mdi mdi-file-video",
+    "file-pdf": "mdi mdi-file-pdf-box",
+    "file-text": "mdi mdi-file-document",
+    "folder-generic": "mdi mdi-folder",
+    "folder-multiple-plus": "mdi mdi-folder-multiple-plus",
+    "folder-plus": "mdi mdi-folder-plus",
 };
 
 export const validator = (value) => {

@@ -9025,4 +9025,5 @@ $AddEmailPictureComment = "This picture will be used in the course header and in
 $DeleteEmailPicture = "Delete picture for headers";
 $AddPictureComment = "The final picture must be in a 16:9 ratio, but you can crop the picture you upload.";
 $ExportAllExercisesAllResults = "Export all results of all tests";
+$ClickToViewDetails = "Click to view details";
 ?>

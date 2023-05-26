@@ -17,7 +17,7 @@ class Wiki extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-xml';
+        return 'mdi-view-dashboard-edit';
     }
 
     public function getLink(): string

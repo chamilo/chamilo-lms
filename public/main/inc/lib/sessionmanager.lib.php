@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -15,6 +16,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * This is the session library for Chamilo
@@ -1928,6 +1930,9 @@ class SessionManager
                 api_not_allowed(true);
             }
         }
+
+        // Delete Picture Session
+        SessionManager::deleteAsset($sessionId);
 
         // Delete documents inside a session
         $courses = self::getCoursesInSession($sessionId);
@@ -8098,15 +8103,99 @@ class SessionManager
             get_lang('Send an email when a user being subscribed to session'),
         );
 
+        // Picture
+        $form->addFile(
+            'picture',
+            get_lang('Add image'),
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
+        );
+        $allowedPictureTypes = api_get_supported_image_extensions(false);
+        $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
+
+        if ($session && $session->getImage()) {
+            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
+            $imageUrl = self::getSessionPictureUrl($session);
+            $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+        }
+
         // Extra fields
         $extra_field = new ExtraFieldModel('session');
-        $extra = $extra_field->addElements($form, $session ? $session->getId() : 0);
+        $extra = $extra_field->addElements($form, $session ? $session->getId() : 0, ['image']);
 
         $form->addElement('html', '</div>');
 
         $js = $extra['jquery_ready_content'];
 
         return ['js' => $js];
+    }
+
+    /**
+     * Saves the session picture.
+     *
+     * @param int    $sessionId
+     * @param array  $file
+     * @param string $crop
+     *
+     * @return false
+     */
+    public static function updateSessionPicture(
+        $sessionId,
+        $file,
+        string $crop = ''
+    ) {
+        if (empty($file)) {
+            return false;
+        }
+
+        $sessionRepo = Container::getSessionRepository();
+        $assetRepo = Container::getAssetRepository();
+
+        $asset = (new Asset())
+            ->setCategory(Asset::SESSION)
+            ->setTitle($file['name'])
+        ;
+        if (!empty($crop)) {
+            $asset->setCrop($crop);
+        }
+        $asset = $assetRepo->createFromRequest($asset, $file);
+
+        /** @var Session $session */
+        $session = $sessionRepo->find($sessionId);
+        $session->setImage($asset);
+        $sessionRepo->update($session);
+    }
+
+    /**
+     * Deletes de session picture as asset.
+     *
+     * @param int $sessionId
+     */
+    public static function deleteAsset(int $sessionId): void
+    {
+        $sessionRepo = Container::getSessionRepository();
+
+        /** @var Session $session */
+        $session = $sessionRepo->find($sessionId);
+        $em = Database::getManager();
+        if ($session->hasImage()) {
+            $asset = $session->getImage();
+            $em->remove($asset);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Get the session picture url.
+     *
+     * @param Session $session
+     * @return string
+     */
+    public static function getSessionPictureUrl(Session $session): string
+    {
+        $assetRepo = Container::getAssetRepository();
+        $imageUrl = $assetRepo->getAssetUrl($session->getImage());
+
+        return $imageUrl;
     }
 
     /**

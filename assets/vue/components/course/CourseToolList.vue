@@ -24,15 +24,15 @@
         v-if="isCurrentTeacher && !isSorting && !isCustomizing"
         @click="changeVisibility(course, tool)"
       >
-        <v-icon
+        <BaseIcon
           v-if="tool.ctool.resourceNode.resourceLinks[0].visibility === 2"
-          icon="mdi-eye"
-          size="lg"
+          icon="eye-on"
+          size="small"
         />
-        <v-icon
+        <BaseIcon
           v-else
-          icon="mdi-eye-off"
-          size="lg"
+          icon="eye-off"
+          size="small"
         />
       </button>
 
@@ -40,18 +40,15 @@
         v-if="isCurrentTeacher && isCustomizing"
         href="#"
       >
-        <v-icon
-          icon="mdi-pencil"
-          size="lg"
-        />
+        <BaseIcon icon="edit" size="small" />
       </a>
 
       <!-- a
         v-if="isCurrentTeacher"
         :href="goToSettingCourseTool(course, tool)"
       >
-        <v-icon
-          icon="mdi-cog"
+        <BaseIcon
+          icon="cog"
           size="lg"
         />
       </a -->
@@ -62,6 +59,7 @@
 <script setup>
 import { useStore } from "vuex";
 import { computed, inject } from "vue";
+import BaseIcon from "../basecomponents/BaseIcon.vue";
 
 const store = useStore();
 

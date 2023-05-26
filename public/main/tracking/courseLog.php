@@ -83,7 +83,7 @@ if ($export_csv) {
     }
     ob_start();
 }
-$columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
+$columnsToHideFromSetting = api_get_setting('course.course_log_hide_columns', true);
 $columnsToHide = [0, 8, 9, 10, 11];
 if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['columns'])) {
     $columnsToHide = $columnsToHideFromSetting['columns'];
@@ -290,7 +290,7 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-$showReporting = false === api_get_configuration_value('hide_reporting_session_list');
+$showReporting = ('false' === api_get_setting('session.hide_reporting_session_list'));
 if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseId);
     if (!empty($sessionList)) {
@@ -693,7 +693,7 @@ if ($nbStudents > 0) {
     );
     $headers['score_best'] = $bestScoreLabel;
 
-    $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+    $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
     $exerciseResultHeaders = [];
     if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
         isset($addExerciseOption['courses'][$courseCode])

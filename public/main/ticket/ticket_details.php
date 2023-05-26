@@ -131,7 +131,7 @@ if (empty($ticket)) {
     api_not_allowed(true);
 }
 $projectId = (int) $ticket['ticket']['project_id'];
-$userIsAllowInProject = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
+$userIsAllowInProject = TicketManager::userIsAllowInProject($projectId);
 $allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id
     || $ticket['ticket']['sys_insert_user_id']
     == $user_id
@@ -399,7 +399,7 @@ if (null != $ticket['ticket']['course_url']) {
             <td></td>
             <td colspan="2"></td>
           </tr>';
-    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+    if ('true' === api_get_setting('lp.ticket_lp_quiz_info_add')) {
         if (!empty($ticket['ticket']['exercise_url'])) {
             echo '<tr>
                 <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>

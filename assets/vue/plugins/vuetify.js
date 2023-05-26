@@ -1,5 +1,5 @@
 //import '@mdi/font/css/materialdesignicons.css';
-import 'vuetify/lib/styles/main.sass';
+//import 'vuetify/lib/styles/main.sass';
 
 //declare module 'vuetify';
 //declare module 'vuetify/lib/components';

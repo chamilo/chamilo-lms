@@ -14,98 +14,66 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="skill_rel_user",
- *     indexes={
- *         @ORM\Index(name="idx_select_cs", columns={"course_id", "session_id"}),
- *         @ORM\Index(name="idx_select_s_c_u", columns={"session_id", "course_id", "user_id"}),
- *         @ORM\Index(name="idx_select_sk_u", columns={"skill_id", "user_id"})
- *     }
- * )
- * @ORM\Entity
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener"})
- */
+#[ORM\Table(name: 'skill_rel_user')]
+#[ORM\Index(name: 'idx_select_cs', columns: ['course_id', 'session_id'])]
+#[ORM\Index(name: 'idx_select_s_c_u', columns: ['session_id', 'course_id', 'user_id'])]
+#[ORM\Index(name: 'idx_select_sk_u', columns: ['skill_id', 'user_id'])]
+#[ORM\Entity]
+#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener::class])]
 class SkillRelUser
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="achievedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'achievedSkills', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Skill $skill = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="issuedSkills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="skillRelUser",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     *
      * @var Collection|SkillRelUserComment[]
      */
+    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelUserComment::class, mappedBy: 'skillRelUser', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $comments;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
-     * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Level::class)]
+    #[ORM\JoinColumn(name: 'acquired_level', referencedColumnName: 'id')]
     protected ?Level $acquiredLevel = null;
 
-    /**
-     * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'acquired_skill_at', type: 'datetime', nullable: false)]
     protected DateTime $acquiredSkillAt;
 
     /**
      * Whether this has been confirmed by a teacher or not
      * Only set to 0 when the skill_rel_item says requires_validation = 1.
-     *
-     * @ORM\Column(name="validation_status", type="integer")
      */
+    #[ORM\Column(name: 'validation_status', type: 'integer')]
     protected int $validationStatus;
 
-    /**
-     * @ORM\Column(name="assigned_by", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'assigned_by', type: 'integer', nullable: false)]
     protected int $assignedBy;
 
-    /**
-     * @ORM\Column(name="argumentation", type="text")
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'argumentation', type: 'text')]
     protected string $argumentation;
 
-    /**
-     * @ORM\Column(name="argumentation_author_id", type="integer")
-     */
+    #[ORM\Column(name: 'argumentation_author_id', type: 'integer')]
     protected int $argumentationAuthorId;
 
     public function __construct()

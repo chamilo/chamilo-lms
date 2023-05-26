@@ -13,97 +13,64 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="gradebook_link",
- *     indexes={
- *         @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'gradebook_link')]
+#[ORM\Index(name: 'idx_gl_cat', columns: ['category_id'])]
+#[ORM\Entity]
 class GradebookLink
 {
     use CourseTrait;
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'type', type: 'integer', nullable: false)]
     protected int $type;
 
-    /**
-     * @ORM\Column(name="ref_id", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'ref_id', type: 'integer', nullable: false)]
     protected int $refId;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinks")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookLinks')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookLinks")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookLinks')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="links")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'links')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $category;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
-     */
+    #[ORM\Column(name: 'weight', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $weight;
 
-    /**
-     * @ORM\Column(name="visible", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'visible', type: 'integer', nullable: false)]
     protected int $visible;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
-    /**
-     * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'best_score', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $bestScore = null;
 
-    /**
-     * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'average_score', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $averageScore = null;
 
-    /**
-     * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'score_weight', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $scoreWeight = null;
 
-    /**
-     * @ORM\Column(name="user_score_list", type="array", nullable=true)
-     */
+    #[ORM\Column(name: 'user_score_list', type: 'array', nullable: true)]
     protected ?array $userScoreList = null;
 
     public function __construct()

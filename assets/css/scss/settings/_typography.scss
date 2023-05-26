@@ -40,42 +40,6 @@
     line-height: 24px;
     font-weight: 700;
   }
-
-  .text-body-1 {
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-  .text-body-1-bold {
-    @apply text-body-1 font-semibold;
-  }
-
-  .text-body-2 {
-    font-size: 14px;
-    line-height: 16px;
-  }
-
-  .text-body-2-bold {
-    @apply text-body-2 font-semibold;
-  }
-
-  .text-caption {
-    font-size: 13px;
-    line-height: 16px;
-  }
-
-  .text-caption-bold {
-    @apply text-caption font-semibold;
-  }
-
-  .text-tiny {
-    font-size: 11px;
-    line-height: 16px;
-  }
-
-  .text-tiny-bold {
-    @apply text-tiny font-semibold;
-  }
 }
 
 @layer base {

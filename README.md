@@ -133,6 +133,12 @@ Load the (your-domain)/main/install/index.php URL to start the installer (which 
 If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully.
 Go back to the beginning of this section and try again.
 
+If you want hot reloading for assets use the command `yarn run encore dev-server`. This will refresh automatically
+your assets when you modify then under `assets/vue`. Access your chamilo instance as usual (this will server asset
+files from a custom server on http://localhost:8080. Do not access this url directly since
+[Encore](https://symfony.com/doc/current/frontend.html#webpack-encore) is in charge of change url assets as needed
+on chamilo).
+
 ### Supporting PHP 7.4 and 8.1 in parallel
 
 You might want to support PHP 8.1 (for Chamilo 2) and PHP 7.4 (for all other things) on the same server simultaneously. On Ubuntu, you could do it this way:

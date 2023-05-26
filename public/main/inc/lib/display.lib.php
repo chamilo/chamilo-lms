@@ -524,7 +524,7 @@ class Display
             $hmail .= '&#'.ord($email[$i]).';';
         }
 
-        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+        $value = ('true' === api_get_setting('profile.add_user_course_information_in_mailto'));
 
         if ($value) {
             if ('false' === api_get_setting('allow_email_editor')) {
@@ -1196,7 +1196,7 @@ class Display
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
-            $rowList = api_get_configuration_value('table_row_list');
+            $rowList = api_get_setting('platform.table_row_list', true);
             if (!empty($rowList) && isset($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
@@ -1204,7 +1204,7 @@ class Display
             $extra_params['rowList'] = $rowList;
         }
 
-        $defaultRow = api_get_configuration_value('table_default_row');
+        $defaultRow = api_get_setting('platform.table_default_row');
         if (!empty($defaultRow)) {
             $obj->rowNum = (int) $defaultRow;
         }
@@ -1316,7 +1316,7 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
-        if (api_get_configuration_value('allow_compilatio_tool') &&
+        if (('true' === api_get_setting('document.allow_compilatio_tool')) &&
             (false !== strpos($_SERVER['REQUEST_URI'], 'work/work.php') ||
              false != strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php')
             )
@@ -1740,6 +1740,7 @@ class Display
                 class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
                 aria-expanded="false"
                 aria-haspopup="true"
+                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
             >
               '.$title.'
               <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -1771,19 +1772,7 @@ class Display
             </div>
             </div>
             </div>
-            <script>
-             document.addEventListener("DOMContentLoaded", function() {
-                const button = document.querySelector("#'.$id.'");
-                    button.addEventListener("click", (e) => {
-                    let menu = document.querySelector("#'.$id.'_menu");
-                    if (menu.classList.contains("hidden")) {
-                        menu.classList.remove("hidden");
-                    } else {
-                        menu.classList.add("hidden");
-                    }
-                });
-            });
-            </script>';
+        ';
 
         return $html;
     }

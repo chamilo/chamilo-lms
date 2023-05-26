@@ -13,13 +13,14 @@
 
 @import "settings/typography";
 
+@import "atoms/form";
 @import "atoms/avatar";
 @import "atoms/buttons";
 @import "atoms/checkbox";
 @import "atoms/dropdown";
-@import "atoms/form";
 @import "atoms/fieldset";
 @import "atoms/inline_message";
+@import "atoms/inputgroup";
 @import "atoms/input_switch";
 @import "atoms/input_text";
 @import "atoms/messages";
@@ -29,6 +30,7 @@
 @import "atoms/radio";
 @import "atoms/skeleton";
 @import "atoms/tags";
+@import "atoms/toast";
 
 @import "molecules/course_tool";
 @import "molecules/datepicker";
@@ -56,5 +58,7 @@
 
 @import 'forums';
 @import 'exercise';
+@import 'catalog_course';
+@import 'catalog_session';
 //@import 'jqueryui';
 @import 'lp';

@@ -56,7 +56,7 @@ $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
 $text = $form->addText('survey_title', get_lang('Title'));
 
-$allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+$allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
 if ($allowSurveyAvailabilityDatetime) {
     $form->addDateTimePicker('start_date', get_lang('Start Date'));

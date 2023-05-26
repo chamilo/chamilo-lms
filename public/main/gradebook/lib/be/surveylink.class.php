@@ -233,7 +233,7 @@ class SurveyLink extends AbstractLink
 
     public function get_link()
     {
-        if (api_get_configuration_value('hide_survey_reporting_button')) {
+        if ('true' === api_get_setting('survey.hide_survey_reporting_button')) {
             return null;
         }
 

@@ -349,7 +349,7 @@ class Notification extends Model
     public function formatContent($messageId, $content, $senderInfo)
     {
         $newMessageText = $linkToNewMessage = '';
-        $showEmail = api_get_configuration_value('show_user_email_in_notification');
+        $showEmail = ('true' === api_get_setting('mail.show_user_email_in_notification'));
         $senderInfoName = '';
         if (!empty($senderInfo) && isset($senderInfo['complete_name'])) {
             $senderInfoName = $senderInfo['complete_name'];
@@ -367,7 +367,7 @@ class Notification extends Model
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
-                $allow = api_get_configuration_value('messages_hide_mail_content');
+                $allow = ('true' === api_get_setting('mail.messages_hide_mail_content'));
                 if ($allow) {
                     $content = '';
                 }

@@ -64,7 +64,7 @@ switch ($action) {
         exit;
         break;
     case 'create_room':
-        if (api_get_configuration_value('hide_chat_video')) {
+        if ('true' === api_get_setting('chat.hide_chat_video')) {
             api_not_allowed();
         }
         /*$room = VideoChat::getChatRoomByUsers(api_get_user_id(), $toUserId);

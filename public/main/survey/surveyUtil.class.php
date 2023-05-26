@@ -2809,7 +2809,7 @@ class SurveyUtil
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
-        if (api_get_configuration_value('allow_mandatory_survey')) {
+        if ('true' === api_get_setting('survey.allow_mandatory_survey')) {
             $table->set_header(9, get_lang('Mandatory?'));
             $table->set_header(10, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(9, 'anonymous_filter');
@@ -2858,7 +2858,7 @@ class SurveyUtil
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
-        if (api_get_configuration_value('allow_mandatory_survey')) {
+        if ('true' === api_get_setting('survey.allow_mandatory_survey')) {
             $table->set_header(9, get_lang('Mandatory?'));
             $table->set_header(10, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(8, 'anonymous_filter');
@@ -2911,7 +2911,7 @@ class SurveyUtil
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
-        if (api_get_configuration_value('allow_mandatory_survey')) {
+        if ('true' === api_get_setting('survey.allow_mandatory_survey')) {
             $table->set_header(9, get_lang('Edit'), false, 'width="130"');
             $table->set_header(10, get_lang('Edit'), false, 'width="130"');
             $table->set_column_filter(8, 'anonymous_filter');
@@ -2934,7 +2934,7 @@ class SurveyUtil
      */
     public static function checkHideEditionToolsByCode($surveyCode)
     {
-        $hideSurveyEdition = api_get_configuration_value('hide_survey_edition');
+        $hideSurveyEdition = api_get_setting('survey.hide_survey_edition', true);
 
         if (false === $hideSurveyEdition) {
             return false;
@@ -2981,7 +2981,7 @@ class SurveyUtil
 
         $survey_id = $survey->getIid();
         $actions = [];
-        $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
+        $hideReportingButton = ('true' === api_get_setting('survey.hide_survey_reporting_button'));
         $codePath = api_get_path(WEB_CODE_PATH);
         $params = [];
         parse_str(api_get_cidreq(), $params);
@@ -3114,7 +3114,7 @@ class SurveyUtil
      */
     public static function getAdditionalTeacherActions($surveyId, $iconSize = ICON_SIZE_SMALL)
     {
-        $additionalActions = api_get_configuration_value('survey_additional_teacher_modify_actions') ?: [];
+        $additionalActions = api_get_setting('survey.survey_additional_teacher_modify_actions', true) ?: [];
 
         if (empty($additionalActions)) {
             return '';
@@ -3276,8 +3276,8 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Searching
         $search_restriction = self::survey_search_restriction();
@@ -3426,8 +3426,8 @@ class SurveyUtil
      */
     public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
-        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
         $repo = Container::getSurveyRepository();
         $qb = $repo->findAllByCourse(
             api_get_course_entity(),
@@ -3528,8 +3528,8 @@ class SurveyUtil
         $course_id = $_course['real_id'];
         $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
-        $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
+        $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
+        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);

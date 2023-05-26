@@ -1,20 +1,35 @@
 <template>
   <component
     :is="layout"
+    v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
-    <transition-group
-      name="p-message"
-      tag="div"
+    <Toast
+      position="top-center"
     >
-      <Message
-        v-for="(toastObj, index) in flashMessageList"
-        :key="index"
-        :severity="toastObj.severity"
-      >
-        <div v-html="toastObj.detail" />
-      </Message>
-    </transition-group>
+      <template #message="slotProps">
+        <span
+          :class="{
+            'mdi-close-outline': 'error' === slotProps.message.severity,
+            'mdi-information-outline': 'info' === slotProps.message.severity,
+            'mdi-check-outline': 'success' === slotProps.message.severity,
+            'mdi-alert-outline': 'warn' === slotProps.message.severity
+          }"
+          class="p-toast-message-icon mdi"
+        />
+        <div class="p-toast-message-text">
+          <span
+            v-if="slotProps.message.summary"
+            class="p-toast-summary"
+            v-text="slotProps.message.summary"
+          />
+          <div
+            class="p-toast-detail"
+            v-html="slotProps.message.detail"
+          />
+        </div>
+      </template>
+    </Toast>
     <slot />
     <div
       id="legacy_content"
@@ -32,8 +47,9 @@ import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core';
 import {useStore} from "vuex";
 import axios from "axios";
 import {isEmpty} from "lodash";
-import Message from "primevue/message";
 import ConfirmDialog from "primevue/confirmdialog";
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -46,6 +62,8 @@ provide(DefaultApolloClient, apolloClient);
 
 const route = useRoute();
 const router = useRouter();
+
+const toast = useToast();
 
 const layout = computed(
   () => {
@@ -137,10 +155,6 @@ const payload = {isAuthenticated, user};
 
 store.dispatch('security/onRefresh', payload);
 
-const flashMessageList = ref([]);
-
-provide('flashMessageList', flashMessageList);
-
 onMounted(() => {
   const app = document.getElementById('app');
 
@@ -152,9 +166,10 @@ onMounted(() => {
 
   for (const key in flashes) {
     for (const flashText in flashes[key]) {
-      flashMessageList.value.push({
+      toast.add({
         severity: key,
         detail: flashes[key][flashText],
+        life: 3500,
       });
     }
   }
@@ -164,18 +179,25 @@ axios.interceptors.response.use(
   undefined,
   (error) => new Promise(() => {
     if (401 === error.response.status) {
-      flashMessageList.value.push({
+      toast.add({
         severity: 'warn',
         detail: error.response.data.error,
+        life: 3500,
       });
     } else if (500 === error.response.status) {
-      flashMessageList.value.push({
+      toast.add({
         severity: 'warn',
         detail: error.response.data.detail,
+        life: 3500,
       });
     }
 
     throw error;
   })
 );
+
+import {usePlatformConfig} from './store/platformConfig';
+
+const platformConfigurationStore = usePlatformConfig();
+platformConfigurationStore.initialize();
 </script>

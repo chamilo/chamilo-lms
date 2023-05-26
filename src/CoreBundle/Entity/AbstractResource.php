@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Metadata\ApiProperty;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -17,41 +17,34 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
- */
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\EntityListeners([ResourceListener::class])]
 abstract class AbstractResource
 {
     use UserCreatorTrait;
 
-    /**
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
-     */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
     public ?string $downloadUrl = null;
 
     /**
      * Content from ResourceFile - Property set by ResourceNormalizer.php.
-     *
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "document:write", "media_object_read"})
      */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read'])]
     public ?string $contentFile = null;
 
     /**
      * Resource illustration URL - Property set by ResourceNormalizer.php.
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
      */
+    #[ApiProperty(types: ['https://schema.org/contentUrl'])]
     #[Groups([
         'resource_node:read',
         'document:read',
@@ -65,16 +58,7 @@ abstract class AbstractResource
     ])]
     public ?string $illustrationUrl = null;
 
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
     #[Assert\Valid]
-    #[ApiSubresource]
     #[Groups([
         'resource_node:read',
         'resource_node:write',
@@ -86,6 +70,8 @@ abstract class AbstractResource
         'message:read',
         'c_tool_intro:read',
     ])]
+    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
     /**
@@ -94,13 +80,11 @@ abstract class AbstractResource
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     public ?int $parentResourceNode = 0;
 
-    /**
-     * @ApiProperty(iri="http://schema.org/image")
-     */
+    #[ApiProperty(types: ['https://schema.org/image'])]
     public ?UploadedFile $uploadFile = null;
 
     /**
-     * @var AbstractResource|ResourceInterface
+     * @var AbstractResource|ResourceInterface|null
      */
     public $parentResource;
 
@@ -115,9 +99,46 @@ abstract class AbstractResource
     public array $resourceLinkList = [];
 
     /**
-     * @var array<\Chamilo\CoreBundle\Entity\ResourceLink>
+     * @var array<ResourceLink>
      */
     public array $resourceLinkEntityList = [];
+
+    /**
+     * This function separates the users from the groups users have a value
+     * USER:XXX (with XXX the groups id have a value
+     * GROUP:YYY (with YYY the group id).
+     *
+     * @param array $to Array of strings that define the type and id of each destination
+     *
+     * @return array Array of groups and users (each an array of IDs)
+     */
+    public static function separateUsersGroups(array $to): array
+    {
+        $sendTo = ['groups' => [], 'users' => []];
+
+        foreach ($to as $toItem) {
+            if (empty($toItem)) {
+                continue;
+            }
+
+            $parts = explode(':', $toItem);
+            $type = $parts[0] ?? '';
+            $id = $parts[1] ?? '';
+
+            switch ($type) {
+                case 'GROUP':
+                    $sendTo['groups'][] = (int) $id;
+
+                    break;
+                case 'USER':
+                    $sendTo['users'][] = (int) $id;
+
+                    break;
+            }
+        }
+
+        return $sendTo;
+    }
 
     abstract public function getResourceName(): string;
 
@@ -129,17 +150,14 @@ abstract class AbstractResource
     }
 
     /**
-     * $this->resourceLinkEntityList will be loaded in the ResourceListener in the setLinks() function.
+     * @throws Exception
      */
-    public function addLink(ResourceLink $link): static
-    {
-        $this->resourceLinkEntityList[] = $link;
-
-        return $this;
-    }
-
-    public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility = ResourceLink::VISIBILITY_PUBLISHED)
-    {
+    public function addCourseLink(
+        Course $course,
+        Session $session = null,
+        CGroup $group = null,
+        int $visibility = ResourceLink::VISIBILITY_PUBLISHED
+    ): self {
         if (null === $this->getParent()) {
             throw new Exception('$resource->addCourseLink requires to set the parent first.');
         }
@@ -174,11 +192,9 @@ abstract class AbstractResource
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
-                function ($key, $element) use ($course, $session, $group) {
-                    return $course === $element->getCourse() &&
-                        $session === $element->getSession() &&
-                        $group === $element->getGroup();
-                }
+                fn ($key, $element) => $course === $element->getCourse() &&
+                    $session === $element->getSession() &&
+                    $group === $element->getGroup()
             );
 
             if ($exists) {
@@ -192,7 +208,107 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addGroupLink(Course $course, CGroup $group, Session $session = null)
+    public function getParent()
+    {
+        return $this->parentResource;
+    }
+
+    public function hasResourceNode(): bool
+    {
+        return $this->resourceNode instanceof ResourceNode;
+    }
+
+    public function getResourceNode(): ?ResourceNode
+    {
+        return $this->resourceNode;
+    }
+
+    public function setResourceNode(ResourceNode $resourceNode): self
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    /**
+     * $this->resourceLinkEntityList will be loaded in the ResourceListener in the setLinks() function.
+     */
+    public function addLink(ResourceLink $link): static
+    {
+        $this->resourceLinkEntityList[] = $link;
+
+        return $this;
+    }
+
+    public function setParent(ResourceInterface $parent): static
+    {
+        $this->parentResource = $parent;
+
+        return $this;
+    }
+
+    public function addResourceToUserList(
+        array $userList,
+        Course $course = null,
+        Session $session = null,
+        CGroup $group = null
+    ): static {
+        if (!empty($userList)) {
+            foreach ($userList as $user) {
+                $this->addUserLink($user, $course, $session, $group);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null): static
+    {
+        $resourceLink = (new ResourceLink())
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ->setUser($user)
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+        ;
+
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($user) {
+                    if ($element->hasUser()) {
+                        return $user->getId() === $element->getUser()->getId();
+                    }
+
+                    return false;
+                }
+            );
+
+            if ($exists) {
+                return $this;
+            }
+
+            $resourceNode->addResourceLink($resourceLink);
+        } else {
+            $this->addLink($resourceLink);
+        }
+
+        return $this;
+    }
+
+    public function addResourceToGroupList(
+        array $groupList,
+        Course $course = null,
+        Session $session = null,
+    ): static {
+        foreach ($groupList as $group) {
+            $this->addGroupLink($course, $group, $session);
+        }
+
+        return $this;
+    }
+
+    public function addGroupLink(Course $course, CGroup $group, Session $session = null): static
     {
         $resourceLink = (new ResourceLink())
             ->setCourse($course)
@@ -222,93 +338,19 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null)
-    {
-        $resourceLink = (new ResourceLink())
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-            ->setUser($user)
-            ->setCourse($course)
-            ->setSession($session)
-            ->setGroup($group)
-        ;
-
-        if ($this->hasResourceNode()) {
-            $resourceNode = $this->getResourceNode();
-            $exists = $resourceNode->getResourceLinks()->exists(
-                function ($key, $element) use ($user) {
-                    if ($element->hasUser()) {
-                        return $user->getId() === $element->getUser()->getId();
-                    }
-                }
-            );
-
-            if ($exists) {
-                return $this;
-            }
-
-            $resourceNode->addResourceLink($resourceLink);
-        } else {
-            $this->addLink($resourceLink);
-        }
-
-        return $this;
-    }
-
-    public function setParent(ResourceInterface $parent)
-    {
-        $this->parentResource = $parent;
-
-        return $this;
-    }
-
-    public function getParent()
-    {
-        return $this->parentResource;
-    }
-
-    /**
-     * @param array $userList User id list
-     */
-    public function addResourceToUserList(
-        array $userList,
-        Course $course = null,
-        Session $session = null,
-        CGroup $group = null
-    ) {
-        if (!empty($userList)) {
-            foreach ($userList as $user) {
-                $this->addUserLink($user, $course, $session, $group);
-            }
-        }
-
-        return $this;
-    }
-
-    public function addResourceToGroupList(
-        array $groupList,
-        Course $course = null,
-        Session $session = null,
-    ) {
-        foreach ($groupList as $group) {
-            $this->addGroupLink($course, $group, $session);
-        }
-
-        return $this;
-    }
-
-    public function getResourceLinkArray()
+    public function getResourceLinkArray(): array
     {
         return $this->resourceLinkList;
     }
 
-    public function setResourceLinkArray(array $links)
+    public function setResourceLinkArray(array $links): static
     {
         $this->resourceLinkList = $links;
 
         return $this;
     }
 
-    public function getResourceLinkListFromEntity()
+    public function getResourceLinkListFromEntity(): ?array
     {
         return $this->resourceLinkListFromEntity;
     }
@@ -340,16 +382,16 @@ abstract class AbstractResource
         return null !== $this->parentResourceNode && 0 !== $this->parentResourceNode;
     }
 
+    public function getParentResourceNode(): ?int
+    {
+        return $this->parentResourceNode;
+    }
+
     public function setParentResourceNode(?int $resourceNode): self
     {
         $this->parentResourceNode = $resourceNode;
 
         return $this;
-    }
-
-    public function getParentResourceNode(): ?int
-    {
-        return $this->parentResourceNode;
     }
 
     public function hasUploadFile(): bool
@@ -367,23 +409,6 @@ abstract class AbstractResource
         $this->uploadFile = $file;
 
         return $this;
-    }
-
-    public function setResourceNode(ResourceNode $resourceNode): self
-    {
-        $this->resourceNode = $resourceNode;
-
-        return $this;
-    }
-
-    public function hasResourceNode(): bool
-    {
-        return $this->resourceNode instanceof ResourceNode;
-    }
-
-    public function getResourceNode(): ?ResourceNode
-    {
-        return $this->resourceNode;
     }
 
     public function getFirstResourceLink(): ?ResourceLink
@@ -480,42 +505,5 @@ abstract class AbstractResource
             'users' => $users,
             'groups' => $groups,
         ];
-    }
-
-    /**
-     * This function separates the users from the groups users have a value
-     * USER:XXX (with XXX the groups id have a value
-     * GROUP:YYY (with YYY the group id).
-     *
-     * @param array $to Array of strings that define the type and id of each destination
-     *
-     * @return array Array of groups and users (each an array of IDs)
-     */
-    public static function separateUsersGroups(array $to): array
-    {
-        $sendTo = ['groups' => [], 'users' => []];
-
-        foreach ($to as $toItem) {
-            if (empty($toItem)) {
-                continue;
-            }
-
-            $parts = explode(':', $toItem);
-            $type = $parts[0] ?? '';
-            $id = $parts[1] ?? '';
-
-            switch ($type) {
-                case 'GROUP':
-                    $sendTo['groups'][] = (int) $id;
-
-                    break;
-                case 'USER':
-                    $sendTo['users'][] = (int) $id;
-
-                    break;
-            }
-        }
-
-        return $sendTo;
     }
 }

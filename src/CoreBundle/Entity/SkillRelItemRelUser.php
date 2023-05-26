@@ -11,49 +11,35 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-/**
- * @ORM\Table(name="skill_rel_item_rel_user")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'skill_rel_item_rel_user')]
+#[ORM\Entity]
 class SkillRelItemRelUser
 {
     use TimestampableEntity;
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", cascade={"persist"})
-     * @ORM\JoinColumn(name="skill_rel_item_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelItem::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'skill_rel_item_id', referencedColumnName: 'id', nullable: false)]
     protected SkillRelItem $skillRelItem;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="result_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'result_id', type: 'integer', nullable: true)]
     protected int $resultId;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_by', type: 'integer', nullable: false)]
     protected int $createdBy;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_by", type="integer", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated_by', type: 'integer', nullable: false)]
     protected int $updatedBy;
 
     public function __construct()

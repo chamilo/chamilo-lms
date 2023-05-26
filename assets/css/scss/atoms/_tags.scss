@@ -1,5 +1,5 @@
 .p-tag {
-  @apply box-decoration-clone text-caption-bold py-1 px-4 rounded-full text-white inline-block;
+  @apply box-decoration-clone text-caption font-semibold py-1 px-4 rounded-full text-white inline-block;
 
   &-success {
     @apply bg-success;
@@ -31,7 +31,7 @@
 }
 
 .badge {
-  @apply box-decoration-clone text-caption-bold py-1 px-4 rounded-full text-white inline-block;
+  @apply box-decoration-clone text-caption font-semibold py-1 px-4 rounded-full text-white inline-block;
 
   &--default {
     @apply bg-gray-50;

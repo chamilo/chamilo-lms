@@ -395,7 +395,7 @@ switch ($action) {
         ]);
         break;
     case 'update_skill_rel_user':
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (empty($allowSkillInTools)) {
             exit;
         }
@@ -458,7 +458,7 @@ switch ($action) {
         }
         break;
     case 'assign_user_to_skill':
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (empty($allowSkillInTools)) {
             exit;
         }

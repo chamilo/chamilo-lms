@@ -11,7 +11,7 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'add_gradebook_comment':
-        if (true !== api_get_configuration_value('allow_gradebook_comments')) {
+        if ('true' !== api_get_setting('gradebook.allow_gradebook_comments')) {
             exit;
         }
         if (api_is_allowed_to_edit(null, true)) {

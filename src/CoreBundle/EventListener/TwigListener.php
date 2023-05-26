@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -49,13 +48,11 @@ class TwigListener
         if (null !== $token) {
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
-                /** @var User $userClone */
-                $userClone = clone $user;
-                $data = $this->serializer->serialize($userClone, 'jsonld', [
+                $data = $this->serializer->serialize($user, 'jsonld', [
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject($userClone, 1);
+                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
             }
         }
 

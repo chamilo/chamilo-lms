@@ -10,41 +10,30 @@ use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_attendance_sheet",
- *     indexes={
- *         @ORM\Index(name="presence", columns={"presence"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_attendance_sheet')]
+#[ORM\Index(name: 'presence', columns: ['presence'])]
+#[ORM\Entity]
 class CAttendanceSheet
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="presence", type="boolean", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'presence', type: 'boolean', nullable: false)]
     protected bool $presence;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar", inversedBy="sheets")
-     * @ORM\JoinColumn(name="attendance_calendar_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceCalendar::class, inversedBy: 'sheets')]
+    #[ORM\JoinColumn(name: 'attendance_calendar_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendanceCalendar $attendanceCalendar;
+
+    #[ORM\Column(name: 'signature', type: 'string', nullable: false)]
+    protected $signature;
 
     public function setPresence(bool $presence): self
     {
@@ -56,6 +45,28 @@ class CAttendanceSheet
     public function getPresence(): bool
     {
         return $this->presence;
+    }
+
+    /**
+     * Set signature.
+     *
+     * @return CAttendanceSheet
+     */
+    public function setSignature(string $signature)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature.
+     *
+     * @return string
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 
     public function getUser(): User

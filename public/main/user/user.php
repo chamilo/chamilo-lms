@@ -49,7 +49,7 @@ if (!empty($sessionId)) {
 }
 
 $disableUsers = 3 === (int) $course_info['visibility'] &&
-    api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+    ('true' === api_get_setting('profile.disable_change_user_visibility_for_public_courses'));
 
 if (false === $canEdit && $disableUsers) {
     api_not_allowed(true);
@@ -524,7 +524,7 @@ $table->set_header($header_nr++, get_lang('Login'));
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Group'), false);
 
-$hideFields = api_get_configuration_value('hide_user_field_from_list');
+$hideFields = api_get_setting('profile.hide_user_field_from_list', true);
 
 if (!empty($hideFields)) {
     $hideFields = $hideFields['fields'];

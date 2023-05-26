@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -37,7 +38,7 @@ class LegacyListener
     private RouterInterface $router;
     private ParameterBagInterface $parameterBag;
 
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag, private readonly SettingsManager $settingsManager)
     {
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
@@ -102,6 +103,20 @@ class LegacyListener
         $session->set('_user', $userInfo);
         $session->set('is_platformAdmin', $isAdmin);
         $session->set('is_allowedCreateCourse', $allowedCreateCourse);
+
+        if ('true' === $this->settingsManager->getSetting('course.student_view_enabled')) {
+            if ($request->query->has('isStudentView')) {
+                $isStudentView = $request->query->get('isStudentView');
+
+                if ('true' === $isStudentView) {
+                    $session->set('studentview', 'studentview');
+                } elseif ('false' === $isStudentView) {
+                    $session->set('studentview', 'teacherview');
+                }
+            } elseif (!$session->has('studentview')) {
+                $session->set('studentview', 'teacherview');
+            }
+        }
 
         // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
         //$theme = api_get_visual_theme();

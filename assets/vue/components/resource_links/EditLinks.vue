@@ -1,11 +1,12 @@
 <template>
   <ShowLinks
-      :edit-status="editStatus"
-      :item="item"
-      :show-status="showStatus"
+    :edit-status="editStatus"
+    :item="item"
+    :show-status="showStatus"
   />
 
-  <VueMultiselect
+  <div class="field">
+    <VueMultiselect
       v-if="showShareWithUser"
       v-model="selectedUsers"
       :internal-search="false"
@@ -20,10 +21,9 @@
       track-by="id"
       @select="addUser"
       @search-change="asyncFind"
-  />
+    />
+  </div>
 </template>
-
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <script>
 
@@ -209,3 +209,5 @@ export default {
   }
 };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

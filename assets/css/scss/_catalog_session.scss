@@ -1,0 +1,44 @@
+::v-deep(.p-paginator) {
+  .p-paginator-current {
+    margin-left: auto;
+  }
+}
+.course-image {
+  width: 130px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+}
+.session-name {
+  font-weight: 700 !important;
+}
+.p-input-icon-left > i:first-of-type {
+  left: 0.75rem;
+  color: #6c757d;
+}
+.p-input-icon-left > i, .p-input-icon-right > i {
+  margin-top: -.5rem;
+  position: absolute;
+  top: 50%;
+}
+.orders-subtable {
+  padding: 1rem;
+}
+
+::v-deep(.p-datatable.p-datatable-sessions) {
+  .p-datatable-header {
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+  }
+
+  .p-paginator {
+    padding: 1rem;
+  }
+
+  .p-datatable-thead > tr > th {
+    text-align: left;
+  }
+
+  .p-datatable-tbody > tr > td {
+    cursor: auto;
+  }
+}

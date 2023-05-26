@@ -11,25 +11,20 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Admin list.
- *
- * @ORM\Table(name="admin")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'admin')]
+#[ORM\Entity]
 class Admin
 {
     use UserTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="admin")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'admin')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     /**

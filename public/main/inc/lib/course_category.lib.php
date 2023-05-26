@@ -90,7 +90,7 @@ class CourseCategory
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
-        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
         if ($allowBaseCategories) {
             $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
         }
@@ -474,10 +474,11 @@ class CourseCategory
     {
         $repo = Container::getCourseCategoryRepository();
         $category = (int) $category;
+        $allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
 
         return $repo->findAllInAccessUrl(
             api_get_current_access_url_id(),
-            api_get_configuration_value('allow_base_course_category'),
+            $allowBaseCourseCategory,
             $category
         );
     }
@@ -517,7 +518,7 @@ class CourseCategory
 
         $categoryToAvoid = '';
         if (!api_is_platform_admin()) {
-            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
         }
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
@@ -612,7 +613,7 @@ class CourseCategory
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
 
-        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
         if ($allowBaseCategories) {
             $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
         }

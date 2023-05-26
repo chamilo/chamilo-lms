@@ -539,7 +539,7 @@ class AnnouncementManager
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
 
-        $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
+        $allow = ('true' !== api_get_setting('announcement.hide_announcement_sent_to_users_info'));
         if ($allow && api_is_allowed_to_edit(false, true)) {
             $sentTo = $announcement->getUsersAndGroupSubscribedToResource();
             $sentToForm = self::sent_to_form($sentTo);

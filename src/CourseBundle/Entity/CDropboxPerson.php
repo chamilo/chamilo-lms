@@ -10,38 +10,25 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxPerson.
- *
- * @ORM\Table(
- *     name="c_dropbox_person",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="user", columns={"user_id"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'c_dropbox_person')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'user', columns: ['user_id'])]
+#[ORM\Entity]
 class CDropboxPerson
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="file_id", type="integer")
-     */
+    #[ORM\Column(name: 'file_id', type: 'integer')]
     protected int $fileId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer")
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer')]
     protected int $userId;
 
     /**

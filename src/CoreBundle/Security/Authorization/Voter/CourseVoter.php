@@ -26,7 +26,7 @@ class CourseVoter extends Voter
 
     public function __construct(
         EntityManagerInterface $entityManager,
-      //  CourseRepository $courseManager,
+        //  CourseRepository $courseManager,
         Security $security
     ) {
         $this->entityManager = $entityManager;

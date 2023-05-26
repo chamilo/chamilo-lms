@@ -329,7 +329,7 @@ function prepare_user_sql_query($getCount)
     $sql .= $extraConditions;
 
     $variables = Session::read('variables_to_show', []);
-    $extraFields = api_get_configuration_value('user_search_on_extra_fields');
+    $extraFields = api_get_setting('profile.user_search_on_extra_fields', true);
 
     if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
         $extraFieldList = $extraFields['extra_fields'];
@@ -547,7 +547,7 @@ function modify_filter($user_id, $url_params, $row)
     $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
 
     // Except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
-    if (api_get_configuration_value('session.allow_session_admin_login_as_teacher')) {
+    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
     }
 
@@ -730,7 +730,7 @@ function modify_filter($user_id, $url_params, $row)
         }
     }
 
-    $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+    $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
 
     if (api_is_session_admin() && $allowDelete) {
         if ($user_id != $currentUserId &&

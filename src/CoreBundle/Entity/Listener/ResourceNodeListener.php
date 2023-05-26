@@ -17,26 +17,15 @@ use Symfony\Component\Security\Core\Security;
 
 class ResourceNodeListener
 {
-    protected SlugifyInterface $slugify;
-    protected Security $security;
-    protected ToolChain $toolChain;
-    protected RequestStack $request;
-    protected ResourceNodeRepository $resourceNodeRepository;
     //protected $accessUrl;
 
     public function __construct(
-        SlugifyInterface $slugify,
-        ToolChain $toolChain,
-        RequestStack $request,
-        Security $security,
-        ResourceNodeRepository $resourceNodeRepository
+        protected SlugifyInterface $slugify,
+        protected ToolChain $toolChain,
+        protected RequestStack $request,
+        protected Security $security,
+        protected ResourceNodeRepository $resourceNodeRepository
     ) {
-        $this->slugify = $slugify;
-        $this->security = $security;
-        $this->toolChain = $toolChain;
-        $this->request = $request;
-        //$this->accessUrl = null;
-        $this->resourceNodeRepository = $resourceNodeRepository;
     }
 
     /*public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)

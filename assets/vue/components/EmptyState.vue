@@ -4,9 +4,9 @@
   >
     <div class="empty-state__container">
       <span
+        :class="icon"
         aria-hidden="true"
         class="empty-state__icon"
-        :class="icon"
       />
       <p
         class="empty-state__summary"
@@ -26,18 +26,18 @@
 defineProps({
   summary: {
     type: String,
-    default: '',
-    required: true,
+    default: "",
+    required: true
   },
   detail: {
     type: String,
-    default: '',
-    required: false,
+    default: "",
+    required: false
   },
   icon: {
     type: String,
-    default: '',
-    required: false,
-  },
+    default: "",
+    required: false
+  }
 });
 </script>

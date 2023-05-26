@@ -105,7 +105,7 @@ class Agenda
                 }
 
                 if (!empty($sessionId)) {
-                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
+                    $allowDhrToEdit = ('true' === api_get_setting('agenda.allow_agenda_edit_for_hrm'));
                     if ($allowDhrToEdit) {
                         $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, api_get_user_id());
                         if ($isHrm) {
@@ -134,7 +134,7 @@ class Agenda
                 'personal' => 'steel blue', //steel blue
                 'student_publication' => '#FF8C00', //DarkOrange
             ],
-            api_get_configuration_value('agenda_colors') ?: []
+            api_get_setting('agenda.agenda_colors', true) ?: []
         );
 
         // Event colors
@@ -1003,7 +1003,7 @@ class Agenda
                     $this->getPlatformEvents($start, $end);
                 }
 
-                $ignoreVisibility = api_get_configuration_value('personal_agenda_show_all_session_events');
+                $ignoreVisibility = ('true' === api_get_setting('agenda.personal_agenda_show_all_session_events'));
 
                 // Getting course events
                 $my_course_list = [];
@@ -1459,7 +1459,7 @@ class Agenda
 
         $isAllowToEditByHrm = false;
         if (!empty($sessionId)) {
-            $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
+            $allowDhrToEdit = ('true' === api_get_setting('agenda.allow_agenda_edit_for_hrm'));
             if ($allowDhrToEdit) {
                 $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, $userId);
                 if ($isHrm) {

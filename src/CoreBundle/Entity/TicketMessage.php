@@ -10,65 +10,43 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Table(name="ticket_message")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'ticket_message')]
+#[ORM\Entity]
 class TicketMessage
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'subject', type: 'string', length: 255, nullable: false)]
     protected string $subject;
 
-    /**
-     * @ORM\Column(name="message", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'message', type: 'text', nullable: true)]
     protected ?string $message = null;
 
-    /**
-     * @ORM\Column(name="status", type="string", nullable=false)
-     */
+    #[ORM\Column(name: 'status', type: 'string', nullable: false)]
     protected string $status;
 
-    /**
-     * @ORM\Column(name="ip_address", type="string", nullable=false)
-     */
+    #[ORM\Column(name: 'ip_address', type: 'string', nullable: false)]
     protected string $ipAddress;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Ticket::class)]
+    #[ORM\JoinColumn(name: 'ticket_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Ticket $ticket;
 
-    /**
-     * @ORM\Column(name="sys_insert_user_id", type="integer")
-     */
+    #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
 
-    /**
-     * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
-     */
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastEditUserId = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastEditDateTime = null;
 
     /**

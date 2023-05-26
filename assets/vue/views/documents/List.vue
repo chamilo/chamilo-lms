@@ -67,18 +67,10 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
-          <ResourceFileLink :resource="slotProps.data" />
-        </div>
-        <div v-else>
-          <Button
-            v-if="slotProps.data"
-            :label="slotProps.data.resourceNode.title"
-            class="p-button-text p-button-plain"
-            icon="mdi mdi-folder"
-            @click="btnFolderOnClick(slotProps.data)"
-          />
-        </div>
+        <DocumentEntry
+          v-if="slotProps.data"
+          :data="slotProps.data"
+        />
       </template>
     </Column>
 
@@ -109,30 +101,34 @@
     >
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
-          <Button
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-information"
+          <BaseButton
+            type="black"
+            icon="information"
+            size="small"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye-off' : '')"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            type="black"
+            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-on' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-off' : '')"
+            size="small"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-pencil"
+            type="black"
+            icon="edit"
+            size="small"
             @click="btnEditOnClick(slotProps.data)"
           />
 
-          <Button
+          <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-            icon="mdi mdi-delete"
+            type="danger"
+            icon="delete"
+            size="small"
             @click="confirmDeleteItem(slotProps.data)"
           />
         </div>
@@ -199,16 +195,16 @@
     </div>
     <template #footer>
       <Button
+        :label="t('No')"
         class="p-button-outlined p-button-plain"
         icon="pi pi-times"
-        label="No"
         @click="deleteItemDialog = false"
       />
       <Button
+        :label="t('Yes')"
         class="p-button-secondary"
         icon="pi pi-check"
-        label="Yes"
-        @click="deleteItemButton"
+        @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
   </Dialog>
@@ -245,27 +241,29 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import ResourceFileLink from '../../components/documents/ResourceFileLink.vue'
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from '../../components/resource_links/visibility'
 import { isEmpty } from 'lodash'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Toolbar from 'primevue/toolbar'
 import Dialog from 'primevue/dialog'
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useCidReq } from '../../composables/cidReq'
 import { useDatatableList } from '../../composables/datatableList'
 import { useRelativeDatetime } from '../../composables/formatDate'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast';
+import DocumentEntry from "../../components/documents/DocumentEntry.vue";
+import BaseButton from "../../components/basecomponents/BaseButton.vue";
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 
-const { filters, options, onUpdateOptions } = useDatatableList('Documents')
+const { filters, options, onUpdateOptions, deleteItem } = useDatatableList('Documents')
 
-const flashMessageList = inject('flashMessageList')
+const toast = useToast();
 
 const { cid, sid, gid } = useCidReq()
 
@@ -352,9 +350,10 @@ function saveItem () {
 
       store.dispatch('documents/createWithFormData', item.value)
           .then(() => {
-            flashMessageList.value.push({
+            toast.add({
               severity: 'success',
-              detail: t('Saved')
+              detail: t('Saved'),
+              life: 3500,
             })
 
             onUpdateOptions(options.value)
@@ -369,8 +368,8 @@ function confirmDeleteMultiple () {
   deleteMultipleDialog.value = true
 }
 
-function confirmDeleteItem (newItem) {
-  item.value = newItem
+function confirmDeleteItem (itemToDelete) {
+  item.value = itemToDelete
   deleteItemDialog.value = true
 }
 
@@ -385,14 +384,12 @@ function deleteMultipleItems () {
 //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
 }
 
-function deleteItemButton () {
-  store.dispatch('documents/del', item.value)
-      .then(() => {
-        deleteItemDialog.value = false
-        item.value = {}
-      })
-  //this.items = this.items.filter(val => val.iid !== this.item.iid);
-  onUpdateOptions(options.value)
+function btnCofirmSingleDeleteOnClick () {
+  deleteItem(item)
+
+  item.value = {}
+
+  deleteItemDialog.value = false
 }
 
 function onPage (event) {
@@ -425,23 +422,6 @@ function goToUploadFile () {
     name: 'DocumentsUploadFile',
     query: route.query
   })
-}
-
-function btnFolderOnClick (item) {
-  const folderParams = route.query;
-  const resourceId = item.resourceNode.id;
-
-  if (!resourceId) {
-    return;
-  }
-
-  filters.value['resourceNode.parent'] = resourceId;
-
-  router.push({
-    name: 'DocumentsList',
-    params: { node: resourceId },
-    query: folderParams,
-  });
 }
 
 function btnShowInformationOnClick (item) {

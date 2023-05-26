@@ -8,37 +8,25 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="course_type")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'course_type')]
+#[ORM\Entity]
 class CourseType
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 50, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="translation_var", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'translation_var', type: 'string', length: 40, nullable: true)]
     protected ?string $translationVar = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @ORM\Column(name="props", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'props', type: 'text', nullable: true)]
     protected ?string $props = null;
 
     public function setName(string $name): self

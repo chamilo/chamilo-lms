@@ -6,7 +6,7 @@
     @apply bg-white border-b border-solid border-gray-30 flex gap-4 rounded-t-lg p-4;
 
     .p-dialog-title {
-      @apply text-body-1-bold;
+      @apply text-body-1 font-semibold;
     }
 
     .p-dialog-header-icons {

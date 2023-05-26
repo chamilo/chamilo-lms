@@ -1,17 +1,23 @@
 import { useStore } from 'vuex'
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { isEmpty } from 'lodash'
 
 import { useCidReq } from './cidReq'
+import { useI18n } from 'vue-i18n';
+import { useToast } from 'primevue/usetoast';
 
 export function useDatatableList (servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
 
   const store = useStore()
+  const router = useRouter()
   const route = useRoute()
+  const { t } = useI18n()
 
   const { cid, sid, gid } = useCidReq()
+
+  const toast = useToast();
 
   const filters = ref({})
 
@@ -50,10 +56,82 @@ export function useDatatableList (servicePrefix) {
       .then(() => options.value = { sortBy, sortDesc, itemsPerPage, page })
   }
 
+  function goToAddItem () {
+    console.log('addHandler');
+
+    let folderParams = route.query;
+
+    router.push({
+      name: `${servicePrefix}Create`,
+      query: folderParams,
+    });
+  }
+
+  function goToEditItem (item) {
+    let folderParams = route.query;
+    folderParams['id'] = item['@id'];
+
+    if ('folder' === item.filetype || isEmpty(item.filetype)) {
+      router.push({
+        name: `${servicePrefix}Update`,
+        params: { id: item['@id'] },
+        query: folderParams
+      });
+    }
+
+    if ('file' === item.filetype) {
+      folderParams['getFile'] = true;
+      if (item.resourceNode.resourceFile &&
+          item.resourceNode.resourceFile.mimeType &&
+          'text/html' === item.resourceNode.resourceFile.mimeType
+      ) {
+        //folderParams['getFile'] = true;
+      }
+
+      this.$router.push({
+        name: `${servicePrefix}UpdateFile`,
+        params: { id: item['@id'] },
+        query: folderParams
+      });
+    }
+  }
+
+  function onShowItem (item) {
+    console.log('listmixin showHandler', item);
+
+    let folderParams = route.query;
+
+    if (item) {
+      folderParams['id'] = item['@id'];
+    }
+
+    router.push({
+      name: `${servicePrefix}Show`,
+      params: folderParams,
+      query: folderParams,
+    });
+  }
+
+  async function deleteItem (item) {
+    await store.dispatch(`${moduleName}/del`, item.value)
+
+    onUpdateOptions(options.value);
+
+    toast.add({
+      severity: 'success',
+      detail: t('Deleted'),
+      life: 3500,
+    });
+  }
+
   return {
     filters,
     expandedFilter,
     options,
     onUpdateOptions,
+    goToAddItem,
+    onShowItem,
+    goToEditItem,
+    deleteItem,
   }
 }

@@ -220,7 +220,7 @@ switch ($my_action) {
 
         break;
     case 'ask_revision':
-        if (api_get_configuration_value('allow_forum_post_revisions')) {
+        if ('true' === api_get_setting('forum.allow_forum_post_revisions')) {
             $result = savePostRevision($postEntity);
             Display::addFlash(Display::return_message(get_lang('Saved.')));
         }

@@ -113,7 +113,7 @@ if (!isset($_GET['keyword'])) {
     ];
 }
 
-$hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
+$hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_list'));
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {

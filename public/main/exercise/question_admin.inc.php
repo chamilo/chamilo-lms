@@ -75,7 +75,7 @@ if (is_object($objQuestion)) {
             } else {
                 // New question
                 $page = 1;
-                $length = api_get_configuration_value('question_pagination_length');
+                $length = api_get_setting('exercise.question_pagination_length');
                 if (!empty($length)) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }

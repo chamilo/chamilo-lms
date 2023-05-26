@@ -106,7 +106,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+    $checkSessionVisibility = ('true' === api_get_setting('session.show_users_in_active_sessions_in_tracking'));
     if (false === $drhLoaded) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
@@ -303,7 +303,7 @@ $actionsRight .= Display::url(
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
 
 $itemPerPage = 10;
-$perPage = api_get_configuration_value('my_space_users_items_per_page');
+$perPage = api_get_setting('profile.my_space_users_items_per_page');
 if ($perPage) {
     $itemPerPage = (int) $perPage;
 }

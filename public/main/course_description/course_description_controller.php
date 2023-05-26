@@ -261,7 +261,7 @@ class CourseDescriptionController
             $form->addElement('hidden', 'description_type', $description_type);
             //$form->addElement('hidden', 'sec_token', $token);
 
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'title',
                     get_lang('Title'),
@@ -351,7 +351,7 @@ class CourseDescriptionController
                 'index.php?action=add&'.api_get_cidreq()
             );
             $form->addElement('hidden', 'description_type', ADD_BLOCK);
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'title',
                     get_lang('Title'),

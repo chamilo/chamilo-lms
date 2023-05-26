@@ -28,7 +28,7 @@ if (empty($lpId)) {
     api_not_allowed(true);
 }
 
-$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+$allowUserGroups = ('true' === api_get_setting('lp.allow_lp_subscription_to_usergroups'));
 $currentUser = api_get_user_entity(api_get_user_id());
 $repo = Container::getLpRepository();
 /** @var CLp $entity */

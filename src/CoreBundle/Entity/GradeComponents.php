@@ -10,38 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * GradeComponents.
- *
- * @ORM\Table(name="grade_components")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'grade_components')]
+#[ORM\Entity]
 class GradeComponents
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="percentage", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'percentage', type: 'string', length: 255, nullable: false)]
     protected string $percentage;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="acronym", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'acronym', type: 'string', length: 255, nullable: false)]
     protected string $acronym;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradeModel")
-     * @ORM\JoinColumn(name="grade_model_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradeModel::class)]
+    #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradeModel $gradeModel;
 
     public function setPercentage(string $percentage): self

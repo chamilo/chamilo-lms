@@ -22,7 +22,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 
 $allowDelete = Exercise::allowAction('delete');
 $allowClean = Exercise::allowAction('clean_results');
@@ -321,7 +321,7 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
         Display::return_icon('new_question.png', get_lang('Add a question'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if (api_get_configuration_value('allow_exercise_categories')) {
+    if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/category.php?'.api_get_cidreq().'">';
         $actionsLeft .= Display::return_icon('folder.png', get_lang('Category'), '', ICON_SIZE_MEDIUM);
         $actionsLeft .= '</a>';
@@ -376,7 +376,7 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $form = new FormValidator('search_simple', 'get', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
     $form->addCourseHiddenParams();
 
-    if (api_get_configuration_value('allow_exercise_categories')) {
+    if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
         $manager = new ExerciseCategoryManager();
         $options = $manager->getCategoriesForSelect(api_get_course_int_id());
         if (!empty($options)) {
@@ -408,7 +408,7 @@ if ($is_allowedToEdit) {
     );
 }
 
-if (false === api_get_configuration_value('allow_exercise_categories')) {
+if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
     echo Exercise::exerciseGridResource(0, $keyword);
 } else {
     if (empty($categoryId)) {

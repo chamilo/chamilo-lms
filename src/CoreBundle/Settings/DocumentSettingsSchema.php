@@ -58,6 +58,17 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'allow_personal_user_files' => '',
                     // ?
                     'if_file_exists_option' => 'rename',
+                    'send_notification_when_document_added' => 'false',
+                    'thematic_pdf_orientation' => 'landscape',
+                    'certificate_pdf_orientation' => 'landscape',
+                    'allow_general_certificate' => 'false',
+                    'group_document_access' => 'false',
+                    'group_category_document_access' => 'false',
+                    'allow_compilatio_tool' => 'false',
+                    'compilatio_tool' => '',
+                    'documents_hide_download_icon' => 'false',
+                    'enable_x_sendfile_headers' => 'false',
+                    'documents_custom_cloud_link_list' => '',
                 ]
             )
             ->setTransformer(
@@ -147,6 +158,83 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
+            ->add('send_notification_when_document_added', YesNoType::class)
+            ->add(
+                'thematic_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add(
+                'certificate_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add('allow_general_certificate', YesNoType::class)
+            ->add('group_document_access', YesNoType::class)
+            ->add('group_category_document_access', YesNoType::class)
+            ->add('allow_compilatio_tool', YesNoType::class)
+            ->add(
+                'compilatio_tool',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
+                        $this->settingArrayHelpValue('compilatio_tool'),
+                ]
+            )
+            ->add('documents_hide_download_icon', YesNoType::class)
+            ->add('enable_x_sendfile_headers', YesNoType::class)
+            ->add(
+                'documents_custom_cloud_link_list',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Custom cloud link URLS, this requires enable_add_file_link = true').
+                        $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
+                ]
+            )
+
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'compilatio_tool' => "<pre>
+                [
+                    'settings' => [
+                        'key' => '',
+                        'soap_url' => '',
+                        'proxy_host' => '',
+                        'proxy_port' => '',
+                        'max_filesize' => '',
+                        'transport_mode' => '',
+                        'wget_uri' => '',
+                        'wget_login' => '',
+                        'wget_password' => '',
+                    ]
+                ]
+                </pre>",
+            'documents_custom_cloud_link_list' => "<pre>
+                ['links' => ['example.com', 'example2.com']]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+        }
+
+        return $returnValue;
     }
 }

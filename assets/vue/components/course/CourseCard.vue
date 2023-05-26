@@ -31,6 +31,7 @@
 <script setup>
 import Card from 'primevue/card';
 import TeacherBar from '../TeacherBar';
+import { computed } from "vue";
 
 // eslint-disable-next-line no-undef
 const props = defineProps(
@@ -45,10 +46,16 @@ const props = defineProps(
     }
 );
 
-const teachers = props.course.users.edges.map(
-    edge => ({
-      id: edge.node.id,
-      ...edge.node.user,
-    })
-);
+const teachers = computed(() => {
+  if (props.course.users && props.course.users.edges) {
+    return props.course.users.edges.map(
+      edge => ({
+        id: edge.node.id,
+        ...edge.node.user,
+      })
+    );
+  }
+
+  return [];
+});
 </script>

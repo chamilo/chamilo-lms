@@ -194,7 +194,7 @@ if (isset($_POST['title'])) {
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $post_title = $_POST['title'];
         }
     }
@@ -701,7 +701,7 @@ switch ($action) {
         }
         break;
     case 'export_to_course_build':
-        $allowExport = api_get_configuration_value('allow_lp_chamilo_export');
+        $allowExport = ('true' === api_get_setting('lp.allow_lp_chamilo_export'));
         if (api_is_allowed_to_edit() && $allowExport) {
             if (!$lp_found) {
                 require 'lp_list.php';

@@ -8,7 +8,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('disable_my_lps_page')) {
+if ('true' === api_get_setting('lp.disable_my_lps_page')) {
     api_not_allowed(true);
 }
 

@@ -17,7 +17,7 @@ class ResourceFactory
 
     protected EntityManagerInterface $entityManager;
 
-    public function __construct(ToolChain $toolChain, EntityManagerInterface $entityManager, )
+    public function __construct(ToolChain $toolChain, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->toolChain = $toolChain;

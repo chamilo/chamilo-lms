@@ -224,7 +224,7 @@ if (!isset($_GET['running'])) {
     }
 
     $loginForm = 'admin';
-    $passForm = api_generate_password();
+    $passForm = api_generate_password(8, false);
     $institutionUrlForm = 'https://chamilo.org';
     $languageForm = api_get_language_isocode();
     $checkEmailByHashSent = 0;
@@ -516,7 +516,15 @@ if (isset($_POST['step2'])) {
 
         // Drop and create the database anyways
         error_log("Drop database $dbNameForm");
-        $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+        $schemaManager = $manager->getConnection()->createSchemaManager();
+
+        try {
+            $schemaManager->dropDatabase($dbNameForm);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            error_log("Database ".$dbNameForm." does not exists");
+        }
+
+        $schemaManager->createDatabase($dbNameForm);
 
         error_log("Connect to database $dbNameForm with user $dbUsernameForm");
         $database = connectToDatabase(
@@ -635,10 +643,10 @@ $installerData = [
     'langIso' => api_get_language_isocode(),
 
     'formAction' => api_get_self().'?'.http_build_query([
-        'running' => 1,
-        'installType' => $installType,
-        'updateFromConfigFile' => $updateFromConfigFile,
-    ]),
+            'running' => 1,
+            'installType' => $installType,
+            'updateFromConfigFile' => $updateFromConfigFile,
+        ]),
 
     'updatePath' => !$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '',
     'urlAppendPath' => api_htmlentities($urlAppendPath, ENT_QUOTES),
@@ -683,16 +691,17 @@ $installerData = [
     </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../build/legacy_app.css">
+    <link rel="stylesheet" href="../../build/app.css">
     <link rel="stylesheet" href="../../build/vue.css">
-    <link rel="stylesheet" href="../../build/css/app.css">
-    <script type="text/javascript" src="../../../build/runtime.js"></script>
-    <script type="text/javascript" src="../../../build/app.js"></script>
+    <script type="text/javascript" src="../../build/legacy_app.js"></script>
 </head>
 <body class="flex min-h-screen p-2 md:px-16 md:py-8 xl:px-32 xl:py-16 bg-gradient-to-br from-primary to-primary-gradient">
-    <div id="app" class="m-auto"></div>
-    <script>
-    var installerData = <?php echo json_encode($installerData) ?>;
-    </script>
-    <script type="text/javascript" src="../../../build/vue_installer.js"></script>
+<div id="app" class="m-auto"></div>
+<script>
+  var installerData = <?php echo json_encode($installerData) ?>;
+</script>
+<script type="text/javascript" src="../../build/runtime.js"></script>
+<script type="text/javascript" src="../../build/vue_installer.js"></script>
 </body>
 </html>

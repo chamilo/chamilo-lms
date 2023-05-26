@@ -6,8 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Core\Security;
 final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
-        private Security $security
+        private readonly Security $security
     ) {
     }
 
@@ -25,13 +26,14 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        string $operationName = null
+        Operation $operation = null,
+        array $context = []
     ): void {
         if (TrackEExercise::class !== $resourceClass) {
             return;
         }
 
-        if ('get' !== $operationName) {
+        if ('get' !== $operation->getName()) {
             return;
         }
 

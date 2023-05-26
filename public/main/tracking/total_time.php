@@ -77,7 +77,7 @@ if ($export_csv) {
     }
     ob_start();
 }
-$columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
+$columnsToHideFromSetting = api_get_setting('course.course_log_hide_columns', true);
 $columnsToHide = empty($columnsToHideFromSetting) ? [0, 8, 9, 10, 11] : $columnsToHideFromSetting;
 $columnsToHide = json_encode($columnsToHide);
 

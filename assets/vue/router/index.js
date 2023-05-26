@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import adminRoutes from './admin';
 import courseRoutes from './course';
 import accountRoutes from './account';
 import personalFileRoutes from './personalfile';
@@ -24,7 +25,7 @@ import MyCoursesLayout from '../layouts/MyCourses.vue';
 
 import CourseCatalog from '../views/course/Catalog.vue';
 import SessionCatalog from '../views/course/CatalogSession.vue';
-import CourseHome from '../views/course/Home.vue';
+import CourseHome from '../views/course/CourseHome.vue';
 
 import Index from '../pages/Index.vue';
 import Home from '../pages/Home.vue';
@@ -116,6 +117,7 @@ const router = createRouter({
             ],
             meta: {requiresAuth: true},
         },
+        adminRoutes,
         courseRoutes,
         //courseCategoryRoutes,
         documents,

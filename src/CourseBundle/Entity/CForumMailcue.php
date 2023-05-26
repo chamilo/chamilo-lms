@@ -8,45 +8,29 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(
- *     name="c_forum_mailcue",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="thread", columns={"thread_id"}),
- *         @ORM\Index(name="user", columns={"user_id"}),
- *         @ORM\Index(name="post", columns={"post_id"})
- *     }
- * )
- * @ORM\Entity
- */
+#[ORM\Table(name: 'c_forum_mailcue')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(name: 'thread', columns: ['thread_id'])]
+#[ORM\Index(name: 'user', columns: ['user_id'])]
+#[ORM\Index(name: 'post', columns: ['post_id'])]
+#[ORM\Entity]
 class CForumMailcue
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected int $iid;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="thread_id", type="integer")
-     */
+    #[ORM\Column(name: 'thread_id', type: 'integer')]
     protected int $threadId;
 
-    /**
-     * @ORM\Column(name="user_id", type="integer")
-     */
+    #[ORM\Column(name: 'user_id', type: 'integer')]
     protected int $userId;
 
-    /**
-     * @ORM\Column(name="post_id", type="integer")
-     */
+    #[ORM\Column(name: 'post_id', type: 'integer')]
     protected int $postId;
 
     /**

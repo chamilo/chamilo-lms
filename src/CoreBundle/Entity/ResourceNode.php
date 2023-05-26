@@ -30,6 +30,7 @@ use InvalidArgumentException;
 use Stringable;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -86,6 +87,7 @@ class ResourceNode implements Stringable
     #[Gedmo\Slug(fields: ['title'])]
     #[ORM\Column(name: 'slug', type: 'string', length: 255, nullable: false)]
     protected string $slug;
+    #[Groups(['resource_node:read'])]
     #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
@@ -108,6 +110,8 @@ class ResourceNode implements Stringable
     #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
+    #[Groups(['resource_node:read'])]
+    #[MaxDepth(1)]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]

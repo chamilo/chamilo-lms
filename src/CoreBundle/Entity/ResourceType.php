@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'resource_type')]
@@ -22,10 +23,12 @@ class ResourceType implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
+    #[Groups(['resource_node:read'])]
     protected ?int $id = null;
 
     #[Assert\NotBlank]
     #[ORM\Column]
+    #[Groups(['resource_node:read'])]
     protected string $name;
 
     #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Tool::class, inversedBy: 'resourceTypes')]

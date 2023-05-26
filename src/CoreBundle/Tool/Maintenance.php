@@ -15,7 +15,7 @@ class Maintenance extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi';
+        return 'mdi-wrench-cog';
     }
 
     public function getLink(): string

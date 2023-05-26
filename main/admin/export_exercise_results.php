@@ -144,6 +144,18 @@ $form
     )
     ->setSelected($exerciseId);
 
+$form->addDateTimePicker('start_date', get_lang('StartDate'));
+$form->addDateTimePicker('end_date', get_lang('EndDate'));
+$form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
+$form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+
+$form->addRule(
+    ['start_date', 'end_date'],
+    get_lang('StartDateShouldBeBeforeEndDate'),
+    'date_compare',
+    'lte'
+);
+
 $form->addHidden('course_id_changed', '0');
 $form->addHidden('exercise_id_changed', '0');
 $form->addButtonExport(get_lang('Export'), 'name');
@@ -155,7 +167,11 @@ if ($form->validate()) {
         $sessionId = (int) $values['session_id'];
         $courseId = (int) $values['selected_course'];
         $exerciseId = (int) $values['exerciseId'];
-        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId);
+        $filterDates = [
+            'start_date' => (!empty($values['start_date']) ? $values['start_date'] : ''),
+            'end_date' => (!empty($values['end_date']) ? $values['end_date'] : ''),
+        ];
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, $filterDates);
     }
 }
 

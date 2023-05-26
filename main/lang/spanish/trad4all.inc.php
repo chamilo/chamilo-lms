@@ -9049,4 +9049,5 @@ $AddEmailPicture = "Añadir imagen de cabecera";
 $AddEmailPictureComment = "Esta imagen será usada en la cabecera de este curso y la de los e-mails enviados desde este curso, pero también en los PDFs generados desde este curso. La imagen final tiene que tener una proporción de 25:7, pero la puede recortar al momento de subirla.";
 $DeleteEmailPicture = "Eliminar la imagen de cabecera";
 $AddPictureComment = "La imagen final tiene que tener una proporción de 16:9, pero la puede recortar durante la subida.";
+$ExportAllExercisesAllResults = "Exportar todos los resultados de todos los ejercicios";
 ?>

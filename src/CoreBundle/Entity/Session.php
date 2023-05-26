@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use DateTime;
@@ -160,6 +161,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected ?SessionCategory $category = null;
     #[ORM\Column(name: 'send_subscription_notification', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $sendSubscriptionNotification;
+    /**
+     * Image illustrating the session (was extra field 'image' in 1.11)
+     */
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Asset $image = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -827,6 +835,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function getResourceLinks(): array|Collection
     {
         return $this->resourceLinks;
+    }
+    public function getImage(): ?Asset
+    {
+        return $this->image;
+    }
+    public function setImage(?Asset $asset): self
+    {
+        $this->image = $asset;
+
+        return $this;
+    }
+    public function hasImage(): bool
+    {
+        return null !== $this->image;
     }
     /**
      * Check if $user is course coach in any course.

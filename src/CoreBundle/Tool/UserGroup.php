@@ -20,7 +20,7 @@ class UserGroup extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-xml';
+        return 'mdi-account-group';
     }
 
     public function getLink(): string

@@ -8420,13 +8420,16 @@ class Exercise
     }
 
     /**
+     * Get array of exercise details and user results
      * @param int   $courseId
      * @param int   $sessionId
      * @param array $quizId
+     * @param bool $checkOnlyActiveUsers
+     * @param array $filterDates Limit the results exported to those within this range ('start_date' to 'end_date')
      *
      * @return array exercises
      */
-    public function getExerciseAndResult($courseId, $sessionId, $quizId = [], $status = null)
+    public function getExerciseAndResult($courseId, $sessionId, $quizId = [], $checkOnlyActiveUsers = false, $filterDates = [])
     {
         if (empty($quizId)) {
             return [];
@@ -8438,16 +8441,30 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackExcercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 
         $condition = '';
-        if (isset($status)) {
-            $condition .= " AND te.status = '$status' ";
+        $innerJoinUser = '';
+        if ($checkOnlyActiveUsers) {
+            $condition .= " AND te.status = '' ";
+            $innerJoinUser .= " INNER JOIN $tblUser u ON u.user_id = te. exe_user_id";
+        }
+
+        if (!empty($filterDates)) {
+            if (!empty($filterDates['start_date'])) {
+                $condition .= " AND te.exe_date >= '".Database::escape_string($filterDates['start_date'])."' ";
+            }
+            if (!empty($filterDates['end_date'])) {
+                $condition .= " AND te.exe_date <= '".Database::escape_string($filterDates['end_date'])."' ";
+            }
         }
 
         if (0 != $sessionId) {
-            $sql = "SELECT * FROM $track_exercises te
-                    INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
+            $sql = "SELECT * FROM $trackExcercises te
+                    INNER JOIN $tblQuiz cq ON cq.iid = te.exe_exo_id
+                    $innerJoinUser
                     WHERE
                     te.c_id = %s AND
                     te.session_id = %s AND
@@ -8457,8 +8474,9 @@ class Exercise
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
-            $sql = "SELECT * FROM $track_exercises te
-                INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
+            $sql = "SELECT * FROM $trackExcercises te
+                INNER JOIN $tblQuiz cq ON cq.iid = te.exe_exo_id
+                $innerJoinUser
                 WHERE
                 te.c_id = %s AND
                 cq.iid IN (%s)

@@ -8958,4 +8958,5 @@ $AddEmailPicture = "Ajouter une image pour les en-têtes";
 $AddEmailPictureComment = "L'image sera utilisée dans les en-têtes de ce cours mais également des e-mails envoyés et des PDFs générés depuis ce cours. L'image doit avoir un ratio de 25:7. Vous pouvez recouper l'image au moment de l'envoi.";
 $DeleteEmailPicture = "Supprimer l'image d'en-tête";
 $AddPictureComment = "L'image finale doit avoir un format 16:9, mais vous pouvez la recouper lors de l'envoi.";
+$ExportAllExercisesAllResults = "Exporter tous les résultats de tous les exercices";
 ?>

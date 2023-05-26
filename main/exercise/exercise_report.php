@@ -58,9 +58,12 @@ $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
-if (empty($exercise_id)) {
-    api_not_allowed(true);
+if ('export_all_exercises_results' !== $action) {
+    if (empty($exercise_id)) {
+        api_not_allowed(true);
+    }
 }
 
 $blockPage = true;
@@ -149,8 +152,13 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 switch ($action) {
+    case 'export_all_exercises_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportAllExercisesResultsZip($sessionId, $courseId);
+
+        break;
     case 'export_all_results':
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();

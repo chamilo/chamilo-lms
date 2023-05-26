@@ -99,6 +99,8 @@ class GradebookTable extends SortableTable
         }
 
         $styleTextRight = ['style' => 'text-align: right;'];
+        $styleTextRight100 = ['style' => 'text-align: right; width: 100px;'];
+        $styleTextRight120 = ['style' => 'text-align: right; width: 120px;'];
         $styleCenterRight = ['style' => 'text-align: center;'];
 
         $this->set_header($column++, get_lang('Type'), '', 'width="20px"');
@@ -114,8 +116,8 @@ class GradebookTable extends SortableTable
             $showWeight = false;
         }
         if ($showWeight) {
-            $this->set_header($column++, get_lang('Weight'), false, $styleTextRight, $styleTextRight);
-        }
+            $this->set_header($column++, get_lang('Weight'), false, $styleTextRight100, $styleTextRight100);
+	}
 
         if (!$this->teacherView) {
             $this->set_header($column++, get_lang('Result'), false, $styleTextRight, $styleTextRight);
@@ -123,14 +125,14 @@ class GradebookTable extends SortableTable
 
         if (empty($model)) {
             if (in_array(1, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Ranking'), false, $styleTextRight, $styleTextRight);
-            }
+                $this->set_header($column++, get_lang('Ranking'), false, $styleTextRight100, $styleTextRight100);
+	    }
             if (in_array(2, $this->loadStats)) {
-                $this->set_header($column++, get_lang('BestScore'), false, $styleTextRight, $styleTextRight);
-            }
+                $this->set_header($column++, get_lang('BestScore'), false, $styleTextRight120, $styleTextRight120);
+	    }
             if (in_array(3, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Average'), false, $styleTextRight, $styleTextRight);
-            }
+                $this->set_header($column++, get_lang('Average'), false, $styleTextRight100, $styleTextRight100);
+	    }
         }
 
         if ($this->teacherView) {

@@ -2037,7 +2037,7 @@ HOTSPOT;
                             }
                         }
                         $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question_attempt&exercise='.$exerciseId.'&question='.$questionId.'&exe_id='.$row['exe_id'];
-                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClicToSeeDetails').'">'.$displayValue.'</a>';
+                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClickToViewDetails').'">'.$displayValue.'</a>';
                     }
                 }
                 $x++;

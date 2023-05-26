@@ -8420,12 +8420,13 @@ class Exercise
     }
 
     /**
-     * Get array of exercise details and user results
+     * Get array of exercise details and user results.
+     *
      * @param int   $courseId
      * @param int   $sessionId
      * @param array $quizId
-     * @param bool $checkOnlyActiveUsers
-     * @param array $filterDates Limit the results exported to those within this range ('start_date' to 'end_date')
+     * @param bool  $checkOnlyActiveUsers
+     * @param array $filterDates          Limit the results exported to those within this range ('start_date' to 'end_date')
      *
      * @return array exercises
      */

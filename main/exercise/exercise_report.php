@@ -153,12 +153,6 @@ $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
 switch ($action) {
-    case 'export_all_exercises_results':
-        $sessionId = api_get_session_id();
-        $courseId = api_get_course_int_id();
-        ExerciseLib::exportAllExercisesResultsZip($sessionId, $courseId);
-
-        break;
     case 'export_all_results':
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();

@@ -31,13 +31,15 @@
   //left: nth($inputPadding, 2) * 2 + $primeIconFontSize;
 }
 
-.p-input-icon-right > i:last-of-type  {
-  //right: nth($inputPadding, 2);
-  //color: $inputIconColor;
-}
+.p-input-icon-right {
+  > i:last-of-type,
+  > svg:last-of-type {
+    @apply right-3;
+  }
 
-.p-input-icon-right > .p-inputtext {
-  //padding-right: nth($inputPadding, 2) * 2 + $primeIconFontSize;
+  > .p-inputtext {
+    @apply pr-10;
+  }
 }
 
 .p-inputtext-sm {

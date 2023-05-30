@@ -104,11 +104,16 @@ class Career extends Model
      * Order the careers by its hierarchy.
      *
      * @param $careers
+
      */
-    public function orderCareersByHierarchy($careers): array
+    public function orderCareersByHierarchy($careers, int $filterId = 0): array
     {
         $orderedCareers = [];
+        $filterAux = [];
         foreach ($careers as &$career) {
+            if (!empty($filterId) && $career['id'] == $filterId) {
+                $filterAux[] = $career;
+            }
             if (is_null($career['parent_id'])) {
                 $orderedCareers[] = &$career;
             } else {
@@ -125,7 +130,7 @@ class Career extends Model
             }
         }
 
-        return $orderedCareers;
+        return !empty($filterId) ? $filterAux : $orderedCareers;
     }
 
     /**

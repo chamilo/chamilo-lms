@@ -117,11 +117,10 @@
     </div>
 {% endmacro %}
 
-{% macro careers_panel(content, admin) %}
+{% macro careers_panel(content, admin, macro_iteration = 0) %}
     {% import _self as display %}
-
     {% for item in content %}
-        <div id="career-{{ item.id }}" class="career panel panel-default" {% if item.parent_id is not empty  %} style="margin-left: 45px"{% endif %}>
+        <div id="career-{{ item.id }}" class="career panel panel-default" {% if item.parent_id is not empty and macro_iteration != 0 %} style="margin-left: 45px"{% endif %}>
             <div  class="panel-heading">
                 <h4>
                     {% if admin %}
@@ -157,7 +156,7 @@
                 {% endif %}
             </div>
             {% if item.children is defined %}
-                {{ display.careers_panel(item.children, admin) }}
+                {{ display.careers_panel(item.children, admin, macro_iteration + 1) }}
             {% endif %}
         </div>
     {% endfor %}

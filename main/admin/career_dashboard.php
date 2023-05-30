@@ -33,6 +33,8 @@ $html = null;
 $showHierarchy = $_GET['showHierarchy'] ?? null;
 if ($useCareerHierarchy && is_null($showHierarchy)) {
     $showHierarchy = 1;
+} elseif (!$useCareerHierarchy) {
+    $showHierarchy = 0;
 }
 $form = new FormValidator('filter_form', 'GET', api_get_self());
 
@@ -42,7 +44,7 @@ $condition = ['status = ?' => 1];
 if ($form->validate()) {
     $data = $form->getSubmitValues();
     $filter = (int) $data['filter'];
-    if (!empty($filter)) {
+    if (!empty($filter) && $showHierarchy == 0) {
         $condition = ['status = ? AND id = ? ' => [1, $filter]];
     }
 }
@@ -63,6 +65,8 @@ $form->addSelect(
 $form->addButtonSearch(get_lang('Filter'));
 
 if ($useCareerHierarchy && $showHierarchy == 1) {
+    $form->addHidden('showHierarchy', '1');
+} else {
     $form->addHidden('showHierarchy', '0');
 }
 // action links
@@ -176,7 +180,8 @@ if (!empty($careers)) {
     }
 }
 if ($useCareerHierarchy && 1 == $showHierarchy) {
-    $careers = $career->orderCareersByHierarchy($careers);
+    $filter = $filter ?? 0;
+    $careers = $career->orderCareersByHierarchy($careers, $filter);
 }
 $tpl->assign('actions', $actions);
 $tpl->assign('form_filter', $html);

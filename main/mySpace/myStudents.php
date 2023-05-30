@@ -734,11 +734,12 @@ if (!empty($student_id) && empty($courseCode)) {
         ['class' => 'ajax', 'data-title' => get_lang('ExportToPDF')]
     );
 }
-
-echo Display::url(
-    Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
-);
+if (true !== api_get_configuration_value('course_tracking_student_detail_hide_certificate_of_achievement')) {
+    echo Display::url(
+        Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+    );
+}
 
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.

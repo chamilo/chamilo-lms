@@ -2432,6 +2432,9 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 // main URL (where the access_url_changeable field = 0)
 // $_configuration['multiple_url_hide_disabled_settings'] = false;
 
+// List of learner certificates - User extra fields to include at the exported CSV as columns
+//$_configuration['certificate_export_report_user_extra_fields'] = ['extra_fields' => ['office_address', 'office_phone_extension']];
+
 // Only courses with this option will be visible in catalogue
 // Requires DB changes:
 /*

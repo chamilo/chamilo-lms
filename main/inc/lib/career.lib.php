@@ -104,7 +104,6 @@ class Career extends Model
      * Order the careers by its hierarchy.
      *
      * @param $careers
-
      */
     public function orderCareersByHierarchy($careers, int $filterId = 0): array
     {

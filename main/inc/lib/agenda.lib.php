@@ -2296,6 +2296,7 @@ class Agenda
                     );
                     $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
                     $event['type'] = 'group';
+                    $event['group_id'] = $row['to_group_id'];
                 }
 
                 // Event sent to a user?

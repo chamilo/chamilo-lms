@@ -727,6 +727,9 @@ $(function() {
                         {% endif %}
                         '{{ "Edit"|get_lang }}' : function() {
                             url =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
+                            if (typeof calEvent.group_id != "undefined" && {{ group_id }} != 0) {
+                              url = url + '&gidReq=' + calEvent.group_id;
+                            }
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },

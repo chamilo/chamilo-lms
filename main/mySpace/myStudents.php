@@ -1775,6 +1775,8 @@ if (empty($details)) {
                                     $formattedWorkTime
                                 );
                             }
+                        } else {
+                            $formattedLpTime = api_time_to_hms($totalLpTime);
                         }
                     }
                 } else {

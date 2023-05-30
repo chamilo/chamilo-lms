@@ -1130,10 +1130,19 @@ class AddCourse
         $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
 
         $now = api_get_utc_datetime();
-        $sql = "INSERT INTO $tableDocument (id, c_id, path,title,filetype,size, readonly, session_id)
-                VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."', 0, 0)";
-        Database::query($sql);
-        $docId = Database::insert_id();
+        $docId = Database::insert(
+            $tableDocument,
+            [
+                'id' => $counter,
+                'c_id' => $course_id,
+                'path' => $file['path'],
+                'title' => $file['title'],
+                'filetype' => $file['filetype'],
+                'size' => $file['size'],
+                'readonly' => 0,
+                'session_id' => 0,
+            ]
+        );
 
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 

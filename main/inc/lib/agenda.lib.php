@@ -1149,22 +1149,17 @@ class Agenda
                 if (isset($attachmentArray) && !empty($attachmentArray)) {
                     $counter = 0;
                     foreach ($attachmentArray as $attachmentItem) {
-                        if (empty($attachmentItem['id'])) {
-                            $this->addAttachment(
-                                $id,
-                                $attachmentItem,
-                                $attachmentCommentList[$counter],
-                                $this->course
-                            );
-                        } else {
-                            $this->updateAttachment(
-                                $attachmentItem['id'],
-                                $id,
-                                $attachmentItem,
-                                $attachmentCommentList[$counter],
-                                $this->course
-                            );
+                        if (empty($attachmentItems['id'])) {
+                            continue;
                         }
+
+                        $this->updateAttachment(
+                            $attachmentItem['id'],
+                            $id,
+                            $attachmentItem,
+                            $attachmentCommentList[$counter],
+                            $this->course
+                        );
                         $counter++;
                     }
                 }

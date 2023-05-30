@@ -9028,4 +9028,5 @@ $ExportAllExercisesAllResults = "Export all results of all tests";
 $ClickToViewDetails = "Click to view details";
 $CertificateOfAchievementHelp = "This report applies to all plateform activities of the user.";
 $DateFormatddmmyyyy = "dd/mm/yyyy";
+$ExportCertificateReport = "Export certificates issue report";
 ?>

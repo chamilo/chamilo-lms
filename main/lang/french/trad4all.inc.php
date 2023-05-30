@@ -8962,4 +8962,5 @@ $ExportAllExercisesAllResults = "Exporter tous les résultats de tous les exerci
 $ClickToViewDetails = "Cliquez pour voir les détails";
 $CertificateOfAchievementHelp = "Ce rapport s'applique sur toutes les données de l'utilisateur sur la plateforme.";
 $DateFormatddmmyyyy = "jj/mm/aaaa";
+$ExportCertificateReport = "Exporter un rapport d'émission de certificats";
 ?>

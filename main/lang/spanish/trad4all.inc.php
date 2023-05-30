@@ -9051,4 +9051,6 @@ $DeleteEmailPicture = "Eliminar la imagen de cabecera";
 $AddPictureComment = "La imagen final tiene que tener una proporción de 16:9, pero la puede recortar durante la subida.";
 $ExportAllExercisesAllResults = "Exportar todos los resultados de todos los ejercicios";
 $ClickToViewDetails = "Haga clic para más detalles";
+$CertificateOfAchievementHelp = "Este reporte usa todos los datos del usuario en toda la plataforma.";
+$DateFormatddmmyyyy = "dd/mm/aaaa";
 ?>

@@ -8960,4 +8960,6 @@ $DeleteEmailPicture = "Supprimer l'image d'en-tête";
 $AddPictureComment = "L'image finale doit avoir un format 16:9, mais vous pouvez la recouper lors de l'envoi.";
 $ExportAllExercisesAllResults = "Exporter tous les résultats de tous les exercices";
 $ClickToViewDetails = "Cliquez pour voir les détails";
+$CertificateOfAchievementHelp = "Ce rapport s'applique sur toutes les données de l'utilisateur sur la plateforme.";
+$DateFormatddmmyyyy = "jj/mm/aaaa";
 ?>

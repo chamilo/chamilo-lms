@@ -1892,7 +1892,7 @@ EOT;
                 $.each(data.files, function (index, file) {
                     // check size
                     if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
-                        errs.push('".$errorUploadMessage."');
+                        errs.push(\"".$errorUploadMessage."\");
                     } else {
                         // array for all errors
                         var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
@@ -1907,7 +1907,7 @@ EOT;
 
                 // Output errors or submit data
                 if (errs.length > 0) {
-                    alert('".get_lang('AnErrorOccured')."' + errs.join(' '));
+                    alert(\"".get_lang('AnErrorOccured')."\\n\" + errs.join(' '));
                     return false;
                 } else {
                     data.submit();

@@ -8952,7 +8952,7 @@ $ExportExerciseNoResult = "Aucun résultat à exporter dans cet exercice.";
 $UserXChangedToYToCancelClickZ = "L'utilisateur %s a été changé en %s. Pour annuler, cliquez <a href='%s'>ici</a>.";
 $Exlearner = "Ex-étudiant";
 $FileSizeIsTooBig = "La taille du fichier est trop grande";
-$AnErrorOccured = "Une erreur s'est produite";
+$AnErrorOccured = "Une erreur s\'est produite";
 $EmailPicture = "Image pour les en-têtes";
 $AddEmailPicture = "Ajouter une image pour les en-têtes";
 $AddEmailPictureComment = "L'image sera utilisée dans les en-têtes de ce cours mais également des e-mails envoyés et des PDFs générés depuis ce cours. L'image doit avoir un ratio de 25:7. Vous pouvez recouper l'image au moment de l'envoi.";

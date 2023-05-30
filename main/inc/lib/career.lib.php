@@ -190,7 +190,7 @@ class Career extends Model
             $this->table,
             [
                 'where' => ['id != ?' => $selfCareer],
-                'order' => 'id ASC'
+                'order' => 'id ASC',
             ]
         );
         foreach ($result as $item) {

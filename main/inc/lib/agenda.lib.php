@@ -1152,6 +1152,14 @@ class Agenda
                         if (empty($attachmentItems['id'])) {
                             continue;
                         }
+                        
+                        $this->updateAttachment(
+                            $attachmentItem['id'],
+                            $id,
+                            $attachmentItem,
+                            $attachmentCommentList[$counter],
+                            $this->course
+                        );
                         $counter++;
                     }
                 }

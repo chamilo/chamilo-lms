@@ -121,7 +121,7 @@
     {% import _self as display %}
 
     {% for item in content %}
-        <div id="career-{{ item.id }}" class="career panel panel-default" style="padding: 20px">
+        <div id="career-{{ item.id }}" class="career panel panel-default" {% if item.parent_id is not empty  %} style="margin-left: 45px"{% endif %}>
             <div  class="panel-heading">
                 <h4>
                     {% if admin %}
@@ -135,24 +135,26 @@
             </div>
             <div class="panel-body">
                 {{ item.description }}
-                <table class="table promotions">
-                    <thead class="title">
-                        <th>{{ 'Promotions' | get_lang }}</th>
-                    </thead>
-                    {% for promotions in item.career %}
-                        {% for prom in promotions %}
-                        <tr>
-                            <td class="promo" rowspan="{{ line }}">
-                                <h4 id="promotion-id-{{ prom.id }}">
-                                    <a title="{{ prom.name }}" href="{{ _p.web }}main/admin/promotions.php?action=edit&id={{ prom.id }}">
-                                        {{ prom.name }}
-                                    </a>
-                                </h4>
-                            </td>
-                        </tr>
+                {% if item.career.promotions is not empty %}
+                    <table class="table promotions">
+                        <thead class="title">
+                            <th>{{ 'Promotions' | get_lang }}</th>
+                        </thead>
+                        {% for promotions in item.career %}
+                            {% for prom in promotions %}
+                                <tr>
+                                    <td class="promo" rowspan="{{ line }}">
+                                        <h4 id="promotion-id-{{ prom.id }}">
+                                            <a title="{{ prom.name }}" href="{{ _p.web }}main/admin/promotions.php?action=edit&id={{ prom.id }}">
+                                                {{ prom.name }}
+                                            </a>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </table>
+                    </table>
+                {% endif %}
             </div>
             {% if item.children is defined %}
                 {{ display.careers_panel(item.children, admin) }}

@@ -180,12 +180,19 @@ class Career extends Model
     }
 
     /**
-     * Return the name of the careers that are parents of others.
+     * Return the name of the careers that can be parents of others.
      */
-    public function getHierarchies(): array
+    public function getHierarchies(int $selfCareer = 0): array
     {
         $return = [];
-        $result = Database::select('name, id', $this->table, ['order' => 'id ASC']);
+        $result = Database::select(
+            'name, id',
+            $this->table,
+            [
+                'where' => ['id != ?' => $selfCareer],
+                'order' => 'id ASC'
+            ]
+        );
         foreach ($result as $item) {
             $return[$item['id']] = $item['name'];
         }
@@ -232,7 +239,7 @@ class Career extends Model
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
 
         if (api_get_configuration_value('career_hierarchy_enable')) {
-            $hierarchyList = $this->getHierarchies();
+            $hierarchyList = $this->getHierarchies((int) $id ?? 0);
             $form->addElement('select', 'parent_id', get_lang('ParentCareer'), $hierarchyList);
         }
 

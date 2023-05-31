@@ -7299,7 +7299,7 @@ EOT;
             }
         }
 
-        if (!$exportOk) {
+        if (empty($mainPath) && !$exportOk) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('ExportExerciseNoResult'),

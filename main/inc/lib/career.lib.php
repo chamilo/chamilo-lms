@@ -110,9 +110,6 @@ class Career extends Model
         $orderedCareers = [];
         $filterAux = [];
         foreach ($careers as &$career) {
-            if (!empty($filterId) && $career['id'] == $filterId) {
-                $filterAux[] = $career;
-            }
             if (is_null($career['parent_id'])) {
                 $orderedCareers[] = &$career;
             } else {
@@ -126,6 +123,9 @@ class Career extends Model
                     }
                     $careers[$pid]['children'][] = &$career;
                 }
+            }
+            if (!empty($filterId) && $career['id'] == $filterId) {
+                $filterAux[0] = &$career;
             }
         }
 

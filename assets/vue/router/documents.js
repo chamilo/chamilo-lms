@@ -2,13 +2,13 @@ export default {
   path: '/resources/document/:node/',
   meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'documents',
-  component: () => import('../components/documents/Layout.vue'),
+  component: () => import('../components/documents/DocumentsLayout.vue'),
   redirect: { name: 'DocumentsList' },
   children: [
     {
       name: 'DocumentsList',
       path: '',
-      component: () => import('../views/documents/List.vue')
+      component: () => import('../views/documents/DocumentsList.vue')
     },
     {
       name: 'DocumentsCreate',

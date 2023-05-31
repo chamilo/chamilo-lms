@@ -26,6 +26,7 @@ const props = defineProps({
         return false
       }
       return [
+        "big",
         "normal",
         "small",
       ].includes(value);
@@ -36,6 +37,9 @@ const props = defineProps({
 const iconClass = computed(() => {
   let iconClass = chamiloIconToClass[props.icon] + " ";
   switch (props.size) {
+    case "big":
+      iconClass += "text-3xl/4 ";
+      break;
     case "normal":
       iconClass += "text-xl/4 ";
       break;

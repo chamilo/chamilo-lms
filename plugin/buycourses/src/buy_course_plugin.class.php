@@ -3107,7 +3107,7 @@ class BuyCoursesPlugin extends Plugin
         $priceWithoutTax = $product['price'];
         $product['total_price'] = $product['price'];
         $product['tax_amount'] = 0;
-        $precision = 2;
+
         if ($this->checkTaxEnabledInProduct($productType)) {
             if (is_null($product['tax_perc'])) {
                 $globalParameters = $this->getGlobalParameters();
@@ -3118,7 +3118,7 @@ class BuyCoursesPlugin extends Plugin
             }
             //$taxPerc = is_null($product['tax_perc']) ? $globalTaxPerc : $product['tax_perc'];
 
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, 2);
             $product['tax_amount'] = $taxAmount;
             $priceWithTax = $priceWithoutTax + $taxAmount;
             $product['total_price'] = $priceWithTax;
@@ -3126,25 +3126,25 @@ class BuyCoursesPlugin extends Plugin
 
         $product['tax_perc_show'] = $taxPerc;
         $product['price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            number_format($product['price'], $precision),
+            $product['price'],
             $product['iso_code']
         );
 
-        $product['tax_amount_formatted'] = number_format($product['tax_amount'], $precision);
+        $product['tax_amount_formatted'] = number_format($product['tax_amount'], 2);
 
         $product['total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            number_format($product['total_price'], $precision),
+            $product['total_price'],
             $product['iso_code']
         );
 
         if ($coupon != null) {
             $product['discount_amount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-                number_format($product['discount_amount'], $precision),
+                $product['discount_amount'],
                 $product['iso_code']
             );
 
             $product['price_without_discount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-                number_format($product['price_without_discount'], $precision),
+                $product['price_without_discount'],
                 $product['iso_code']
             );
         }

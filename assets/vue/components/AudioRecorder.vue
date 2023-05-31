@@ -1,124 +1,90 @@
 <template>
-  <div class="py-4">
-    <q-btn
-      v-if="!isRecording"
-      :label="$t('Start recording')"
-      color="primary"
-      icon="mic"
-      @click="record()"
-    />
+  <BaseButton v-if="recorderState.isRecording" :label="t('Stop recording')" icon="stop" type="danger" @click="stop" />
+  <BaseButton v-else :label="t('Start recording')" icon="microphone" type="primary" @click="record" />
 
-    <q-btn
-      v-if="isRecording"
-      :label="$t('Stop recording')"
-      color="red"
-      icon="stop"
-      @click="stop()"
-    />
+  <div v-for="(audio, index) in recorderState.audioList" :key="index" class="py-2">
+    <audio class="max-w-full" controls>
+      <source :src="window.URL.createObjectURL(audio)" />
+    </audio>
 
-    <div
-      v-for="(audio, index) in audioList"
-      :key="index"
-      class="py-2"
-    >
-      <audio
-        class="max-w-full"
-        controls
-      >
-        <source
-          :src="URL.createObjectURL(audio)"
-        >
-      </audio>
-      <q-btn
-        :label="$t('Attach')"
-        class="my-1"
-        color="green"
-        icon="attachment"
-        size="sm"
-        @click="attachAudio(audio)"
-      />
-    </div>
+    <BaseButton
+      :label="$t('Attach')"
+      class="my-1"
+      icon="attachment"
+      size="small"
+      type="success"
+      @click="attachAudio(audio)"
+    />
   </div>
 </template>
 
-<script>
-import {reactive, toRefs} from "vue";
-import {RecordRTCPromisesHandler, StereoAudioRecorder} from "recordrtc";
+<script setup>
+import BaseButton from "./basecomponents/BaseButton.vue";
+import { reactive } from "vue";
+import { RecordRTCPromisesHandler, StereoAudioRecorder } from "recordrtc";
+import { useI18n } from "vue-i18n";
 
-export default {
-  name: "AudioRecorder",
-  props: {
-    multiple: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
+const props = defineProps({
+  multiple: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
-  setup(props, {emit}) {
-    const recorderState = reactive({
-      isRecording: false,
-      audioList: [],
-    });
+});
 
-    let recorder = null;
+const emit = defineEmits(["attach-audio"]);
 
-    async function record() {
-      if (!navigator.mediaDevices.getUserMedia) {
-        return;
-      }
+const { t } = useI18n();
 
-      let stream = await navigator.mediaDevices.getUserMedia({video: false, audio: true});
-      recorder = new RecordRTCPromisesHandler(stream, {
-        recorderType: StereoAudioRecorder,
-        type: 'audio',
-        mimeType: 'audio/wav',
-        numberOfAudioChannels: 2
-      });
-      recorder.startRecording();
+const recorderState = reactive({
+  isRecording: false,
+  audioList: [],
+});
 
-      recorderState.isRecording = true;
-    }
+let recorder = null;
 
-    async function stop() {
-      if (!recorder) {
-        return;
-      }
+async function record() {
+  if (!navigator.mediaDevices.getUserMedia) {
+    return;
+  }
 
-      if (false === props.multiple && recorderState.audioList.length > 0) {
-        recorderState.audioList.shift();
-      }
+  let stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+  recorder = new RecordRTCPromisesHandler(stream, {
+    recorderType: StereoAudioRecorder,
+    type: "audio",
+    mimeType: "audio/wav",
+    numberOfAudioChannels: 2,
+  });
+  recorder.startRecording();
 
-      await recorder.stopRecording();
+  recorderState.isRecording = true;
+}
 
-      const audioBlob = await recorder.getBlob();
+async function stop() {
+  if (!recorder) {
+    return;
+  }
 
-      recorderState.audioList.push(audioBlob);
+  if (false === props.multiple && recorderState.audioList.length > 0) {
+    recorderState.audioList.shift();
+  }
 
-      recorderState.isRecording = false;
-    }
+  await recorder.stopRecording();
 
-    function attachAudio(audio) {
-      emit('attach-audio', audio);
+  const audioBlob = await recorder.getBlob();
 
-      const index = recorderState.audioList.indexOf(audio);
+  recorderState.audioList.push(audioBlob);
 
-      if (index >= 0) {
-        recorderState.audioList.splice(index, 1);
-      }
-    }
+  recorderState.isRecording = false;
+}
 
-    return {
-      record,
-      stop,
-      ...toRefs(recorderState),
-      attachAudio,
-      URL
-    };
-  },
-  emits: ['attachAudio'],
+function attachAudio(audio) {
+  emit("attach-audio", audio);
+
+  const index = recorderState.audioList.indexOf(audio);
+
+  if (index >= 0) {
+    recorderState.audioList.splice(index, 1);
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

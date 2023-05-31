@@ -9054,4 +9054,8 @@ $ClickToViewDetails = "Haga clic para más detalles";
 $CertificateOfAchievementHelp = "Este reporte usa todos los datos del usuario en toda la plataforma.";
 $DateFormatddmmyyyy = "dd/mm/aaaa";
 $ExportCertificateReport = "Exportar reporte de emisión de certificados";
+$HideCareersHierarchy = "Ocultar jerarquías";
+$ShowCareersHierarchy = "Mostrar jerarquías";
+$ParentCareer = "Carrera padre";
+$CareerCannotBeDeletedAsItHasChildren = "Esta carrera no puede ser eliminada hasta que las carreras hijas a ésta sean eliminadas o movidas a otra carrera.";
 ?>

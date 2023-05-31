@@ -9029,4 +9029,8 @@ $ClickToViewDetails = "Click to view details";
 $CertificateOfAchievementHelp = "This report applies to all plateform activities of the user.";
 $DateFormatddmmyyyy = "dd/mm/yyyy";
 $ExportCertificateReport = "Export certificates issue report";
+$HideCareersHierarchy = "Hide hierarchies";
+$ShowCareersHierarchy = "Show hierarchies";
+$ParentCareer = "Parent career";
+$CareerCannotBeDeletedAsItHasChildren = "This career cannot be deleted until all of its children have been deleted or moved to another career.";
 ?>

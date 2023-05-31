@@ -2428,6 +2428,16 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 // external authentication system rather than user.id.
 // $_configuration['webservice_return_user_field'] = 'oauth2_id';
 
+// Add support for careers hierarchy - refs BT#20711
+// 1. This requires the following DB change:
+// ALTER TABLE career add parent_id INT
+// ALTER TABLE career add constraint career_career_id_fk foreign key (parent_id) references career (id);
+// 2. Add an "@" before "var int" and "ORM\Column..." in the "Career::$parentId" property definition (in src/Chamilo/CoreBundle/Entity/Career.php)
+// 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
+// $_configuration['career_hierarchy_enable'] = false;
+
+// KEEP THIS AT THE END
+// -------- Custom DB changes
 // Set to true to hide settings completely in a sub-URL if the setting is disabled in the
 // main URL (where the access_url_changeable field = 0)
 // $_configuration['multiple_url_hide_disabled_settings'] = false;

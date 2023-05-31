@@ -14,10 +14,16 @@ if (!empty($course_info)) {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
+$group_id = api_get_group_id();
+
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
-        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        if (!empty($group_id)) {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq().'&user_id=GROUP:'.$group_id;
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        }
     } else {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?';
     }
@@ -31,7 +37,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = $_REQUEST['id'] ?? null;
 $type = $event_type = $_GET['type'] ?? null;

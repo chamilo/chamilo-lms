@@ -1923,7 +1923,7 @@ class Agenda
                         OR (
                             pa.subscriptionVisibility = ".AgendaEventSubscription::SUBSCRIPTION_CLASS."
                             AND pa.subscriptionItemId IN (".implode(', ', array_column($groupList, 'id')).")
-                        ) 
+                        )
                 ";
             }
 
@@ -2487,6 +2487,7 @@ class Agenda
                     );
                     $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
                     $event['type'] = 'group';
+                    $event['group_id'] = $row['to_group_id'];
                 }
 
                 // Event sent to a user?
@@ -3180,7 +3181,7 @@ class Agenda
                     $('#add_event_subscription_visibility')
                         .on('change', function () {
                             $('#max_subscriptions').prop('disabled', this.value == 0);
-                            $('#add_event_subscription_item').prop('disabled', this.value != 2);                        
+                            $('#add_event_subscription_item').prop('disabled', this.value != 2);
                         })
                         .trigger('change');
                 })

@@ -369,6 +369,8 @@ $extraSettings = Agenda::returnFullCalendarExtraSettings();
 
 $tpl->assign('fullcalendar_settings', $extraSettings);
 
+$tpl->assign('group_id', (!empty($group_id) ? $group_id : 0));
+
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

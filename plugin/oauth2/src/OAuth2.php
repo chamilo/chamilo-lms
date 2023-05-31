@@ -139,10 +139,13 @@ class OAuth2 extends Plugin
 
     public function getProvider(): GenericProvider
     {
+        $redirectUri = api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php';
+        // In cases not precisely defined yet, this alternative version might be necessary - see BT#20611
+        //$redirectUri = api_get_path(WEB_PATH).'authorization-code/callback';
         $options = [
             'clientId' => $this->get(self::SETTING_CLIENT_ID),
             'clientSecret' => $this->get(self::SETTING_CLIENT_SECRET),
-            'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php',
+            'redirectUri' => $redirectUri,
             'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
             'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
         ];
@@ -310,6 +313,8 @@ class OAuth2 extends Plugin
     public function getSignInURL(): string
     {
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
+        // In cases not precisely defined yet, this alternative version might be necessary - see BT#20611
+        //return api_get_path(WEB_PATH).'authorization-code/callback';
     }
 
     public function getLogoutUrl(): string

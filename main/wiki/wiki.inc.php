@@ -2102,6 +2102,11 @@ class Wiki
         $group_name = $group_properties ? $group_properties['name'] : '';
         $allow_send_mail = false; //define the variable to below
         $email_assignment = null;
+
+        if (!is_string($lastime) && get_class($lastime) == 'DateTime') {
+            $lastime = $lastime->format('Y-m-d H:i:s');
+        }
+
         if ($type == 'P') {
             //if modifying a wiki page
             //first, current author and time

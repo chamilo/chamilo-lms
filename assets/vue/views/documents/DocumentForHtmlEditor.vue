@@ -152,11 +152,11 @@ export default {
     };
   },
   created() {
-    console.log('created - vue/views/documents/List.vue');
+    console.log('created - vue/views/documents/DocumentsList.vue');
     this.filters['loadNode'] = 1;
   },
   mounted() {
-    console.log('mounted - vue/views/documents/List.vue');
+    console.log('mounted - vue/views/documents/DocumentsList.vue');
     this.filters['loadNode'] = 1;
     this.onUpdateOptions(this.options);
   },

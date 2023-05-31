@@ -121,7 +121,7 @@ export default {
     };
   },
   created() {
-    //console.log('created assets/vue/views/documents/List.vue');
+    //console.log('created assets/vue/views/documents/DocumentsList.vue');
     this.moment = moment;
     const route = useRoute()
     let nodeId = route.params['node'];

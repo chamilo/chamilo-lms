@@ -1,12 +1,12 @@
 <template>
-  <div v-if="data && data.resourceNode && data.resourceNode.resourceFile">
+  <div v-if="isFile">
     <a
       data-fancybox="gallery"
       class="flex align-center"
       :href="data.contentUrl"
       :data-type="dataType"
     >
-      <ResourceIcon class="mr-2" :resource-data="data" />
+      <ResourceIcon class="mr-2" :resource-data="data"/>
       {{ data.title }}
     </a>
   </div>
@@ -15,8 +15,8 @@
       class="flex align-center"
       :to="{
         name: 'DocumentsList',
-        params: { node: data.resourceNode.id },
-        query: folderParams,
+        params: {node: props.data.resourceNode.id},
+        query: cidQuery,
       }"
     >
       <ResourceIcon class="mr-2" :resource-data="data"/>
@@ -26,28 +26,37 @@
 </template>
 
 <script setup>
-import ResourceIcon from "./ResourceIcon.vue";
-import {computed} from "vue";
+import ResourceIcon from "./ResourceIcon.vue"
+import {computed} from "vue"
+import {useCidReq} from '../../composables/cidReq'
+import {useFileUtils} from "../../composables/fileUtils";
 
 const props = defineProps({
   data: {
     type: Object,
     required: true,
   },
-});
+})
+
+const cidQuery = useCidReq()
+const {isFile: utilsIsFile, isImage, isVideo} = useFileUtils()
 
 const dataType = computed(() => {
-  let resourceFile = props.data.resourceNode.resourceFile;
-  if (resourceFile === null) {
-    return '';
+  if (!utilsIsFile(props.data)) {
+    return ''
   }
-  if (resourceFile.image) {
-    return 'image';
+
+  if (isImage(props.data)) {
+    return 'image'
   }
-  if (resourceFile.video) {
-    return 'video';
+  if (isVideo(props.data)) {
+    return 'video'
   }
 
   return 'iframe';
-});
+})
+
+const isFile = computed(() => {
+  return props.data && utilsIsFile(props.data)
+})
 </script>

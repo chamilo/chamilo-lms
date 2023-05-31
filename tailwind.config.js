@@ -12,10 +12,13 @@ module.exports = {
       primary: {
         DEFAULT: "#2e75a3",
         gradient: "#9cc2da",
+        bgdisabled: '#fafafa',
+        borderdisabled: '#e4e9eD',
       },
       secondary: {
         DEFAULT: "#f37e2f",
         gradient: "#e06410",
+        bgdisabled: '#e4e9ed',
       },
       gray: {
         5: "#fcfcfc",
@@ -44,6 +47,8 @@ module.exports = {
       black: colors.black,
       transparent: colors.transparent,
       current: colors.current,
+
+      fontdisabled: '#a2a6b0',
     },
     extend: {
       fontFamily: {

@@ -93,15 +93,16 @@ const buttonClass = computed(() => {
     case "small":
       result += "py-2 px-3.5 "
   }
+  let commonDisabled = "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled"
   switch (props.type) {
     case "primary":
-      result += "border-primary hover:bg-primary text-primary hover:text-white ";
+      result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `;
       break;
     case "secondary":
-      result += "bg-secondary hover:bg-secondary-gradient text-white ";
+      result += "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
       break;
     case "danger":
-      result += "border-error hover:bg-error text-error hover:text-white ";
+      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
   }
   return result;
 });

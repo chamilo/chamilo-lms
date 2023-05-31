@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
@@ -63,10 +64,15 @@ class ResourceLink implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     #[ORM\Column(name: 'end_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $endVisibilityAt = null;
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
+    #[Gedmo\SortablePosition]
+    protected int $displayOrder;
+
     public function __construct()
     {
         $this->resourceRights = new ArrayCollection();
         $this->visibility = self::VISIBILITY_DRAFT;
+        $this->displayOrder = 0;
     }
     public function __toString(): string
     {
@@ -248,4 +254,18 @@ class ResourceLink implements Stringable
     {
         return array_flip(static::getVisibilityList())[$this->getVisibility()];
     }
+
+    public function getDisplayOrder()
+    {
+        return $this->displayOrder;
+    }
+
+    public function setDisplayOrder(int $displayOrder): self
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
+    }
+
+
 }

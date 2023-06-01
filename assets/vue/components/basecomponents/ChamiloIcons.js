@@ -67,6 +67,16 @@ export const chamiloIconToClass = {
     "drawing": "mdi mdi-drawing",
     "view-gallery": "mdi mdi-view-gallery",
     "usage": "mdi mdi-chart-donut",
+    "email-plus": "mdi mdi-email-plus-outline",
+    "refresh": "mdi mdi-refresh",
+    "multiple-marked": "mdi mdi-checkbox-multiple-marked-outline",
+    "email-unread": "mdi mdi-email-mark-as-unread",
+    "inbox": "mdi mdi-inbox",
+    "sent": "mdi mdi-send-check",
+    "tag-outline": "mdi mdi-tag-outline",
+    "microphone": "mdi mdi-microphone",
+    "stop": "mdi mdi-stop",
+    "attachment": "mdi mdi-attachment",
 };
 
 export const validator = (value) => {

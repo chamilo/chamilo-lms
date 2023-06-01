@@ -33,7 +33,7 @@
     <slot />
     <div
       id="legacy_content"
-      v-html="legacyContent"
+      ref="legacyContainer"
     />
     <ConfirmDialog />
   </component>
@@ -79,55 +79,29 @@ const layout = computed(
   }
 );
 
-const legacyContent = ref('');
-let isFirstTime = false;
-
-onMounted(
-  () => {
-    isFirstTime = true;
-  }
-);
+const legacyContainer = ref(null);
 
 watch(
   route,
   () => {
-    legacyContent.value = '';
-
-    const currentUrl = window.location.href;
-
-    if (currentUrl.indexOf('main/') > 0) {
-      if (isFirstTime) {
-        const content = document.querySelector('#sectionMainContent');
-
-        if (content) {
-          content.style.display = 'block';
-          document.querySelector('#sectionMainContent').remove();
-          legacyContent.value = content.outerHTML;
-        }
-      } else {
-        document.querySelector('#sectionMainContent')?.remove();
-
-        window.location.replace(currentUrl);
-      }
-    } else {
-      if (isFirstTime) {
-        const content = document.querySelector("#sectionMainContent");
-
-        if (content) {
-          content.style.display = 'block';
-          document.querySelector("#sectionMainContent").remove();
-          legacyContent.value = content.outerHTML;
-        }
-      } else {
-        document.querySelector("#sectionMainContent")?.remove();
-
-        legacyContent.value = '';
-      }
+    if (legacyContainer.value) {
+      legacyContainer.value.innerHTML = '';
     }
-
-    isFirstTime = false;
   }
 );
+
+watchEffect(() => {
+  if (!legacyContainer.value) {
+    return;
+  }
+
+  const content = document.querySelector("#sectionMainContent");
+
+  if (content) {
+    legacyContainer.value.appendChild(content);
+    content.style.display = "block";
+  }
+});
 
 watchEffect(
   async () => {

@@ -2,7 +2,7 @@
   <Dialog
     :header="title"
     :modal="true"
-    :style="{width: '450px'}"
+    :style="{ width: '450px' }"
     :visible="isVisible"
     class="p-fluid"
     @update:visible="$emit('update:isVisible', $event)"
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import Dialog from 'primevue/dialog'
+import Dialog from "primevue/dialog";
 
 defineProps({
   title: {
@@ -25,9 +25,8 @@ defineProps({
   isVisible: {
     type: Boolean,
     required: true,
-  }
-})
+  },
+});
 
-defineEmits(['update:isVisible'])
-
+defineEmits(["update:isVisible"]);
 </script>

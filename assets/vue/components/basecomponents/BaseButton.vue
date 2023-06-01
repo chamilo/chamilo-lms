@@ -1,19 +1,16 @@
 <template>
   <Button
+    :class="buttonClass"
+    :label="label"
+    :outlined="primeOutlinedProperty"
+    :size="size"
+    :text="primeTextProperty"
     class="cursor-pointer"
     plain
-    :label="label"
-    :class="buttonClass"
-    :outlined="primeOutlinedProperty"
-    :text="primeTextProperty"
-    :size="size"
     @click="$emit('click', $event)"
   >
-    <BaseIcon class="text-inherit" :icon="icon" :size="size" />
-    <span
-      v-if="!onlyIcon && label"
-      class="hidden md:block text-inherit"
-    >
+    <BaseIcon :icon="icon" :size="size" class="text-inherit" />
+    <span v-if="!onlyIcon && label" class="hidden md:block text-inherit">
       {{ label }}
     </span>
   </Button>
@@ -21,9 +18,9 @@
 
 <script setup>
 import Button from "primevue/button";
-import {chamiloIconToClass} from "./ChamiloIcons";
+import { chamiloIconToClass } from "./ChamiloIcons";
 import BaseIcon from "./BaseIcon.vue";
-import {computed} from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   label: {
@@ -34,31 +31,26 @@ const props = defineProps({
     type: String,
     required: true,
     validator: (value) => {
-      if (typeof (value) !== "string") {
+      if (typeof value !== "string") {
         return false;
       }
       return Object.keys(chamiloIconToClass).includes(value);
-    }
+    },
   },
   type: {
     type: String,
     required: true,
     validator: (value) => {
-      if (typeof (value) !== "string") {
+      if (typeof value !== "string") {
         return false;
       }
-      return [
-        "primary",
-        "secondary",
-        "black",
-        "danger",
-      ].includes(value);
-    }
+      return ["primary", "secondary", "black", "danger"].includes(value);
+    },
   },
   // associate this button to a popup through its identifier, this will make this button toggle the popup
   popupIdentifier: {
     type: String,
-    default: ""
+    default: "",
   },
   onlyIcon: {
     type: Boolean,
@@ -68,14 +60,11 @@ const props = defineProps({
     type: String,
     default: "normal",
     validator: (value) => {
-      if (typeof (value) !== "string") {
-        return false
+      if (typeof value !== "string") {
+        return false;
       }
-      return [
-        "normal",
-        "small",
-      ].includes(value);
-    }
+      return ["normal", "small"].includes(value);
+    },
   },
 });
 
@@ -85,21 +74,23 @@ const buttonClass = computed(() => {
   if (props.onlyIcon) {
     return "p-3";
   }
-  let result =""
+  let result = "";
   switch (props.size) {
     case "normal":
       result += "py-2.5 px-4 ";
       break;
     case "small":
-      result += "py-2 px-3.5 "
+      result += "py-2 px-3.5 ";
   }
-  let commonDisabled = "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled"
+  let commonDisabled =
+    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled";
   switch (props.type) {
     case "primary":
       result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `;
       break;
     case "secondary":
-      result += "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
+      result +=
+        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
       break;
     case "danger":
       result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;

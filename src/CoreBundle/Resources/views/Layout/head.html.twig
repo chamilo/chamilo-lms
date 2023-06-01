@@ -23,7 +23,11 @@
     {% set profile_link = '' %}
     {% set message_link = '' %}
     {%- block stylesheets %}
+        {{ encore_entry_link_tags('legacy_free-jqgrid') }}
         {{ encore_entry_link_tags('legacy_app') }}
+        {{ encore_entry_link_tags('legacy_lp') }}
+        {{ encore_entry_link_tags('legacy_exercise') }}
+        {{ encore_entry_link_tags('legacy_document') }}
         {{ encore_entry_link_tags('vue') }}
         {{ encore_entry_link_tags('app') }}
         {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
@@ -36,7 +40,11 @@
     {% endblock %}
     {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
     {# <script src="{{ url('index') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script> #}
+    {{ encore_entry_script_tags('legacy_free-jqgrid') }}
     {{ encore_entry_script_tags('legacy_app') }}
+    {{ encore_entry_script_tags('legacy_lp') }}
+    {{ encore_entry_script_tags('legacy_exercise') }}
+    {{ encore_entry_script_tags('legacy_document') }}
     {# Add third party js libraries that can't be loaded using webpack #}
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
     {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}

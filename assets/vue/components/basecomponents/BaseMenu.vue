@@ -18,6 +18,7 @@ defineProps({
     type: String,
     required: true,
   },
+  // https://primevue.org/menu/#api.options.MenuItem
   model: {
     type: Array,
     required: true,

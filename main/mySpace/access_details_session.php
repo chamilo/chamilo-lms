@@ -588,7 +588,7 @@ if ($formByDay->validate()) {
 $formByDay->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 Display::display_header('');
-echo Display::page_header(get_lang('CertificateOfAchievement'),get_lang('CertificateOfAchievementHelp'));
+echo Display::page_header(get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementHelp'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );

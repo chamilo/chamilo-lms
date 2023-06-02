@@ -323,7 +323,8 @@ function formatCompleteName(array $userInfo, bool $orderListByOfficialCode): str
 {
     if ($orderListByOfficialCode) {
         $officialCode = !empty($userInfo['official_code']) ? $userInfo['official_code'].' - ' : '? - ';
-        return  $officialCode.$userInfo['complete_name_with_username'];
+
+        return $officialCode.$userInfo['complete_name_with_username'];
     }
 
     $officialCode = !empty($userInfo['official_code']) ? ' - '.$userInfo['official_code'] : null;

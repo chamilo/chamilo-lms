@@ -173,7 +173,7 @@ switch ($action) {
         }
         break;
     case 'download_certificates_report':
-        $exportData = array_map(function($learner) {
+        $exportData = array_map(function ($learner) {
             return [
                 $learner['user_id'],
                 $learner['username'],

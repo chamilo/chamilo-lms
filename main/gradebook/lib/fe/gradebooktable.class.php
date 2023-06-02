@@ -117,7 +117,7 @@ class GradebookTable extends SortableTable
         }
         if ($showWeight) {
             $this->set_header($column++, get_lang('Weight'), false, $styleTextRight100, $styleTextRight100);
-	}
+        }
 
         if (!$this->teacherView) {
             $this->set_header($column++, get_lang('Result'), false, $styleTextRight, $styleTextRight);
@@ -126,13 +126,13 @@ class GradebookTable extends SortableTable
         if (empty($model)) {
             if (in_array(1, $this->loadStats)) {
                 $this->set_header($column++, get_lang('Ranking'), false, $styleTextRight100, $styleTextRight100);
-	    }
+            }
             if (in_array(2, $this->loadStats)) {
                 $this->set_header($column++, get_lang('BestScore'), false, $styleTextRight120, $styleTextRight120);
-	    }
+            }
             if (in_array(3, $this->loadStats)) {
                 $this->set_header($column++, get_lang('Average'), false, $styleTextRight100, $styleTextRight100);
-	    }
+            }
         }
 
         if ($this->teacherView) {

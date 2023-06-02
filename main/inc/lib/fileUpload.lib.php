@@ -739,17 +739,11 @@ function handle_uploaded_document(
     }
 }
 
-/**
- * @param string $file
- * @param string $storePath
- *
- * @return bool
- */
-function moveUploadedFile($file, $storePath)
+function moveUploadedFile(array $file, string $storePath): bool
 {
-    $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
-    $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
-    $copyFile = isset($file['copy_file']) && $file['copy_file'] ? true : false;
+    $handleFromFile = isset($file['from_file']) && $file['from_file'];
+    $moveFile = isset($file['move_file']) && $file['move_file'];
+    $copyFile = isset($file['copy_file']) && $file['copy_file'];
     if ($moveFile) {
         $copied = copy($file['tmp_name'], $storePath);
 

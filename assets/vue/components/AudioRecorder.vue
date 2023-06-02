@@ -75,7 +75,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["attach-audio"]);
+const emit = defineEmits(["attach-audio", "recorded-audio"]);
 
 defineExpose({
   record,
@@ -140,9 +140,10 @@ async function stop() {
   const audioBlob = await recorder.getBlob();
 
   recorderState.audioList.push(audioBlob);
+  emit('recorded-audio', audioBlob);
 
   recorderState.isRecording = false;
-  stopTimer()
+  stopTimer();
 }
 
 function attachAudio(audio) {
@@ -157,9 +158,9 @@ function attachAudio(audio) {
 
 let timer = null;
 function startTimer() {
-  recorderState.seconds = 0
-  recorderState.minutes = 0
-  recorderState.hours = 0
+  recorderState.seconds = 0;
+  recorderState.minutes = 0;
+  recorderState.hours = 0;
 
   timer = setInterval(() => {
     recorderState.seconds = recorderState.seconds + 1
@@ -171,19 +172,19 @@ function startTimer() {
       recorderState.hours = recorderState.hours + 1
       recorderState.minutes = 0
     }
-  }, 1000)
+  }, 1000);
 }
 
 function stopTimer() {
-  recorderState.seconds = 0
-  recorderState.minutes = 0
-  recorderState.hours = 0
+  recorderState.seconds = 0;
+  recorderState.minutes = 0;
+  recorderState.hours = 0;
 
-  clearInterval(timer)
-  timer = null
+  clearInterval(timer);
+  timer = null;
 }
 
 function timeComponentToString(value) {
-  return value.toString().padStart(2, '0')
+  return value.toString().padStart(2, '0');
 }
 </script>

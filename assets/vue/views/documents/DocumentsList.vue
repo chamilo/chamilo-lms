@@ -23,11 +23,11 @@
       icon="drawing"
     />
     <BaseButton
-      :disabled="true"
       :label="t('Record audio')"
       class="mr-2 mb-2"
       type="black"
       icon="record-add"
+      @click="showRecordAudioDialog"
     />
     <BaseButton
       :label="t('Upload')"
@@ -268,6 +268,18 @@
       :data="usageData"
     />
   </BaseDialog>
+
+  <BaseDialog
+    v-model:is-visible="isRecordAudioDialogVisible"
+    :title="t('Record audio')"
+    header-icon="record-add"
+  >
+    <DocumentAudioRecorder
+      :parent-resource-node-id="route.params.node"
+      @document-saved="recordedAudioSaved"
+      @document-not-saved="recordedAudioNotSaved"
+    />
+  </BaseDialog>
 </template>
 
 <script setup>
@@ -290,6 +302,7 @@ import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogC
 import {useFileUtils} from "../../composables/fileUtils";
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue";
 import BaseChart from "../../components/basecomponents/BaseChart.vue";
+import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue";
 
 const store = useStore()
 const route = useRoute()
@@ -318,6 +331,7 @@ const isNewFolderDialogVisible = ref(false)
 const isDeleteItemDialogVisible = ref(false)
 const isDeleteMultipleDialogVisible = ref(false)
 const isFileUsageDialogVisible = ref(false)
+const isRecordAudioDialogVisible = ref(false)
 
 const submitted = ref(false)
 
@@ -583,5 +597,19 @@ function showUsageDialog() {
     labels: ['Course', 'Teacher', 'Available space'],
   }
   isFileUsageDialogVisible.value = true
+}
+
+function showRecordAudioDialog() {
+  isRecordAudioDialogVisible.value = true
+}
+
+function recordedAudioSaved() {
+  // TODO show a notification about upload success
+  isRecordAudioDialogVisible.value = false
+  onUpdateOptions(options.value)
+}
+
+function recordedAudioNotSaved() {
+  // TODO show a notification about upload failure
 }
 </script>

@@ -12,6 +12,8 @@
  * @todo test and reorganise
  */
 
+use enshrined\svgSanitize\Sanitizer;
+
 /**
  * Changes the file name extension from .php to .phps
  * Useful for securing a site.
@@ -189,6 +191,22 @@ function process_uploaded_file($uploaded_file, $show_output = true)
 
     // case 0: default: We assume there is no error, the file uploaded with success.
     return true;
+}
+
+function sanitizeSvgFile(string $fullPath)
+{
+    $fileType = mime_content_type($fullPath);
+
+    if ('image/svg+xml' !== $fileType) {
+        return;
+    }
+
+    $svgContent = file_get_contents($fullPath);
+
+    $sanitizer = new Sanitizer();
+    $cleanSvg = $sanitizer->sanitize($svgContent);
+
+    file_put_contents($fullPath, $cleanSvg);
 }
 
 /**
@@ -394,6 +412,7 @@ function handle_uploaded_document(
                     $fileExists = file_exists($fullPath);
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
 
                         if ($fileExists && $docId) {
@@ -577,6 +596,7 @@ function handle_uploaded_document(
                     $filePath = $uploadPath.$fileSystemName;
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
                         // Put the document data in the database
                         $documentId = add_document(

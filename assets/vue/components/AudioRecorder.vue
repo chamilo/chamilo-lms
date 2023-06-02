@@ -1,28 +1,37 @@
 <template>
-  <BaseButton v-if="recorderState.isRecording" :label="t('Stop recording')" icon="stop" type="danger" @click="stop" />
-  <BaseButton v-else :label="t('Start recording')" icon="microphone" type="primary" @click="record" />
+  <div v-if="isMicrophoneSupported">
+    <BaseButton v-if="recorderState.isRecording" :label="t('Stop recording')" icon="stop" type="danger" @click="stop"/>
+    <BaseButton v-else :label="t('Start recording')" icon="microphone" type="primary" @click="record"/>
 
-  <div v-for="(audio, index) in recorderState.audioList" :key="index" class="py-2">
-    <audio class="max-w-full" controls>
-      <source :src="window.URL.createObjectURL(audio)" />
-    </audio>
+    <div v-for="(audio, index) in recorderState.audioList" :key="index" class="py-2">
+      <audio class="max-w-full" controls>
+        <source :src="window.URL.createObjectURL(audio)"/>
+      </audio>
 
-    <BaseButton
-      :label="$t('Attach')"
-      class="my-1"
-      icon="attachment"
-      size="small"
-      type="success"
-      @click="attachAudio(audio)"
-    />
+      <BaseButton
+        :label="$t('Attach')"
+        class="my-1"
+        icon="attachment"
+        size="small"
+        type="success"
+        @click="attachAudio(audio)"
+      />
+    </div>
+  </div>
+  <div v-else>
+      <p>
+        {{ t('We\'re sorry, your browser does not support using a microphone') }}
+      </p>
   </div>
 </template>
 
 <script setup>
 import BaseButton from "./basecomponents/BaseButton.vue";
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import { RecordRTCPromisesHandler, StereoAudioRecorder } from "recordrtc";
 import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   multiple: {
@@ -34,17 +43,25 @@ const props = defineProps({
 
 const emit = defineEmits(["attach-audio"]);
 
-const { t } = useI18n();
-
 const recorderState = reactive({
   isRecording: false,
   audioList: [],
 });
 
+
+const isMicrophoneSupported = computed(() => {
+  let isMediaDevicesSupported = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+  if (!isMediaDevicesSupported) {
+    console.warn('Either your browser does not support microphone or your are serving your site from not secure ' +
+      'context, check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information')
+  }
+  return isMediaDevicesSupported
+})
+
 let recorder = null;
 
 async function record() {
-  if (!navigator.mediaDevices.getUserMedia) {
+  if (!isMicrophoneSupported.value) {
     return;
   }
 

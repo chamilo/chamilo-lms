@@ -23,7 +23,7 @@ export default {
     {
       name: 'DocumentsUploadFile',
       path: 'upload',
-      component: () => import('../views/documents/Upload.vue')
+      component: () => import('../views/documents/DocumentsUpload.vue')
     },
     {
       name: 'DocumentsUpdate',

@@ -281,7 +281,6 @@ import {useCidReq} from '../../composables/cidReq'
 import {useDatatableList} from '../../composables/datatableList'
 import {useRelativeDatetime} from '../../composables/formatDate'
 import axios from 'axios'
-import {useToast} from 'primevue/usetoast';
 import DocumentEntry from "../../components/documents/DocumentEntry.vue";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue";
@@ -290,19 +289,16 @@ import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogC
 import {useFileUtils} from "../../composables/fileUtils";
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue";
 import BaseChart from "../../components/basecomponents/BaseChart.vue";
+import {useNotification} from "../../composables/notification";
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
 const {t} = useI18n()
-
 const {filters, options, onUpdateOptions, deleteItem} = useDatatableList('Documents')
-
-const toast = useToast();
-
+const notification = useNotification()
 const {cid, sid, gid} = useCidReq()
-
 const {isImage} = useFileUtils()
 
 store.dispatch('course/findCourse', {id: `/api/courses/${cid}`})
@@ -414,12 +410,7 @@ function createNewFolder() {
 
       store.dispatch('documents/createWithFormData', item.value)
         .then(() => {
-          toast.add({
-            severity: 'success',
-            detail: t('Saved'),
-            life: 3500,
-          })
-
+          notification.showSuccessNotification(t('Saved'))
           onUpdateOptions(options.value)
         })
     }
@@ -440,15 +431,12 @@ function confirmDeleteItem (itemToDelete) {
   isDeleteItemDialogVisible.value = true
 }
 
-function deleteMultipleItems () {
-  store.dispatch('documents/delMultiple', selectedItems.value)
-    .then(() => {
-      isDeleteMultipleDialogVisible.value = false
-      unselectAll()
-    })
-
+async function deleteMultipleItems () {
+  await store.dispatch('documents/delMultiple', selectedItems.value)
+  isDeleteMultipleDialogVisible.value = false
+  notification.showSuccessNotification(t('Deleted'))
+  unselectAll()
   onUpdateOptions(options.value)
-//this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
 }
 
 function unselectAll () {

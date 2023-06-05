@@ -180,6 +180,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
         $this->theme = '';
+        $this->nextLpId = 0;
         $this->items = new ArrayCollection();
         $this->forums = new ArrayCollection();
     }

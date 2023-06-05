@@ -498,7 +498,7 @@ switch ($action) {
                     ->setTitle($subject)
                     ->setContent($content)
                     ->setSender(api_get_user_entity())
-                    ->addReceiver($student)
+                    ->addReceiverTo($student)
                     ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
                 ;
                 $em->persist($message);
@@ -523,7 +523,7 @@ switch ($action) {
                             ->setTitle(sprintf(get_lang('Follow up message about student %s'), $studentFullName))
                             ->setContent($content)
                             ->setSender(api_get_user_entity())
-                            ->addReceiver(api_get_user_entity($boss['boss_id']))
+                            ->addReceiverTo(api_get_user_entity($boss['boss_id']))
                             ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
                         ;
                         $em->persist($message);

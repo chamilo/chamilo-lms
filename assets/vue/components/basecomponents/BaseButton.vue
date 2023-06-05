@@ -44,7 +44,7 @@ const props = defineProps({
       if (typeof value !== "string") {
         return false;
       }
-      return ["primary", "secondary", "black", "danger"].includes(value);
+      return ["primary", "secondary", "black", "success", "danger"].includes(value);
     },
   },
   // associate this button to a popup through its identifier, this will make this button toggle the popup
@@ -92,8 +92,12 @@ const buttonClass = computed(() => {
       result +=
         "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
       break;
+    case "success":
+      result += `bg-success hover:bg-success-gradient ${commonDisabled} `;
+      break;
     case "danger":
       result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
+      break;
   }
   return result;
 });

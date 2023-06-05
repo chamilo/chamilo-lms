@@ -32,7 +32,7 @@
       />
       <BaseButton
         :label="t('Save recorded audio')"
-        type="secondary"
+        type="success"
         icon="send"
         class="mr-2"
         @click="saveAudio"

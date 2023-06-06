@@ -156,4 +156,18 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
     }
 }
 
-$pdf->Output();
+$typeSuffix = 'q';
+switch ($_GET['type']) {
+    case 'question':
+        $typeSuffix = 'Q';
+        break;
+    case 'answer':
+        $typeSuffix = 'A';
+        break;
+    case 'all':
+        $typeSuffix = 'QA';
+        break;
+}
+// Name the file download as something like 'C2-S0-Q34-QA' where C is course ID, S is session ID, Q is quiz ID & QA is the type
+$filename = 'C'.$courseId.'-S'.(empty($sessionId) ? '0' : $sessionId).'-Q'.$quizId.'-'.$typeSuffix;
+$pdf->Output($filename, 'I');

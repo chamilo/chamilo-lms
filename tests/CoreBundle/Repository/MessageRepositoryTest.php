@@ -40,7 +40,7 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setContent('content')
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
-            ->addReceiver($testUser)
+            ->addReceiverTo($testUser)
             ->setSendDate(new DateTime())
             ->setVotes(0)
             ->setGroup(null)
@@ -53,7 +53,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->assertNotNull($message->getUpdateDate());
         $this->assertNull($message->getParent());
-        $this->assertTrue($message->hasReceiver($testUser));
+        $this->assertTrue($message->hasUserReceiver($testUser));
 
         $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
         $this->assertCount(1, $transport->getSent());
@@ -98,7 +98,7 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setContent('content')
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
-            ->addReceiver($testUser)
+            ->addReceiverTo($testUser)
         ;
 
         $this->assertHasNoEntityViolations($message);
@@ -318,7 +318,7 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setContent('content')
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
-            ->addReceiver($testUser)
+            ->addReceiverTo($testUser)
         ;
 
         $this->assertHasNoEntityViolations($message);
@@ -389,8 +389,8 @@ class MessageRepositoryTest extends AbstractApiTest
                 ->setContent('content')
                 ->setMsgType(Message::MESSAGE_TYPE_INBOX)
                 ->setSender($admin)
-                ->addReceiver($testUser)
-                ->addReceiver($receiverCopy, MessageRelUser::TYPE_CC)
+                ->addReceiverTo($testUser)
+                ->addReceiverCc($receiverCopy, MessageRelUser::TYPE_CC)
         ;
 
         $this->assertHasNoEntityViolations($message);
@@ -659,7 +659,7 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setContent('content')
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
-            ->addReceiver($testUser)
+            ->addReceiverTo($testUser)
         ;
 
         $this->assertHasNoEntityViolations($message);

@@ -27,15 +27,40 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], normalizationContext: ['groups' => ['message:read']], denormalizationContext: ['groups' => ['message:write']], security: 'is_granted(\'ROLE_USER\')')]
 #[ORM\Table(name: 'message')]
 #[ORM\Index(columns: ['user_sender_id'], name: 'idx_message_user_sender')]
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ORM\EntityListeners([MessageListener::class])]
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
+    ],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['message:write'],
+    ],
+    security: "is_granted('ROLE_USER')"
+)]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['msgType' => 'exact', 'status' => 'exact', 'sender' => 'exact', 'receivers.receiver' => 'exact', 'receivers.tags.tag' => 'exact', 'parent' => 'exact'])]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: [
+        'msgType' => 'exact',
+        'status' => 'exact',
+        'sender' => 'exact',
+        'receivers.receiver' => 'exact',
+        'receivers.tags.tag' => 'exact',
+        'parent' => 'exact',
+    ]
+)]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -60,22 +85,12 @@ class Message
     #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
     protected User $sender;
     /**
-     * @var Collection|MessageRelUser[]
+     * @var Collection<int, MessageRelUser>
      */
-    #[Assert\Valid]
-    #[Groups(['message:read', 'message:write'])]
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageRelUser::class, cascade: ['persist', 'remove'])]
-    protected array|null|Collection $receivers;
-    /**
-     * @var Collection|MessageRelUser[]
-     */
-    #[Groups(['message:read', 'message:write'])]
-    protected array|null|Collection $receiversTo;
-    /**
-     * @var Collection|MessageRelUser[]
-     */
-    #[Groups(['message:read', 'message:write'])]
-    protected array|null|Collection $receiversCc;
+    #[Groups(['message:write'])]
+    protected Collection $receivers;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'msg_type', type: 'smallint', nullable: false)]
@@ -95,8 +110,7 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
-    #[Groups(['message:read', 'message:write'])]
-    protected ?MessageRelUser $firstReceiver = null;
+
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;
@@ -133,56 +147,44 @@ class Message
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->receivers = new ArrayCollection();
-        $this->receiversCc = new ArrayCollection();
-        $this->receiversTo = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }
+
     /**
-     * @return null|Collection|MessageRelUser[]
+     * @return Collection<int, MessageRelUser>
      */
-    public function getReceivers(): null|Collection|array
+    public function getReceivers(): Collection
     {
         return $this->receivers;
     }
-    /**
-     * @return MessageRelUser[]
-     */
-    public function getReceiversTo(): array
-    {
-        /*return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
-              return MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType();
-          });*/
-        $list = [];
-        foreach ($this->receivers as $receiver) {
-            if (MessageRelUser::TYPE_TO === $receiver->getReceiverType()) {
-                $list[] = $receiver;
-            }
-        }
 
-        return $list;
-    }
     /**
-     * @return array<int, MessageRelUser>
+     * @return Collection<int, MessageRelUser>
      */
-    public function getReceiversCc(): array
+    #[Groups(['message:read'])]
+    public function getReceiversTo(): Collection
     {
-        $list = [];
-        foreach ($this->receivers as $receiver) {
-            if (MessageRelUser::TYPE_CC === $receiver->getReceiverType()) {
-                $list[] = $receiver;
-            }
-        }
-        /*
-        For some reason this doesn't work, api platform returns an obj instead a collection.
-        $result = $this->receivers->filter(function (MessageRelUser $messageRelUser) {
-            error_log((string)$messageRelUser->getId());
-            return MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType();
-        });
-        */
-        return $list;
+        return $this->receivers
+            ->filter(
+                fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
+            );
     }
+
+    /**
+     * @return Collection<int, MessageRelUser>
+     */
+    #[Groups(['message:read'])]
+    public function getReceiversCc(): Collection
+    {
+        return $this->receivers
+            ->filter(
+                fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
+            );
+    }
+
+    #[Groups(['message:read'])]
     public function getFirstReceiver(): ?MessageRelUser
     {
         if ($this->receivers->count() > 0) {
@@ -191,109 +193,153 @@ class Message
 
         return null;
     }
-    public function hasReceiver(User $receiver): bool
+
+    public function hasUserReceiver(User $receiver): bool
     {
         if ($this->receivers->count()) {
-            $criteria = Criteria::create()->where(Criteria::expr()->eq('receiver', $receiver))->andWhere(Criteria::expr()->eq('message', $this));
+            $criteria = Criteria::create()
+                ->where(
+                    Criteria::expr()->eq('receiver', $receiver)
+                )
+                ->andWhere(
+                    Criteria::expr()->eq('message', $this)
+                );
 
             return $this->receivers->matching($criteria)->count() > 0;
         }
 
         return false;
     }
-    public function addReceiver(User $receiver, int $receiverType = MessageRelUser::TYPE_TO): self
+
+    public function addReceiverTo(User $receiver): self
     {
-        $messageRelUser = (new MessageRelUser())->setReceiver($receiver)->setReceiverType($receiverType)->setMessage($this);
+        $messageRelUser = (new MessageRelUser())
+            ->setReceiver($receiver)
+            ->setReceiverType(MessageRelUser::TYPE_TO);
+
+        $this->addReceiver($messageRelUser);
+
+        return $this;
+    }
+
+    public function addReceiver(MessageRelUser $messageRelUser): self
+    {
         if (!$this->receivers->contains($messageRelUser)) {
             $this->receivers->add($messageRelUser);
+
+            $messageRelUser->setMessage($this);
         }
 
         return $this;
     }
-    public function setReceivers(Collection|MessageRelUser $receivers): self
+
+    public function addReceiverCc(User $receiver): self
     {
-        /** @var MessageRelUser $receiver */
-        foreach ($receivers as $receiver) {
-            $receiver->setMessage($this);
-        }
-        $this->receivers = $receivers;
+        $messageRelUser = (new MessageRelUser())
+            ->setReceiver($receiver)
+            ->setReceiverType(MessageRelUser::TYPE_CC);
+
+        $this->addReceiver($messageRelUser);
 
         return $this;
     }
+
+    public function removeReceiver(MessageRelUser $messageRelUser): self
+    {
+        $this->receivers->removeElement($messageRelUser);
+
+        return $this;
+    }
+
+    public function getSender(): User
+    {
+        return $this->sender;
+    }
+
     public function setSender(User $sender): self
     {
         $this->sender = $sender;
 
         return $this;
     }
-    public function getSender(): User
+
+    public function getMsgType(): int
     {
-        return $this->sender;
+        return $this->msgType;
     }
+
     public function setMsgType(int $msgType): self
     {
         $this->msgType = $msgType;
 
         return $this;
     }
-    public function getMsgType(): int
+
+    public function getSendDate(): DateTime
     {
-        return $this->msgType;
+        return $this->sendDate;
     }
+
     public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
 
         return $this;
     }
-    public function getSendDate(): DateTime
+
+    public function getTitle(): string
     {
-        return $this->sendDate;
+        return $this->title;
     }
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
-    public function getTitle(): string
+
+    public function getContent(): string
     {
-        return $this->title;
+        return $this->content;
     }
+
     public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
-    public function getContent(): string
+
+    public function getUpdateDate(): ?DateTime
     {
-        return $this->content;
+        return $this->updateDate;
     }
+
     public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
 
         return $this;
     }
-    public function getUpdateDate(): ?DateTime
-    {
-        return $this->updateDate;
-    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
+    public function getVotes(): int
+    {
+        return $this->votes;
+    }
+
     public function setVotes(int $votes): self
     {
         $this->votes = $votes;
 
         return $this;
     }
-    public function getVotes(): int
-    {
-        return $this->votes;
-    }
+
     /**
      * @return Collection<int, MessageAttachment>
      */
@@ -301,6 +347,7 @@ class Message
     {
         return $this->attachments;
     }
+
     public function addAttachment(MessageAttachment $attachment): self
     {
         $this->attachments->add($attachment);
@@ -308,10 +355,19 @@ class Message
 
         return $this;
     }
+
     public function getParent(): ?self
     {
         return $this->parent;
     }
+
+    public function setParent(self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Message>
      */
@@ -319,6 +375,7 @@ class Message
     {
         return $this->children;
     }
+
     public function addChild(self $child): self
     {
         $this->children[] = $child;
@@ -326,16 +383,12 @@ class Message
 
         return $this;
     }
-    public function setParent(self $parent = null): self
-    {
-        $this->parent = $parent;
 
-        return $this;
-    }
     public function getGroup(): ?Usergroup
     {
         return $this->group;
     }
+
     public function setGroup(?Usergroup $group): self
     {
         //        $this->msgType = self::MESSAGE_TYPE_GROUP;
@@ -343,10 +396,12 @@ class Message
 
         return $this;
     }
+
     public function getStatus(): int
     {
         return $this->status;
     }
+
     public function setStatus(int $status): self
     {
         $this->status = $status;

@@ -287,7 +287,7 @@ class MessageManager
 
                 $message = (new Message())
                     ->setSender($userSender)
-                    ->addReceiver($userRecipient)
+                    ->addReceiverTo($userRecipient)
                     ->setTitle($subject)
                     ->setContent($content)
                     ->setGroup($group)

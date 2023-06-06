@@ -52,7 +52,7 @@ class SkillRelUserListener
                 $message = (new Message())
                     ->setTitle($this->translator->trans('You have achieved a new skill.'))
                     ->setContent($message)
-                    ->addReceiver($user)
+                    ->addReceiverTo($user)
                     ->setSender($currentUser)
                 ;
 

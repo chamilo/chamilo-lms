@@ -13,7 +13,7 @@ export default {
     {
       name: 'MessageCreate',
       path: 'new',
-      component: () => import('../views/message/Create.vue')
+      component: () => import('../views/message/MessageCreate.vue')
     },
     {
       name: 'MessageReply',

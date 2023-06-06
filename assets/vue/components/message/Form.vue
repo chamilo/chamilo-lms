@@ -1,68 +1,53 @@
 <template>
-  <q-form>
-    <v-container>
-      <v-row>
-        <v-col md="9">
-          <q-input
-            id="item_title"
-            v-model="item.title"
-            :error="v$.item.title.$error"
-            :error-message="titleErrors"
-            :placeholder="$t('Title')"
-            @blur="v$.item.title.$touch()"
-            @input="v$.item.title.$touch()"
-          />
-          <slot></slot>
-        </v-col>
-        <v-col md="3">
-          <div
-            v-if="item.attachments && item.attachments.length > 0"
-          >
-            <div
-              class="text-h6"
-              v-text="$t('Attachments')"
-            />
-            <ul>
-              <li
-                v-for="(attachment, index) in item.attachments"
-                :key="index"
-                class="my-2"
-              >
-                <audio
-                  v-if="attachment.type.indexOf('audio') === 0"
-                  class="max-w-full"
-                  controls
-                >
-                  <source
-                    :src="URL.createObjectURL(attachment)"
-                  >
-                </audio>
-              </li>
-            </ul>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="col-span-2">
+      <BaseInputText
+        id="item_title"
+        v-model:help-text="v$.item.title.required.$message"
+        v-model:is-invalid="v$.item.title.$invalid"
+        v-model:value="v$.item.title.$model"
+        :label="t('Title')"
+      />
 
-            <hr class="my-2">
-          </div>
+      <slot></slot>
+    </div>
 
-          <AudioRecorder
-            @attach-audio="attachAudios"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
-  </q-form>
+    <div>
+      <div v-if="attachments && attachments.length > 0">
+        <div v-t="'Attachments'" class="text-h6" />
+
+        <ul>
+          <li v-for="(attachment, index) in attachments" :key="index" class="my-2">
+            <audio v-if="attachment.type.indexOf('audio') === 0" class="max-w-full" controls>
+              <source :src="URL.createObjectURL(attachment)" />
+            </audio>
+          </li>
+        </ul>
+
+        <hr />
+      </div>
+
+      <AudioRecorder @attach-audio="attachAudios" />
+    </div>
+  </div>
 </template>
 
 <script>
-import has from 'lodash/has';
-import useVuelidate from '@vuelidate/core';
-import {required} from '@vuelidate/validators';
+import has from "lodash/has";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import AudioRecorder from "../AudioRecorder";
+import BaseInputText from "../basecomponents/BaseInputText.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: 'MessageForm',
-  components: {AudioRecorder},
+  components: { AudioRecorder, BaseInputText },
+  emits: ['update:attachments'],
   setup() {
-    return {v$: useVuelidate(), URL}
+    const { t } = useI18n();
+
+    return { v$: useVuelidate(), URL, t };
   },
   props: {
     values: {
@@ -79,6 +64,11 @@ export default {
       default: () => {
       }
     },
+    attachments: {
+      type: Array,
+      required: false,
+      default: () => [],
+    }
   },
   data() {
     return {
@@ -121,11 +111,7 @@ export default {
   },
   methods: {
     attachAudios(audio) {
-      if (!this.item.attachments) {
-        this.item.attachments = [];
-      }
-
-      this.item.attachments.push(audio);
+      this.$emit('update:attachments', [...this.attachments, audio]);
     }
   },
   validations: {

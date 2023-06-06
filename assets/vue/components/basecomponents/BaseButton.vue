@@ -98,6 +98,9 @@ const buttonClass = computed(() => {
     case "danger":
       result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
       break;
+    case "black":
+      result += "bg-white text-black hover:bg-gray-90 hover:text-white ";
+      break;
   }
   return result;
 });

@@ -76,7 +76,7 @@ class MessageVoter extends Voter
 
                 break;
             case self::VIEW:
-                if ($message->hasReceiver($user) || $message->getSender() === $user) {
+                if ($message->hasUserReceiver($user) || $message->getSender() === $user) {
                     return true;
                 }
 

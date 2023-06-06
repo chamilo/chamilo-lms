@@ -592,12 +592,13 @@ function showRecordAudioDialog() {
 }
 
 function recordedAudioSaved() {
-  // TODO show a notification about upload success
+  notification.showSuccessNotification(t('Saved'))
   isRecordAudioDialogVisible.value = false
   onUpdateOptions(options.value)
 }
 
-function recordedAudioNotSaved() {
-  // TODO show a notification about upload failure
+function recordedAudioNotSaved(error) {
+  notification.showErrorNotification(t('Document not saved'))
+  console.error(error)
 }
 </script>

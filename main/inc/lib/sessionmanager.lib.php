@@ -4300,7 +4300,7 @@ class SessionManager
         $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $selectedField = '
-            u.user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
+            u.id as user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
             su.moved_to, su.moved_status, su.moved_at, su.registered_at
         ';
 

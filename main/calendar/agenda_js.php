@@ -101,7 +101,7 @@ switch ($type) {
             $tpl->assign('google_calendar_url', $googleCalendarUrl);
         }
         $this_section = SECTION_MYAGENDA;
-        if (!api_is_anonymous()) {
+        if (!api_is_anonymous() && ('true' === api_get_setting('allow_personal_agenda'))) {
             $can_add_events = 1;
         }
         break;

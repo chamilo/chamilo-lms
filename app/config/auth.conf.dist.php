@@ -117,7 +117,7 @@ $extldap_user_correspondance = array(
     'password' => 'userPassword',
     'status' => '!5', // Forcing status to 5; To change this set 'status' => 'func' and implement an extldap_get_status($ldap_array) function
     'active' => '!1', // Forcing active to 1; To change this set 'status' => 'func' and implement an extldap_get_active($ldap_array) function
-    'admin' => 'func' // Using the extldap_get_admin() function to check if user is an administrator based on some ldap user record value
+    'admin' => 'func' // Using the extldap_get_admin() function (defined in main/auth/external_login/ldap.inc.php) to check if user is an administrator based on some ldap user record value
     /* Extras example
     'extra' => array(
         'title' => 'title',
@@ -135,14 +135,6 @@ if (!empty($ldapUserCorrespondance)) {
 }
 
 /**
- * Example method to get whether the user is an admin or not. Please implement your logic inside.
- */
-function extldap_get_admin($ldap_array)
-{
-    return 0; // By default users comming from ldap are not Administrators
-}
-
-/**
  * OpenID
  */
 
@@ -155,8 +147,8 @@ $langMainInfoDetail .= '<p>More information on OpenID is available at <a href="h
  * CAS
  */
 $cas = [
-    'service_base_url' => '', //The base url of your service required by phpCAS since compliance with 
-    //https://github.com/advisories/GHSA-8q72-6qq8-xv64 in version 1.6 
+    'service_base_url' => '', //The base url of your service required by phpCAS since compliance with
+    //https://github.com/advisories/GHSA-8q72-6qq8-xv64 in version 1.6
     //with this https://github.com/apereo/phpCAS/commit/b759361d904a2cb2a3bcee9411fc348cfde5d163
     //It should be the URL of you Chamilo or an array of all the URLs in case of a multiURL installation including https and / at the end
     'force_redirect' => false,

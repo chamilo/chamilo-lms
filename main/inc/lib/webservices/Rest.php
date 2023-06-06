@@ -1639,8 +1639,9 @@ class Rest extends WebService
      * return all the courses.
      *
      * @param int $campusId
+     * @return array
      */
-    public function getCoursesCampus($campusId = null): array
+    public function getCoursesCampus(int $campusId = 0): array
     {
         return CourseManager::get_courses_list(
             0, //offset
@@ -1658,9 +1659,11 @@ class Rest extends WebService
      * Returns a list of sessions in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
      * return all the sessions.
      *
-     * @param int $campusId
+     * @param int $campusId Optional
+     * @return array
+     * @throws Exception
      */
-    public function getSessionsCampus(int $campusId = null): array
+    public function getSessionsCampus(int $campusId = 0): array
     {
         self::protectAdminEndpoint();
 

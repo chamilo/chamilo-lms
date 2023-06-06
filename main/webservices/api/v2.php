@@ -751,6 +751,15 @@ try {
             $users = $restApi->getUsersSubscribedToCourse();
             $restResponse->setData($users);
             break;
+        case Rest::GET_SESSIONS:
+            $campusId = api_get_current_access_url_id();
+            if (!empty($_POST['id_campus'])) {
+                $campusId = (int) $_POST['id_campus'];
+            }
+            Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
+            $data = $restApi->getSessionsCampus($campusId);
+            $restResponse->setData($data);
+            break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
             Event::addEvent(
@@ -761,7 +770,17 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::ADD_USERS_SESSION:
+        case Rest::SUBSCRIBE_USERS_TO_SESSION:
             $data = $restApi->addUsersSession($_POST);
+            Event::addEvent(
+                LOG_WS.$action,
+                'session_id-users_ids',
+                (int) $_POST['id_session'].':'.implode(',', $_POST['list_users'])
+            );
+            $restResponse->setData($data);
+            break;
+        case Rest::UNSUBSCRIBE_USERS_FROM_SESSION:
+            $data = $restApi->unsubscribeUsersFromSession($_POST);
             Event::addEvent(
                 LOG_WS.$action,
                 'session_id-users_ids',
@@ -780,6 +799,11 @@ try {
                 (int) $_POST['sessionId'].':'.Database::escape_string($_POST['loginname'])
             );
             $restResponse->setData([$subscribed]);
+            break;
+        case Rest::GET_USERS_SUBSCRIBED_TO_SESSION:
+            Event::addEvent(LOG_WS.$action, 'session_id', (int) $_POST['id_session']);
+            $users = $restApi->getUsersSubscribedToSession($_POST['id_session'], $_POST['move_info']);
+            $restResponse->setData($users);
             break;
         case Rest::GET_COURSE_QUIZ_MDL_COMPAT:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);

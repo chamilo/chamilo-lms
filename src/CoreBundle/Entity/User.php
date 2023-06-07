@@ -397,9 +397,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups(['user:write'])]
     protected ?AccessUrl $currentUrl = null;
     /**
-     * @var Collection<int, MessageTag>|MessageTag[]
+     * @var Collection<int, MessageTag>
      */
-    #[ORM\OneToMany(targetEntity: MessageTag::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: MessageTag::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     protected Collection $messageTags;
     /**
      * @var Collection<int, Message>|Message[]

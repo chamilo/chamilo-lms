@@ -63,11 +63,14 @@ class SkillProfile extends Model
         $name = Database::escape_string($name);
         $description = Database::escape_string($description);
 
-        $sql = "UPDATE $this->table SET
-                    name = '$name',
-                    description = '$description'
-                WHERE id = $profileId ";
-        Database::query($sql);
+        Database::update(
+            $this->table,
+            [
+                'name' => html_filter($name),
+                'description' => html_filter($description),
+            ],
+            ['id = ?' => $profileId]
+        );
 
         return true;
     }
@@ -83,6 +86,9 @@ class SkillProfile extends Model
     public function save($params, $show_query = false)
     {
         if (!empty($params)) {
+            $params['name'] = html_filter($params['name']);
+            $params['description'] = html_filter($params['description']);
+
             $profile_id = parent::save($params, $show_query);
             if ($profile_id) {
                 $skill_rel_profile = new SkillRelProfile();

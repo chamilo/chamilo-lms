@@ -39,7 +39,10 @@ module.exports = {
         6: "#faf7f5",
       },
       warning: "#f5ce01",
-      success: "#77aa0c",
+      success: {
+        DEFAULT: "#77aa0c",
+        gradient: "#547708",
+      },
       error: "#df3b3b",
       info: "#0d7bfd",
 

@@ -1,7 +1,13 @@
 <template>
   <div class="field">
     <div class="p-float-label">
-      <InputText :id="id" v-model="baseModel" :class="{ 'p-invalid': isInvalid }" type="text" />
+      <InputText
+        :id="id"
+        :model-value="modelValue"
+        :class="{ 'p-invalid': isInvalid }"
+        type="text"
+        @update:model-value="$emit('update:modelValue', $event)"
+      />
       <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
     </div>
     <small v-if="isInvalid" v-t="helpText" class="p-error" />
@@ -9,7 +15,6 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
 import InputText from "primevue/inputtext";
 
 defineProps({
@@ -23,10 +28,9 @@ defineProps({
     required: true,
     default: "",
   },
-  value: {
-    type: Object,
-    require: true,
-    default: null,
+  modelValue: {
+    type: String,
+    required: true,
   },
   helpText: {
     type: String,
@@ -40,9 +44,5 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:value"]);
-
-const baseModel = ref(null);
-
-watch(baseModel, (newValue) => emit("update:value", newValue));
+defineEmits(["update:modelValue"]);
 </script>

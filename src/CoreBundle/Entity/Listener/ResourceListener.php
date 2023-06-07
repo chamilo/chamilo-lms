@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceFormat;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
@@ -198,6 +199,28 @@ class ResourceListener
             ->setResourceType($resourceType)
             ->setParent($parentNode)
         ;
+
+        // Set ResourceFormat.
+        $txtTypes = [
+            'events',
+            'event_attachments',
+            'illustrations',
+            'links',
+            'files',
+            'courses',
+            'users',
+            'external_tools',
+            'usergroups',
+        ];
+        $resourceFormatRepo = $em->getRepository(ResourceFormat::class);
+        $formatName = (in_array($name, $txtTypes) ? 'txt' : 'html');
+        $resourceFormat = $resourceFormatRepo->findOneBy([
+            'name' => $formatName,
+        ]);
+        if ($resourceFormat) {
+            $resourceNode->setResourceFormat($resourceFormat);
+        }
+
         $resource->setResourceNode($resourceNode);
 
         // Update resourceNode title from Resource.

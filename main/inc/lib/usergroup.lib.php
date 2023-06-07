@@ -1966,10 +1966,7 @@ class UserGroup extends Model
         $form->addHeader($header);
 
         // Name
-        $form->addElement('text', 'name', get_lang('Name'), ['maxlength' => 255]);
-        $form->applyFilter('name', 'trim');
-
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addText('name', get_lang('Name'), true, ['maxlength' => 255]);
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
@@ -1986,13 +1983,12 @@ class UserGroup extends Model
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('Url'));
-        $form->applyFilter('url', 'trim');
+        $form->addText('url', get_lang('Url'), false);
 
         // Picture
         $allowed_picture_types = $this->getAllowedPictureExtensions();
 
-        $form->addElement('file', 'picture', get_lang('AddPicture'));
+        $form->addFile('picture', get_lang('AddPicture'));
         $form->addRule(
             'picture',
             get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
@@ -2003,7 +1999,7 @@ class UserGroup extends Model
         if (isset($data['picture']) && strlen($data['picture']) > 0) {
             $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
             $img = '<img src="'.$picture['file'].'" />';
-            $form->addElement('label', null, $img);
+            $form->addLabel(null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
         }
 

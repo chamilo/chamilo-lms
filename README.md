@@ -97,9 +97,10 @@ yarn dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.
 
-Some times there are conflicts with existing files so to avoid those here are some hints/
+Some times there are conflicts with existing files so to avoid those here are some hints :
 - for composer errors you can remove the vendor folder and composer.lock file
 - for yarn erros you can remove yarn.lock .yarn/cache/* node_modules/*
+- when opening Chamilo, it does not load, then you can delete var/cache/*
 
 ### Refresh configuration settings
 

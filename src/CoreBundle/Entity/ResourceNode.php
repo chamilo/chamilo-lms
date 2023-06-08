@@ -93,7 +93,7 @@ class ResourceNode implements Stringable
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
     protected ResourceType $resourceType;
 
-    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ["persist", "remove"], inversedBy: "resourceNode")]
+    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ["persist", "remove"], inversedBy: "resourceNodes")]
     #[ORM\JoinColumn(name: "resource_format_id", referencedColumnName: "id")]
     protected ResourceFormat $resourceFormat;
 

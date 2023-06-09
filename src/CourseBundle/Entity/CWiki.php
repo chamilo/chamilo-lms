@@ -110,14 +110,13 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     protected ?int $sessionId = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy="wikiPages")
-     * @ORM\JoinTable(
-     *     name="c_wiki_rel_category",
-     *     joinColumns={@ORM\JoinColumn(name="wiki_id", referencedColumnName="iid", onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
+     * @var Collection<int, CWikiCategory>
      */
-    private $categories;
+    #[ORM\ManyToMany(targetEntity: CWikiCategory::class, inversedBy: "wikiPages")]
+    #[ORM\JoinTable(name: 'c_wiki_rel_category')]
+    #[ORM\JoinColumn(name: 'wiki_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private Collection $categories;
 
     public function __toString(): string
     {

@@ -67,6 +67,7 @@
         "graphp/algorithms": "~0.8.0",
         "graphp/graphviz": "~0.2.0",
         "guzzlehttp/guzzle": "~6.0",
+        "h5p/h5p-core": "*",
         "imagine/imagine": "0.6.3",
         "ircmaxell/password-compat": "~1.0.4",
         "jbroadway/urlify": "1.1.0-stable",

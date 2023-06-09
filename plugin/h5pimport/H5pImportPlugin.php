@@ -63,7 +63,6 @@ class H5pImportPlugin extends Plugin
             ]
         );
     }
-
     public function uninstall()
     {
         $settings = [
@@ -90,7 +89,6 @@ class H5pImportPlugin extends Plugin
             ]
         );
     }
-
     public function performActionsAfterConfigure(): H5pImportPlugin
     {
         $em = Database::getManager();
@@ -108,10 +106,9 @@ class H5pImportPlugin extends Plugin
 
         return $this;
     }
-
-    public function getViewUrl(H5pImport $h5pImport)
+    public function getViewUrl(H5pImport $h5pImport): string
     {
-        return api_get_path(WEB_PLUGIN_PATH).'embedregistry/view.php?id='.$h5pImport->getId().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'view.php?id='.$h5pImport->getId().'&'.api_get_cidreq();
     }
     private function deleteCourseToolLinks()
     {

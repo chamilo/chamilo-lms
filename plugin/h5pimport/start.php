@@ -3,6 +3,7 @@
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageImporter;
+use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -43,13 +44,17 @@ switch ($action) {
             api_get_self()
         );
 
+        // Set the max upload size in php.ini in the file uploader
+        $maxFileSize = getIniMaxFileSizeInBytes();
         $form = new FormValidator('frm_edit');
-//        $form->addText(
-//            'title',
-//            [get_lang('Title'), $plugin->get_lang('EmbedTitleHelp')],
-//            true
-//        );
         $form->addFile('file', $plugin->get_lang('h5p_package'), ['accept' => '.h5p']);
+        $form->addRule(
+            'file',
+            'The file size cannot exceed: '.$maxFileSize.' bytes',
+            'maxfilesize',
+            $maxFileSize,
+            'client'
+        );
 
         $form->addButtonUpdate(get_lang('Add'));
         $form->addHidden('action', 'add');
@@ -62,16 +67,39 @@ switch ($action) {
             try {
                 $importer = H5pPackageImporter::create($zipFileInfo, $course);
                 $packageFile = $importer->import();
-                print("<pre>".print_r('$importer',true)."</pre>");
-                die();
 
-                $parser = PackageParser::create(
-                    $importer->getPackageType(),
-                    $packageFile,
-                    $course,
-                    $session
+                // Get the h5p.json and content.json contents
+                $h5pJson  = H5pPackageTools::getJson($packageFile.DIRECTORY_SEPARATOR.'h5p.json');
+                $contentJson = H5pPackageTools::getJson(
+                    $packageFile.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'content.json'
                 );
-                $toolLaunch = $parser->parse();
+                if ($h5pJson && $contentJson) {
+                    print("<pre>".print_r($contentJson,true)."</pre>");
+                    die();
+                    // ToDo Manipular archivos descomprimidos, validar h5p.json, insertar en BBDD
+
+                    $h5p = new H5pImport();
+
+                    $h5p
+                        ->setTitle($values['title'])
+                        ->setDisplayStartDate($startDate)
+                        ->setDisplayEndDate($endDate)
+                        ->setCourse($course)
+                        ->setSession($session);
+
+                    $em->persist($h5p);
+                    $em->flush();
+
+                    Display::addFlash(
+                        Display::return_message(get_lang('Added'), 'success')
+                    );
+
+                    header('Location: '.api_get_self());
+
+                }
+
+                exit;
+
             } catch (Exception $e) {
                 Display::addFlash(
                     Display::return_message($e->getMessage(), 'error')
@@ -81,27 +109,6 @@ switch ($action) {
                 exit;
             }
 
-
-
-
-            $embed = new H5pImport();
-            $embed
-                ->setTitle($values['title'])
-                ->setDisplayStartDate($startDate)
-                ->setDisplayEndDate($endDate)
-                ->setHtmlCode($values['html_code'])
-                ->setCourse($course)
-                ->setSession($session);
-
-            $em->persist($embed);
-            $em->flush();
-
-            Display::addFlash(
-                Display::return_message(get_lang('Added'), 'success')
-            );
-
-            header('Location: '.api_get_self());
-            exit;
         }
 
         $view->assign('header', $plugin->get_lang('import_h5p_package'));

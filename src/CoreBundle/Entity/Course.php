@@ -131,17 +131,6 @@ class Course extends AbstractResource implements
     protected Collection $users;
 
     /**
-     * @var Collection<int, CourseRelUser>
-     *
-     * "orphanRemoval" is needed to delete the CourseRelUser relation
-     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
-     * addUsers methods need to be added.
-     */
-    #[Groups(['course:read', 'user:read'])]
-    #[ORM\OneToMany(mappedBy: 'course', targetEntity: CourseRelUser::class, cascade: ['persist'])]
-    protected Collection $teachers;
-
-    /**
      * @var Collection<int, EntityAccessUrlInterface>
      */
     #[ORM\OneToMany(
@@ -555,6 +544,7 @@ class Course extends AbstractResource implements
     /**
      * @return Collection<int, CourseRelUser>
      */
+    #[Groups(['course:read', 'user:read'])]
     public function getTeachers(): Collection
     {
         $criteria = Criteria::create();

@@ -87,33 +87,43 @@ class CourseRelUser implements Stringable
     //public const SESSION_ADMIN = 3;
     //public const DRH = 4;
     public const STUDENT = 5;
+
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[MaxDepth(1)]
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
+
     #[Groups(['user:read'])]
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
+
     #[Groups(['course:read', 'user:read'])]
     #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;
+
     #[Groups(['user:read'])]
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
+
     #[ORM\Column(name: 'is_tutor', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $tutor;
+
     #[ORM\Column(name: 'sort', type: 'integer', nullable: true, unique: false)]
     protected ?int $sort;
+
     #[ORM\Column(name: 'user_course_cat', type: 'integer', nullable: true, unique: false)]
     protected ?int $userCourseCat;
+
     #[ORM\Column(name: 'legal_agreement', type: 'integer', nullable: true, unique: false)]
     protected ?int $legalAgreement = null;
+
     #[Groups(['course:read', 'user:read'])]
     #[Assert\Range(min: 0, max: 100, notInRangeMessage: 'Progress from {{ min }} to {{ max }} only')]
     #[ORM\Column(name: 'progress', type: 'integer')]

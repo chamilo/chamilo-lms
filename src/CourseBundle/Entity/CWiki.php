@@ -8,21 +8,20 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * CWiki.
- */
 #[ORM\Table(name: 'c_wiki', options: ['row_format' => 'DYNAMIC'])]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Index(name: 'reflink', columns: ['reflink'])]
-#[ORM\Index(name: 'group_id', columns: ['group_id'])]
-#[ORM\Index(name: 'page_id', columns: ['page_id'])]
-#[ORM\Index(name: 'session_id', columns: ['session_id'])]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CWikiRepository::class)]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
+#[ORM\Index(columns: ['reflink'], name: 'reflink')]
+#[ORM\Index(columns: ['group_id'], name: 'group_id')]
+#[ORM\Index(columns: ['page_id'], name: 'page_id')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id')]
+#[ORM\Entity(repositoryClass: CWikiRepository::class)]
 class CWiki extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -125,572 +124,312 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
         return $this->getTitle();
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set title.
-     *
-     * @return CWiki
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get pageId.
-     *
-     * @return int
-     */
-    public function getPageId()
+    public function getPageId(): ?int
     {
         return $this->pageId;
     }
 
-    /**
-     * Set pageId.
-     *
-     * @return CWiki
-     */
-    public function setPageId(int $pageId)
+    public function setPageId(int $pageId): static
     {
         $this->pageId = $pageId;
 
         return $this;
     }
 
-    /**
-     * Get reflink.
-     *
-     * @return string
-     */
-    public function getReflink()
+    public function getReflink(): string
     {
         return $this->reflink;
     }
 
-    /**
-     * Set reflink.
-     *
-     * @return CWiki
-     */
-    public function setReflink(string $reflink)
+    public function setReflink(string $reflink): static
     {
         $this->reflink = $reflink;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * Set content.
-     *
-     * @return CWiki
-     */
-    public function setContent(string $content)
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    /**
-     * Set userId.
-     *
-     * @return CWiki
-     */
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
+    public function getGroupId(): ?int
     {
         return $this->groupId;
     }
 
-    /**
-     * Set groupId.
-     *
-     * @return CWiki
-     */
-    public function setGroupId(int $groupId)
+    public function setGroupId(int $groupId): static
     {
         $this->groupId = $groupId;
 
         return $this;
     }
 
-    /**
-     * Get dtime.
-     *
-     * @return DateTime
-     */
-    public function getDtime()
+    public function getDtime(): ?DateTime
     {
         return $this->dtime;
     }
 
-    /**
-     * Set dtime.
-     *
-     * @return CWiki
-     */
-    public function setDtime(DateTime $dtime)
+    public function setDtime(DateTime $dtime): static
     {
         $this->dtime = $dtime;
 
         return $this;
     }
 
-    /**
-     * Get addlock.
-     *
-     * @return int
-     */
-    public function getAddlock()
+    public function getAddlock(): int
     {
         return $this->addlock;
     }
 
-    /**
-     * Set addlock.
-     *
-     * @return CWiki
-     */
-    public function setAddlock(int $addlock)
+    public function setAddlock(int $addlock): static
     {
         $this->addlock = $addlock;
 
         return $this;
     }
 
-    /**
-     * Get editlock.
-     *
-     * @return int
-     */
-    public function getEditlock()
+    public function getEditlock(): int
     {
         return $this->editlock;
     }
 
-    /**
-     * Set editlock.
-     *
-     * @return CWiki
-     */
-    public function setEditlock(int $editlock)
+    public function setEditlock(int $editlock): static
     {
         $this->editlock = $editlock;
 
         return $this;
     }
 
-    /**
-     * Get visibility.
-     *
-     * @return int
-     */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * Set visibility.
-     *
-     * @return CWiki
-     */
-    public function setVisibility(int $visibility)
+    public function setVisibility(int $visibility): static
     {
         $this->visibility = $visibility;
 
         return $this;
     }
 
-    /**
-     * Get addlockDisc.
-     *
-     * @return int
-     */
-    public function getAddlockDisc()
+    public function getAddlockDisc(): int
     {
         return $this->addlockDisc;
     }
 
-    /**
-     * Set addlockDisc.
-     *
-     * @return CWiki
-     */
-    public function setAddlockDisc(int $addlockDisc)
+    public function setAddlockDisc(int $addlockDisc): static
     {
         $this->addlockDisc = $addlockDisc;
 
         return $this;
     }
 
-    /**
-     * Get visibilityDisc.
-     *
-     * @return int
-     */
-    public function getVisibilityDisc()
+    public function getVisibilityDisc(): int
     {
         return $this->visibilityDisc;
     }
 
-    /**
-     * Set visibilityDisc.
-     *
-     * @return CWiki
-     */
-    public function setVisibilityDisc(int $visibilityDisc)
+    public function setVisibilityDisc(int $visibilityDisc): static
     {
         $this->visibilityDisc = $visibilityDisc;
 
         return $this;
     }
 
-    /**
-     * Get ratinglockDisc.
-     *
-     * @return int
-     */
-    public function getRatinglockDisc()
+    public function getRatinglockDisc(): int
     {
         return $this->ratinglockDisc;
     }
 
-    /**
-     * Set ratinglockDisc.
-     *
-     * @return CWiki
-     */
-    public function setRatinglockDisc(int $ratinglockDisc)
+    public function setRatinglockDisc(int $ratinglockDisc): static
     {
         $this->ratinglockDisc = $ratinglockDisc;
 
         return $this;
     }
 
-    /**
-     * Get assignment.
-     *
-     * @return int
-     */
-    public function getAssignment()
+    public function getAssignment(): int
     {
         return $this->assignment;
     }
 
-    /**
-     * Set assignment.
-     *
-     * @return CWiki
-     */
-    public function setAssignment(int $assignment)
+    public function setAssignment(int $assignment): static
     {
         $this->assignment = $assignment;
 
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): string
     {
         return $this->comment;
     }
 
-    /**
-     * Set comment.
-     *
-     * @return CWiki
-     */
-    public function setComment(string $comment)
+    public function setComment(string $comment): static
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * Get progress.
-     *
-     * @return string
-     */
-    public function getProgress()
+    public function getProgress(): string
     {
         return $this->progress;
     }
 
-    /**
-     * Set progress.
-     *
-     * @return CWiki
-     */
-    public function setProgress(string $progress)
+    public function setProgress(string $progress): static
     {
         $this->progress = $progress;
 
         return $this;
     }
 
-    /**
-     * Get score.
-     *
-     * @return int
-     */
-    public function getScore()
+    public function getScore(): ?int
     {
         return $this->score;
     }
 
-    /**
-     * Set score.
-     *
-     * @return CWiki
-     */
-    public function setScore(int $score)
+    public function setScore(int $score): static
     {
         $this->score = $score;
 
         return $this;
     }
 
-    /**
-     * Get version.
-     *
-     * @return int
-     */
-    public function getVersion()
+    public function getVersion(): ?int
     {
         return $this->version;
     }
 
-    /**
-     * Set version.
-     *
-     * @return CWiki
-     */
-    public function setVersion(int $version)
+    public function setVersion(int $version): static
     {
         $this->version = $version;
 
         return $this;
     }
 
-    /**
-     * Get isEditing.
-     *
-     * @return int
-     */
-    public function getIsEditing()
+    public function getIsEditing(): int
     {
         return $this->isEditing;
     }
 
-    /**
-     * Set isEditing.
-     *
-     * @return CWiki
-     */
-    public function setIsEditing(int $isEditing)
+    public function setIsEditing(int $isEditing): static
     {
         $this->isEditing = $isEditing;
 
         return $this;
     }
 
-    /**
-     * Get timeEdit.
-     *
-     * @return DateTime
-     */
-    public function getTimeEdit()
+    public function getTimeEdit(): ?DateTime
     {
         return $this->timeEdit;
     }
 
-    /**
-     * Set timeEdit.
-     *
-     * @return CWiki
-     */
-    public function setTimeEdit(DateTime $timeEdit)
+    public function setTimeEdit(DateTime $timeEdit): static
     {
         $this->timeEdit = $timeEdit;
 
         return $this;
     }
 
-    /**
-     * Get hits.
-     *
-     * @return int
-     */
-    public function getHits()
+    public function getHits(): ?int
     {
         return $this->hits;
     }
 
-    /**
-     * Set hits.
-     *
-     * @return CWiki
-     */
-    public function setHits(int $hits)
+    public function setHits(int $hits): static
     {
         $this->hits = $hits;
 
         return $this;
     }
 
-    /**
-     * Get linksto.
-     *
-     * @return string
-     */
-    public function getLinksto()
+    public function getLinksto(): string
     {
         return $this->linksto;
     }
 
-    /**
-     * Set linksto.
-     *
-     * @return CWiki
-     */
-    public function setLinksto(string $linksto)
+    public function setLinksto(string $linksto): static
     {
         $this->linksto = $linksto;
 
         return $this;
     }
 
-    /**
-     * Get tag.
-     *
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return $this->tag;
     }
 
-    /**
-     * Set tag.
-     *
-     * @return CWiki
-     */
-    public function setTag(string $tag)
+    public function setTag(string $tag): static
     {
         $this->tag = $tag;
 
         return $this;
     }
 
-    /**
-     * Get userIp.
-     *
-     * @return string
-     */
-    public function getUserIp()
+    public function getUserIp(): string
     {
         return $this->userIp;
     }
 
-    /**
-     * Set userIp.
-     *
-     * @return CWiki
-     */
-    public function setUserIp(string $userIp)
+    public function setUserIp(string $userIp): static
     {
         $this->userIp = $userIp;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): ?int
     {
         return $this->sessionId;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CWiki
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): static
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getCId(): int
     {
         return $this->cId;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CWiki
-     */
-    public function setCId(int $cId)
+    public function setCId(int $cId): static
     {
         $this->cId = $cId;
 
@@ -712,7 +451,10 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
         return $this->getTitle();
     }
 
-    public function getCategories()
+    /**
+     * @return Collection<int, CWikiCategory>
+     */
+    public function getCategories(): Collection
     {
         return $this->categories;
     }

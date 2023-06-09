@@ -26,14 +26,14 @@ class CWikiCategory
     #[ORM\Column(name: 'name', type: 'string')]
     private string $name;
 
-    #[ORM\ManyToMany(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWiki', mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: CWiki::class, mappedBy: 'categories')]
     private Collection $wikiPages;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Course')]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Course $course;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Session')]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Session $session;
 
@@ -49,16 +49,16 @@ class CWikiCategory
     #[ORM\Column(name: 'rgt', type: 'integer')]
     private int $rgt;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory')]
+    #[ORM\ManyToOne(targetEntity: CWikiCategory::class)]
     #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $root;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: CWikiCategory::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $parent;
 
-    #[ORM\OneToMany(targetEntity: 'Chamilo\\CourseBundle\\Entity\\CWikiCategory', mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CWikiCategory::class)]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     private Collection $children;
 
@@ -137,6 +137,9 @@ class CWikiCategory
         return $this;
     }
 
+    /**
+     * @return Collection<int, CWiki>
+     */
     public function getChildren(): Collection
     {
         return $this->children;
@@ -156,6 +159,9 @@ class CWikiCategory
         return $this;
     }
 
+    /**
+     * @return Collection<int, CWiki>
+     */
     public function getWikiPages(): Collection
     {
         return $this->wikiPages;

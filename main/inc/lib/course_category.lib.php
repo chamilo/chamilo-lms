@@ -188,7 +188,7 @@ class CourseCategory
         $tree_pos = $row['maxTreePos'] + 1;
 
         $params = [
-            'name' => $name,
+            'name' => html_filter($name),
             'code' => $code,
             'parent_id' => empty($parent_id) ? null : $parent_id,
             'tree_pos' => $tree_pos,
@@ -300,29 +300,34 @@ class CourseCategory
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-        $code = trim(Database::escape_string($code));
-        $name = trim(Database::escape_string($name));
-        $old_code = Database::escape_string($old_code);
-        $canHaveCourses = Database::escape_string($canHaveCourses);
+        $code = CourseManager::generate_course_code($code);
+        $name = html_filter($name);
 
         $code = CourseManager::generate_course_code($code);
         // Updating category
-        $sql = "UPDATE $tbl_category SET
-                    name='$name',
-                    code='$code',
-                    auth_course_child = '$canHaveCourses'
-                WHERE code = '$old_code'";
-        Database::query($sql);
+        Database::update(
+            $tbl_category,
+            [
+                'name' => $name,
+                'code' => $code,
+                'auth_course_child' => $canHaveCourses,
+            ],
+            ['code = ?' => $old_code]
+        );
 
         // Updating children
-        $sql = "UPDATE $tbl_category SET parent_id = '$code'
-            WHERE parent_id = '$old_code'";
-        Database::query($sql);
+        Database::update(
+            $tbl_category,
+            ['parent_id' => $code],
+            ['parent_id = ?' => $old_code]
+        );
 
         // Updating course category
-        $sql = "UPDATE $tbl_course SET category_code = '$code'
-            WHERE category_code = '$old_code' ";
-        Database::query($sql);
+        Database::update(
+            $tbl_course,
+            ['category_code' => $code],
+            ['category_code = ?' => $old_code]
+        );
 
         Database::update(
             $tbl_category,

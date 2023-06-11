@@ -125,7 +125,6 @@ class Rest extends WebService
     public const UNSUBSCRIBE_USERS_FROM_SESSION = 'unsubscribe_users_from_session';
     public const GET_USERS_SUBSCRIBED_TO_SESSION = 'get_users_subscribed_to_session';
 
-
     public const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
 
     public const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
@@ -1638,9 +1637,6 @@ class Rest extends WebService
     /**
      * Returns a list of courses in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
      * return all the courses.
-     *
-     * @param int $campusId
-     * @return array
      */
     public function getCoursesCampus(int $campusId = 0): array
     {
@@ -1661,7 +1657,7 @@ class Rest extends WebService
      * return all the sessions.
      *
      * @param int $campusId Optional
-     * @return array
+     *
      * @throws Exception
      */
     public function getSessionsCampus(int $campusId = 0): array
@@ -2187,7 +2183,8 @@ class Rest extends WebService
     }
 
     /**
-     * Simple legacy shortcut to subscribeUsersToSession
+     * Simple legacy shortcut to subscribeUsersToSession.
+     *
      * @throws Exception
      */
     public function addUsersSession(array $params): array
@@ -2196,9 +2193,10 @@ class Rest extends WebService
     }
 
     /**
-     * Subscribe a list of users to the given session
+     * Subscribe a list of users to the given session.
+     *
      * @param array $params Containing 'id_session' and 'list_users' entries
-     * @return array
+     *
      * @throws Exception
      */
     public function subscribeUsersToSession(array $params): array
@@ -2226,10 +2224,10 @@ class Rest extends WebService
             'message' => get_lang('UsersAdded'),
         ];
     }
+
     /**
-     * Unsubscribe a given list of users from the given session
-     * @param array $params
-     * @return array
+     * Unsubscribe a given list of users from the given session.
+     *
      * @throws Exception
      */
     public function unsubscribeUsersFromSession(array $params): array
@@ -2457,10 +2455,10 @@ class Rest extends WebService
     }
 
     /**
-     * Get a list of users subscribed to the given session
+     * Get a list of users subscribed to the given session.
+     *
      * @params int $sessionId
      * @params int $moveInfo Whether to return the "moved_*" fields or not
-     * @return array
      */
     public function getUsersSubscribedToSession(int $sessionId, int $moveInfo = 0): array
     {

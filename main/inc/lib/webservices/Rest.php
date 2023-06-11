@@ -1620,6 +1620,7 @@ class Rest extends WebService
                 'lastname' => $item['lastname'],
                 'email' => $item['email'],
                 'username' => $item['username'],
+                'active' => $item['active'],
             ];
             foreach ($fields as $field) {
                 $field = trim($field);

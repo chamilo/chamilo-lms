@@ -32,7 +32,7 @@ $userEntity = api_get_user_entity($user['user_id']);
 $myUserId = api_get_user_id();
 
 if (!api_is_student_boss()) {
-    api_protect_admin_script();
+    api_protect_admin_script(true);
 } else {
     $isBoss = UserManager::userIsBossOfStudent($myUserId, $user['user_id']);
     if (!$isBoss) {

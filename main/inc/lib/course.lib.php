@@ -2476,7 +2476,7 @@ class CourseManager
      * course from the groups in the real course if they are not subscribed in
      * that real course.
      */
-    public static function delete_course($code)
+    public static function delete_course($code, $from_ws = false)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2534,7 +2534,9 @@ class CourseManager
         }
 
         $count = 0;
-        if (api_is_multiple_url_enabled()) {
+        if ($from_ws) {
+            UrlManager::deleteRelationFromCourseWithAllUrls($courseId);
+        } elseif (api_is_multiple_url_enabled()) {
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();

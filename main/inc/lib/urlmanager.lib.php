@@ -914,6 +914,25 @@ class UrlManager
     }
 
     /**
+     * Deletes course relationship with all urls.
+     *
+     * @author Nicolas Ducoulombier
+     *
+     * @param int $courseId
+     *
+     * @return bool true if success
+     * */
+    public static function deleteRelationFromCourseWithAllUrls ($courseId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "DELETE FROM $table
+               WHERE c_id = '".intval($courseId)."' ";
+        $result = Database::query($sql);
+
+        return $result;
+    }
+
+    /**
      * Deletes an url and $userGroup relationship.
      *
      * @author Julio Montoya

@@ -38,7 +38,7 @@ $resCoursesToDelete = Database::query($sqlCoursesToDelete);
 while ($data = Database::fetch_array($resCoursesToDelete)) {
     $courseCode = CourseManager::get_course_code_from_course_id($data['c_id']);
     echo "deleting course " . $courseCode . " with c_id = " . $data['c_id'] . ".".PHP_EOL;
-    if (!CourseManager::delete_course($courseCode)) {
+    if (!CourseManager::delete_course($courseCode, true)) {
         echo "Course " . $data['c_id'] . " not deleted".PHP_EOL;    
     }
 }

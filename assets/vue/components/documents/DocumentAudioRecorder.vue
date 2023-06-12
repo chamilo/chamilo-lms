@@ -57,7 +57,7 @@ const store = useStore()
 
 const props = defineProps({
   parentResourceNodeId: {
-    type: Object,
+    type: String,
     required: true,
   }
 })

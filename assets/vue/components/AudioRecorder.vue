@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isMicrophoneSupported">
+  <div v-if="!microphoneError">
     <div class="flex flex-row">
       <div v-if="recorderState.isRecording" class="flex rounded-md mr-2 mb-2 py-2 px-3 border border-error">
         <BaseIcon class="self-center mr-2 text-error motion-safe:animate-pulse" icon="microphone"/>
@@ -45,14 +45,14 @@
   </div>
   <div v-else>
       <p>
-        {{ t('We\'re sorry, your browser does not support using a microphone') }}
+        {{ microphoneError }}
       </p>
   </div>
 </template>
 
 <script setup>
 import BaseButton from "./basecomponents/BaseButton.vue";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { RecordRTCPromisesHandler, StereoAudioRecorder } from "recordrtc";
 import { useI18n } from "vue-i18n";
 import BaseIcon from "./basecomponents/BaseIcon.vue";
@@ -90,6 +90,8 @@ const recorderState = reactive({
   hours: 0,
 });
 
+const microphoneError = ref('');
+
 const recordedTime = computed(() => {
   let hours = timeComponentToString(recorderState.hours)
   let minutes = timeComponentToString(recorderState.minutes)
@@ -97,33 +99,45 @@ const recordedTime = computed(() => {
   return `${hours} : ${minutes} : ${seconds}`
 })
 
-const isMicrophoneSupported = computed(() => {
-  let isMediaDevicesSupported = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+onMounted(() => {
+  let isMediaDevicesSupported = navigator.mediaDevices
+    && navigator.mediaDevices.getUserMedia
+
   if (!isMediaDevicesSupported) {
     console.warn('Either your browser does not support microphone or your are serving your site from not secure ' +
-      'context, check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information')
+      'context, check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information');
+    microphoneError.value = t('We\'re sorry, your browser does not support using a microphone');
   }
-  return isMediaDevicesSupported
-})
+});
 
 let recorder = null;
 
 async function record() {
-  if (!isMicrophoneSupported.value) {
+  if (microphoneError.value) {
     return;
   }
 
-  let stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-  recorder = new RecordRTCPromisesHandler(stream, {
-    recorderType: StereoAudioRecorder,
-    type: "audio",
-    mimeType: "audio/wav",
-    numberOfAudioChannels: 2,
-  });
-  recorder.startRecording();
-  startTimer()
+  try {
+    let stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+    recorder = new RecordRTCPromisesHandler(stream, {
+      recorderType: StereoAudioRecorder,
+      type: "audio",
+      mimeType: "audio/wav",
+      numberOfAudioChannels: 2,
+    });
+    recorder.startRecording();
+    startTimer()
 
-  recorderState.isRecording = true;
+    recorderState.isRecording = true;
+  } catch (error) {
+    console.warn('Either the user denied permission or microphone is not available, ' +
+      'check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia');
+    if (error.name === 'NotAllowedError') {
+      microphoneError.value = t('Permission to use the microphone is not enabled, please enable it in your browser to record audio');
+    } else {
+      microphoneError.value = t('We\'re sorry, your browser does not support using a microphone');
+    }
+  }
 }
 
 async function stop() {

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -60,6 +61,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'receivers.tags.tag' => 'exact',
         'parent' => 'exact',
     ]
+)]
+#[ApiFilter(
+    BooleanFilter::class,
+    properties: ['receivers.read']
 )]
 class Message
 {
@@ -160,28 +165,23 @@ class Message
         return $this->receivers;
     }
 
-    /**
-     * @return Collection<int, MessageRelUser>
-     */
     #[Groups(['message:read'])]
-    public function getReceiversTo(): Collection
+    public function getReceiversTo(): array
     {
         return $this->receivers
             ->filter(
                 fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
-            );
+            )->getValues();
     }
 
-    /**
-     * @return Collection<int, MessageRelUser>
-     */
     #[Groups(['message:read'])]
-    public function getReceiversCc(): Collection
+    public function getReceiversCc(): array
     {
         return $this->receivers
             ->filter(
                 fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
-            );
+            )
+            ->getValues();
     }
 
     #[Groups(['message:read'])]

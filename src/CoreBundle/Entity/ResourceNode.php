@@ -91,7 +91,13 @@ class ResourceNode implements Stringable
     #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
+    #[Gedmo\SortableGroup]
     protected ResourceType $resourceType;
+
+    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ["persist", "remove"], inversedBy: "resourceNodes")]
+    #[ORM\JoinColumn(name: "resource_format_id", referencedColumnName: "id")]
+    protected ResourceFormat $resourceFormat;
+
     /**
      * @var Collection<int, ResourceLink>
      */
@@ -115,6 +121,7 @@ class ResourceNode implements Stringable
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[Gedmo\SortableGroup]
     protected ?ResourceNode $parent = null;
     /**
      * @var Collection|ResourceNode[]
@@ -160,6 +167,10 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?UuidV4 $uuid = null;
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
+    #[Gedmo\SortablePosition]
+    protected int $displayOrder;
+
     public function __construct()
     {
         $this->public = false;
@@ -169,6 +180,7 @@ class ResourceNode implements Stringable
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
+        $this->displayOrder = 0;
     }
     public function __toString(): string
     {
@@ -349,6 +361,19 @@ class ResourceNode implements Stringable
 
         return $this;
     }
+
+    public function getResourceFormat(): ?ResourceFormat
+    {
+        return $this->resourceFormat;
+    }
+
+    public function setResourceFormat(ResourceFormat $resourceFormat): self
+    {
+        $this->resourceFormat = $resourceFormat;
+
+        return $this;
+    }
+
     public function getResourceLinks(): Collection
     {
         return $this->resourceLinks;
@@ -483,6 +508,18 @@ class ResourceNode implements Stringable
     public function setPublic(bool $public): self
     {
         $this->public = $public;
+
+        return $this;
+    }
+
+    public function getDisplayOrder(): int
+    {
+        return $this->displayOrder;
+    }
+
+    public function setDisplayOrder(int $displayOrder): self
+    {
+        $this->displayOrder = $displayOrder;
 
         return $this;
     }

@@ -27,8 +27,8 @@ class CLpCategoryRelUserGroup
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: CLpCategory::class)]
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
-    protected CLpCategory $category;
+    #[ORM\JoinColumn(name: "lp_category_id", referencedColumnName: "iid")]
+    protected CLpCategory $lpCategory;
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true)]
@@ -49,4 +49,60 @@ class CLpCategoryRelUserGroup
     public function __construct()
     {
     }
+
+    /**
+     * @return CLpCategory
+     */
+    public function getLpCategory(): CLpCategory
+    {
+        return $this->lpCategory;
+    }
+
+    /**
+     * @param CLpCategory $lpCategory
+     */
+    public function setLpCategory(CLpCategory $lpCategory): self
+    {
+        $this->lpCategory = $lpCategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Usergroup|null
+     */
+    public function getUserGroup(): ?Usergroup
+    {
+        return $this->userGroup;
+    }
+
+    /**
+     * @param Usergroup|null $userGroup
+     */
+    public function setUserGroup(?Usergroup $userGroup): self
+    {
+        $this->userGroup = $userGroup;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTime $createdAt
+     */
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+
 }

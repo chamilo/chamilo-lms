@@ -64,7 +64,8 @@ $form->addLabel('', $message);
 $groupList = \CourseManager::get_group_list_of_course(
     api_get_course_id(),
     api_get_session_id(),
-    1
+    1,
+    true
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 $session = api_get_session_entity($sessionId);
@@ -267,7 +268,7 @@ $formUsers->setDefaults($defaults);
 // Building the form for Groups
 $tpl = new Template();
 
-if ($formUsers->validate()) {
+if ($form->validate()) {
     $values = $formUsers->getSubmitValues();
 
     // Subscribing users

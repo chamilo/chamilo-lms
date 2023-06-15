@@ -8,7 +8,7 @@ export default {
     {
       name: 'MessageList',
       path: '',
-      component: () => import('../views/message/List.vue')
+      component: () => import('../views/message/MessageList.vue')
     },
     {
       name: 'MessageCreate',

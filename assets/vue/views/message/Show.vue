@@ -175,7 +175,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const {showNotification} = useNotification();
-    const myReceiver = ref([]);
+    const myReceiver = ref(null);
 
     let id = route.params.id;
     if (isEmpty(id)) {
@@ -188,10 +188,15 @@ export default {
     onMounted(async () => {
       item.value = await store.dispatch('message/load', id);
 
-      myReceiver.value = item.value.receivers.find(({receiver}) => receiver['@id'] === user['@id']);
+      myReceiver.value = [
+        ...item.value.receiversTo,
+        ...item.value.receiversCc
+      ].find(({receiver}) => receiver['@id'] === user['@id']);
+
+      console.log(myReceiver);
 
       // Change to read.
-      if (false === myReceiver.value.read) {
+      if (myReceiver.value && false === myReceiver.value.read) {
         axios.put(myReceiver.value['@id'], {
           read: true,
         }).then(response => {

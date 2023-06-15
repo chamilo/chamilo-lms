@@ -33,6 +33,9 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8A5F48FFD17F50A6 ON resource_node (uuid)');
             $this->addSql('ALTER TABLE resource_node ADD public TINYINT(1) NOT NULL');
+            $this->addSql(
+                'ALTER TABLE resource_node ADD display_order INT NOT NULL'
+            );
         }
 
         if (!$schema->hasTable('resource_link')) {

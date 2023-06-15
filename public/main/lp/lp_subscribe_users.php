@@ -2,9 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -53,6 +55,9 @@ $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
 $em = Database::getManager();
 $courseRepo = Container::getCourseRepository();
 
+/** @var CLpRelUserRepository $cLpRelUserRepo */
+$cLpRelUserRepo = $em->getRepository(CLpRelUser::class);
+
 /** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
@@ -85,16 +90,16 @@ foreach ($subscribedUsers as $user) {
 }
 
 // Getting subscribed users to a LP.
-$subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
-    'learnpath',
-    $lpId,
+$subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+    $entity,
     $course,
     $session
 );
 
 $selectedChoices = [];
-foreach ($subscribedUsersInLp as $itemProperty) {
-    $selectedChoices[] = $itemProperty->getToUser()->getId();
+foreach ($subscribedUsersInLp as $users) {
+    /** @var CLpRelUser $users */
+    $selectedChoices[] = $users->getUser()->getId();
 }
 
 //Building the form for Users
@@ -116,6 +121,9 @@ if (!empty($selectedChoices)) {
 
 $formUsers->setDefaults($defaults);
 
+// Subscribed groups to a LP
+$links = $entity->getResourceNode()->getResourceLinks();
+
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
@@ -124,22 +132,16 @@ $form->addElement('hidden', 'group_form', 1);
 $groupList = \CourseManager::get_group_list_of_course(
     api_get_course_id(),
     api_get_session_id(),
-    1
+    1,
+    true
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 
-// Subscribed groups to a LP
-$subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-    'learnpath',
-    $lpId,
-    $course,
-    $session
-);
-
 $selectedGroupChoices = [];
-/** @var CItemProperty $itemProperty */
-foreach ($subscribedGroupsInLp as $itemProperty) {
-    $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
+foreach ($links as $link) {
+    if (null !== $link->getGroup()) {
+        $selectedGroupChoices[] = $link->getGroup()->getIid();
+    }
 }
 
 $groupMultiSelect = $form->addMultiSelect(
@@ -197,11 +199,10 @@ if ($allowUserGroups) {
                     Database::query($sql);
 
                     $userList = $userGroup->get_users_by_usergroup($userGroupId);
-                    $itemRepo->unsubcribeUsersToItem(
-                        'learnpath',
+                    $cLpRelUserRepo->unsubcribeUsersToItem(
                         $course,
                         $session,
-                        $lpId,
+                        $entity,
                         $userList
                     );
                 }
@@ -236,12 +237,11 @@ if ($allowUserGroups) {
             $userList = [];
             foreach ($groups as $groupId) {
                 $userList = $userGroup->get_users_by_usergroup($groupId);
-                $itemRepo->subscribeUsersToItem(
+                $cLpRelUserRepo->subscribeUsersToItem(
                     $currentUser,
-                    'learnpath',
                     $course,
                     $session,
-                    $lpId,
+                    $entity,
                     $userList,
                     false
                 );
@@ -251,11 +251,10 @@ if ($allowUserGroups) {
         } else {
             foreach ($groups as $group) {
                 $userList = $userGroup->get_users_by_usergroup($group['id']);
-                $itemRepo->unsubcribeUsersToItem(
-                    'learnpath',
+                $cLpRelUserRepo->unsubcribeUsersToItem(
                     $course,
                     $session,
-                    $lpId,
+                    $entity,
                     $userList
                 );
             }
@@ -294,12 +293,11 @@ if ($form->validate()) {
     $userForm = isset($values['user_form']) ? $values['user_form'] : [];
 
     if (!empty($userForm)) {
-        $itemRepo->subscribeUsersToItem(
+        $cLpRelUserRepo->subscribeUsersToItem(
             $currentUser,
-            'learnpath',
             $course,
             $session,
-            $lpId,
+            $entity,
             $users
         );
         Display::addFlash(Display::return_message(get_lang('Update successful')));
@@ -310,14 +308,28 @@ if ($form->validate()) {
     $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
 
     if (!empty($groupForm)) {
-        $itemRepo->subscribeGroupsToItem(
-            $currentUser,
-            'learnpath',
-            $course,
-            $session,
-            $lpId,
-            $groups
-        );
+        if (!empty($selectedGroupChoices)) {
+            $diff = array_diff($selectedGroupChoices, $groups);
+            if (!empty($diff)) {
+                foreach ($diff as $groupIdToDelete) {
+                    foreach ($links as $link) {
+                        if ($link->getGroup() && $link->getGroup()->getIid()) {
+                            $em->remove($link);
+                        }
+                    }
+                }
+                $em->flush();
+            }
+        }
+
+        foreach ($groups as $groupId) {
+            $group = api_get_group_entity($groupId);
+            $entity->addGroupLink($course, $group);
+        }
+
+        $em->persist($entity);
+        $em->flush();
+
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 

@@ -1,6 +1,7 @@
 <template>
   <Button
     :class="buttonClass"
+    :disabled="disabled"
     :label="label"
     :outlined="primeOutlinedProperty"
     :size="size"
@@ -66,6 +67,11 @@ const props = defineProps({
       return ["normal", "small"].includes(value);
     },
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 });
 
 defineEmits(["click"]);

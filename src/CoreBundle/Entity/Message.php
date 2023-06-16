@@ -10,7 +10,6 @@ use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -84,11 +83,13 @@ class Message
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentMessages')]
     #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
     protected User $sender;
+
     /**
      * @var Collection<int, MessageRelUser>
      */
@@ -100,17 +101,21 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'msg_type', type: 'smallint', nullable: false)]
     protected int $msgType;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'status', type: 'smallint', nullable: false)]
     protected int $status;
+
     #[Groups(['message:read'])]
     #[ORM\Column(name: 'send_date', type: 'datetime', nullable: false)]
     protected DateTime $sendDate;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
@@ -119,6 +124,7 @@ class Message
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;
+
     /**
      * @var Collection<int, Message>
      */
@@ -128,11 +134,14 @@ class Message
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?Message $parent = null;
+
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'update_date', type: 'datetime', nullable: true)]
     protected ?DateTime $updateDate;
+
     #[ORM\Column(name: 'votes', type: 'integer', nullable: true)]
     protected ?int $votes;
+
     /**
      * @var Collection<int, MessageAttachment>
      */
@@ -361,7 +370,7 @@ class Message
         return $this->parent;
     }
 
-    public function setParent(self $parent = null): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

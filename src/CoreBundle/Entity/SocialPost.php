@@ -70,54 +70,75 @@ class SocialPost
     public const TYPE_PROMOTED_MESSAGE = 4;
     public const STATUS_SENT = 1;
     public const STATUS_DELETED = 2;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id', type: 'bigint')]
     protected ?int $id = null;
+
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentSocialPosts')]
     #[ORM\JoinColumn(nullable: false)]
     protected User $sender;
+
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'receivedSocialPosts')]
     #[ORM\JoinColumn(nullable: true)]
     protected ?User $userReceiver;
+
     #[ORM\Column(name: 'subject', type: 'text', nullable: true)]
     protected ?string $subject = null;
+
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\Column(type: 'text')]
     protected string $content;
+
     #[Groups(['social_post:write', 'social_post:read'])]
-    #[Assert\Choice([self::TYPE_WALL_POST, self::TYPE_WALL_COMMENT, self::TYPE_GROUP_MESSAGE, self::TYPE_PROMOTED_MESSAGE], message: 'Choose a valid type.')]
+    #[Assert\Choice([
+        self::TYPE_WALL_POST,
+        self::TYPE_WALL_COMMENT,
+        self::TYPE_GROUP_MESSAGE,
+        self::TYPE_PROMOTED_MESSAGE,
+    ], message: 'Choose a valid type.')]
     #[ORM\Column(type: 'smallint')]
     protected int $type;
+
     #[Assert\Choice([self::STATUS_SENT, self::STATUS_DELETED], message: 'Choose a status.')]
     #[ORM\Column(type: 'smallint')]
     protected int $status;
+
     #[Groups(['social_post:read'])]
     #[ORM\Column(type: 'datetime')]
     protected DateTime $sendDate;
+
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
+
     #[ORM\OneToMany(targetEntity: SocialPostFeedback::class, mappedBy: 'socialPost')]
     protected Collection $feedbacks;
+
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Usergroup $groupReceiver = null;
+
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
     #[Groups(['social_post:write'])]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected ?SocialPost $parent;
+    protected ?SocialPost $parent = null;
+
     #[Groups(['social_post:read', 'social_post_feedback'])]
-    protected int $countFeedbackLikes;
+    protected int $countFeedbackLikes = 0;
+
     #[Groups(['social_post:read', 'social_post_feedback'])]
-    protected int $countFeedbackDislikes;
+    protected int $countFeedbackDislikes = 0;
+
     #[ApiFilter(filterClass: SocialWallFilter::class)]
     protected User $wallOwner;
+
     public function __construct()
     {
         $this->userReceiver = null;
@@ -131,96 +152,115 @@ class SocialPost
         $this->countFeedbackLikes = 0;
         $this->countFeedbackDislikes = 0;
     }
+
     public function getId(): int
     {
         return $this->id;
     }
+
     public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
+
     public function getSender(): User
     {
         return $this->sender;
     }
+
     public function setSender(User $sender): self
     {
         $this->sender = $sender;
 
         return $this;
     }
+
     public function getUserReceiver(): ?User
     {
         return $this->userReceiver;
     }
+
     public function setUserReceiver(?User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
 
         return $this;
     }
+
     public function getStatus(): int
     {
         return $this->status;
     }
+
     public function setStatus(int $status): self
     {
         $this->status = $status;
 
         return $this;
     }
+
     public function getSendDate(): DateTime
     {
         return $this->sendDate;
     }
+
     public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
 
         return $this;
     }
+
     public function getSubject(): ?string
     {
         return $this->subject;
     }
+
     public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
 
         return $this;
     }
+
     public function getContent(): string
     {
         return $this->content;
     }
+
     public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
+
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
+
     public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
+
     public function getFeedbacks(): Collection
     {
         return $this->feedbacks;
     }
+
     public function setFeedbacks(Collection $feedbacks): self
     {
         $this->feedbacks = $feedbacks;
 
         return $this;
     }
+
     public function addFeedback(SocialPostFeedback $feedback): self
     {
         if (!$this->feedbacks->contains($feedback)) {
@@ -230,6 +270,7 @@ class SocialPost
 
         return $this;
     }
+
     public function getCountFeedbackLikes(): int
     {
         $criteria = Criteria::create();
@@ -237,6 +278,7 @@ class SocialPost
 
         return $this->feedbacks->matching($criteria)->count();
     }
+
     public function getCountFeedbackDislikes(): int
     {
         $criteria = Criteria::create();
@@ -244,16 +286,19 @@ class SocialPost
 
         return $this->feedbacks->matching($criteria)->count();
     }
+
     public function getParent(): ?self
     {
         return $this->parent;
     }
-    public function setParent(self $parent = null): self
+
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
         return $this;
     }
+
     /**
      * @return Collection<int, SocialPost>
      */
@@ -261,6 +306,7 @@ class SocialPost
     {
         return $this->children;
     }
+
     public function addChild(self $child): self
     {
         $this->children[] = $child;
@@ -268,20 +314,24 @@ class SocialPost
 
         return $this;
     }
+
     public function getGroupReceiver(): ?Usergroup
     {
         return $this->groupReceiver;
     }
+
     public function setGroupReceiver(?Usergroup $groupReceiver): self
     {
         $this->groupReceiver = $groupReceiver;
 
         return $this;
     }
+
     public function getType(): int
     {
         return $this->type;
     }
+
     public function setType(int $type): self
     {
         $this->type = $type;

@@ -23,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
+use \Chamilo\CoreBundle\Entity\ResourceNode;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
@@ -8643,6 +8644,32 @@ class learnpath
         }
 
         return true;
+    }
+
+    public static function move(int $lpId, string $direction)
+    {
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = Container::getLpRepository()->find($lpId);
+        if ($lp) {
+            $resourceNode = $lp->getResourceNode();
+            $position = $resourceNode->getDisplayOrder();
+            $resourceNodeId = $resourceNode->getId();
+
+            $item = $em->find(ResourceNode::class, $resourceNodeId);
+            if ($item) {
+                $newPosition = 0;
+                if ('down' === $direction) {
+                    $newPosition = $position + 1;
+                }
+                if ('up' === $direction) {
+                    $newPosition = $position - 1;
+                }
+                $item->setDisplayOrder($newPosition);
+                $em->persist($item);
+                $em->flush();
+            }
+        }
     }
 
     /**

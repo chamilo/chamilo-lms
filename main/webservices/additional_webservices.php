@@ -27,10 +27,13 @@ function wsConvertPpt($pptData)
         }
     }
     $fileData = $pptData['file_data'];
-    $dataInfo = pathinfo($pptData['file_name']);
-    $fileName = basename($pptData['file_name'], '.'.$dataInfo['extension']);
-    $fullFileName = $pptData['file_name'];
-    $size = $pptData['service_ppt2lp_size'];
+    // Clean filename to avoid hacks. Prevents "&" and ";" to be used in filename, notably
+    $sanitizedFileName = Security::sanitizeExecParam($pptData['file_name']);
+    $dataInfo = pathinfo($sanitizedFileName);
+    $fileName = basename($sanitizedFileName, '.'.$dataInfo['extension']);
+    // Add additional cleaning of .php and .htaccess files
+    $fullFileName = Security::filter_filename($sanitizedFileName);
+    $size = Security::sanitizeExecParam($pptData['service_ppt2lp_size']);
     $w = '800';
     $h = '600';
     if (!empty($size)) {

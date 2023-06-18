@@ -77,8 +77,7 @@ class Message
     public const MESSAGE_STATUS_INVITATION_PENDING = 5;
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
-    #[ApiProperty(identifier: true)]
-    #[Groups(['message:read'])]
+
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -130,7 +129,7 @@ class Message
      */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
-    #[Groups(['message:write'])]
+
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?Message $parent = null;

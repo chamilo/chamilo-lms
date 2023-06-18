@@ -94,7 +94,7 @@ class CourseVoter extends Voter
                 if (Course::OPEN_PLATFORM === $course->getVisibility()) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
-                    if ($course->hasTeacher($user)) {
+                    if ($course->hasUserAsTeacher($user)) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
                     }
 
@@ -105,10 +105,10 @@ class CourseVoter extends Voter
 
                 // Course::REGISTERED
                 // User must be subscribed in the course no matter if is teacher/student
-                if ($course->hasUser($user)) {
+                if ($course->hasSubscriptionByUser($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
-                    if ($course->hasTeacher($user)) {
+                    if ($course->hasUserAsTeacher($user)) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
                     }
 
@@ -121,7 +121,7 @@ class CourseVoter extends Voter
             case self::EDIT:
             case self::DELETE:
                 // Only teacher can edit/delete stuff.
-                if ($course->hasTeacher($user)) {
+                if ($course->hasUserAsTeacher($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
                     $token->setUser($user);
 

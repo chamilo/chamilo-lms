@@ -84,12 +84,12 @@ class GroupVoter extends Voter
         }
 
         if (Course::REGISTERED === $course->getVisibility()) {
-            if (!$course->hasUser($user)) {
+            if (!$course->hasSubscriptionByUser($user)) {
                 return false;
             }
         }
 
-        if ($course->hasTeacher($user)) {
+        if ($course->hasUserAsTeacher($user)) {
             $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
 
             return true;

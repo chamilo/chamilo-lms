@@ -137,6 +137,7 @@ class User implements
         'user:read',
         'user:write',
         'course:read',
+        'course_rel_user:read',
         'resource_node:read',
         'user_json:read',
         'message:read',
@@ -701,7 +702,13 @@ class User implements
     // Property used only during installation.
     protected bool $skipResourceNode = false;
 
-    #[Groups(['user:read', 'user_json:read', 'social_post:read', 'course:read'])]
+    #[Groups([
+        'user:read',
+        'user_json:read',
+        'social_post:read',
+        'course:read',
+        'course_rel_user:read',
+    ])]
     protected string $fullName;
 
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: SocialPost::class, orphanRemoval: true)]

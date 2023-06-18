@@ -93,7 +93,7 @@ class CourseControllerTest extends WebTestCase
         $test = $this->getUser('test');
         $course = $this->getCourse($course->getId());
 
-        $course->addStudent($test);
+        $course->addUserAsStudent($test);
         $em->persist($course);
         $em->flush();
 
@@ -197,7 +197,7 @@ class CourseControllerTest extends WebTestCase
         // simulate $testUser being logged in
         $client->loginUser($admin);
 
-        $course->addTeacher($teacher);
+        $course->addUserAsTeacher($teacher);
         $em = $this->getEntityManager();
 
         $types = CCourseDescription::getTypes();

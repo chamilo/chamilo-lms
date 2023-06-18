@@ -61,7 +61,7 @@ class TrackEExerciseVoter extends Voter
                 return true;
             }
         } else {
-            if ($course->hasTeacher($user)) {
+            if ($course->hasUserAsTeacher($user)) {
                 return true;
             }
         }

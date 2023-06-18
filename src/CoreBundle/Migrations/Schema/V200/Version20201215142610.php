@@ -55,7 +55,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
-            $courseRelUserList = $course->getTeachers();
+            $courseRelUserList = $course->getTeachersSubscriptions();
             $courseAdmin = null;
             if (!empty($courseRelUserList)) {
                 foreach ($courseRelUserList as $courseRelUser) {

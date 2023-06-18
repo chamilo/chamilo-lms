@@ -6550,7 +6550,7 @@ class CourseManager
             ->setSort($relationInfo['sort'])
             ->setUserCourseCat($relationInfo['user_course_cat']);
 
-        $course->addUsers($courseRelUser);
+        $course->addSubscription($courseRelUser);
 
         $em = Database::getManager();
         $em->persist($course);

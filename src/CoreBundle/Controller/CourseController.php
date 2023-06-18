@@ -435,7 +435,7 @@ class CourseController extends ToolBaseController
         $courseValues = new ExtraFieldValue('course');
 
         $urlCourse = api_get_path(WEB_PATH).sprintf('course/%s/about', $courseId);
-        $courseTeachers = $course->getTeachers();
+        $courseTeachers = $course->getTeachersSubscriptions();
         $teachersData = [];
 
         foreach ($courseTeachers as $teacherSubscription) {

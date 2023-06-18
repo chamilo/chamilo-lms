@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: [
-        'groups' => ['course_rel_user:read', 'user:read'],
+        'groups' => ['course_rel_user:read'],
         'enable_max_depth' => true,
     ],
     security: "is_granted('ROLE_USER')"
@@ -47,38 +47,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'user.username' => 'partial',
     ]
 )]
-#[ApiResource(
-    uriTemplate: '/courses/{id}/users.{_format}',
-    operations: [
-        new GetCollection(),
-    ],
-    uriVariables: [
-        'id' => new Link(
-            fromClass: Course::class,
-            identifiers: ['id']
-        ),
-    ],
-    status: 200,
-    normalizationContext: [
-        'groups' => ['course_rel_user:read', 'user:read'],
-    ],
-)]
-#[ApiResource(
-    uriTemplate: '/users/{id}/courses.{_format}',
-    operations: [
-        new GetCollection(),
-    ],
-    uriVariables: [
-        'id' => new Link(
-            fromClass: User::class,
-            identifiers: ['id']
-        ),
-    ],
-    status: 200,
-    normalizationContext: [
-        'groups' => ['course_rel_user:read', 'user:read'],
-    ],
-)]
 class CourseRelUser implements Stringable
 {
     use UserTrait;
@@ -93,13 +61,12 @@ class CourseRelUser implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[MaxDepth(1)]
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[Groups(['user:read'])]
+    #[Groups(['course_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected Course $course;
@@ -108,7 +75,7 @@ class CourseRelUser implements Stringable
     #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;
 
-    #[Groups(['user:read'])]
+    #[Groups(['course_rel_user:read'])]
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 

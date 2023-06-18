@@ -88,7 +88,7 @@ switch ($action) {
                 $course_code = $course->getCode();
                 $user = api_get_user_entity();
 
-                if ($course->hasUser($user)) {
+                if ($course->hasSubscriptionByUser($user)) {
                     //------Forum messages
                     $forum_result = Container::getForumPostRepository()->countUserForumPosts($user, $course);
                     $all_result_data = 0;

@@ -43,8 +43,8 @@ class CourseVoterTest extends WebTestCase
 
         // Public course.
         $publicCourse = $this->createCourse('public');
-        $publicCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $publicCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $publicCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $publicCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($publicCourse);
         $em->flush();
 
@@ -60,8 +60,8 @@ class CourseVoterTest extends WebTestCase
         // REGISTERED course.
         $registeredCourse = $this->createCourse('registered');
         $registeredCourse->setVisibility(Course::REGISTERED);
-        $registeredCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $registeredCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($registeredCourse);
         $em->flush();
 

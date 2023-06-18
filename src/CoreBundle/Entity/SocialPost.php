@@ -125,7 +125,7 @@ class SocialPost
 
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $children;
-    #[Groups(['social_post:write'])]
+
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?SocialPost $parent = null;

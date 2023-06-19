@@ -382,7 +382,7 @@ class OAuth2 extends Plugin
         return $fieldValue->getCreatedAt() >= $lastLogin->getLoginDate();
     }
 
-    private function mapUserStatusFromResponse(array $response, int $defaultStatus = STUDENT): bool
+    private function mapUserStatusFromResponse(array $response, int $defaultStatus = STUDENT): int
     {
         $status = $this->getValueByKey(
             $response,
@@ -390,13 +390,29 @@ class OAuth2 extends Plugin
             $defaultStatus
         );
 
-        $map = array_flip([
-            COURSEMANAGER => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS),
-            SESSIONADMIN => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS),
-            DRH => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS),
-            STUDENT => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS),
-            ANONYMOUS => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS),
-        ]);
+        $responseStatus = [];
+
+        if ($teacherStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS)) {
+            $responseStatus[COURSEMANAGER] = $teacherStatus;
+        }
+
+        if ($sessAdminStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS)) {
+            $responseStatus[SESSIONADMIN] = $sessAdminStatus;
+        }
+
+        if ($drhStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS)) {
+            $responseStatus[DRH] = $drhStatus;
+        }
+
+        if ($studentStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS)) {
+            $responseStatus[STUDENT] = $studentStatus;
+        }
+
+        if ($anonStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS)) {
+            $responseStatus[ANONYMOUS] = $anonStatus;
+        }
+
+        $map = array_flip($responseStatus);
 
         return $map[$status] ?? $status;
     }

@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MessageTagRepository::class)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
-    properties: ['user' => 'exact', 'tag' => 'exact']
+    properties: ['user' => 'exact', 'tag' => 'word_start']
 )]
 class MessageTag
 {

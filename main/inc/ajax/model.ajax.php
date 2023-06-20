@@ -1858,7 +1858,7 @@ switch ($action) {
         } else {
             $sidx = in_array($sidx, $columns) ? $sidx : 'name';
         }
-        $orderBy = "$sidx $sord";
+        $orderBy = "$sidx $sord, s.name";
 
         if ($list_type === 'simple' || $list_type === 'custom') {
             $result = SessionManager::get_sessions_admin(

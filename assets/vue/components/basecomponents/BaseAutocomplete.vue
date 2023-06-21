@@ -7,8 +7,10 @@
         :multiple="isMultiple"
         :suggestions="suggestions"
         force-selection
-        option-label="name"
+        :option-label="optionLabel"
         @complete="onComplete"
+        @item-select="$emit('item-select', $event)"
+        @update:model-value="$emit('update:modelValue', $event)"
       />
       <label :for="id" v-t="label" />
     </div>
@@ -18,7 +20,7 @@
 
 <script setup>
 import AutoComplete from "primevue/autocomplete";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   id: {
@@ -56,19 +58,31 @@ const props = defineProps({
     required: true,
     default: () => {},
   },
+  optionLabel: {
+    type: String,
+    required: false,
+    default: () => 'name',
+  }
 });
 
-const emit = defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue", "item-select"]);
 
 const baseModel = ref([]);
-
-watch(baseModel, (newValue) => emit("update:modelValue", newValue.map(item => item.value)));
 
 const suggestions = ref([]);
 
 const onComplete = (event) => {
   if (event.query.length >= 3) {
-    props.search(event.query).then((members) => (suggestions.value = members));
+    props.search(event.query).then((members) => {
+      if (members.length > 0) {
+        suggestions.value = members
+      } else {
+        let fakeSuggestion = {};
+        fakeSuggestion[`${props.optionLabel}`] = event.query;
+
+        suggestions.value = [fakeSuggestion];
+      }
+    });
   }
 };
 </script>

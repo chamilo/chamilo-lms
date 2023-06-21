@@ -10,8 +10,8 @@
             }
         }
     </script>
-    {% set configuration = chamilo_settings_get('lp.lp_category_accordion') %}
-    <div class="lp-accordion panel-group my-8" id="lp-accordion" role="tablist" aria-multiselectable="true">
+    {% set configuration = 1 %}
+    <div class="panel-group my-8" role="tablist">
         {% for lp_data in data %}
             {% set show_category = true %}
             {% if filtered_category and filtered_category != lp_data.category.iid %}
@@ -342,7 +342,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if categories|length > 1 and lp_data.category.id %}
+                    {% if categories|length > 1 and lp_data.category.iid %}
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="heading-{{ lp_data.category.iid }}">
                                 {% if is_allowed_to_edit %}
@@ -385,12 +385,12 @@
                                             {% endif %}
 
                                             {% if lp_data.category_visibility == 0 %}
-                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                                    title="{{ 'Show'|trans }}">
                                                     <i class="mdi-eye-off mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Show"|trans }}"></i>
                                                 </a>
                                             {% else %}
-                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                                <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                                    title="{{ 'Hide'|trans }}">
                                                     <i class="mdi-eye mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
                                                 </a>
@@ -398,12 +398,12 @@
 
                                             {% if lp_data.category_visibility == 1 %}
                                                 {% if lp_data.category_is_published == 0 %}
-                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                                        title="{{ 'LearnpathPublish'|trans }}">
                                                         <i class="mdi-checkbox-multiple-blank-outline mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "LearnpathPublish"|trans }}"></i>
                                                     </a>
                                                 {% else %}
-                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                                    <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                                        title="{{ 'LearnpathDoNotPublish'|trans }}">
                                                         <i class="mdi-checkbox-multiple-blank mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
                                                     </a>
@@ -422,19 +422,10 @@
                                     </div>
                                 {% endif %}
                                 <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
-                                       href="#collapse-{{ lp_data.category.iid }}" aria-expanded="true"
-                                       aria-controls="collapse-{{ lp_data.category.iid }}">
-                                        {{ lp_data.category.getName() }}
-                                        {% if lp_data.category.sessionId %}
-                                            {{ session_star_icon }}
-                                        {% endif %}
-                                    </a>
+                                    {{ lp_data.category.getName() }}
                                 </h4>
                             </div>
-                            {% set number = number + 1 %}
-                            <div id="collapse-{{ lp_data.category.iid }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
-                                 role="tabpanel" aria-labelledby="heading-{{ lp_data.category.iid }}">
+                            <div>
                                 <div class="panel-body">
                                     {% if lp_data.lp_list %}
 

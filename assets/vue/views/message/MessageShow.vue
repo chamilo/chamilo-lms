@@ -27,51 +27,50 @@
       <BaseAutocomplete
         id="search-tags"
         v-model="foundTag"
-        :search="onSearchTags"
         :label="t('Tags')"
+        :search="onSearchTags"
         option-label="tag"
         @item-select="onItemSelect"
       />
     </div>
 
     <div>
-      {{ t('From') }}
+      {{ t("From") }}
 
-      <BaseChip :value="item.sender" label-field="username" image-field="illustrationUrl" />
+      <BaseChip :value="item.sender" image-field="illustrationUrl" label-field="username" />
     </div>
 
     <div>
-      {{ t('To') }}
+      {{ t("To") }}
 
       <BaseChip
         v-for="receiver in item.receiversTo"
         :key="receiver.receiver.id"
         :value="receiver.receiver"
-        label-field="username"
         image-field="illustrationUrl"
+        label-field="username"
       />
     </div>
 
     <div>
-      {{ t('Cc') }}
+      {{ t("Cc") }}
 
       <BaseChip
         v-for="receiver in item.receiversCc"
         :key="receiver.receiver.id"
         :value="receiver.receiver"
-        label-field="username"
         image-field="illustrationUrl"
+        label-field="username"
       />
     </div>
 
-    <hr>
+    <hr />
 
     <p v-text="useRelativeDatetime(item.sendDate)" />
 
     <div v-html="item.content" />
 
     <q-card>
-
       <q-card-section v-if="item.attachments && item.attachments.length > 0">
         <p class="my-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
 
@@ -129,13 +128,12 @@ const isLoading = computed(() => store.state.message.isLoading);
 const item = ref(null);
 const myReceiver = ref(null);
 
-store.dispatch('message/load', id).then(responseItem => {
+store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem;
 
-  myReceiver.value = [
-    ...responseItem.receiversTo,
-    ...responseItem.receiversCc
-  ].find(({ receiver }) => receiver["@id"] === user["@id"]);
+  myReceiver.value = [...responseItem.receiversTo, ...responseItem.receiversCc].find(
+    ({ receiver }) => receiver["@id"] === user["@id"]
+  );
 
   // Change to read.
   if (myReceiver.value && false === myReceiver.value.read) {
@@ -161,11 +159,11 @@ function confirmDelete() {
 }
 
 function getTagIndex(tag) {
-  return myReceiver.value.tags.findIndex(receiverTag => receiverTag["@id"] === tag["@id"]);
+  return myReceiver.value.tags.findIndex((receiverTag) => receiverTag["@id"] === tag["@id"]);
 }
 
 function mapTagsToIds() {
-  return myReceiver.value.tags.map(receiverTag => receiverTag["@id"]);
+  return myReceiver.value.tags.map((receiverTag) => receiverTag["@id"]);
 }
 
 async function onRemoveTagFromMessage(tag) {
@@ -186,46 +184,49 @@ async function onRemoveTagFromMessage(tag) {
 }
 
 function reply() {
-  router.push({name: "MessageReply", query: {...route.query}});
+  router.push({ name: "MessageReply", query: { ...route.query } });
 }
 
 function replyAll() {
-  router.push({name: `MessageReply`, query: {...route.query, all: 1}});
+  router.push({ name: `MessageReply`, query: { ...route.query, all: 1 } });
 }
 
 function createEvent() {
   let params = route.query;
-  router.push({name: "CCalendarEventCreate", query: params});
+  router.push({ name: "CCalendarEventCreate", query: params });
 }
 
-const foundTag = ref('');
+const foundTag = ref("");
 
 function onSearchTags(query) {
   isLoadingSelect.value = true;
 
-  return axios.get(ENTRYPOINT + 'message_tags', {
-    params: {
-      user: user['@id'],
-      tag: query
-    }
-  }).then(response => {
-    isLoadingSelect.value = false;
+  return axios
+    .get(ENTRYPOINT + "message_tags", {
+      params: {
+        user: user["@id"],
+        tag: query,
+      },
+    })
+    .then((response) => {
+      isLoadingSelect.value = false;
 
-    return response.data['hydra:member'];
-  }).catch(function (error) {
-    isLoadingSelect.value = false;
-    console.log(error);
-  });
+      return response.data["hydra:member"];
+    })
+    .catch(function (error) {
+      isLoadingSelect.value = false;
+      console.log(error);
+    });
 }
 
 async function onItemSelect({ value }) {
   let newTag;
 
-  if (!value['@id']) {
+  if (!value["@id"]) {
     try {
-      await store.dispatch('messagetag/create', {
-        user: user['@id'],
-        tag: value.tag
+      await store.dispatch("messagetag/create", {
+        user: user["@id"],
+        tag: value.tag,
       });
 
       newTag = store.state.messagetag.created;
@@ -233,7 +234,7 @@ async function onItemSelect({ value }) {
       console.log(e);
     }
   } else {
-    const existingIndex = getTagIndex(value['@id']) >= 0;
+    const existingIndex = getTagIndex(value["@id"]) >= 0;
 
     if (existingIndex) {
       return;
@@ -242,7 +243,7 @@ async function onItemSelect({ value }) {
     newTag = value;
   }
 
-  foundTag.value = '';
+  foundTag.value = "";
 
   if (myReceiver.value && newTag) {
     myReceiver.value.tags.push(newTag);

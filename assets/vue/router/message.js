@@ -29,7 +29,7 @@ export default {
       name: 'MessageShow',
       //path: ':id',
       path: 'show',
-      component: () => import('../views/message/Show.vue')
+      component: () => import('../views/message/MessageShow.vue')
     }
   ]
 };

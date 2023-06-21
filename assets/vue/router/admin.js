@@ -8,7 +8,14 @@ export default {
             path: '',
             name: 'AdminIndex',
             meta: { requiresAdmin: true, requiresSessionAdmin: true },
-            component: () => import('../views/admin/AdminIndex.vue')
+            component: () => import('../views/admin/AdminIndex.vue'),
         },
+      {
+        name: 'AdminConfigurationColors',
+        path: 'configuration/colors',
+        meta: { requiresAdmin: true, requiresSessionAdmin: true },
+        component: () => import('../views/admin/AdminConfigureColors.vue'),
+      }
     ],
 };
+

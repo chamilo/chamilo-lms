@@ -34,6 +34,7 @@
             </a>
           </div>
         </li>
+        <slot></slot>
       </ul>
     </div>
   </div>

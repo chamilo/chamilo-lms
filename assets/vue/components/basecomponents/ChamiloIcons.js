@@ -55,6 +55,7 @@ export const chamiloIconToClass = {
     "file-generic": "mdi mdi-file",
     "file-image": "mdi mdi-file-image",
     "file-video": "mdi mdi-file-video",
+    "file-audio": "mdi mdi-file-music",
     "file-pdf": "mdi mdi-file-pdf-box",
     "file-text": "mdi mdi-file-document",
     "file-add": "mdi mdi-file-plus",

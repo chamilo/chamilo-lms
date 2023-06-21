@@ -20,6 +20,10 @@
     icon="file-pdf"
   />
   <BaseIcon
+    v-else-if="isAudio(resourceData)"
+    icon="file-audio"
+  />
+  <BaseIcon
     v-else
     icon="file-generic"
   />
@@ -27,6 +31,9 @@
 
 <script setup>
 import BaseIcon from "../basecomponents/BaseIcon.vue";
+import {useFileUtils} from "../../composables/fileUtils";
+
+const {isAudio} = useFileUtils()
 
 defineProps({
   resourceData: {

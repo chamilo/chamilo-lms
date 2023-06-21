@@ -10,6 +10,7 @@ export const chamiloIconToClass = {
     "back": "mdi mdi-arrow-left-bold-box",
     "close": "mdi mdi-close",
     "confirm": "mdi mdi-check",
+    "confirm-bold": "mdi mdi-check-bold",
     "select-all": "mdi mdi-select-group",
     "unselect-all": "mdi mdi-select-remove",
     "camera": "mdi mdi-camera",

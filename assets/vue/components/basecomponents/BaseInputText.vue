@@ -5,10 +5,16 @@
         :id="id"
         :model-value="modelValue"
         :class="{ 'p-invalid': isInvalid }"
+        class="border-primary-gradient hover:border-primary focus:ring-primary"
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
+      <label
+        v-t="label"
+        :class="{ 'p-error': isInvalid }"
+        :for="id"
+        class="text-primary/40"
+      />
     </div>
     <small v-if="isInvalid" v-t="helpText" class="p-error" />
   </div>

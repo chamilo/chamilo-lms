@@ -72,7 +72,7 @@ defineEmits(["click"]);
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
-    return "p-3";
+    return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = "";
   switch (props.size) {
@@ -99,7 +99,7 @@ const buttonClass = computed(() => {
       result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
       break;
     case "black":
-      result += "bg-white text-black hover:bg-gray-90 hover:text-white ";
+      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white";
       break;
   }
   return result;

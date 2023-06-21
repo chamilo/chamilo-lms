@@ -39,7 +39,7 @@ const props = defineProps({
 })
 
 const cidQuery = useCidReq()
-const {isFile: utilsIsFile, isImage, isVideo} = useFileUtils()
+const {isFile: utilsIsFile, isImage, isVideo, isAudio} = useFileUtils()
 
 const dataType = computed(() => {
   if (!utilsIsFile(props.data)) {
@@ -50,6 +50,9 @@ const dataType = computed(() => {
     return 'image'
   }
   if (isVideo(props.data)) {
+    return 'video'
+  }
+  if (isAudio(props.data)) {
     return 'video'
   }
 

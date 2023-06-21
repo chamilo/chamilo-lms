@@ -8,6 +8,26 @@
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
 
+
+// TAILWIND COLOR DEFINITION https://tailwindcss.com/docs/customizing-colors#using-css-variables
+@layer base {
+  :root {
+    --color-primary-base: 46, 117, 163;
+    --color-primary-gradient: 156, 194, 218;
+
+    --color-secondary-base: 243, 126, 47;
+    --color-secondary-gradient: 224, 100, 16;
+
+    --color-tertiary-base: 0, 0, 0;
+    --color-tertiary-gradient: 51, 51, 51;
+
+    --color-success-base: 119, 170, 12;
+    --color-success-gradient: 84, 119, 8;
+
+    --color-danger-base: 223, 59, 59;
+  }
+}
+
 @layer components {
   .card {
     @apply rounded shadow-lg w-full;

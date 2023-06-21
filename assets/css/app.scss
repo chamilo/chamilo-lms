@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-blue {
-  @apply bg-primary text-white;
-}
-.btn-blue:hover {
-}
-
 @import '~cropper/dist/cropper.css';
 //@import "~flag-icons/sass/flag-icons.scss";
 @import "~select2/dist/css/select2.css";

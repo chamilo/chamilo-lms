@@ -17,6 +17,7 @@ import resourceNodeService from './services/resourcenode';
 import messageService from './services/message';
 import messageAttachmentService from './services/messageattachment';
 import messageRelUserService from './services/messagereluser';
+import messageTagService from "./services/messagetag";
 import userService from './services/user';
 import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
@@ -142,6 +143,13 @@ store.registerModule(
     makeCrudModule({
         service: messageRelUserService
     })
+);
+
+store.registerModule(
+  'messagetag',
+  makeCrudModule({
+    service: messageTagService
+  })
 );
 
 store.registerModule(

@@ -12,6 +12,8 @@ export const chamiloIconToClass = {
     "confirm": "mdi mdi-check",
     "select-all": "mdi mdi-select-group",
     "unselect-all": "mdi mdi-select-remove",
+    "swap-vertical": "mdi mdi-swap-vertical",
+    "customize": "mdi mdi-format-paint",
     "camera": "mdi mdi-camera",
     "record-generic": "mdi mdi-microphone",
     "record-add": "mdi mdi-microphone-plus",

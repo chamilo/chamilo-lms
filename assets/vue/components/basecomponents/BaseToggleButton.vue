@@ -68,7 +68,7 @@ defineEmits(["update:modelValue"]);
 const customClass = computed(() => {
   if (props.withoutBorders) {
     if (props.modelValue) {
-      return 'bg-primary/10 text-primary border-none hover:bg-primary/30 hover:text-primary/90 '
+      return '!bg-primary/10 text-primary border-none hover:bg-primary/30 hover:text-primary/90 '
     } else {
       return 'bg-white text-black border-none hover:bg-primary/10 hover:text-primary/90 '
     }

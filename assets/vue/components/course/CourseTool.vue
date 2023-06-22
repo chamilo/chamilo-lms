@@ -93,22 +93,26 @@ const props = defineProps({
 
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 const cardCustomClass = computed(() => {
-  if (isVisible.value) {
-    return '';
+  if (!isVisible.value) {
+    return 'bg-primary-bgdisabled border-primary-borderdisabled shadow-none ';
   }
-  return 'bg-primary-bgdisabled border-primary-borderdisabled shadow-none ';
+  if (isSorting.value) {
+    return 'border-2 border-dashed border-primary '
+  }
+  return '';
 })
 const iconCustomClass = computed(() => {
-  if (isVisible.value) {
-    return 'bg-primary-bgdisabled ';
+  if (!isVisible.value) {
+    return 'bg-gradient-to-b from-gray-50 to-gray-25 ';
   }
-  return 'bg-gradient-to-b from-gray-50 to-gray-25 ';
+  return 'bg-primary-bgdisabled ';
+
 })
 const titleCustomClass = computed(() => {
-  if (isVisible.value) {
-    return '';
+  if (!isVisible.value) {
+    return 'text-gray-90 ';
   }
-  return 'text-gray-90 ';
+  return '';
 })
 const isVisible = computed(() => props.tool.ctool.resourceNode.resourceLinks[0].visibility === 2);
 </script>

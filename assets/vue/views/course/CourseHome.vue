@@ -131,35 +131,41 @@
     </div>
     <hr class="mt-0 mb-4" />
 
-    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
+    <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
       <CourseTool
         v-for="(tool, index) in tools.authoring"
-        :key="index"
+        :key="'authoring-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="authoring"
+        :data-index="index"
       />
 
       <CourseTool
         v-for="(tool, index) in tools.interaction"
-        :key="index"
+        :key="'interaction-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="interaction"
+        :data-index="index"
       />
 
       <CourseTool
         v-for="(tool, index) in tools.plugin"
-        :key="index"
+        :key="'plugin-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="plugin"
+        :data-index="index"
       />
 
       <ShortCutList
@@ -174,7 +180,7 @@
 </template>
 
 <script setup>
-import { computed, provide, ref } from "vue";
+import {computed, provide, ref, watch} from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -189,6 +195,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
+import Sortable from 'sortablejs';
 
 const route = useRoute();
 const store = useStore();
@@ -361,5 +368,49 @@ function onClickHideAll() {
       tools.value.plugin.forEach((tool) => setToolVisibility(tool, 0));
     })
     .catch((error) => console.log(error));
+}
+
+// Sort behaviour
+let sortable = null;
+watch(isSorting, (isSortingEnabled) => {
+  if (isCourseLoading.value) {
+    return
+  }
+  if (sortable === null) {
+    let el = document.getElementById("course-tools")
+    sortable = Sortable.create(el, {
+      ghostClass: "invisible",
+      chosenClass: "cursor-move",
+      onSort: (event) => {
+        updateDisplayOrder(event.item, event.newIndex)
+      }
+    })
+  }
+
+  sortable.option("disabled", !isSortingEnabled)
+})
+function updateDisplayOrder(htmlItem, newIndex) {
+  let tool = htmlItem.dataset.tool
+  let index = htmlItem.dataset.index
+  let toolItem = null
+
+  switch (tool) {
+    case 'authoring':
+      toolItem = tools.value.authoring[index]
+      break;
+    case 'interaction':
+      toolItem = tools.value.interaction[index]
+      break;
+    case 'plugin':
+      toolItem = tools.value.plugin[index]
+      break;
+    default:
+      return
+  }
+
+  console.log(toolItem, newIndex)
+  // TODO send values to server
+  // toolItem is the tool value, retrieve id or needed data
+  // newIndex is the new Index of the tool (do we need to send the index of the other tools?)
 }
 </script>

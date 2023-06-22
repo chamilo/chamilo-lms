@@ -3,75 +3,33 @@
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
       :label="t('Back')"
-      type="black"
       class="mr-2 mb-2"
       icon="back"
+      type="black"
       @click="back"
     />
-    <BaseButton
-      :label="t('New document')"
-      type="black"
-      class="mr-2 mb-2"
-      icon="file-add"
-      @click="goToNewDocument"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New drawing')"
-      class="mr-2 mb-2"
-      type="black"
-      icon="drawing"
-    />
+    <BaseButton :label="t('New document')" class="mr-2 mb-2" icon="file-add" type="black" @click="goToNewDocument" />
+    <BaseButton :disabled="true" :label="t('New drawing')" class="mr-2 mb-2" icon="drawing" type="black" />
     <BaseButton
       :label="t('Record audio')"
       class="mr-2 mb-2"
-      type="black"
       icon="record-add"
+      type="black"
       @click="showRecordAudioDialog"
     />
-    <BaseButton
-      :label="t('Upload')"
-      type="black"
-      class="mr-2 mb-2"
-      icon="file-upload"
-      @click="goToUploadFile"
-    />
-    <BaseButton
-      :label="t('New folder')"
-      type="black"
-      class="mr-2 mb-2"
-      icon="folder-plus"
-      @click="openNew"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New cloud file')"
-      class="mr-2 mb-2"
-      type="black"
-      icon="file-cloud-add"
-    />
+    <BaseButton :label="t('Upload')" class="mr-2 mb-2" icon="file-upload" type="black" @click="goToUploadFile" />
+    <BaseButton :label="t('New folder')" class="mr-2 mb-2" icon="folder-plus" type="black" @click="openNew" />
+    <BaseButton :disabled="true" :label="t('New cloud file')" class="mr-2 mb-2" icon="file-cloud-add" type="black" />
     <BaseButton
       :disabled="!hasImageInDocumentEntries"
       :label="t('Slideshow')"
       class="mr-2 mb-2"
-      type="black"
       icon="view-gallery"
+      type="black"
       @click="showSlideShowWithFirstImage"
     />
-    <BaseButton
-      :label="t('Usage')"
-      type="black"
-      class="mr-2 mb-2"
-      icon="usage"
-      @click="showUsageDialog"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('Download all')"
-      type="black"
-      class="mr-2 mb-2"
-      icon="download"
-    />
+    <BaseButton :label="t('Usage')" class="mr-2 mb-2" icon="usage" type="black" @click="showUsageDialog" />
+    <BaseButton :disabled="true" :label="t('Download all')" class="mr-2 mb-2" icon="download" type="black" />
   </ButtonToolbar>
 
   <DataTable
@@ -85,91 +43,72 @@
     :rows-per-page-options="[5, 10, 20, 50]"
     :total-records="totalItems"
     :value="items"
+    class="mb-5"
     current-page-report-template="Showing {first} to {last} of {totalRecords}"
     data-key="iid"
     filter-display="menu"
     paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
     responsive-layout="scroll"
     striped-rows
-    class="mb-5"
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
-    <Column
-      v-if="isCurrentTeacher"
-      :exportable="false"
-      selection-mode="multiple"
-    />
+    <Column v-if="isCurrentTeacher" :exportable="false" selection-mode="multiple" />
 
-    <Column
-      :header="t('Title')"
-      :sortable="true"
-      field="resourceNode.title"
-    >
+    <Column :header="t('Title')" :sortable="true" field="resourceNode.title">
       <template #body="slotProps">
-        <DocumentEntry
-          v-if="slotProps.data"
-          :data="slotProps.data"
-        />
+        <DocumentEntry v-if="slotProps.data" :data="slotProps.data" />
       </template>
     </Column>
 
-    <Column
-      :header="t('Size')"
-      :sortable="true"
-      field="resourceNode.resourceFile.size"
-    >
+    <Column :header="t('Size')" :sortable="true" field="resourceNode.resourceFile.size">
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.resourceFile ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size) :
-            ''
+          slotProps.data.resourceNode.resourceFile
+            ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+            : ""
         }}
       </template>
     </Column>
 
-    <Column
-      :header="t('Modified')"
-      :sortable="true"
-      field="resourceNode.updatedAt"
-    >
+    <Column :header="t('Modified')" :sortable="true" field="resourceNode.updatedAt">
       <template #body="slotProps">
         {{ useRelativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 
-    <Column
-      :exportable="false"
-    >
+    <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
-          <BaseButton
-            type="black"
-            icon="information"
-            size="small"
-            @click="btnShowInformationOnClick(slotProps.data)"
-          />
+          <BaseButton icon="information" size="small" type="black" @click="btnShowInformationOnClick(slotProps.data)" />
 
           <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            type="black"
-            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-on' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'eye-off' : '')"
+            :icon="
+              RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility
+                ? 'eye-on'
+                : RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility
+                ? 'eye-off'
+                : ''
+            "
             size="small"
+            type="black"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            type="black"
             icon="edit"
             size="small"
+            type="black"
             @click="btnEditOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="isAuthenticated && isCurrentTeacher"
-            type="danger"
             icon="delete"
             size="small"
+            type="danger"
             @click="confirmDeleteItem(slotProps.data)"
           />
         </div>
@@ -177,39 +116,24 @@
     </Column>
   </DataTable>
 
-  <ButtonToolbar
-    v-if="isAuthenticated && isCurrentTeacher"
-    show-top-border
-  >
-    <BaseButton
-      :label="t('Select all')"
-      class="mr-2 mb-2"
-      type="black"
-      icon="select-all"
-      @click="selectAll"
-    />
-    <BaseButton
-      :label="t('Unselect all')"
-      class="mr-2 mb-2"
-      type="black"
-      icon="unselect-all"
-      @click="unselectAll"
-    />
+  <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher" show-top-border>
+    <BaseButton :label="t('Select all')" class="mr-2 mb-2" icon="select-all" type="black" @click="selectAll" />
+    <BaseButton :label="t('Unselect all')" class="mr-2 mb-2" icon="unselect-all" type="black" @click="unselectAll" />
     <BaseButton
       :disabled="!selectedItems || !selectedItems.length"
       :label="t('Delete selected')"
       class="mr-2 mb-2"
-      type="danger"
       icon="delete"
+      type="danger"
       @click="showDeleteMultipleDialog"
     />
   </ButtonToolbar>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isNewFolderDialogVisible"
-    :title="t('New folder')"
-    :confirm-label="t('Save')"
     :cancel-label="t('Cancel')"
+    :confirm-label="t('Save')"
+    :title="t('New folder')"
     @confirm-clicked="createNewFolder"
     @cancel-clicked="hideNewFolderDialog"
   >
@@ -223,16 +147,9 @@
         name="name"
         required="true"
       />
-      <label
-        v-t="'Name'"
-        for="name"
-      />
+      <label v-t="'Name'" for="name" />
     </div>
-    <small
-      v-if="submitted && !item.title"
-      v-t="'Title is required'"
-      class="p-error"
-    />
+    <small v-if="submitted && !item.title" v-t="'Title is required'" class="p-error" />
   </BaseDialogConfirmCancel>
 
   <BaseDialogConfirmCancel
@@ -242,8 +159,11 @@
     @cancel-clicked="isDeleteItemDialogVisible = false"
   >
     <div class="confirmation-content">
-      <BaseIcon icon="alert" size="big" class="mr-2" />
-      <span v-if="item">{{ t('Are you sure you want to delete') }} <b>{{ item.title }}</b>?</span>
+      <BaseIcon class="mr-2" icon="alert" size="big" />
+      <span v-if="item"
+        >{{ t("Are you sure you want to delete") }} <b>{{ item.title }}</b
+        >?</span
+      >
     </div>
   </BaseDialogConfirmCancel>
 
@@ -254,26 +174,17 @@
     @cancel-clicked="isDeleteMultipleDialogVisible = false"
   >
     <div class="confirmation-content">
-      <BaseIcon icon="alert" size="big" class="mr-2" />
-      <span v-if="item">{{ t('Are you sure you want to delete the selected items?') }}</span>
+      <BaseIcon class="mr-2" icon="alert" size="big" />
+      <span v-if="item">{{ t("Are you sure you want to delete the selected items?") }}</span>
     </div>
   </BaseDialogConfirmCancel>
 
-  <BaseDialog
-    v-model:is-visible="isFileUsageDialogVisible"
-    :title="t('Space available')"
-  >
+  <BaseDialog v-model:is-visible="isFileUsageDialogVisible" :title="t('Space available')">
     <p>This feature is in development, this is a mockup with placeholder data!</p>
-    <BaseChart
-      :data="usageData"
-    />
+    <BaseChart :data="usageData" />
   </BaseDialog>
 
-  <BaseDialog
-    v-model:is-visible="isRecordAudioDialogVisible"
-    :title="t('Record audio')"
-    header-icon="record-add"
-  >
+  <BaseDialog v-model:is-visible="isRecordAudioDialogVisible" :title="t('Record audio')" header-icon="record-add">
     <DocumentAudioRecorder
       :parent-resource-node-id="route.params.node"
       @document-saved="recordedAudioSaved"
@@ -283,97 +194,97 @@
 </template>
 
 <script setup>
-import {useStore} from 'vuex'
-import {RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED} from '../../components/resource_links/visibility'
-import {isEmpty} from 'lodash'
-import {useRoute, useRouter} from 'vue-router'
-import {useI18n} from 'vue-i18n'
-import {computed, onMounted, ref, watch} from 'vue'
-import {useCidReq} from '../../composables/cidReq'
-import {useDatatableList} from '../../composables/datatableList'
-import {useRelativeDatetime} from '../../composables/formatDate'
-import axios from 'axios'
+import { useStore } from "vuex";
+import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility";
+import { isEmpty } from "lodash";
+import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { computed, onMounted, ref, watch } from "vue";
+import { useCidReq } from "../../composables/cidReq";
+import { useDatatableList } from "../../composables/datatableList";
+import { useRelativeDatetime } from "../../composables/formatDate";
+import axios from "axios";
 import DocumentEntry from "../../components/documents/DocumentEntry.vue";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue";
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue";
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue";
-import {useFileUtils} from "../../composables/fileUtils";
+import { useFileUtils } from "../../composables/fileUtils";
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue";
 import BaseChart from "../../components/basecomponents/BaseChart.vue";
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue";
-import {useNotification} from "../../composables/notification";
+import { useNotification } from "../../composables/notification";
 
-const store = useStore()
-const route = useRoute()
-const router = useRouter()
+const store = useStore();
+const route = useRoute();
+const router = useRouter();
 
-const {t} = useI18n()
-const {filters, options, onUpdateOptions, deleteItem} = useDatatableList('Documents')
-const notification = useNotification()
-const {cid, sid, gid} = useCidReq()
-const {isImage} = useFileUtils()
+const { t } = useI18n();
+const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents");
+const notification = useNotification();
+const { cid, sid, gid } = useCidReq();
+const { isImage } = useFileUtils();
 
-store.dispatch('course/findCourse', {id: `/api/courses/${cid}`})
+store.dispatch("course/findCourse", { id: `/api/courses/${cid}` });
 
 if (sid) {
-  store.dispatch('session/findSession', {id: `/api/sessions/${sid}`})
+  store.dispatch("session/findSession", { id: `/api/sessions/${sid}` });
 }
 
-const item = ref({})
-const usageData = ref({})
+const item = ref({});
+const usageData = ref({});
 
-const isNewFolderDialogVisible = ref(false)
-const isDeleteItemDialogVisible = ref(false)
-const isDeleteMultipleDialogVisible = ref(false)
-const isFileUsageDialogVisible = ref(false)
-const isRecordAudioDialogVisible = ref(false)
+const isNewFolderDialogVisible = ref(false);
+const isDeleteItemDialogVisible = ref(false);
+const isDeleteMultipleDialogVisible = ref(false);
+const isFileUsageDialogVisible = ref(false);
+const isRecordAudioDialogVisible = ref(false);
 
-const submitted = ref(false)
+const submitted = ref(false);
 
-filters.value.loadNode = 1
+filters.value.loadNode = 1;
 
-const selectedItems = ref([])
+const selectedItems = ref([]);
 
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated'])
-const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher'])
+const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 
-const items = computed(() => store.getters['documents/getRecents'])
-const isLoading = computed(() => store.getters['documents/isLoading'])
+const items = computed(() => store.getters["documents/getRecents"]);
+const isLoading = computed(() => store.getters["documents/isLoading"]);
 
-const totalItems = computed(() => store.getters['documents/getTotalItems'])
+const totalItems = computed(() => store.getters["documents/getTotalItems"]);
 
-const resourceNode = computed(() => store.getters['resourcenode/getResourceNode'])
+const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"]);
 
 const hasImageInDocumentEntries = computed(() => {
-  return items.value.find(i => isImage(i)) !== undefined
-})
+  return items.value.find((i) => isImage(i)) !== undefined;
+});
 
 onMounted(() => {
-  filters.value.loadNode = 1
+  filters.value.loadNode = 1;
 
   // Set resource node.
-  let nodeId = route.params.node
+  let nodeId = route.params.node;
 
   if (isEmpty(nodeId)) {
-    nodeId = route.query.node
+    nodeId = route.query.node;
   }
 
-  store.dispatch('resourcenode/findResourceNode', {id: `/api/resource_nodes/${nodeId}`});
+  store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` });
 
-  onUpdateOptions(options.value)
+  onUpdateOptions(options.value);
 });
 
 watch(
   () => route.params,
   () => {
-    const nodeId = route.params.node
+    const nodeId = route.params.node;
 
-    const finderParams = {id: `/api/resource_nodes/${nodeId}`, cid, sid, gid};
+    const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid };
 
-    store.dispatch('resourcenode/findResourceNode', finderParams);
+    store.dispatch("resourcenode/findResourceNode", finderParams);
 
-    if ('DocumentsList' === route.name) {
+    if ("DocumentsList" === route.name) {
       onUpdateOptions(options.value);
     }
   }
@@ -383,8 +294,8 @@ const showBackButtonIfNotRootFolder = computed(() => {
   if (!resourceNode.value) {
     return false;
   }
-  return resourceNode.value.resourceType.name !== 'courses';
-})
+  return resourceNode.value.resourceType.name !== "courses";
+});
 
 function back() {
   if (!resourceNode.value) {
@@ -392,213 +303,217 @@ function back() {
   }
   let parent = resourceNode.value.parent;
   if (parent) {
-    let queryParams = {cid, sid, gid}
-    router.push({name: 'DocumentsList', params: {node: parent.id}, query: queryParams});
+    let queryParams = { cid, sid, gid };
+    router.push({ name: "DocumentsList", params: { node: parent.id }, query: queryParams });
   }
 }
 
 function openNew() {
-  item.value = {}
-  submitted.value = false
-  isNewFolderDialogVisible.value = true
+  item.value = {};
+  submitted.value = false;
+  isNewFolderDialogVisible.value = true;
 }
 
 function hideNewFolderDialog() {
-  isNewFolderDialogVisible.value = false
-  submitted.value = false
+  isNewFolderDialogVisible.value = false;
+  submitted.value = false;
 }
 
 function createNewFolder() {
-  submitted.value = true
+  submitted.value = true;
 
   if (item.value.title?.trim()) {
     if (!item.value.id) {
-      item.value.filetype = 'folder'
-      item.value.parentResourceNodeId = route.params.node
-      item.value.resourceLinkList = JSON.stringify([{
-        gid,
-        sid,
-        cid,
-        visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-      }])
+      item.value.filetype = "folder";
+      item.value.parentResourceNodeId = route.params.node;
+      item.value.resourceLinkList = JSON.stringify([
+        {
+          gid,
+          sid,
+          cid,
+          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+        },
+      ]);
 
-      store.dispatch('documents/createWithFormData', item.value)
-        .then(() => {
-          notification.showSuccessNotification(t('Saved'))
-          onUpdateOptions(options.value)
-        })
+      store.dispatch("documents/createWithFormData", item.value).then(() => {
+        notification.showSuccessNotification(t("Saved"));
+        onUpdateOptions(options.value);
+      });
     }
-    isNewFolderDialogVisible.value = false
-    item.value = {}
+    isNewFolderDialogVisible.value = false;
+    item.value = {};
   }
 }
 
 function selectAll() {
   selectedItems.value = items.value;
 }
+
 function showDeleteMultipleDialog() {
-  isDeleteMultipleDialogVisible.value = true
+  isDeleteMultipleDialogVisible.value = true;
 }
 
-function confirmDeleteItem (itemToDelete) {
-  item.value = itemToDelete
-  isDeleteItemDialogVisible.value = true
+function confirmDeleteItem(itemToDelete) {
+  item.value = itemToDelete;
+  isDeleteItemDialogVisible.value = true;
 }
 
-async function deleteMultipleItems () {
-  await store.dispatch('documents/delMultiple', selectedItems.value)
-  isDeleteMultipleDialogVisible.value = false
-  notification.showSuccessNotification(t('Deleted'))
-  unselectAll()
-  onUpdateOptions(options.value)
+async function deleteMultipleItems() {
+  await store.dispatch("documents/delMultiple", selectedItems.value);
+  isDeleteMultipleDialogVisible.value = false;
+  notification.showSuccessNotification(t("Deleted"));
+  unselectAll();
+  onUpdateOptions(options.value);
 }
 
-function unselectAll () {
+function unselectAll() {
   selectedItems.value = [];
 }
 
 function deleteSingleItem() {
-  deleteItem(item)
+  deleteItem(item);
 
-  item.value = {}
+  item.value = {};
 
-  isDeleteItemDialogVisible.value = false
+  isDeleteItemDialogVisible.value = false;
 }
 
-function onPage (event) {
+function onPage(event) {
   options.value = {
     itemsPerPage: event.rows,
     page: event.page + 1,
     sortBy: event.sortField,
-    sortDesc: event.sortOrder === -1
-  }
+    sortDesc: event.sortOrder === -1,
+  };
 
-  onUpdateOptions(options.value)
+  onUpdateOptions(options.value);
 }
 
-function sortingChanged (event) {
-  options.value.sortBy = event.sortField
-  options.value.sortDesc = event.sortOrder === -1
+function sortingChanged(event) {
+  options.value.sortBy = event.sortField;
+  options.value.sortDesc = event.sortOrder === -1;
 
-  onUpdateOptions(options.value)
+  onUpdateOptions(options.value);
 }
 
-function goToNewDocument () {
+function goToNewDocument() {
   router.push({
-    name: 'DocumentsCreateFile',
+    name: "DocumentsCreateFile",
     query: route.query,
-  })
-}
-
-function goToUploadFile () {
-  router.push({
-    name: 'DocumentsUploadFile',
-    query: route.query
-  })
-}
-
-function btnShowInformationOnClick (item) {
-  const folderParams = route.query;
-
-  if (item) {
-    folderParams.id = item['@id'];
-  }
-
-  router.push({
-    name: 'DocumentsShow',
-    params: folderParams,
-    query: folderParams
   });
 }
 
-function btnChangeVisibilityOnClick (item) {
-  const folderParams = route.query;
-
-  folderParams.id = item['@id'];
-
-  axios
-    .put(item['@id'] + '/toggle_visibility')
-    .then(response => {
-      item.resourceLinkListFromEntity = response.data.resourceLinkListFromEntity;
-    })
-  ;
+function goToUploadFile() {
+  router.push({
+    name: "DocumentsUploadFile",
+    query: route.query,
+  });
 }
 
-function btnEditOnClick (item) {
+function btnShowInformationOnClick(item) {
   const folderParams = route.query;
 
-  folderParams.id = item['@id'];
+  if (item) {
+    folderParams.id = item["@id"];
+  }
 
-  if ('folder' === item.filetype || isEmpty(item.filetype)) {
+  router.push({
+    name: "DocumentsShow",
+    params: folderParams,
+    query: folderParams,
+  });
+}
+
+function btnChangeVisibilityOnClick(item) {
+  const folderParams = route.query;
+
+  folderParams.id = item["@id"];
+
+  axios.put(item["@id"] + "/toggle_visibility").then((response) => {
+    item.resourceLinkListFromEntity = response.data.resourceLinkListFromEntity;
+  });
+}
+
+function btnEditOnClick(item) {
+  const folderParams = route.query;
+
+  folderParams.id = item["@id"];
+
+  if ("folder" === item.filetype || isEmpty(item.filetype)) {
     router.push({
-      name: 'DocumentsUpdate',
-      params: {id: item['@id']},
+      name: "DocumentsUpdate",
+      params: { id: item["@id"] },
       query: folderParams,
     });
 
     return;
   }
 
-  if ('file' === item.filetype) {
+  if ("file" === item.filetype) {
     folderParams.getFile = true;
 
-    if (item.resourceNode.resourceFile
-      && item.resourceNode.resourceFile.mimeType
-      && 'text/html' === item.resourceNode.resourceFile.mimeType
+    if (
+      item.resourceNode.resourceFile &&
+      item.resourceNode.resourceFile.mimeType &&
+      "text/html" === item.resourceNode.resourceFile.mimeType
     ) {
       //folderParams.getFile = true;
     }
 
     router.push({
-      name: 'DocumentsUpdateFile',
-      params: {id: item['@id']},
-      query: folderParams
+      name: "DocumentsUpdateFile",
+      params: { id: item["@id"] },
+      query: folderParams,
     });
   }
 }
 
 function showSlideShowWithFirstImage() {
-  let item = items.value.find(i => isImage(i))
-  if (item === undefined) { return }
+  let item = items.value.find((i) => isImage(i));
+  if (item === undefined) {
+    return;
+  }
   // Right now Vue prime datatable does not offer a method to click on a row in a table
   // https://primevue.org/datatable/#api.datatable.methods
   // so we click on the dom element that has the href on the item
-  document.querySelector(`a[href='${item.contentUrl}']`).click()
+  document.querySelector(`a[href='${item.contentUrl}']`).click();
   // start slideshow trusting the button to play is present
-  document.querySelector('button[class="fancybox-button fancybox-button--play"]').click()
+  document.querySelector('button[class="fancybox-button fancybox-button--play"]').click();
 }
 
 function showUsageDialog() {
   // TODO retrieve usage data from server
   usageData.value = {
-    datasets: [{
-      data: [83, 14, 5],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.7)',
-        'rgba(54, 162, 235, 0.7)',
-        'rgba(255, 206, 86, 0.7)',
-        'rgba(75, 192, 192, 0.7)',
-        'rgba(153, 102, 255, 0.7)',
-        'rgba(255, 159, 64, 0.7)'
-      ],
-    }],
-    labels: ['Course', 'Teacher', 'Available space'],
-  }
-  isFileUsageDialogVisible.value = true
+    datasets: [
+      {
+        data: [83, 14, 5],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.7)",
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(153, 102, 255, 0.7)",
+          "rgba(255, 159, 64, 0.7)",
+        ],
+      },
+    ],
+    labels: ["Course", "Teacher", "Available space"],
+  };
+  isFileUsageDialogVisible.value = true;
 }
 
 function showRecordAudioDialog() {
-  isRecordAudioDialogVisible.value = true
+  isRecordAudioDialogVisible.value = true;
 }
 
 function recordedAudioSaved() {
-  notification.showSuccessNotification(t('Saved'))
-  isRecordAudioDialogVisible.value = false
-  onUpdateOptions(options.value)
+  notification.showSuccessNotification(t("Saved"));
+  isRecordAudioDialogVisible.value = false;
+  onUpdateOptions(options.value);
 }
 
 function recordedAudioNotSaved(error) {
-  notification.showErrorNotification(t('Document not saved'))
-  console.error(error)
+  notification.showErrorNotification(t("Document not saved"));
+  console.error(error);
 }
 </script>

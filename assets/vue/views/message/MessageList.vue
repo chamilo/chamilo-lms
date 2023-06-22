@@ -116,7 +116,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { useConfirm } from "primevue/useconfirm";
 import { useQuery } from "@vue/apollo-composable";
-import { MESSAGE_TYPE_INBOX, MESSAGE_STATUS_DELETED } from "../../components/message/constants";
+import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/message/constants";
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag";
 import { useNotification } from "../../composables/notification";
 

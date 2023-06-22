@@ -48,7 +48,7 @@ const dataType = computed(() => {
     return "video";
   }
   if (isAudio(props.data)) {
-    return "audio";
+    return "video";
   }
 
   return "iframe";

@@ -565,9 +565,13 @@ class BuyCoursesPlugin extends Plugin
         $return = [];
         $paypal = $this->get('paypal_enable') === 'true';
         $transfer = $this->get('transfer_enable') === 'true';
+        $stripe = $this->get('stripe_enable') === 'true';
+        $culqi = $this->get('culqi_enable') === 'true';
+        $cecabank = $this->get('cecabank_enable') === 'true';
+        $tpv_redsys = $this->get('tpv_redsys_enable') === 'true';
         $hideFree = $this->get('hide_free_text') === 'true';
 
-        if ($paypal || $transfer) {
+        if ($paypal || $transfer || $stripe || $culqi || $cecabank || $tpv_redsys) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {

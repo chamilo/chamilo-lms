@@ -51,7 +51,9 @@
       <BaseMenu id="course-tmenu" ref="courseTMenu" :model="courseItems" />
     </div>
 
-    <div v-if="isCurrentTeacher">
+    <hr class="mt-1 mb-1">
+
+    <div v-if="isCurrentTeacher" class="mb-4">
       <div v-if="intro" class="flex flex-col gap-4">
         <div v-html="intro.introText" />
 
@@ -79,78 +81,91 @@
         />
       </EmptyState>
     </div>
-    <div v-else-if="intro" v-html="intro.introText" />
+    <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
 
-    <div class="flex items-center gap-6">
+    <div v-if="isCurrentTeacher" class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Show all')"
+        :off-label="t('Show all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Show all')"
-        class="p-button-text p-button-plain p-button-sm ml-auto"
-        icon="mdi mdi-eye"
+        on-icon="eye-on"
+        off-icon="eye-on"
+        size="small"
+        class="ml-auto"
+        without-borders
         @click="onClickShowAll"
       />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Hide all')"
+        :off-label="t('Hide all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Hide all')"
-        class="p-button-text p-button-plain p-button-sm"
-        icon="mdi mdi-eye-off"
+        on-icon="eye-off"
+        off-icon="eye-off"
+        size="small"
+        without-borders
         @click="onClickHideAll"
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isSorting"
         :disabled="isCustomizing"
-        :off-label="t('Sort')"
         :on-label="t('Sort')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-swap-vertical"
-        on-icon="mdi mdi-swap-vertical"
+        on-icon="swap-vertical"
+        :off-label="t('Sort')"
+        off-icon="swap-vertical"
+        size="small"
+        without-borders
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isCustomizing"
         :disabled="isSorting"
-        :off-label="t('Customize')"
         :on-label="t('Customize')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-format-paint"
-        on-icon="mdi mdi-format-paint"
+        on-icon="customize"
+        :off-label="t('Customize')"
+        off-icon="customize"
+        size="small"
+        without-borders
       />
     </div>
     <hr class="mt-0 mb-4" />
 
-    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
-      <CourseToolList
+    <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
+      <CourseTool
         v-for="(tool, index) in tools.authoring"
-        :key="index"
+        :key="'authoring-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="authoring"
+        :data-index="index"
       />
 
-      <CourseToolList
+      <CourseTool
         v-for="(tool, index) in tools.interaction"
-        :key="index"
+        :key="'interaction-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="interaction"
+        :data-index="index"
       />
 
-      <CourseToolList
+      <CourseTool
         v-for="(tool, index) in tools.plugin"
-        :key="index"
+        :key="'plugin-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
+        data-tool="plugin"
+        :data-index="index"
       />
 
       <ShortCutList
@@ -165,22 +180,22 @@
 </template>
 
 <script setup>
-import { computed, provide, ref } from "vue";
+import {computed, provide, ref, watch} from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { ENTRYPOINT } from "../../config/entrypoint";
-import Button from "primevue/button";
-import ToggleButton from "primevue/togglebutton";
-import CourseToolList from "../../components/course/CourseToolList.vue";
+import CourseTool from "../../components/course/CourseTool";
 import ShortCutList from "../../components/course/ShortCutList.vue";
 import translateHtml from "../../../js/translatehtml.js";
 import EmptyState from "../../components/EmptyState";
 import Skeleton from "primevue/skeleton";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
+import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
+import Sortable from 'sortablejs';
 
 const route = useRoute();
 const store = useStore();
@@ -353,5 +368,49 @@ function onClickHideAll() {
       tools.value.plugin.forEach((tool) => setToolVisibility(tool, 0));
     })
     .catch((error) => console.log(error));
+}
+
+// Sort behaviour
+let sortable = null;
+watch(isSorting, (isSortingEnabled) => {
+  if (isCourseLoading.value) {
+    return
+  }
+  if (sortable === null) {
+    let el = document.getElementById("course-tools")
+    sortable = Sortable.create(el, {
+      ghostClass: "invisible",
+      chosenClass: "cursor-move",
+      onSort: (event) => {
+        updateDisplayOrder(event.item, event.newIndex)
+      }
+    })
+  }
+
+  sortable.option("disabled", !isSortingEnabled)
+})
+function updateDisplayOrder(htmlItem, newIndex) {
+  let tool = htmlItem.dataset.tool
+  let index = htmlItem.dataset.index
+  let toolItem = null
+
+  switch (tool) {
+    case 'authoring':
+      toolItem = tools.value.authoring[index]
+      break;
+    case 'interaction':
+      toolItem = tools.value.interaction[index]
+      break;
+    case 'plugin':
+      toolItem = tools.value.plugin[index]
+      break;
+    default:
+      return
+  }
+
+  console.log(toolItem, newIndex)
+  // TODO send values to server
+  // toolItem is the tool value, retrieve id or needed data
+  // newIndex is the new Index of the tool (do we need to send the index of the other tools?)
 }
 </script>

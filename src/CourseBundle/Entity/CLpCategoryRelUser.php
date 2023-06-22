@@ -12,11 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 
 /**
- * CLpCategoryUser.
+ * CLpCategoryRelUser.
  */
-#[ORM\Table(name: 'c_lp_category_user')]
+#[ORM\Table(name: 'c_lp_category_rel_user')]
 #[ORM\Entity]
-class CLpCategoryUser implements Stringable
+class CLpCategoryRelUser implements Stringable
 {
     use UserTrait;
 

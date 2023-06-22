@@ -79,6 +79,9 @@ export const chamiloIconToClass = {
     "microphone": "mdi mdi-microphone",
     "stop": "mdi mdi-stop",
     "attachment": "mdi mdi-attachment",
+    "reply": "mdi mdi-reply",
+    "reply-all": "mdi mdi-reply-all",
+    "calendar-plus": "mdi mdi-calendar-plus",
 };
 
 export const validator = (value) => {

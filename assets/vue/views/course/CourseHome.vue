@@ -51,7 +51,9 @@
       <BaseMenu id="course-tmenu" ref="courseTMenu" :model="courseItems" />
     </div>
 
-    <div v-if="isCurrentTeacher">
+    <hr class="mt-1 mb-1">
+
+    <div v-if="isCurrentTeacher" class="mb-4">
       <div v-if="intro" class="flex flex-col gap-4">
         <div v-html="intro.introText" />
 
@@ -79,45 +81,52 @@
         />
       </EmptyState>
     </div>
-    <div v-else-if="intro" v-html="intro.introText" />
+    <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
 
-    <div class="flex items-center gap-6">
+    <div v-if="isCurrentTeacher" class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Show all')"
+        :off-label="t('Show all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Show all')"
-        class="p-button-text p-button-plain p-button-sm ml-auto"
-        icon="mdi mdi-eye"
+        on-icon="eye-on"
+        off-icon="eye-on"
+        size="small"
+        class="ml-auto"
+        without-borders
         @click="onClickShowAll"
       />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Hide all')"
+        :off-label="t('Hide all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Hide all')"
-        class="p-button-text p-button-plain p-button-sm"
-        icon="mdi mdi-eye-off"
+        on-icon="eye-off"
+        off-icon="eye-off"
+        size="small"
+        without-borders
         @click="onClickHideAll"
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isSorting"
         :disabled="isCustomizing"
-        :off-label="t('Sort')"
         :on-label="t('Sort')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-swap-vertical"
-        on-icon="mdi mdi-swap-vertical"
+        on-icon="swap-vertical"
+        :off-label="t('Sort')"
+        off-icon="swap-vertical"
+        size="small"
+        without-borders
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isCustomizing"
         :disabled="isSorting"
-        :off-label="t('Customize')"
         :on-label="t('Customize')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-format-paint"
-        on-icon="mdi mdi-format-paint"
+        on-icon="customize"
+        :off-label="t('Customize')"
+        off-icon="customize"
+        size="small"
+        without-borders
       />
     </div>
     <hr class="mt-0 mb-4" />
@@ -180,6 +189,7 @@ import EmptyState from "../../components/EmptyState";
 import Skeleton from "primevue/skeleton";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
+import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
 
 const route = useRoute();

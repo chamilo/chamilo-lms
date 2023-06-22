@@ -5,6 +5,7 @@
     :off-label="offLabel"
     :on-icon="chamiloIconToClass[onIcon]"
     :on-label="onLabel"
+    class="cursor-pointer"
     @change="$emit('update:modelValue', primeModelValue)"
   />
 </template>

@@ -400,7 +400,7 @@ function save_data(
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userSaved as $user) {
+            foreach ($userSaved as &$user) {
                 $csv_row = [];
                 $csv_row[] = isset($user['id']) ? $user['id'] : '';
                 $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
@@ -418,7 +418,7 @@ function save_data(
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userError as $user) {
+            foreach ($userError as &$user) {
                 $csv_row = [];
                 $csv_row[] = isset($user['id']) ? $user['id'] : '';
                 $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
@@ -437,7 +437,7 @@ function save_data(
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userWarning as $user) {
+            foreach ($userWarning as &$user) {
                 $csv_row = [];
                 $csv_row[] = isset($user['id']) ? $user['id'] : '';
                 $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';

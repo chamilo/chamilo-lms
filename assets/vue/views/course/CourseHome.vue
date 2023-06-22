@@ -132,7 +132,7 @@
     <hr class="mt-0 mb-4" />
 
     <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
-      <CourseToolList
+      <CourseTool
         v-for="(tool, index) in tools.authoring"
         :key="index"
         :change-visibility="changeVisibility"
@@ -142,7 +142,7 @@
         :tool="tool"
       />
 
-      <CourseToolList
+      <CourseTool
         v-for="(tool, index) in tools.interaction"
         :key="index"
         :change-visibility="changeVisibility"
@@ -152,7 +152,7 @@
         :tool="tool"
       />
 
-      <CourseToolList
+      <CourseTool
         v-for="(tool, index) in tools.plugin"
         :key="index"
         :change-visibility="changeVisibility"
@@ -180,9 +180,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { ENTRYPOINT } from "../../config/entrypoint";
-import Button from "primevue/button";
-import ToggleButton from "primevue/togglebutton";
-import CourseToolList from "../../components/course/CourseToolList.vue";
+import CourseTool from "../../components/course/CourseTool";
 import ShortCutList from "../../components/course/ShortCutList.vue";
 import translateHtml from "../../../js/translatehtml.js";
 import EmptyState from "../../components/EmptyState";

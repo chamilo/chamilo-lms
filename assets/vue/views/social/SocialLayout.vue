@@ -21,7 +21,7 @@
 <script>
 import {useStore} from "vuex";
 import {onMounted, provide, readonly, ref, watch} from "vue";
-import SocialNetworkWall from "./Wall";
+import SocialNetworkWall from "./SocialWall.vue";
 import {useRoute} from "vue-router";
 
 export default {

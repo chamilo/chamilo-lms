@@ -97,7 +97,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
 
 export default {
-  name: "WallPost",
+  name: "SocialWallPost",
   components: {WallComment, WallCommentForm, WallActions},
   props: {
     post: {

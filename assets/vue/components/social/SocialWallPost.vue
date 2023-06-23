@@ -87,7 +87,7 @@
   </q-card>
 </template>
 
-<script>
+<script setup>
 import WallCommentForm from "./CommentForm";
 import {computed, onMounted, reactive} from "vue";
 import WallComment from "./WallComment";
@@ -96,68 +96,55 @@ import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
 
-export default {
-  name: "SocialWallPost",
-  components: {WallComment, WallCommentForm, WallActions},
-  props: {
-    post: {
-      type: Object,
-      required: true
-    }
-  },
-  emits: ["post-deleted"],
-  setup(props, {emit}) {
-    const store = useStore();
-
-    const currentUser = store.getters['security/getUser'];
-
-    const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
-    let comments = reactive([]);
-
-    const containsImage = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('image/');
-    const containsVideo = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
-
-    function loadComments() {
-      axios
-        .get(ENTRYPOINT + 'social_posts', {
-          params: {
-            parent: props.post['@id'],
-            'order[sendDate]': 'desc',
-            itemsPerPage: 3,
-          }
-        })
-        .then(response => comments.push(...response.data['hydra:member']))
-      ;
-    }
-
-    function onCommentDeleted(event) {
-      const index = comments.findIndex(comment => comment['@id'] === event.comment['@id']);
-
-      if (-1 !== index) {
-        comments.splice(index, 1);
-      }
-    }
-
-    function onCommentPosted(newComment) {
-      comments.unshift(newComment);
-    }
-
-    function onPostDeleted(post) {
-      emit('post-deleted', post);
-    }
-
-    onMounted(loadComments);
-
-    return {
-      attachment,
-      containsImage,
-      containsVideo,
-      comments,
-      onCommentDeleted,
-      onCommentPosted,
-      onPostDeleted,
-      isOwner: computed(() => currentUser['@id'] === props.post.sender['@id']),
-    }
+const props = defineProps({
+  post: {
+    type: Object,
+    required: true
   }
+});
+
+const emit = defineEmits(["post-deleted"]);
+
+const store = useStore();
+
+const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
+let comments = reactive([]);
+
+const containsImage = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('image/');
+const containsVideo = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
+
+const currentUser = store.getters['security/getUser'];
+
+const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
+
+onMounted(loadComments);
+
+function loadComments() {
+  axios
+    .get(ENTRYPOINT + 'social_posts', {
+      params: {
+        parent: props.post['@id'],
+        'order[sendDate]': 'desc',
+        itemsPerPage: 3,
+      }
+    })
+    .then(response => comments.push(...response.data['hydra:member']))
+  ;
+}
+
+function onCommentDeleted(event) {
+  const index = comments.findIndex(comment => comment['@id'] === event.comment['@id']);
+
+  if (-1 !== index) {
+    comments.splice(index, 1);
+  }
+}
+
+function onCommentPosted(newComment) {
+  comments.unshift(newComment);
+}
+
+function onPostDeleted(post) {
+  emit('post-deleted', post);
 }
 </script>

@@ -1,57 +1,45 @@
 <template>
-  <div class="row q-col-gutter-md">
-    <div class="col-8">
-      <SocialNetworkWall />
+  <div class="flex flex-col md:flex-row gap-4">
+    <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
+      <SocialNetworkWall/>
     </div>
-    <div class="col-4">
-      <q-card bordered flat>
-        <img
-          :src="user.illustrationUrl"
-        />
-
-        <q-card-section class="text-center">
-          <div class="text-h6">{{ user.fullName }}</div>
-          <div class="text-subtitle2">{{ user.username }}</div>
-        </q-card-section>
-      </q-card>
+    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex justify-center">
+      <BaseCard plain>
+        <img class="mb-2 p-3 rounded-full" :src="user.illustrationUrl" />
+        <div class="flex flex-col text-center">
+          <div class="text-xl">{{ user.fullName }}</div>
+          <div class="text-lg">{{ user.username }}</div>
+        </div>
+      </BaseCard>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import {useStore} from "vuex";
 import {onMounted, provide, readonly, ref, watch} from "vue";
 import SocialNetworkWall from "./SocialWall.vue";
 import {useRoute} from "vue-router";
+import BaseCard from "../../components/basecomponents/BaseCard.vue";
 
-export default {
-  name: "SocialNetworkLayout",
-  components: {SocialNetworkWall},
-  setup() {
-    const store = useStore();
-    const route = useRoute();
+const store = useStore();
+const route = useRoute();
 
-    const user = ref({});
+const user = ref({});
 
-    provide('social-user', readonly(user));
+provide('social-user', readonly(user));
 
-    async function loadUser() {
-      try {
-        user.value = route.query.id
-          ? await store.dispatch('user/load', route.query.id)
-          : store.getters['security/getUser'];
-      } catch (e) {
-        user.value = {};
-      }
-    }
-
-    onMounted(loadUser);
-
-    watch(() => route.query, loadUser);
-
-    return {
-      user
-    }
+async function loadUser() {
+  try {
+    user.value = route.query.id
+      ? await store.dispatch('user/load', route.query.id)
+      : store.getters['security/getUser'];
+  } catch (e) {
+    user.value = {};
   }
 }
+
+onMounted(loadUser);
+
+watch(() => route.query, loadUser);
 </script>

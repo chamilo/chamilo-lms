@@ -1,139 +1,141 @@
 <template>
-  <q-card bordered class="mb-4" flat>
-    <q-card-section>
-      <q-form
-        class="q-gutter-md"
+  <BaseCard plain>
+    <form>
+      <BaseInputText
+        v-model="content"
+        class="mb-2"
+        :label="textPlaceholder"
+        :aria-placeholder="textPlaceholder"
+        :is-invalid="v$.content.$error"
       >
-        <q-input
-          v-model="content"
-          :error="v$.content.$error"
-          :label="textPlaceholder"
-          autogrow
+        <template #errors>
+          <p
+            v-for="error in v$.content.$errors"
+            :key="error.$uid"
+            class="mt-1 text-error"
+          >
+            {{ error.$message }}
+          </p>
+        </template>
+      </BaseInputText>
+
+      <div class="mb-2">
+        <BaseCheckbox
+          v-if="allowCreatePromoted"
+          id="is-promoted"
+          v-model="isPromoted"
+          :label="$t('Mark as promoted message')"
+          name="is-promoted"
+        />
+      </div>
+
+      <div class="flex mb-2">
+        <BaseFileUpload
+          v-model="attachment"
+          :label="$t('File upload')"
+          accept="image"
+          @change="v$.attachment.$touch()"
         />
 
-        <div class="row justify-between mt-0">
-          <q-file
-            v-model="attachment"
-            :label="$t('File upload')"
-            accept="image/*"
-            clearable
-            dense
-            @change="v$.attachment.$touch()"
-          >
-            <template v-slot:prepend>
-              <q-icon name="attach_file" />
-            </template>
-          </q-file>
-
-          <q-checkbox
-            v-model="isPromoted"
-            v-if="allowCreatePromoted"
-            :label="$t('Mark as promoted message')"
-            left-label
-          />
-
-          <q-btn
-            :label="$t('Post')"
-            icon="send"
-            @click="sendPost"
-          />
-        </div>
-      </q-form>
-    </q-card-section>
-  </q-card>
+        <BaseButton
+          :label="$t('Post')"
+          class="ml-auto"
+          type="primary"
+          icon="send"
+          size="small"
+          @click="sendPost"
+        />
+      </div>
+    </form>
+  </BaseCard>
 </template>
 
-<script>
+<script setup>
 import {computed, inject, onMounted, reactive, ref, toRefs, watch} from "vue";
 import {useStore} from "vuex";
 import {SOCIAL_TYPE_PROMOTED_MESSAGE, SOCIAL_TYPE_WALL_POST} from "./constants";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
+import BaseCard from "../basecomponents/BaseCard.vue";
+import BaseButton from "../basecomponents/BaseButton.vue";
+import BaseInputText from "../basecomponents/BaseInputText.vue";
+import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 
-export default {
-  name: "WallPostForm",
-  setup() {
-    const user = inject('social-user');
+const store = useStore();
+const {t} = useI18n();
 
-    const store = useStore();
-    const {t} = useI18n();
+const user = inject('social-user');
 
-    const currentUser = store.getters['security/getUser'];
-    const userIsAdmin = store.getters['security/isAdmin'];
+const currentUser = store.getters['security/getUser'];
+const userIsAdmin = store.getters['security/isAdmin'];
 
-    const postState = reactive({
-      content: '',
-      attachment: null,
-      isPromoted: false,
-      textPlaceholder: '',
-    });
+const postState = reactive({
+  content: '',
+  attachment: null,
+  isPromoted: false,
+  textPlaceholder: '',
+});
 
-    function showTextPlaceholder() {
-      postState.textPlaceholder = currentUser['@id'] === user.value['@id']
-        ? t('What are you thinking about?')
-        : t('Write something to {0}', [user.value.fullName]);
-    }
+const {content, attachment, isPromoted, textPlaceholder} = toRefs(postState)
 
-    const allowCreatePromoted = ref(false);
+const v$ = useVuelidate({
+  content: {required},
+}, postState);
 
-    function showCheckboxPromoted() {
-      allowCreatePromoted.value = userIsAdmin && currentUser['@id'] === user.value['@id'];
-    }
+watch(() => user.value, () => {
+  showTextPlaceholder();
 
-    const v$ = useVuelidate({
-      content: {required},
-    }, postState);
+  showCheckboxPromoted();
+});
 
-    async function sendPost() {
-      v$.value.$touch();
+onMounted(() => {
+  showTextPlaceholder();
 
-      if (v$.value.$invalid) {
-        return;
-      }
+  showCheckboxPromoted();
+});
 
-      const createPostPayload = {
-        content: postState.content,
-        type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
-        sender: currentUser['@id'],
-        userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
-      };
+function showTextPlaceholder() {
+  postState.textPlaceholder = currentUser['@id'] === user.value['@id']
+    ? t('What are you thinking about?')
+    : t('Write something to {0}', [user.value.fullName]);
+}
 
-      await store.dispatch('socialpost/create', createPostPayload);
+const allowCreatePromoted = ref(false);
 
-      if (postState.attachment) {
-        const post = store.state.socialpost.created;
-        const attachmentPayload = {
-          postId: post.id,
-          file: postState.attachment
-        };
+function showCheckboxPromoted() {
+  allowCreatePromoted.value = userIsAdmin && currentUser['@id'] === user.value['@id'];
+}
 
-        await store.dispatch('messageattachment/createWithFormData', attachmentPayload);
-      }
+async function sendPost() {
+  v$.value.$touch();
 
-      postState.content = '';
-      postState.attachment = null;
-      postState.isPromoted = false;
-    }
-
-    watch(() => user.value, () => {
-      showTextPlaceholder();
-
-      showCheckboxPromoted();
-    });
-
-    onMounted(() => {
-      showTextPlaceholder();
-
-      showCheckboxPromoted();
-    });
-
-    return {
-      allowCreatePromoted,
-      ...toRefs(postState),
-      sendPost,
-      v$
-    }
+  if (v$.value.$invalid) {
+    return;
   }
+
+  const createPostPayload = {
+    content: postState.content,
+    type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
+    sender: currentUser['@id'],
+    userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
+  };
+
+  await store.dispatch('socialpost/create', createPostPayload);
+
+  if (postState.attachment) {
+    const post = store.state.socialpost.created;
+    const attachmentPayload = {
+      postId: post.id,
+      file: postState.attachment
+    };
+
+    await store.dispatch('messageattachment/createWithFormData', attachmentPayload);
+  }
+
+  postState.content = '';
+  postState.attachment = null;
+  postState.isPromoted = false;
 }
 </script>

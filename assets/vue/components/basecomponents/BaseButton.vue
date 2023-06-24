@@ -6,6 +6,7 @@
     :outlined="primeOutlinedProperty"
     :size="size"
     :text="primeTextProperty"
+    :type="isSubmit ? 'submit': 'button'"
     class="cursor-pointer"
     plain
     @click="$emit('click', $event)"
@@ -27,6 +28,11 @@ const props = defineProps({
   label: {
     type: String,
     default: "",
+  },
+  isSubmit: {
+    type: Boolean,
+    required: false,
+    default: () => false,
   },
   icon: {
     type: String,

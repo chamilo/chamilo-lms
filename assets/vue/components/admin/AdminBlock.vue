@@ -1,20 +1,22 @@
 <template>
   <div class="p-4 rounded-lg shadow-lg space-y-4">
-    <div class="flex flex-col lg:flex-row gap-3 items-center">
-      <div class="lg:basis-2/3 space-y-3 text-center lg:text-left">
-        <h4>
-          <span :class="`mdi-${props.icon}`" aria-hidden="true" class="mdi" />
-          {{ props.title }}
-        </h4>
+    <div class="flex gap-2 justify-between">
+      <h4>
+        <BaseIcon :icon="icon" />
+        {{ props.title }}
+      </h4>
+    </div>
 
-        <p v-if="props.description" class="text-body-2" v-text="props.description" />
-      </div>
+    <div class="flex flex-col md:flex-row gap-2 justify-between items-center">
+      <p v-if="props.description" class="text-body-2 text-center md:text-left" v-text="props.description" />
 
       <form v-if="props.searchUrl" :action="props.searchUrl" class="lg:basis-1/3" method="get">
-        <div class="p-inputgroup flex-1">
-          <InputText :placeholder="t('Keyword')" name="keyword" type="text" />
-          <Button :label="t('Search')" icon="pi pi-search" type="submit" />
-        </div>
+        <BaseInputGroup
+          :button-label="t('Search')"
+          :input-placeholder="t('Keyword')"
+          button-icon="search"
+          input-name="keyword"
+        />
       </form>
     </div>
 
@@ -42,13 +44,13 @@
 <script setup>
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
+import BaseInputGroup from "../basecomponents/BaseInputGroup.vue";
+import BaseIcon from "../basecomponents/BaseIcon.vue";
 
 const { t } = useI18n();
 
 const props = defineProps({
-  icon: { type: String, required: false, default: () => "cogs" },
+  icon: { type: String, required: false, default: () => "admin-settings" },
   title: { type: String, require: true, default: () => "" },
   description: { type: String, required: false, default: () => null },
   searchUrl: { type: String, required: false, default: () => null },

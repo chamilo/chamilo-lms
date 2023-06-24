@@ -84,6 +84,14 @@ export const chamiloIconToClass = {
   "unselect-all": "mdi mdi-select-remove",
   "usage": "mdi mdi-chart-donut",
   "view-gallery": "mdi mdi-view-gallery",
+  "gradebook": "mdi mdi-certificate",
+  "sessions": "mdi mdi-google-classroom",
+  "search": "mdi mdi-magnify",
+  "account": "mdi mdi-account",
+  "admin-settings": "mdi mdi-cogs",
+  "courses": "mdi mdi-book-open-page-variant",
+  "anonymous": "mdi mdi-incognito",
+  "settings": "mdi mdi-tools",
 };
 
 export const validator = (value) => {

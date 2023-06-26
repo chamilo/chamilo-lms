@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
+use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pFramework;
+use H5PCore;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -22,33 +24,31 @@ $embedRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImport');
 $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
 
-$embedId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
-if (!$embedId) {
+if (!$h5pImportId) {
     api_not_allowed(true);
 }
 
-/** @var Embed|null $embed */
-$embed = $embedRepo->find($embedId);
+/** @var H5pImport|null $h5pImport */
+$h5pImport = $embedRepo->find($h5pImportId);
 
-if (!$embed) {
+if (!$h5pImport) {
     api_not_allowed(
         true,
         Display::return_message($plugin->get_lang('ContentNotFound'), 'danger')
     );
 }
 
-if ($course->getId() !== $embed->getCourse()->getId()) {
+if ($course->getId() !== $h5pImport->getCourse()->getId()) {
     api_not_allowed(true);
 }
 
-if ($session && $embed->getSession()) {
-    if ($session->getId() !== $embed->getSession()->getId()) {
+if ($session && $h5pImport->getSession()) {
+    if ($session->getId() !== $h5pImport->getSession()->getId()) {
         api_not_allowed(true);
     }
 }
-
-$plugin->saveEventAccessTool();
 
 $interbreadcrumb[] = [
     'name' => $plugin->getToolTitle(),
@@ -60,13 +60,15 @@ $actions = Display::url(
     api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq()
 );
 
-$view = new Template($embed->getTitle());
-$view->assign('header', $embed->getTitle());
+//ToDo Visualizar paquete h5P
+
+$view = new Template($h5pImport->getName());
+$view->assign('header', $h5pImport->getName());
 $view->assign('actions', Display::toolbarAction($plugin->get_name(), [$actions]));
 $view->assign(
     'content',
-    '<p>'.$plugin->formatDisplayDate($embed).'</p>'
+    '<p> hola</p>'
         .PHP_EOL
-        .Security::remove_XSS($embed->getHtmlCode(), COURSEMANAGERLOWSECURITY)
+        .Security::remove_XSS($h5pImport->getName(), COURSEMANAGERLOWSECURITY)
 );
 $view->display_one_col_template();

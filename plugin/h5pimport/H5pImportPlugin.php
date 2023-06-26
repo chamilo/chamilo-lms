@@ -4,6 +4,7 @@
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 
 /**
  * Define the H5pImportPlugin class as an extension of Plugin
@@ -14,6 +15,7 @@ class H5pImportPlugin extends Plugin
 {
 
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
+    public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
     protected function __construct()
     {
         $settings = [
@@ -51,17 +53,27 @@ class H5pImportPlugin extends Plugin
     public function install()
     {
         $em = Database::getManager();
-
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TBL_H5P_IMPORT])) {
+        if ($em->getConnection()
+            ->getSchemaManager()
+            ->tablesExist(
+                [
+                    self::TBL_H5P_IMPORT,
+                    self::TBL_H5P_IMPORT_LIBRARY
+                ]
+            )
+        ) {
             return;
         }
+
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
             [
                 $em->getClassMetadata(H5pImport::class),
+                $em->getClassMetadata(H5pImportLibrary::class),
             ]
         );
+        $this->addCourseTools();
     }
     public function uninstall()
     {
@@ -78,7 +90,15 @@ class H5pImportPlugin extends Plugin
             Database::query($sql);
         }
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TBL_H5P_IMPORT])) {
+        if (!$em->getConnection()
+            ->getSchemaManager()
+            ->tablesExist(
+                [
+                    self::TBL_H5P_IMPORT,
+                    self::TBL_H5P_IMPORT_LIBRARY
+                ]
+            )
+        ) {
             return;
         }
 
@@ -86,6 +106,7 @@ class H5pImportPlugin extends Plugin
         $schemaTool->dropSchema(
             [
                 $em->getClassMetadata(H5pImport::class),
+                $em->getClassMetadata(H5pImportLibrary::class),
             ]
         );
     }
@@ -108,7 +129,35 @@ class H5pImportPlugin extends Plugin
     }
     public function getViewUrl(H5pImport $h5pImport): string
     {
-        return api_get_path(WEB_PLUGIN_PATH).'view.php?id='.$h5pImport->getId().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'h5pimport\view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
+    }
+
+    private function addCourseTools()
+    {
+        $courses = Database::getManager()
+            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->getResult();
+
+        foreach ($courses as $course) {
+            $this->addCourseTool($course['id']);
+        }
+    }
+
+    /**
+     * @param int $courseId
+     */
+    public function addCourseTool($courseId)
+    {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
+        $this->createLinkToCourseTool(
+            $this->get_lang('plugin_title'),
+            $courseId,
+            'plugins.png',
+            '../plugin/h5pimport/start.php',
+            0,
+            'authoring'
+        );
     }
     private function deleteCourseToolLinks()
     {

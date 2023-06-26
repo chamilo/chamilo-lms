@@ -5,8 +5,12 @@ namespace Chamilo\PluginBundle\Entity\H5pImport;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class H5pImport.
@@ -46,7 +50,7 @@ class H5pImport
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="text")
+     * @ORM\Column(name="name", type="text", nullable=true)
      */
     private string $name;
 
@@ -58,8 +62,22 @@ class H5pImport
     protected string $path;
 
     /**
+     * @var Collection<int, H5pImportLibrary>
+     * @ORM\ManyToMany(targetEntity="H5pImportLibrary", mappedBy="h5pImports", cascade={"persist"})
+     */
+    private $libraries;
+
+    /**
+     * @var H5pImportLibrary
+     * @ORM\ManyToOne(targetEntity="H5pImportLibrary")
+     * @ORM\JoinColumn(name="main_library_id", referencedColumnName="iid", onDelete="SET NULL")
+     */
+    private H5pImportLibrary $mainLibrary;
+
+    /**
      * @var DateTime
      *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected DateTime $createdAt;
@@ -67,9 +85,15 @@ class H5pImport
     /**
      * @var DateTime
      *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
     protected DateTime $modifiedAt;
+
+    public function __construct()
+    {
+        $this->libraries = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -198,6 +222,35 @@ class H5pImport
         $this->modifiedAt = $modifiedAt;
     }
 
+    public function addLibraries(H5pImportLibrary $library): self
+    {
+        $library->addH5pImport($this);
+        $this->libraries[] = $library;
+        return $this;
+    }
 
+    public function removeLibraries(H5pImportLibrary $library): self
+    {
+        $this->libraries->removeElement($library);
+
+        return $this;
+    }
+
+    public function getLibraries(): Collection
+    {
+        return $this->libraries;
+    }
+
+    public function setMainLibrary(H5pImportLibrary $library): self
+    {
+        $this->mainLibrary = $library;
+
+        return $this;
+    }
+
+    public function getMainLibrary(): ?H5pImportLibrary
+    {
+        return $this->mainLibrary;
+    }
 
 }

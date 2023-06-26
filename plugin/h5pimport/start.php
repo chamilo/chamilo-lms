@@ -74,25 +74,22 @@ switch ($action) {
                     $packageFile.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'content.json'
                 );
                 if ($h5pJson && $contentJson) {
-                    print("<pre>".print_r($contentJson,true)."</pre>");
-                    die();
-                    // ToDo Manipular archivos descomprimidos, validar h5p.json, insertar en BBDD
 
-                    $h5p = new H5pImport();
 
-                    $h5p
-                        ->setTitle($values['title'])
-                        ->setDisplayStartDate($startDate)
-                        ->setDisplayEndDate($endDate)
-                        ->setCourse($course)
-                        ->setSession($session);
+                    if (H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
 
-                    $em->persist($h5p);
-                    $em->flush();
+                        H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session);
 
-                    Display::addFlash(
-                        Display::return_message(get_lang('Added'), 'success')
-                    );
+                        Display::addFlash(
+                            Display::return_message(get_lang('Added'), 'success')
+                        );
+
+                    } else {
+                        Display::addFlash(
+                            Display::return_message(get_lang('Error'), 'error')
+                        );
+                        break;
+                    }
 
                     header('Location: '.api_get_self());
 
@@ -114,11 +111,6 @@ switch ($action) {
         $view->assign('header', $plugin->get_lang('import_h5p_package'));
         $view->assign('form', $form->returnForm());
 
-        $externalUrl = $plugin->get(EmbedRegistryPlugin::SETTING_EXTERNAL_URL);
-
-        if (!empty($externalUrl)) {
-            $view->assign('external_url', $externalUrl);
-        }
         break;
     case 'edit':
         if (!$isAllowedToEdit) {
@@ -190,27 +182,29 @@ switch ($action) {
         $view->assign('form', $form->returnForm());
         break;
     case 'delete':
-        $embedId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+        $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
-        if (!$embedId) {
+        if (!$h5pImportId) {
             break;
         }
 
-        /** @var Embed|null $embed */
-        $embed = $h5pRepo->find($embedId);
+        /** @var H5pImport|null $h5pImport */
+        $h5pImport = $h5pRepo->find($h5pImportId);
 
-        if (!$embed) {
+        if (!$h5pImport) {
             Display::addFlash(Display::return_message($plugin->get_lang('ContentNotFound'), 'danger'));
 
             break;
         }
-
-        $em->remove($embed);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('Deleted'), 'success')
-        );
+        if (H5pPackageTools::deleteH5pPackage($h5pImport)) {
+            Display::addFlash(
+                Display::return_message(get_lang('Deleted'), 'success')
+            );
+        } else {
+            Display::addFlash(
+                Display::return_message(get_lang('Error'), 'danger')
+            );
+        }
 
         header('Location: '.api_get_self());
         exit;
@@ -222,8 +216,8 @@ switch ($action) {
         $tableData = [];
         foreach ($h5pImports as $h5pImport) {
             $data = [
-                $h5pImport->getTitle(),
-                $h5pImport,
+                $h5pImport->getName(),
+                $h5pImport->getPath(),
             ];
 
             if ($isAllowedToEdit) {
@@ -251,18 +245,22 @@ switch ($action) {
             }
         }
 
-        $table = new SortableTableFromArray($tableData, 1);
+        $table = new SortableTableFromArray($tableData, 0);
         $table->set_header(0, get_lang('Title'));
+        $table->set_header(1, get_lang('Path'));
 
-        $table->set_header(
-            $isAllowedToEdit ? 2 : 1,
-            get_lang('Actions'),
-            false,
-            'th-header text-right',
-            ['class' => 'text-right']
-        );
+        if ($isAllowedToEdit) {
+
+            $table->set_header(
+                2,
+                get_lang('Actions'),
+                false,
+                'th-header text-right',
+                ['class' => 'text-right']
+            );
+        }
         $table->set_column_filter(
-            $isAllowedToEdit ? 2 : 1,
+            2,
             function (H5pImport $value) use ($isAllowedToEdit, $plugin) {
                 $actions = [];
 
@@ -272,10 +270,6 @@ switch ($action) {
                 );
 
                 if ($isAllowedToEdit) {
-                    $actions[] = Display::url(
-                        Display::return_icon('edit.png', get_lang('Edit')),
-                        api_get_self().'?action=edit&id='.$value->getIid()
-                    );
 
                     $actions[] = Display::url(
                         Display::return_icon('delete.png', get_lang('Delete')),

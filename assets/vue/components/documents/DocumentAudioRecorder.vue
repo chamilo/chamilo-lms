@@ -3,7 +3,7 @@
     <BaseInputText
       v-if="audio"
       v-model="recordName"
-      :help-text="recordError"
+      :error-text="recordError"
       :is-invalid="recordError !== ''"
       :label="t('Enter filename here')"
       class="max-w-full self-center mb-4 w-60"

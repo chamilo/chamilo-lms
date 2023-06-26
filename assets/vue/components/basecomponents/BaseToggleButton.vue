@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { validator } from "./ChamiloIcons";
+import {iconValidator, sizeValidator} from "./validators";
 import BaseButton from "./BaseButton.vue";
 import {computed} from "vue";
 
@@ -36,7 +36,7 @@ const props = defineProps({
   onIcon: {
     type: String,
     required: true,
-    validator,
+    validator: iconValidator,
   },
   offLabel: {
     type: String,
@@ -45,17 +45,12 @@ const props = defineProps({
   offIcon: {
     type: String,
     required: true,
-    validator,
+    validator: iconValidator,
   },
   size: {
     type: String,
     default: "normal",
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return ["normal", "small"].includes(value);
-    },
+    validator: sizeValidator,
   },
   withoutBorders: {
     type: Boolean,

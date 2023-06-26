@@ -1,0 +1,30 @@
+<template>
+  <Card
+    class="bg-gray-15 border border-gray-25 shadow-none"
+    :class="customClass"
+  >
+    <template #content>
+      <slot></slot>
+    </template>
+  </Card>
+</template>
+
+<script setup>
+import Card from 'primevue/card'
+import {computed} from "vue"
+
+const props = defineProps({
+  plain: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+const customClass = computed(() => {
+  let resultClass = ''
+  if (props.plain) {
+    resultClass += 'border border-gray-25 shadow-none '
+  }
+  return resultClass
+})
+</script>

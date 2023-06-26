@@ -10,7 +10,9 @@
       />
       <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
     </div>
-    <small v-if="isInvalid" v-t="helpText" class="p-error" />
+    <slot name="errors">
+      <small v-if="isInvalid" v-t="errorText" class="p-error" />
+    </slot>
   </div>
 </template>
 
@@ -32,7 +34,7 @@ defineProps({
     type: String,
     required: true,
   },
-  helpText: {
+  errorText: {
     type: String,
     required: false,
     default: null,

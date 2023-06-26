@@ -999,7 +999,8 @@ class bbb
         $isAdminReport = false,
         $dateRange = [],
         $start = 0,
-        $limit = 0
+        $limit = 0,
+        $order = "ASC"
     ) {
         $em = Database::getManager();
         $manager = $this->isConferenceManager();
@@ -1061,7 +1062,7 @@ class bbb
             );
         }
 
-        $conditions['order'] = 'created_at ASC';
+        $conditions['order'] = 'created_at ' . $order;
 
         if ($limit) {
             $conditions['limit'] = "$start , $limit";

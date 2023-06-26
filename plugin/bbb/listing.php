@@ -383,16 +383,14 @@ $meetings = $bbb->getMeetings(
     false,
     [],
     $start,
-    $limit
+    $limit,
+    "DESC"
 );
 
 if (empty($meetings)) {
     $pageId = 0;
 }
 
-if (!empty($meetings)) {
-    $meetings = array_reverse($meetings);
-}
 $usersOnline = $bbb->getUsersOnlineInCurrentRoom();
 $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();

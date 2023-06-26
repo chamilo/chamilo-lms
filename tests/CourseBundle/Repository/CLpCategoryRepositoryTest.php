@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpCategoryUser;
+use Chamilo\CourseBundle\Entity\CLpCategoryRelUser;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -62,7 +62,7 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
         $em->persist($category);
         $em->flush();
 
-        $categoryRelUser = (new CLpCategoryUser())
+        $categoryRelUser = (new CLpCategoryRelUser())
             ->setCategory($category)
             ->setUser($teacher)
         ;

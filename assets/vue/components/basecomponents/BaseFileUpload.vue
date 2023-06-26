@@ -2,6 +2,7 @@
   <div class="flex gap-2 items-center">
     <BaseButton
       :label="label"
+      :size="size"
       type="primary"
       icon="attachment"
       @click="showFileDialog"
@@ -38,7 +39,17 @@ const props = defineProps({
       if (value === '') { return true }
       return ['image'].includes(value);
     },
-  }
+  },
+  size: {
+    type: String,
+    default: "normal",
+    validator: (value) => {
+      if (typeof value !== "string") {
+        return false;
+      }
+      return ["normal", "small"].includes(value);
+    },
+  },
 })
 
 const emit = defineEmits(['fileSelected'])

@@ -34,6 +34,7 @@
           v-model="attachment"
           :label="$t('File upload')"
           accept="image"
+          size="small"
           @change="v$.attachment.$touch()"
         />
 
@@ -51,7 +52,7 @@
 </template>
 
 <script setup>
-import {computed, inject, onMounted, reactive, ref, toRefs, watch} from "vue";
+import {inject, onMounted, reactive, ref, toRefs, watch} from "vue";
 import {useStore} from "vuex";
 import {SOCIAL_TYPE_PROMOTED_MESSAGE, SOCIAL_TYPE_WALL_POST} from "./constants";
 import useVuelidate from "@vuelidate/core";

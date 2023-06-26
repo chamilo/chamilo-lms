@@ -1,6 +1,6 @@
 <template>
   <StickyCourses/>
-  <SessionTabs/>
+  <SessionTabs class="mb-4"/>
 
   <!-- All sessions -->
   <!--  <SessionListWrapper :sessions="sessionList"/>-->
@@ -9,10 +9,9 @@
 </template>
 
 <script>
-
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {useStore} from 'vuex';
-import {useQuery, useResult} from '@vue/apollo-composable'
+import {useQuery} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser.js";
 import SessionTabs from '../../../components/session/SessionTabs.vue';
 import StickyCourses from '../../../views/user/courses/StickyCourses.vue';

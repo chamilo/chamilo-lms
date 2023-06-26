@@ -1,12 +1,14 @@
 <template>
-  <SocialWallPost
-    v-for="socialPost in postList"
-    :key="socialPost.id"
-    :post="socialPost"
-    @post-deleted="onPostDeleted($event)"
-  />
+  <div>
+    <SocialWallPost
+      v-for="socialPost in postList"
+      :key="socialPost.id"
+      :post="socialPost"
+      @post-deleted="onPostDeleted($event)"
+    />
 
-  <Loading :visible="isLoading" />
+    <Loading :visible="isLoading" />
+  </div>
 </template>
 
 <script setup>

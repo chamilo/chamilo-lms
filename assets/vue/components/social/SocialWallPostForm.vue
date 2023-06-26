@@ -35,7 +35,7 @@
           :label="$t('File upload')"
           accept="image"
           size="small"
-          @change="v$.attachment.$touch()"
+          @file-selected="v$.attachment.$touch()"
         />
 
         <BaseButton

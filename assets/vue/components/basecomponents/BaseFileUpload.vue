@@ -26,7 +26,7 @@ import {sizeValidator} from "./validators";
 
 const props = defineProps({
   modelValue: {
-    type: File,
+    type: [File, null],
     required: true,
   },
   label: {

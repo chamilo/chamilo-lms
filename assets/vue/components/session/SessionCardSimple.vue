@@ -52,7 +52,11 @@ export default {
         return node.course;
       });
     } else {
-      if (!isEmpty(props.session.courses) && !isEmpty(props.session.courses.edges)) {
+      if (
+        !isEmpty(props.session.courses)
+        && !isEmpty(props.session.courses.edges)
+        && !isEmpty(props.session.sessionRelCourseRelUsers)
+      ) {
         props.session.sessionRelCourseRelUsers.edges.map(({node}) => {
           const courseExists = props.session.courses.edges.findIndex(courseItem => courseItem.node.course._id === node.course._id) >= 0;
 

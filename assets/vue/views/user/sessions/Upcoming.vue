@@ -12,7 +12,7 @@ import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
 import SessionCategoryView from '../../../components/session/SessionCategoryView';
-import SessionTabs from '../../../components/session/Tabs';
+import SessionTabs from '../../../components/session/SessionTabs.vue';
 
 export default {
   name: 'SessionListUpcoming',

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <SocialWallPostForm/>
-    <SocialWallPostList/>
+    <SocialWallPostForm class="mb-6"/>
+    <SocialWallPostList class="mb-6"/>
   </div>
 </template>
 

@@ -1,90 +1,86 @@
 <template>
-  <q-card
-    :class="{ 'border-success': post.type === 4 }"
-    :flat="post.type !== 4"
-    bordered
+  <BaseCard
     class="mb-4"
+    :class="{ 'border-success': post.type === 4 }"
+    plain
   >
-    <q-item>
-      <q-item-section side>
-        <q-avatar>
-          <q-img :alt="post.sender.username" :src="post.sender.illustrationUrl" />
-        </q-avatar>
-      </q-item-section>
+    <div class="flex flex-col">
+      <div class="flex gap-2 mb-4">
+        <img class="h-12 w-12 border border-gray-25" :src="post.sender.illustrationUrl" :alt="post.sender.username">
 
-      <q-item-section>
-        <q-item-label
-          v-if="null === post.userReceiver || post.sender['@id'] === post.userReceiver['@id']"
-        >
-          <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
-            {{ post.sender.fullName }}
-          </router-link>
-        </q-item-label>
+        <div class="flex flex-col">
+          <div v-if="null === post.userReceiver || post.sender['@id'] === post.userReceiver['@id']">
+            <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
+              {{ post.sender.fullName }}
+            </router-link>
+          </div>
 
-        <q-item-label v-else>
-          <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
-            {{ post.sender.fullName }}
-          </router-link>
-          &raquo;
-          <router-link :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id']} }">
-            {{ post.userReceiver.fullName }}
-          </router-link>
-        </q-item-label>
+          <div v-else>
+            <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
+              {{ post.sender.fullName }}
+            </router-link>
+            &raquo;
+            <router-link :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id']} }">
+              {{ post.userReceiver.fullName }}
+            </router-link>
+          </div>
 
-        <q-item-label
-          :title="$filters.abbreviatedDatetime(post.sendDate)"
-          caption
-        >
-          {{ $filters.relativeDatetime(post.sendDate) }}
-        </q-item-label>
-      </q-item-section>
+          <small>
+            {{ $filters.relativeDatetime(post.sendDate) }}
+          </small>
+        </div>
 
-      <q-item-section side top>
         <WallActions
+          class="ml-auto"
           :is-owner="isOwner"
           :social-post="post"
           @post-deleted="onPostDeleted(post)"
         />
-      </q-item-section>
-    </q-item>
+      </div>
 
-    <q-img
-      v-if="containsImage"
-      :alt="attachment.comment"
-      :src="attachment.contentUrl"
-    />
+      <div class="flex flex-col gap-2">
+        <img
+          v-if="containsImage"
+          :alt="attachment.comment"
+          :src="attachment.contentUrl"
+        >
+        <video
+          v-if="containsVideo"
+          width="320"
+          height="240"
+          controls
+        >
+          <source
+            :src="attachment.contentUrl"
+          >
+          {{ attachment.comment }}
+        </video>
 
-    <q-video
-      v-if="containsVideo"
-      :alt="attachment.comment"
-      :src="attachment.contentUrl"
-    />
-    <q-card-section v-html="post.content" />
+        <div v-html="post.content"/>
 
-    <q-separator :color="post.type === 4 ? 'green-400' : false" />
+        <hr :class="{'text-success': post.type === 4}">
 
-    <q-list
-      v-if="comments.length"
-      :class="{ 'border-success': post.type === 4 }"
-      bordered
-      class="border-t-0"
-      separator
-    >
-      <q-item-label header>{{ $t('Comments') }}</q-item-label>
+        <div
+          v-if="comments.length"
+          :class="{'text-success': post.type === 4}"
+          class="border-t-0"
+        >
+          <div>{{ $t('Comments') }}</div>
+          <WallComment
+            v-for="(comment, index) in comments"
+            :key="index"
+            :comment="comment"
+            @comment-deleted="onCommentDeleted($event)"
+          />
+        </div>
 
-      <WallComment
-        v-for="(comment, index) in comments"
-        :key="index"
-        :comment="comment"
-        @comment-deleted="onCommentDeleted($event)"
-      />
-    </q-list>
-
-    <WallCommentForm
-      :post="post"
-      @comment-posted="onCommentPosted"
-    />
-  </q-card>
+        <WallCommentForm
+          :post="post"
+          @comment-posted="onCommentPosted"
+        />
+      </div>
+    </div>
+  </BaseCard>
 </template>
 
 <script setup>
@@ -95,6 +91,7 @@ import WallActions from "./Actions";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
+import BaseCard from "../basecomponents/BaseCard.vue";
 
 const props = defineProps({
   post: {

@@ -480,33 +480,37 @@ class ZoomPlugin extends Plugin
 
     /**
      * @param Meeting $meeting
-     * @param string  $returnURL
+     * @param string $returnURL
      *
-     * @return false
+     * @return bool
      */
-    public function deleteMeeting($meeting, $returnURL)
+    public function deleteMeeting($meeting, $returnURL): bool
     {
         if (null === $meeting) {
             return false;
         }
 
-        $em = Database::getManager();
+        // No need to delete a instant meeting.
+        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
+            return false;
+        }
+
         try {
-            // No need to delete a instant meeting.
-            if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT != $meeting->getMeetingInfoGet()->type) {
-                $meeting->getMeetingInfoGet()->delete();
-            }
-
-            $em->remove($meeting);
-            $em->flush();
-
-            Display::addFlash(
-                Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
-            );
-            api_location($returnURL);
+            $meeting->getMeetingInfoGet()->delete();
         } catch (Exception $exception) {
             $this->handleException($exception);
         }
+
+        $em = Database::getManager();
+        $em->remove($meeting);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
+        );
+        api_location($returnURL);
+
+        return true;
     }
 
     public function deleteWebinar(Webinar $webinar, string $returnURL)

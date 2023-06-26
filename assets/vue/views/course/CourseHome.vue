@@ -133,44 +133,20 @@
 
     <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
       <CourseTool
-        v-for="(tool, index) in tools.authoring"
-        :key="'authoring-' + index.toString()"
+        v-for="(tool, index) in tools"
+        :key="'tool-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
-        data-tool="authoring"
-        :data-index="index"
-      />
-
-      <CourseTool
-        v-for="(tool, index) in tools.interaction"
-        :key="'interaction-' + index.toString()"
-        :change-visibility="changeVisibility"
-        :course="course"
-        :go-to-course-tool="goToCourseTool"
-        :go-to-setting-course-tool="goToSettingCourseTool"
-        :tool="tool"
-        data-tool="interaction"
-        :data-index="index"
-      />
-
-      <CourseTool
-        v-for="(tool, index) in tools.plugin"
-        :key="'plugin-' + index.toString()"
-        :change-visibility="changeVisibility"
-        :course="course"
-        :go-to-course-tool="goToCourseTool"
-        :go-to-setting-course-tool="goToSettingCourseTool"
-        :tool="tool"
-        data-tool="plugin"
+        :data-tool="tool.ctool.name"
         :data-index="index"
       />
 
       <ShortCutList
         v-for="(shortcut, index) in shortcuts"
-        :key="index"
+        :key="'shortcut-' + index.toString()"
         :change-visibility="changeVisibility"
         :go-to-short-cut="goToShortCut"
         :shortcut="shortcut"
@@ -239,8 +215,10 @@ axios
     tools.value = data.tools;
     shortcuts.value = data.shortcuts;
 
-    if (tools.value.admin) {
-      courseItems.value = tools.value.admin.map((tool) => ({
+    let adminTool = tools.value.find((element) => element.category === "admin");
+
+    if (Array.isArray(adminTool)) {
+      courseItems.value = adminTool.map((tool) => ({
         label: tool.tool.nameToShow,
         url: goToCourseTool(course, tool),
       }));
@@ -348,11 +326,7 @@ function onClickShowAll() {
   axios
     .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach((tool) => setToolVisibility(tool, 2));
-
-      tools.value.interaction.forEach((tool) => setToolVisibility(tool, 2));
-
-      tools.value.plugin.forEach((tool) => setToolVisibility(tool, 2));
+      tools.value.forEach((tool) => setToolVisibility(tool, 2));
     })
     .catch((error) => console.log(error));
 }
@@ -361,11 +335,7 @@ function onClickHideAll() {
   axios
     .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach((tool) => setToolVisibility(tool, 0));
-
-      tools.value.interaction.forEach((tool) => setToolVisibility(tool, 0));
-
-      tools.value.plugin.forEach((tool) => setToolVisibility(tool, 0));
+      tools.value.forEach((tool) => setToolVisibility(tool, 0));
     })
     .catch((error) => console.log(error));
 }
@@ -389,28 +359,34 @@ watch(isSorting, (isSortingEnabled) => {
 
   sortable.option("disabled", !isSortingEnabled)
 })
-function updateDisplayOrder(htmlItem, newIndex) {
-  let tool = htmlItem.dataset.tool
-  let index = htmlItem.dataset.index
-  let toolItem = null
+async function updateDisplayOrder(htmlItem, newIndex) {
+  const tool = htmlItem.dataset.tool;
+  let toolItem = null;
 
-  switch (tool) {
-    case 'authoring':
-      toolItem = tools.value.authoring[index]
-      break;
-    case 'interaction':
-      toolItem = tools.value.interaction[index]
-      break;
-    case 'plugin':
-      toolItem = tools.value.plugin[index]
-      break;
-    default:
-      return
+  if (typeof tools !== 'undefined' && Array.isArray(tools.value)) {
+    const toolList = tools.value;
+    toolItem = toolList.find((element) => element.tool.name === tool);
+  } else {
+    console.error('Error: tools.value is undefined');
+    return;
   }
 
-  console.log(toolItem, newIndex)
-  // TODO send values to server
-  // toolItem is the tool value, retrieve id or needed data
-  // newIndex is the new Index of the tool (do we need to send the index of the other tools?)
+  console.log(toolItem, newIndex);
+
+  // Send the updated values to the server
+  const url = ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`;
+  const data = {
+    index: newIndex,
+    toolItem: toolItem,
+    // Add any other necessary data that you need to send to the server
+  };
+
+  try {
+    console.log(url, data);
+    const response = await axios.post(url, data);
+    console.log(response.data); // Server response
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>

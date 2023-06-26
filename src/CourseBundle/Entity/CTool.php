@@ -42,9 +42,11 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     protected ?bool $visibility = null;
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'tools')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
+    #[Gedmo\SortableGroup]
     protected Course $course;
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[Gedmo\SortableGroup]
     protected ?Session $session = null;
     #[ORM\ManyToOne(targetEntity: Tool::class)]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', nullable: false)]

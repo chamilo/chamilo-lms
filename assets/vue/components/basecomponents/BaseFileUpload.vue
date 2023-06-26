@@ -22,6 +22,7 @@
 <script setup>
 import BaseButton from "./BaseButton.vue"
 import {computed, onMounted, ref} from "vue";
+import {sizeValidator} from "./validators";
 
 const props = defineProps({
   modelValue: {
@@ -43,12 +44,7 @@ const props = defineProps({
   size: {
     type: String,
     default: "normal",
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return ["normal", "small"].includes(value);
-    },
+    validator: sizeValidator,
   },
 })
 

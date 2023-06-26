@@ -85,11 +85,3 @@ export const chamiloIconToClass = {
     "reply-all": "mdi mdi-reply-all",
     "calendar-plus": "mdi mdi-calendar-plus",
 };
-
-export const validator = (value) => {
-  if (typeof (value) !== "string") {
-    return false;
-  }
-
-  return Object.keys(chamiloIconToClass).includes(value);
-};

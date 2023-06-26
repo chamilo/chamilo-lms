@@ -922,7 +922,7 @@ class UrlManager
      *
      * @return bool true if success
      * */
-    public static function deleteRelationFromCourseWithAllUrls ($courseId)
+    public static function deleteRelationFromCourseWithAllUrls($courseId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "DELETE FROM $table

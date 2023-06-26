@@ -480,9 +480,7 @@ class ZoomPlugin extends Plugin
 
     /**
      * @param Meeting $meeting
-     * @param string $returnURL
-     *
-     * @return bool
+     * @param string  $returnURL
      */
     public function deleteMeeting($meeting, $returnURL): bool
     {

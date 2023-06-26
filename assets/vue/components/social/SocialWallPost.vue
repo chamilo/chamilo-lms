@@ -1,7 +1,7 @@
 <template>
   <BaseCard
     class="mb-4"
-    :class="{ 'border-success': post.type === 4 }"
+    :class="{ 'border-success': post.type === SOCIAL_TYPE_PROMOTED_MESSAGE}"
     plain
   >
     <div class="flex flex-col">
@@ -58,11 +58,11 @@
 
         <div v-html="post.content"/>
 
-        <hr :class="{'text-success': post.type === 4}">
+        <hr :class="{'text-success': post.type === SOCIAL_TYPE_PROMOTED_MESSAGE}">
 
         <div
           v-if="comments.length"
-          :class="{'text-success': post.type === 4}"
+          :class="{'text-success': post.type === SOCIAL_TYPE_PROMOTED_MESSAGE}"
           class="border-t-0"
         >
           <div>{{ $t('Comments') }}</div>
@@ -92,6 +92,7 @@ import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
 import BaseCard from "../basecomponents/BaseCard.vue";
+import {SOCIAL_TYPE_PROMOTED_MESSAGE} from "./constants";
 
 const props = defineProps({
   post: {

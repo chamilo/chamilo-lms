@@ -9558,10 +9558,10 @@ function api_mail_html(
     $mail->Mailer = api_get_mail_configuration_value('SMTP_MAILER');
     $mail->Host = api_get_mail_configuration_value('SMTP_HOST');
     $mail->Port = api_get_mail_configuration_value('SMTP_PORT');
-    $mail->CharSet = api_get_mail_configuration_value('SMTP_CHARSET') ? api_get_mail_configuration_value('SMTP_CHARSET') : 'UTF-8';
+    $mail->CharSet = api_get_mail_configuration_value('SMTP_CHARSET') ?: 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
-    $mail->SMTPOptions = api_get_mail_configuration_value('SMTPOptions') ?? [];
+    $mail->SMTPOptions = api_get_mail_configuration_value('SMTPOptions') ?: [];
 
     if (api_get_mail_configuration_value('SMTP_AUTH')) {
         $mail->SMTPAuth = 1;
@@ -9571,7 +9571,7 @@ function api_mail_html(
             $mail->SMTPSecure = api_get_mail_configuration_value('SMTP_SECURE');
         }
     }
-    $mail->SMTPDebug = api_get_mail_configuration_value('SMTP_DEBUG') ? api_get_mail_configuration_value('SMTP_DEBUG') : 0;
+    $mail->SMTPDebug = api_get_mail_configuration_value('SMTP_DEBUG') ?: 0;
 
     // 5 = low, 1 = high
     $mail->Priority = 3;

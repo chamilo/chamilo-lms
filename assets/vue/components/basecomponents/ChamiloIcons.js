@@ -93,11 +93,3 @@ export const chamiloIconToClass = {
   "anonymous": "mdi mdi-incognito",
   "settings": "mdi mdi-tools",
 };
-
-export const validator = (value) => {
-  if (typeof value !== "string") {
-    return false;
-  }
-
-  return Object.keys(chamiloIconToClass).includes(value);
-};

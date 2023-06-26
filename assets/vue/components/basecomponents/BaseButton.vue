@@ -23,6 +23,7 @@ import Button from "primevue/button";
 import { chamiloIconToClass } from "./ChamiloIcons";
 import BaseIcon from "./BaseIcon.vue";
 import { computed } from "vue";
+import {sizeValidator} from "./validators";
 
 const props = defineProps({
   label: {
@@ -66,12 +67,7 @@ const props = defineProps({
   size: {
     type: String,
     default: "normal",
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return ["normal", "small"].includes(value);
-    },
+    validator: sizeValidator,
   },
   disabled: {
     type: Boolean,

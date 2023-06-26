@@ -144,8 +144,25 @@ class CourseController extends ToolBaseController
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
     #[Entity('course', expr: 'repository.find(cid)')]
-    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
+    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain, EntityManagerInterface $em): Response
     {
+        $requestData = json_decode($request->getContent(), true);
+        // Sort behaviour
+        if (!empty($requestData) && isset($requestData['toolItem'])) {
+            $index = $requestData['index'];
+            $toolItem = $requestData['toolItem'];
+            $toolId = (int) $toolItem['ctool']['iid'];
+
+            /** @var CTool $cTool */
+            $cTool = $em->find(CTool::class, $toolId);
+
+            if ($cTool) {
+                $cTool->setPosition($index + 1);
+                $em->persist($cTool);
+                $em->flush();
+            }
+        }
+
         $course = $this->getCourse();
         $sessionId = $this->getSessionId();
 
@@ -202,27 +219,28 @@ class CourseController extends ToolBaseController
 
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
+        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
+        $qb->andWhere($qb->expr()->notIn('resource.name', $skipTools));
+        $qb->addOrderBy('resource.position', 'ASC');
 
         $result = $qb->getQuery()->getResult();
         $tools = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
+
 
         /** @var CTool $item */
         foreach ($result as $item) {
-            if (\in_array($item->getName(), $skipTools, true)) {
-                continue;
-            }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
             if (!$isCourseTeacher && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
 
-            $tools[$toolModel->getCategory()][] = [
+            $tools[] = [
                 'ctool' => $item,
                 'tool' => $toolModel,
+                'category' => $toolModel->getCategory(),
             ];
         }
 

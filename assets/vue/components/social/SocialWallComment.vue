@@ -29,34 +29,26 @@
   </q-item>
 </template>
 
-<script>
-import {useStore} from "vuex";
-import {computed} from "vue";
-import WallActions from "./Actions";
+<script setup>
+import {useStore} from "vuex"
+import {computed} from "vue"
+import WallActions from "./Actions"
 
-export default {
-  name: "WallComment",
-  components: {WallActions},
-  props: {
-    comment: {
-      type: Object,
-      required: true
-    }
-  },
-  emits: ['comment-deleted'],
-  setup(props, {emit}) {
-    const store = useStore();
-
-    const currentUser = store.getters['security/getUser'];
-
-    function onCommentDeleted(event) {
-      emit('comment-deleted', event);
-    }
-
-    return {
-      isOwner: computed(() => currentUser['@id'] === props.comment.sender['@id']),
-      onCommentDeleted,
-    };
+const props = defineProps({
+  comment: {
+    type: Object,
+    required: true
   }
+})
+
+const emit = defineEmits(['comment-deleted'])
+
+const store = useStore();
+const currentUser = store.getters['security/getUser'];
+
+const isOwner = computed(() =>  currentUser['@id'] === props.comment.sender['@id'])
+
+function onCommentDeleted(event) {
+  emit('comment-deleted', event);
 }
 </script>

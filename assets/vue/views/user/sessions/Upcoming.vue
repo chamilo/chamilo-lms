@@ -1,44 +1,23 @@
 <template>
-  <SessionTabs/>
+  <SessionTabs class="mb-4"/>
 <!--  <SessionListWrapper :sessions="sessions"/>-->
-  <SessionCategoryView :result-sessions="resultSessions"/>
+  <SessionCategoryView :result-sessions="sessions"/>
 </template>
 
-<script>
+<script setup>
+import {computed} from "vue"
+import {useStore} from 'vuex'
+import {DateTime} from "luxon"
+import SessionCategoryView from '../../../components/session/SessionCategoryView'
+import SessionTabs from '../../../components/session/SessionTabs.vue'
+import {useSession} from "./session"
 
-import {computed, ref} from "vue";
-import {useStore} from 'vuex';
-import {useQuery, useResult} from '@vue/apollo-composable'
-import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
-import {DateTime} from "luxon";
-import SessionCategoryView from '../../../components/session/SessionCategoryView';
-import SessionTabs from '../../../components/session/SessionTabs.vue';
 
-export default {
-  name: 'SessionListUpcoming',
-  components: {
-    SessionCategoryView,
-    SessionTabs
-  },
-  setup() {
-    const store = useStore();
-    let user = computed(() => store.getters['security/getUser']);
+const store = useStore();
 
-    if (user.value) {
-      let userId = user.value.id;
-      let start = DateTime.local().toISO();
+let user = computed(() => store.getters['security/getUser']);
 
-      const {result: resultSessions, loading} = useQuery(GET_SESSION_REL_USER, {
-        user: "/api/users/" + userId,
-        afterStartDate: start,
-      });
+let start = DateTime.local().toISO()
 
-      return {
-        resultSessions,
-        loading
-      }
-    }
-  }
-}
-
+const {sessions} = useSession(user, start)
 </script>

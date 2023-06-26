@@ -84,9 +84,9 @@
 </template>
 
 <script setup>
-import WallCommentForm from "./CommentForm";
+import WallCommentForm from "./SocialWallCommentForm.vue";
 import {computed, onMounted, reactive} from "vue";
-import WallComment from "./WallComment";
+import WallComment from "./SocialWallComment.vue";
 import WallActions from "./Actions";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";

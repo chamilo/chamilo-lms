@@ -515,22 +515,21 @@ class ZoomPlugin extends Plugin
 
     public function deleteWebinar(Webinar $webinar, string $returnURL)
     {
-        $em = Database::getManager();
-
         try {
             $webinar->getWebinarSchema()->delete();
-
-            $em->remove($webinar);
-            $em->flush();
-
-            Display::addFlash(
-                Display::return_message($this->get_lang('WebinarDeleted'), 'success')
-            );
-
-            api_location($returnURL);
         } catch (Exception $exception) {
             $this->handleException($exception);
         }
+
+        $em = Database::getManager();
+        $em->remove($webinar);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message($this->get_lang('WebinarDeleted'), 'success')
+        );
+
+        api_location($returnURL);
     }
 
     /**

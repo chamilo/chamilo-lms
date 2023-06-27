@@ -18,8 +18,8 @@ const store = useStore()
 
 let user = computed(() => store.getters['security/getUser'])
 
-let start = DateTime.local().minus({days: 360}).toISO()
-let end = DateTime.local().toISO()
+let start = DateTime.local().minus({days: 360})
+let end = DateTime.local()
 
 const {sessions} = useSession(user, start, end)
 </script>

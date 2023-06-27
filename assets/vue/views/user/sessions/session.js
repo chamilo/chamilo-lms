@@ -34,7 +34,7 @@ const includeStartDateIfExist = (variables, start) => {
     if (!DateTime.isDateTime(start)) {
       console.error("You should pass a DateTime instance to useSession start parameter")
     }
-    variables.afterStartDate = start
+    variables.afterStartDate = start.toISO()
   }
 
   return variables
@@ -45,7 +45,7 @@ const includeEndDateIfExist = (variables, end) => {
     if (!DateTime.isDateTime(end)) {
       console.error("You should pass a DateTime instance to useSession end parameter")
     }
-    variables.beforeEndDate = end
+    variables.beforeEndDate = end.toISO()
   }
 
   return variables

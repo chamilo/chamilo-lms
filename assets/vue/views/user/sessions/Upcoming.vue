@@ -17,7 +17,7 @@ const store = useStore();
 
 let user = computed(() => store.getters['security/getUser']);
 
-let start = DateTime.local().toISO()
+let start = DateTime.local()
 
 const {sessions} = useSession(user, start)
 </script>

@@ -3,41 +3,56 @@
     <div v-for="(option, index) in options" :key="option.value" class="flex items-center mr-2">
       <RadioButton
         :input-id="name + index"
-        :model-value="value"
+        :model-value="modelValue"
         :name="name"
         :value="option.value"
-        @update:model-value="value = $event"
+        @change="handleOptionChange(option.value)"
       />
       <label :for="name + index" class="ml-2 cursor-pointer">{{ option.label }}</label>
     </div>
   </div>
 </template>
 
-<script setup>
+<script>
 import RadioButton from 'primevue/radiobutton';
-import {ref} from "vue";
+import { ref, watch } from "vue";
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    required: true
+export default {
+  name: 'BaseRadioButtons',
+  components: {
+    RadioButton
   },
-  name: {
-    type: String,
-    required: true,
+  props: {
+    modelValue: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    // Array with {label: x, value: y} for every option you want to support
+    options: {
+      type: Array,
+      required: true,
+    },
   },
-  // Array with {label: x, value: y} for every option you want to support
-  options: {
-    type: Array,
-    required: true,
-  },
-  initialValue: {
-    type: String,
-    default: ''
-  },
-})
+  setup(props, { emit }) {
+    const value = ref(props.modelValue);
 
-defineEmits(['update:modelValue'])
+    watch(() => props.modelValue, (newValue) => {
+      value.value = newValue;
+    });
 
-const value = ref(props.initialValue)
+    const handleOptionChange = (newValue) => {
+      value.value = newValue;
+      emit('update:modelValue', newValue);
+    };
+
+    return {
+      value,
+      handleOptionChange
+    };
+  },
+};
 </script>

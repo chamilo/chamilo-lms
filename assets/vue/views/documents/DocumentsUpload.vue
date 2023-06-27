@@ -24,20 +24,28 @@
     <div v-if="showAdvancedSettings">
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
-        <BaseCheckbox id="uncompress" v-model="isUncompressZipEnabled" :label="t('Uncompres zip')" name="uncompress" />
+        <BaseCheckbox
+          id="uncompress"
+          v-model="isUncompressZipEnabled"
+          :label="t('Uncompress zip')"
+          name="isUncompressZipEnabled"
+          @change="handleUncompressZipEnabledChange"
+        />
       </div>
 
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("If file exists") }}:</label>
         <BaseRadioButtons
+          id="fileExistsOption"
           v-model="fileExistsOption"
           :options="[
             { label: t('Do nothing'), value: 'nothing' },
             { label: t('Overwrite the existing file'), value: 'overwrite' },
             { label: t('Rename the uploaded file if it exists'), value: 'rename' },
           ]"
-          initial-value="rename"
-          name="file-exists-options"
+          :initial-value="'rename'"
+          name="fileExistsOption"
+          @change="handleFileExistsOptionChange"
         />
       </div>
     </div>
@@ -85,7 +93,7 @@ const resourceLinkList = ref(
 );
 const showAdvancedSettings = ref(false);
 const isUncompressZipEnabled = ref(false);
-const fileExistsOption = ref("");
+const fileExistsOption = ref("rename");
 
 const showAdvancedSettingsLabel = computed(() => {
   if (showAdvancedSettings.value) {
@@ -120,7 +128,7 @@ uppy.value = new Uppy()
   .use(XHRUpload, {
     endpoint: ENTRYPOINT + "documents",
     formData: true,
-    fieldName: "uploadFile",
+    fieldName: "uploadFile"
   })
   .on("upload-success", (item, response) => {
     onCreated(response.body);
@@ -135,5 +143,17 @@ uppy.value.setMeta({
 
 const advancedSettingsClicked = () => {
   showAdvancedSettings.value = !showAdvancedSettings.value;
+};
+
+const handleUncompressZipEnabledChange = () => {
+  uppy.value.setMeta({
+    isUncompressZipEnabled: isUncompressZipEnabled.value,
+  });
+};
+
+const handleFileExistsOptionChange = () => {
+  uppy.value.setMeta({
+    fileExistsOption: fileExistsOption.value,
+  });
 };
 </script>

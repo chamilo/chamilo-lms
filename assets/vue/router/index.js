@@ -16,9 +16,9 @@ import socialNetworkRoutes from './social';
 import documents from './documents';
 import store from '../store';
 import MyCourseList from '../views/user/courses/List.vue';
-import MySessionList from '../views/user/sessions/SessionList.vue';
-import MySessionListPast from '../views/user/sessions/Past.vue';
-import MySessionListUpcoming from '../views/user/sessions/Upcoming.vue';
+import MySessionList from '../views/user/sessions/SessionsCurrent.vue';
+import MySessionListPast from '../views/user/sessions/SessionsPast.vue';
+import MySessionListUpcoming from '../views/user/sessions/SessionsUpcoming.vue';
 
 import CatalogLayout from '../layouts/Catalog.vue';
 import MyCoursesLayout from '../layouts/MyCourses.vue';

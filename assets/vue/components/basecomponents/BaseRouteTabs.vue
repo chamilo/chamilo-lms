@@ -5,9 +5,9 @@
       :key="tab.title"
       class="px-4 py-2 font-semibold"
       :class="{
-          'text-primary border-b-2 border-primary': selectedTab === index,
-          'text-gray-50 border-b-2 border-gray-50 hover:text-primary hover:border-b-2 hover:border-primary': selectedTab !== index,
-        }"
+        'text-primary border-b-2 border-primary': selectedTab === index,
+        'text-gray-50 border-b-2 border-gray-50 hover:text-primary hover:border-b-2 hover:border-primary': selectedTab !== index,
+      }"
       :to="tab.to"
       role="tab"
       :aria-selected="selectedTab === index ? 'true' : 'false'"
@@ -18,6 +18,10 @@
 </template>
 
 <script setup>
+/**
+ * Component that will render a tab interface WITHOUT content. Every tab should be a router link. So, when user
+ * change tab the route of the url will change
+ */
 defineProps({
   tabs: {
     type: Array,

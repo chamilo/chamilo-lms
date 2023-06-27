@@ -2,7 +2,7 @@
   <Card class="course-card">
     <template #header>
       <router-link
-        :to="{ name: 'CourseHome', params: {id: course._id, course: course}, query: { sid: sessionId } }"
+        :to="{ name: 'CourseHome', params: {id: course._id}, query: { sid: sessionId } }"
         class="course-card__home-link"
       >
         <img
@@ -13,7 +13,7 @@
     </template>
     <template #title>
       <router-link
-        :to="{ name: 'CourseHome', params: {id: course._id, course: course}, query: { sid: sessionId } }"
+        :to="{ name: 'CourseHome', params: {id: course._id}, query: { sid: sessionId } }"
         class="course-card__home-link"
       >
         <span v-if="session">

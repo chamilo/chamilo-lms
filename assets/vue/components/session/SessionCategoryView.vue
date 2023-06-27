@@ -1,5 +1,5 @@
 <template>
-  <SessionListNoCategoryWrapper :sessions="sessionList"/>
+  <SessionListNoCategoryWrapper :sessions="sessionList" class="mb-4"/>
   <SessionCategoryListWrapper :categories="categories" :categoryWithSessions="categoryWithSessions"/>
 </template>
 <script>
@@ -36,9 +36,6 @@ export default {
       });
       return sessionList;
     });
-
-    console.log('sessions');
-    console.log(sessions);
 
     let categories = useResult(resultSessions, [], ({sessionRelUsers}) => {
       let categoryList = [];
@@ -80,8 +77,6 @@ export default {
 
       return categoriesIn;
     });
-
-    console.log(sessionList);
 
     return {
       sessionList,

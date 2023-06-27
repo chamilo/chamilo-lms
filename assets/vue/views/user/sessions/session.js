@@ -8,7 +8,6 @@ export function useSession(user, start, end) {
   let isLoading = ref(false)
 
   if (user.value) {
-    isLoading.value = true
     let userId = user.value.id
     let variables = {
       user: "/api/users/" + userId,
@@ -18,9 +17,13 @@ export function useSession(user, start, end) {
     variables = includeEndDateIfExist(variables, end)
     let query = getGraphqlQuery(variables)
 
-    const {result} = useQuery(query, variables)
+    isLoading.value = true
+    const {result, loading} = useQuery(query, variables)
     sessions.value = result
-    isLoading.value = false
+    return {
+      sessions,
+      isLoading: loading,
+    }
   }
 
   return {

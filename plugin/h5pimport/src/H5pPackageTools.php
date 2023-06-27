@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 use Database;
+use H5PCore;
 use Symfony\Component\Filesystem\Filesystem;
 
 class H5pPackageTools
@@ -128,11 +129,21 @@ class H5pPackageTools
                 );
 
             if (null === $library) {
+
+                $auxFullName = $libraryData->machineName.'-'.$libraryData->majorVersion.'.'.$libraryData->minorVersion;
+                $libraryOwnJson = self::getJson($sharedLibrariesDir.'/'.$auxFullName.'/library.json');
+
                 $library = new H5pImportLibrary();
                 $library->setMachineName($libraryData->machineName);
+                $library->setTitle($libraryOwnJson->title);
                 $library->setMajorVersion($libraryData->majorVersion);
                 $library->setMinorVersion($libraryData->minorVersion);
-                $library->setLibraryPath($sharedLibrariesDir);
+                $library->setPatchVersion($libraryOwnJson->patchVersion);
+                $library->setRunnable($libraryOwnJson->runnable);
+                $library->setEmbedTypes($libraryOwnJson->embedTypes);
+                $library->setPreloadedJs($libraryOwnJson->preloadedJs);
+                $library->setPreloadedCss($libraryOwnJson->preloadedCss);
+                $library->setLibraryPath($sharedLibrariesDir.'/'.$auxFullName);
                 $library->setCourse($course);
                 $entityManager->persist($library);
                 $entityManager->flush();
@@ -173,5 +184,53 @@ class H5pPackageTools
         }
 
         return true;
+    }
+
+    /**
+     * Get core settings for H5P content.
+     *
+     * @param H5pImport $h5pImport The H5pImport object.
+     *
+     * @return array The core settings for H5P content.
+     */
+    public static function getCoreSettings(H5pImport $h5pImport): array
+    {
+        $interface = new H5pImplementation($h5pImport);
+        $core = new H5PCore(
+            $interface,
+            $h5pImport->getPath(),
+            api_get_self(),
+            'en',
+            false
+        );
+        $settings = [
+            'baseUrl' => api_get_self(),
+            'url' => $h5pImport->getPath(),
+            'postUserStatistics' => false,
+            'ajax' => array(
+                'setFinished' => '',
+                'contentUserData' => ''
+            ),
+            'saveFreq' => false,
+            'l10n' => array(
+                'H5P' => $core->getLocalization()
+            ),
+//            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
+//            'crossorigin' => variable_get('h5p_crossorigin', NULL),
+//            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
+//            'libraryConfig' => $core->h5pF->getLibraryConfig(),
+            'pluginCacheBuster' => '?' . 0,
+            'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath() . '/js'
+        ];
+
+        $loggedUser = api_get_user_info();
+        if ($loggedUser) {
+            $settings['user'] = array(
+                'name' => $loggedUser['name'],
+                'mail' => $loggedUser['email']
+            );
+        }
+
+        return $settings;
     }
 }

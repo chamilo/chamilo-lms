@@ -8,6 +8,8 @@ use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -20,7 +22,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="plugin_h5p_import_library")
  */
 
-class H5pImportLibrary
+class H5pImportLibrary extends EntityRepository
 {
     /**
      * @var int
@@ -30,6 +32,11 @@ class H5pImportLibrary
      * @ORM\GeneratedValue
      */
     private int $iid;
+
+    /**
+     * @ORM\Column(name="title", type="string", nullable=true)
+     */
+    private string $title;
 
     /**
      * @ORM\Column(name="machine_name", type="string")
@@ -45,6 +52,31 @@ class H5pImportLibrary
      * @ORM\Column(name="minor_version", type="integer")
      */
     private int $minorVersion;
+
+    /**
+     * @ORM\Column(name="patch_version", type="integer")
+     */
+    private int $patchVersion;
+
+    /**
+     * @ORM\Column(name="runnable", type="integer", nullable=true)
+     */
+    private ?int $runnable;
+
+    /**
+     * @ORM\Column(name="embed_types", type="array", nullable=true)
+     */
+    private ?array $embedTypes;
+
+    /**
+     * @ORM\Column(name="preloaded_js" , type="array", nullable=true)
+     */
+    private ?array $preloadedJs;
+
+    /**
+     * @ORM\Column(name="preloaded_css", type="array", nullable=true)
+     */
+    private ?array $preloadedCss;
 
     /**
      * @ORM\Column(name="library_path", type="string", length=255)
@@ -128,6 +160,23 @@ class H5pImportLibrary
     }
 
     /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return H5pImportLibrary
+     */
+    public function setTitle(string $title): H5pImportLibrary
+    {
+        $this->title = $title;
+        return $this;
+    }
+    /**
      * @return int
      */
     public function getMajorVersion(): int
@@ -160,6 +209,96 @@ class H5pImportLibrary
     public function setMinorVersion(int $minorVersion): H5pImportLibrary
     {
         $this->minorVersion = $minorVersion;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPatchVersion(): int
+    {
+        return $this->patchVersion;
+    }
+
+    /**
+     * @param int $patchVersion
+     * @return H5pImportLibrary
+     */
+    public function setPatchVersion(int $patchVersion): H5pImportLibrary
+    {
+        $this->patchVersion = $patchVersion;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRunnable(): int
+    {
+        return $this->runnable;
+    }
+
+    /**
+     * @param int|null $runnable
+     * @return H5pImportLibrary
+     */
+    public function setRunnable(?int $runnable): H5pImportLibrary
+    {
+        $this->runnable = $runnable;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreloadedJs(): array
+    {
+        return $this->preloadedJs;
+    }
+
+    /**
+     * @param array|null $preloadedJs
+     * @return H5pImportLibrary
+     */
+    public function setPreloadedJs(?array $preloadedJs): H5pImportLibrary
+    {
+        $this->preloadedJs = $preloadedJs;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreloadedCss(): array
+    {
+        return $this->preloadedCss;
+    }
+
+    /**
+     * @param array|null $preloadedCss
+     * @return H5pImportLibrary
+     */
+    public function setPreloadedCss(?array $preloadedCss): H5pImportLibrary
+    {
+        $this->preloadedCss = $preloadedCss;
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getEmbedTypes(): ?array
+    {
+        return $this->embedTypes;
+    }
+
+    /**
+     * @param array|null $embedTypes
+     * @return H5pImportLibrary
+     */
+    public function setEmbedTypes(?array $embedTypes): H5pImportLibrary
+    {
+        $this->embedTypes = $embedTypes;
         return $this;
     }
 
@@ -201,6 +340,7 @@ class H5pImportLibrary
     {
         return $this->h5pImports;
     }
+
     /**
      * @return Course
      */
@@ -211,7 +351,7 @@ class H5pImportLibrary
 
     /**
      * @param Course $course
-     * @return H5pImport
+     * @return H5pImportLibrary
      */
     public function setCourse(Course $course): self
     {
@@ -254,6 +394,64 @@ class H5pImportLibrary
     {
         $this->modifiedAt = $modifiedAt;
         return $this;
+    }
+
+    public function getLibraryByMachineNameAndVersions(string $machineName, int $majorVersion, int $minorVersion)
+    {
+        if (
+            $this->machineName === $machineName &&
+            $this->majorVersion === $majorVersion &&
+            $this->minorVersion === $minorVersion
+        ) {
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * Get the preloaded JS array of the imported library formatted as a comma-separated string.
+     *
+     * @return string The preloaded JS array of the imported library formatted as a comma-separated string.
+     */
+    public function getPreloadedJsFormatted(): string
+    {
+        $formattedJs = [];
+
+        foreach ($this->preloadedJs as $value) {
+            if (is_string($value->path)) {
+                $formattedJs[] = $value->path;
+            }
+        }
+
+        return implode(',', $formattedJs);
+    }
+
+    /**
+     * Get the preloaded CSS array of the imported library formatted as a comma-separated string.
+     *
+     * @return string The preloaded CSS array of the imported library formatted as a comma-separated string.
+     */
+    public function getPreloadedCssFormatted(): string
+    {
+        $formattedJCss = [];
+
+        foreach ($this->preloadedCss as $value) {
+            if (is_string($value->path)) {
+                $formattedJCss[] = $value->path;
+            }
+        }
+
+        return implode(',', $formattedJCss);
+    }
+
+    /**
+     * Get the embed types array formatted as a comma-separated string.
+     *
+     * @return string The embed types array formatted as a comma-separated string.
+     */
+    public function getEmbedTypesFormatted(): string
+    {
+        return implode(',', $this->getEmbedTypes());
     }
 
 }

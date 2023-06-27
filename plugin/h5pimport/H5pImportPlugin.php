@@ -5,6 +5,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Define the H5pImportPlugin class as an extension of Plugin
@@ -109,6 +110,7 @@ class H5pImportPlugin extends Plugin
                 $em->getClassMetadata(H5pImportLibrary::class),
             ]
         );
+        $this->removeH5pDirectories();
     }
     public function performActionsAfterConfigure(): H5pImportPlugin
     {
@@ -146,7 +148,7 @@ class H5pImportPlugin extends Plugin
     /**
      * @param int $courseId
      */
-    public function addCourseTool($courseId)
+    public function addCourseTool(int $courseId)
     {
         // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
         // Otherwise, the link en the course tool will link to "/main/" URL.
@@ -164,5 +166,19 @@ class H5pImportPlugin extends Plugin
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
             ->execute(['category' => 'plugin', 'link' => 'h5pimport/start.php%']);
+    }
+
+    private function removeH5pDirectories()
+    {
+
+        $fs = new Filesystem();
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table
+                ORDER BY id";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $courseInfo =  api_get_course_info_by_id($row['id']);
+            $fs->remove($courseInfo['course_sys_path'].'/h5p');
+        }
     }
 }

@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
-use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pFramework;
-use H5PCore;
+use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pImplementation;
+use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -61,6 +61,19 @@ $actions = Display::url(
 );
 
 //ToDo Visualizar paquete h5P
+
+$aux = new H5pImplementation($h5pImport);
+$aux2 = new H5PCore($aux, $h5pImport->getPath(), 'as');
+
+$h5pNode = $aux2->loadContent($h5pImport->getIid());
+
+$coreSettings = H5pPackageTools::getCoreSettings($h5pImport);
+
+$embed = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
+
+die(print_r($embed));
+
+// -------------------
 
 $view = new Template($h5pImport->getName());
 $view->assign('header', $h5pImport->getName());

@@ -4920,8 +4920,8 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     $session = api_get_session_entity($sessionId);
     $course_id = $courseInfo['real_id'];
 
-    $enableEndDate = isset($formValues['enableEndDate']) ? true : false;
-    $enableExpiryDate = isset($formValues['enableExpiryDate']) ? true : false;
+    $enableEndDate = isset($formValues['enableEndDate']);
+    $enableExpiryDate = isset($formValues['enableExpiryDate']);
 
     if ($enableEndDate && $enableExpiryDate) {
         if ($formValues['expires_on'] > $formValues['ends_on']) {
@@ -4937,7 +4937,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     }
 
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-    $title = isset($formValues['work_title']) ? $formValues['work_title'] : $formValues['new_dir'];
+    $title = $formValues['work_title'] ?? $formValues['new_dir'];
     $courseEntity = api_get_course_entity($course_id);
 
     $studentPublication = new CStudentPublication();

@@ -4,11 +4,14 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
+
+$httpRequest = HttpRequest::createFromGlobals();
 
 $courseInfo = api_get_course_info();
 $user_id = api_get_user_id();
@@ -17,22 +20,23 @@ $groupId = api_get_group_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
-$work_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+$work_id = $httpRequest->query->getInt('id');
 $my_folder_data = get_work_data_by_id($work_id);
 $repo = Container::getStudentPublicationRepository();
-$studentPublication = null;
-if (!empty($work_id)) {
-    $studentPublication = $repo->find($work_id);
-}
+$studentPublication = empty($work_id) ? null : $repo->find($work_id);
 
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
 $tool_name = get_lang('Assignments');
 
-$item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
+$item_id = $httpRequest->query->has('item_id')
+    ? $httpRequest->query->getInt('item_id')
+    : $httpRequest->request->getInt('item_id');
 $origin = api_get_origin();
-$action = $_REQUEST['action'] ?? 'list';
+$action = $httpRequest->query->has('action')
+    ? $httpRequest->query->get('action', 'list')
+    : $httpRequest->request->get('action', 'list');
 
 $display_upload_form = false;
 if ('upload_form' === $action) {
@@ -80,33 +84,29 @@ if (!empty($groupId)) {
             'name' => get_lang('Create assignment'),
         ];
     }
-} else {
-    if ('learnpath' != $origin) {
-        if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || 'create_dir' === $action
-        ) {
-            $interbreadcrumb[] = [
-                'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-                'name' => get_lang('Assignments'),
-            ];
-        } else {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Assignments')];
-        }
+} elseif ('learnpath' !== $origin) {
+    if (!empty($_GET['id']) || $display_upload_form || 'create_dir' === $action) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+            'name' => get_lang('Assignments'),
+        ];
+    } else {
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Assignments')];
+    }
 
-        if (!empty($my_folder_data)) {
-            $interbreadcrumb[] = [
-                'url' => api_get_path(WEB_CODE_PATH).'work/work.php?id='.$work_id.'&'.api_get_cidreq(),
-                'name' => $my_folder_data['title'],
-            ];
-        }
+    if (!empty($my_folder_data)) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'work/work.php?id='.$work_id.'&'.api_get_cidreq(),
+            'name' => $my_folder_data['title'],
+        ];
+    }
 
-        if ('upload_form' === $action) {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
-        }
+    if ('upload_form' === $action) {
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
+    }
 
-        if ('create_dir' === $action) {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create assignment')];
-        }
+    if ('create_dir' === $action) {
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create assignment')];
     }
 }
 
@@ -130,7 +130,7 @@ if (!empty($groupId)) {
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-/*	Display links to upload form and tool options */
+/*  Display links to upload form and tool options */
 if (!in_array($action, ['add', 'create_dir'])) {
     $token = Security::get_token();
 }

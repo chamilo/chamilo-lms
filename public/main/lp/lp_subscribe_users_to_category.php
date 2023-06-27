@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpCategoryUser;
+use Chamilo\CourseBundle\Entity\CLpCategoryRelUser;
 use Doctrine\Common\Collections\Criteria;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -183,7 +183,7 @@ if ($allowUserGroups) {
                 foreach ($userList as $userId) {
                     $user = api_get_user_entity($userId);
                     if ($user) {
-                        $categoryUser = new CLpCategoryUser();
+                        $categoryUser = new CLpCategoryRelUser();
                         $categoryUser->setUser($user);
                         $category->addUser($categoryUser);
                     }
@@ -278,7 +278,7 @@ if ($form->validate()) {
     if (!empty($userForm)) {
         $deleteUsers = [];
         if ($subscribedUsersInCategory) {
-            /** @var CLpCategoryUser $user */
+            /** @var CLpCategoryRelUser $user */
             foreach ($subscribedUsersInCategory as $user) {
                 $userId = $user->getUser()->getId();
 
@@ -289,7 +289,7 @@ if ($form->validate()) {
         }
 
         foreach ($users as $userId) {
-            $categoryUser = new CLpCategoryUser();
+            $categoryUser = new CLpCategoryRelUser();
             $user = UserManager::getRepository()->find($userId);
             if ($user) {
                 $categoryUser->setUser($user);

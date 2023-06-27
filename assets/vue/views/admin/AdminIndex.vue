@@ -21,7 +21,7 @@
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
       class="block-admin-courses"
-      icon="book-open-page-variant"
+      icon="courses"
     />
 
     <AdminBlock
@@ -31,7 +31,7 @@
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
       class="block-admin-sessions"
-      icon="google-classroom"
+      icon="sessions"
     />
 
     <AdminBlock
@@ -39,7 +39,7 @@
       :items="blockGradebook.items"
       :title="t('Assessments')"
       class="block-admin-gradebook"
-      icon="certificate"
+      icon="gradebook"
     />
 
     <AdminBlock
@@ -48,7 +48,7 @@
       :items="blockSkills.items"
       :title="t('Skills')"
       class="block-admin-skills"
-      icon="certificate"
+      icon="gradebook"
     />
 
     <AdminBlock
@@ -56,7 +56,7 @@
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
       class="block-admin-privacy"
-      icon="incognito"
+      icon="anonymous"
     />
 
     <AdminBlock
@@ -65,7 +65,7 @@
       :items="blockSettings.items"
       :title="t('System')"
       class="block-admin-settings"
-      icon="tools"
+      icon="settings"
     />
 
     <AdminBlock
@@ -75,7 +75,7 @@
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
       class="block-admin-platform"
-      icon="cogs"
+      icon="admin-settings"
     />
 
     <AdminBlock
@@ -83,7 +83,7 @@
       :description="t('Learn more about Chamilo and its use, official references links')"
       :items="blockChamilo.items"
       class="block-admin-chamilo"
-      icon="cogs"
+      icon="admin-settings"
       title="Chamilo.org"
     />
 

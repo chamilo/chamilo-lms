@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -10,6 +9,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,11 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * CStudentPublication.
- */
 #[ORM\Table(name: 'c_student_publication')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationRepository::class)]
+#[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -69,26 +66,26 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?DateTime $dateOfQualification = null;
 
     /**
-     * @var Collection|CStudentPublication[]
+     * @var Collection<int, CStudentPublication>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'publicationParent')]
+    #[ORM\OneToMany(mappedBy: 'publicationParent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CStudentPublicationComment[]
+     * @var Collection<int, CStudentPublicationComment>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublicationComment::class, mappedBy: 'publication')]
+    #[ORM\OneToMany(mappedBy: 'publication', targetEntity: CStudentPublicationComment::class)]
     protected Collection $comments;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublicationAssignment::class, mappedBy: 'publication')]
+    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class)]
     protected ?CStudentPublicationAssignment $assignment = null;
 
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
@@ -134,19 +131,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this->getTitle();
     }
 
-    public function getFileTypes(): array
+    public function getTitle(): string
     {
-        return ['file', 'folder'];
-    }
-
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -156,14 +143,14 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getFileTypes(): array
     {
-        return $this->title;
+        return ['file', 'folder'];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function setDescription(string $description): self
@@ -173,9 +160,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getAuthor(): ?string
     {
-        return $this->description;
+        return $this->author;
     }
 
     public function setAuthor(string $author): self
@@ -185,14 +172,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
+    public function getActive(): ?int
     {
-        return $this->author;
+        return $this->active;
     }
 
     public function setActive(int $active): self
@@ -202,14 +184,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get active.
-     *
-     * @return int
-     */
-    public function getActive()
+    public function getAccepted(): ?bool
     {
-        return $this->active;
+        return $this->accepted;
     }
 
     public function setAccepted(bool $accepted): self
@@ -220,35 +197,23 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     }
 
     /**
-     * Get accepted.
-     *
-     * @return bool
+     * Get postGroupId.
      */
-    public function getAccepted()
+    public function getPostGroupId(): int
     {
-        return $this->accepted;
+        return $this->postGroupId;
     }
 
-    /**
-     * Set postGroupId.
-     *
-     * @return CStudentPublication
-     */
-    public function setPostGroupId(int $postGroupId)
+    public function setPostGroupId(int $postGroupId): static
     {
         $this->postGroupId = $postGroupId;
 
         return $this;
     }
 
-    /**
-     * Get postGroupId.
-     *
-     * @return int
-     */
-    public function getPostGroupId()
+    public function getSentDate(): ?DateTime
     {
-        return $this->postGroupId;
+        return $this->sentDate;
     }
 
     public function setSentDate(DateTime $sentDate): self
@@ -258,14 +223,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get sentDate.
-     *
-     * @return DateTime
-     */
-    public function getSentDate()
+    public function getFiletype(): string
     {
-        return $this->sentDate;
+        return $this->filetype;
     }
 
     public function setFiletype(string $filetype): self
@@ -275,14 +235,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get filetype.
-     *
-     * @return string
-     */
-    public function getFiletype()
+    public function getHasProperties(): int
     {
-        return $this->filetype;
+        return $this->hasProperties;
     }
 
     public function setHasProperties(int $hasProperties): self
@@ -292,14 +247,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get hasProperties.
-     *
-     * @return int
-     */
-    public function getHasProperties()
+    public function getViewProperties(): ?bool
     {
-        return $this->hasProperties;
+        return $this->viewProperties;
     }
 
     public function setViewProperties(bool $viewProperties): self
@@ -309,14 +259,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get viewProperties.
-     *
-     * @return bool
-     */
-    public function getViewProperties()
+    public function getQualification(): float
     {
-        return $this->viewProperties;
+        return $this->qualification;
     }
 
     public function setQualification(float $qualification): self
@@ -326,14 +271,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get qualification.
-     *
-     * @return float
-     */
-    public function getQualification()
+    public function getDateOfQualification(): ?DateTime
     {
-        return $this->qualification;
+        return $this->dateOfQualification;
     }
 
     public function setDateOfQualification(DateTime $dateOfQualification): self
@@ -343,31 +283,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get dateOfQualification.
-     *
-     * @return DateTime
-     */
-    public function getDateOfQualification()
+    public function getQualificatorId(): int
     {
-        return $this->dateOfQualification;
+        return $this->qualificatorId;
     }
 
-    /**
-     * Set qualificatorId.
-     *
-     * @return CStudentPublication
-     */
-    public function setQualificatorId(int $qualificatorId)
+    public function setQualificatorId(int $qualificatorId): static
     {
         $this->qualificatorId = $qualificatorId;
 
         return $this;
     }
 
-    public function getQualificatorId(): int
+    public function getWeight(): float
     {
-        return $this->qualificatorId;
+        return $this->weight;
     }
 
     public function setWeight(float $weight): self
@@ -377,14 +307,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get weight.
-     *
-     * @return float
-     */
-    public function getWeight()
+    public function getAllowTextAssignment(): int
     {
-        return $this->weight;
+        return $this->allowTextAssignment;
     }
 
     public function setAllowTextAssignment(int $allowTextAssignment): self
@@ -394,14 +319,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get allowTextAssignment.
-     *
-     * @return int
-     */
-    public function getAllowTextAssignment()
+    public function getContainsFile(): int
     {
-        return $this->allowTextAssignment;
+        return $this->containsFile;
     }
 
     public function setContainsFile(int $containsFile): self
@@ -411,20 +331,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get containsFile.
-     *
-     * @return int
-     */
-    public function getContainsFile()
-    {
-        return $this->containsFile;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDocumentId()
+    public function getDocumentId(): int
     {
         return $this->documentId;
     }
@@ -463,6 +370,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return null;
     }
 
+    /**
+     * @return Collection<int, CStudentPublication>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
     public function getAssignment(): ?CStudentPublicationAssignment
     {
         return $this->assignment;
@@ -471,21 +393,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setAssignment(?CStudentPublicationAssignment $assignment): self
     {
         $this->assignment = $assignment;
-
-        return $this;
-    }
-
-    /**
-     * @return CStudentPublication[]|Collection
-     */
-    public function getChildren(): array|Collection
-    {
-        return $this->children;
-    }
-
-    public function setChildren(Collection $children): self
-    {
-        $this->children = $children;
 
         return $this;
     }
@@ -515,17 +422,14 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     }
 
     /**
-     * @return CStudentPublicationComment[]|Collection
+     * @return Collection<int, CStudentPublicationComment>
      */
-    public function getComments(): array|Collection
+    public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    /**
-     * @param CStudentPublicationComment[]|Collection $comments
-     */
-    public function setComments(array|Collection $comments): self
+    public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
 
@@ -535,6 +439,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
     }
 
     public function getResourceName(): string

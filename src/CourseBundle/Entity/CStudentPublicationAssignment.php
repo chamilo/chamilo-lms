@@ -1,20 +1,17 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
 
-/* For licensing terms, see /license.txt */
-
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 
-/**
- * CStudentPublicationAssignment.
- */
 #[ORM\Table(name: 'c_student_publication_assignment')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository::class)]
+#[ORM\Entity(repositoryClass: CStudentPublicationAssignmentRepository::class)]
 class CStudentPublicationAssignment implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -34,7 +31,7 @@ class CStudentPublicationAssignment implements Stringable
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, inversedBy: 'assignment')]
+    #[ORM\OneToOne(inversedBy: 'assignment', targetEntity: CStudentPublication::class)]
     #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
@@ -48,21 +45,14 @@ class CStudentPublicationAssignment implements Stringable
         return $this->iid;
     }
 
-    public function setExpiresOn(DateTime $expiresOn): self
-    {
-        $this->expiresOn = $expiresOn;
-
-        return $this;
-    }
-
     public function getExpiresOn(): ?DateTime
     {
         return $this->expiresOn;
     }
 
-    public function setEndsOn(DateTime $endsOn): self
+    public function setExpiresOn(DateTime $expiresOn): self
     {
-        $this->endsOn = $endsOn;
+        $this->expiresOn = $expiresOn;
 
         return $this;
     }
@@ -72,9 +62,9 @@ class CStudentPublicationAssignment implements Stringable
         return $this->endsOn;
     }
 
-    public function setAddToCalendar(int $addToCalendar): self
+    public function setEndsOn(DateTime $endsOn): self
     {
-        $this->addToCalendar = $addToCalendar;
+        $this->endsOn = $endsOn;
 
         return $this;
     }
@@ -84,9 +74,9 @@ class CStudentPublicationAssignment implements Stringable
         return $this->addToCalendar;
     }
 
-    public function setEnableQualification(bool $enableQualification): self
+    public function setAddToCalendar(int $addToCalendar): self
     {
-        $this->enableQualification = $enableQualification;
+        $this->addToCalendar = $addToCalendar;
 
         return $this;
     }
@@ -94,6 +84,13 @@ class CStudentPublicationAssignment implements Stringable
     public function getEnableQualification(): bool
     {
         return $this->enableQualification;
+    }
+
+    public function setEnableQualification(bool $enableQualification): self
+    {
+        $this->enableQualification = $enableQualification;
+
+        return $this;
     }
 
     public function getPublication(): CStudentPublication

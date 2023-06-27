@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -49,10 +48,7 @@ class CStudentPublicationRelDocument
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }

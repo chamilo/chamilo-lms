@@ -3,7 +3,7 @@ import {useQuery} from "@vue/apollo-composable"
 import {GET_SESSION_REL_USER, GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser"
 import {DateTime} from 'luxon'
 
-export function useSession(user, start, end) {
+export function useSession(user, start, end, query) {
   let sessions = ref(null)
   let isLoading = ref(false)
 
@@ -15,10 +15,13 @@ export function useSession(user, start, end) {
 
     variables = includeStartDateIfExist(variables, start)
     variables = includeEndDateIfExist(variables, end)
-    let query = getGraphqlQuery(variables)
+    let finalQuery = getGraphqlQuery(variables)
+    if (query !== undefined) {
+      finalQuery = query
+    }
 
     isLoading.value = true
-    const {result, loading} = useQuery(query, variables)
+    const {result, loading} = useQuery(finalQuery, variables)
     sessions.value = result
     return {
       sessions,
@@ -33,7 +36,7 @@ export function useSession(user, start, end) {
 }
 
 const includeStartDateIfExist = (variables, start) => {
-  if (start !== undefined) {
+  if (start !== undefined && start !== null) {
     if (!DateTime.isDateTime(start)) {
       console.error("You should pass a DateTime instance to useSession start parameter")
     }
@@ -44,7 +47,7 @@ const includeStartDateIfExist = (variables, start) => {
 }
 
 const includeEndDateIfExist = (variables, end) => {
-  if (end !== undefined) {
+  if (end !== undefined && end !== null) {
     if (!DateTime.isDateTime(end)) {
       console.error("You should pass a DateTime instance to useSession end parameter")
     }

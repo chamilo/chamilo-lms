@@ -75,7 +75,6 @@ switch ($action) {
                 );
                 if ($h5pJson && $contentJson) {
 
-
                     if (H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
 
                         H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session);
@@ -105,7 +104,6 @@ switch ($action) {
                 header("Location: $pluginIndex");
                 exit;
             }
-
         }
 
         $view->assign('header', $plugin->get_lang('import_h5p_package'));

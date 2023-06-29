@@ -60,28 +60,94 @@ $actions = Display::url(
     api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq()
 );
 
-//ToDo Visualizar paquete h5P
+$htmlContent = '';
+$interface = new H5pImplementation($h5pImport);
+$h5pCore = new H5PCore(
+    $interface,
+    $h5pImport->getPath(),
+    api_get_self(),
+    'en',
+    false
+);
 
-$aux = new H5pImplementation($h5pImport);
-$aux2 = new H5PCore($aux, $h5pImport->getPath(), 'as');
+$h5pNode = $h5pCore->loadContent($h5pImport->getIid());
 
-$h5pNode = $aux2->loadContent($h5pImport->getIid());
+if (empty($h5pNode)) {
+    Display::addFlash(
+        Display::return_message(get_lang('Error'), 'error')
+    );
+} else {
+    $coreAssets = H5pPackageTools::getCoreAssets();
+    $integration = H5pPackageTools::getCoreSettings($h5pImport, $h5pCore);
+    $embedType = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
 
-$coreSettings = H5pPackageTools::getCoreSettings($h5pImport);
 
-$embed = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
+    $integration['contents']['cid-' . $h5pNode['contentId']] = H5pPackageTools::getContentSettings($h5pNode, $h5pCore);
 
-die(print_r($embed));
+    $preloadedDependencies = $h5pCore->loadContentDependencies($h5pNode['id'], 'preloaded');
+    $files = $h5pCore->getDependenciesFiles(
+        $preloadedDependencies,
+        api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/h5p'
+    );
+    $libraryList = H5pPackageTools::h5pDependenciesToLibraryList($preloadedDependencies);
 
-// -------------------
+    foreach ($coreAssets['js'] as $script) {
+        $htmlHeadXtra[] = api_get_js_simple($script);
+    }
+    foreach ($coreAssets['css'] as $style) {
+        $htmlHeadXtra[] = api_get_css($style);
+    }
+
+    if ($embedType === 'div') {
+
+        foreach ($files['scripts'] as $script) {
+            $htmlHeadXtra[] = api_get_js_simple($script->path.$script->version);
+            $integration['loadedJs'] = $script->path.$script->version;
+        }
+        foreach ($files['styles'] as $script) {
+            $htmlHeadXtra[] = api_get_css($script->path.$script->version);
+            $integration['loadedCss'][] = $script->path.$script->version;
+        }
+
+        $htmlContent = '<div class="h5p-content" data-content-id="' .  $h5pNode['contentId'] . '"></div>';
+
+    } elseif ($embedType === 'iframe') {
+        $integration['core']['scripts'] = $coreAssets['js'];
+        $integration['core']['styles'] = $coreAssets['css'];
+        $integration['contents']['cid-' . $h5pNode['contentId']]['styles'] =
+            $h5pCore->getAssetsUrls($files['styles']);
+        $integration['contents']['cid-' . $h5pNode['contentId']]['scripts'] =
+            $h5pCore->getAssetsUrls($files['scripts']);
+
+        $htmlContent = '<div class="h5p-iframe-wrapper">
+                        <iframe
+                            id="h5p-iframe-' . $h5pNode['contentId'] . '"
+                            class="h5p-iframe"
+                            data-content-id="' . $h5pNode['contentId'] . '"
+                            style="height:1px"
+                            src="about:blank" frameBorder="0" scrolling="no"
+                            allowfullscreen="allowfullscreen"
+                            allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"
+                            title="' . $h5pNode['title'] . '">
+                        </iframe>
+                    </div>';
+    }
+
+    if (!isset($htmlContent)) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('h5p_error_loading'), 'danger')
+        );
+    } else {
+        $htmlContent .= '<script> H5PIntegration = '. json_encode($integration).'</script>';
+    }
+
+}
 
 $view = new Template($h5pImport->getName());
 $view->assign('header', $h5pImport->getName());
 $view->assign('actions', Display::toolbarAction($plugin->get_name(), [$actions]));
 $view->assign(
     'content',
-    '<p> hola</p>'
-        .PHP_EOL
-        .Security::remove_XSS($h5pImport->getName(), COURSEMANAGERLOWSECURITY)
+    $htmlContent
 );
 $view->display_one_col_template();

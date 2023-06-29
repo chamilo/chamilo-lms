@@ -21,6 +21,10 @@ class H5pImportPlugin extends Plugin
     {
         $settings = [
             'tool_enable' => 'boolean',
+            'frame' => 'boolean',
+            'embed' => 'boolean',
+            'copyright' => 'boolean',
+            'icon' => 'boolean',
         ];
 
         parent::__construct(
@@ -80,6 +84,10 @@ class H5pImportPlugin extends Plugin
     {
         $settings = [
             'tool_enable',
+            'frame' => 'boolean',
+            'embed' => 'boolean',
+            'copyright' => 'boolean',
+            'icon' => 'boolean',
         ];
 
         $em = Database::getManager();

@@ -251,7 +251,7 @@ class H5pImportLibrary extends EntityRepository
     /**
      * @return array
      */
-    public function getPreloadedJs(): array
+    public function getPreloadedJs(): ?array
     {
         return $this->preloadedJs;
     }
@@ -269,7 +269,7 @@ class H5pImportLibrary extends EntityRepository
     /**
      * @return array
      */
-    public function getPreloadedCss(): array
+    public function getPreloadedCss(): ?array
     {
         return $this->preloadedCss;
     }

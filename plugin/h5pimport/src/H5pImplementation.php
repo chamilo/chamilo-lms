@@ -4,9 +4,12 @@ namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
+use Database;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use H5PCore;
 use H5PFrameworkInterface;
+use Plugin;
 
 class H5pImplementation implements H5PFrameworkInterface
 {
@@ -73,7 +76,7 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function t($message, $replacements = array())
     {
-        // TODO: Implement t() method.
+       return get_lang($message);
     }
 
     /**
@@ -105,7 +108,25 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function loadAddons()
     {
-        // TODO: Implement loadAddons() method.
+        $addons = [];
+        $sql = "
+                SELECT l1.machine_name, l1.major_version, l1.minor_version, l1.patch_version,
+                      l1.iid, l1.preloaded_js, l1.preloaded_css
+                FROM plugin_h5p_import_library AS l1
+                LEFT JOIN plugin_h5p_import_library AS l2
+                ON l1.machine_name = l2.machine_name AND
+                    (l1.major_version < l2.major_version OR
+                    (l1.major_version = l2.major_version AND
+                    l1.minor_version < l2.minor_version))
+                WHERE l2.machine_name IS NULL
+        ";
+
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result)) {
+            $addons[] = H5PCore::snakeToCamel($row);
+        }
+
+        return $addons;
     }
 
     /**
@@ -336,7 +357,6 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function loadContent($id): array
     {
-
         $contentId = $id ?? $this->h5pImport->getIid();
 
         $contentJson = H5pPackageTools::getJson($this->h5pImport->getPath().'/content/content.json');
@@ -375,9 +395,25 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function loadContentDependencies($id, $type = NULL)
+    public function loadContentDependencies($id, $type = null)
     {
-        // TODO: Implement loadContentDependencies() method.
+        $h5pImportLibraries = $this->h5pImportLibraries;
+        $dependencies = [];
+
+        /** @var H5pImportLibrary|null $library */
+        foreach ($h5pImportLibraries as $library) {
+            $dependencies[] = [
+                'libraryId' => $library->getIid(),
+                'machineName' => $library->getMachineName(),
+                'majorVersion' => $library->getMajorVersion(),
+                'minorVersion' => $library->getMinorVersion(),
+                'patchVersion' => $library->getPatchVersion(),
+                'preloadedJs' => $library->getPreloadedJsFormatted(),
+                'preloadedCss' => $library->getPreloadedCssFormatted(),
+            ];
+        }
+
+        return $dependencies;
     }
 
     /**
@@ -385,7 +421,7 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function getOption($name, $default = NULL)
     {
-        // TODO: Implement getOption() method.
+        return api_get_course_plugin_setting('h5pimport', $name);
     }
 
     /**
@@ -433,7 +469,7 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function isContentSlugAvailable($slug)
     {
-        // TODO: Implement isContentSlugAvailable() method.
+        return true;
     }
 
     /**

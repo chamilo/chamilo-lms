@@ -118,7 +118,6 @@ class ZipPackageImporter extends H5pPackageImporter
         if (!empty($h5pPackageContent)) {
 
             foreach ($h5pPackageContent as $content) {
-
                 if (preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $content['filename']) !== 0) {
                     // Skip any file or folder starting with a . or _
                 } elseif (!in_array(pathinfo($content['filename'], PATHINFO_EXTENSION), self::ALLOWED_FILES)) {

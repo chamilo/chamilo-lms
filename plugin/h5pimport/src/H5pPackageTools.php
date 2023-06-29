@@ -190,19 +190,12 @@ class H5pPackageTools
      * Get core settings for H5P content.
      *
      * @param H5pImport $h5pImport The H5pImport object.
+     * @param H5PCore $h5pCore The H5PCore object.
      *
      * @return array The core settings for H5P content.
      */
-    public static function getCoreSettings(H5pImport $h5pImport): array
+    public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
-        $interface = new H5pImplementation($h5pImport);
-        $core = new H5PCore(
-            $interface,
-            $h5pImport->getPath(),
-            api_get_self(),
-            'en',
-            false
-        );
         $settings = [
             'baseUrl' => api_get_self(),
             'url' => $h5pImport->getPath(),
@@ -213,7 +206,7 @@ class H5pPackageTools
             ),
             'saveFreq' => false,
             'l10n' => array(
-                'H5P' => $core->getLocalization()
+                'H5P' => $h5pCore->getLocalization()
             ),
 //            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
 //            'crossorigin' => variable_get('h5p_crossorigin', NULL),
@@ -233,4 +226,85 @@ class H5pPackageTools
 
         return $settings;
     }
+
+    /**
+     * Get the core assets.
+     *
+     * @return array An array containing CSS and JS assets.
+     */
+    public static function getCoreAssets(): array
+    {
+        $assets = [
+            'css' => [],
+            'js' => [],
+        ];
+
+        // Add CSS assets
+        foreach (H5PCore::$styles as $style) {
+            $assets['css'][] = api_get_path(WEB_PATH) . 'vendor/h5p/h5p-core/' . $style;
+        }
+
+        // Add JS assets
+        foreach (H5PCore::$scripts as $script) {
+            $assets['js'][] = api_get_path(WEB_PATH) . 'vendor/h5p/h5p-core/' . $script;
+        }
+
+        return $assets;
+    }
+
+    public static function getContentSettings($h5pNode, H5PCore $h5pCore): array
+    {
+        $filtered = $h5pCore->filterParameters($h5pNode);
+        $contentUserData = [
+            0 => [
+                'state' => '{}'
+            ]
+        ];
+
+        //ToDo Use $h5pCore->getDisplayOptionsForView() function
+        $displayOptions = [
+            'frame' => api_get_course_plugin_setting('h5pimport', 'frame'),
+            'embed' => api_get_course_plugin_setting('h5pimport', 'embed'),
+            'copyright' => api_get_course_plugin_setting('h5pimport', 'copyright'),
+            'icon' => api_get_course_plugin_setting('h5pimport','icon'),
+
+        ];
+
+        return [
+            'library' => H5PCore::libraryToString($h5pNode['library']),
+            'jsonContent' => $h5pNode['params'] ,
+            'fullScreen' => $h5pNode['library']['fullscreen'],
+            'exportUrl' => '',
+            'language' => 'en',
+            'filtered' => $filtered,
+            'embedCode' => '<iframe src="' . api_get_course_url().'h5p/embed/' . $h5pNode['mainId'] . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" title="' . $h5pNode['title'] . '"></iframe>',
+            'resizeCode' => '',
+            'mainId' => $h5pNode['mainId'],
+            'url' => $h5pNode['url'],
+            'contentUserData' => $contentUserData,
+            'displayOptions' => $displayOptions,
+            'metadata' => $h5pNode['metadata']
+        ];
+    }
+
+    /**
+     * Convert H5P dependencies to a library list.
+     *
+     * @param array $dependencies The H5P dependencies.
+     * @return array The library list with machine names as keys and version information as values.
+     */
+    public static function h5pDependenciesToLibraryList(array $dependencies): array
+    {
+        $libraryList = [];
+
+        foreach ($dependencies as $dependency) {
+            $libraryList[$dependency['machineName']] = [
+                'majorVersion' => $dependency['majorVersion'],
+                'minorVersion' => $dependency['minorVersion'],
+            ];
+        }
+
+        return $libraryList;
+    }
+
 }

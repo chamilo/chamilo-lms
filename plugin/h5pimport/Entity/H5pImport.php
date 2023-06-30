@@ -62,6 +62,13 @@ class H5pImport
     protected string $path;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="relative_path", type="text", nullable=false)
+     */
+    protected string $relativePath;
+
+    /**
      * @var Collection<int, H5pImportLibrary>
      * @ORM\ManyToMany(targetEntity="H5pImportLibrary", mappedBy="h5pImports", cascade={"persist"})
      */
@@ -184,6 +191,24 @@ class H5pImport
     {
         $this->path = $path;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelativePath(): string
+    {
+        return $this->relativePath;
+    }
+
+    /**
+     * @param string $relativePath
+     * @return H5pImport
+     */
+    public function setRelativePath(string $relativePath): H5pImport
+    {
+        $this->relativePath = $relativePath;
         return $this;
     }
 

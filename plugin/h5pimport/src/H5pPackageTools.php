@@ -56,9 +56,12 @@ class H5pPackageTools
     public static function checkPackageIntegrity(object $h5pJson, string $extractedDir): bool
     {
         $filesystem = new Filesystem();
-        $h5pDir = dirname($extractedDir);
+        $h5pDir = dirname($extractedDir, 2);
         $sharedLibrariesDir = $h5pDir . '/libraries';
 
+        //Move 'content' directory one level back (H5P specification)
+        $filesystem->mirror($extractedDir.'/content', $extractedDir, null, ['override' => true]);
+        $filesystem->remove($extractedDir.'/content');
         // Get the list of preloaded dependencies
         $preloadedDependencies = $h5pJson->preloadedDependencies;
 
@@ -102,14 +105,17 @@ class H5pPackageTools
         Session $session = null
     ) {
         $entityManager = Database::getManager();
-        $h5pDir = dirname($packagePath);
+        // Go back 2 directories
+        $h5pDir = dirname($packagePath, 2);
         $sharedLibrariesDir = $h5pDir . '/libraries';
 
         $mainLibraryName = $h5pJson->mainLibrary;
+        $relativePath = api_get_path(REL_COURSE_PATH).$course->getDirectory().'/h5p/';
 
         $h5pImport = new H5pImport();
         $h5pImport->setName($h5pJson->title);
         $h5pImport->setPath($packagePath);
+        $h5pImport->setRelativePath($relativePath);
         $h5pImport->setCourse($course);
         $h5pImport->setSession($session);
         $entityManager->persist($h5pImport);
@@ -197,8 +203,8 @@ class H5pPackageTools
     public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
         $settings = [
-            'baseUrl' => api_get_self(),
-            'url' => $h5pImport->getPath(),
+            'baseUrl' => api_get_path(WEB_PATH),
+            'url' => $h5pImport->getRelativePath(),
             'postUserStatistics' => false,
             'ajax' => array(
                 'setFinished' => '',

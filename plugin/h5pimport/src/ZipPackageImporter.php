@@ -137,7 +137,7 @@ class ZipPackageImporter extends H5pPackageImporter
     }
     private function generatePackageDirectory(string $name): string
     {
-        $baseDirectory = $this->courseDirectoryPath . '/h5p/';
+        $baseDirectory = $this->courseDirectoryPath . '/h5p/content/';
         $safeName = api_replace_dangerous_char($name);
         $directoryPath = $baseDirectory . $safeName;
 
@@ -159,7 +159,7 @@ class ZipPackageImporter extends H5pPackageImporter
             api_get_permissions_for_new_directories()
         );
 
-        $sharedLibrariesDir = dirname($directoryPath) . '/libraries';
+        $sharedLibrariesDir = $this->courseDirectoryPath . '/h5p/libraries';
 
         if (!$fs->exists($sharedLibrariesDir)) {
             $fs->mkdir(

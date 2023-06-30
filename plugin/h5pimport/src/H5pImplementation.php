@@ -357,9 +357,7 @@ class H5pImplementation implements H5PFrameworkInterface
      */
     public function loadContent($id): array
     {
-        $contentId = $id ?? $this->h5pImport->getIid();
-
-        $contentJson = H5pPackageTools::getJson($this->h5pImport->getPath().'/content/content.json');
+        $contentJson = H5pPackageTools::getJson($this->h5pImport->getPath().'/content.json');
         $h5pJson = H5pPackageTools::getJson($this->h5pImport->getPath().'/h5p.json');
 
         if ($contentJson && $h5pJson) {
@@ -373,9 +371,9 @@ class H5pImplementation implements H5PFrameworkInterface
             $libraryMinorVersion = $this->h5pImport->getMainLibrary()->getMinorVersion();
             $libraryEmbedTypes = $this->h5pImport->getMainLibrary()->getEmbedTypesFormatted();
 
-            // Create the associative array with the loaded content information
+            // Create the associative array with the loaded content information. Use the unique folder name as id.
             return [
-                'contentId' => $contentId,
+                'contentId' => basename($this->h5pImport->getPath()),
                 'params' => $params,
                 'embedType' => $embedType,
                 'title' => $title,

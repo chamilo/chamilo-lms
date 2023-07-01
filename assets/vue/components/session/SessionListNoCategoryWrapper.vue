@@ -1,24 +1,21 @@
 <template>
-    <h5>
-      <v-icon icon="mdi-folder" />
-      {{ $t('No category') }}
-    </h5>
-    <SessionListCategoryWrapper :sessions="sessions"/>
+    <div>
+      <h5 class="mb-2">
+        <BaseIcon icon="folder-generic"/>
+        {{ $t('No category') }}
+      </h5>
+      <SessionListCategoryWrapper :sessions="sessions"/>
+    </div>
 </template>
-<script>
 
-import SessionListCategoryWrapper from '../../components/session/SessionListCategoryWrapper';
+<script setup>
+import SessionListCategoryWrapper from '../../components/session/SessionListCategoryWrapper'
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
-export default {
-  name: 'SessionListNoCategoryWrapper',
-  components: {
-    SessionListCategoryWrapper
+defineProps({
+  sessions: {
+    type: Array,
+    required: true,
   },
-  props: {
-    sessions: Array,
-  },
-  setup() {
-  }
-}
-
+})
 </script>

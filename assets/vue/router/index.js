@@ -14,11 +14,12 @@ import socialNetworkRoutes from './social';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
+import links from './links';
 import store from '../store';
 import MyCourseList from '../views/user/courses/List.vue';
-import MySessionList from '../views/user/sessions/List.vue';
-import MySessionListPast from '../views/user/sessions/Past.vue';
-import MySessionListUpcoming from '../views/user/sessions/Upcoming.vue';
+import MySessionList from '../views/user/sessions/SessionsCurrent.vue';
+import MySessionListPast from '../views/user/sessions/SessionsPast.vue';
+import MySessionListUpcoming from '../views/user/sessions/SessionsUpcoming.vue';
 
 import CatalogLayout from '../layouts/Catalog.vue';
 import MyCoursesLayout from '../layouts/MyCourses.vue';
@@ -121,6 +122,7 @@ const router = createRouter({
         courseRoutes,
         //courseCategoryRoutes,
         documents,
+        links,
         accountRoutes,
         personalFileRoutes,
         messageRoutes,

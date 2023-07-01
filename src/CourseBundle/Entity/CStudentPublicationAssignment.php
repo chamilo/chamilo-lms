@@ -26,7 +26,7 @@ class CStudentPublicationAssignment implements Stringable
     protected ?DateTime $endsOn = null;
 
     #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
-    protected int $addToCalendar;
+    protected int $eventCalendarId;
 
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
@@ -69,14 +69,14 @@ class CStudentPublicationAssignment implements Stringable
         return $this;
     }
 
-    public function getAddToCalendar(): int
+    public function getEventCalendarId(): int
     {
-        return $this->addToCalendar;
+        return $this->eventCalendarId;
     }
 
-    public function setAddToCalendar(int $addToCalendar): self
+    public function setEventCalendarId(int $eventCalendarId): self
     {
-        $this->addToCalendar = $addToCalendar;
+        $this->eventCalendarId = $eventCalendarId;
 
         return $this;
     }

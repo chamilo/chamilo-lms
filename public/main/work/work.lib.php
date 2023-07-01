@@ -5205,7 +5205,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     $assignment
-        ->setAddToCalendar($agendaId)
+        ->setEventCalendarId($agendaId)
         ->setEnableQualification(1 === $qualification)
         ->setPublication($publication)
     ;

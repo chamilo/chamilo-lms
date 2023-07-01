@@ -4923,17 +4923,17 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     $enableEndDate = isset($formValues['enableEndDate']);
     $enableExpiryDate = isset($formValues['enableExpiryDate']);
 
-    if ($enableEndDate && $enableExpiryDate) {
-        if ($formValues['expires_on'] > $formValues['ends_on']) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('The date of effective blocking of sending the work can not be before the displayed posting deadline.'),
-                    'warning'
-                )
-            );
+    if ($enableEndDate && $enableExpiryDate && $formValues['expires_on'] > $formValues['ends_on']) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'The date of effective blocking of sending the work can not be before the displayed posting deadline.'
+                ),
+                'warning'
+            )
+        );
 
-            return false;
-        }
+        return false;
     }
 
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
@@ -4956,7 +4956,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         ->setParent($courseEntity)
         ->addCourseLink(
             $courseEntity,
-            api_get_session_entity(),
+            $session,
             api_get_group_entity()
         )
     ;
@@ -4972,14 +4972,14 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         'DirectoryCreated',
         $user_id,
         $groupInfo
-    );
+    );*/
 
     updatePublicationAssignment(
         $studentPublication->getIid(),
         $formValues,
         $courseInfo,
         $groupIid
-    );*/
+    );
 
     // Added the new Work ID to the extra field values
     $formValues['item_id'] = $studentPublication->getIid();
@@ -5093,7 +5093,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         }
 
         $title = sprintf(get_lang('Handing over of task %s'), $params['new_dir']);
-        $description = isset($params['description']) ? $params['description'] : '';
+        $description = $params['description'] ?? '';
         $content = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId.'">'
             .$params['new_dir'].'</a>'.$description;
 
@@ -5145,9 +5145,13 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         }
     }
 
-    $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-    $expiryDate = isset($params['enableExpiryDate']) && 1 == (int) $params['enableExpiryDate'] ? api_get_utc_datetime($params['expires_on']) : '';
-    $endDate = isset($params['enableEndDate']) && 1 == (int) $params['enableEndDate'] ? api_get_utc_datetime($params['ends_on']) : '';
+    $qualification = !empty($params['qualification']) ? 1 : 0;
+    $expiryDate = isset($params['enableExpiryDate']) && 1 == (int) $params['enableExpiryDate']
+        ? api_get_utc_datetime($params['expires_on'])
+        : '';
+    $endDate = isset($params['enableEndDate']) && 1 == (int) $params['enableEndDate']
+        ? api_get_utc_datetime($params['ends_on'])
+        : '';
     $data = get_work_assignment_by_id($workId, $course_id);
     if (!empty($expiryDate)) {
         $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
@@ -5167,13 +5171,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (empty($data)) {
         $assignment = new CStudentPublicationAssignment();
-
-        $publication
-            ->setHasProperties(1)
-            ->setViewProperties(1)
-        ;
-        $em->persist($publication);
-
     /*$sql = "INSERT INTO $table SET
             c_id = $course_id ,
             $expiryDateCondition
@@ -5217,6 +5214,15 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $assignment->setEndsOn(api_get_utc_datetime($endDate, true, true));
     }
     $em->persist($assignment);
+    $em->flush();
+
+    if (empty($data)) {
+        $publication
+            ->setHasProperties($assignment->getIid())
+            ->setViewProperties(true)
+        ;
+    }
+
     $em->flush();
 
     if (!empty($params['category_id'])) {

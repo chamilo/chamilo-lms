@@ -85,7 +85,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class)]
+    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
     protected ?CStudentPublicationAssignment $assignment = null;
 
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
@@ -393,6 +393,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setAssignment(?CStudentPublicationAssignment $assignment): self
     {
         $this->assignment = $assignment;
+
+        if ($assignment) {
+            $assignment->setPublication($this);
+        }
 
         return $this;
     }

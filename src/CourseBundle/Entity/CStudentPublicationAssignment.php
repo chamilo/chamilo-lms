@@ -102,6 +102,10 @@ class CStudentPublicationAssignment implements Stringable
     {
         $this->publication = $publication;
 
+        $qualification = $this->publication->getQualification();
+
+        $this->enableQualification = !empty($qualification);
+
         return $this;
     }
 

@@ -9,6 +9,8 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication_assignment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationAssignmentRepository::class)]
@@ -20,13 +22,16 @@ class CStudentPublicationAssignment implements Stringable
     protected int $iid;
 
     #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write'])]
     protected ?DateTime $expiresOn = null;
 
     #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write'])]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'expiresOn')]
     protected ?DateTime $endsOn = null;
 
     #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
-    protected int $eventCalendarId;
+    protected int $eventCalendarId = 0;
 
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
@@ -50,7 +55,7 @@ class CStudentPublicationAssignment implements Stringable
         return $this->expiresOn;
     }
 
-    public function setExpiresOn(DateTime $expiresOn): self
+    public function setExpiresOn(?DateTime $expiresOn): self
     {
         $this->expiresOn = $expiresOn;
 
@@ -62,7 +67,7 @@ class CStudentPublicationAssignment implements Stringable
         return $this->endsOn;
     }
 
-    public function setEndsOn(DateTime $endsOn): self
+    public function setEndsOn(?DateTime $endsOn): self
     {
         $this->endsOn = $endsOn;
 

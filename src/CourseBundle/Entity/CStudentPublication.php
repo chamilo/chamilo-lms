@@ -5,32 +5,45 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\CStudentPublicationStateProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication')]
 #[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['student_publication:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['c_student_publication:write'],
+    ]
+)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[Groups(['c_student_publication:write'])]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[Groups(['c_student_publication:write'])]
     protected ?string $description;
 
     #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
@@ -60,6 +73,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?bool $viewProperties = null;
 
     #[ORM\Column(name: 'qualification', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[Groups(['c_student_publication:write'])]
     protected float $qualification;
 
     #[ORM\Column(name: 'date_of_qualification', type: 'datetime', nullable: true)]
@@ -85,7 +99,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
+    #[Groups(['c_student_publication:write'])]
     #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
+    #[Assert\Valid]
     protected ?CStudentPublicationAssignment $assignment = null;
 
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
@@ -93,9 +109,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
-    protected float $weight;
+    #[Groups(['c_student_publication:write'])]
+    protected float $weight = 0;
 
     #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
+    #[Groups(['c_student_publication:write'])]
     protected int $allowTextAssignment;
 
     #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]
@@ -445,7 +463,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

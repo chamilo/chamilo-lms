@@ -82,6 +82,7 @@ abstract class AbstractResource
         'resource_node:write',
         'document:read',
         'document:write',
+        'c_student_publication:write',
     ])]
     public ?int $parentResourceNode = 0;
 
@@ -100,7 +101,7 @@ abstract class AbstractResource
      * Use when sending a request to Api platform.
      * Temporal array that saves the resource link list that will be filled by CreateDocumentFileAction.php.
      */
-    #[Groups(['c_tool_intro:write', 'resource_node:write'])]
+    #[Groups(['c_tool_intro:write', 'resource_node:write', 'c_student_publication:write'])]
     public array $resourceLinkList = [];
 
     /**

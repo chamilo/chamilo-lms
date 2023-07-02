@@ -28,7 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     denormalizationContext: [
         'groups' => ['c_student_publication:write'],
-    ]
+    ],
+    processor: CStudentPublicationStateProcessor::class
 )]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
@@ -107,6 +108,12 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
     protected int $qualificatorId;
 
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['c_student_publication:write'])]
+    public int $gradebookCategoryId = 0;
+
     #[Assert\NotBlank]
     #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
     #[Groups(['c_student_publication:write'])]
@@ -124,6 +131,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
+
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToCalendar = false;
 
     public function __construct()
     {

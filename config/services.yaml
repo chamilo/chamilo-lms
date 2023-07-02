@@ -63,6 +63,11 @@ services:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
 
+    Chamilo\CoreBundle\State\CStudentPublicationStateProcessor:
+        bind:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        tags: [ 'api_platform.state_processor' ]
+
 cocur_slugify:
     lowercase: true
 

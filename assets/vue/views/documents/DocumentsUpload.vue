@@ -13,15 +13,7 @@
       />
     </div>
 
-    <BaseButton
-      :label="showAdvancedSettingsLabel"
-      class="mr-auto mb-4"
-      icon="cog"
-      type="black"
-      @click="advancedSettingsClicked"
-    />
-
-    <div v-if="showAdvancedSettings">
+    <BaseAdvancedSettingsButton>
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
         <BaseCheckbox id="uncompress" v-model="isUncompressZipEnabled" :label="t('Uncompres zip')" name="uncompress" />
@@ -40,12 +32,12 @@
           name="file-exists-options"
         />
       </div>
-    </div>
+    </BaseAdvancedSettingsButton>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 import "@uppy/image-editor/dist/style.css";
@@ -58,10 +50,10 @@ import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibil
 import { ENTRYPOINT } from "../../config/entrypoint";
 import { useCidReq } from "../../composables/cidReq";
 import { useUpload } from "../../composables/upload";
-import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import { useI18n } from "vue-i18n";
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue";
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue";
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue";
 
 const XHRUpload = require("@uppy/xhr-upload");
 const ImageEditor = require("@uppy/image-editor");
@@ -83,17 +75,8 @@ const resourceLinkList = ref(
     },
   ])
 );
-const showAdvancedSettings = ref(false);
 const isUncompressZipEnabled = ref(false);
 const fileExistsOption = ref("");
-
-const showAdvancedSettingsLabel = computed(() => {
-  if (showAdvancedSettings.value) {
-    return t("Hide advanced settings");
-  } else {
-    return t("Show advanced settings");
-  }
-});
 
 let uppy = ref();
 uppy.value = new Uppy()
@@ -132,8 +115,4 @@ uppy.value.setMeta({
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
 });
-
-const advancedSettingsClicked = () => {
-  showAdvancedSettings.value = !showAdvancedSettings.value;
-};
 </script>

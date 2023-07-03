@@ -2,21 +2,21 @@
   <div>
     <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
       <BaseButton
-        label="Add a link"
+        :label="t('Add a link')"
         icon="link-add"
         class="mr-2 mb-2"
         type="black"
         @click="redirectToCreateLink"
       />
       <BaseButton
-        label="Add a category"
+        :label="t('Add a category')"
         icon="folder-plus"
         class="mr-2 mb-2"
         type="black"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
-        label="Export to PDF"
+        :label="t('Export to PDF')"
         icon="file-pdf"
         class="mr-2 mb-2"
         type="black"
@@ -28,7 +28,7 @@
       <!-- Render the image and create button -->
       <EmptyState
         icon="mdi mdi-link"
-        summary="Add your first link to this course"
+        :summary="t('Add your first link to this course')"
       >
         <BaseButton
           :label="t('Add a link')"
@@ -40,86 +40,76 @@
       </EmptyState>
     </div>
 
-    <div>
+    <div class="flex flex-col gap-4">
       <!-- Render the list of links -->
-      <ul>
-        <li v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
-          <h3>General</h3>
-          <ul>
-            <li v-for="link in linksWithoutCategory" :key="link.id">
-              <span>{{ link.title }}</span>
-              <span>{{ link.url }}</span>
-              <div>
-                <a @click="checkLink(link.iid, link.url)" title="Check link" class="btn btn--secondary btn-sm">
-                  <i class="mdi-check-circle mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="editLink(link)" title="Edit" class="btn btn--secondary btn-sm">
-                  <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="toggleVisibility(link)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                  <i :class="link.linkVisible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-                </a>
-                <a @click="moveUp(link.iid, link.position)" class="btn btn--secondary btn-sm disabled" title="Move up">
-                  <i class="mdi-level-up-alt mdi v-icon notranslate v-icon--size-default"></i>
-                  <span class="sr-only">Move up</span>
-                </a>
-                <a @click="moveDown(link.iid, link.position)" class="btn btn--secondary btn-sm" title="Move down">
-                  <i class="mdi-level-down-alt mdi v-icon notranslate v-icon--size-default"></i>
-                  <span class="sr-only">Move down</span>
-                </a>
-                <a @click="deleteLink(link.iid)" title="Delete" class="btn btn--secondary btn-sm">
-                  <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </li>
-        <li v-for="category in categories" :key="category.info.id">
-          <div class="category-header">
-            <h3>{{ category.info.name }}</h3>
-            <div>
-              <a @click="editCategory(category)" title="Edit" class="btn btn--secondary btn-sm">
-                <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-              </a>
-              <a @click="deleteCategory(category)" title="Delete" class="btn btn--secondary btn-sm">
-                <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-              </a>
-              <a @click="toggleCategoryVisibility(category)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                <i :class="category.info.visible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-              </a>
+      <LinkCategoryCard v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
+        <ul>
+          <li v-for="link in linksWithoutCategory" :key="link.id" class="mb-4">
+            <LinkItem
+              :link="link"
+              @check="checkLink(link.iid, link.url)"
+              @edit="editLink"
+              @toggle="toggleVisibility"
+              @move-up="moveUp(link.iid, link.position)"
+              @move-down="moveDown(link.iid, link.position)"
+              @delete="deleteLink(link.iid)"
+            />
+          </li>
+        </ul>
+      </LinkCategoryCard>
+
+      <LinkCategoryCard v-for="category in categories" :key="category.info.id">
+
+        <template #header>
+          <div class="flex justify-between mb-2">
+            <div class="flex items-center">
+              <BaseIcon class="mr-2" icon="folder-generic" size="big"/>
+              <h5>{{ category.info.name }}</h5>
+            </div>
+            <div class="flex gap-2">
+              <BaseButton
+                :label="t('Edit')"
+                type="black"
+                icon="edit"
+                size="small"
+                @click="editCategory(category)"
+              />
+              <BaseButton
+                :label="t('Delete')"
+                type="black"
+                :icon="category.info.visible ? 'eye-on' : 'eye-off'"
+                size="small"
+                @click="deleteCategory(category)"
+              />
+              <BaseButton
+                :label="t('Delete')"
+                type="danger"
+                icon="delete"
+                size="small"
+                @click="toggleCategoryVisibility(category)"
+              />
             </div>
           </div>
-          <ul>
-            <li v-for="link in category.links" :key="link.id">
-              <span>{{ link.title }}</span>
-              <span>{{ link.url }}</span>
-              <div>
-                <a @click="checkLink(link.iid, link.url)" title="Check link" class="btn btn--secondary btn-sm">
-                  <i class="mdi-check-circle mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="editLink(link)" title="Edit" class="btn btn--secondary btn-sm">
-                  <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="toggleVisibility(link)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                  <i :class="link.linkVisible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-                </a>
-                <a @click="moveUp(link.iid, link.position)" class="btn btn--secondary btn-sm disabled" title="Move up">
-                  <i class="mdi mdi-arrow-up-bold v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                  <span class="sr-only">Move up</span>
-                </a>
-                <a @click="moveDown(link.iid, link.position)" class="btn btn--secondary btn-sm" title="Move down">
-                  <i class="mdi mdi-arrow-down-bold v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                  <span class="sr-only">Move down</span>
-                </a>
-                <a @click="deleteLink(link.iid)" title="Delete" class="btn btn--secondary btn-sm">
-                  <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+          <p v-if="category.info.description">{{ category.info.description }}</p>
+        </template>
 
+        <ul>
+          <li v-for="link in category.links" :key="link.id">
+            <LinkItem
+              :link="link"
+              @check="checkLink(link.iid, link.url)"
+              @edit="editLink"
+              @toggle="toggleVisibility"
+              @move-up="moveUp(link.iid, link.position)"
+              @move-down="moveDown(link.iid, link.position)"
+              @delete="deleteLink(link.iid)"
+            />
+          </li>
+        </ul>
+        <p v-if="!category.links || category.links === 0">
+          {{ t('There are no links in this category') }}
+        </p>
+      </LinkCategoryCard>
     </div>
   </div>
 </template>
@@ -128,18 +118,24 @@
 import EmptyState from "../../components/EmptyState.vue";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue";
-import { computed, onMounted, ref } from "vue";
-import { useStore } from "vuex";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
+import {computed, onMounted, ref} from "vue";
+import {useStore} from "vuex";
+import {useRoute, useRouter} from "vue-router";
+import {useI18n} from "vue-i18n";
 import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
+import {ENTRYPOINT} from "../../config/entrypoint";
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue";
+import LinkItem from "../../components/links/LinkItem.vue";
+import {useNotification} from "../../composables/notification";
+import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-const { t } = useI18n();
+const {t} = useI18n();
+
+const notifications = useNotification()
 
 const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]);
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
@@ -151,10 +147,10 @@ const selectedLink = ref(null);
 const selectedCategory = ref(null);
 
 function editLink(link) {
-  selectedLink.value = { ...link };
+  selectedLink.value = {...link};
   router.push({
     name: "UpdateLink",
-    params: { id: link.iid },
+    params: {id: link.iid},
     query: route.query,
   });
 }
@@ -181,10 +177,10 @@ function toggleVisibility(link) {
   const endpoint = `${ENTRYPOINT}links/${link.iid}/toggle_visibility`;
 
   axios
-    .put(endpoint, { visible: makeVisible })
+    .put(endpoint, {visible: makeVisible})
     .then(response => {
       const updatedLink = response.data;
-      console.log('Link visibility updated:', updatedLink.linkVisible);
+      notifications.showSuccessNotification(t('Link visibility updated'))
     })
     .catch(error => {
       console.error('Error updating link visibility:', error);
@@ -211,7 +207,7 @@ function moveUp(id, position) {
   console.log('linkIndex Up newPosition', newPosition);
 
   axios
-    .put(endpoint, { position: newPosition })
+    .put(endpoint, {position: newPosition})
     .then((response) => {
       console.log("Link moved up:", response.data);
       // Perform any additional actions or updates if needed
@@ -227,14 +223,14 @@ function moveDown(id, position) {
 
   console.log('linkIndex Down position', position);
 
-    // Send the updated position to the server
-    const endpoint = `${ENTRYPOINT}links/${id}/move`;
-    const newPosition = parseInt(position) + 1;
+  // Send the updated position to the server
+  const endpoint = `${ENTRYPOINT}links/${id}/move`;
+  const newPosition = parseInt(position) + 1;
 
-    console.log('linkIndex Down newPosition', newPosition);
+  console.log('linkIndex Down newPosition', newPosition);
 
-    axios
-    .put(endpoint, { position: newPosition })
+  axios
+    .put(endpoint, {position: newPosition})
     .then((response) => {
       console.log("Link moved down:", response.data);
       // Perform any additional actions or updates if needed
@@ -267,7 +263,7 @@ function fetchLinks() {
   };
 
   axios
-    .get(ENTRYPOINT + 'links', { params })
+    .get(ENTRYPOINT + 'links', {params})
     .then(response => {
 
       console.log('responsedata:', response.data);
@@ -291,10 +287,10 @@ onMounted(() => {
 
 function editCategory(category) {
   console.log('category.info.id', category.info.id);
-  selectedCategory.value = { ...category };
+  selectedCategory.value = {...category};
   router.push({
     name: "UpdateLinkCategory",
-    params: { id: category.info.id },
+    params: {id: category.info.id},
     query: route.query,
   });
 }
@@ -317,7 +313,7 @@ function toggleCategoryVisibility(category) {
   const endpoint = `${ENTRYPOINT}link_categories/${category.info.id}/toggle_visibility`;
 
   axios
-    .put(endpoint, { visible: makeVisible })
+    .put(endpoint, {visible: makeVisible})
     .then(response => {
       const updatedLinkCategory = response.data;
       console.log('Link visibility updated:', updatedLinkCategory);
@@ -330,12 +326,7 @@ function toggleCategoryVisibility(category) {
     });
 }
 
-</script>
-<style scoped>
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+function exportToPDF() {
+  // TODO
 }
-</style>
+</script>

@@ -1,6 +1,5 @@
 <template>
   <Card
-    class="bg-gray-15 border border-gray-25 shadow-none"
     :class="customClass"
   >
     <template #content>
@@ -23,7 +22,7 @@ const props = defineProps({
 const customClass = computed(() => {
   let resultClass = ''
   if (props.plain) {
-    resultClass += 'border border-gray-25 shadow-none '
+    resultClass += 'bg-gray-15 border border-gray-25 shadow-none '
   }
   return resultClass
 })

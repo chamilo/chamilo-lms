@@ -3,21 +3,21 @@
     <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
       <BaseButton
         label="Add a link"
-        icon="new_link"
+        icon="link-add"
         class="mr-2 mb-2"
         type="black"
         @click="redirectToCreateLink"
       />
       <BaseButton
         label="Add a category"
-        icon="new_folder"
+        icon="folder-plus"
         class="mr-2 mb-2"
         type="black"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
         label="Export to PDF"
-        icon="pdf"
+        icon="file-pdf"
         class="mr-2 mb-2"
         type="black"
         @click="exportToPDF"
@@ -31,9 +31,9 @@
         summary="Add your first link to this course"
       >
         <BaseButton
-          label="Create Link"
+          :label="t('Add a link')"
           class="mt-4"
-          icon="plus"
+          icon="link-add"
           type="primary"
           @click="redirectToCreateLink"
         />

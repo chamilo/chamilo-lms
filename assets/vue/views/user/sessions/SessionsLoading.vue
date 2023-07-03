@@ -5,7 +5,7 @@
   >
     <Skeleton class="h-8 w-44"/>
     <div class="hidden md:block md:col-span-1 lg:col-span-3 "></div>
-    <Skeleton v-for="el in 4" :key="el" class="h-44"/>
+    <Skeleton v-for="el in 4" :key="el" class="h-44 xl:h-60"/>
   </div>
 </template>
 

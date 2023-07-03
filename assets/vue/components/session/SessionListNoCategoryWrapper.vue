@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="sessions.length > 0">
       <h5 class="mb-2">
         <BaseIcon icon="folder-generic"/>
         {{ $t('No category') }}

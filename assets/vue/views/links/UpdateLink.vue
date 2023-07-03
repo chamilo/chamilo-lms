@@ -1,40 +1,34 @@
 <template>
   <div>
-    <div class="mb-4">
-      <button class="btn btn--secondary" @click="goBack">Back</button>
-    </div>
-    <h1>Update Link <hr /></h1>
-    <LinkForm :linkId="linkId" />
+    <h2 class="text-h3 font-small text-gray-800 mb-4">
+      {{ t('Upate link') }}
+    </h2>
+    <hr class="m-0 mb-4"/>
+    <LinkForm
+      :link-id="linkId"
+      @back-pressed="goBack"
+    />
   </div>
 </template>
 
-<script>
-import LinkForm from "../../components/links/LinkForm.vue";
-import {useRoute, useRouter} from "vue-router";
+<script setup>
+import LinkForm from "../../components/links/LinkForm.vue"
+import {useRoute, useRouter} from "vue-router"
+import {computed} from "vue";
+import {useI18n} from "vue-i18n"
 
-export default {
-  components: {
-    LinkForm,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const {t} = useI18n()
+const router = useRouter()
+const route = useRoute()
 
-    const goBack = () => {
-      router.push({
-        name: "LinksList",
-        query: route.query,
-      });
-    };
+const goBack = () => {
+  router.push({
+    name: "LinksList",
+    query: route.query,
+  })
+}
 
-    return {
-      goBack,
-    };
-  },
-  computed: {
-    linkId() {
-      return this.$route.params.id;
-    },
-  },
-};
+const linkId = computed(() => {
+  return route.params.id
+})
 </script>

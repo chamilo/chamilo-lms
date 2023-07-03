@@ -82,7 +82,7 @@ const route = useRoute()
 
 const props = defineProps({
   linkId: {
-    type: Number,
+    type: [String, Number],
     default: null
   },
 })
@@ -136,9 +136,16 @@ const fetchLink = async () => {
   if (props.linkId) {
     try {
       const response = await linkService.getLink(props.linkId)
-      formData.value = response
+      console.log('EEEEEEEEEEEEEEEEIIIII', response)
+      formData.url = response.url
+      formData.title = response.title
+      formData.description = response.description
+      formData.showOnHomepage = response.showOnHomepage
+      formData.target = response.target
+      formData.parentResourceNodeId = response.value
+      formData.resourceLinkList = response.value
       if (response.category) {
-        formData.value.category = parseInt(response.data.category["@id"].split("/").pop())
+        formData.category = parseInt(response.category["@id"].split("/").pop())
       }
     } catch (error) {
       console.error('Error fetching link:', error)

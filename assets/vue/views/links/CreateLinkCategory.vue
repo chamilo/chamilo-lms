@@ -1,35 +1,31 @@
 <template>
   <div>
-    <div class="mb-4">
-      <button class="btn btn--secondary" @click="goBack">Back</button>
-    </div>
-    <h1 class="text-h3 font-small text-gray-800 mb-4">Add a category<hr /></h1>
-    <CategoryForm />
+    <h2 class="text-h3 font-small text-gray-800 mb-4">
+      <BaseIcon icon="folder-plus"/>
+      {{ t('Add a category') }}
+    </h2>
+    <hr class="m-0 mb-4"/>
+    <CategoryForm
+      @back-pressed="goBack"
+    />
   </div>
 </template>
 
-<script>
-import { useRouter, useRoute } from 'vue-router';
-import CategoryForm from "../../components/links/CategoryForm.vue";
+<script setup>
+import { useRouter, useRoute } from 'vue-router'
+import CategoryForm from "../../components/links/CategoryForm.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import {useI18n} from "vue-i18n";
 
-export default {
-  components: {
-    CategoryForm,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const {t} = useI18n()
 
-    const goBack = () => {
-      router.push({
-        name: "LinksList",
-        query: route.query,
-      });
-    };
+const router = useRouter();
+const route = useRoute();
 
-    return {
-      goBack,
-    };
-  },
-};
+const goBack = () => {
+  router.push({
+    name: "LinksList",
+    query: route.query,
+  })
+}
 </script>

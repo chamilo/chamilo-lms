@@ -2,7 +2,7 @@ export default {
   path: '/resources/links/:node/',
   meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'links',
-  component: () => import('../components/links/LinksLayout.vue'),
+  component: () => import('../views/links/LinksLayout.vue'),
   redirect: { name: 'LinksList' },
   children: [
     {

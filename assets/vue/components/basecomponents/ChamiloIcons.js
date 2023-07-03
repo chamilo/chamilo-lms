@@ -57,6 +57,7 @@ export const chamiloIconToClass = {
   "hammer-wrench": "",
   "inbox": "mdi mdi-inbox",
   "information": "mdi mdi-information",
+  "link-add": "mdi mdi-link-plus",
   "magnify-plus-outline": "",
   "microphone": "mdi mdi-microphone",
   "multiple-marked": "mdi mdi-checkbox-multiple-marked-outline",

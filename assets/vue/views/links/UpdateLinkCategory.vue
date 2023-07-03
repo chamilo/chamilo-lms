@@ -1,40 +1,34 @@
 <template>
   <div>
-    <div class="mb-4">
-      <button class="btn btn--secondary" @click="goBack">Back</button>
-    </div>
-    <h1>Update Link <hr /></h1>
-    <CategoryForm :categoryId="categoryId" />
+    <h2 class="text-h3 font-small text-gray-800 mb-4">
+      {{ t('Update category') }}
+    </h2>
+    <hr class="m-0 mb-4"/>
+    <CategoryForm
+      :category-id="categoryId"
+      @back-pressed="goBack"
+    />
   </div>
 </template>
 
-<script>
+<script setup>
 import CategoryForm from "../../components/links/CategoryForm.vue";
 import {useRoute, useRouter} from "vue-router";
+import {computed} from "vue";
+import {useI18n} from "vue-i18n";
 
-export default {
-  components: {
-    CategoryForm,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const {t} = useI18n()
+const router = useRouter()
+const route = useRoute()
 
-    const goBack = () => {
-      router.push({
-        name: "LinksList",
-        query: route.query,
-      });
-    };
+const goBack = () => {
+  router.push({
+    name: "LinksList",
+    query: route.query,
+  });
+}
 
-    return {
-      goBack,
-    };
-  },
-  computed: {
-    categoryId() {
-      return this.$route.params.id;
-    },
-  },
-};
+const categoryId = computed(() => {
+  return route.params.id
+})
 </script>

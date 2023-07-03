@@ -18,9 +18,8 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n()
-
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
 const goBack = () => {
   router.push({

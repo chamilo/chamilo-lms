@@ -1,127 +1,81 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="field">
-      <div class="p-float-label">
-        <input
-          id="link_url"
-          v-model="formData.url"
-          name="url"
-          type="text"
-          class="p-inputtext p-component p-filled"
-        />
-        <label for="link_url">
-          <span class="form_required">*</span>
-          URL
-        </label>
-      </div>
-    </div>
-    <div class="field">
-      <div class="p-float-label">
-        <input
-          id="link_title"
-          v-model="formData.title"
-          name="title"
-          type="text"
-          class="p-inputtext p-component p-filled"
-        />
-        <label for="link_title">
-          <span class="form_required">*</span>
-          Link name
-        </label>
-      </div>
-    </div>
-    <div class="field">
-      <div class="p-float-label">
-        <textarea id="description" v-model="formData.description" name="description"></textarea>
-        <label for="description">
-          Description
-        </label>
-      </div>
-    </div>
+  <form class="flex flex-col gap-2 mt-6">
+    <BaseInputTextWithVuelidate
+      v-model="formData.url"
+      :vuelidate-property="v$.url"
+      :label="t('URL')"
+    />
+    <BaseInputTextWithVuelidate
+      v-model="formData.title"
+      :vuelidate-property="v$.title"
+      :label="t('Link name')"
+    />
+    <BaseTextArea
+      v-model="formData.description"
+      :label="t('Description')"
+    />
+    <BaseCheckbox
+      id="show-link-on-home-page"
+      v-model="formData.showOnHomepage"
+      :label="t('Show link on course homepage')"
+      name="show-link-on-home-page"
+    />
 
-    <div class="field">
-      <div class="p-float-label">
-        <select
-          id="link_category_id"
-          v-model="formData.category"
-          name="category_id"
-          class="p-dropdown p-component p-inputwrapper p-inputwrapper-filled"
-        >
-          <option value="0">--</option>
-          <option
-            v-for="categoryItem in categories"
-            :value="categoryItem.iid"
-            :key="categoryItem.iid"
-          >
-            {{ categoryItem.categoryTitle }}
-          </option>
-        </select>
-        <label for="link_category_id">Category</label>
-      </div>
-    </div>
+    <BaseSelect
+      v-model="formData.category"
+      :options="categories"
+      :label="t('Select a category')"
+      option-label="categoryTitle"
+      option-value="iid"
+      hast-empty-value
+    />
 
-    <div class="field 2">
-      <div class="8">
-        <label for="qf_88d91d" class="h-4"></label>
-        <div id="on_homepage" class="field-checkbox">
-          <input
-            id="qf_88d91d"
-            v-model="formData.showOnHomepage"
-            class="appearance-none checked:bg-support-4 outline-none"
-            name="on_homepage"
-            type="checkbox" value="1"
-          />
-          <label for="qf_88d91d">
-            Show link on course homepage
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="field">
-      <div class="p-float-label">
-        <select
-          id="link_target"
-          v-model="formData.target"
-          name="target"
-          class="p-dropdown p-component p-inputwrapper p-inputwrapper-filled"
-        >
-          <option value="_self">Open self</option>
-          <option value="_blank">Open blank</option>
-          <option value="_parent">Open parent</option>
-          <option value="_top">Open top</option>
-        </select>
-        <label for="link_target">
-          Link's target
-        </label>
-      </div>
-      <small>Select the target which shows the link on the homepage of the course</small>
-    </div>
-    <div class="field 2">
-      <div class="8">
-        <label for="link_submitLink" class="h-4"></label>
-        <button id="link_submitLink" class="btn btn--primary" name="submitLink" type="submit">
-          <em class="mdi mdi-check"></em> Save links
-        </button>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <span class="form_required">*</span>
-        <small>Required field</small>
-      </div>
+    <BaseSelect
+      v-model="formData.target"
+      :options="[
+        {label: 'Open self', value: '_self'},
+        {label: 'Open blank', value: '_blank'},
+        {label: 'Open parent', value: '_parent'},
+        {label: 'Open top', value: '_top'},
+      ]"
+      :label="t('Link\'s target')"
+      option-label="label"
+      option-value="value"
+    />
+
+    <div class="flex gap-4">
+      <BaseButton
+        :label="t('Back')"
+        type="black"
+        icon="back"
+        @click="emit('backPressed')"
+      />
+      <BaseButton
+        :label="t('Save link')"
+        type="success"
+        icon="send"
+        @click="submitForm"
+      />
     </div>
   </form>
 </template>
 
 <script setup>
-import {RESOURCE_LINK_PUBLISHED} from "../resource_links/visibility";
-import linkService from "../../services/linkService";
-import {useRoute, useRouter} from 'vue-router';
-import {useI18n} from "vue-i18n";
-import {onMounted, ref} from "vue";
-import {useCidReq} from "../../composables/cidReq";
+import {RESOURCE_LINK_PUBLISHED} from "../resource_links/visibility"
+import linkService from "../../services/linkService"
+import {useRoute, useRouter} from "vue-router"
+import {useI18n} from "vue-i18n"
+import {onMounted, reactive, ref} from "vue"
+import {useCidReq} from "../../composables/cidReq"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import {required, url} from "@vuelidate/validators"
+import useVuelidate from "@vuelidate/core";
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
+import BaseTextArea from "../basecomponents/BaseTextArea.vue";
+import BaseSelect from "../basecomponents/BaseSelect.vue";
 
-const {t} = useI18n();
+const {t} = useI18n()
 const {cid, sid} = useCidReq()
 const router = useRouter()
 const route = useRoute()
@@ -133,8 +87,9 @@ const props = defineProps({
   },
 })
 
-const parentResourceNodeId = ref(Number(route.params.node));
+const emit = defineEmits(['backPressed'])
 
+const parentResourceNodeId = ref(Number(route.params.node));
 const resourceLinkList = ref(
   JSON.stringify([
     {
@@ -143,22 +98,30 @@ const resourceLinkList = ref(
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
   ])
-);
+)
+const categories = ref([])
 
-const formData = ref({
+const formData = reactive({
   url: 'http://',
   title: '',
   description: '',
-  category: 0,
+  category: null,
   showOnHomepage: false,
   target: '_blank',
-});
-
-const categories = ref([]);
+})
+const rules = {
+  url: {required, url},
+  title: {required},
+  description: {},
+  category: {},
+  showOnHomepage: {},
+  target: {}
+}
+const v$ = useVuelidate(rules, formData)
 
 onMounted(() => {
-  fetchCategories();
-  fetchLink();
+  fetchCategories()
+  fetchLink()
 });
 
 const fetchCategories = async () => {
@@ -167,7 +130,7 @@ const fetchCategories = async () => {
   } catch (error) {
     console.error('Error fetching categories:', error)
   }
-};
+}
 
 const fetchLink = async () => {
   if (props.linkId) {
@@ -184,13 +147,24 @@ const fetchLink = async () => {
 }
 
 const submitForm = async () => {
+  v$.value.$touch()
+
+  if (v$.value.$invalid) {
+    return
+  }
+
+  let category = 0
+  if (formData.category !== null) {
+    category = formData.category
+  }
+
   const postData = {
-    url: formData.value.url,
-    title: formData.value.title,
-    description: formData.value.description,
-    category: formData.value.category,
-    showOnHomepage: formData.value.showOnHomepage,
-    target: formData.value.target,
+    url: formData.url,
+    title: formData.title,
+    description: formData.description,
+    category: category,
+    showOnHomepage: formData.showOnHomepage,
+    target: formData.target,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
   }

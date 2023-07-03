@@ -3,6 +3,9 @@ import axios from "axios";
 
 
 export default {
+  /**
+   * @param {Number|String} linkId
+   */
   getLink: async(linkId) => {
     const response = await axios.get(ENTRYPOINT + 'links/' + linkId)
     return response.data
@@ -19,7 +22,7 @@ export default {
   },
 
   /**
-   * @param {Number} linkId
+   * @param {Number|String} linkId
    * @param {Object} data
    */
   updateLink: async (linkId, data) => {
@@ -36,16 +39,24 @@ export default {
   },
 
   /**
-   * @param {Object} data
+   * @param {Number|String} categoryId
    */
-  createCategory: async(data) => {
-    const endpoint = `${ENTRYPOINT}link_categories`
-    const response = axios.post(endpoint, data)
+  getCategory: async (categoryId) => {
+    const response = await axios.get(ENTRYPOINT + 'link_categories/' + categoryId)
     return response.data
   },
 
   /**
-   * @param {Number} categoryId
+   * @param {Object} data
+   */
+  createCategory: async(data) => {
+    const endpoint = `${ENTRYPOINT}link_categories`
+    const response = await axios.post(endpoint, data)
+    return response.data
+  },
+
+  /**
+   * @param {Number|String} categoryId
    * @param {Object} data
    */
   updateCategory: async(categoryId, data) => {

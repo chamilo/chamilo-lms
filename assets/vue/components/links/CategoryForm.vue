@@ -1,52 +1,45 @@
 <template>
-  <div>
-    <div>
-      <form @submit.prevent="submitCategoryForm">
-        <div class="field">
-          <div class="p-float-label">
-            <input v-model="formData.title" type="text" id="category_category_title" class="p-inputtext p-component p-filled" />
-            <label for="category_category_title">
-              <span class="form_required">*</span>
-              Category name
-            </label>
-          </div>
-        </div>
-        <div class="field">
-          <div class="p-float-label">
-            <textarea v-model="formData.description" id="description" name="description"></textarea>
-            <label for="description">
-              Description
-            </label>
-          </div>
-        </div>
-        <div class="field 2">
-          <div class="8">
-            <label for="category_submitCategory" class="h-4"></label>
-            <button class="btn btn--primary" name="submitCategory" type="submit" id="category_submitCategory">
-              <em class="mdi mdi-check"></em> Add a category
-            </button>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <span class="form_required">*</span>
-            <small>Required field</small>
-          </div>
-        </div>
-      </form>
-    </div>
+  <form class="flex flex-col gap-2 mt-6">
+    <BaseInputTextWithVuelidate
+      id="category_category_title"
+      v-model="formData.title"
+      :vuelidate-property="v$.title"
+      :label="t('Category name')"
+    />
+    <BaseTextArea
+      id="description"
+      v-model="formData.description"
+      :label="t('Description')"
+    />
 
-  </div>
+    <div class="flex gap-4">
+      <BaseButton
+        :label="t('Back')"
+        type="black"
+        icon="back"
+        @click="emit('backPressed')"
+      />
+      <BaseButton
+        :label="t('Save category')"
+        type="success"
+        icon="send"
+        @click="submitCategoryForm"
+      />
+    </div>
+  </form>
 </template>
 
 <script setup>
-import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
 import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
+import {ref, onMounted, reactive} from "vue";
 import linkService from "../../services/linkService";
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
+import BaseTextArea from "../basecomponents/BaseTextArea.vue";
+import BaseButton from "../basecomponents/BaseButton.vue";
+import useVuelidate from "@vuelidate/core";
+import {required} from "@vuelidate/validators";
 
 
 const route = useRoute();
@@ -56,13 +49,14 @@ const { t } = useI18n();
 
 const props = defineProps({
   categoryId: {
-    type: Number,
+    type: [String, Number],
     default: null
   }
 })
 
-const parentResourceNodeId = ref(Number(route.params.node));
+const emit = defineEmits(['backPressed'])
 
+const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
   JSON.stringify([
     {
@@ -71,35 +65,44 @@ const resourceLinkList = ref(
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
   ])
-);
+)
 
-const formData = ref({
+const formData = reactive({
   title: '',
   description: '',
-});
-
-const fetchCategory = () => {
-  if (props.categoryId) {
-    axios.get(ENTRYPOINT + 'link_categories/' + props.categoryId)
-      .then(response => {
-        const category = response.data;
-        formData.value.title = category.categoryTitle;
-        formData.value.description = category.description;
-      })
-      .catch(error => {
-        console.error('Error fetching link:', error);
-      });
-  }
-};
+})
+const rules = {
+  title: {required},
+  description: {}
+}
+const v$ = useVuelidate(rules, formData)
 
 onMounted(() => {
   fetchCategory();
-});
+})
+
+const fetchCategory = async () => {
+  if (props.categoryId) {
+    try {
+      let category = await linkService.getCategory(props.categoryId)
+      formData.title = category.categoryTitle
+      formData.description = category.description
+    } catch (error) {
+      console.error('Error fetching category:', error)
+    }
+  }
+}
 
 const submitCategoryForm = async () => {
+  v$.value.$touch()
+
+  if (v$.value.$invalid) {
+    return
+  }
+
   const postData = {
-    category_title: formData.value.title,
-    description: formData.value.description,
+    category_title: formData.title,
+    description: formData.description,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
   }

@@ -40,8 +40,9 @@ import BaseTextArea from "../basecomponents/BaseTextArea.vue";
 import BaseButton from "../basecomponents/BaseButton.vue";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
+import {useNotification} from "../../composables/notification";
 
-
+const notification = useNotification();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -113,6 +114,8 @@ const submitCategoryForm = async () => {
     } else {
       await linkService.createCategory(postData)
     }
+
+    notification.showSuccessNotification(t('Category saved'))
 
     await router.push({
       name: "LinksList",

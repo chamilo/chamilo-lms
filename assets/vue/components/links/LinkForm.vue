@@ -74,7 +74,9 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseTextArea from "../basecomponents/BaseTextArea.vue";
 import BaseSelect from "../basecomponents/BaseSelect.vue";
+import {useNotification} from "../../composables/notification";
 
+const notification = useNotification()
 const {t} = useI18n()
 const {cid, sid} = useCidReq()
 const router = useRouter()
@@ -136,7 +138,6 @@ const fetchLink = async () => {
   if (props.linkId) {
     try {
       const response = await linkService.getLink(props.linkId)
-      console.log('EEEEEEEEEEEEEEEEIIIII', response)
       formData.url = response.url
       formData.title = response.title
       formData.description = response.description
@@ -181,6 +182,8 @@ const submitForm = async () => {
     } else {
       await linkService.createLink(postData)
     }
+
+    notification.showSuccessNotification(t('Link saved'))
 
     await router.push({
       name: "LinksList",

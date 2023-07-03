@@ -41,6 +41,10 @@ $tblCQuizQuestionRelCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_RE
 $tblCQuizRelCategory = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
 $tblCQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
+// to avoid duplication we first :
+// create a done_e column to mark that exercise id modification has been done
+// create a done_q column to mark that question id modification has been done
+// at the end we will drop those column
 $exercises = [];
 $sql = "SELECT id, iid, c_id, session_id FROM $tblCQuiz WHERE id != iid ORDER BY iid";
 $result = Database::query($sql);
@@ -84,7 +88,9 @@ echo "(".date('Y-m-d H:i:s').") Work arrays with quiz details prepared".PHP_EOL;
 // We have to treat each of the following tables, and replace the contents of
 // the field which contains the id by the corresponding iid
 // c_item_property, exercises, ref field
-$sqlTemplate = "UPDATE $tblCItemProperty SET ref = %d WHERE tool = 'quiz' AND lastedit_type IN (%s) AND c_id = %d AND ref = %d";
+$sqlAlter = "ALTER table $tblCItemProperty ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCItemProperty SET ref = %d, done_e = 1 WHERE tool = 'quiz' AND lastedit_type IN (%s) AND c_id = %d AND ref = %d and done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], "'QuizDeleted', 'QuizUpdated'", $value['c_id'], $value['id']);
     if ($value['s_id'] === 0) {
@@ -95,20 +101,31 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCItemProperty DROP COLUMN done_e";
+Database::query($sqlAlter);
+$sqlAlter = "ALTER table $tblCItemProperty ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCItemProperty SET ref = %d, done_q = 1 WHERE tool = 'quiz' AND lastedit_type IN (%s) AND c_id = %d AND ref = %d and done_q = 0";
 // c_item_property, question, ref field
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], "'QuizQuestionUpdated', 'QuizQuestionDeleted'", $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCItemProperty DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_item_property".PHP_EOL;
 // track_e_exercises, exercises, exe_exo_id field
-$sqlTemplate = "UPDATE $tblTrackExercises SET exe_exo_id = %d WHERE c_id = %d AND exe_exo_id = %d";
+$sqlAlter = "ALTER table $tblTrackExercises ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblTrackExercises SET exe_exo_id = %d, done_e = 1 WHERE c_id = %d AND exe_exo_id = %d AND done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblTrackExercises DROP COLUMN done_e";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises.exe_exo_id".PHP_EOL;
 
 // Split and update the track_e_exercises.data_tracking field, which is a
@@ -157,19 +174,28 @@ while ($row = Database::fetch_assoc($res)) {
 echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises.data_tracking".PHP_EOL;
 
 // track_e_attempt, question *AND* answer, question_id and answer fields
-$sqlTemplate = "UPDATE $tblTrackAttempt SET answer = '%s' WHERE c_id = %d AND question_id = %d AND answer = '%s'";
+$sqlAlter = "ALTER table $tblTrackAttempt ADD COLUMN done_a int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblTrackAttempt SET answer = '%s', done_a = 1 WHERE c_id = %d AND question_id = %d AND answer = '%s' AND done_a = 0";
 foreach ($answers as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['q_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
-$sqlTemplate = "UPDATE $tblTrackAttempt SET question_id = %d WHERE c_id = %d AND question_id = %d";
+$sqlAlter = "ALTER table $tblTrackAttempt DROP COLUMN done_a";
+Database::query($sqlAlter);
+$sqlAlter = "ALTER table $tblTrackAttempt ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblTrackAttempt SET question_id = %d, done_q = 1 WHERE c_id = %d AND question_id = %d AND done_q = 0";
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblTrackAttempt DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated track_e_attempt".PHP_EOL;
+
 // track_e_attempt_recording, question, question_id field
 // This cannot be done because this table does not contain a c_id field
 /*
@@ -181,66 +207,98 @@ foreach ($questions as $key => $value) {
 }
 */
 // c_lp_item, exercises, path field
-$sqlTemplate = "UPDATE $tblCLpItem SET path = '%s' WHERE c_id = %d AND path = '%s'";
+$sqlAlter = "ALTER table $tblCLpItem ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCLpItem SET path = '%s', done_e = 1 WHERE c_id = %d AND path = '%s' and done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCLpItem DROP COLUMN done_e";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_lp_item".PHP_EOL;
 // gradebook_link, exercises, ref_id
-$sqlTemplate = "UPDATE $tblGradebookLink SET ref_id = %d WHERE course_code = '%s' AND ref_id = %d";
+$sqlAlter = "ALTER table $tblGradebookLink ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblGradebookLink SET ref_id = %d, done_e = 1 WHERE course_code = '%s' AND ref_id = %d AND done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $courseCodes[$value['c_id']], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblGradebookLink DROP COLUMN done_e";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated gradebook_link".PHP_EOL;
 // c_quiz_answer, question, question_id field
-$sqlTemplate = "UPDATE $tblCQuizAnswer SET question_id = %d WHERE c_id = %d AND question_id = %d";
+$sqlAlter = "ALTER table $tblCQuizAnswer ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizAnswer SET question_id = %d, done_q = 1 WHERE c_id = %d AND question_id = %d AND done_q = 0";
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCQuizAnswer DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_quiz_answer".PHP_EOL;
 // c_quiz_question_option, quiz_question, question_id field
-$sqlTemplate = "UPDATE $tblCQuizQuestionOption SET question_id = %d WHERE c_id = %d AND question_id = %d";
+$sqlAlter = "ALTER table $tblCQuizQuestionOption ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizQuestionOption SET question_id = %d, done_q = 1 WHERE c_id = %d AND question_id = %d AND done_q = 0";
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCQuizQuestionOption DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_quiz_question_option".PHP_EOL;
 // c_quiz_question_rel_category, question, question_id field
-$sqlTemplate = "UPDATE $tblCQuizQuestionRelCategory SET question_id = %d WHERE c_id = %d AND question_id = %d";
+$sqlAlter = "ALTER table $tblCQuizQuestionRelCategory ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizQuestionRelCategory SET question_id = %d, done_q = 1 WHERE c_id = %d AND question_id = %d AND done_q = 0";
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCQuizQuestionRelCategory DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_quiz_question_rel_category".PHP_EOL;
 // c_quiz_rel_category, exercises, exercise_id field
-$sqlTemplate = "UPDATE $tblCQuizRelCategory SET exercise_id = %d WHERE c_id = %d AND exercise_id = %d";
+$sqlAlter = "ALTER table $tblCQuizRelCategory ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizRelCategory SET exercise_id = %d, done_e = 1 WHERE c_id = %d AND exercise_id = %d AND done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCQuizRelCategory DROP COLUMN done_e";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_quiz_rel_category".PHP_EOL;
 // c_quiz_rel_question, exercises and question, exercice_id and question_id fields
-$sqlTemplate = "UPDATE $tblCQuizRelQuestion SET exercice_id = %d WHERE c_id = %d AND exercice_id = %d";
+$sqlAlter = "ALTER table $tblCQuizRelQuestion ADD COLUMN done_e int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizRelQuestion SET exercice_id = %d, done_e = 1 WHERE c_id = %d AND exercice_id = %d AND done_e = 0";
 foreach ($exercises as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
-$sqlTemplate = "UPDATE $tblCQuizRelQuestion SET question_id = %d WHERE c_id = %d AND question_id = %d";
+$sqlAlter = "ALTER table $tblCQuizRelQuestion DROP COLUMN done_e";
+Database::query($sqlAlter);
+$sqlAlter = "ALTER table $tblCQuizRelQuestion ADD COLUMN done_q int NOT NULL default 0";
+Database::query($sqlAlter);
+$sqlTemplate = "UPDATE $tblCQuizRelQuestion SET question_id = %d, done_q = 1 WHERE c_id = %d AND question_id = %d AND done_q = 0";
 foreach ($questions as $key => $value) {
     $sql = sprintf($sqlTemplate, $value['iid'], $value['c_id'], $value['id']);
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+$sqlAlter = "ALTER table $tblCQuizRelQuestion DROP COLUMN done_q";
+Database::query($sqlAlter);
 echo "(".date('Y-m-d H:i:s').") Updated c_quiz_rel_question".PHP_EOL;
 
 echo 'Finished';

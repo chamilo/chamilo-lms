@@ -19,9 +19,18 @@ import BaseButton from "./BaseButton.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: false,
+    default: () => false,
+  }
+})
+const emit = defineEmits(['update:modelValue']);
+
 const { t } = useI18n();
 
-const showAdvancedSettings = ref(false);
+const showAdvancedSettings = ref(props.modelValue);
 
 const showAdvancedSettingsLabel = computed(() => {
   if (showAdvancedSettings.value) {
@@ -33,5 +42,7 @@ const showAdvancedSettingsLabel = computed(() => {
 
 const advancedSettingsClicked = () => {
   showAdvancedSettings.value = !showAdvancedSettings.value;
+
+  emit('update:modelValue', showAdvancedSettings.value);
 };
 </script>

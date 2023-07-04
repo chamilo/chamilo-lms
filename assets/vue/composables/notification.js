@@ -19,7 +19,17 @@ export function useNotification() {
   }
 
   const showErrorNotification = (error) => {
-    showMessage(error, 'danger');
+    let message = error;
+
+    if (error.response) {
+      if (error.response.data) {
+        message = error.response.data['hydra:description'];
+      }
+    } else if (error.message) {
+      message = error.message;
+    }
+
+    showMessage(message, 'error');
   }
 
   const showMessage = (message, severity) => {

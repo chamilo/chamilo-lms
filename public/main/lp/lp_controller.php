@@ -785,7 +785,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            learnpath::move($_REQUEST['lp_id'], 'up');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);
@@ -798,7 +798,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            learnpath::move($_REQUEST['lp_id'], 'down');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);

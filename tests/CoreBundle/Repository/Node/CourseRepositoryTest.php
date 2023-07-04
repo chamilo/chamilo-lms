@@ -155,12 +155,12 @@ class CourseRepositoryTest extends AbstractApiTest
         $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
         $this->assertCount(0, $courses);
 
-        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $course->addSubscriptionForUser($student, 0, '', CourseRelUser::STUDENT);
         $courseRepo->update($course);
 
-        $this->assertTrue($course->hasUser($student));
-        $this->assertTrue($course->hasStudent($student));
-        $this->assertFalse($course->hasTeacher($student));
+        $this->assertTrue($course->hasSubscriptionByUser($student));
+        $this->assertTrue($course->hasUserAsStudent($student));
+        $this->assertFalse($course->hasUserAsTeacher($student));
 
         $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
         $this->assertCount(1, $courses);
@@ -177,7 +177,7 @@ class CourseRepositoryTest extends AbstractApiTest
         $qb = $courseRepo->getSubscribedUsers($course);
         $this->assertCount(0, $qb->getQuery()->getResult());
 
-        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $course->addSubscriptionForUser($student, 0, '', CourseRelUser::STUDENT);
         $courseRepo->update($course);
 
         $qb = $courseRepo->getSubscribedUsers($course);
@@ -208,21 +208,21 @@ class CourseRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student', 'student');
 
         // Add user to the course.
-        $course->addUser($student, 0, null, CourseRelUser::STUDENT);
+        $course->addSubscriptionForUser($student, 0, null, CourseRelUser::STUDENT);
         $courseRepo->update($course);
 
-        $this->assertTrue($course->hasStudent($student));
-        $this->assertFalse($course->hasTeacher($student));
+        $this->assertTrue($course->hasUserAsStudent($student));
+        $this->assertFalse($course->hasUserAsTeacher($student));
 
         $this->assertSame(1, $course->getUsers()->count());
 
         // Add the same user again:
-        $course->addUser($student, 0, null, CourseRelUser::STUDENT);
+        $course->addSubscriptionForUser($student, 0, null, CourseRelUser::STUDENT);
         $courseRepo->update($course);
 
         $this->assertSame(1, $course->getUsers()->count());
-        $this->assertSame(1, $course->getStudents()->count());
-        $this->assertSame(0, $course->getTeachers()->count());
+        $this->assertSame(1, $course->getStudentSubscriptions()->count());
+        $this->assertSame(0, $course->getTeachersSubscriptions()->count());
 
         $client->request('GET', sprintf('/course/%s/home', $course->getId()));
         $this->assertResponseIsSuccessful();
@@ -243,26 +243,26 @@ class CourseRepositoryTest extends AbstractApiTest
 
         // Add user to the course.
         // Add the same user again:
-        $course->addUser($teacher, 0, null, CourseRelUser::TEACHER);
+        $course->addSubscriptionForUser($teacher, 0, null, CourseRelUser::TEACHER);
         $courseRepo->update($course);
 
-        $this->assertFalse($course->hasStudent($teacher));
-        $this->assertTrue($course->hasTeacher($teacher));
+        $this->assertFalse($course->hasUserAsStudent($teacher));
+        $this->assertTrue($course->hasUserAsTeacher($teacher));
 
-        $course->addTeacher($teacher2);
+        $course->addUserAsTeacher($teacher2);
         $courseRepo->update($course);
 
-        $this->assertFalse($course->hasStudent($teacher2));
-        $this->assertTrue($course->hasTeacher($teacher2));
+        $this->assertFalse($course->hasUserAsStudent($teacher2));
+        $this->assertTrue($course->hasUserAsTeacher($teacher2));
 
         $this->assertSame(2, $course->getUsers()->count());
-        $this->assertSame(0, $course->getStudents()->count());
-        $this->assertSame(2, $course->getTeachers()->count());
+        $this->assertSame(0, $course->getStudentSubscriptions()->count());
+        $this->assertSame(2, $course->getTeachersSubscriptions()->count());
 
         // Test adding again.
-        $course->addUser($teacher, 0, null, CourseRelUser::TEACHER);
+        $course->addSubscriptionForUser($teacher, 0, null, CourseRelUser::TEACHER);
         $courseRepo->update($course);
-        $this->assertSame(2, $course->getTeachers()->count());
+        $this->assertSame(2, $course->getTeachersSubscriptions()->count());
 
         $teacher = $this->getUser('teacher');
 
@@ -285,7 +285,7 @@ class CourseRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student', 'student');
 
         // Add user to the course.
-        $course->addUser($student, 0, null, 5);
+        $course->addSubscriptionForUser($student, 0, null, 5);
         $courseRepo->update($course);
 
         $this->assertSame(1, $course->getUsers()->count());

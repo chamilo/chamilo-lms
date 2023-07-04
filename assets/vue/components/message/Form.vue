@@ -3,9 +3,9 @@
     <div class="col-span-2">
       <BaseInputText
         id="item_title"
-        v-model:help-text="v$.item.title.required.$message"
+        v-model:error-text="v$.item.title.required.$message"
         v-model:is-invalid="v$.item.title.$invalid"
-        v-model:value="v$.item.title.$model"
+        v-model="v$.item.title.$model"
         :label="t('Title')"
       />
 

@@ -48,8 +48,8 @@ class GroupVoterTest extends WebTestCase
 
         // Group in public course.
         $publicCourse = $this->createCourse('public');
-        $publicCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $publicCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $publicCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $publicCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($publicCourse);
 
         $group = (new CGroup())
@@ -81,10 +81,10 @@ class GroupVoterTest extends WebTestCase
         // REGISTERED course.
         $registeredCourse = $this->createCourse('registered');
         $registeredCourse->setVisibility(Course::REGISTERED);
-        $registeredCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($studentInGroup2IsTutor, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($studentInGroup2IsMember, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $registeredCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($studentInGroup2IsTutor, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($studentInGroup2IsMember, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($registeredCourse);
         $em->flush();
 

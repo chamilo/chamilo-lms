@@ -38,9 +38,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     protected int $position;
 
     /**
-     * @var Collection|CLpCategoryUser[]
+     * @var Collection|CLpCategoryRelUser[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategoryUser::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategoryRelUser::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
@@ -119,7 +119,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         }
     }
 
-    public function addUser(CLpCategoryUser $categoryUser): void
+    public function addUser(CLpCategoryRelUser $categoryUser): void
     {
         $categoryUser->setCategory($this);
 
@@ -128,7 +128,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         }
     }
 
-    public function hasUser(CLpCategoryUser $categoryUser): bool
+    public function hasUser(CLpCategoryRelUser $categoryUser): bool
     {
         if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -148,7 +148,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     public function hasUserAdded(User $user): bool
     {
         if (0 !== $this->getUsers()->count()) {
-            $categoryUser = new CLpCategoryUser();
+            $categoryUser = new CLpCategoryRelUser();
             $categoryUser->setCategory($this);
             $categoryUser->setUser($user);
 
@@ -158,7 +158,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         return false;
     }
 
-    public function removeUsers(CLpCategoryUser $user): self
+    public function removeUsers(CLpCategoryRelUser $user): self
     {
         $this->users->removeElement($user);
 

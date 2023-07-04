@@ -1,10 +1,12 @@
 <template>
   <Button
     :class="buttonClass"
+    :disabled="disabled"
     :label="label"
     :outlined="primeOutlinedProperty"
     :size="size"
     :text="primeTextProperty"
+    :type="isSubmit ? 'submit': 'button'"
     class="cursor-pointer"
     plain
     @click="$emit('click', $event)"
@@ -21,11 +23,17 @@ import Button from "primevue/button";
 import { chamiloIconToClass } from "./ChamiloIcons";
 import BaseIcon from "./BaseIcon.vue";
 import { computed } from "vue";
+import {sizeValidator} from "./validators";
 
 const props = defineProps({
   label: {
     type: String,
     default: "",
+  },
+  isSubmit: {
+    type: Boolean,
+    required: false,
+    default: () => false,
   },
   icon: {
     type: String,
@@ -59,13 +67,13 @@ const props = defineProps({
   size: {
     type: String,
     default: "normal",
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return ["normal", "small"].includes(value);
-    },
+    validator: sizeValidator,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 });
 
 defineEmits(["click"]);

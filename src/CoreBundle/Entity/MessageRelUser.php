@@ -90,9 +90,9 @@ class MessageRelUser
     }
 
     /**
-     * @return Collection|MessageTag[]
+     * @return Collection<int, MessageTag>
      */
-    public function getTags(): Collection|array
+    public function getTags(): Collection
     {
         return $this->tags;
     }

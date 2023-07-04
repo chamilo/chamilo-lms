@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -15,9 +14,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 
-/**
- * CStudentPublicationComment.
- */
 #[ORM\Table(name: 'c_student_publication_comment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface, Stringable
@@ -59,21 +55,9 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this->iid;
     }
 
-    public function setComment(string $comment): self
+    public function getFile(): ?string
     {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
+        return $this->file;
     }
 
     public function setFile(string $file): self
@@ -81,16 +65,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         $this->file = $file;
 
         return $this;
-    }
-
-    /**
-     * Get file.
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
     }
 
     public function getUser(): User
@@ -105,16 +79,16 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
+    public function getSentAt(): DateTime
+    {
+        return $this->sentAt;
+    }
+
     public function setSentAt(DateTime $sentAt): self
     {
         $this->sentAt = $sentAt;
 
         return $this;
-    }
-
-    public function getSentAt(): DateTime
-    {
-        return $this->sentAt;
     }
 
     public function getPublication(): CStudentPublication
@@ -137,10 +111,22 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function getResourceName(): string
     {
         $text = strip_tags($this->getComment());
-        $slugify = new Slugify();
-        $text = $slugify->slugify($text);
 
-        return (string) substr($text, 0, 40);
+        $text = Slugify::create()->slugify($text);
+
+        return substr($text, 0, 40);
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     public function setResourceName(string $name): self

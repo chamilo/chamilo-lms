@@ -55,7 +55,7 @@ if ($editingCourse) {
 
     $courseItem = $plugin->getCourseForConfiguration($course, $currency);
     $defaultBeneficiaries = [];
-    $teachers = $course->getTeachers();
+    $teachers = $course->getTeachersSubscriptions();
     $teachersOptions = [];
 
     foreach ($teachers as $courseTeacher) {

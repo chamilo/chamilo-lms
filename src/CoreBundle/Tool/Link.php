@@ -28,7 +28,7 @@ class Link extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/link/link.php';
+        return '/resources/links/:nodeId/';
     }
 
     public function getResourceTypes(): ?array

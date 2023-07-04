@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 
 /**
  * Report from students for learning path.
@@ -59,33 +61,21 @@ $session = api_get_session_entity($sessionId);
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    /** @var ItemPropertyRepository $itemRepo */
-    $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
-    $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
-        'learnpath',
-        $lpId,
+
+    /** @var CLpRelUserRepository $cLpRelUserRepo */
+    $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
+    $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+        $entity,
         $course,
         $session
     );
 
     // Subscribed groups to a LP
-    $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-        'learnpath',
-        $lpId,
-        $course,
-        $session
-    );
-
+    $links = $entity->getResourceNode()->getResourceLinks();
     $groups = [];
-    /** @var CItemProperty $itemProperty */
-    if (!empty($subscribedGroupsInLp)) {
-        foreach ($subscribedGroupsInLp as $itemProperty) {
-            if (!empty($itemProperty)) {
-                $getGroup = $itemProperty->getGroup();
-                if (!empty($getGroup)) {
-                    $groups[] = $itemProperty->getGroup()->getId();
-                }
-            }
+    foreach ($links as $link) {
+        if (null !== $link->getGroup()) {
+            $groups[] = $link->getGroup()->getIid();
         }
     }
 
@@ -102,10 +92,11 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 
     if (!empty($subscribedUsersInLp)) {
-        foreach ($subscribedUsersInLp as $itemProperty) {
-            $user = $itemProperty->getToUser();
+        foreach ($subscribedUsersInLp as $users) {
+            /** @var CLpRelUser $users */
+            $user = $users->getUser();
             if ($user) {
-                $users[]['user_id'] = $itemProperty->getToUser()->getId();
+                $users[]['user_id'] = $user->getId();
             }
         }
     }

@@ -44,8 +44,8 @@ class SessionVoterTest extends WebTestCase
 
         $session = $this->createSession('session');
         $publicCourse = $this->createCourse('public');
-        $publicCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $publicCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $publicCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $publicCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($publicCourse);
 
         $session->addCourse($publicCourse);

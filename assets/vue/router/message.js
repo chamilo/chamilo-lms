@@ -8,7 +8,7 @@ export default {
     {
       name: 'MessageList',
       path: '',
-      component: () => import('../views/message/List.vue')
+      component: () => import('../views/message/MessageList.vue')
     },
     {
       name: 'MessageCreate',
@@ -29,7 +29,7 @@ export default {
       name: 'MessageShow',
       //path: ':id',
       path: 'show',
-      component: () => import('../views/message/Show.vue')
+      component: () => import('../views/message/MessageShow.vue')
     }
   ]
 };

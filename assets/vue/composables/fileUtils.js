@@ -10,6 +10,12 @@ export function useFileUtils() {
     return isFile(fileData) && fileData.resourceNode.resourceFile.video
   }
 
+  const isAudio = (fileData) => {
+    const mimeType = fileData.resourceNode.resourceFile.mimeType
+    const isAudio = mimeType.split("/")[0].toLowerCase() === "audio"
+    return isFile(fileData) && isAudio
+  }
+
   const isFile = (fileData) => {
     return fileData.resourceNode && fileData.resourceNode.resourceFile
   }
@@ -18,5 +24,6 @@ export function useFileUtils() {
     isFile,
     isImage,
     isVideo,
+    isAudio,
   }
 }

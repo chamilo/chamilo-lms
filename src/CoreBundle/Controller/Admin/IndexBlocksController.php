@@ -594,22 +594,22 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-skill-wheel',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/skills_wheel.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_wheel.php']),
             'label' => $this->translator->trans('Skills wheel'),
         ];
         $items[] = [
             'class' => 'item-skill-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/skills_import.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_import.php']),
             'label' => $this->translator->trans('Skills import'),
         ];
         $items[] = [
             'class' => 'item-skill-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/skill_list.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skill_list.php']),
             'label' => $this->translator->trans('Manage skills'),
         ];
         $items[] = [
             'class' => 'item-skill-level',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/skill.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skill.php']),
             'label' => $this->translator->trans('Manage skills levels'),
         ];
 
@@ -620,7 +620,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-skill-gradebook',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/skills_gradebook.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_gradebook.php']),
             'label' => $this->translator->trans('Skills and assessments'),
         ];
         /*$items[] = [

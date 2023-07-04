@@ -798,7 +798,7 @@ class AddCourse
                     ->setRelationType(0)
                     ->setUserCourseCat(0)
                 ;
-                $course->addUsers($courseRelTutor);
+                $course->addSubscription($courseRelTutor);
             }
 
             if (!empty($teachers)) {
@@ -827,7 +827,7 @@ class AddCourse
                         ->setRelationType(0)
                         ->setUserCourseCat(0)
                     ;
-                    $course->addUsers($courseRelTeacher);
+                    $course->addSubscription($courseRelTeacher);
                 }
             }
 

@@ -1,20 +1,19 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
 
-/* For licensing terms, see /license.txt */
-
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * CStudentPublicationAssignment.
- */
 #[ORM\Table(name: 'c_student_publication_assignment')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository::class)]
+#[ORM\Entity(repositoryClass: CStudentPublicationAssignmentRepository::class)]
 class CStudentPublicationAssignment implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -23,18 +22,21 @@ class CStudentPublicationAssignment implements Stringable
     protected int $iid;
 
     #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write'])]
     protected ?DateTime $expiresOn = null;
 
     #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write'])]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'expiresOn')]
     protected ?DateTime $endsOn = null;
 
     #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
-    protected int $addToCalendar;
+    protected int $eventCalendarId = 0;
 
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CStudentPublication::class, inversedBy: 'assignment')]
+    #[ORM\OneToOne(inversedBy: 'assignment', targetEntity: CStudentPublication::class)]
     #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
@@ -48,21 +50,14 @@ class CStudentPublicationAssignment implements Stringable
         return $this->iid;
     }
 
-    public function setExpiresOn(DateTime $expiresOn): self
-    {
-        $this->expiresOn = $expiresOn;
-
-        return $this;
-    }
-
     public function getExpiresOn(): ?DateTime
     {
         return $this->expiresOn;
     }
 
-    public function setEndsOn(DateTime $endsOn): self
+    public function setExpiresOn(?DateTime $expiresOn): self
     {
-        $this->endsOn = $endsOn;
+        $this->expiresOn = $expiresOn;
 
         return $this;
     }
@@ -72,21 +67,21 @@ class CStudentPublicationAssignment implements Stringable
         return $this->endsOn;
     }
 
-    public function setAddToCalendar(int $addToCalendar): self
+    public function setEndsOn(?DateTime $endsOn): self
     {
-        $this->addToCalendar = $addToCalendar;
+        $this->endsOn = $endsOn;
 
         return $this;
     }
 
-    public function getAddToCalendar(): int
+    public function getEventCalendarId(): int
     {
-        return $this->addToCalendar;
+        return $this->eventCalendarId;
     }
 
-    public function setEnableQualification(bool $enableQualification): self
+    public function setEventCalendarId(int $eventCalendarId): self
     {
-        $this->enableQualification = $enableQualification;
+        $this->eventCalendarId = $eventCalendarId;
 
         return $this;
     }
@@ -94,6 +89,13 @@ class CStudentPublicationAssignment implements Stringable
     public function getEnableQualification(): bool
     {
         return $this->enableQualification;
+    }
+
+    public function setEnableQualification(bool $enableQualification): self
+    {
+        $this->enableQualification = $enableQualification;
+
+        return $this;
     }
 
     public function getPublication(): CStudentPublication
@@ -104,6 +106,10 @@ class CStudentPublicationAssignment implements Stringable
     public function setPublication(CStudentPublication $publication): self
     {
         $this->publication = $publication;
+
+        $qualification = $this->publication->getQualification();
+
+        $this->enableQualification = !empty($qualification);
 
         return $this;
     }

@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpCategoryUser;
+use Chamilo\CourseBundle\Entity\CLpCategoryRelUser;
 use Doctrine\Common\Collections\Criteria;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -64,7 +64,8 @@ $form->addLabel('', $message);
 $groupList = \CourseManager::get_group_list_of_course(
     api_get_course_id(),
     api_get_session_id(),
-    1
+    1,
+    true
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 $session = api_get_session_entity($sessionId);
@@ -182,7 +183,7 @@ if ($allowUserGroups) {
                 foreach ($userList as $userId) {
                     $user = api_get_user_entity($userId);
                     if ($user) {
-                        $categoryUser = new CLpCategoryUser();
+                        $categoryUser = new CLpCategoryRelUser();
                         $categoryUser->setUser($user);
                         $category->addUser($categoryUser);
                     }
@@ -267,7 +268,7 @@ $formUsers->setDefaults($defaults);
 // Building the form for Groups
 $tpl = new Template();
 
-if ($formUsers->validate()) {
+if ($form->validate()) {
     $values = $formUsers->getSubmitValues();
 
     // Subscribing users
@@ -277,7 +278,7 @@ if ($formUsers->validate()) {
     if (!empty($userForm)) {
         $deleteUsers = [];
         if ($subscribedUsersInCategory) {
-            /** @var CLpCategoryUser $user */
+            /** @var CLpCategoryRelUser $user */
             foreach ($subscribedUsersInCategory as $user) {
                 $userId = $user->getUser()->getId();
 
@@ -288,7 +289,7 @@ if ($formUsers->validate()) {
         }
 
         foreach ($users as $userId) {
-            $categoryUser = new CLpCategoryUser();
+            $categoryUser = new CLpCategoryRelUser();
             $user = UserManager::getRepository()->find($userId);
             if ($user) {
                 $categoryUser->setUser($user);

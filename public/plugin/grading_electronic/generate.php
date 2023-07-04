@@ -79,7 +79,7 @@ try {
             $students[] = $subscription->getUser();
         }
     } else {
-        $subscriptions = $course->getStudents();
+        $subscriptions = $course->getStudentSubscriptions();
 
         /** @var CourseRelUser $subscription */
         foreach ($subscriptions as $subscription) {

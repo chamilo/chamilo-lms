@@ -4,8 +4,8 @@
     v-model="isStudentView"
     :off-label="t('Switch to student view')"
     :on-label="t('Switch to teacher view')"
-    off-icon="eye"
-    on-icon="eye"
+    off-icon="eye-off"
+    on-icon="eye-on"
   />
 </template>
 

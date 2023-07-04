@@ -181,18 +181,19 @@ class ToolChain
 
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
-            $position = $toolList[$tool->getName()] + 1;
+            if ($toolEntity) {
+                $position = $toolList[$tool->getName()] + 1;
 
-            $courseTool = (new CTool())
-                ->setTool($toolEntity)
-                ->setName($tool->getName())
-                ->setPosition($position)
-                ->setVisibility($visibility)
-                ->setParent($course)
-                ->setCreator($course->getCreator())
-                ->addCourseLink($course)
-            ;
-            $course->addTool($courseTool);
+                $courseTool = (new CTool())
+                    ->setTool($toolEntity)
+                    ->setName($tool->getName())
+                    ->setPosition($position)
+                    ->setVisibility($visibility)
+                    ->setParent($course)
+                    ->setCreator($course->getCreator())
+                    ->addCourseLink($course);
+                $course->addTool($courseTool);
+            }
         }
 
         return $course;

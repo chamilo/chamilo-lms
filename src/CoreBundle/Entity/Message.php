@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -61,6 +61,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'parent' => 'exact',
     ]
 )]
+#[ApiFilter(
+    BooleanFilter::class,
+    properties: ['receivers.read']
+)]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -73,17 +77,18 @@ class Message
     public const MESSAGE_STATUS_INVITATION_PENDING = 5;
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
-    #[ApiProperty(identifier: true)]
-    #[Groups(['message:read'])]
+
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentMessages')]
     #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
     protected User $sender;
+
     /**
      * @var Collection<int, MessageRelUser>
      */
@@ -95,17 +100,21 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'msg_type', type: 'smallint', nullable: false)]
     protected int $msgType;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'status', type: 'smallint', nullable: false)]
     protected int $status;
+
     #[Groups(['message:read'])]
     #[ORM\Column(name: 'send_date', type: 'datetime', nullable: false)]
     protected DateTime $sendDate;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
@@ -114,20 +123,24 @@ class Message
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;
+
     /**
      * @var Collection<int, Message>
      */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
-    #[Groups(['message:write'])]
+
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
     protected ?Message $parent = null;
+
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'update_date', type: 'datetime', nullable: true)]
     protected ?DateTime $updateDate;
+
     #[ORM\Column(name: 'votes', type: 'integer', nullable: true)]
     protected ?int $votes;
+
     /**
      * @var Collection<int, MessageAttachment>
      */
@@ -160,28 +173,23 @@ class Message
         return $this->receivers;
     }
 
-    /**
-     * @return Collection<int, MessageRelUser>
-     */
     #[Groups(['message:read'])]
-    public function getReceiversTo(): Collection
+    public function getReceiversTo(): array
     {
         return $this->receivers
             ->filter(
                 fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
-            );
+            )->getValues();
     }
 
-    /**
-     * @return Collection<int, MessageRelUser>
-     */
     #[Groups(['message:read'])]
-    public function getReceiversCc(): Collection
+    public function getReceiversCc(): array
     {
         return $this->receivers
             ->filter(
                 fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
-            );
+            )
+            ->getValues();
     }
 
     #[Groups(['message:read'])]
@@ -361,7 +369,7 @@ class Message
         return $this->parent;
     }
 
-    public function setParent(self $parent = null): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

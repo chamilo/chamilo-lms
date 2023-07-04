@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -26,11 +25,27 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    public function __construct()
+    public function __toString(): string
     {
+        return $this->title;
     }
 
-    public function __toString(): string
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -40,26 +55,6 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
         $this->title = $title;
 
         return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getResourceIdentifier(): int
-    {
-        return $this->getId();
-    }
-
-    public function getResourceName(): string
-    {
-        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self

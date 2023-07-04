@@ -14,7 +14,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -57,7 +56,6 @@ use function in_array;
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial'])]
-#[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Course extends AbstractResource implements
     ResourceInterface,
@@ -121,12 +119,12 @@ class Course extends AbstractResource implements
 
     /**
      * @var Collection<int, CourseRelUser>
-     *
-     * "orphanRemoval" is needed to delete the CourseRelUser relation
-     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
-     * addUsers methods need to be added.
      */
-    #[Groups(['course:read', 'user:read'])]
+    #[Groups([
+        'course:read',
+        'user:read',
+        'course_rel_user:read',
+    ])]
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: CourseRelUser::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
 
@@ -457,14 +455,14 @@ class Course extends AbstractResource implements
         return $this;
     }
 
-    public function hasUser(User $user): bool
+    public function hasSubscriptionByUser(User $user): bool
     {
-        if (0 === $this->getUsers()->count()) {
+        if (0 === $this->users->count()) {
             return false;
         }
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
 
-        return $this->getUsers()->matching($criteria)->count() > 0;
+        return $this->users->matching($criteria)->count() > 0;
     }
 
     /**
@@ -475,29 +473,28 @@ class Course extends AbstractResource implements
         return $this->users;
     }
 
-    public function setUsers(Collection $users): self
-    {
-        $this->users = new ArrayCollection();
-        foreach ($users as $user) {
-            $this->addUsers($user);
-        }
-
-        return $this;
-    }
-
-    public function addUsers(CourseRelUser $courseRelUser): self
+    public function addSubscription(CourseRelUser $courseRelUser): self
     {
         $courseRelUser->setCourse($this);
-        if (!$this->hasSubscription($courseRelUser)) {
+        if (!$this->hasUsers($courseRelUser)) {
             $this->users->add($courseRelUser);
         }
 
         return $this;
     }
 
-    public function hasSubscription(CourseRelUser $subscription): bool
+    public function removeSubscription(CourseRelUser $user): void
     {
-        if (0 !== $this->getUsers()->count()) {
+        foreach ($this->users as $key => $value) {
+            if ($value->getId() === $user->getId()) {
+                unset($this->users[$key]);
+            }
+        }
+    }
+
+    public function hasUsers(CourseRelUser $subscription): bool
+    {
+        if (0 !== $this->users->count()) {
             $criteria = Criteria::create()
                 ->where(
                     Criteria::expr()->eq('user', $subscription->getUser())
@@ -508,7 +505,7 @@ class Course extends AbstractResource implements
                 ->andWhere(
                     Criteria::expr()->eq('relationType', $subscription->getRelationType())
                 );
-            $relation = $this->getUsers()->matching($criteria);
+            $relation = $this->users->matching($criteria);
 
             return $relation->count() > 0;
         }
@@ -516,17 +513,26 @@ class Course extends AbstractResource implements
         return false;
     }
 
-    public function hasStudent(User $user): bool
+    public function addSubscriptionForUser(User $user, int $relationType, ?string $role, int $status): self
+    {
+        $courseRelUser = (new CourseRelUser())
+            ->setCourse($this)
+            ->setUser($user)
+            ->setRelationType($relationType)
+            ->setStatus($status);
+        $this->addSubscription($courseRelUser);
+
+        return $this;
+    }
+
+    public function hasUserAsStudent(User $user): bool
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
 
-        return $this->getStudents()->matching($criteria)->count() > 0;
+        return $this->getStudentSubscriptions()->matching($criteria)->count() > 0;
     }
 
-    /**
-     * @return Collection<int, CourseRelUser>
-     */
-    public function getStudents(): Collection
+    public function getStudentSubscriptions(): Collection
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('status', CourseRelUser::STUDENT));
@@ -534,23 +540,33 @@ class Course extends AbstractResource implements
         return $this->users->matching($criteria);
     }
 
-    public function hasTeacher(User $user): bool
+    public function addUserAsStudent(User $user): self
+    {
+        $this->addSubscriptionForUser($user, 0, '', CourseRelUser::STUDENT);
+
+        return $this;
+    }
+
+    public function hasUserAsTeacher(User $user): bool
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
 
-        return $this->getTeachers()->matching($criteria)->count() > 0;
+        return $this->getTeachersSubscriptions()->matching($criteria)->count() > 0;
     }
 
-    /**
-     * @return Collection<int, CourseRelUser>
-     */
-    #[Groups(['course:read', 'user:read'])]
-    public function getTeachers(): Collection
+    public function getTeachersSubscriptions(): Collection
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER));
 
         return $this->users->matching($criteria);
+    }
+
+    public function addUserAsTeacher(User $user): self
+    {
+        $this->addSubscriptionForUser($user, 0, 'Trainer', CourseRelUser::TEACHER);
+
+        return $this;
     }
 
     public function hasGroup(CGroup $group): void
@@ -561,47 +577,9 @@ class Course extends AbstractResource implements
         //return $this->getGroups()->contains($group);
     }
 
-    /**
-     * Remove $user.
-     */
-    public function removeUsers(CourseRelUser $user): void
-    {
-        foreach ($this->users as $key => $value) {
-            if ($value->getId() === $user->getId()) {
-                unset($this->users[$key]);
-            }
-        }
-    }
-
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function addTeacher(User $user): self
-    {
-        $this->addUser($user, 0, 'Trainer', CourseRelUser::TEACHER);
-
-        return $this;
-    }
-
-    public function addUser(User $user, int $relationType, ?string $role, int $status): self
-    {
-        $courseRelUser = (new CourseRelUser())
-            ->setCourse($this)
-            ->setUser($user)
-            ->setRelationType($relationType)
-            ->setStatus($status);
-        $this->addUsers($courseRelUser);
-
-        return $this;
-    }
-
-    public function addStudent(User $user): self
-    {
-        $this->addUser($user, 0, '', CourseRelUser::STUDENT);
-
-        return $this;
     }
 
     /**

@@ -51,7 +51,9 @@
       <BaseMenu id="course-tmenu" ref="courseTMenu" :model="courseItems" />
     </div>
 
-    <div v-if="isCurrentTeacher">
+    <hr class="mt-1 mb-1">
+
+    <div v-if="isCurrentTeacher" class="mb-4">
       <div v-if="intro" class="flex flex-col gap-4">
         <div v-html="intro.introText" />
 
@@ -79,83 +81,72 @@
         />
       </EmptyState>
     </div>
-    <div v-else-if="intro" v-html="intro.introText" />
+    <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
 
-    <div class="flex items-center gap-6">
+    <div v-if="isCurrentTeacher" class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Show all')"
+        :off-label="t('Show all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Show all')"
-        class="p-button-text p-button-plain p-button-sm ml-auto"
-        icon="mdi mdi-eye"
+        on-icon="eye-on"
+        off-icon="eye-on"
+        size="small"
+        class="ml-auto"
+        without-borders
         @click="onClickShowAll"
       />
-      <Button
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
+        :model-value="false"
+        :on-label="t('Hide all')"
+        :off-label="t('Hide all')"
         :disabled="isSorting || isCustomizing"
-        :label="t('Hide all')"
-        class="p-button-text p-button-plain p-button-sm"
-        icon="mdi mdi-eye-off"
+        on-icon="eye-off"
+        off-icon="eye-off"
+        size="small"
+        without-borders
         @click="onClickHideAll"
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isSorting"
         :disabled="isCustomizing"
-        :off-label="t('Sort')"
         :on-label="t('Sort')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-swap-vertical"
-        on-icon="mdi mdi-swap-vertical"
+        on-icon="swap-vertical"
+        :off-label="t('Sort')"
+        off-icon="swap-vertical"
+        size="small"
+        without-borders
       />
-      <ToggleButton
-        v-if="isCurrentTeacher"
+      <BaseToggleButton
         v-model="isCustomizing"
         :disabled="isSorting"
-        :off-label="t('Customize')"
         :on-label="t('Customize')"
-        class="p-button-text p-button-plain p-button-sm"
-        off-icon="mdi mdi-format-paint"
-        on-icon="mdi mdi-format-paint"
+        on-icon="customize"
+        :off-label="t('Customize')"
+        off-icon="customize"
+        size="small"
+        without-borders
       />
     </div>
     <hr class="mt-0 mb-4" />
 
-    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
-      <CourseToolList
-        v-for="(tool, index) in tools.authoring"
-        :key="index"
+    <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
+      <CourseTool
+        v-for="(tool, index) in tools"
+        :key="'tool-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
         :go-to-course-tool="goToCourseTool"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
-      />
-
-      <CourseToolList
-        v-for="(tool, index) in tools.interaction"
-        :key="index"
-        :change-visibility="changeVisibility"
-        :course="course"
-        :go-to-course-tool="goToCourseTool"
-        :go-to-setting-course-tool="goToSettingCourseTool"
-        :tool="tool"
-      />
-
-      <CourseToolList
-        v-for="(tool, index) in tools.plugin"
-        :key="index"
-        :change-visibility="changeVisibility"
-        :course="course"
-        :go-to-course-tool="goToCourseTool"
-        :go-to-setting-course-tool="goToSettingCourseTool"
-        :tool="tool"
+        :data-tool="tool.ctool.name"
+        :data-index="index"
       />
 
       <ShortCutList
         v-for="(shortcut, index) in shortcuts"
-        :key="index"
+        :key="'shortcut-' + index.toString()"
         :change-visibility="changeVisibility"
         :go-to-short-cut="goToShortCut"
         :shortcut="shortcut"
@@ -165,22 +156,22 @@
 </template>
 
 <script setup>
-import { computed, provide, ref } from "vue";
+import {computed, provide, ref, watch} from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { ENTRYPOINT } from "../../config/entrypoint";
-import Button from "primevue/button";
-import ToggleButton from "primevue/togglebutton";
-import CourseToolList from "../../components/course/CourseToolList.vue";
+import CourseTool from "../../components/course/CourseTool";
 import ShortCutList from "../../components/course/ShortCutList.vue";
 import translateHtml from "../../../js/translatehtml.js";
 import EmptyState from "../../components/EmptyState";
 import Skeleton from "primevue/skeleton";
 import BaseButton from "../../components/basecomponents/BaseButton.vue";
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
+import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
+import Sortable from 'sortablejs';
 
 const route = useRoute();
 const store = useStore();
@@ -224,8 +215,10 @@ axios
     tools.value = data.tools;
     shortcuts.value = data.shortcuts;
 
-    if (tools.value.admin) {
-      courseItems.value = tools.value.admin.map((tool) => ({
+    let adminTool = tools.value.find((element) => element.category === "admin");
+
+    if (Array.isArray(adminTool)) {
+      courseItems.value = adminTool.map((tool) => ({
         label: tool.tool.nameToShow,
         url: goToCourseTool(course, tool),
       }));
@@ -333,11 +326,7 @@ function onClickShowAll() {
   axios
     .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach((tool) => setToolVisibility(tool, 2));
-
-      tools.value.interaction.forEach((tool) => setToolVisibility(tool, 2));
-
-      tools.value.plugin.forEach((tool) => setToolVisibility(tool, 2));
+      tools.value.forEach((tool) => setToolVisibility(tool, 2));
     })
     .catch((error) => console.log(error));
 }
@@ -346,12 +335,58 @@ function onClickHideAll() {
   axios
     .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${courseId}&sid=${sessionId}`)
     .then(() => {
-      tools.value.authoring.forEach((tool) => setToolVisibility(tool, 0));
-
-      tools.value.interaction.forEach((tool) => setToolVisibility(tool, 0));
-
-      tools.value.plugin.forEach((tool) => setToolVisibility(tool, 0));
+      tools.value.forEach((tool) => setToolVisibility(tool, 0));
     })
     .catch((error) => console.log(error));
+}
+
+// Sort behaviour
+let sortable = null;
+watch(isSorting, (isSortingEnabled) => {
+  if (isCourseLoading.value) {
+    return
+  }
+  if (sortable === null) {
+    let el = document.getElementById("course-tools")
+    sortable = Sortable.create(el, {
+      ghostClass: "invisible",
+      chosenClass: "cursor-move",
+      onSort: (event) => {
+        updateDisplayOrder(event.item, event.newIndex)
+      }
+    })
+  }
+
+  sortable.option("disabled", !isSortingEnabled)
+})
+async function updateDisplayOrder(htmlItem, newIndex) {
+  const tool = htmlItem.dataset.tool;
+  let toolItem = null;
+
+  if (typeof tools !== 'undefined' && Array.isArray(tools.value)) {
+    const toolList = tools.value;
+    toolItem = toolList.find((element) => element.tool.name === tool);
+  } else {
+    console.error('Error: tools.value is undefined');
+    return;
+  }
+
+  console.log(toolItem, newIndex);
+
+  // Send the updated values to the server
+  const url = ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`;
+  const data = {
+    index: newIndex,
+    toolItem: toolItem,
+    // Add any other necessary data that you need to send to the server
+  };
+
+  try {
+    console.log(url, data);
+    const response = await axios.post(url, data);
+    console.log(response.data); // Server response
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <i :class="iconClass" />
+  <i :class="iconClass" aria-hidden="true" />
 </template>
 
 <script setup>

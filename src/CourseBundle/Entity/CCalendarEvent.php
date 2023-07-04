@@ -54,6 +54,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
 {
+    public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
+
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

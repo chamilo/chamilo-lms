@@ -21,7 +21,7 @@
 
 <script setup>
 import Dialog from "primevue/dialog";
-import {validator} from "./ChamiloIcons";
+import {iconValidator} from "./validators";
 import BaseIcon from "./BaseIcon.vue";
 
 defineProps({
@@ -38,7 +38,7 @@ defineProps({
     default: '',
     validator: (value) => {
       if (value === '') { return true }
-      return validator(value);
+      return iconValidator(value);
     },
   },
 });

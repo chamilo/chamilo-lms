@@ -1,10 +1,16 @@
 <template>
-  <BaseCard plain>
-    <slot name="header">
-      <h5 class="mb-2">{{ t('General') }}</h5>
-    </slot>
-    <hr class="mt-0 mb-4">
-    <slot></slot>
+  <BaseCard plain class="bg-white">
+    <template #header>
+      <div class="px-4 py-2 -mb-2 bg-gray-15">
+        <slot name="header"/>
+      </div>
+    </template>
+
+    <hr class="-mt-2 mb-4 -mx-4">
+
+    <div>
+      <slot/>
+    </div>
   </BaseCard>
 </template>
 

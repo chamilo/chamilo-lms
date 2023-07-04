@@ -2,6 +2,9 @@
   <Card
     :class="customClass"
   >
+    <template #header>
+      <slot name="header"></slot>
+    </template>
     <template #content>
       <slot></slot>
     </template>

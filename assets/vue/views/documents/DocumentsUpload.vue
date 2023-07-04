@@ -104,7 +104,15 @@ const showAdvancedSettingsLabel = computed(() => {
 });
 
 let uppy = ref();
-uppy.value = new Uppy()
+uppy.value = new Uppy({
+  meta: {
+    filetype: "file",
+    parentResourceNodeId: parentResourceNodeId.value,
+    resourceLinkList: resourceLinkList.value,
+    isUncompressZipEnabled: isUncompressZipEnabled.value,
+    fileExistsOption: fileExistsOption.value,
+  },
+})
   .use(Webcam)
   .use(ImageEditor, {
     cropperOptions: {
@@ -128,32 +136,30 @@ uppy.value = new Uppy()
   .use(XHRUpload, {
     endpoint: ENTRYPOINT + "documents",
     formData: true,
-    fieldName: "uploadFile"
+    fieldName: "uploadFile",
   })
   .on("upload-success", (item, response) => {
     onCreated(response.body);
     router.back();
   });
 
-uppy.value.setMeta({
-  filetype: "file",
-  parentResourceNodeId: parentResourceNodeId.value,
-  resourceLinkList: resourceLinkList.value,
-});
-
 const advancedSettingsClicked = () => {
   showAdvancedSettings.value = !showAdvancedSettings.value;
 };
 
 const handleUncompressZipEnabledChange = () => {
-  uppy.value.setMeta({
-    isUncompressZipEnabled: isUncompressZipEnabled.value,
+  uppy.value.setOptions({
+    meta: {
+      isUncompressZipEnabled: isUncompressZipEnabled.value,
+    },
   });
 };
 
 const handleFileExistsOptionChange = () => {
-  uppy.value.setMeta({
-    fileExistsOption: fileExistsOption.value,
+  uppy.value.setOptions({
+    meta: {
+      fileExistsOption: fileExistsOption.value,
+    },
   });
 };
 </script>

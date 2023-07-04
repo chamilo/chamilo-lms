@@ -5,7 +5,7 @@
       {{ t('Add a category') }}
     </h2>
     <hr class="m-0 mb-4"/>
-    <CategoryForm
+    <LinkCategoryForm
       @back-pressed="goBack"
     />
   </div>
@@ -13,7 +13,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
-import CategoryForm from "../../components/links/CategoryForm.vue"
+import LinkCategoryForm from "../../components/links/LinkCategoryForm.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import {useI18n} from "vue-i18n";
 

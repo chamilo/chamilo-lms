@@ -4,7 +4,7 @@
       {{ t('Update category') }}
     </h2>
     <hr class="m-0 mb-4"/>
-    <CategoryForm
+    <LinkCategoryForm
       :category-id="categoryId"
       @back-pressed="goBack"
     />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import CategoryForm from "../../components/links/CategoryForm.vue";
+import LinkCategoryForm from "../../components/links/LinkCategoryForm.vue";
 import {useRoute, useRouter} from "vue-router";
 import {computed} from "vue";
 import {useI18n} from "vue-i18n";

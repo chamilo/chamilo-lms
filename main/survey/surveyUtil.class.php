@@ -630,7 +630,7 @@ class SurveyUtil
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
-        $lpItemsArray = $qb->select('sa.lpItemId, li.title, l.name')
+        $qb->select('sa.lpItemId, li.title, l.name')
             ->distinct()
             ->from('ChamiloCourseBundle:CSurveyAnswer', 'sa')
             ->innerJoin(
@@ -650,8 +650,14 @@ class SurveyUtil
             ->andWhere('sa.surveyId = :surveyId')
             ->setParameter('cId', $courseId)
             ->setParameter('sessionId', $sessionId)
-            ->setParameter('surveyId', $surveyId)
-            ->getQuery()
+            ->setParameter('surveyId', $surveyId);
+
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $qb->andWhere('sa.sessionId = :sessionId')
+               ->setParameter('sessionId', $sessionId);
+        }
+
+        $lpItemsArray = $qb->getQuery()
             ->getArrayResult();
 
         $options = [];

@@ -27,7 +27,7 @@ export const chamiloIconToClass = {
   "close": "mdi mdi-close",
   "cog": "mdi mdi-cog",
   "confirm": "mdi mdi-check",
-  "content-save": "",
+  "save": "mdi mdi-content-save",
   "cursor-move": "",
   "customize": "mdi mdi-format-paint",
   "delete": "mdi mdi-delete",

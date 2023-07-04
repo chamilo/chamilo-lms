@@ -14,6 +14,7 @@ import socialNetworkRoutes from './social';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
+import assignments from './assignments';
 import links from './links';
 import glossary from './glossary';
 import store from '../store';
@@ -123,6 +124,7 @@ const router = createRouter({
         courseRoutes,
         //courseCategoryRoutes,
         documents,
+        assignments,
         links,
         glossary,
         accountRoutes,

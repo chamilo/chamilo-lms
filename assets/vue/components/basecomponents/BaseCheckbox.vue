@@ -1,15 +1,13 @@
 <template>
-  <div class="field -mt-2">
-    <div class="flex items-center">
-      <Checkbox
-        :model-value="modelValue"
-        :binary="true"
-        :name="name"
-        :input-id="id"
-        @update:model-value="$emit('update:modelValue', $event)"
-      />
-      <label :for="id" class="ml-2 cursor-pointer">{{ label }}</label>
-    </div>
+  <div class="field-checkbox">
+    <Checkbox
+      :model-value="modelValue"
+      :binary="true"
+      :name="name"
+      :input-id="id"
+      @update:model-value="$emit('update:modelValue', $event)"
+    />
+    <label :for="id" class="ml-2 cursor-pointer">{{ label }}</label>
   </div>
 </template>
 

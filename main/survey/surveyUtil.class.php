@@ -646,10 +646,8 @@ class SurveyUtil
                 'l.iid = li.lpId'
             )
             ->where('sa.cId = :cId')
-            ->andWhere('sa.sessionId = :sessionId')
             ->andWhere('sa.surveyId = :surveyId')
             ->setParameter('cId', $courseId)
-            ->setParameter('sessionId', $sessionId)
             ->setParameter('surveyId', $surveyId);
 
         if (api_get_configuration_value('show_surveys_base_in_sessions')) {

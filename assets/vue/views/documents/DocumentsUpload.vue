@@ -29,7 +29,7 @@
           v-model="isUncompressZipEnabled"
           :label="t('Uncompress zip')"
           name="isUncompressZipEnabled"
-          @change="handleUncompressZipEnabledChange"
+          @input="handleUncompressZipEnabledChange"
         />
       </div>
 
@@ -45,7 +45,7 @@
           ]"
           :initial-value="'rename'"
           name="fileExistsOption"
-          @change="handleFileExistsOptionChange"
+          @input="handleFileExistsOptionChange"
         />
       </div>
     </div>

@@ -18,8 +18,8 @@ class CreateDocumentFileAction extends BaseResourceFileAction
     public function __invoke(Request $request, CDocumentRepository $repo, EntityManager $em, KernelInterface $kernel): CDocument
     {
 
-        $isUncompressZipEnabled = $request->request->get('isUncompressZipEnabled', 'false');
-        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
+        $isUncompressZipEnabled = $request->get('isUncompressZipEnabled', 'false');
+        $fileExistsOption = $request->get('fileExistsOption', 'rename');
 
         $document = new CDocument();
 

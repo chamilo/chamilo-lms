@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="p-float-label">
-      <InputText
+      <Textarea
         :id="id"
         :model-value="modelValue"
         :class="{ 'p-invalid': isInvalid }"
@@ -11,14 +11,10 @@
       />
       <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
     </div>
-    <slot name="errors">
-      <small v-if="isInvalid" v-t="errorText" class="p-error" />
-    </slot>
   </div>
 </template>
-
-<script setup>
-import InputText from "primevue/inputtext";
+<script setup lang="ts">
+import Textarea from "primevue/textarea"
 
 const props = defineProps({
   id: {

@@ -1,23 +1,12 @@
 <template>
   <BaseCard plain>
     <form>
-      <BaseInputText
+      <BaseInputTextWithVuelidate
         v-model="content"
         class="mb-2"
         :label="textPlaceholder"
-        :aria-placeholder="textPlaceholder"
-        :is-invalid="v$.content.$error"
-      >
-        <template #errors>
-          <p
-            v-for="error in v$.content.$errors"
-            :key="error.$uid"
-            class="mt-1 text-error"
-          >
-            {{ error.$message }}
-          </p>
-        </template>
-      </BaseInputText>
+        :vuelidate-property="v$.content"
+      />
 
       <div class="mb-2">
         <BaseCheckbox
@@ -60,9 +49,9 @@ import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
 import BaseCard from "../basecomponents/BaseCard.vue";
 import BaseButton from "../basecomponents/BaseButton.vue";
-import BaseInputText from "../basecomponents/BaseInputText.vue";
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
 
 const store = useStore();
 const {t} = useI18n();

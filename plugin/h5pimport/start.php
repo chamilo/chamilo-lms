@@ -23,9 +23,11 @@ $action = $_REQUEST['action'] ?? null;
 
 $em = Database::getManager();
 $h5pRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImport');
+$h5pResultsRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
 
 $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
+$user = api_get_user_entity(api_get_user_id());
 
 $actions = [];
 
@@ -213,9 +215,21 @@ switch ($action) {
 
         $tableData = [];
         foreach ($h5pImports as $h5pImport) {
+            $h5pImportsResults = $h5pResultsRepo->count(
+                [
+                    'course' => $course,
+                    'session' => $session,
+                    'user' => $user,
+                    'h5pImport' => $h5pImport
+                ]
+            );
             $data = [
-                $h5pImport->getName(),
+                Display::url(
+                    $h5pImport->getName(),
+                    $plugin->getViewUrl($h5pImport)
+                ),
                 $h5pImport->getPath(),
+                $h5pImportsResults,
             ];
 
             if ($isAllowedToEdit) {
@@ -246,38 +260,33 @@ switch ($action) {
         $table = new SortableTableFromArray($tableData, 0);
         $table->set_header(0, get_lang('Title'));
         $table->set_header(1, get_lang('Path'));
+        $table->set_header(2, $plugin->get_lang('attempts'));
 
         if ($isAllowedToEdit) {
-
             $table->set_header(
-                2,
+                3,
                 get_lang('Actions'),
                 false,
                 'th-header text-right',
                 ['class' => 'text-right']
             );
-        }
-        $table->set_column_filter(
-            2,
-            function (H5pImport $value) use ($isAllowedToEdit, $plugin) {
-                $actions = [];
+            $table->set_column_filter(
+                3,
+                function (H5pImport $value) use ($isAllowedToEdit) {
+                    $actions = [];
 
-                $actions[] = Display::url(
-                    Display::return_icon('external_link.png', get_lang('View')),
-                    $plugin->getViewUrl($value)
-                );
+                    if ($isAllowedToEdit) {
 
-                if ($isAllowedToEdit) {
+                        $actions[] = Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete')),
+                            api_get_self().'?action=delete&id='.$value->getIid()
+                        );
+                    }
 
-                    $actions[] = Display::url(
-                        Display::return_icon('delete.png', get_lang('Delete')),
-                        api_get_self().'?action=delete&id='.$value->getIid()
-                    );
+                    return implode(PHP_EOL, $actions);
                 }
-
-                return implode(PHP_EOL, $actions);
-            }
-        );
+            );
+        }
         $view->assign('h5pImports', $h5pImports);
         $view->assign('table', $table->return_table());
 

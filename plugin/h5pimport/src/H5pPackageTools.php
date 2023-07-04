@@ -202,20 +202,21 @@ class H5pPackageTools
      */
     public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
+
         $settings = [
             'baseUrl' => api_get_path(WEB_PATH),
             'url' => $h5pImport->getRelativePath(),
-            'postUserStatistics' => false,
-            'ajax' => array(
-                'setFinished' => '',
-                'contentUserData' => ''
-            ),
-            'saveFreq' => false,
+            'postUserStatistics' => true,
+            'ajax' => [
+                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('result'),
+                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content')
+            ],
+            'saveFreq' => api_get_course_plugin_setting('h5pimport', 'h5p_save_freq'),
             'l10n' => array(
                 'H5P' => $h5pCore->getLocalization()
             ),
 //            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
-//            'crossorigin' => variable_get('h5p_crossorigin', NULL),
+            'crossorigin' => false,
 //            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
 //            'libraryConfig' => $core->h5pF->getLibraryConfig(),
             'pluginCacheBuster' => '?' . 0,
@@ -225,7 +226,7 @@ class H5pPackageTools
         $loggedUser = api_get_user_info();
         if ($loggedUser) {
             $settings['user'] = array(
-                'name' => $loggedUser['name'],
+                'name' => $loggedUser['complete_name'],
                 'mail' => $loggedUser['email']
             );
         }
@@ -236,9 +237,9 @@ class H5pPackageTools
     /**
      * Get the core assets.
      *
-     * @return array An array containing CSS and JS assets.
+     * @return array[]|bool An array containing CSS and JS assets or false if some core assets missing.
      */
-    public static function getCoreAssets(): array
+    public static function getCoreAssets()
     {
         $assets = [
             'css' => [],
@@ -247,12 +248,21 @@ class H5pPackageTools
 
         // Add CSS assets
         foreach (H5PCore::$styles as $style) {
-            $assets['css'][] = api_get_path(WEB_PATH) . 'vendor/h5p/h5p-core/' . $style;
+            $auxAssetPath = 'vendor/h5p/h5p-core/' . $style;
+            $assets['css'][] = api_get_path(WEB_PATH) . $auxAssetPath;
+            if (!file_exists(api_get_path(SYS_PATH) . $auxAssetPath)) {
+                return false;
+            }
         }
 
         // Add JS assets
         foreach (H5PCore::$scripts as $script) {
-            $assets['js'][] = api_get_path(WEB_PATH) . 'vendor/h5p/h5p-core/' . $script;
+            $auxAssetPath = 'vendor/h5p/h5p-core/' . $script;
+            $auxUrl = api_get_path(WEB_PATH) . $auxAssetPath;
+            $assets['js'][] = $auxUrl;
+            if (!file_exists(api_get_path(SYS_PATH) . $auxAssetPath)) {
+                return false;
+            }
         }
 
         return $assets;

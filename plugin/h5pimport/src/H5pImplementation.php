@@ -393,7 +393,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function loadContentDependencies($id, $type = null)
+    public function loadContentDependencies($id, $type = null): array
     {
         $h5pImportLibraries = $this->h5pImportLibraries;
         $dependencies = [];

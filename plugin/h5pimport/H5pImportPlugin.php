@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
@@ -17,6 +18,7 @@ class H5pImportPlugin extends Plugin
 
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
     public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
+    public const TBL_H5P_IMPORT_RESULTS = 'plugin_h5p_import_results';
     protected function __construct()
     {
         $settings = [
@@ -25,6 +27,7 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
+            'h5p_save_freq' => 'text',
         ];
 
         parent::__construct(
@@ -63,7 +66,8 @@ class H5pImportPlugin extends Plugin
             ->tablesExist(
                 [
                     self::TBL_H5P_IMPORT,
-                    self::TBL_H5P_IMPORT_LIBRARY
+                    self::TBL_H5P_IMPORT_LIBRARY,
+                    self::TBL_H5P_IMPORT_RESULTS
                 ]
             )
         ) {
@@ -76,6 +80,7 @@ class H5pImportPlugin extends Plugin
             [
                 $em->getClassMetadata(H5pImport::class),
                 $em->getClassMetadata(H5pImportLibrary::class),
+                $em->getClassMetadata(H5pImportResults::class),
             ]
         );
         $this->addCourseTools();
@@ -88,6 +93,7 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
+            'h5p_save_freq' => 'text',
         ];
 
         $em = Database::getManager();
@@ -104,7 +110,8 @@ class H5pImportPlugin extends Plugin
             ->tablesExist(
                 [
                     self::TBL_H5P_IMPORT,
-                    self::TBL_H5P_IMPORT_LIBRARY
+                    self::TBL_H5P_IMPORT_LIBRARY,
+                    self::TBL_H5P_IMPORT_RESULTS
                 ]
             )
         ) {
@@ -116,6 +123,7 @@ class H5pImportPlugin extends Plugin
             [
                 $em->getClassMetadata(H5pImport::class),
                 $em->getClassMetadata(H5pImportLibrary::class),
+                $em->getClassMetadata(H5pImportResults::class),
             ]
         );
         $this->removeH5pDirectories();

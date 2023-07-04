@@ -39,6 +39,7 @@ class H5pImport
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     private Course $course;
+
     /**
      * @var Session|null
      *

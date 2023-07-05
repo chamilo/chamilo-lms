@@ -128,11 +128,11 @@ onMounted(() => {
 
 const fetchCategories = async () => {
   try {
-    categories.value = await linkService.getCategories()
+    categories.value = await linkService.getCategories(parentResourceNodeId.value, cid, sid);
   } catch (error) {
-    console.error('Error fetching categories:', error)
+    console.error('Error fetching categories:', error);
   }
-}
+};
 
 const fetchLink = async () => {
   if (props.linkId) {
@@ -141,7 +141,7 @@ const fetchLink = async () => {
       formData.url = response.url
       formData.title = response.title
       formData.description = response.description
-      formData.showOnHomepage = response.showOnHomepage
+      formData.showOnHomepage = response.onHomepage
       formData.target = response.target
       formData.parentResourceNodeId = response.value
       formData.resourceLinkList = response.value

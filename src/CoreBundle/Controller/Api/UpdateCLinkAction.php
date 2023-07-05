@@ -24,15 +24,18 @@ class UpdateCLinkAction extends BaseResourceFileAction
         $title = $data['title'];
         $description = $data['description'];
         $categoryId = (int) $data['category'];
-        $onHomepage = isset($data['showOnHomepage']) ? (int) $data['showOnHomepage'] : 0;
+        $onHomepage = isset($data['showOnHomepage']) && (bool) $data['showOnHomepage'];
         $target = $data['target'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
+
+        error_log('In UpdateCLinkAction $onHomepage '.$onHomepage);
 
         $link->setUrl($url);
         $link->setTitle($title);
         $link->setDescription($description);
         $link->setTarget($target);
+        $link->setOnHomepage($onHomepage);
 
         if (0 !== $categoryId) {
             $linkCategory = $em->getRepository(CLinkCategory::class)->find($categoryId);

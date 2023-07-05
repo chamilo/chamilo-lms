@@ -19,8 +19,10 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
@@ -144,7 +146,7 @@ class CourseController extends ToolBaseController
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
     #[Entity('course', expr: 'repository.find(cid)')]
-    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain, EntityManagerInterface $em): Response
+    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain, EntityManagerInterface $em, CLinkRepository $linkRepo): Response
     {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
@@ -227,7 +229,22 @@ class CourseController extends ToolBaseController
         $tools = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
+        // Links to display on homepage
+        $qb = $linkRepo->getResourcesByCourse($course, $this->getSession());
+        $qb->andWhere('resource.onHomepage = 1');
+        $qb->addOrderBy('resource.displayOrder', 'ASC');
+        $linkEntities = $qb->getQuery()->getResult();
 
+        $links = [];
+        /* @var CLink $linkEntity */
+        foreach ($linkEntities as $linkEntity) {
+            $links[] = [
+                'title' => $linkEntity->getTitle(),
+                'url' => $linkEntity->getUrl(),
+                'description' => $linkEntity->getDescription(),
+                'target' => $linkEntity->getTarget(),
+            ];
+        }
 
         /** @var CTool $item */
         foreach ($result as $item) {
@@ -246,49 +263,6 @@ class CourseController extends ToolBaseController
 
         // Get session-career diagram
         $diagram = '';
-        /*$allow = api_get_configuration_value('allow_career_diagram');
-        if (true === $allow) {
-            $htmlHeadXtra[] = api_get_js('jsplumb2.js');
-            $extra = new ExtraFieldValue('session');
-            $value = $extra->get_values_by_handler_and_field_variable(
-                api_get_session_id(),
-                'external_career_id'
-            );
-
-            if (!empty($value) && isset($value['value'])) {
-                $careerId = $value['value'];
-                $extraFieldValue = new ExtraFieldValue('career');
-                $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-                    'external_career_id',
-                    $careerId,
-                    false,
-                    false,
-                    false
-                );
-
-                if (!empty($item) && isset($item['item_id'])) {
-                    $careerId = $item['item_id'];
-                    $career = new Career();
-                    $careerInfo = $career->get($careerId);
-                    if (!empty($careerInfo)) {
-                        $extraFieldValue = new ExtraFieldValue('career');
-                        $item = $extraFieldValue->get_values_by_handler_and_field_variable(
-                            $careerId,
-                            'career_diagram',
-                            false,
-                            false,
-                            0
-                        );
-
-                        if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                            // @var Graph $graph
-                            $graph = UnserializeApi::unserialize('career', $item['value']);
-                            $diagram = Career::renderDiagram($careerInfo, $graph);
-                        }
-                    }
-                }
-            }
-        }*/
 
         // Deleting the objects
         $session->remove('toolgroup');
@@ -310,6 +284,7 @@ class CourseController extends ToolBaseController
             'shortcuts' => $shortcuts,
             'diagram' => $diagram,
             'tools' => $tools,
+            'links' => $links,
         ];
 
         $json = $this->serializer->serialize(

@@ -25,7 +25,7 @@ class CreateCLinkAction extends BaseResourceFileAction
         $title = $data['title'];
         $description = $data['description'];
         $categoryId = (int) $data['category'];
-        $onHomepage = isset($data['showOnHomepage']) ? (int) $data['showOnHomepage'] : 0;
+        $onHomepage = isset($data['showOnHomepage']) && (bool) $data['showOnHomepage'];
         $target = $data['target'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
@@ -35,6 +35,7 @@ class CreateCLinkAction extends BaseResourceFileAction
             ->setTitle($title)
             ->setDescription($description)
             ->setTarget($target)
+            ->setOnHomepage($onHomepage)
         ;
 
         if (0 !== $categoryId) {

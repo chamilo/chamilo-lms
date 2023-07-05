@@ -70,9 +70,18 @@ export default {
     return response.data
   },
 
-  getCategories: async () => {
-    const response = await axios.get(ENTRYPOINT + 'link_categories')
-    return response.data['hydra:member']
+  getCategories: async (parent, cid, sid) => {
+    const params = {
+      'resourceNode.parent': parent,
+      'cid': cid,
+      'sid': sid
+    };
+
+    const response = await axios.get(ENTRYPOINT + 'link_categories', {
+      params: params
+    });
+
+    return response.data['hydra:member'];
   },
 
   /**

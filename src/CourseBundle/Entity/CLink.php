@@ -176,6 +176,10 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'target', type: 'string', length: 10, nullable: true)]
     protected ?string $target = null;
 
+    #[Groups(['link:read', 'link:write', 'link:browse'])]
+    #[ORM\Column(name: 'on_homepage', type: 'boolean', nullable: false)]
+    protected ?bool $onHomepage = false;
+
     #[Groups(['link:read', 'link:browse'])]
     protected bool $linkVisible = true;
 
@@ -233,14 +237,21 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
+    }
+
+    public function getOnHomepage(): ?bool
+    {
+        return $this->onHomepage;
+    }
+
+    public function setOnHomepage(?bool $onHomepage): self
+    {
+        $this->onHomepage = $onHomepage;
+
+        return $this;
     }
 
     public function setTarget(string $target): self

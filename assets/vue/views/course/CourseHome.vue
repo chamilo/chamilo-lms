@@ -144,6 +144,13 @@
         :data-index="index"
       />
 
+      <div v-for="(link, index) in links" :key="'link-' + index" class="flex items-center gap-2">
+        <i class="mdi mdi-link-variant text-gray-500"></i>
+        <a :href="link.url" :target="link.target" :title="link.title" class="text-primary">
+          {{ link.title }}
+        </a>
+      </div>
+
       <ShortCutList
         v-for="(shortcut, index) in shortcuts"
         :key="'shortcut-' + index.toString()"
@@ -185,6 +192,7 @@ const shortcuts = ref([]);
 const intro = ref(null);
 const introTool = ref(null);
 const createInSession = ref(false);
+const links = ref([]);
 
 let courseId = route.params.id;
 let sessionId = route.query.sid ?? 0;
@@ -214,6 +222,7 @@ axios
     session.value = data.session;
     tools.value = data.tools;
     shortcuts.value = data.shortcuts;
+    links.value = data.links;
 
     let adminTool = tools.value.find((element) => element.category === "admin");
 

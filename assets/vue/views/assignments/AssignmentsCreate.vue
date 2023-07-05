@@ -163,12 +163,12 @@ const assignment = reactive({
   title: "",
   description: "",
   qualification: 0,
-  gradebookId: null,
+  gradebookId: gradebookCategories.value[0],
   weight: 0,
-  expiresOn: null,
-  endsOn: null,
+  expiresOn: new Date(),
+  endsOn: new Date(),
   addToCalendar: false,
-  allowTextAssignment: null,
+  allowTextAssignment: documentTypes.value[2],
 });
 
 const rules = computed(() => {

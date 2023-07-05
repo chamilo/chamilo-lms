@@ -25,6 +25,7 @@ $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
 
 $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$originIsLearnpath = api_get_origin() === 'learnpath';
 
 if (!$h5pImportId) {
     api_not_allowed(true);
@@ -50,15 +51,17 @@ if ($session && $h5pImport->getSession()) {
     }
 }
 
-$interbreadcrumb[] = [
-    'name' => $plugin->getToolTitle(),
-    'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php',
-];
+if (!$originIsLearnpath) {
+    $interbreadcrumb[] = [
+        'name' => $plugin->getToolTitle(),
+        'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php',
+    ];
 
-$actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq()
-);
+    $actions = Display::url(
+        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq()
+    );
+}
 
 $htmlContent = '';
 $interface = new H5pImplementation($h5pImport);
@@ -149,7 +152,9 @@ if (empty($h5pNode)) {
 
 $view = new Template($h5pImport->getName());
 $view->assign('header', $h5pImport->getName());
-$view->assign('actions', Display::toolbarAction($plugin->get_name(), [$actions]));
+if (!$originIsLearnpath) {
+    $view->assign('actions', Display::toolbarAction($plugin->get_name(), [$actions]));
+}
 $view->assign(
     'content',
     $htmlContent

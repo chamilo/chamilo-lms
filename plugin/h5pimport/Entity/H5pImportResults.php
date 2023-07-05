@@ -62,7 +62,7 @@ class H5pImportResults
      * @var H5pImport
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\H5pImport\H5pImport")
-     * @ORM\JoinColumn(name="plugin_h5p_import_id", referencedColumnName="iid", nullable=false)
+     * @ORM\JoinColumn(name="plugin_h5p_import_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
     private H5pImport $h5pImport;
 

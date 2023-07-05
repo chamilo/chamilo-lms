@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
@@ -3665,7 +3666,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'xapi', 'survey']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'xapi', 'h5p', 'survey']
             )
             ) {
                 $lp_type = 1;
@@ -7762,6 +7763,17 @@ class learnpath
                 ICON_SIZE_BIG
             );
             $items[] = $xApiPlugin->getLpResourceBlock($this->lp_id);
+        }
+
+        $h5pImportPlugin = H5pImportPlugin::create();
+        if ($h5pImportPlugin->isEnabled()) {
+            $headers[] = Display::return_icon(
+                'plugin_h5p_import_upload.png',
+                get_lang($h5pImportPlugin->get_lang('plugin_title')),
+                [],
+                ICON_SIZE_BIG
+            );
+            $items[] = $h5pImportPlugin->getLpResourceBlock($this->lp_id);
         }
 
         $headers[] = Display::return_icon('flag_checkered.png', get_lang('Certificate'), [], ICON_SIZE_BIG);
@@ -13939,6 +13951,14 @@ EOD;
                 return api_get_path(WEB_PLUGIN_PATH).'xapi/'
                     .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
                     ."?id=$id&$extraParams";
+            case TOOL_H5P:
+                $toolLaunch = $em->find(H5pImport::class, $id);
+
+                if (empty($toolLaunch)) {
+                    break;
+                }
+
+                return api_get_path(WEB_PLUGIN_PATH).'h5pimport/view.php'."?id=$id&$extraParams";
             case TOOL_SURVEY:
                 $table = Database::get_course_table(TABLE_SURVEY);
                 $sql = "SELECT code FROM $table WHERE c_id = $course_id AND survey_id =".(int) $id;

@@ -19,6 +19,7 @@ class H5pImportPlugin extends Plugin
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
     public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
     public const TBL_H5P_IMPORT_RESULTS = 'plugin_h5p_import_results';
+
     protected function __construct()
     {
         $settings = [
@@ -74,7 +75,6 @@ class H5pImportPlugin extends Plugin
             return;
         }
 
-
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
             [
@@ -85,6 +85,7 @@ class H5pImportPlugin extends Plugin
         );
         $this->addCourseTools();
     }
+
     public function uninstall()
     {
         $settings = [
@@ -126,17 +127,22 @@ class H5pImportPlugin extends Plugin
                 $em->getClassMetadata(H5pImportResults::class),
             ]
         );
+        $this->deleteCourseToolLinks();
         $this->removeH5pDirectories();
     }
+
+    /**
+     * Perform actions after configuring the H5P import plugin.
+     *
+     * @return H5pImportPlugin The H5P import plugin instance.
+     */
     public function performActionsAfterConfigure(): H5pImportPlugin
     {
         $em = Database::getManager();
-
         $this->deleteCourseToolLinks();
 
         if ('true' === $this->get('tool_enable')) {
             $courses = $em->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')->getResult();
-
 
             foreach ($courses as $course) {
                 $this->createLinkToCourseTool($this->getToolTitle(), $course['id']);
@@ -145,12 +151,22 @@ class H5pImportPlugin extends Plugin
 
         return $this;
     }
+
+    /**
+     * Get the view URL for an H5P import.
+     *
+     * @param H5pImport $h5pImport The H5P import object.
+     * @return string The view URL for the H5P import.
+     */
     public function getViewUrl(H5pImport $h5pImport): string
     {
         return api_get_path(WEB_PLUGIN_PATH).'h5pimport\view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
     }
 
-    private function addCourseTools()
+    /**
+     * Add course tools for all courses.
+     */
+    private function addCourseTools(): void
     {
         $courses = Database::getManager()
             ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
@@ -171,30 +187,94 @@ class H5pImportPlugin extends Plugin
         $this->createLinkToCourseTool(
             $this->get_lang('plugin_title'),
             $courseId,
-            'plugins.png',
+            'plugin_h5p_import.png',
             '../plugin/h5pimport/start.php',
             0,
             'authoring'
         );
     }
+
     private function deleteCourseToolLinks()
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'h5pimport/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/h5pimport/start.php%']);
     }
 
-    private function removeH5pDirectories()
+    /**
+     * Removes H5P directories for all courses.
+     */
+    private function removeH5pDirectories(): void
     {
-
         $fs = new Filesystem();
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $table
-                ORDER BY id";
+        $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $courseInfo =  api_get_course_info_by_id($row['id']);
             $fs->remove($courseInfo['course_sys_path'].'/h5p');
         }
     }
+
+    /**
+     * Generates the LP resource block for H5P imports.
+     *
+     * @param int $lpId The LP ID.
+     * @return string The HTML for the LP resource block.
+     */
+    public function getLpResourceBlock(int $lpId): string
+    {
+        $cidReq = api_get_cidreq(true, true, 'lp');
+        $webPath = api_get_path(WEB_PLUGIN_PATH).'h5pimport/';
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $tools = Database::getManager()
+            ->getRepository(H5pImport::class)
+            ->findBy(['course' => $course, 'session' => $session]);
+
+        $importIcon = Display::return_icon('plugin_h5p_import_upload.png');
+        $moveIcon = Display::url(
+            Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY),
+            '#',
+            ['class' => 'moved']
+        );
+
+        $return = '<ul class="lp_resource">';
+        $return .= '<li class="lp_resource_element">';
+        $return .= $importIcon;
+        $return .= Display::url(
+            get_lang('Import'),
+            $webPath . "start.php?action=add&$cidReq&" . http_build_query(['lp_id' => $lpId])
+        );
+        $return .= '</li>';
+
+        /** @var H5pImport $tool */
+        foreach ($tools as $tool) {
+            $toolAnchor = Display::url(
+                Security::remove_XSS($tool->getName()),
+                api_get_self()."?$cidReq&"
+                .http_build_query(
+                    ['action' => 'add_item', 'type' => TOOL_H5P, 'file' => $tool->getIid(), 'lp_id' => $lpId]
+                ),
+                ['class' => 'moved']
+            );
+
+            $return .= Display::tag(
+                'li',
+                $moveIcon.$importIcon.$toolAnchor,
+                [
+                    'class' => 'lp_resource_element',
+                    'data_id' => $tool->getIid(),
+                    'data_type' => TOOL_H5P,
+                    'title' => $tool->getName(),
+                ]
+            );
+        }
+
+        $return .= '</ul>';
+
+        return $return;
+    }
+
 }

@@ -152,6 +152,7 @@ define('TOOL_PORTFOLIO', 'portfolio');
 define('TOOL_PORTFOLIO_COMMENT', 'portfolio_comment');
 define('TOOL_PLAGIARISM', 'compilatio');
 define('TOOL_XAPI', 'xapi');
+define('TOOL_H5P', 'h5p');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');

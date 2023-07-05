@@ -268,6 +268,13 @@ class H5pPackageTools
         return $assets;
     }
 
+    /**
+     * Return the content body for the H5PIntegration javascript object
+     *
+     * @param $h5pNode
+     * @param H5PCore $h5pCore
+     * @return array
+     */
     public static function getContentSettings($h5pNode, H5PCore $h5pCore): array
     {
         $filtered = $h5pCore->filterParameters($h5pNode);

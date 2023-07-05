@@ -30,17 +30,20 @@ function wsConvertPpt($pptData)
     }
     $fileData = $pptData['file_data'];
     // Clean filename to avoid hacks. Prevents "&" and ";" to be used in filename, notably
-    $sanitizedFileName = Security::sanitizeExecParam($pptData['file_name']);
+    $sanitizedFileName = $pptData['file_name'];
     $dataInfo = pathinfo($sanitizedFileName);
     $fileName = basename($sanitizedFileName, '.'.$dataInfo['extension']);
     // Add additional cleaning of .php and .htaccess files
     $fullFileName = Security::filter_filename($sanitizedFileName);
-    $size = Security::sanitizeExecParam($pptData['service_ppt2lp_size']);
+    $size = $pptData['service_ppt2lp_size'];
     $w = '800';
     $h = '600';
     if (!empty($size)) {
         list($w, $h) = explode('x', $size);
     }
+
+    $w = Security::sanitizeExecParam($w);
+    $h = Security::sanitizeExecParam($h);
 
     $tempArchivePath = api_get_path(SYS_ARCHIVE_PATH);
     $tempPath = $tempArchivePath.'wsConvert/'.$fileName.'/';
@@ -57,13 +60,24 @@ function wsConvertPpt($pptData)
     file_put_contents($tempPath.$fullFileName, $file);
 
     $cmd = pptConverterGetCommandBaseParams();
-    $cmd .= ' -w '.$w.' -h '.$h.' -d oogie "'.$tempPath.$fullFileName.'"  "'.$tempPathNewFiles.$fileName.'.html"';
+    $cmd .= ' -w '.$w.' -h '.$h.' -d oogie '
+        .Security::sanitizeExecParam($tempPath.$fullFileName)
+        .' '
+        .Security::sanitizeExecParam($tempPathNewFiles.$fileName.'.html');
 
     //$perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles.$fileName, $perms);
 
     $files = [];
     $return = 0;
+    $cmdParts = explode(' && ', $cmd);
+    $cmdParts = array_map(
+        function (string $part): string {
+            return escapeshellcmd($part);
+        },
+        $cmdParts
+    );
+    $cmd = implode(' && ', $cmdParts);
     $shell = exec($cmd, $files, $return);
     umask($oldumask);
 

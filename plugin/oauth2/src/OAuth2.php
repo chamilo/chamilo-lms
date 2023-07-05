@@ -49,6 +49,11 @@ class OAuth2 extends Plugin
     public const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
     public const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
     public const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS = 'response_resource_owner_teacher_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS = 'response_resource_owner_sessadmin_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS = 'response_resource_owner_drh_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS = 'response_resource_owner_student_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS = 'response_resource_owner_anon_status';
     public const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
     public const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
 
@@ -106,6 +111,11 @@ class OAuth2 extends Plugin
                 self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME => 'text',
 
@@ -255,11 +265,7 @@ class OAuth2 extends Plugin
                     $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
                     $this->get_lang('DefaultLastname')
                 );
-                $status = $this->getValueByKey(
-                    $response,
-                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                    STUDENT
-                );
+                $status = $this->mapUserStatusFromResponse($response);
                 $email = $this->getValueByKey(
                     $response,
                     $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
@@ -376,6 +382,41 @@ class OAuth2 extends Plugin
         return $fieldValue->getCreatedAt() >= $lastLogin->getLoginDate();
     }
 
+    private function mapUserStatusFromResponse(array $response, int $defaultStatus = STUDENT): int
+    {
+        $status = $this->getValueByKey(
+            $response,
+            $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+            $defaultStatus
+        );
+
+        $responseStatus = [];
+
+        if ($teacherStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS)) {
+            $responseStatus[COURSEMANAGER] = $teacherStatus;
+        }
+
+        if ($sessAdminStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS)) {
+            $responseStatus[SESSIONADMIN] = $sessAdminStatus;
+        }
+
+        if ($drhStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS)) {
+            $responseStatus[DRH] = $drhStatus;
+        }
+
+        if ($studentStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS)) {
+            $responseStatus[STUDENT] = $studentStatus;
+        }
+
+        if ($anonStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS)) {
+            $responseStatus[ANONYMOUS] = $anonStatus;
+        }
+
+        $map = array_flip($responseStatus);
+
+        return $map[$status] ?? $status;
+    }
+
     /**
      * Extends ArrayAccessorTrait::getValueByKey to return a list of values
      * $key can contain wild card character *
@@ -445,13 +486,11 @@ class OAuth2 extends Plugin
                 $user->getEmail()
             )
         );
-        $user->setStatus(
-            $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                $user->getStatus()
-            )
+        $status = $this->mapUserStatusFromResponse(
+            $response,
+            $user->getStatus()
         );
+        $user->setStatus($status);
         $user->setAuthSource('oauth2');
         $configFilePath = __DIR__.'/../config.php';
         if (file_exists($configFilePath)) {

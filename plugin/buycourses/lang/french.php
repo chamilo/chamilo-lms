@@ -244,3 +244,7 @@ $strings['ConfigureSubscriptionsFrequencies'] = "Configurez des périodes de sou
 $strings['FrequencyAdd'] = "Ajouter période";
 $strings['SubscriptionAlreadyExists'] = "La souscription existe déjà";
 $strings['SubscriptionPeriodDuration'] = "Durée de souscription (en jours)";
+$strings['Product'] = "Produit";
+$strings['SalePrice'] = "Prix";
+$strings['YouProductIsActivatedYouCanNowAccessIt'] = "Votre abonnement a été activé, vous avez maintenant accès au module choisi.";
+

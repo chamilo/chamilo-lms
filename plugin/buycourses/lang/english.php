@@ -316,3 +316,6 @@ $strings['ConfigureSubscriptionsFrequencies'] = "Configure subscriptions periods
 $strings['FrequencyAdd'] = "Add periods";
 $strings['SubscriptionAlreadyExists'] = "Subscription already exists";
 $strings['SubscriptionPeriodDuration'] = "Subscription duration (in days)";
+$strings['Product'] = "Product name";
+$strings['YouProductIsActivatedYouCanNowAccessIt'] = "Your product is now activated and you can now have access to it.";
+

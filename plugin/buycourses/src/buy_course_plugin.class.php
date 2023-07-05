@@ -1763,7 +1763,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function updateSaleReference(int $saleId, int $saleReference)
+    public function updateSaleReference(int $saleId, string $saleReference)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
 

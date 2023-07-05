@@ -434,61 +434,7 @@ switch ($sale['payment_type']) {
             ]);
 
             if (!empty($session)) {
-                $messageTemplate = new Template();
-                $messageTemplate->assign('user', $userInfo);
-                $messageTemplate->assign(
-                    'sale',
-                    [
-                        'date' => $sale['date'],
-                        'product' => $sale['product_name'],
-                        'currency' => $currency['iso_code'],
-                        'price' => $sale['price'],
-                        'reference' => $sale['reference'],
-                    ]
-                );
-                $messageTemplate->assign('transfer_accounts', $transferAccounts);
-                $messageTemplate->assign('info_email_extra', $infoEmailExtra);
-
-                MessageManager::send_message_simple(
-                    $userInfo['user_id'],
-                    $plugin->get_lang('bc_subject'),
-                    $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
-                );
-
-                if (!empty($globalParameters['sale_email'])) {
-                    $messageConfirmTemplate = new Template();
-                    $messageConfirmTemplate->assign('user', $userInfo);
-                    $messageConfirmTemplate->assign(
-                        'sale',
-                        [
-                            'date' => $sale['date'],
-                            'product' => $sale['product_name'],
-                            'currency' => $currency['iso_code'],
-                            'price' => $sale['price'],
-                            'reference' => $sale['reference'],
-                        ]
-                    );
-
-                    api_mail_html(
-                        '',
-                        $globalParameters['sale_email'],
-                        $plugin->get_lang('bc_subject'),
-                        $messageConfirmTemplate->fetch('buycourses/view/message_confirm.tpl')
-                    );
-                }
-
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf(
-                            $plugin->get_lang('PurchaseStatusX'),
-                            $plugin->get_lang('PendingReasonByStripe')
-                        ),
-                        'success',
-                        false
-                    )
-                );
-
-                $plugin->updateSaleReference($saleId, $session->payment_intent);
+                $plugin->updateSaleReference($saleId, $session->id);
 
                 unset($_SESSION['bc_coupon_id']);
 

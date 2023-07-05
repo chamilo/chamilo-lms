@@ -10258,8 +10258,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
  */
 function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
 {
-    $platformEmail = $GLOBALS['platform_email'];
-
     $noReplyAddress = api_get_setting('noreply_email_address');
     $avoidReplyToAddress = false;
 
@@ -10291,8 +10289,8 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
 
     //If the SMTP configuration only accept one sender
     if (
-        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
-        $platformEmail['SMTP_UNIQUE_SENDER']
+        !empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')) &&
+        api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')
     ) {
         $senderName = $notification->getDefaultPlatformSenderName();
         $senderEmail = $notification->getDefaultPlatformSenderEmail();

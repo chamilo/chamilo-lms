@@ -28,10 +28,10 @@ try {
 }
 
 switch ($event->type) {
-    case 'payment_intent.succeeded':
-        $paymentIntent = $event->data->object;
+    case 'checkout.session.completed':
+        $checkoutSession = $event->data->object;
 
-        $sale = $plugin->getSaleFromReference($paymentIntent->id);
+        $sale = $plugin->getSaleFromReference($checkoutSession->id);
 
         if (empty($sale)) {
             api_not_allowed(true);

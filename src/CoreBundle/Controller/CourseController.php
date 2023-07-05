@@ -50,13 +50,16 @@ use UserManager;
 class CourseController extends ToolBaseController
 {
     public function __construct(
-        private SerializerInterface $serializer
+        private readonly SerializerInterface $serializer
     ) {
     }
 
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
-    public function checkTermsAndConditionJson(Request $request, LegalRepository $legalTermsRepo, LanguageRepository $languageRepository): Response
-    {
+    public function checkTermsAndConditionJson(
+        Request $request,
+        LegalRepository $legalTermsRepo,
+        LanguageRepository $languageRepository
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         $course = $this->getCourse();
@@ -109,7 +112,8 @@ class CourseController extends ToolBaseController
             }
 
             $redirect = true;
-            $allow = ('true' === Container::getSettingsManager()->getSetting('course.allow_public_course_with_no_terms_conditions'));
+            $allow = 'true' === Container::getSettingsManager()
+                    ->getSetting('course.allow_public_course_with_no_terms_conditions');
             if (true === $allow &&
                 null !== $course->getVisibility() &&
                 COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
@@ -144,8 +148,13 @@ class CourseController extends ToolBaseController
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
     #[Entity('course', expr: 'repository.find(cid)')]
-    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain, EntityManagerInterface $em): Response
-    {
+    public function indexJson(
+        Request $request,
+        CToolRepository $toolRepository,
+        CShortcutRepository $shortcutRepository,
+        ToolChain $toolChain,
+        EntityManagerInterface $em
+    ): Response {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
         if (!empty($requestData) && isset($requestData['toolItem'])) {
@@ -226,8 +235,6 @@ class CourseController extends ToolBaseController
         $result = $qb->getQuery()->getResult();
         $tools = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-
-
 
         /** @var CTool $item */
         foreach ($result as $item) {
@@ -389,8 +396,13 @@ class CourseController extends ToolBaseController
      */
     #[Route('/{cid}/settings/{namespace}', name: 'chamilo_core_course_settings')]
     #[Entity('course', expr: 'repository.find(cid)')]
-    public function updateSettings(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory): Response
-    {
+    public function updateSettings(
+        Request $request,
+        Course $course,
+        string $namespace,
+        SettingsCourseManager $manager,
+        SettingsFormFactory $formFactory
+    ): Response {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
@@ -443,7 +455,6 @@ class CourseController extends ToolBaseController
         /** @var ?User $user */
         $user = $this->getUser();
 
-        /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
@@ -747,7 +758,7 @@ class CourseController extends ToolBaseController
             }
         }
 
-        /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
+        /*  SWITCH TO A DIFFERENT HOMEPAGE VIEW
          the setting homepage_view is adjustable through
          the platform administration section */
         if (!empty($autoLaunchWarning)) {

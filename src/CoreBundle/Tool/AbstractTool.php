@@ -11,19 +11,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 abstract class AbstractTool
 {
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $name;
 
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $nameToShow = '';
 
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $icon = '';
     protected string $category = '';
     protected string $link;

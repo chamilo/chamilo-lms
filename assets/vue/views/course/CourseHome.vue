@@ -215,7 +215,7 @@ axios
     tools.value = data.tools;
     shortcuts.value = data.shortcuts;
 
-    let adminTool = tools.value.find((element) => element.category === "admin");
+    let adminTool = tools.value.filter((element) => element.category === "admin");
 
     if (Array.isArray(adminTool)) {
       courseItems.value = adminTool.map((tool) => ({

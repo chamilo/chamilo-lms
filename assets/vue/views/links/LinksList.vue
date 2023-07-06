@@ -34,7 +34,7 @@
     <div v-if="!linksWithoutCategory && !categories">
       <!-- Render the image and create button -->
       <EmptyState
-        icon="mdi mdi-link"
+        icon="link"
         :summary="t('Add your first link to this course')"
       >
         <BaseButton

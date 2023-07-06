@@ -18,7 +18,7 @@
     v-else-if="!isLoading && 0 === courses.length"
     :detail="t('Go to Explore to find a topic of interest, or wait for someone to subscribe you')"
     :summary="t('You don\'t have any course yet')"
-    icon="mdi mdi-book-open-page-variant"
+    icon="courses"
   />
 </template>
 

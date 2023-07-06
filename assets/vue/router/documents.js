@@ -2,7 +2,7 @@ export default {
   path: '/resources/document/:node/',
   meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'documents',
-  component: () => import('../components/documents/DocumentsLayout.vue'),
+  component: () => import('../components/layout/SimpleRouterViewLayout.vue'),
   redirect: { name: 'DocumentsList' },
   children: [
     {

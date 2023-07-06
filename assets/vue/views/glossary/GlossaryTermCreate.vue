@@ -1,28 +1,28 @@
 <template>
   <LayoutFormGeneric>
     <template #header>
-      <BaseIcon icon="link-add" />
-      {{ t("Add a link") }}
+      <BaseIcon icon="plus" />
+      {{ t("Add new glossary term") }}
     </template>
 
-    <LinkForm @back-pressed="goBack" />
+    <GlossaryForm @back-pressed="goBack" />
   </LayoutFormGeneric>
 </template>
 
 <script setup>
-import LinkForm from "../../components/links/LinkForm.vue"
-import { useRoute, useRouter } from "vue-router"
-import { useI18n } from "vue-i18n"
+import GlossaryForm from "../../components/glossary/GlossaryForm.vue"
+import { useRouter, useRoute } from "vue-router"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { useI18n } from "vue-i18n"
 import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
 
-const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const goBack = () => {
   router.push({
-    name: "LinksList",
+    name: "GlossaryList",
     query: route.query,
   })
 }

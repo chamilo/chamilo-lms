@@ -1,127 +1,117 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="field 2">
-      <div class="8">
-        <label for="glossary_file" class="h-4">
-          File
-        </label>
-        <input class="mt-1" :ref="fileInputRef" name="file" type="file" id="glossary_file" />
-      </div>
-    </div>
-    <div class="field">
-      <label>File type</label>
-      <div class="field-radiobutton">
-        <input name="file_type" value="csv" type="radio" id="qf_85f94d" v-model="fileType" checked="checked" />
-        <label for="qf_85f94d" class="">CSV</label>
-      </div>
-      <div class="field-radiobutton">
-        <input name="file_type" value="xls" type="radio" id="qf_bff468" v-model="fileType" />
-        <label for="qf_bff468" class="">XLS</label>
-      </div>
-    </div>
-    <div class="field 2">
-      <div class="8">
-        <div id="replace" class="field-checkbox">
-          <input class="appearance-none checked:bg-support-4 outline-none" name="replace" type="checkbox" value="1" id="qf_5b8df0" v-model="replace" />
-          <label for="qf_5b8df0" class="">
-            Delete all terms before import.
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="field 2">
-      <div class="8">
-        <div id="update" class="field-checkbox">
-          <input class="appearance-none checked:bg-support-4 outline-none" name="update" type="checkbox" value="1" id="qf_594e6e" v-model="update" />
-          <label for="qf_594e6e" class="">
-            Update existing terms.
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="field 2">
-      <div class="8">
-        <button class="btn btn--primary" name="SubmitImport" type="submit" id="glossary_SubmitImport">
-          <em class="mdi mdi-check"></em> Import
-        </button>
-      </div>
-    </div>
+  <form>
+    <BaseFileUpload
+      id="terms-file"
+      :label="t('File')"
+      class="mb-6"
+      @file-selected="selectedFile = $event"
+    />
+
+    <p>{{ t("File type") }}</p>
+    <BaseRadioButtons
+      id="file-type"
+      v-model="fileType"
+      :options="formats"
+      class="mb-6"
+      name="file-type"
+      initial-value="csv"
+    />
+
+    <BaseCheckbox
+      id="terms-delete-all"
+      v-model="replace"
+      :label="t('Delete all terms before import')"
+      name="terms-delete-all"
+    />
+
+    <BaseCheckbox
+      id="terms-update"
+      v-model="update"
+      :label="t('Update existing terms')"
+      name="terms-delete-all"
+    />
+
+    <LayoutFormButtons class="mt-8">
+      <BaseButton
+        :label="t('Back')"
+        type="black"
+        icon="back"
+        @click="emit('backPressed')"
+      />
+      <BaseButton
+        :label="t('Import')"
+        type="secondary"
+        icon="import"
+        @click="submitForm"
+      />
+    </LayoutFormButtons>
   </form>
 </template>
 
-<script>
-import axios from 'axios';
-import { ENTRYPOINT } from "../../config/entrypoint";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
-import { ref } from "vue";
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
+<script setup>
+import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+import { ref } from "vue"
+import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import { useNotification } from "../../composables/notification"
+import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import glossaryService from "../../services/glossaryService"
+import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
+import {useCidReq} from "../../composables/cidReq";
 
-export default {
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const { t } = useI18n();
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const notification = useNotification()
+const { sid, cid } = useCidReq()
 
-    const fileInputRef = ref(null);
-    const fileType = ref("csv");
-    const replace = ref(false);
-    const update = ref(false);
-    const parentResourceNodeId = ref(Number(route.params.node));
+const emit = defineEmits(["backPressed"])
 
-    const resourceLinkList = ref(
-      JSON.stringify([
-        {
-          sid: route.query.sid,
-          cid: route.query.cid,
-          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-        },
-      ])
-    );
+const formats = [
+  { label: "CSV", value: "csv" },
+  { label: "Excel", value: "xls" },
+]
+const fileType = ref("csv")
 
-    const submitForm = async () => {
-      const fileInput = document.getElementById('glossary_file');
-      const file = fileInput.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("file_type", fileType.value);
-      formData.append("replace", replace.value);
-      formData.append("update", update.value);
-      formData.append("sid", route.query.sid);
-      formData.append("cid", route.query.cid);
-      formData.append("parentResourceNodeId", parentResourceNodeId.value);
-      formData.append("resourceLinkList", resourceLinkList.value);
+const selectedFile = ref(null)
+const replace = ref(false)
+const update = ref(false)
+const parentResourceNodeId = ref(Number(route.params.node))
 
-      console.log('formData', formData);
+const resourceLinkList = ref(
+  JSON.stringify([
+    {
+      sid,
+      cid,
+      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+    },
+  ])
+)
 
-      console.log(ENTRYPOINT + 'glossaries/import');
-      try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await axios.post(ENTRYPOINT + 'glossaries/import', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
+const submitForm = async () => {
+  console.log(selectedFile.value)
+  const formData = new FormData()
+  formData.append("file", selectedFile.value)
+  formData.append("file_type", fileType.value)
+  formData.append("replace", replace.value)
+  formData.append("update", update.value)
+  formData.append("sid", route.query.sid)
+  formData.append("cid", route.query.cid)
+  formData.append("parentResourceNodeId", parentResourceNodeId.value)
+  formData.append("resourceLinkList", resourceLinkList.value)
 
-        router.push({
-          name: "GlossaryList",
-          query: route.query,
-        });
-      } catch (error) {
-        fileInputRef.value = null;
-        fileType.value = "csv";
-        replace.value = false;
-        update.value = false;
-      }
-    };
-
-    return {
-      fileInputRef,
-      fileType,
-      replace,
-      update,
-      submitForm,
-    };
-  },
-};
+  try {
+    await glossaryService.import(formData)
+    notification.showSuccessNotification(t("Terms imported succesfully"))
+    await router.push({
+      name: "GlossaryList",
+      query: route.query,
+    })
+  } catch (error) {
+    notification.showErrorNotification(t("Could not import terms"))
+  }
+}
 </script>

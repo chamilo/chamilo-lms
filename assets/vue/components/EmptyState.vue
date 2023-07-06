@@ -1,43 +1,38 @@
 <template>
-  <div
-    class="empty-state"
-  >
+  <div class="empty-state">
     <div class="empty-state__container">
-      <span
-        :class="icon"
-        aria-hidden="true"
-        class="empty-state__icon"
-      />
-      <p
-        class="empty-state__summary"
-        v-text="summary"
-      />
-      <p
-        class="empty-state__detail"
-        v-text="detail"
-      />
+      <span :class="chamiloIconToClass[icon]" aria-hidden="true" class="empty-state__icon" />
+      <p class="empty-state__summary" v-text="summary" />
+      <p class="empty-state__detail" v-text="detail" />
       <slot />
     </div>
   </div>
 </template>
 
 <script setup>
-// eslint-disable-next-line no-undef
+import { chamiloIconToClass } from "./basecomponents/ChamiloIcons"
+import { iconValidator } from "./basecomponents/validators"
+
 defineProps({
   summary: {
     type: String,
     default: "",
-    required: true
+    required: true,
   },
   detail: {
     type: String,
     default: "",
-    required: false
+    required: false,
   },
   icon: {
     type: String,
     default: "",
-    required: false
-  }
-});
+    validator: (value) => {
+      if (value === "") {
+        return true
+      }
+      return iconValidator(value)
+    },
+  },
+})
 </script>

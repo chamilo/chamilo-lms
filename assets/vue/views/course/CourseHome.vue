@@ -70,7 +70,7 @@
         v-else-if="introTool"
         :detail="t('Add a course introduction to display to your students.')"
         :summary="t('You don\'t have any course content yet.')"
-        icon="mdi mdi-book-open-page-variant"
+        icon="courses"
       >
         <BaseButton
           :label="t('Course introduction')"

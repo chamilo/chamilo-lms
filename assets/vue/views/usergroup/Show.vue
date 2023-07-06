@@ -54,9 +54,7 @@
       {{ $filters.relativeDatetime(item['sendDate']) }}
     </p>
 
-    <p class="text-lg">
-      <h3>{{ item.title }}</h3>
-    </p>
+    <h3 class="text-lg">{{ item.title }}</h3>
 
     <div class="flex flex-row">
       <div class="w-full">

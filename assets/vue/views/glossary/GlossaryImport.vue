@@ -8,28 +8,17 @@
   </div>
 </template>
 
-<script>
-import GlossaryImportForm from "../../components/glossary/GlossaryImportForm.vue";
-import {useRoute, useRouter} from "vue-router";
+<script setup>
+import GlossaryImportForm from "../../components/glossary/GlossaryImportForm.vue"
+import {useRoute, useRouter} from "vue-router"
 
-export default {
-  components: {
-    GlossaryImportForm,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
-    const goBack = () => {
-      router.push({
-        name: "GlossaryList",
-        query: route.query,
-      });
-    };
-
-    return {
-      goBack,
-    };
-  },
-};
+const goBack = () => {
+  router.push({
+    name: "GlossaryList",
+    query: route.query,
+  })
+}
 </script>

@@ -166,13 +166,19 @@ api_display_tool_title($tool_name);
 $nosessionUsersList = $sessionUsersList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
+$showAndOrderByOfficialCode = api_get_configuration_value('multiurl_user_management_show_and_order_by_official_code');
+
 if ($ajax_search) {
     $Users = UrlManager::get_url_rel_user_data($access_url_id, null, $join, $where);
     foreach ($Users as $user) {
         $sessionUsersList[$user['user_id']] = $user;
     }
 } else {
-    $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+    if ($showAndOrderByOfficialCode) {
+        $order_clause = 'ORDER BY official_code, username';
+    } else {
+        $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+    }
 
     $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
     foreach ($Users as $user) {
@@ -181,7 +187,7 @@ if ($ajax_search) {
         }
     }
 
-    $sql = "SELECT u.user_id, lastname, firstname, username
+    $sql = "SELECT u.user_id, lastname, firstname, username, official_code
 	  	  	FROM $tbl_user u
             $join
             WHERE u.status <> ".ANONYMOUS."
@@ -296,9 +302,13 @@ if (!empty($errorMsg)) {
         ?>
     <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
     <?php
+        $userOfficialCode = '';
         foreach ($nosessionUsersList as $enreg) {
+            if ($showAndOrderByOfficialCode) {
+                $userOfficialCode = $enreg['official_code'].' - ';
+            }
             ?>
-    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
+    <option value="<?php echo $userOfficialCode . $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
     <?php
         }
         unset($nosessionUsersList); ?>
@@ -332,10 +342,13 @@ if (!empty($errorMsg)) {
   <td align="center">
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
     <?php
-    foreach ($sessionUsersList as $enreg) {
+        foreach ($sessionUsersList as $enreg) {
+            if ($showAndOrderByOfficialCode) {
+            $userOfficialCode = $enreg['official_code'].' - ';
+        }
         ?>
         <option value="<?php echo $enreg['user_id']; ?>">
-            <?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+            <?php echo $userOfficialCode . $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
         </option>
     <?php
     }

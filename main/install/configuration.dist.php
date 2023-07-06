@@ -1986,6 +1986,9 @@ $_configuration['auth_password_links'] = [
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;
 
+// Show official_code and order user based on this field in the multiple access url user management page
+//$_configuration['multiple_access_url_user_management_show_and_order_by_official_code'] = false;
+
 // Add option to copy a session with its course-session content BT#17832
 //$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
 

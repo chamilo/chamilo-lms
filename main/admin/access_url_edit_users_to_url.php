@@ -308,7 +308,7 @@ if (!empty($errorMsg)) {
                 $userOfficialCode = $enreg['official_code'].' - ';
             }
             ?>
-    <option value="<?php echo $userOfficialCode . $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
+    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $userOfficialCode . $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
     <?php
         }
         unset($nosessionUsersList); ?>

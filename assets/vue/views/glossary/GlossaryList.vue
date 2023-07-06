@@ -16,7 +16,7 @@
         @click="importGlossary"
       />
       <BaseButton
-        :label="t('Export')"
+        :label="t('Export glossary')"
         icon="file-export"
         class="mb-2 mr-2"
         type="black"

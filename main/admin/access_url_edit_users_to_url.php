@@ -166,7 +166,7 @@ api_display_tool_title($tool_name);
 $nosessionUsersList = $sessionUsersList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
-$showAndOrderByOfficialCode = api_get_configuration_value('multiurl_user_management_show_and_order_by_official_code');
+$showAndOrderByOfficialCode = api_get_configuration_value('multiple_access_url_user_management_show_and_order_by_official_code');
 
 if ($ajax_search) {
     $Users = UrlManager::get_url_rel_user_data($access_url_id, null, $join, $where);

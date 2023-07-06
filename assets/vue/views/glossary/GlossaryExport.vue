@@ -4,13 +4,13 @@
       <button class="btn btn--secondary" @click="goBack">Back</button>
     </div>
     <h2>Export Glossary</h2>
-    <GlossaryExportForm/>
+    <GlossaryExportForm />
   </div>
 </template>
 
 <script setup>
-import GlossaryExportForm from '../../components/glossary/GlossaryExportForm.vue'
-import {useRoute, useRouter} from "vue-router"
+import GlossaryExportForm from "../../components/glossary/GlossaryExportForm.vue"
+import { useRoute, useRouter } from "vue-router"
 
 const router = useRouter()
 const route = useRoute()

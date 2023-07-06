@@ -12,20 +12,19 @@
   </form>
 </template>
 
-
 <script setup>
 import axios from "axios"
-import {ENTRYPOINT} from "../../config/entrypoint"
-import {RESOURCE_LINK_PUBLISHED} from "../resource_links/visibility"
-import {useRoute, useRouter} from 'vue-router'
-import {useI18n} from "vue-i18n"
-import {ref, onMounted} from "vue"
+import { ENTRYPOINT } from "../../config/entrypoint"
+import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+import { ref } from "vue"
 
 const route = useRoute()
 const router = useRouter()
-const {t} = useI18n()
+const { t } = useI18n()
 
-const selectedFormat = ref('csv')
+const selectedFormat = ref("csv")
 const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
   JSON.stringify([
@@ -35,31 +34,32 @@ const resourceLinkList = ref(
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
   ])
-);
+)
 
 const submitForm = () => {
   const format = selectedFormat.value
 
   const formData = new FormData()
-  formData.append('format', format)
+  formData.append("format", format)
   formData.append("sid", route.query.sid)
   formData.append("cid", route.query.cid)
 
   const endpoint = `${ENTRYPOINT}glossaries/export`
-  axios.post(endpoint, formData, {responseType: 'blob'})
-    .then(response => {
+  axios
+    .post(endpoint, formData, { responseType: "blob" })
+    .then((response) => {
       const fileUrl = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
-      link.href = fileUrl;
-      link.setAttribute('download', `glossary.${format}`)
+      const link = document.createElement("a")
+      link.href = fileUrl
+      link.setAttribute("download", `glossary.${format}`)
       document.body.appendChild(link)
-      link.click();
+      link.click()
       document.body.removeChild(link)
     })
-    .catch(error => {
-      console.error('Error exporting glossary:', error)
+    .catch((error) => {
+      console.error("Error exporting glossary:", error)
     })
-};
+}
 </script>
 
 <style scoped>

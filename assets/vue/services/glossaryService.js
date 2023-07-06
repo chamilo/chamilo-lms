@@ -36,6 +36,15 @@ export default {
   },
 
   /**
+   * @param {FormData} formData
+   */
+  export: async (formData) => {
+    const endpoint = `${ENTRYPOINT}glossaries/export`
+    const response = await axios.post(endpoint, formData, { responsetype: "blob " })
+    return response.data
+  },
+
+  /**
    * @param {Object} data
    */
   exportToDocuments: async (data) => {

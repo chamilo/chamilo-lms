@@ -45,6 +45,19 @@ export default {
   },
 
   /**
+   * @param {FormData} formData
+   */
+  import: async (formData) => {
+    const endpoint = `${ENTRYPOINT}glossaries/import`
+    const response = await axios.post(endpoint, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  },
+
+  /**
    * @param {Object} data
    */
   exportToDocuments: async (data) => {

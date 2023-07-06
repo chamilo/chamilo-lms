@@ -11,6 +11,7 @@
 
 <script setup>
 import { chamiloIconToClass } from "./basecomponents/ChamiloIcons"
+import { iconValidator } from "./basecomponents/validators"
 
 defineProps({
   summary: {
@@ -27,13 +28,10 @@ defineProps({
     type: String,
     default: "",
     validator: (value) => {
-      if (typeof value !== "string") {
-        return false
-      }
       if (value === "") {
         return true
       }
-      return Object.keys(chamiloIconToClass).includes(value)
+      return iconValidator(value)
     },
   },
 })

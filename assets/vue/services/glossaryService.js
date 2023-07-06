@@ -23,7 +23,7 @@ export default {
    * @param {String|Number} termId
    */
   deleteTerm: async (termId) => {
-    const endpoint = `${ENTRYPOINT}glossaries /${termId}`
+    const endpoint = `${ENTRYPOINT}glossaries/${termId}`
     const response = await axios.delete(endpoint)
     return response.data
   },

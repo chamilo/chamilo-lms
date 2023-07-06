@@ -66,16 +66,23 @@
         :glossaries="glossaries"
         :search-term="searchTerm"
         @edit="editTerm($event)"
-        @delete="deleteTerm($event)"
+        @delete="confirmDeleteTerm($event)"
       />
       <GlossaryTermTable
         v-else
         :glossaries="glossaries"
         :search-term="searchTerm"
         @edit="editTerm($event)"
-        @delete="deleteTerm($event)"
+        @delete="confirmDeleteTerm($event)"
       />
     </div>
+
+    <BaseDialogDelete
+      v-model:is-visible="isDeleteItemDialogVisible"
+      :item-to-delete="termToDeleteString"
+      @confirm-clicked="deleteTerm"
+      @cancel-clicked="isDeleteItemDialogVisible = false"
+    />
   </div>
 </template>
 
@@ -94,6 +101,7 @@ import GlossaryTermTable from "../../components/glossary/GlossaryTermTable.vue"
 import { useCidReq } from "../../composables/cidReq"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
+import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 
 const store = useStore()
 const route = useRoute()
@@ -121,6 +129,15 @@ const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher
 const glossaries = ref([])
 const view = ref("list")
 
+const isDeleteItemDialogVisible = ref(false)
+const termToDelete = ref(null)
+const termToDeleteString = computed(() => {
+  if (termToDelete.value === null) {
+    return ''
+  }
+  return termToDelete.value.name
+})
+
 watch(searchTerm, () => {
   fetchGlossaries()
 })
@@ -144,15 +161,21 @@ function editTerm(term) {
   })
 }
 
-async function deleteTerm(term) {
-  if (confirm("¿Delete?")) {
-    try {
-      await glossaryService.deleteTerm(term.iid)
-      notifications.showSuccessNotification(t("Term deleted"))
-    } catch (error) {
-      console.error("Error deleting term:", error)
-      notifications.showErrorNotification(t("Could not delete term"))
-    }
+async function confirmDeleteTerm(term) {
+  termToDelete.value = term
+  isDeleteItemDialogVisible.value = true
+}
+
+async function deleteTerm() {
+  try {
+    await glossaryService.deleteTerm(termToDelete.value.iid)
+    notifications.showSuccessNotification(t("Term deleted"))
+    termToDelete.value = null
+    isDeleteItemDialogVisible.value = false
+    await fetchGlossaries()
+  } catch (error) {
+    console.error("Error deleting term:", error)
+    notifications.showErrorNotification(t("Could not delete term"))
   }
 }
 

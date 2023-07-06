@@ -1,64 +1,55 @@
 <template>
-  <div>
-    <form @submit.prevent="submitGlossaryForm" name="glossary" id="glossary">
-      <div class="field">
-        <div class="p-float-label">
-          <input
-            v-model="formData.name"
-            id="glossary_title"
-            name="name"
-            type="text"
-            class="p-inputtext p-component p-filled"
-          />
+  <form class="mt-6 flex flex-col gap-2">
+    <BaseInputTextWithVuelidate
+      id="term-name"
+      v-model="formData.name"
+      :vuelidate-property="v$.name"
+      :label="t('Term')"
+    />
+    <BaseTextAreaWithVuelidate
+      id="term-description"
+      v-model="formData.description"
+      :label="t('Description')"
+      :vuelidate-property="v$.description"
+    />
 
-          <label for="glossary_title">
-            <span class="form_required">*</span>
-            Term
-          </label>
-        </div>
-      </div>
-      <div class="field">
-        <div class="p-float-label">
-          <textarea v-model="formData.description" id="description" name="description"></textarea>
-
-          <label for="description">
-            <span class="form_required">*</span>
-            Term definition
-          </label>
-        </div>
-      </div>
-      <div class="field 2">
-        <div class="8">
-          <label for="glossary_SubmitGlossary" class="h-4"> </label>
-
-          <button class="btn btn--primary" name="SubmitGlossary" type="submit" id="glossary_SubmitGlossary">
-            <em class="mdi mdi-plus"></em> Save term
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <span class="form_required">*</span>
-          <small>Required field</small>
-        </div>
-      </div>
-      <input name="_qf__glossary" type="hidden" value="" id="glossary__qf__glossary" />
-      <input name="sec_token" type="hidden" value="1e7d47c276bfdfe308a79e1b71d58089" id="glossary_sec_token" />
-    </form>
-  </div>
+    <LayoutFormButtons>
+      <BaseButton
+        :label="t('Back')"
+        type="black"
+        icon="back"
+        @click="emit('backPressed')"
+      />
+      <BaseButton
+        :label="t('Save term')"
+        type="success"
+        icon="send"
+        @click="submitGlossaryForm"
+      />
+    </LayoutFormButtons>
+  </form>
 </template>
 
 <script setup>
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { ref, onMounted } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
+import { required } from "@vuelidate/validators"
+import useVuelidate from "@vuelidate/core"
+import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelidate.vue"
+import { useNotification } from "../../composables/notification"
+import glossaryService from "../../services/glossaryService"
+import { useCidReq } from "../../composables/cidReq"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const notification = useNotification()
+const { sid, cid } = useCidReq()
 
 const props = defineProps({
   termId: {
@@ -67,82 +58,80 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(["backPressed"])
+
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const resourceLinkList = ref(
   JSON.stringify([
     {
-      sid: route.query.sid,
-      cid: route.query.cid,
+      sid,
+      cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
   ])
 )
 
-const formData = ref({
+const formData = reactive({
   name: "",
   description: "",
 })
+const rules = {
+  name: { required },
+  description: { required },
+}
+const v$ = useVuelidate(rules, formData)
 
 onMounted(() => {
   fetchTerm()
 })
 
-const fetchTerm = () => {
-  if (props.termId) {
-    axios
-      .get(ENTRYPOINT + "glossaries/" + props.termId)
-      .then((response) => {
-        const glossary = response.data
-        formData.value.name = glossary.name
-        formData.value.description = glossary.description
-      })
-      .catch((error) => {
-        console.error("Error fetching link:", error)
-      })
+const fetchTerm = async () => {
+  if (props.termId === null) {
+    return
+  }
+  try {
+    const glossary = await glossaryService.getGlossaryTerm(props.termId)
+    formData.name = glossary.name
+    formData.description = glossary.description
+  } catch (error) {
+    console.error("Error glossary term:", error)
+    notification.showErrorNotification(t("Could not fetch glossary term"))
   }
 }
 
-const submitGlossaryForm = () => {
+const submitGlossaryForm = async () => {
+  v$.value.$touch()
+
+  if (v$.value.$invalid) {
+    return
+  }
+
   const postData = {
-    name: formData.value.name,
-    description: formData.value.description,
+    name: formData.name,
+    description: formData.description,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
     sid: route.query.sid,
     cid: route.query.cid,
   }
 
-  if (props.termId) {
-    const endpoint = `${ENTRYPOINT}glossaries/${props.termId}`
-    axios
-      .put(endpoint, postData)
-      .then((response) => {
-        console.log("Glossary updated:", response.data)
+  try {
+    if (props.linkId) {
+      await glossaryService.updateGlossaryTerm(props.linkId, postData)
+    } else {
+      await glossaryService.createGlossaryTerm(postData)
+    }
 
-        router.push({
-          name: "GlossaryList",
-          query: route.query,
-        })
-      })
-      .catch((error) => {
-        console.error("Error updating Glossary:", error)
-      })
-  } else {
-    const endpoint = `${ENTRYPOINT}glossaries`
-    axios
-      .post(endpoint, postData)
-      .then((response) => {
-        console.log("Glossary created:", response.data)
+    notification.showSuccessNotification(t("Glossary term saved"))
 
-        router.push({
-          name: "GlossaryList",
-          query: route.query,
-        })
-      })
-      .catch((error) => {
-        console.error("Error creating Glossary:", error)
-      })
+    await router.push({
+      name: "GlossaryList",
+      query: route.query,
+    })
+  } catch (error) {
+    console.error("Error updating link:", error)
+    notification.showErrorNotification(t("Could not create glossary term"))
   }
 }
 </script>

@@ -1,22 +1,24 @@
 <template>
-  <div>
-    <div class="mb-4">
-      <button class="btn btn--secondary" @click="goBack">Back</button>
-    </div>
-    <h1 class="text-h3 font-small text-gray-800 mb-4">
-      Add new glossary term
-      <hr />
-    </h1>
-    <GlossaryForm />
-  </div>
+  <LayoutFormGeneric>
+    <template #header>
+      <BaseIcon icon="plus" />
+      {{ t("Add new glossary term") }}
+    </template>
+
+    <GlossaryForm @back-pressed="goBack" />
+  </LayoutFormGeneric>
 </template>
 
 <script setup>
 import GlossaryForm from "../../components/glossary/GlossaryForm.vue"
 import { useRouter, useRoute } from "vue-router"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { useI18n } from "vue-i18n"
+import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const goBack = () => {
   router.push({

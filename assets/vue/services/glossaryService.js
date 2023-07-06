@@ -11,6 +11,31 @@ export default {
   },
 
   /**
+   * @param {String|Number} termId
+   */
+  getGlossaryTerm: async (termId) => {
+    const response = await axios.get(ENTRYPOINT + `glossaries/${termId}`)
+    return response.data
+  },
+
+  /**
+   * @param {Object} data
+   */
+  createGlossaryTerm: async (data) => {
+    const response = await axios.post(ENTRYPOINT + `glossaries`, data)
+    return response.data
+  },
+
+  /**
+   * @param {String|Number} termId
+   * @param {Object} data
+   */
+  updateGlossaryTerm: async (termId, data) => {
+    const response = await axios.put(ENTRYPOINT + `glossaries/${termId}`, data)
+    return response.data
+  },
+
+  /**
    * @param {Object} data
    */
   exportToDocuments: async (data) => {

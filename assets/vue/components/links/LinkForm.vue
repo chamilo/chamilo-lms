@@ -43,7 +43,7 @@
       option-value="value"
     />
 
-    <div class="flex gap-4">
+    <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
         type="black"
@@ -56,7 +56,7 @@
         icon="send"
         @click="submitForm"
       />
-    </div>
+    </LayoutFormButtons>
   </form>
 </template>
 
@@ -75,6 +75,7 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseTextArea from "../basecomponents/BaseTextArea.vue";
 import BaseSelect from "../basecomponents/BaseSelect.vue";
 import {useNotification} from "../../composables/notification";
+import LayoutFormButtons from "../layout/LayoutFormButtons.vue";
 
 const notification = useNotification()
 const {t} = useI18n()

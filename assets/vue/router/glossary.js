@@ -13,22 +13,22 @@ export default {
     {
       name: 'CreateTerm',
       path: 'create',
-      component: () => import('../views/glossary/CreateTerm.vue')
+      component: () => import('../views/glossary/GlossaryTermCreate.vue')
     },
     {
       name: 'UpdateTerm',
       path: 'edit/:id',
-      component: () => import('../views/glossary/UpdateTerm.vue')
+      component: () => import('../views/glossary/GlossaryTermUpdate.vue')
     },
     {
       name: 'ImportGlossary',
       path: '',
-      component: () => import('../views/glossary/ImportGlossary.vue')
+      component: () => import('../views/glossary/GlossaryImport.vue')
     },
     {
       name: 'ExportGlossary',
       path: '',
-      component: () => import('../views/glossary/ExportGlossary.vue')
+      component: () => import('../views/glossary/GlossaryExport.vue')
     },
   ]
 };

@@ -1,5 +1,3 @@
 {
-  "printWidth": 120,
-  "semi": false,
-  "singleAttributePerLine": true
+  "printWidth": 120
 }

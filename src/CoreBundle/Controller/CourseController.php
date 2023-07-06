@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -29,7 +30,6 @@ use CourseManager;
 use Database;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Event;
 use Exercise;
 use ExtraFieldValue;
@@ -247,6 +247,7 @@ class CourseController extends ToolBaseController
             $tools[] = [
                 'ctool' => $item,
                 'tool' => $toolModel,
+                'url' => $this->generateToolUrl($toolModel),
                 'category' => $toolModel->getCategory(),
             ];
         }
@@ -770,5 +771,18 @@ class CourseController extends ToolBaseController
                 )
             );
         }
+    }
+
+    private function generateToolUrl(AbstractTool $tool): string
+    {
+        $link = $tool->getLink();
+        $course = $this->getCourse();
+
+        if (strpos($link, 'nodeId')) {
+            $nodeId = (string) $course->getResourceNode()->getId();
+            $link = str_replace(':nodeId', $nodeId, $link);
+        }
+
+        return $link.'?'.$this->getCourseUrlQuery();
     }
 }

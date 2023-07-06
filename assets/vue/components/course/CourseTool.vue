@@ -1,8 +1,22 @@
 <template>
   <div class="course-tool">
-    <a
+    <router-link
+      v-if="to"
       :aria-labelledby="`course-tool-${tool.ctool.iid}`"
-      :href="goToCourseTool(course, tool)"
+      :to="to"
+      class="course-tool__link"
+      :class="cardCustomClass"
+    >
+      <span
+        :class="tool.tool.icon + ' ' + iconCustomClass"
+        aria-hidden="true"
+        class="course-tool__icon mdi"
+      />
+    </router-link>
+    <a
+      v-else
+      :aria-labelledby="`course-tool-${tool.ctool.iid}`"
+      :href="url"
       class="course-tool__link"
       :class="cardCustomClass"
     >
@@ -13,10 +27,20 @@
       />
     </a>
 
+    <router-link
+      v-if="to"
+      :id="`course-tool-${tool.ctool.iid}`"
+      :class="titleCustomClass"
+      :to="to"
+      class="course-tool__title"
+    >
+      {{ tool.tool.nameToShow }}
+    </router-link>
     <a
+      v-else
       :id="`course-tool-${tool.ctool.iid}`"
       v-t="tool.tool.nameToShow"
-      :href="goToCourseTool(course, tool)"
+      :href="url"
       class="course-tool__title"
       :class="titleCustomClass"
     />
@@ -77,9 +101,15 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  goToCourseTool: {
-    type: Function,
-    required: true
+  url: {
+    type: String,
+    required: false,
+    default: () => null,
+  },
+  to: {
+    type: String,
+    required: false,
+    default: () => null,
   },
   changeVisibility: {
     type: Function,

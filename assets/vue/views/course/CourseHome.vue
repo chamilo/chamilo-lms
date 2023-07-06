@@ -137,7 +137,8 @@
         :key="'tool-' + index.toString()"
         :change-visibility="changeVisibility"
         :course="course"
-        :go-to-course-tool="goToCourseTool"
+        :to="tool.to"
+        :url="tool.url"
         :go-to-setting-course-tool="goToSettingCourseTool"
         :tool="tool"
         :data-tool="tool.ctool.name"
@@ -207,12 +208,28 @@ store.dispatch("session/cleanSession");
 
 const courseItems = ref([]);
 
+const routerTools = [
+  'document',
+  'link',
+  'glossary',
+  'agenda',
+  'student_publication',
+  'course_homepage',
+];
+
 axios
   .get(ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`)
   .then(({ data }) => {
     course.value = data.course;
     session.value = data.session;
-    tools.value = data.tools;
+    tools.value = data.tools.map((element) => {
+      if (routerTools.includes(element.ctool.name)) {
+        element.to = element.url;
+      }
+
+      return element;
+    });
+
     shortcuts.value = data.shortcuts;
 
     let adminTool = tools.value.filter((element) => element.category === "admin");
@@ -220,7 +237,7 @@ axios
     if (Array.isArray(adminTool)) {
       courseItems.value = adminTool.map((tool) => ({
         label: tool.tool.nameToShow,
-        url: goToCourseTool(course, tool),
+        url: tool.url,
       }));
     }
 
@@ -296,10 +313,6 @@ function updateIntro(intro) {
 
 function goToSettingCourseTool(course, tool) {
   return "/course/" + courseId + "/settings/" + tool.tool.name + "?sid=" + sessionId;
-}
-
-function goToCourseTool(course, tool) {
-  return "/course/" + courseId + "/tool/" + tool.tool.name + "?sid=" + sessionId;
 }
 
 function goToShortCut(shortcut) {

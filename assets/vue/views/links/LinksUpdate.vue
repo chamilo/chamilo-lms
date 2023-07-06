@@ -1,23 +1,26 @@
 <template>
-  <div>
-    <h2 class="text-h3 font-small text-gray-800 mb-4">
-      {{ t('Upate link') }}
-    </h2>
-    <hr class="m-0 mb-4"/>
+  <LayoutFormGeneric>
+    <template #header>
+      <BaseIcon icon="link-add" />
+      {{ t("Update link") }}
+    </template>
+
     <LinkForm
       :link-id="linkId"
       @back-pressed="goBack"
     />
-  </div>
+  </LayoutFormGeneric>
 </template>
 
 <script setup>
 import LinkForm from "../../components/links/LinkForm.vue"
-import {useRoute, useRouter} from "vue-router"
-import {computed} from "vue";
-import {useI18n} from "vue-i18n"
+import { useRoute, useRouter } from "vue-router"
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
+import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
-const {t} = useI18n()
+const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 

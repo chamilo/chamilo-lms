@@ -96,13 +96,15 @@ class H5pPackageTools
      * @param object $h5pJson The parsed H5P JSON object.
      * @param Course $course The course entity related to the package.
      * @param Session|null $session The session entity related to the package.
+     * @param array|null $values The advance options in upload form.
      * @return void
      */
     public static function storeH5pPackage(
         string $packagePath,
         object $h5pJson,
         Course $course,
-        Session $session = null
+        Session $session = null,
+        array $values = null
     ) {
         $entityManager = Database::getManager();
         // Go back 2 directories
@@ -115,6 +117,9 @@ class H5pPackageTools
         $h5pImport = new H5pImport();
         $h5pImport->setName($h5pJson->title);
         $h5pImport->setPath($packagePath);
+        if ($values) {
+            $h5pImport->setDescription($values['description']);
+        }
         $h5pImport->setRelativePath($relativePath);
         $h5pImport->setCourse($course);
         $h5pImport->setSession($session);
@@ -203,6 +208,9 @@ class H5pPackageTools
     public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
 
+        $saveFreqState = api_get_course_plugin_setting('h5pimport', 'h5p_save_content_state');
+        $saveFreq = api_get_course_plugin_setting('h5pimport', 'h5p_save_freq');
+
         $settings = [
             'baseUrl' => api_get_path(WEB_PATH),
             'url' => $h5pImport->getRelativePath(),
@@ -211,7 +219,7 @@ class H5pPackageTools
                 'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('result'),
                 'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content')
             ],
-            'saveFreq' => api_get_course_plugin_setting('h5pimport', 'h5p_save_freq'),
+            'saveFreq' => $saveFreqState ? $saveFreq : false,
             'l10n' => array(
                 'H5P' => $h5pCore->getLocalization()
             ),

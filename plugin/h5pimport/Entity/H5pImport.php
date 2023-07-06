@@ -49,11 +49,11 @@ class H5pImport
     private ?Session $session;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="name", type="text", nullable=true)
      */
-    private string $name;
+    private ?string $name;
 
     /**
      * @var string
@@ -61,6 +61,13 @@ class H5pImport
      * @ORM\Column(name="path", type="text", nullable=false)
      */
     protected string $path;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private ?string $description;
 
     /**
      * @var string
@@ -192,6 +199,24 @@ class H5pImport
     {
         $this->path = $path;
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return H5pImport
+     */
+    public function setDescription(?string $description): H5pImport
+    {
+        $this->description = $description;
         return $this;
     }
 

@@ -57,7 +57,11 @@ switch ($action) {
             $maxFileSize,
             'client'
         );
-
+        $form->addButtonAdvancedSettings('advanced_params');
+        $form->addHtml('<div id="advanced_params_options" style="display:none">');
+        $form->addTextarea('description', get_lang('Description'));
+        $form->applyFilter('description', 'trim');
+        $form->addHtml('</div>');
         $form->addButtonUpdate(get_lang('Add'));
         $form->addHidden('action', 'add');
 
@@ -79,7 +83,7 @@ switch ($action) {
 
                     if (H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
 
-                        H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session);
+                        H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session, $values);
 
                         Display::addFlash(
                             Display::return_message(get_lang('Added'), 'success')
@@ -214,6 +218,7 @@ switch ($action) {
         $h5pImports = $h5pRepo->findBy(['course' => $course, 'session' => $session]);
 
         $tableData = [];
+        /** @var H5pImport $h5pImport */
         foreach ($h5pImports as $h5pImport) {
             $h5pImportsResults = $h5pResultsRepo->count(
                 [
@@ -228,7 +233,7 @@ switch ($action) {
                     $h5pImport->getName(),
                     $plugin->getViewUrl($h5pImport)
                 ),
-                $h5pImport->getPath(),
+                $h5pImport->getDescription(),
                 $h5pImportsResults,
             ];
 
@@ -259,7 +264,7 @@ switch ($action) {
 
         $table = new SortableTableFromArray($tableData, 0);
         $table->set_header(0, get_lang('Title'));
-        $table->set_header(1, get_lang('Path'));
+        $table->set_header(1, get_lang('Description'));
         $table->set_header(2, $plugin->get_lang('attempts'));
 
         if ($isAllowedToEdit) {

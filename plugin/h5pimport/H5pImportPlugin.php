@@ -28,7 +28,8 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
-            'h5p_save_freq' => 'text',
+            'h5p_save_content_state' => 'boolean',
+            'h5p_save_content_freq' => 'text',
         ];
 
         parent::__construct(
@@ -94,7 +95,8 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
-            'h5p_save_freq' => 'text',
+            'h5p_save_content_state' => 'boolean',
+            'h5p_save_content_freq' => 'text',
         ];
 
         $em = Database::getManager();
@@ -138,15 +140,10 @@ class H5pImportPlugin extends Plugin
      */
     public function performActionsAfterConfigure(): H5pImportPlugin
     {
-        $em = Database::getManager();
         $this->deleteCourseToolLinks();
 
         if ('true' === $this->get('tool_enable')) {
-            $courses = $em->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')->getResult();
-
-            foreach ($courses as $course) {
-                $this->createLinkToCourseTool($this->getToolTitle(), $course['id']);
-            }
+            $this->addCourseTools();
         }
 
         return $this;

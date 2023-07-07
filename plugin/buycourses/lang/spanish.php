@@ -318,3 +318,4 @@ $strings['SubscriptionAlreadyExists'] = "La suscripción ya existe";
 $strings['SubscriptionPeriodDuration'] = "Duración de suscripción (en días)";
 $strings['Product'] = "Producto";
 $strings['YouProductIsActivatedYouCanNowAccessIt'] = "Tu producto esta activado y puedes ahora acceder a este.";
+$strings['hide_shopping_cart_from_course_catalogue'] = "Esconder el carito de compra del catalogo de curso y dejar el boton de subscripcion a curso";

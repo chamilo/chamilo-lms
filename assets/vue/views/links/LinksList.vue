@@ -22,12 +22,8 @@
         type="black"
         @click="exportToPDF"
       />
-      <BaseButton
-        :label="t('Switch to student view')"
-        icon="eye-on"
+      <StudentViewButton
         class="mb-2 mr-2"
-        type="black"
-        @click="toggleTeacherStudent"
       />
     </ButtonToolbar>
 
@@ -183,6 +179,7 @@ import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
 import linkService from "../../services/linkService"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import Skeleton from "primevue/skeleton"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const store = useStore()
 const route = useRoute()

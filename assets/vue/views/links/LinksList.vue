@@ -31,6 +31,19 @@
       />
     </ButtonToolbar>
 
+    <LinkCategoryCard v-if="isLoading">
+      <template #header>
+        <Skeleton class="h-6 w-48" />
+      </template>
+      <div class="flex flex-col gap-4">
+        <Skeleton class="ml-2 h-6 w-52" />
+        <Skeleton class="ml-2 h-6 w-64" />
+        <Skeleton class="ml-2 h-6 w-60" />
+        <Skeleton class="ml-2 h-6 w-52" />
+        <Skeleton class="ml-2 h-6 w-60" />
+      </div>
+    </LinkCategoryCard>
+
     <div v-if="!linksWithoutCategory && !categories">
       <!-- Render the image and create button -->
       <EmptyState
@@ -67,7 +80,7 @@
               @toggle="toggleVisibility"
               @move-up="moveUp(link.iid, link.position)"
               @move-down="moveDown(link.iid, link.position)"
-              @delete="deleteLink(link.iid)"
+              @delete="confirmDeleteLink(link)"
             />
           </li>
         </ul>
@@ -104,10 +117,10 @@
               />
               <BaseButton
                 :label="t('Delete')"
-                type="black"
+                type="danger"
                 icon="delete"
                 size="small"
-                @click="deleteCategory(category)"
+                @click="confirmDeleteCategory(category)"
               />
             </div>
           </div>
@@ -126,7 +139,7 @@
               @toggle="toggleVisibility"
               @move-up="moveUp(link.iid, link.position)"
               @move-down="moveDown(link.iid, link.position)"
-              @delete="deleteLink(link.iid)"
+              @delete="confirmDeleteLink(link)"
             />
           </li>
         </ul>
@@ -135,6 +148,23 @@
         </p>
       </LinkCategoryCard>
     </div>
+
+    <BaseDialogDelete
+      v-model:is-visible="isDeleteLinkDialogVisible"
+      :item-to-delete="linkToDeleteString"
+      @confirm-clicked="deleteLink"
+      @cancel-clicked="isDeleteLinkDialogVisible = false"
+    />
+    <BaseDialogDelete
+      v-model:is-visible="isDeleteCategoryDialogVisible"
+      @confirm-clicked="deleteCategory"
+      @cancel-clicked="isDeleteCategoryDialogVisible = false"
+    >
+      <div v-if="categoryToDelete">
+        <p class="mb-2 font-semibold">{{ categoryToDelete.info.name }}</p>
+        <p>{{ t("With links") }}: {{ categoryToDelete.links.map((l) => l.title).join(", ") }}</p>
+      </div>
+    </BaseDialogDelete>
   </div>
 </template>
 
@@ -151,6 +181,8 @@ import LinkItem from "../../components/links/LinkItem.vue"
 import { useNotification } from "../../composables/notification"
 import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
 import linkService from "../../services/linkService"
+import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
+import Skeleton from "primevue/skeleton"
 
 const store = useStore()
 const route = useRoute()
@@ -169,6 +201,20 @@ const categories = ref([])
 const selectedLink = ref(null)
 const selectedCategory = ref(null)
 
+const isDeleteLinkDialogVisible = ref(false)
+const linkToDelete = ref(null)
+const linkToDeleteString = computed(() => {
+  if (linkToDelete.value === null) {
+    return ""
+  }
+  return linkToDelete.value.title
+})
+
+const isDeleteCategoryDialogVisible = ref(false)
+const categoryToDelete = ref(null)
+
+const isLoading = ref(true)
+
 onMounted(() => {
   linksWithoutCategory.value = []
   categories.value = []
@@ -184,11 +230,18 @@ function editLink(link) {
   })
 }
 
-async function deleteLink(id) {
+function confirmDeleteLink(link) {
+  linkToDelete.value = link
+  isDeleteLinkDialogVisible.value = true
+}
+
+async function deleteLink() {
   try {
-    await linkService.deleteLink(id)
+    await linkService.deleteLink(linkToDelete.value.id)
+    isDeleteLinkDialogVisible.value = true
+    linkToDelete.value = null
     notifications.showSuccessNotification(t("Link deleted"))
-    fetchLinks()
+    await fetchLinks()
   } catch (error) {
     console.error("Error deleting link:", error)
     notifications.showErrorNotification(t("Could not delete link"))
@@ -204,7 +257,7 @@ async function toggleVisibility(link) {
     const makeVisible = !link.visible
     await linkService.toggleLinkVisibility(link.iid, makeVisible)
     notifications.showSuccessNotification(t("Link visibility updated"))
-    fetchLinks()
+    await fetchLinks()
     linksWithoutCategory.value.forEach((item) => {
       if (item.iid === link.iid) {
         item.linkVisible = !item.linkVisible
@@ -224,7 +277,7 @@ async function moveUp(id, position) {
   try {
     await linkService.moveLink(id, newPosition)
     notifications.showSuccessNotification(t("Link moved up"))
-    fetchLinks()
+    await fetchLinks()
   } catch (error) {
     console.error("Error moving link up:", error)
     notifications.showErrorNotification(t("Could not moved link up"))
@@ -236,7 +289,7 @@ async function moveDown(id, position) {
   try {
     await linkService.moveLink(id, newPosition)
     notifications.showSuccessNotification(t("Link moved down"))
-    fetchLinks()
+    await fetchLinks()
   } catch (error) {
     console.error("Error moving link down:", error)
     notifications.showErrorNotification(t("Could not moved link down"))
@@ -266,11 +319,18 @@ function editCategory(category) {
   })
 }
 
-async function deleteCategory(category) {
+function confirmDeleteCategory(category) {
+  categoryToDelete.value = category
+  isDeleteCategoryDialogVisible.value = true
+}
+
+async function deleteCategory() {
   try {
-    await linkService.deleteCategory(category.info.id)
+    await linkService.deleteCategory(categoryToDelete.value.info.id)
+    categoryToDelete.value = null
+    isDeleteCategoryDialogVisible.value = false
     notifications.showSuccessNotification(t("Category deleted"))
-    fetchLinks()
+    await fetchLinks()
   } catch (error) {
     console.error("Error deleting category:", error)
     notifications.showErrorNotification(t("Could not delete category"))
@@ -298,6 +358,7 @@ function toggleTeacherStudent() {
 }
 
 async function fetchLinks() {
+  isLoading.value = true
   const params = {
     "resourceNode.parent": route.query.parent || null,
     cid: route.query.cid || null,
@@ -308,7 +369,9 @@ async function fetchLinks() {
     const data = await linkService.getLinks(params)
     linksWithoutCategory.value = data.linksWithoutCategory
     categories.value = data.categories
+    isLoading.value = false
   } catch (error) {
+    isLoading.value = false
     console.error("Error fetching links:", error)
     notifications.showErrorNotification(t("Could not retrieve links"))
   }

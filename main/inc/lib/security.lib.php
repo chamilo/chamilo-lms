@@ -632,6 +632,8 @@ class Security
      */
     public static function sanitizeExecParam(string $param): string
     {
+        $param = preg_replace('/[`;&|]/', '', $param);
+
         return escapeshellarg($param);
     }
 

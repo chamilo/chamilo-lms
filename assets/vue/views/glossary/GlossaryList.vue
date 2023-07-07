@@ -36,9 +36,7 @@
         type="black"
         @click="exportToDocuments"
       />
-      <StudentViewButton
-        class="mb-2 mr-2"
-      />
+      <StudentViewButton class="mb-2 mr-2" />
     </ButtonToolbar>
 
     <BaseInputText
@@ -105,7 +103,7 @@ import { useCidReq } from "../../composables/cidReq"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue";
+import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const store = useStore()
 const route = useRoute()
@@ -137,7 +135,7 @@ const isDeleteItemDialogVisible = ref(false)
 const termToDelete = ref(null)
 const termToDeleteString = computed(() => {
   if (termToDelete.value === null) {
-    return ''
+    return ""
   }
   return termToDelete.value.name
 })

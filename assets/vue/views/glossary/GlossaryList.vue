@@ -43,9 +43,26 @@
       v-model="searchTerm"
       class="mb-4"
       :label="t('Search term...')"
+      @update:model-value="debouncedSearch"
     />
 
-    <div v-if="glossaries.length === 0 && searchTerm === ''">
+    <div v-if="isLoading">
+      <BaseCard
+        v-for="i in 4"
+        :key="i"
+        class="mb-4 bg-white"
+        plain
+      >
+        <template #header>
+          <div class="-mb-2 bg-gray-15 px-4 py-2">
+            <Skeleton class="my-2 h-6 w-52" />
+          </div>
+        </template>
+        <Skeleton class="h-6 w-64" />
+      </BaseCard>
+    </div>
+
+    <div v-if="glossaries.length === 0 && !searchBoxTouched && !isLoading">
       <!-- Render the image and create button -->
       <EmptyState
         icon="glossary"
@@ -66,6 +83,7 @@
         v-if="view === 'list'"
         :glossaries="glossaries"
         :search-term="searchTerm"
+        :is-loading="isLoading"
         @edit="editTerm($event)"
         @delete="confirmDeleteTerm($event)"
       />
@@ -91,7 +109,7 @@
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
@@ -104,6 +122,9 @@ import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
+import { debounce } from "lodash"
+import BaseCard from "../../components/basecomponents/BaseCard.vue"
+import Skeleton from "primevue/skeleton"
 
 const store = useStore()
 const route = useRoute()
@@ -112,7 +133,10 @@ const notifications = useNotification()
 
 const { t } = useI18n()
 
+const isLoading = ref(true)
+const isSearchLoading = ref(false)
 const searchTerm = ref("")
+const searchBoxTouched = ref(false)
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const resourceLinkList = ref(
@@ -140,13 +164,16 @@ const termToDeleteString = computed(() => {
   return termToDelete.value.name
 })
 
-watch(searchTerm, () => {
+onMounted(() => {
+  isLoading.value = true
   fetchGlossaries()
 })
 
-onMounted(() => {
+const debouncedSearch = debounce(() => {
+  searchBoxTouched.value = true
+  isSearchLoading.value = true
   fetchGlossaries()
-})
+}, 500)
 
 function addNewTerm() {
   router.push({
@@ -230,6 +257,9 @@ async function fetchGlossaries() {
   } catch (error) {
     console.error("Error fetching links:", error)
     notifications.showErrorNotification(t("Could not fetch glossary terms"))
+  } finally {
+    isLoading.value = false
+    isSearchLoading.value = false
   }
 }
 </script>

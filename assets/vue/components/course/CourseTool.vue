@@ -4,7 +4,7 @@
       v-if="to"
       :aria-labelledby="`course-tool-${tool.ctool.iid}`"
       :to="to"
-      class="course-tool__link"
+      class="course-tool__link hover:primary-gradient"
       :class="cardCustomClass"
     >
       <span
@@ -127,12 +127,12 @@ const props = defineProps({
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 const cardCustomClass = computed(() => {
   if (!isVisible.value) {
-    return "bg-primary-bgdisabled border-primary-borderdisabled shadow-none "
+    return "bg-primary-bgdisabled hover:bg-gray-50/25 border-primary-borderdisabled shadow-none "
   }
   if (isSorting.value) {
-    return "border-2 border-dashed border-primary "
+    return "border-2 border-dashed border-primary hover:bg-primary-gradient/10 "
   }
-  return ""
+  return "hover:bg-primary-gradient/10 "
 })
 const iconCustomClass = computed(() => {
   if (!isVisible.value) {

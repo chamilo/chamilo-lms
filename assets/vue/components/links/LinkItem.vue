@@ -1,9 +1,12 @@
 <template>
-  <div class="flex flex-col xl:flex-row xl:justify-between pb-4">
+  <div class="flex flex-col pb-4 xl:flex-row xl:justify-between">
     <div class="pb-2">
       <h6>
         <a :href="link.url">
-          <BaseIcon icon="link-external" size="small"/>
+          <BaseIcon
+            icon="link-external"
+            size="small"
+          />
           {{ link.title }}
         </a>
       </h6>
@@ -25,7 +28,7 @@
       />
       <BaseButton
         type="black"
-        :icon="link.linkVisible ? 'eye-on' : 'eye-off'"
+        :icon="isVisible(link.linkVisible) ? 'eye-on' : 'eye-off'"
         size="small"
         :label="t('Toggle visibility')"
         @click="emit('toggle', link)"
@@ -57,24 +60,18 @@
 
 <script setup>
 import BaseButton from "../basecomponents/BaseButton.vue"
-import {useI18n} from "vue-i18n"
-import BaseIcon from "../basecomponents/BaseIcon.vue";
+import { useI18n } from "vue-i18n"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
+import { isVisible, VISIBLE } from "./linkVisibility"
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 defineProps({
   link: {
     type: Object,
     required: true,
-  }
+  },
 })
 
-const emit = defineEmits([
-  'check',
-  'edit',
-  'toggle',
-  'moveUp',
-  'moveDown',
-  'delete',
-])
+const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 </script>

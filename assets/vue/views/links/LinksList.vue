@@ -22,9 +22,7 @@
         type="black"
         @click="exportToPDF"
       />
-      <StudentViewButton
-        class="mb-2 mr-2"
-      />
+      <StudentViewButton class="mb-2 mr-2" />
     </ButtonToolbar>
 
     <LinkCategoryCard v-if="isLoading">
@@ -56,7 +54,10 @@
       </EmptyState>
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div
+      v-if="!isLoading"
+      class="flex flex-col gap-4"
+    >
       <!-- Render the list of links -->
       <LinkCategoryCard v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
         <template #header>
@@ -107,7 +108,7 @@
               <BaseButton
                 :label="t('Change visibility')"
                 type="black"
-                :icon="category.info.visible ? 'eye-on' : 'eye-off'"
+                :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
                 size="small"
                 @click="toggleCategoryVisibility(category)"
               />
@@ -180,6 +181,7 @@ import linkService from "../../services/linkService"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import Skeleton from "primevue/skeleton"
 import StudentViewButton from "../../components/StudentViewButton.vue"
+import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 
 const store = useStore()
 const route = useRoute()
@@ -193,7 +195,7 @@ const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const linksWithoutCategory = ref([])
-const categories = ref([])
+const categories = ref({})
 
 const selectedLink = ref(null)
 const selectedCategory = ref(null)
@@ -214,7 +216,7 @@ const isLoading = ref(true)
 
 onMounted(() => {
   linksWithoutCategory.value = []
-  categories.value = []
+  categories.value = {}
   fetchLinks()
 })
 
@@ -251,15 +253,17 @@ function checkLink(id, url) {
 
 async function toggleVisibility(link) {
   try {
-    const makeVisible = !link.visible
-    await linkService.toggleLinkVisibility(link.iid, makeVisible)
+    const visibility = toggleVisibilityProperty(!link.linkVisible)
+    let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility))
     notifications.showSuccessNotification(t("Link visibility updated"))
-    await fetchLinks()
-    linksWithoutCategory.value.forEach((item) => {
-      if (item.iid === link.iid) {
-        item.linkVisible = !item.linkVisible
-      }
-    })
+    linksWithoutCategory.value
+      .filter((l) => l.iid === link.iid)
+      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
+    Object.values(categories.value)
+      .map((c) => c.links)
+      .flat()
+      .filter((l) => l.iid === link.iid)
+      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
   } catch (error) {
     console.error("Error deleting link:", error)
     notifications.showErrorNotification(t("Could not change visibility of link"))
@@ -335,10 +339,10 @@ async function deleteCategory() {
 }
 
 async function toggleCategoryVisibility(category) {
-  const makeVisible = !category.info.visible
+  const visibility = toggleVisibilityProperty(category.info.visible)
   try {
-    const updatedLinkCategory = await linkService.toggleCategoryVisibility(category.info.id, makeVisible)
-    category.info.visible = updatedLinkCategory.linkCategoryVisible
+    const updatedLinkCategory = await linkService.toggleCategoryVisibility(category.info.id, isVisible(visibility))
+    category.info.visible = visibilityFromBoolean(updatedLinkCategory.linkCategoryVisible)
     notifications.showSuccessNotification(t("Visibility of category changed"))
   } catch (error) {
     console.error("Error updating link visibility:", error)
@@ -366,11 +370,11 @@ async function fetchLinks() {
     const data = await linkService.getLinks(params)
     linksWithoutCategory.value = data.linksWithoutCategory
     categories.value = data.categories
-    isLoading.value = false
   } catch (error) {
-    isLoading.value = false
     console.error("Error fetching links:", error)
     notifications.showErrorNotification(t("Could not retrieve links"))
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

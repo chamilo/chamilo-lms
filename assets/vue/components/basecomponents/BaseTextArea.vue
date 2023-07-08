@@ -9,11 +9,23 @@
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
+      <label
+        v-t="label"
+        :class="{ 'p-error': isInvalid }"
+        :for="id"
+      />
     </div>
+    <slot name="errors">
+      <small
+        v-if="isInvalid"
+        v-t="errorText"
+        class="p-error"
+      />
+    </slot>
   </div>
 </template>
-<script setup lang="ts">
+
+<script setup>
 import Textarea from "primevue/textarea"
 
 const props = defineProps({
@@ -41,7 +53,7 @@ const props = defineProps({
     required: false,
     default: false,
   },
-});
+})
 
 defineEmits(["update:modelValue"])
 </script>

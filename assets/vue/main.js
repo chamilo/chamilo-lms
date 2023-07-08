@@ -211,7 +211,6 @@ const options = {
 const vuetify = createVuetify(options);
 
 import DashboardLayout from './components/layout/DashboardLayout.vue'
-import EmptyLayout from './components/layout/EmptyLayout.vue'
 
 // Vue setup.
 const app = createApp(App);
@@ -256,7 +255,6 @@ app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
 app.component('Toolbar', Toolbar);
 app.component('DashboardLayout', DashboardLayout);
-app.component('EmptyLayout', EmptyLayout);
 app.component('TinyEditor', Editor);
 
 app.config.globalProperties.axios = axios;

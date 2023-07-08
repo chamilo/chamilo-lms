@@ -1,95 +1,76 @@
 <template>
-  <form @submit.prevent="submitForm" class="export-form">
-    <div class="form-field">
-      <label for="export-format">Export Format:</label>
-      <select id="export-format" v-model="selectedFormat">
-        <option value="csv">CSV</option>
-        <option value="xls">Excel</option>
-        <option value="pdf">PDF</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn--primary">Export</button>
+  <form>
+    <BaseSelect
+      id="format"
+      v-model="selectedFormat"
+      :options="formats"
+      :label="t('Export format')"
+      option-label="label"
+      option-value="value"
+    />
+
+    <LayoutFormButtons>
+      <BaseButton
+        :label="t('Back')"
+        type="black"
+        icon="back"
+        @click="emit('backPressed')"
+      />
+      <BaseButton
+        :label="t('Export')"
+        type="secondary"
+        icon="file-export"
+        @click="submitForm"
+      />
+    </LayoutFormButtons>
   </form>
 </template>
 
+<script setup>
+import { useI18n } from "vue-i18n"
+import { ref } from "vue"
+import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
+import { useCidReq } from "../../composables/cidReq"
+import { useNotification } from "../../composables/notification"
+import glossaryService from "../../services/glossaryService"
 
-<script>
-import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
+const { t } = useI18n()
+const { sid, cid } = useCidReq()
+const notification = useNotification()
 
-export default {
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const { t } = useI18n();
+const emit = defineEmits(["backPressed"])
 
-    const selectedFormat = ref('csv');
-    const parentResourceNodeId = ref(Number(route.params.node));
-    const resourceLinkList = ref(
-      JSON.stringify([
-        {
-          sid: route.query.sid,
-          cid: route.query.cid,
-          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-        },
-      ])
-    );
+const formats = [
+  { label: "CSV", value: "csv" },
+  { label: "Excel", value: "xls" },
+  { label: "PDF", value: "pdf" },
+]
+const selectedFormat = ref("csv")
 
-    const submitForm = () => {
-      const format = selectedFormat.value;
+const submitForm = async () => {
+  const format = selectedFormat.value
 
-      const formData = new FormData();
-      formData.append('format', format);
-      formData.append("sid", route.query.sid);
-      formData.append("cid", route.query.cid);
+  const formData = new FormData()
+  formData.append("format", format)
+  formData.append("sid", sid)
+  formData.append("cid", cid)
 
-      const endpoint = `${ENTRYPOINT}glossaries/export`;
-      axios.post(endpoint, formData, { responseType: 'blob' })
-        .then(response => {
-          const fileUrl = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = fileUrl;
-          link.setAttribute('download', `glossary.${format}`);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        })
-        .catch(error => {
-          console.error('Error exporting glossary:', error);
-        });
-    };
+  try {
+    const data = await glossaryService.export(formData)
+    const fileUrl = window.URL.createObjectURL(new Blob([data]))
+    const link = document.createElement("a")
+    link.href = fileUrl
+    link.setAttribute("download", `glossary.${format}`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 
-    return {
-      selectedFormat,
-      submitForm,
-    };
-  },
-};
+    notification.showSuccessNotification(t("Glossary exported"))
+  } catch (error) {
+    console.error("Error exporting glossary:", error)
+    notification.showErrorNotification(t("Could not export glossary"))
+  }
+}
 </script>
-
-<style scoped>
-.export-form {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.form-field {
-  margin-bottom: 10px;
-}
-
-label {
-  font-weight: bold;
-}
-
-.btn--primary {
-  background-color: #007bff;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-</style>

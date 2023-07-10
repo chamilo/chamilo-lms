@@ -8,13 +8,17 @@
     @cancel-clicked="emit('cancelClicked', $event)"
     @update:is-visible="emit('update:isVisible', $event)"
   >
-    <div class="confirmation-content">
-      <BaseIcon
-        class="mr-2"
-        icon="alert"
-        size="big"
-      />
-      {{ t("Are you sure you want to delete") }}: {{ itemToDelete }}
+    <div class="my-2 flex flex-col gap-4">
+      <div class="flex gap-2">
+        <BaseIcon
+          icon="alert"
+          size="big"
+        />
+        <p>{{ t("Are you sure you want to delete this item?") }}</p>
+      </div>
+      <div class="mx-2">
+        <slot>{{ itemToDelete }}</slot>
+      </div>
     </div>
   </BaseDialogConfirmCancel>
 </template>
@@ -33,7 +37,7 @@ defineProps({
   },
   itemToDelete: {
     type: String,
-    required: true,
+    default: '',
   },
 })
 

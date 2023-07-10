@@ -65,6 +65,7 @@
     "jsplumb": "^2.15.6",
     "linkifyjs": "3.0.5",
     "litepicker": "^2.0.12",
+    "lodash": "^4.17.21",
     "luxon": "^2.5.2",
     "mathjax": "^2.7.9",
     "mediaelement": "^5.1.1",

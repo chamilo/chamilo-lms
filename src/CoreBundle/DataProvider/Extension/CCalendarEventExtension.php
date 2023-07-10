@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Security;
 
 final class CCalendarEventExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
+    use CourseLinkExtensionTrait;
+
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
@@ -80,9 +82,9 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         ;
 
         $request = $this->requestStack->getCurrentRequest();
-        $courseId = $request->query->get('cid');
-        $sessionId = $request->query->get('sid');
-        $groupId = $request->query->get('gid');
+        $courseId = $request->query->getInt('cid');
+        $sessionId = $request->query->getInt('sid');
+        $groupId = $request->query->getInt('gid');
 
         $startDate = $request->query->get('startDate');
         $endDate = $request->query->get('endDate');
@@ -106,28 +108,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                 ->setParameter('user', $user)
             ;
         } else {
-            $qb
-                ->andWhere('links.course = :course')
-                ->setParameter('course', $courseId)
-            ;
-
-            if (empty($sessionId)) {
-                $qb->andWhere('links.session IS NULL');
-            } else {
-                $qb
-                    ->andWhere('links.session = :session')
-                    ->setParameter('session', $sessionId)
-                ;
-            }
-
-            if (empty($groupId)) {
-                $qb->andWhere('links.group IS NULL');
-            } else {
-                $qb
-                    ->andWhere('links.group = :group')
-                    ->setParameter('group', $groupId)
-                ;
-            }
+            $this->addCourseLinkCondition($qb, $courseId, $sessionId, $groupId);
         }
 
         //$qb->leftJoin("$alias.receivers", 'r');

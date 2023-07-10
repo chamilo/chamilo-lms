@@ -20,6 +20,8 @@ use Symfony\Component\Security\Core\Security;
 
 final class CToolIntroExtension implements QueryCollectionExtensionInterface
 {
+    use CourseLinkExtensionTrait;
+
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
@@ -33,18 +35,9 @@ final class CToolIntroExtension implements QueryCollectionExtensionInterface
         Operation $operation = null,
         array $context = []
     ): void {
-        $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
-    {
         if (CToolIntro::class !== $resourceClass) {
             return;
         }
-
-        /*if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }*/
 
         if (null === $user = $this->security->getUser()) {
             throw new AccessDeniedException('Access Denied.');
@@ -52,55 +45,10 @@ final class CToolIntroExtension implements QueryCollectionExtensionInterface
 
         $request = $this->requestStack->getCurrentRequest();
 
-        $courseId = $request->query->get('cid');
-        $sessionId = $request->query->get('sid');
-        $groupId = $request->query->get('gid');
+        $courseId = $request->query->getInt('cid');
+        $sessionId = $request->query->getInt('sid');
+        $groupId = $request->query->getInt('gid');
 
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-
-        $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-        ;
-
-        // Do not show deleted resources.
-        $queryBuilder
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
-        ;
-
-        $allowDraft =
-            $this->security->isGranted('ROLE_ADMIN') ||
-            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-
-        if (!$allowDraft) {
-            $queryBuilder
-                ->andWhere('links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-            ;
-        }
-
-        $queryBuilder
-            ->andWhere('links.course = :course')
-            ->setParameter('course', $courseId)
-        ;
-
-        if (empty($sessionId)) {
-            $queryBuilder->andWhere('links.session IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId)
-            ;
-        }
-
-        if (empty($groupId)) {
-            $queryBuilder->andWhere('links.group IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.group = :group')
-                ->setParameter('group', $groupId)
-            ;
-        }
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
     }
 }

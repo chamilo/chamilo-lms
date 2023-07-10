@@ -6,6 +6,11 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -23,6 +28,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_student_publication')]
 #[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
 #[ApiResource(
+    operations: [
+        new Put(security: "is_granted('EDIT', object.resourceNode)"),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new GetCollection(),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Post(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"
+        ),
+    ],
     normalizationContext: [
         'groups' => ['student_publication:read'],
     ],

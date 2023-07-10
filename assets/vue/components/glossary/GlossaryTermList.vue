@@ -40,7 +40,7 @@
         </div>
       </BaseCard>
     </li>
-    <li v-if="glossaries.length == 0">
+    <li v-if="!isLoading && glossaries.length === 0">
       {{ t("There is no terms that matches the search: {searchTerm}", { searchTerm: searchTerm }) }}
     </li>
   </ul>
@@ -60,6 +60,10 @@ defineProps({
   },
   searchTerm: {
     type: String,
+    required: true,
+  },
+  isLoading: {
+    type: Boolean,
     required: true,
   },
 })

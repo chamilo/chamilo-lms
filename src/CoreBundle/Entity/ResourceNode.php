@@ -36,6 +36,7 @@ use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
+
 /**
  * Base entity for all resources.
  */
@@ -72,21 +73,26 @@ class ResourceNode implements Stringable
 {
     use TimestampableTypedEntity;
     use TimestampableAgoTrait;
+
     public const PATH_SEPARATOR = '/';
+
     #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read'])]
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
+
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
     #[Gedmo\TreePathSource]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
     #[Assert\NotBlank]
     #[Gedmo\Slug(fields: ['title'])]
     #[ORM\Column(name: 'slug', type: 'string', length: 255, nullable: false)]
     protected string $slug;
+
     #[Groups(['resource_node:read'])]
     #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes')]
@@ -107,35 +113,42 @@ class ResourceNode implements Stringable
     /**
      * ResourceFile available file for this node.
      */
+
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
     #[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceFile $resourceFile = null;
+
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
+
     #[Groups(['resource_node:read'])]
     #[MaxDepth(1)]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
-    #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[Gedmo\TreeParent]
     #[Gedmo\SortableGroup]
     protected ?ResourceNode $parent = null;
+
     /**
-     * @var Collection|ResourceNode[]
+     * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
+
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'level', type: 'integer', nullable: true)]
     protected ?int $level = null;
+
     #[Groups(['resource_node:read', 'document:read'])]
-    #[Gedmo\TreePath(appendId: true, separator: '/')]
+    #[Gedmo\TreePath(separator: '/', appendId: true)]
     #[ORM\Column(name: 'path', type: 'text', nullable: true)]
     protected ?string $path = null;
+
     /**
      * Shortcut to access Course resource from ResourceNode.
      * Groups({"resource_node:read", "course:read"}).
@@ -143,30 +156,39 @@ class ResourceNode implements Stringable
      * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
      */
     //protected $illustration;
+
     /**
-     * @var Collection|ResourceComment[]
+     * @var Collection<int, ResourceComment>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceComment::class, mappedBy: 'resourceNode', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceComment::class, cascade: ['persist', 'remove'])]
     protected Collection $comments;
+
     #[Groups(['resource_node:read', 'document:read'])]
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime')]
     protected DateTime $createdAt;
+
     #[Groups(['resource_node:read', 'document:read'])]
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime')]
     protected DateTime $updatedAt;
+
     #[Groups(['resource_node:read', 'document:read'])]
     protected bool $fileEditableText;
+
     #[Groups(['resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'boolean')]
     protected bool $public;
+
     protected ?string $content = null;
-    #[ORM\OneToOne(targetEntity: \Chamilo\CourseBundle\Entity\CShortcut::class, mappedBy: 'shortCutNode', cascade: ['persist', 'remove'])]
+
+    #[ORM\OneToOne(mappedBy: 'shortCutNode', targetEntity: CShortcut::class, cascade: ['persist', 'remove'])]
     protected ?CShortcut $shortCut = null;
+
     #[Groups(['resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?UuidV4 $uuid = null;
+
     #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
     #[Gedmo\SortablePosition]
     protected int $displayOrder;
@@ -182,94 +204,12 @@ class ResourceNode implements Stringable
         $this->fileEditableText = false;
         $this->displayOrder = 0;
     }
+
     public function __toString(): string
     {
         return $this->getPathForDisplay();
     }
-    public function getUuid(): ?UuidV4
-    {
-        return $this->uuid;
-    }
-    /**
-     * Returns the resource id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    public function hasCreator(): bool
-    {
-        return null !== $this->creator;
-    }
-    public function getCreator(): ?User
-    {
-        return $this->creator;
-    }
-    public function setCreator(User $creator): self
-    {
-        $this->creator = $creator;
 
-        return $this;
-    }
-    /**
-     * Returns the children resource instances.
-     *
-     * @return Collection|ResourceNode[]
-     */
-    public function getChildren(): Collection|array
-    {
-        return $this->children;
-    }
-    /**
-     * Sets the parent resource.
-     */
-    public function setParent(self $parent = null): self
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-    /**
-     * Returns the parent resource.
-     */
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-    /**
-     * Return the lvl value of the resource in the tree.
-     */
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-    /**
-     * Returns the "raw" path of the resource
-     * (the path merge names and ids of all items).
-     * Eg.: "Root-1/subdir-2/file.txt-3/".
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-    /**
-     * @return Collection|ResourceComment[]
-     */
-    public function getComments(): Collection|array
-    {
-        return $this->comments;
-    }
-    public function addComment(ResourceComment $comment): self
-    {
-        $comment->setResourceNode($this);
-        $this->comments->add($comment);
-
-        return $this;
-    }
     /**
      * Returns the path cleaned from its ids.
      * Eg.: "Root/subdir/file.txt".
@@ -279,6 +219,91 @@ class ResourceNode implements Stringable
         return $this->path;
         //return $this->convertPathForDisplay($this->path);
     }
+
+    public function getUuid(): ?UuidV4
+    {
+        return $this->uuid;
+    }
+
+    public function hasCreator(): bool
+    {
+        return null !== $this->creator;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * Returns the children resource instances.
+     *
+     * @return Collection<int, ResourceNode>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    /**
+     * Returns the parent resource.
+     */
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Sets the parent resource.
+     */
+    public function setParent(self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Return the lvl value of the resource in the tree.
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * Returns the "raw" path of the resource
+     * (the path merge names and ids of all items).
+     * Eg.: "Root-1/subdir-2/file.txt-3/".
+     */
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return Collection|ResourceComment[]
+     */
+    public function getComments(): Collection|array
+    {
+        return $this->comments;
+    }
+
+    public function addComment(ResourceComment $comment): self
+    {
+        $comment->setResourceNode($this);
+        $this->comments->add($comment);
+
+        return $this;
+    }
+
     public function getPathForDisplayToArray(?int $baseRoot = null): array
     {
         $parts = explode(self::PATH_SEPARATOR, $this->path);
@@ -298,38 +323,14 @@ class ResourceNode implements Stringable
 
         return $list;
     }
+
     public function getPathForDisplayRemoveBase(string $base): string
     {
         $path = str_replace($base, '', $this->path);
 
         return $this->convertPathForDisplay($path);
     }
-    public function getSlug(): string
-    {
-        return $this->slug;
-    }
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-    public function setTitle(string $title): self
-    {
-        $title = str_replace('/', '-', $title);
-        $this->title = $title;
 
-        return $this;
-    }
-    public function setSlug(string $slug): self
-    {
-        if (str_contains(self::PATH_SEPARATOR, $slug)) {
-            $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
-
-            throw new InvalidArgumentException($message);
-        }
-        $this->slug = $slug;
-
-        return $this;
-    }
     /**
      * Convert a path for display: remove ids.
      */
@@ -351,13 +352,33 @@ class ResourceNode implements Stringable
 
         return $pathForDisplay;
     }
-    public function getResourceType(): ResourceType
+
+    public function getSlug(): string
     {
-        return $this->resourceType;
+        return $this->slug;
     }
-    public function setResourceType(ResourceType $resourceType): self
+
+    public function setSlug(string $slug): self
     {
-        $this->resourceType = $resourceType;
+        if (str_contains(self::PATH_SEPARATOR, $slug)) {
+            $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
+
+            throw new InvalidArgumentException($message);
+        }
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $title = str_replace('/', '-', $title);
+        $this->title = $title;
 
         return $this;
     }
@@ -374,10 +395,21 @@ class ResourceNode implements Stringable
         return $this;
     }
 
+    /**
+     * @return Collection<int, ResourceLink>
+     */
     public function getResourceLinks(): Collection
     {
         return $this->resourceLinks;
     }
+
+    public function setResourceLinks(Collection $resourceLinks): self
+    {
+        $this->resourceLinks = $resourceLinks;
+
+        return $this;
+    }
+
     public function addResourceLink(ResourceLink $link): self
     {
         $link->setResourceNode($this);
@@ -385,24 +417,12 @@ class ResourceNode implements Stringable
 
         return $this;
     }
-    public function setResourceLinks(Collection $resourceLinks): self
-    {
-        $this->resourceLinks = $resourceLinks;
 
-        return $this;
-    }
-    public function hasResourceFile(): bool
-    {
-        return null !== $this->resourceFile;
-    }
-    public function getResourceFile(): ?ResourceFile
-    {
-        return $this->resourceFile;
-    }
     public function hasEditableTextContent(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
+
             if (str_contains($mimeType, 'text')) {
                 return true;
             }
@@ -410,37 +430,26 @@ class ResourceNode implements Stringable
 
         return false;
     }
-    public function isResourceFileAnImage(): bool
-    {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
-            if (str_contains($mimeType, 'image')) {
-                return true;
-            }
-        }
 
-        return false;
-    }
-    public function isResourceFileAVideo(): bool
+    public function hasResourceFile(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
-            if (str_contains($mimeType, 'video')) {
-                return true;
-            }
-        }
-
-        return false;
+        return null !== $this->resourceFile;
     }
+
+    public function getResourceFile(): ?ResourceFile
+    {
+        return $this->resourceFile;
+    }
+
     public function setResourceFile(?ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
-        if (null !== $resourceFile) {
-            $resourceFile->setResourceNode($this);
-        }
+
+        $resourceFile?->setResourceNode($this);
 
         return $this;
     }
+
     public function getIcon(): string
     {
         $class = 'fa fa-folder';
@@ -456,6 +465,31 @@ class ResourceNode implements Stringable
 
         return '<i class="'.$class.'"></i>';
     }
+
+    public function isResourceFileAnImage(): bool
+    {
+        if ($this->hasResourceFile()) {
+            $mimeType = $this->getResourceFile()->getMimeType();
+            if (str_contains($mimeType, 'image')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isResourceFileAVideo(): bool
+    {
+        if ($this->hasResourceFile()) {
+            $mimeType = $this->getResourceFile()->getMimeType();
+            if (str_contains($mimeType, 'video')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
@@ -481,30 +515,56 @@ class ResourceNode implements Stringable
 
         return '<i class="'.$class.'"></i>';
     }
+
+    /**
+     * Returns the resource id.
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getResourceType(): ResourceType
+    {
+        return $this->resourceType;
+    }
+
+    public function setResourceType(ResourceType $resourceType): self
+    {
+        $this->resourceType = $resourceType;
+
+        return $this;
+    }
+
     public function getContent(): ?string
     {
         return $this->content;
     }
+
     public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
+
     public function getShortCut(): ?CShortcut
     {
         return $this->shortCut;
     }
+
     public function setShortCut(?CShortcut $shortCut): self
     {
         $this->shortCut = $shortCut;
 
         return $this;
     }
+
     public function isPublic(): bool
     {
         return $this->public;
     }
+
     public function setPublic(bool $public): self
     {
         $this->public = $public;

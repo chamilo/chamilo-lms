@@ -210,13 +210,14 @@ class H5pPackageTools
 
         $saveFreqState = api_get_course_plugin_setting('h5pimport', 'h5p_save_content_state');
         $saveFreq = api_get_course_plugin_setting('h5pimport', 'h5p_save_freq');
+        $originIsLearnpath = api_get_origin() === 'learnpath';
 
         $settings = [
             'baseUrl' => api_get_path(WEB_PATH),
             'url' => $h5pImport->getRelativePath(),
             'postUserStatistics' => true,
             'ajax' => [
-                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('result'),
+                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.H5PCore::createToken('result'),
                 'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content')
             ],
             'saveFreq' => $saveFreqState ? $saveFreq : false,

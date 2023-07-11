@@ -1,7 +1,11 @@
 <?php
 
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
+use ChamiloSession as Session;
+
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -36,7 +40,34 @@ if ($action === 'set_finished' && $h5pId !== 0) {
         $h5pImportResults->setUser($user);
         $h5pImportResults->setScore($_POST['score']);
         $h5pImportResults->setMaxScore($_POST['maxScore']);
+        $h5pImportResults->setStartTime($_POST['opened']);
+        $h5pImportResults->setTotalTime(time() - $_POST['opened']);
+
         $entityManager->persist($h5pImportResults);
+
+        // If it comes from an LP, update in c_lp_item_view
+        if ($_REQUEST['learnpath'] == 1 && Session::has('oLP')) {
+
+            $lpObject = Session::read('oLP');
+            $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
+            /** @var CLpItemView|null $lpItemView */
+            $lpItemView = $clpItemViewRepo->findOneBy(['lpViewId' => $lpObject->lp_view_id, 'lpItemId' => $lpObject->current]);
+
+            /** @var CLpItem|null $lpItem */
+            $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
+            if ('h5p' !== $lpItem->getItemType()) {
+                return null;
+            }
+
+            $lpItemView->setScore($_POST['score']);
+            $lpItemView->setMaxScore($_POST['maxScore']);
+            $lpItem->setMaxScore($_POST['maxScore']);
+            $h5pImportResults->setCLpItemView($lpItemView);
+            $entityManager->persist($h5pImportResults);
+            $entityManager->persist($lpItem);
+            $entityManager->persist($lpItemView);
+
+        }
         $entityManager->flush();
 
         H5PCore::ajaxSuccess();

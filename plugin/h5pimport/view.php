@@ -159,4 +159,5 @@ $view->assign(
     'content',
     $htmlContent
 );
+
 $view->display_one_col_template();

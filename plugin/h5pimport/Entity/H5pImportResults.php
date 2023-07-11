@@ -4,6 +4,7 @@ namespace Chamilo\PluginBundle\Entity\H5pImport;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,6 +75,27 @@ class H5pImportResults
      */
     private User $user;
 
+    /**
+     * @var CLpItemView
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItemView")
+     * @ORM\JoinColumn(name="c_lp_item_view_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
+     */
+    private CLpItemView $cLpItemView;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="start_time", type="integer", nullable=false)
+     */
+    protected int $startTime;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="total_time", type="integer", nullable=false)
+     */
+    protected int $totalTime;
     /**
      * @var DateTime
      *
@@ -222,6 +244,60 @@ class H5pImportResults
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return CLpItemView
+     */
+    public function getCLpItemView(): CLpItemView
+    {
+        return $this->cLpItemView;
+    }
+
+    /**
+     * @param CLpItemView $cLpItemView
+     * @return H5pImportResults
+     */
+    public function setCLpItemView(CLpItemView $cLpItemView): H5pImportResults
+    {
+        $this->cLpItemView = $cLpItemView;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartTime(): int
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * @param int $startTime
+     * @return H5pImportResults
+     */
+    public function setStartTime(int $startTime): H5pImportResults
+    {
+        $this->startTime = $startTime;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalTime(): int
+    {
+        return $this->totalTime;
+    }
+
+    /**
+     * @param int $totalTime
+     * @return H5pImportResults
+     */
+    public function setTotalTime(int $totalTime): H5pImportResults
+    {
+        $this->totalTime = $totalTime;
+        return $this;
     }
 
     /**

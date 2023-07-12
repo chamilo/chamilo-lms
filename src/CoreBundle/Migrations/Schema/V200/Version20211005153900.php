@@ -16,6 +16,7 @@ class Version20211005153900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20211005153900 ...');
         // Assigned users
         $table = $schema->getTable('ticket_ticket');
         $this->addSql(

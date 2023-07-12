@@ -16,6 +16,7 @@ final class Version20211008133540 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20211008133540 ...');
         $table = $schema->getTable('c_tool_intro');
 
         if ($table->hasColumn('c_tool_id')) {

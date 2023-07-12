@@ -18,6 +18,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20190110182615 ...');
         $this->addSql('UPDATE c_lp SET created_on = NOW() WHERE CAST(created_on AS CHAR(20)) = "0000-00-00 00:00:00"');
         $this->addSql(
             'UPDATE c_lp SET modified_on = NOW() WHERE CAST(modified_on AS CHAR(20)) = "0000-00-00 00:00:00"'

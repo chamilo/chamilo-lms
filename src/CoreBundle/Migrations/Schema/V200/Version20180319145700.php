@@ -20,6 +20,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20180319145700 ...');
         $survey = $schema->getTable('c_survey');
 
         if ($survey->hasIndex('session_id')) {

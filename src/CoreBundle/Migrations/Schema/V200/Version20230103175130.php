@@ -22,6 +22,7 @@ final class Version20230103175130 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230103175130 ...');
         $this->addSql(
             'ALTER TABLE personal_agenda CHANGE color color varchar(20) NULL;'
         );

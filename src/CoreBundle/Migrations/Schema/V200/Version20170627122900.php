@@ -18,6 +18,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170627122900 ...');
         $this->addSql('ALTER TABLE settings_current CHANGE access_url access_url INT DEFAULT NULL');
         $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
 

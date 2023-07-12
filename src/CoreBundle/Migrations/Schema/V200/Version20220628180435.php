@@ -22,6 +22,7 @@ final class Version20220628180435 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20220628180435 ...');
         if (false === $schema->hasTable('track_e_login_record')) {
             $this->addSql(
                 'CREATE TABLE track_e_login_record (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(100) NOT NULL, login_date DATETIME NOT NULL COMMENT "(DC2Type:datetime)", user_ip VARCHAR(39) NOT NULL, success TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'

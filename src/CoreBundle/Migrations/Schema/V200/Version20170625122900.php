@@ -19,6 +19,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625122900 ...');
         // Install tools.
         $container = $this->getContainer();
         $toolChain = $container->get(ToolChain::class);

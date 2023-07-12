@@ -18,6 +18,7 @@ class Version20170525123900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170525123900 ...');
         $table = $schema->getTable('usergroup');
         if (!$table->hasForeignKey('FK_4A6478171BAD783F')) {
             $this->addSql('ALTER TABLE usergroup ADD CONSTRAINT FK_4A6478171BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');

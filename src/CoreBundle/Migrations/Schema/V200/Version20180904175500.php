@@ -18,6 +18,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20180904175500 ...');
         $this->addSql(
             'UPDATE track_e_exercises SET expired_time_control = NULL WHERE CAST(expired_time_control AS CHAR(20)) = "0000-00-00 00:00:00"'
         );

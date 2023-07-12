@@ -18,6 +18,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20180927172830 ...');
         $table = $schema->getTable('c_forum_post');
         if (!$table->hasIndex('c_id_visible_post_date')) {
             $this->addSql('CREATE INDEX c_id_visible_post_date ON c_forum_post (c_id, visible, post_date)');

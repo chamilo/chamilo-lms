@@ -23,6 +23,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20191101132000 ...');
         $table = $schema->getTable('course');
 
         if (!$table->hasColumn('introduction')) {

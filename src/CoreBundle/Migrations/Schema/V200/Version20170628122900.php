@@ -18,6 +18,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170628122900 ...');
         // access_url_rel_user.
         $table = $schema->getTable('access_url_rel_user');
         if (false === $table->hasColumn('id')) {

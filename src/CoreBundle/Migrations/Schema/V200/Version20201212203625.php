@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\EntityManager;
 use DocumentManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -30,12 +31,15 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201212203625 ...');
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+        /** @var EntityManager $em */
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
+        /* @var CDocumentRepository $documentRepo */
         $documentRepo = $container->get(CDocumentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
         $attemptRepo = $em->getRepository(TrackEAttempt::class);
@@ -217,12 +221,14 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 $parent = null;
                 if ('.' !== \dirname($documentPath)) {
-                    $parentId = (int) DocumentManager::get_document_id(
-                        [
-                            'real_id' => $courseId,
-                        ],
-                        \dirname($documentPath)
-                    );
+                    $currentPath = \dirname($documentPath);
+                    $sql = "SELECT iid FROM c_document
+                    WHERE
+                          c_id = {$courseId} AND
+                          path LIKE '$currentPath'";
+                    $result = $connection->executeQuery($sql);
+                    $parentId = $result->fetchOne();
+
                     if (!empty($parentId)) {
                         $parent = $documentRepo->find($parentId);
                     }

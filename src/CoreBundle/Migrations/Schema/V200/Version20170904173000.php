@@ -18,6 +18,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170904173000 ...');
         $table = $schema->getTable('c_group_info');
 
         $this->addSql('ALTER TABLE c_group_info CHANGE doc_state doc_state INT NOT NULL, CHANGE calendar_state calendar_state INT NOT NULL, CHANGE work_state work_state INT NOT NULL');

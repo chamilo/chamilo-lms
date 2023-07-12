@@ -18,6 +18,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625145000 ...');
         $table = $schema->getTable('c_calendar_event');
 
         // Delete empty events.

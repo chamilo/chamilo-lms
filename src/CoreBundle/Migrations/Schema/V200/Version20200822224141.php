@@ -18,6 +18,7 @@ final class Version20200822224141 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20200822224141 ...');
         // Portfolio
         if (!$schema->hasTable('portfolio')) {
             $this->addSql(

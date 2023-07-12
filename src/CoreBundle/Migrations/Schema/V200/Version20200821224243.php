@@ -33,6 +33,7 @@ final class Version20200821224243 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20200821224243 ...');
         $connection = $this->getEntityManager()->getConnection();
         $result = $connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
         $messages = $result->fetchAllAssociative();

@@ -18,6 +18,7 @@ class Version20190110182620 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20190110182620 ...');
         $table = $schema->getTable('c_blog');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_blog ADD resource_node_id BIGINT DEFAULT NULL;');

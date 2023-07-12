@@ -22,6 +22,7 @@ class Version20210221082033 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20210221082033 ...');
         $container = $this->getContainer();
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');

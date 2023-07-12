@@ -18,6 +18,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625153000 ...');
         $table = $schema->getTable('c_forum_attachment');
         $this->addSql('ALTER TABLE c_forum_attachment CHANGE post_id post_id INT DEFAULT NULL');
 

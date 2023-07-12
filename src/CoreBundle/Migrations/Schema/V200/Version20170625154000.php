@@ -18,6 +18,7 @@ class Version20170625154000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625154000 ...');
         $table = $schema->getTable('c_course_description');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_course_description ADD resource_node_id BIGINT DEFAULT NULL');

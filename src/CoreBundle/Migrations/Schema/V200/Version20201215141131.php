@@ -28,6 +28,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201215141131 ...');
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -37,9 +38,6 @@ final class Version20201215141131 extends AbstractMigrationChamilo
         $linkRepo = $container->get(CLinkRepository::class);
         $linkCategoryRepo = $container->get(CLinkCategoryRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
 
         $admin = $this->getAdmin();
 

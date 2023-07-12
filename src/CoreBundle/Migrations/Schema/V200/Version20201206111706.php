@@ -18,6 +18,7 @@ final class Version20201206111706 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201206111706 ...');
         // From configuration.dist.php 1.11.x
         $this->addSql('ALTER TABLE c_dropbox_file CHANGE filename filename VARCHAR(190) NOT NULL');
         $this->addSql('ALTER TABLE course_category CHANGE name name LONGTEXT NOT NULL;');

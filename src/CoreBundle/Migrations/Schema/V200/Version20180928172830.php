@@ -18,6 +18,7 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20180928172830 ...');
         $table = $schema->getTable('c_tool');
         if (false === $table->hasForeignKey('FK_8456658091D79BD3')) {
             $this->addSql(

@@ -18,6 +18,7 @@ class Version20191208160020 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20191208160020 ...');
         $connection = $this->getEntityManager()->getConnection();
 
         // Delete empty values.

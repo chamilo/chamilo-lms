@@ -18,6 +18,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625123000 ...');
         // CAttendance
         $table = $schema->getTable('c_attendance');
         if ($table->hasIndex('course')) {

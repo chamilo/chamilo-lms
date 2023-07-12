@@ -18,6 +18,7 @@ class Version20220614165020 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20220614165020 ...');
         $this->addSql('DROP INDEX access_session_id ON track_e_access');
         $this->addSql('DROP INDEX user_course_session_date ON track_e_access');
         $this->addSql('ALTER TABLE track_e_access CHANGE access_session_id session_id INT NOT NULL');

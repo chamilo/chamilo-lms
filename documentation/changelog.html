@@ -110,6 +110,76 @@
 
     </table>
 
+        <h1>Chamilo 1.11.22 - , ?/07/2023</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.22 is mainly a security fix release on top of 1.11.20.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/">-</a> </p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c75ff227bcf00e9f88e9477b78eaeed9e0668905">c75ff227</a>) Group: Use FormValidator shortcuts instead of FormValidator:addElement()</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/91ecc6141de6de9483c5a31fbb9fa91450f24940">91ecc614</a>) Extrafield: Use FormValidator shortcuts instead of FormValidator:addElement()</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/da61f287d2e508a5e940953b474051d0f21e91c0">da61f287</a>) Session: filter HTML when saving/updating categories</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/546a18b0bd1446123f4e29f81f42e71b761f51b7">546a18b0</a>) Career: Use FormValidator::addText instead of FormValidator:addElement('text')</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/75e9b3e0acac6f7a643da6ff19a00d55a94417a1">75e9b3e0</a>) Admin: filter HTML when updating language</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c263933d1d958edee3999820f636c8cb919d03d1">c263933d</a>) Course: filter HTML when saving/updating category</li>
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4f7b5ebf90c35999917c231276e47a4184275690">4f7b5ebf</a>) Skill: filter HTML when saving profiles</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/de80b91544f8696e63f73a35388565625966cc1c">de80b915</a> - <a href="https://task.beeznest.com/issues/20784">BT#20784</a>) Plugin: OAuth2: Enable setting values for user status from OAuth2.0 responses</li>
+            <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/e71b8232801930b04c48a2d5c0017a6e3148cbac">e71b8232</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: Add configuration setting 'multiple_access_url_user_management_show_and_order_by_official_code' to enable official code presentation and ordering in user management page</li>
+            <li>[2023-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/969914366bc28baa1dbf2e615bf56e4dbfacebc6">96991436</a> - <a href="https://task.beeznest.com/issues/20825">BT#20825</a>) Plugin: Buycourse: Add plugin configuration setting 'hide_shopping_cart_from_course_catalogue' to not show the shopping cart in the catalogue but the same subscribe button even if the course is on sale</li>
+            <li>[2023-07-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/68025447a06218e72eacb2ec79f30a0f42e8721d">68025447</a>) Admin: Add sec_token to delete courses</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2023-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/8e1e3a436cec2c95d9e62753f6e8c88421ddb517">8e1e3a43</a> - <a href="https://task.beeznest.com/issues/20825">BT#20825</a>) Plugin: Buycourse: adapt documentation for webhook configuration on Stripe to work with new API</li>
+            <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/00c90f056ce358151a9f81c9eee77d86269d83bd">00c90f05</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: fix select option presentation to add option to enable official code presentation and ordering in user management page</li>
+            <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0c780587ba32d5e11f164c742daee16aa586250">b0c78058</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: fix option name to add option to enable official code presentation and ordering in user management page</li>
+            <li>[2023-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/b8c6db193b18f7dcae2ab812ffa9e447a49036cf">b8c6db19</a> - <a href="https://task.beeznest.com/issues/20852">BT#20852</a>) Plugin: Buycourse: adapt confirmation message content for Stripe command</li>
+            <li>[2023-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b5402edd3bf023215603820aa2ad168fefaef36">4b5402ed</a> - <a href="https://task.beeznest.com/issues/20856">BT#20856</a>) Plugin: file missing for Fix Stripe process to work with new API version 2022-11-15</li>
+            <li>[2023-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/8d3940496884e136234e78eebafa8109e59c3b79">8d394049</a> - <a href="https://task.beeznest.com/issues/20852">BT#20852</a>) Plugin: Buycourse add confirmation message for seller and buyer at the end of the Stripe command</li>
+            <li>[2023-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/91680c781dcb8515748aa3dc05c70982f1a9154a">91680c78</a> - <a href="https://task.beeznest.com/issues/20856">BT#20856</a>) Plugin: Fix Stripe process to work with new API version 2022-11-15</li>
+            <li>[2023-07-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/ec53098d8befdf459fa4ff7da17cf9d908e2aee7">ec53098d</a> - <a href="https://task.beeznest.com/issues/20584">BT#20584</a>) Survey: fix per-user report when survey in LP but not in all sessions: missing 2 lines to remove from previous commit</li>
+            <li>[2023-07-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/f1d533808de765c50ec2cf3d8ea9e52b66d8d2b6">f1d53380</a> - <a href="https://task.beeznest.com/issues/20584">BT#20584</a>) Survey: fix per-user report when survey in LP but not in all sessions</li>
+            <li>[2023-07-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1f9ae716d683c191fd80ccbf0a7959a1fac6f894">1f9ae716</a> - <a href="https://task.beeznest.com/issues/20835">BT#20835</a>) Script: fix script for id to iid correction for quiz to avoir duplicate actions</li>
+            <li>[2023-06-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/1beac3186940d7b6f2de52b448d2f275ff080199">1beac318</a> - <a href="https://task.beeznest.com/issues/20813">BT#20813</a>) Script: Add script to update user extra fields based on other extra field values</li>
+            <li>[2023-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/3f5bc960c9fd2186f6f4ecb9da3ba8cf698ea673">3f5bc960</a> - <a href="https://task.beeznest.com/issues/20827">BT#20827</a>) Plugin: Zoom: Delete webinar even if API doesn't respond</li>
+            <li>[2023-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/435a93b9dedd6c06a0e94f4aea58e7c73f911d03">435a93b9</a> - <a href="https://task.beeznest.com/issues/20827">BT#20827</a>) Plugin: Zoom: Delete meeting even if API doesn't respond</li>
+            <li>[2023-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/91807103a7a6674f54ea24123477288cfb55687f">91807103</a> - <a href="https://task.beeznest.com/issues/20837">BT#20837</a>) Mail: Fix SMTP options if set in mail.conf.php</li>
+            <li>[2023-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/7eec52171622e0d97bc5109a7da11b59b79c445f">7eec5217</a> - <a href="https://task.beeznest.com/issues/20841">BT#20841</a>) Plugin: BBB: Fix ordering to have the last conferences on the first page</li>
+            <li>[2023-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/ae7c8a2a3088517ef66f96a25b96c7c5397a6dff">ae7c8a2a</a> - <a href="https://task.beeznest.com/issues/20825">BT#20825</a>) Catalogue: show price in catalogue for all kind of payment types activated</li>
+            <li>[2023-06-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/d59fcb484ec2f88cca4a0c11356c53058b5603b0">d59fcb48</a> - <a href="https://task.beeznest.com/issues/20784">BT#20784</a>) Plugin: OAuth2: Fix function to set user status</li>
+            <li>[2023-06-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/b7ebccbae097237e60ea2fa3bdf2418e170757d9">b7ebccba</a>) Plugin: Zoom: Differenciate instant meeting from period meeting. Don't try to show instant meeting in the profile block or in the agenda</li>
+            <li>[2023-06-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/47d0cef9bdd1ff012c12c073446b039f0024d0f1">47d0cef9</a> - <a href="https://task.beeznest.com/issues/20736">BT#20736</a>) Script: adapt script to be able to delete course from a script for all URLs</li>
+            <li>[2023-06-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc4dc493d9575d5b3c660cb2f7e680df66aaa4f1">bc4dc493</a> - <a href="https://task.beeznest.com/issues/20736">BT#20736</a>) Script: adapt course rel URL deletion to make it usable from script and delete relation with all URLs</li>
+            <li>[2023-06-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/53f6bc86e52fffd9fb9afac8ea4e0d185f9b1bea">53f6bc86</a> - <a href="https://task.beeznest.com/issues/20796">BT#20796</a>) Admin: session admins can access user information page by defaut</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>[2023-06-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/38fe5e6cd604833f25190b65032630d52c49d00c">38fe5e6c</a> - <a href="https://task.beeznest.com/issues/20460">BT#20460</a>) Webservice: Add 'status' field to get_users' return values</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>The Zoom plugin fails on one of the endpoints for reasons that seem to be on the Zoom side.</li>
+        </ul>
+    </div>
+
     <div class="version" aria-label="1.11.20">
         <a id="1.11.20"></a>
 

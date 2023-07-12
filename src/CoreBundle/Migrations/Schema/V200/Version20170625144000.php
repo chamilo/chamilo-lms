@@ -18,6 +18,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170625144000 ...');
         $table = $schema->getTable('c_student_publication');
 
         $this->addSql('ALTER TABLE c_student_publication CHANGE title title VARCHAR(255) NOT NULL');

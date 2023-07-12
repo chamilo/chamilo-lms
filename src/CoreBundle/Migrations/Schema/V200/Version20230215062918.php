@@ -18,6 +18,7 @@ final class Version20230215062918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230215062918 ...');
         if (false === $schema->hasTable('c_lp_rel_user')) {
             $this->addSql(
                 "CREATE TABLE c_lp_rel_user (iid INT AUTO_INCREMENT NOT NULL, lp_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, user_id INT NOT NULL, creator_id INT DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_AD97516E68DFD1EF (lp_id), INDEX IDX_AD97516E91D79BD3 (c_id), INDEX IDX_AD97516E613FECDF (session_id), INDEX IDX_AD97516EA76ED395 (user_id), INDEX IDX_AD97516E61220EA6 (creator_id), PRIMARY KEY(iid)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;"

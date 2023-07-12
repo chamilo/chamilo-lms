@@ -19,6 +19,7 @@ final class Version20211029123419 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20211029123419 ...');
         if ($schema->hasTable('page')) {
             $container = $this->getContainer();
             $createDefaultPages = $container->get(CreateDefaultPages::class);

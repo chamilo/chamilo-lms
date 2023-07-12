@@ -24,6 +24,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20210930130343 ...');
         $container = $this->getContainer();
         $em = $this->getEntityManager();
         $connection = $em->getConnection();

@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20230306150219 extends AbstractMigrationChamilo
+final class Version20201211124910 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -16,6 +16,7 @@ final class Version20230306150219 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230306150219 ...');
         $connection = $this->getEntityManager()->getConnection();
         if ($schema->hasTable('resource_format')) {
             $result = $connection->executeQuery(" SELECT * FROM resource_format WHERE name = 'html'");

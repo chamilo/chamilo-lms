@@ -22,6 +22,7 @@ final class Version20220909165130 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20220909165130 ...');
         $this->addSql(
             'ALTER TABLE track_e_exercises CHANGE user_ip user_ip VARCHAR(45) NOT NULL;'
         );

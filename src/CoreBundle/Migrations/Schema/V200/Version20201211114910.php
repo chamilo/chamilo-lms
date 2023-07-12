@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20230306145019 extends AbstractMigrationChamilo
+final class Version20201211114910 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -16,6 +16,7 @@ final class Version20230306145019 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230306145019 ...');
         if (!$schema->hasTable('resource_format')) {
             $this->addSql(
                 "CREATE TABLE resource_format (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;"

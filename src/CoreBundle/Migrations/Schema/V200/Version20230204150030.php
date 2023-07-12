@@ -7,10 +7,12 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use ExtraField;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Version20230204150030 extends AbstractMigrationChamilo
@@ -22,8 +24,10 @@ class Version20230204150030 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230204150030 ...');
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+        /* @var EntityManager $em */
         $em = $doctrine->getManager();
 
         $kernel = $container->get('kernel');

@@ -16,7 +16,7 @@ final class Version20230622150000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-
+        error_log('MIGRATIONS FINAL :: FILE -- Version20230622150000 ...');
         if ($schema->hasTable('c_lp_category_user')) {
             $this->addSql("ALTER TABLE c_lp_category_user RENAME TO c_lp_category_rel_user");
         }

@@ -29,6 +29,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201215153517 ...');
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -116,9 +117,6 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 $em->persist($resource);
                 $em->flush();
             }
-
-            $em->flush();
-            $em->clear();
         }
     }
 }

@@ -18,6 +18,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20170525122900 ...');
         if (false === $schema->hasTable('resource_file')) {
             $this->addSql(
                 'CREATE TABLE resource_file (id BIGINT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL, description longtext DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'

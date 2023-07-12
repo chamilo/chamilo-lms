@@ -16,6 +16,7 @@ final class Version20211005065400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20211005065400 ...');
         if ($schema->hasTable('plugin_bbb_meeting')) {
             $table = $schema->getTable('plugin_bbb_meeting');
             if (!$table->hasColumn('internal_meeting_id')) {

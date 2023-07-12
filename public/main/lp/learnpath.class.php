@@ -8586,13 +8586,17 @@ class learnpath
      *
      * @param array $orderList A associative array with id and parent_id keys.
      */
-    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true)
+    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true, $em = null, $lpItemRepo = null)
     {
         if (empty($orderList)) {
             return true;
         }
-        $lpItemRepo = Container::getLpItemRepository();
-        $em = Database::getManager();
+        if (null === $lpItemRepo) {
+            $lpItemRepo = Container::getLpItemRepository();
+        }
+        if (null === $em) {
+            $em = Database::getManager();
+        }
         $counter = 2;
         $rootItem->setDisplayOrder(1);
         $rootItem->setPreviousItemId(null);

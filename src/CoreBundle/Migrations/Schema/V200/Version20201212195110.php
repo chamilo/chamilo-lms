@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-class Version20230204145530 extends AbstractMigrationChamilo
+class Version20201212195110 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -17,6 +17,7 @@ class Version20230204145530 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201212195110 ...');
         $table = $schema->getTable('session');
         if (false === $table->hasColumn('image_id')) {
             $this->addSql("ALTER TABLE session ADD image_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)'");

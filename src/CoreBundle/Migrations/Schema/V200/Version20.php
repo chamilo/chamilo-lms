@@ -23,6 +23,7 @@ class Version20 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20 ...');
         $this->addSql('set sql_mode=""');
         // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
         //$this->addSql('set autocommit=0');

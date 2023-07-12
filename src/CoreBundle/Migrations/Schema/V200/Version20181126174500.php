@@ -18,6 +18,7 @@ class Version20181126174500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20181126174500 ...');
         if ($schema->hasTable('plugin_ims_lti_tool')) {
             $schema->renameTable('plugin_ims_lti_tool', 'lti_external_tool');
 

@@ -23,6 +23,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201216132000 ...');
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -73,7 +74,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            learnpath::sortItemByOrderList($rootItem, $orderList, true);
+            learnpath::sortItemByOrderList($rootItem, $orderList, true, $em, $lpItemRepo);
             if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

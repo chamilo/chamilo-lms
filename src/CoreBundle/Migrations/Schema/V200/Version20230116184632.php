@@ -25,6 +25,7 @@ final class Version20230116184632 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20230116184632 ...');
         $table = $schema->getTable('c_quiz_question_rel_category');
         $cQuizQuestionTable = $schema->getTable('c_quiz_question');
         $cQuizQuestionCategoryTable = $schema->getTable('c_quiz_question_category');

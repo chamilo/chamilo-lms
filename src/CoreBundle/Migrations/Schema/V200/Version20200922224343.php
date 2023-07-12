@@ -18,6 +18,7 @@ final class Version20200922224343 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20200922224343 ...');
         $table = $schema->getTable('sys_announcement');
 
         if (!$table->hasColumn('roles')) {

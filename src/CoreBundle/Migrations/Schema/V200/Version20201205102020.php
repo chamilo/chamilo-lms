@@ -18,6 +18,7 @@ final class Version20201205102020 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20201205102020 ...');
         $table = $schema->getTable('skill');
 
         $this->addSql('UPDATE skill SET updated_at = NOW() WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"');

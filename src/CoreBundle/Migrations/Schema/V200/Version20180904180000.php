@@ -18,6 +18,7 @@ class Version20180904180000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20180904180000 ...');
         $table = $schema->getTable('sys_calendar');
 
         $this->addSql('ALTER TABLE sys_calendar CHANGE access_url_id access_url_id INT DEFAULT NULL');

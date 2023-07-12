@@ -18,6 +18,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        error_log('MIGRATIONS :: FILE -- Version20181025064351 ...');
         $table = $schema->getTable('gradebook_result_log');
         if ($table->hasColumn('id_result')) {
             $this->addSql('DELETE FROM gradebook_result_log WHERE id_result IS NULL');
@@ -291,7 +292,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE gradebook_certificate ADD downloaded_at DATETIME DEFAULT NULL;');
             $this->addSql(
                 'UPDATE gradebook_certificate gc SET downloaded_at = (
-                        SELECT value from extra_field e
+                        SELECT field_value from extra_field e
                         INNER JOIN extra_field_values v on v.field_id = e.id
                         WHERE variable = "downloaded_at" and item_type = 11 and item_id = gc.id
                     )'

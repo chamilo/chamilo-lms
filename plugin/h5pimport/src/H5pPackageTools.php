@@ -13,20 +13,16 @@ use Symfony\Component\Filesystem\Filesystem;
 class H5pPackageTools
 {
     /**
-     * Help read JSON from the archive
+     * Help read JSON from the archive.
      *
-     * @param string $file
-     * @param bool $assoc
      * @return mixed JSON content if valid or FALSE for invalid
      */
     public static function getJson(string $file, bool $assoc = false)
     {
-
         $fs = new Filesystem();
         $json = false;
 
         if ($fs->exists($file)) {
-
             $contents = '';
             $fileContent = fopen($file, "r");
             while (!feof($fileContent)) {
@@ -57,7 +53,7 @@ class H5pPackageTools
     {
         $filesystem = new Filesystem();
         $h5pDir = dirname($extractedDir, 2);
-        $sharedLibrariesDir = $h5pDir . '/libraries';
+        $sharedLibrariesDir = $h5pDir.'/libraries';
 
         //Move 'content' directory one level back (H5P specification)
         $filesystem->mirror($extractedDir.'/content', $extractedDir, null, ['override' => true]);
@@ -71,8 +67,8 @@ class H5pPackageTools
             $majorVersion = $dependency->majorVersion;
             $minorVersion = $dependency->minorVersion;
 
-            $libraryFolderName = $libraryName . '-' . $majorVersion . '.' . $minorVersion;
-            $libraryPath = $extractedDir . '/' . $libraryFolderName;
+            $libraryFolderName = $libraryName .'-'.$majorVersion .'.'.$minorVersion;
+            $libraryPath = $extractedDir .'/'.$libraryFolderName;
 
             // Check if the library folder exists
             if (!$filesystem->exists($libraryPath)) {
@@ -80,10 +76,9 @@ class H5pPackageTools
             }
 
             // Move the entire folder to the "libraries" directory
-            $targetPath = $sharedLibrariesDir . '/' . $libraryFolderName;
+            $targetPath = $sharedLibrariesDir.'/'.$libraryFolderName;
 
             $filesystem->rename($libraryPath, $targetPath, true);
-
         }
 
         return true;
@@ -92,11 +87,12 @@ class H5pPackageTools
     /**
      * Stores the H5P package information in the database.
      *
-     * @param string $packagePath The path to the H5P package file.
-     * @param object $h5pJson The parsed H5P JSON object.
-     * @param Course $course The course entity related to the package.
-     * @param Session|null $session The session entity related to the package.
-     * @param array|null $values The advance options in upload form.
+     * @param string        $packagePath    The path to the H5P package file.
+     * @param object        $h5pJson        The parsed H5P JSON object.
+     * @param Course        $course         The course entity related to the package.
+     * @param Session|null  $session        The session entity related to the package.
+     * @param array|null    $values         The advance options in upload form.
+     *
      * @return void
      */
     public static function storeH5pPackage(
@@ -109,7 +105,7 @@ class H5pPackageTools
         $entityManager = Database::getManager();
         // Go back 2 directories
         $h5pDir = dirname($packagePath, 2);
-        $sharedLibrariesDir = $h5pDir . '/libraries';
+        $sharedLibrariesDir = $h5pDir.'/libraries';
 
         $mainLibraryName = $h5pJson->mainLibrary;
         $relativePath = api_get_path(REL_COURSE_PATH).$course->getDirectory().'/h5p/';
@@ -140,7 +136,6 @@ class H5pPackageTools
                 );
 
             if (null === $library) {
-
                 $auxFullName = $libraryData->machineName.'-'.$libraryData->majorVersion.'.'.$libraryData->minorVersion;
                 $libraryOwnJson = self::getJson($sharedLibrariesDir.'/'.$auxFullName.'/library.json');
 
@@ -166,14 +161,13 @@ class H5pPackageTools
             }
             $entityManager->persist($h5pImport);
             $entityManager->flush();
-
         }
     }
 
     /**
      * Deletes an H5P package from the database and the disk.
      *
-     * @param H5pImport $h5pImport  The H5P import entity representing the package to delete.
+     * @param H5pImport $h5pImport The H5P import entity representing the package to delete.
      *
      * @return bool True if the package was successfully deleted, false otherwise.
      */
@@ -200,16 +194,13 @@ class H5pPackageTools
     /**
      * Get core settings for H5P content.
      *
-     * @param H5pImport $h5pImport The H5pImport object.
-     * @param H5PCore $h5pCore The H5PCore object.
+     * @param H5pImport $h5pImport  The H5pImport object.
+     * @param H5PCore   $h5pCore    The H5PCore object.
      *
      * @return array The core settings for H5P content.
      */
     public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
-
-        $saveFreqState = api_get_course_plugin_setting('h5pimport', 'h5p_save_content_state');
-        $saveFreq = api_get_course_plugin_setting('h5pimport', 'h5p_save_freq');
         $originIsLearnpath = api_get_origin() === 'learnpath';
 
         $settings = [
@@ -218,26 +209,26 @@ class H5pPackageTools
             'postUserStatistics' => true,
             'ajax' => [
                 'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.H5PCore::createToken('result'),
-                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content')
+                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content'),
             ],
-            'saveFreq' => $saveFreqState ? $saveFreq : false,
+            'saveFreq' => false,
             'l10n' => array(
-                'H5P' => $h5pCore->getLocalization()
+                'H5P' => $h5pCore->getLocalization(),
             ),
 //            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
             'crossorigin' => false,
 //            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
 //            'libraryConfig' => $core->h5pF->getLibraryConfig(),
-            'pluginCacheBuster' => '?' . 0,
-            'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath() . '/js'
+            'pluginCacheBuster' => '?0',
+            'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath().'/js'
         ];
 
         $loggedUser = api_get_user_info();
         if ($loggedUser) {
-            $settings['user'] = array(
+            $settings['user'] = [
                 'name' => $loggedUser['complete_name'],
-                'mail' => $loggedUser['email']
-            );
+                'mail' => $loggedUser['email'],
+            ];
         }
 
         return $settings;
@@ -266,10 +257,10 @@ class H5pPackageTools
 
         // Add JS assets
         foreach (H5PCore::$scripts as $script) {
-            $auxAssetPath = 'vendor/h5p/h5p-core/' . $script;
-            $auxUrl = api_get_path(WEB_PATH) . $auxAssetPath;
+            $auxAssetPath = 'vendor/h5p/h5p-core/'.$script;
+            $auxUrl = api_get_path(WEB_PATH).$auxAssetPath;
             $assets['js'][] = $auxUrl;
-            if (!file_exists(api_get_path(SYS_PATH) . $auxAssetPath)) {
+            if (!file_exists(api_get_path(SYS_PATH).$auxAssetPath)) {
                 return false;
             }
         }
@@ -278,19 +269,17 @@ class H5pPackageTools
     }
 
     /**
-     * Return the content body for the H5PIntegration javascript object
+     * Return the content body for the H5PIntegration javascript object.
      *
      * @param $h5pNode
-     * @param H5PCore $h5pCore
-     * @return array
      */
     public static function getContentSettings($h5pNode, H5PCore $h5pCore): array
     {
         $filtered = $h5pCore->filterParameters($h5pNode);
         $contentUserData = [
             0 => [
-                'state' => '{}'
-            ]
+                'state' => '{}',
+            ],
         ];
 
         //ToDo Use $h5pCore->getDisplayOptionsForView() function
@@ -298,24 +287,24 @@ class H5pPackageTools
             'frame' => api_get_course_plugin_setting('h5pimport', 'frame'),
             'embed' => api_get_course_plugin_setting('h5pimport', 'embed'),
             'copyright' => api_get_course_plugin_setting('h5pimport', 'copyright'),
-            'icon' => api_get_course_plugin_setting('h5pimport','icon'),
+            'icon' => api_get_course_plugin_setting('h5pimport', 'icon'),
 
         ];
 
         return [
             'library' => H5PCore::libraryToString($h5pNode['library']),
-            'jsonContent' => $h5pNode['params'] ,
+            'jsonContent' => $h5pNode['params'],
             'fullScreen' => $h5pNode['library']['fullscreen'],
             'exportUrl' => '',
             'language' => 'en',
             'filtered' => $filtered,
-            'embedCode' => '<iframe src="' . api_get_course_url().'h5p/embed/' . $h5pNode['mainId'] . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" title="' . $h5pNode['title'] . '"></iframe>',
+            'embedCode' => '<iframe src="'.api_get_course_url().'h5p/embed/'.$h5pNode['mainId'].'" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" title="'.$h5pNode['title'].'"></iframe>',
             'resizeCode' => '',
             'mainId' => $h5pNode['mainId'],
             'url' => $h5pNode['url'],
             'contentUserData' => $contentUserData,
             'displayOptions' => $displayOptions,
-            'metadata' => $h5pNode['metadata']
+            'metadata' => $h5pNode['metadata'],
         ];
     }
 
@@ -323,6 +312,7 @@ class H5pPackageTools
      * Convert H5P dependencies to a library list.
      *
      * @param array $dependencies The H5P dependencies.
+     *
      * @return array The library list with machine names as keys and version information as values.
      */
     public static function h5pDependenciesToLibraryList(array $dependencies): array
@@ -338,5 +328,4 @@ class H5pPackageTools
 
         return $libraryList;
     }
-
 }

@@ -2,6 +2,14 @@
 $strings['plugin_title'] = "H5P import";
 $strings['plugin_comment'] = "Este plugin permite importar paquetes en formato H5P e insertarlos como elementos en una lección. Abra el README.md para instrucciones de instalación.";
 $strings['tool_enable'] = "Activar plugin";
+$strings['frame'] = "Frame";
+$strings['frame_help'] = "Mostrar marco y botones debajo de H5P";
+$strings['embed'] = "Insertar";
+$strings['embed_help'] = "Mostrar botón de inserción";
+$strings['copyright'] = "Derechos de autor";
+$strings['copyright_help'] = "Mostrar botón de derechos de autor";
+$strings['icon'] = "Icono";
+$strings['icon_help'] = "Mostrar icono de H5P";
 $strings['attempts'] = "Número de intentos";
 $strings['import_h5p_package'] = "Subir paquete H5P";
 $strings['upload_h5p'] = "Subir";

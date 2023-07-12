@@ -2,6 +2,14 @@
 $strings['plugin_title'] = "H5P import";
 $strings['plugin_comment'] = "Ce plugin permet d'importer des contenus H5P. Ouvrez le fichier README.md pour des instructions d'installation.";
 $strings['tool_enable'] = "Activer le plugin";
+$strings['frame'] = "Frame";
+$strings['frame_help'] = "Afficher le cadre et les boutons en dessous de H5P";
+$strings['embed'] = "Incorporer";
+$strings['embed_help'] = "Afficher le bouton d\'incorporation";
+$strings['copyright'] = "Droits d\'auteur";
+$strings['copyright_help'] = "Afficher le bouton de droits d\'auteur";
+$strings['icon'] = "Icône";
+$strings['icon_help'] = "Afficher l\'icône H5P";
 $strings['attempts'] = "Number of attempts";
 $strings['import_h5p_package'] = "Importer un package H5P";
 $strings['upload_h5p'] = "Importer";

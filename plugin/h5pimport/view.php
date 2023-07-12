@@ -89,7 +89,8 @@ if (empty($h5pNode)) {
     } else {
         $integration = H5pPackageTools::getCoreSettings($h5pImport, $h5pCore);
         $embedType = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
-        $integration['contents']['cid-' . $h5pNode['contentId']] = H5pPackageTools::getContentSettings($h5pNode, $h5pCore);
+        $integration['contents']['cid-'.$h5pNode['contentId']] =
+            H5pPackageTools::getContentSettings($h5pNode, $h5pCore);
 
         $preloadedDependencies = $h5pCore->loadContentDependencies($h5pNode['id'], 'preloaded');
         $files = $h5pCore->getDependenciesFiles(
@@ -106,7 +107,6 @@ if (empty($h5pNode)) {
         }
 
         if ($embedType === 'div') {
-
             foreach ($files['scripts'] as $script) {
                 $htmlHeadXtra[] = api_get_js_simple($script->path.$script->version);
                 $integration['loadedJs'] = $script->path.$script->version;
@@ -117,25 +117,24 @@ if (empty($h5pNode)) {
             }
 
             $htmlContent = '<div class="h5p-content" data-content-id="' .  $h5pNode['contentId'] . '"></div>';
-
         } elseif ($embedType === 'iframe') {
             $integration['core']['scripts'] = $coreAssets['js'];
             $integration['core']['styles'] = $coreAssets['css'];
-            $integration['contents']['cid-' . $h5pNode['contentId']]['styles'] =
+            $integration['contents']['cid-'.$h5pNode['contentId']]['styles'] =
                 $h5pCore->getAssetsUrls($files['styles']);
-            $integration['contents']['cid-' . $h5pNode['contentId']]['scripts'] =
+            $integration['contents']['cid-'.$h5pNode['contentId']]['scripts'] =
                 $h5pCore->getAssetsUrls($files['scripts']);
 
             $htmlContent = '<div class="h5p-iframe-wrapper">
                         <iframe
-                            id="h5p-iframe-' . $h5pNode['contentId'] . '"
+                            id="h5p-iframe-'.$h5pNode['contentId'] . '"
                             class="h5p-iframe"
-                            data-content-id="' . $h5pNode['contentId'] . '"
+                            data-content-id="'.$h5pNode['contentId'] . '"
                             style="height:1px"
                             src="about:blank" frameBorder="0" scrolling="no"
                             allowfullscreen="allowfullscreen"
                             allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                            title="' . $h5pNode['title'] . '">
+                            title="'.$h5pNode['title'] . '">
                         </iframe>
                     </div>';
         }
@@ -145,7 +144,7 @@ if (empty($h5pNode)) {
                 Display::return_message($plugin->get_lang('h5p_error_loading'), 'danger')
             );
         } else {
-            $htmlContent .= '<script> H5PIntegration = '. json_encode($integration).'</script>';
+            $htmlContent .= '<script> H5PIntegration = '.json_encode($integration).'</script>';
         }
     }
 }

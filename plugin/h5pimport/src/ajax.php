@@ -6,7 +6,6 @@ use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
 use ChamiloSession as Session;
 
-
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $action = $_REQUEST['action'] ?? null;
@@ -20,9 +19,7 @@ $em = Database::getManager();
 $h5pImportRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImport');
 $user = api_get_user_entity(api_get_user_id());
 
-
 if ($action === 'set_finished' && $h5pId !== 0) {
-
     if (!H5PCore::validToken('result', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
     }
@@ -47,7 +44,6 @@ if ($action === 'set_finished' && $h5pId !== 0) {
 
         // If it comes from an LP, update in c_lp_item_view
         if ($_REQUEST['learnpath'] == 1 && Session::has('oLP')) {
-
             $lpObject = Session::read('oLP');
             $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
             /** @var CLpItemView|null $lpItemView */
@@ -66,7 +62,6 @@ if ($action === 'set_finished' && $h5pId !== 0) {
             $entityManager->persist($h5pImportResults);
             $entityManager->persist($lpItem);
             $entityManager->persist($lpItemView);
-
         }
         $entityManager->flush();
 
@@ -76,14 +71,12 @@ if ($action === 'set_finished' && $h5pId !== 0) {
     }
 
 } elseif ($action === 'content_user_data' && $h5pId !== 0) {
-
     if (!H5PCore::validToken('content', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
     }
 
     /** @var H5pImport|null $h5pImport */
     $h5pImport = $h5pImportRepo->find($h5pId);
-
-} else{
+} else {
     H5PCore::ajaxError(get_lang('InvalidAction'));
 }

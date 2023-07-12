@@ -6395,6 +6395,8 @@ class learnpath
                         $icon = Display::return_icon('flag_checkered.png');
                     } elseif (TOOL_XAPI === $arrLP[$i]['item_type']) {
                         $icon = Display::return_icon('import_scorm.png');
+                    } elseif (TOOL_H5P) {
+                        $icon = Display::return_icon('plugin_h5p_import.png');
                     } elseif (TOOL_SURVEY === $arrLP[$i]['item_type']) {
                         $icon = Display::return_icon('survey.gif');
                     } else {

@@ -28,8 +28,6 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
-            'h5p_save_content_state' => 'boolean',
-            'h5p_save_content_freq' => 'text',
         ];
 
         parent::__construct(
@@ -95,8 +93,6 @@ class H5pImportPlugin extends Plugin
             'embed' => 'boolean',
             'copyright' => 'boolean',
             'icon' => 'boolean',
-            'h5p_save_content_state' => 'boolean',
-            'h5p_save_content_freq' => 'text',
         ];
 
         $em = Database::getManager();
@@ -274,4 +270,57 @@ class H5pImportPlugin extends Plugin
         return $return;
     }
 
+    /**
+     * Updates and returns the total duration in the view of an H5P learning path item in a course.
+     *
+     * @param int $lpItemId     The ID of the learning path item
+     * @param int $lpItemViewId The ID of the learning path item view
+     * @param int $userId       The user ID
+     * @param int $courseId     The course ID
+     * @param int $sessionId    The session ID
+     *
+     * @return int The updated total duration in the learning path item view
+     */
+    public static function fixTotalTimeInLpItemView(
+        int $lpItemId,
+        int $lpItemViewId,
+        int $userId,
+        int $courseId,
+        int $sessionId
+    ): int
+    {
+        $sessionCondition = api_get_session_condition($sessionId);
+        $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+        $sql = "SELECT iid, score
+            FROM $lpItemViewTable
+            WHERE
+                c_id = $courseId AND
+                lp_item_id = $lpItemId AND
+                lp_view_id = $lpItemViewId
+            ORDER BY view_count DESC
+            LIMIT 1";
+        $responseItemView = Database::query($sql);
+        $lpItemView = Database::fetch_array($responseItemView);
+
+        // Get the total execution duration of the user in the learning path item view
+        $sql = 'SELECT SUM(total_time) AS exe_duration
+            FROM plugin_h5p_import_results
+            WHERE
+                user_id = ' . $userId . ' AND
+                c_lp_item_view_id = ' . $lpItemView['iid'] . ' AND
+                c_id = ' . $courseId .
+            $sessionCondition .
+            ' ORDER BY total_time DESC';
+        $sumScoreResult = Database::query($sql);
+        $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
+
+        // Update the total duration in the learning path item view
+        $sqlUpdate = 'UPDATE ' . $lpItemViewTable . '
+                SET total_time = ' . $durationRow['exe_duration'] . '
+                WHERE iid = ' . $lpItemView['iid'];
+        Database::query($sqlUpdate);
+
+        return (int)$durationRow['exe_duration'];
+    }
 }

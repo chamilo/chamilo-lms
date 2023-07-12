@@ -5,13 +5,11 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use Doctrine\Common\Collections\Collection;
 use ExtraField as ExtraFieldModel;
 
 /**
@@ -1565,6 +1563,17 @@ class Tracking
                     $lesson_status = $row['mystatus'];
                     $score = $row['myscore'];
                     $subtotal_time = $row['mytime'];
+
+                    // This is necessary for fix the total time
+                    if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                        $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
+                            $row['myid'],
+                            $row['mylpviewid'],
+                            $user_id,
+                            $course_id,
+                            $session_id
+                        );
+                    }
                     while ($tmp_row = Database::fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
@@ -1675,6 +1684,18 @@ class Tracking
                                 }
                             }
                             break;
+                        case 'h5p':
+                            if (api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                                $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
+                                    $row['myid'],
+                                    $row['mylpviewid'],
+                                    $user_id,
+                                    $course_id,
+                                    $session_id
+                                );
+                            }
+                            $maxscore = $row['mymaxscore'];
+                            break;
                         default:
                             $maxscore = $row['mymaxscore'];
                             break;
@@ -1755,7 +1776,7 @@ class Tracking
                         if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
                             $em = Database::getManager();
                             $cLpItemViewRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
-                            $count = $cLpItemViewRepo->count(['user' => $user_id , 'cLpItemView' => $row['iv_id']]);
+                            $count = $cLpItemViewRepo->count(['user' => $user_id, 'cLpItemView' => $row['iv_id']]);
 
                             $showRowspan = false;
                             if ($count > 0) {
@@ -1923,7 +1944,6 @@ class Tracking
                         if (!empty($lp_id) &&
                             !empty($lp_item_id)
                         ) {
-
                             $sql = "SELECT path FROM $TBL_LP_ITEM
                                     WHERE
                                         c_id = $course_id AND
@@ -1936,13 +1956,13 @@ class Tracking
                                 if ('quiz' === $row['item_type']) {
                                     $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
                                     WHERE
-                                        exe_exo_id="' . (int)$row_path['path'] . '" AND
+                                        exe_exo_id="'.(int)$row_path['path'] . '" AND
                                         status <> "incomplete" AND
-                                        exe_user_id="' . $user_id . '" AND
-                                        orig_lp_id = "' . (int)$lp_id . '" AND
-                                        orig_lp_item_id = "' . (int)$lp_item_id . '" AND
-                                        c_id = ' . $course_id . '  AND
-                                        session_id = ' . $session_id . '
+                                        exe_user_id="'.$user_id.'" AND
+                                        orig_lp_id = "'.(int)$lp_id.'" AND
+                                        orig_lp_item_id = "'.(int)$lp_item_id.'" AND
+                                        c_id = '.$course_id . '  AND
+                                        session_id = '.session_id.'
                                     ORDER BY exe_date';
                                     $res_attempts = Database::query($sql);
                                     $num_attempts = Database::num_rows($res_attempts);
@@ -2039,17 +2059,16 @@ class Tracking
                                         ->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
                                     $h5pResults = $cLpItemViewRepo
                                         ->findBy(
-                                            ['user' => $user_id, 'cLpItemView' => $row['iv_id']
+                                            [
+                                                'user' => $user_id, 'cLpItemView' => $row['iv_id'],
                                             ]
                                         );
 
                                     if (count($h5pResults) > 0) {
-
                                         foreach ($h5pResults as $result) {
-
-                                            $timeAttemp = ' - ';
+                                            $timeAttempt = ' - ';
                                             if ($result->getTotalTime()) {
-                                                $timeAttemp = gmdate('H:i:s', $result->getTotalTime());
+                                                $timeAttempt = gmdate('H:i:s', $result->getTotalTime());
                                             }
                                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                 $view_score = Display::return_icon(
@@ -2079,7 +2098,7 @@ class Tracking
                                                 }
                                             }
                                             $my_lesson_status = learnpathitem::humanize_status('completed');
-                                            $timeRow = '<td class="lp_time" colspan="2">' . $timeAttemp . '</td>';
+                                            $timeRow = '<td class="lp_time" colspan="2">'.$timeAttempt.'</td>';
                                             if ($hideTime) {
                                                 $timeRow = '';
                                             }
@@ -2087,30 +2106,30 @@ class Tracking
                                             $output .= '<tr class="' . $oddclass . '" >
                                                 <td></td>
                                                 <td>' . $extend_attempt_link . '</td>
-                                                <td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>
-                                                <td colspan="2">' . $my_lesson_status . '</td>
-                                                <td colspan="2">' . $view_score . '</td>' . $timeRow;
+                                                <td colspan="3">'.get_lang('Attempt').' '.$n .'</td>
+                                                <td colspan="2">'.$my_lesson_status.'</td>
+                                                <td colspan="2">'.$view_score.'</td>'.$timeRow;
 
                                             if ($action == 'classic') {
                                                 if ($origin != 'tracking') {
                                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                         $output .= '<td>
-                                                        <img src="' . Display::returnIconPath('quiz_na.gif') . '" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                        <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
                                                         </td>';
                                                     } else {
                                                         $output .= '<td>
-                                                        <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $result->getIid() . '&cidReq=' . $courseCode . '" target="_parent">
-                                                        <img src="' . Display::returnIconPath('quiz.png') . '" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                        <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$result->getIid() . '&cidReq='.$courseCode.'" target="_parent">
+                                                        <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
                                                         </a></td>';
                                                     }
                                                 } else {
                                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                         $output .= '<td>
-                                                            <img src="' . Display::returnIconPath('quiz_na.gif') . '" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
+                                                            <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                                     } else {
                                                         $output .= '<td>
-                                                                <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $result->getIid() . '" target="_parent">
-                                                                <img src="' . Display::returnIconPath('quiz.gif') . '" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                                <a href="../exercise/exercise_show.php?cidReq='.$courseCode.'&origin=correct_exercise_in_lp&id='.$result->getIid().'" target="_parent">
+                                                                <img src="' . Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                                     }
                                                 }
                                             }

@@ -2,6 +2,14 @@
 $strings['plugin_title'] = "H5P import";
 $strings['plugin_comment'] = "Import H5P contents and use it in learnpaths. Open README.md for installation instructions.";
 $strings['tool_enable'] = "Enable plugin";
+$strings['frame'] = "Frame";
+$strings['frame_help'] = "Show frame and buttons below H5P";
+$strings['embed'] = "Embed";
+$strings['embed_help'] = "Display embed button";
+$strings['copyright'] = "Copyright";
+$strings['copyright_help'] = "Display copyright button";
+$strings['icon'] = "Enable plugin";
+$strings['icon_help'] = "Display H5P icon";
 $strings['attempts'] = "Number of attempts";
 $strings['upload_h5p'] = "Upload";
 $strings['import_h5p_package'] = "Upload H5P package";

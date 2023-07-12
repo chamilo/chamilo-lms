@@ -95,6 +95,16 @@
         />
       </template>
     </Column>
+
+    <template #footer>
+      <BaseButton
+        :disabled="0 === selected.length || loading"
+        :label="t('Delete selected')"
+        icon="delete"
+        type="danger"
+        @click="onClickMultipleDelete()"
+      />
+    </template>
   </DataTable>
 </template>
 
@@ -109,6 +119,8 @@ import { useAbbreviatedDatetime } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import { useNotification } from "../../composables/notification"
+import { useConfirm } from "primevue/useconfirm"
 
 const { t } = useI18n()
 
@@ -118,6 +130,10 @@ const loading = ref(false)
 const totalRecords = ref(0)
 
 const { cid, sid, gid } = useCidReq()
+
+const notification = useNotification()
+
+const confirm = useConfirm()
 
 const dt = ref()
 const loadParams = reactive({
@@ -166,4 +182,29 @@ watch(loadParams, (newLoadParams) => {
   loadData(newLoadParams)
 })
 
+function onClickMultipleDelete() {
+  confirm.require({
+    header: t("Confirmation"),
+    message: t("Are you sure you want to delete the selected items?"),
+    accept: async () => {
+      loading.value = true
+
+      try {
+        for (const assignment of selected.value) {
+          await cStudentPublicationService.del(assignment)
+        }
+      } catch (e) {
+        notification.showErrorNotification(e)
+
+        loading.value = false
+
+        return
+      }
+
+      loadData(loadParams)
+
+      notification.showSuccessNotification(t("Assignments deleted"))
+    },
+  })
+}
 </script>

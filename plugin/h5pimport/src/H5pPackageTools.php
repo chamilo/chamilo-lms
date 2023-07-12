@@ -67,8 +67,8 @@ class H5pPackageTools
             $majorVersion = $dependency->majorVersion;
             $minorVersion = $dependency->minorVersion;
 
-            $libraryFolderName = $libraryName .'-'.$majorVersion .'.'.$minorVersion;
-            $libraryPath = $extractedDir .'/'.$libraryFolderName;
+            $libraryFolderName = $libraryName.'-'.$majorVersion.'.'.$minorVersion;
+            $libraryPath = $extractedDir.'/'.$libraryFolderName;
 
             // Check if the library folder exists
             if (!$filesystem->exists($libraryPath)) {
@@ -87,11 +87,11 @@ class H5pPackageTools
     /**
      * Stores the H5P package information in the database.
      *
-     * @param string        $packagePath    The path to the H5P package file.
-     * @param object        $h5pJson        The parsed H5P JSON object.
-     * @param Course        $course         The course entity related to the package.
-     * @param Session|null  $session        The session entity related to the package.
-     * @param array|null    $values         The advance options in upload form.
+     * @param string       $packagePath The path to the H5P package file.
+     * @param object       $h5pJson     The parsed H5P JSON object.
+     * @param Course       $course      The course entity related to the package.
+     * @param Session|null $session     The session entity related to the package.
+     * @param array|null   $values      The advance options in upload form.
      *
      * @return void
      */
@@ -194,8 +194,8 @@ class H5pPackageTools
     /**
      * Get core settings for H5P content.
      *
-     * @param H5pImport $h5pImport  The H5pImport object.
-     * @param H5PCore   $h5pCore    The H5PCore object.
+     * @param H5pImport $h5pImport The H5pImport object.
+     * @param H5PCore   $h5pCore   The H5PCore object.
      *
      * @return array The core settings for H5P content.
      */
@@ -212,15 +212,15 @@ class H5pPackageTools
                 'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content'),
             ],
             'saveFreq' => false,
-            'l10n' => array(
+            'l10n' => [
                 'H5P' => $h5pCore->getLocalization(),
-            ),
+            ],
 //            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
             'crossorigin' => false,
 //            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
 //            'libraryConfig' => $core->h5pF->getLibraryConfig(),
             'pluginCacheBuster' => '?0',
-            'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath().'/js'
+            'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath().'/js',
         ];
 
         $loggedUser = api_get_user_info();
@@ -248,9 +248,9 @@ class H5pPackageTools
 
         // Add CSS assets
         foreach (H5PCore::$styles as $style) {
-            $auxAssetPath = 'vendor/h5p/h5p-core/' . $style;
-            $assets['css'][] = api_get_path(WEB_PATH) . $auxAssetPath;
-            if (!file_exists(api_get_path(SYS_PATH) . $auxAssetPath)) {
+            $auxAssetPath = 'vendor/h5p/h5p-core/'.$style;
+            $assets['css'][] = api_get_path(WEB_PATH).$auxAssetPath;
+            if (!file_exists(api_get_path(SYS_PATH).$auxAssetPath)) {
                 return false;
             }
         }

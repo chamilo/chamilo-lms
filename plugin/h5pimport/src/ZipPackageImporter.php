@@ -73,7 +73,6 @@ class ZipPackageImporter extends H5pPackageImporter
         $zipContent = $zipFile->listContent();
 
         if ($this->validateH5pPackageContent($zipContent)) {
-
             $packageSize = array_reduce(
                 $zipContent,
                 function ($accumulator, $zipEntry) {
@@ -89,11 +88,9 @@ class ZipPackageImporter extends H5pPackageImporter
             $zipFile->extract($packageDirectoryPath);
 
             return "$packageDirectoryPath";
-
         } else {
             throw new Exception('Invalid H5P package');
         }
-
     }
 
     /**
@@ -107,6 +104,7 @@ class ZipPackageImporter extends H5pPackageImporter
             throw new Exception('Not enough space to store package.');
         }
     }
+
     /**
      * Validate a H5P package.
      * Check if exits h5p.json, content.json file and if the files are in a file whitelist (ALLOWED_FILES).
@@ -116,7 +114,6 @@ class ZipPackageImporter extends H5pPackageImporter
         $validPackage = false;
 
         if (!empty($h5pPackageContent)) {
-
             foreach ($h5pPackageContent as $content) {
                 if (preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $content['filename']) !== 0) {
                     // Skip any file or folder starting with a . or _
@@ -128,7 +125,6 @@ class ZipPackageImporter extends H5pPackageImporter
                 } elseif ($content['filename'] === 'content/content.json') {
                     $validPackage = true;
                 }
-
             }
         }
 
@@ -137,9 +133,9 @@ class ZipPackageImporter extends H5pPackageImporter
     }
     private function generatePackageDirectory(string $name): string
     {
-        $baseDirectory = $this->courseDirectoryPath . '/h5p/content/';
+        $baseDirectory = $this->courseDirectoryPath.'/h5p/content/';
         $safeName = api_replace_dangerous_char($name);
-        $directoryPath = $baseDirectory . $safeName;
+        $directoryPath = $baseDirectory.$safeName;
 
         $fs = new Filesystem();
 
@@ -148,8 +144,8 @@ class ZipPackageImporter extends H5pPackageImporter
 
             // Add numeric suffix to the name until a unique directory name is found
             while ($fs->exists($directoryPath)) {
-                $modifiedName = $safeName . '_' . $counter;
-                $directoryPath = $baseDirectory . $modifiedName;
+                $modifiedName = $safeName.'_'.$counter;
+                $directoryPath = $baseDirectory.$modifiedName;
                 $counter++;
             }
         }
@@ -159,7 +155,7 @@ class ZipPackageImporter extends H5pPackageImporter
             api_get_permissions_for_new_directories()
         );
 
-        $sharedLibrariesDir = $this->courseDirectoryPath . '/h5p/libraries';
+        $sharedLibrariesDir = $this->courseDirectoryPath.'/h5p/libraries';
 
         if (!$fs->exists($sharedLibrariesDir)) {
             $fs->mkdir(
@@ -170,5 +166,4 @@ class ZipPackageImporter extends H5pPackageImporter
 
         return $directoryPath;
     }
-
 }

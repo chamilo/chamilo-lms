@@ -1,21 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
+use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Define the H5pImportPlugin class as an extension of Plugin
  * install/uninstall the plugin.
  */
-
 class H5pImportPlugin extends Plugin
 {
-
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
     public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
     public const TBL_H5P_IMPORT_RESULTS = 'plugin_h5p_import_results';
@@ -67,7 +65,7 @@ class H5pImportPlugin extends Plugin
                 [
                     self::TBL_H5P_IMPORT,
                     self::TBL_H5P_IMPORT_LIBRARY,
-                    self::TBL_H5P_IMPORT_RESULTS
+                    self::TBL_H5P_IMPORT_RESULTS,
                 ]
             )
         ) {
@@ -110,7 +108,7 @@ class H5pImportPlugin extends Plugin
                 [
                     self::TBL_H5P_IMPORT,
                     self::TBL_H5P_IMPORT_LIBRARY,
-                    self::TBL_H5P_IMPORT_RESULTS
+                    self::TBL_H5P_IMPORT_RESULTS,
                 ]
             )
         ) {
@@ -149,6 +147,7 @@ class H5pImportPlugin extends Plugin
      * Get the view URL for an H5P import.
      *
      * @param H5pImport $h5pImport The H5P import object.
+     *
      * @return string The view URL for the H5P import.
      */
     public function getViewUrl(H5pImport $h5pImport): string
@@ -171,48 +170,10 @@ class H5pImportPlugin extends Plugin
     }
 
     /**
-     * @param int $courseId
-     */
-    public function addCourseTool(int $courseId)
-    {
-        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
-        // Otherwise, the link en the course tool will link to "/main/" URL.
-        $this->createLinkToCourseTool(
-            $this->get_lang('plugin_title'),
-            $courseId,
-            'plugin_h5p_import.png',
-            '../plugin/h5pimport/start.php',
-            0,
-            'authoring'
-        );
-    }
-
-    private function deleteCourseToolLinks()
-    {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/h5pimport/start.php%']);
-    }
-
-    /**
-     * Removes H5P directories for all courses.
-     */
-    private function removeH5pDirectories(): void
-    {
-        $fs = new Filesystem();
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $table ORDER BY id";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $courseInfo =  api_get_course_info_by_id($row['id']);
-            $fs->remove($courseInfo['course_sys_path'].'/h5p');
-        }
-    }
-
-    /**
      * Generates the LP resource block for H5P imports.
      *
      * @param int $lpId The LP ID.
+     *
      * @return string The HTML for the LP resource block.
      */
     public function getLpResourceBlock(int $lpId): string
@@ -238,7 +199,7 @@ class H5pImportPlugin extends Plugin
         $return .= $importIcon;
         $return .= Display::url(
             get_lang('Import'),
-            $webPath . "start.php?action=add&$cidReq&" . http_build_query(['lp_id' => $lpId])
+            $webPath."start.php?action=add&$cidReq&".http_build_query(['lp_id' => $lpId])
         );
         $return .= '</li>';
 
@@ -287,8 +248,7 @@ class H5pImportPlugin extends Plugin
         int $userId,
         int $courseId,
         int $sessionId
-    ): int
-    {
+    ): int {
         $sessionCondition = api_get_session_condition($sessionId);
         $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -307,20 +267,59 @@ class H5pImportPlugin extends Plugin
         $sql = 'SELECT SUM(total_time) AS exe_duration
             FROM plugin_h5p_import_results
             WHERE
-                user_id = ' . $userId . ' AND
-                c_lp_item_view_id = ' . $lpItemView['iid'] . ' AND
-                c_id = ' . $courseId .
+                user_id = '.$userId.' AND
+                c_lp_item_view_id = '.$lpItemView['iid'].' AND
+                c_id = '.$courseId .
             $sessionCondition .
             ' ORDER BY total_time DESC';
         $sumScoreResult = Database::query($sql);
         $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
 
         // Update the total duration in the learning path item view
-        $sqlUpdate = 'UPDATE ' . $lpItemViewTable . '
-                SET total_time = ' . $durationRow['exe_duration'] . '
-                WHERE iid = ' . $lpItemView['iid'];
+        $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
+                SET total_time = '.$durationRow['exe_duration'].'
+                WHERE iid = '.$lpItemView['iid'];
         Database::query($sqlUpdate);
 
         return (int)$durationRow['exe_duration'];
+    }
+
+    /**
+     * @param int $courseId
+     */
+    public function addCourseTool(int $courseId)
+    {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
+        $this->createLinkToCourseTool(
+            $this->get_lang('plugin_title'),
+            $courseId,
+            'plugin_h5p_import.png',
+            '../plugin/h5pimport/start.php',
+            0,
+            'authoring'
+        );
+    }
+
+    private function deleteCourseToolLinks()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'authoring', 'link' => '../plugin/h5pimport/start.php%']);
+    }
+
+    /**
+     * Removes H5P directories for all courses.
+     */
+    private function removeH5pDirectories(): void
+    {
+        $fs = new Filesystem();
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $courseInfo =  api_get_course_info_by_id($row['id']);
+            $fs->remove($courseInfo['course_sys_path'].'/h5p');
+        }
     }
 }

@@ -34,7 +34,6 @@ $actions = [];
 $view = new Template($plugin->getToolTitle());
 $view->assign('is_allowed_to_edit', $isAllowedToEdit);
 
-
 switch ($action) {
     case 'add':
         if (!$isAllowedToEdit) {
@@ -75,12 +74,11 @@ switch ($action) {
                 $packageFile = $importer->import();
 
                 // Get the h5p.json and content.json contents
-                $h5pJson  = H5pPackageTools::getJson($packageFile.DIRECTORY_SEPARATOR.'h5p.json');
+                $h5pJson = H5pPackageTools::getJson($packageFile.DIRECTORY_SEPARATOR.'h5p.json');
                 $contentJson = H5pPackageTools::getJson(
                     $packageFile.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'content.json'
                 );
                 if ($h5pJson && $contentJson) {
-
                     if (H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
 
                         H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session, $values);
@@ -88,7 +86,6 @@ switch ($action) {
                         Display::addFlash(
                             Display::return_message(get_lang('Added'), 'success')
                         );
-
                     } else {
                         Display::addFlash(
                             Display::return_message(get_lang('Error'), 'error')
@@ -97,11 +94,9 @@ switch ($action) {
                     }
 
                     header('Location: '.api_get_self());
-
                 }
 
                 exit;
-
             } catch (Exception $e) {
                 Display::addFlash(
                     Display::return_message($e->getMessage(), 'error')
@@ -225,7 +220,7 @@ switch ($action) {
                     'course' => $course,
                     'session' => $session,
                     'user' => $user,
-                    'h5pImport' => $h5pImport
+                    'h5pImport' => $h5pImport,
                 ]
             );
             $data = [
@@ -281,7 +276,6 @@ switch ($action) {
                     $actions = [];
 
                     if ($isAllowedToEdit) {
-
                         $actions[] = Display::url(
                             Display::return_icon('delete.png', get_lang('Delete')),
                             api_get_self().'?action=delete&id='.$value->getIid()
@@ -296,7 +290,6 @@ switch ($action) {
         $view->assign('table', $table->return_table());
 
 }
-
 
 $content = $view->fetch('h5pimport/view/index.tpl');
 if ($actions) {

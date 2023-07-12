@@ -116,7 +116,7 @@ if (empty($h5pNode)) {
                 $integration['loadedCss'][] = $script->path.$script->version;
             }
 
-            $htmlContent = '<div class="h5p-content" data-content-id="' .  $h5pNode['contentId'] . '"></div>';
+            $htmlContent = '<div class="h5p-content" data-content-id="'.$h5pNode['contentId'].'"></div>';
         } elseif ($embedType === 'iframe') {
             $integration['core']['scripts'] = $coreAssets['js'];
             $integration['core']['styles'] = $coreAssets['css'];
@@ -127,14 +127,14 @@ if (empty($h5pNode)) {
 
             $htmlContent = '<div class="h5p-iframe-wrapper">
                         <iframe
-                            id="h5p-iframe-'.$h5pNode['contentId'] . '"
+                            id="h5p-iframe-'.$h5pNode['contentId'].'"
                             class="h5p-iframe"
-                            data-content-id="'.$h5pNode['contentId'] . '"
+                            data-content-id="'.$h5pNode['contentId'].'"
                             style="height:1px"
                             src="about:blank" frameBorder="0" scrolling="no"
                             allowfullscreen="allowfullscreen"
                             allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                            title="'.$h5pNode['title'] . '">
+                            title="'.$h5pNode['title'].'">
                         </iframe>
                     </div>';
         }

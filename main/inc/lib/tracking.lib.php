@@ -2011,39 +2011,39 @@ class Tracking
                                             } elseif ($my_lesson_status == 'incomplete') {
                                                 $my_lesson_status = learnpathitem::humanize_status('incomplete');
                                             }
-                                            $timeRow = '<td class="lp_time" colspan="2">' . $time_attemp . '</td>';
+                                            $timeRow = '<td class="lp_time" colspan="2">'.$time_attemp.'</td>';
                                             if ($hideTime) {
                                                 $timeRow = '';
                                             }
 
-                                            $output .= '<tr class="' . $oddclass . '" >
+                                            $output .= '<tr class="'.$oddclass.'" >
                                     <td></td>
-                                    <td>' . $extend_attempt_link . '</td>
-                                    <td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>
-                                    <td colspan="2">' . $my_lesson_status . '</td>
-                                    <td colspan="2">' . $view_score . '</td>
-                                    ' . $timeRow;
+                                    <td>'.$extend_attempt_link.'</td>
+                                    <td colspan="3">'.get_lang('Attempt').' '.$n.'</td>
+                                    <td colspan="2">'.$my_lesson_status.'</td>
+                                    <td colspan="2">'.$view_score.'</td>
+                                    '.$timeRow;
 
                                             if ($action == 'classic') {
                                                 if ($origin != 'tracking') {
                                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                         $output .= '<td>
-                                                        <img src="' . Display::returnIconPath('quiz_na.gif') . '" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                        <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
                                                         </td>';
                                                     } else {
                                                         $output .= '<td>
-                                                        <a href="../exercise/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
-                                                        <img src="' . Display::returnIconPath('quiz.png') . '" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                        <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$my_exe_id.'&cidReq='.$courseCode.'" target="_parent">
+                                                        <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
                                                         </a></td>';
                                                     }
                                                 } else {
                                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                         $output .= '<td>
-                                                            <img src="' . Display::returnIconPath('quiz_na.gif') . '" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
+                                                            <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                                     } else {
                                                         $output .= '<td>
-                                                                <a href="../exercise/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
-                                                                <img src="' . Display::returnIconPath('quiz.gif') . '" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                                <a href="../exercise/exercise_show.php?cidReq='.$courseCode . '&origin=correct_exercise_in_lp&id='.$my_exe_id.'" target="_parent">
+                                                                <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                                     }
                                                 }
                                             }

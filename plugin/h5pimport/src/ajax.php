@@ -69,7 +69,6 @@ if ($action === 'set_finished' && $h5pId !== 0) {
     } else {
         H5PCore::ajaxError();
     }
-
 } elseif ($action === 'content_user_data' && $h5pId !== 0) {
     if (!H5PCore::validToken('content', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));

@@ -63,7 +63,7 @@ services:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
 
-    Chamilo\CoreBundle\State\CStudentPublicationStateProcessor:
+    Chamilo\CoreBundle\State\CStudentPublicationPostProcessor:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 

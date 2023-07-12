@@ -70,6 +70,7 @@
           only-icon
           size="small"
           type="black"
+          @click="onClickVisibility(slotProps.data)"
         />
         <BaseButton
           :label="t('Upload corrections')"
@@ -121,6 +122,7 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
 import { useNotification } from "../../composables/notification"
 import { useConfirm } from "primevue/useconfirm"
+import resourceLinkService from "../../services/resourcelink"
 
 const { t } = useI18n()
 
@@ -206,5 +208,19 @@ function onClickMultipleDelete() {
       notification.showSuccessNotification(t("Assignments deleted"))
     },
   })
+}
+
+async function onClickVisibility(assignment) {
+  if (RESOURCE_LINK_PUBLISHED === assignment.firstResourceLink.visibility) {
+    assignment.firstResourceLink.visibility = RESOURCE_LINK_DRAFT
+  } else if (RESOURCE_LINK_DRAFT === assignment.firstResourceLink.visibility) {
+    assignment.firstResourceLink.visibility = RESOURCE_LINK_PUBLISHED
+  }
+
+  try {
+    await resourceLinkService.update(assignment.firstResourceLink)
+  } catch (e) {
+    notification.showErrorNotification(e)
+  }
 }
 </script>

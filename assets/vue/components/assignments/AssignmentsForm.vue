@@ -236,8 +236,9 @@ const onSubmit = async () => {
   if (showAdvancedSettings.value) {
     publicationStudent.qualification = assignment.qualification;
 
+    publicationStudent.addToCalendar = assignment.addToCalendar;
+
     if (chkAddToGradebook.value) {
-      publicationStudent.addToCalendar = true;
       publicationStudent.gradebookCategoryId = assignment.gradebookId.id;
       publicationStudent.weight = assignment.weight;
     }

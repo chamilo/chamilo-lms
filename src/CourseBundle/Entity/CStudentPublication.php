@@ -5,6 +5,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -45,6 +48,15 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['c_student_publication:write'],
     ],
 )]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'title',
+        'sentDate' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assignment.expiresOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+    ]
+)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -54,7 +66,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
@@ -74,6 +86,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected int $postGroupId;
 
     #[ORM\Column(name: 'sent_date', type: 'datetime', nullable: true)]
+    #[Groups(['student_publication:read'])]
     protected ?DateTime $sentDate;
 
     #[Assert\NotBlank]
@@ -114,7 +127,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
     #[Assert\Valid]
     protected ?CStudentPublicationAssignment $assignment = null;

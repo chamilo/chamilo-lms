@@ -417,6 +417,9 @@ abstract class AbstractResource
         return $this;
     }
 
+    #[Groups([
+        'student_publication:read',
+    ])]
     public function getFirstResourceLink(): ?ResourceLink
     {
         $resourceNode = $this->getResourceNode();

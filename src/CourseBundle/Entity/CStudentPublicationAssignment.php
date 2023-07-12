@@ -22,11 +22,11 @@ class CStudentPublicationAssignment implements Stringable
     protected int $iid;
 
     #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected ?DateTime $expiresOn = null;
 
     #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[Assert\GreaterThanOrEqual(propertyPath: 'expiresOn')]
     protected ?DateTime $endsOn = null;
 

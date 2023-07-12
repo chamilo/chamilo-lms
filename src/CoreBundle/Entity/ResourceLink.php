@@ -73,6 +73,7 @@ class ResourceLink implements Stringable
     #[Groups([
         'ctool:read',
         'c_tool_intro:read',
+        'student_publication:read',
     ])]
     #[ORM\Column(name: 'visibility', type: 'integer', nullable: false)]
     protected int $visibility;

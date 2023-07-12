@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\State\CStudentPublicationStateProcessor;
+use Chamilo\CoreBundle\State\CStudentPublicationPostProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            processor: CStudentPublicationPostProcessor::class
         ),
     ],
     normalizationContext: [
@@ -43,7 +44,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['c_student_publication:write'],
     ],
-    processor: CStudentPublicationStateProcessor::class
 )]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {

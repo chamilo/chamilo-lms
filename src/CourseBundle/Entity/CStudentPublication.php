@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\CStudentPublicationPostProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
@@ -513,5 +514,54 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getUniqueStudentAttemptsTotal(): int
+    {
+        $userIdList = [];
+
+        $reduce = $this->children
+            ->filter(function (CStudentPublication $child) {
+                return $child->postGroupId == $this->postGroupId;
+            })
+            ->reduce(function (int $accumulator, CStudentPublication $child) use (&$userIdList): int {
+                $user = $child->getUser();
+
+                if (!in_array($user->getId(), $userIdList)) {
+                    $userIdList[] = $user->getId();
+
+                    return $accumulator + 1;
+                }
+
+                return $accumulator;
+            });
+        ;
+
+        return $reduce ?: 0;
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getStudentSubscribedToWork(): int
+    {
+        $firstLink = $this->getFirstResourceLink();
+
+        $course = $firstLink->getCourse();
+        $session = $firstLink->getSession();
+        $group = $firstLink->getGroup();
+
+        if ($group) {
+            return $group->getMembers()->count();
+        }
+
+        if ($session) {
+            return $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)->count();
+        }
+
+        if ($course) {
+            return $course->getStudentSubscriptions()->count();
+        }
+
+        return 0;
     }
 }

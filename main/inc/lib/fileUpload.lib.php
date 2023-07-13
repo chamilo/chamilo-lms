@@ -30,7 +30,7 @@ function php2phps($file_name)
 }
 
 /**
- * Renames .htaccess & .HTACCESS to htaccess.txt.
+ * Renames .htaccess & .HTACCESS & .htAccess to htaccess.txt.
  *
  * @param string $filename
  *
@@ -38,7 +38,9 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    return str_replace(['.htaccess', '.HTACCESS'], ['htaccess.txt', 'htaccess.txt'], $filename);
+    $filename = strtolower($filename);
+
+    return str_replace('.htaccess', 'htaccess.txt', $filename);
 }
 
 /**

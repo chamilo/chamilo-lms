@@ -30,6 +30,11 @@ function wsConvertPpt($pptData)
     }
     $fileData = $pptData['file_data'];
     // Clean filename to avoid hacks. Prevents "&" and ";" to be used in filename, notably
+
+    if (strpos($pptData['file_name'], '..') !== false) {
+        return false;
+    }
+
     $sanitizedFileName = $pptData['file_name'];
     $dataInfo = pathinfo($sanitizedFileName);
     $fileName = basename($sanitizedFileName, '.'.$dataInfo['extension']);

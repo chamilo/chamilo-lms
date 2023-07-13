@@ -13954,13 +13954,16 @@ EOD;
                     .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
                     ."?id=$id&$extraParams";
             case TOOL_H5P:
-                $toolLaunch = $em->find(H5pImport::class, $id);
+                if (api_get_plugin_setting('h5pimport', 'tool_enable')){
+                    $toolLaunch = $em->find(H5pImport::class, $id);
 
-                if (empty($toolLaunch)) {
-                    break;
+                    if (empty($toolLaunch)) {
+                        break;
+                    }
+
+                    return api_get_path(WEB_PLUGIN_PATH).'h5pimport/view.php'."?id=$id&$extraParams";
                 }
-
-                return api_get_path(WEB_PLUGIN_PATH).'h5pimport/view.php'."?id=$id&$extraParams";
+                break;
             case TOOL_SURVEY:
                 $table = Database::get_course_table(TABLE_SURVEY);
                 $sql = "SELECT code FROM $table WHERE c_id = $course_id AND survey_id =".(int) $id;

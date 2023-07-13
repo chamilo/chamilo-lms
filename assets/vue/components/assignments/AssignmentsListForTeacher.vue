@@ -201,6 +201,8 @@ function onClickMultipleDelete() {
         loading.value = false
 
         return
+      } finally {
+        selected.value = []
       }
 
       loadData(loadParams)

@@ -10,7 +10,11 @@
       <div class="app-sidebar__bottom">
         <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
       </div>
-      <a v-if="isAuthenticated" href="/logout" class="app-sidebar__logout-link">
+      <a
+        v-if="isAuthenticated"
+        class="app-sidebar__logout-link"
+        href="/logout"
+      >
         <span class="pi pi-fw pi-sign-out" />
         <span class="logout-text">{{ t("Sign out") }}</span>
       </a>
@@ -25,8 +29,8 @@
 
   <Teleport to=".p-megamenu .p-megamenu-end">
     <a
-      tabindex="0"
       class="app-sidebar__topbar-button"
+      tabindex="0"
       @click="sidebarIsOpen = !sidebarIsOpen"
     >
       <i class="pi pi-times" />
@@ -35,21 +39,19 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
-import PanelMenu from "primevue/panelmenu";
-import ToggleButton from "primevue/togglebutton";
-import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
+import { computed, ref, watch } from "vue"
+import PanelMenu from "primevue/panelmenu"
+import ToggleButton from "primevue/togglebutton"
+import { useI18n } from "vue-i18n"
+import { useStore } from "vuex"
 
-const store = useStore();
-const { t } = useI18n();
+const store = useStore()
+const { t } = useI18n()
 
-const isAuthenticated = computed(
-  () => store.getters["security/isAuthenticated"]
-);
-const isAdmin = computed(() => store.getters["security/isAdmin"]);
-const isBoss = computed(() => store.getters["security/isBoss"]);
-const isStudent = computed(() => store.getters["security/isStudent"]);
+const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
+const isAdmin = computed(() => store.getters["security/isAdmin"])
+const isBoss = computed(() => store.getters["security/isBoss"])
+const isStudent = computed(() => store.getters["security/isStudent"])
 
 const items = ref([
   {
@@ -137,23 +139,21 @@ const items = ref([
       },
     ],
   },
-]);
+])
 
-const sidebarIsOpen = ref(
-  window.localStorage.getItem("sidebarIsOpen") === "true"
-);
+const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 
 watch(
   sidebarIsOpen,
   (newValue) => {
-    const appEl = document.querySelector("#app");
+    const appEl = document.querySelector("#app")
 
-    window.localStorage.setItem("sidebarIsOpen", newValue.toString());
+    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
 
-    appEl.classList.toggle("app--sidebar-inactive", !newValue);
+    appEl.classList.toggle("app--sidebar-inactive", !newValue)
   },
   {
     immediate: true,
-  }
-);
+  },
+)
 </script>

@@ -37,8 +37,9 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary p-3
-      sm:inline-flex;
+    @apply bg-white border border-solid border-gray-25 rounded-full top-7 -right-4 text-tiny text-primary p-3;
+    display: none !important;
+    position: absolute !important;
     z-index: 11;
 
     &:hover,
@@ -161,6 +162,15 @@
 
     .app-main {
       @apply overflow-auto;
+    }
+  }
+}
+
+@media (min-width: 640px) {
+  .app-sidebar {
+    &__button {
+      display: inline-flex !important;
+      position: absolute !important;
     }
   }
 }

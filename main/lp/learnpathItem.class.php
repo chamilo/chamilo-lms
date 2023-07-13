@@ -266,7 +266,7 @@ class learnpathItem
             error_log("get_id: ".$this->get_id());
         }
         if ($type !== 'sco') {
-            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
+            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES || $type == TOOL_H5P) {
                 $this->get_status(
                     true,
                     true
@@ -954,6 +954,7 @@ class learnpathItem
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
+            case TOOL_H5P:
             case 'sco':
                 // Get the document and, if HTML, open it.
                 if (!is_file($abs_path)) {
@@ -2339,7 +2340,7 @@ class learnpathItem
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                    if ($itemToCheck->type === 'quiz') {
+                                    if ($itemToCheck->type === 'quiz' || $itemToCheck->type === 'h5p') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2722,7 +2723,7 @@ class learnpathItem
             $this->objectives_count = 0;
             $this->objectives = [];
             $this->lesson_location = '';
-            if ($this->type != TOOL_QUIZ) {
+            if ($this->type != TOOL_QUIZ || $this->type != TOOL_H5P) {
                 $this->write_to_db();
             }
         } else {
@@ -2889,6 +2890,7 @@ class learnpathItem
                     break;
                 case TOOL_HOTPOTATOES:
                     break;
+                case TOOL_H5P:
                 case TOOL_QUIZ:
                     return false;
                     break;
@@ -3716,7 +3718,7 @@ class learnpathItem
         } else {
             // Check the row exists.
             // This a special case for multiple attempts and Chamilo exercises.
-            if ($this->type === 'quiz' &&
+            if (($this->type === 'quiz' || $this->type === 'h5p') &&
                 $this->get_prevent_reinit() == 0 &&
                 $this->get_status() === 'completed'
             ) {
@@ -3819,7 +3821,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ($this->type === 'quiz') {
+                    if ($this->type === 'quiz' || $this->type === 'h5p') {
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {

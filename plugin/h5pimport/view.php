@@ -63,69 +63,74 @@ if (!$originIsLearnpath) {
     );
 }
 
+$formTarget = $originIsLearnpath ? '_self' : '_blank';
 $htmlContent = '';
-$interface = new H5pImplementation($h5pImport);
-$h5pCore = new H5PCore(
-    $interface,
-    $h5pImport->getPath(),
-    api_get_self(),
-    'en',
-    false
-);
-
-$h5pNode = $h5pCore->loadContent($h5pImport->getIid());
-
-if (empty($h5pNode)) {
-    Display::addFlash(
-        Display::return_message(get_lang('Error'), 'error')
+if ($_REQUEST['view']) {
+    $interface = new H5pImplementation($h5pImport);
+    $h5pCore = new H5PCore(
+        $interface,
+        $h5pImport->getPath(),
+        api_get_self(),
+        'en',
+        false
     );
-} else {
-    $coreAssets = H5pPackageTools::getCoreAssets();
 
-    if (!$coreAssets) {
+    $h5pNode = $h5pCore->loadContent($h5pImport->getIid());
+
+    if (empty($h5pNode)) {
         Display::addFlash(
-            Display::return_message($plugin->get_lang('h5p_error_missing_core_asset'), 'danger')
+            Display::return_message(get_lang('Error'), 'error')
         );
     } else {
-        $integration = H5pPackageTools::getCoreSettings($h5pImport, $h5pCore);
-        $embedType = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
-        $integration['contents']['cid-'.$h5pNode['contentId']] =
-            H5pPackageTools::getContentSettings($h5pNode, $h5pCore);
+        $coreAssets = H5pPackageTools::getCoreAssets();
 
-        $preloadedDependencies = $h5pCore->loadContentDependencies($h5pNode['id'], 'preloaded');
-        $files = $h5pCore->getDependenciesFiles(
-            $preloadedDependencies,
-            api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/h5p'
-        );
-        $libraryList = H5pPackageTools::h5pDependenciesToLibraryList($preloadedDependencies);
+        if (!$coreAssets) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('h5p_error_missing_core_asset'), 'danger')
+            );
+        } else {
+            $htmlContent .= Display::div(
+                ['class' => 'exercise_overview_options']
+            );
+            $integration = H5pPackageTools::getCoreSettings($h5pImport, $h5pCore);
+            $embedType = H5PCore::determineEmbedType($h5pNode['embedType'], $h5pNode['library']['embedTypes']);
+            $integration['contents']['cid-'.$h5pNode['contentId']] =
+                H5pPackageTools::getContentSettings($h5pNode, $h5pCore);
 
-        foreach ($coreAssets['js'] as $script) {
-            $htmlHeadXtra[] = api_get_js_simple($script);
-        }
-        foreach ($coreAssets['css'] as $style) {
-            $htmlHeadXtra[] = api_get_css($style);
-        }
+            $preloadedDependencies = $h5pCore->loadContentDependencies($h5pNode['id'], 'preloaded');
+            $files = $h5pCore->getDependenciesFiles(
+                $preloadedDependencies,
+                api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/h5p'
+            );
+            $libraryList = H5pPackageTools::h5pDependenciesToLibraryList($preloadedDependencies);
 
-        if ($embedType === 'div') {
-            foreach ($files['scripts'] as $script) {
-                $htmlHeadXtra[] = api_get_js_simple($script->path.$script->version);
-                $integration['loadedJs'] = $script->path.$script->version;
+            foreach ($coreAssets['js'] as $script) {
+                $htmlHeadXtra[] = api_get_js_simple($script);
             }
-            foreach ($files['styles'] as $script) {
-                $htmlHeadXtra[] = api_get_css($script->path.$script->version);
-                $integration['loadedCss'][] = $script->path.$script->version;
+            foreach ($coreAssets['css'] as $style) {
+                $htmlHeadXtra[] = api_get_css($style);
             }
 
-            $htmlContent = '<div class="h5p-content" data-content-id="'.$h5pNode['contentId'].'"></div>';
-        } elseif ($embedType === 'iframe') {
-            $integration['core']['scripts'] = $coreAssets['js'];
-            $integration['core']['styles'] = $coreAssets['css'];
-            $integration['contents']['cid-'.$h5pNode['contentId']]['styles'] =
-                $h5pCore->getAssetsUrls($files['styles']);
-            $integration['contents']['cid-'.$h5pNode['contentId']]['scripts'] =
-                $h5pCore->getAssetsUrls($files['scripts']);
+            if ($embedType === 'div') {
+                foreach ($files['scripts'] as $script) {
+                    $htmlHeadXtra[] = api_get_js_simple($script->path.$script->version);
+                    $integration['loadedJs'] = $script->path.$script->version;
+                }
+                foreach ($files['styles'] as $script) {
+                    $htmlHeadXtra[] = api_get_css($script->path.$script->version);
+                    $integration['loadedCss'][] = $script->path.$script->version;
+                }
 
-            $htmlContent = '<div class="h5p-iframe-wrapper">
+                $htmlContent = '<div class="h5p-content" data-content-id="'.$h5pNode['contentId'].'"></div>';
+            } elseif ($embedType === 'iframe') {
+                $integration['core']['scripts'] = $coreAssets['js'];
+                $integration['core']['styles'] = $coreAssets['css'];
+                $integration['contents']['cid-'.$h5pNode['contentId']]['styles'] =
+                    $h5pCore->getAssetsUrls($files['styles']);
+                $integration['contents']['cid-'.$h5pNode['contentId']]['scripts'] =
+                    $h5pCore->getAssetsUrls($files['scripts']);
+
+                $htmlContent = '<div class="h5p-iframe-wrapper">
                         <iframe
                             id="h5p-iframe-'.$h5pNode['contentId'].'"
                             class="h5p-iframe"
@@ -137,16 +142,37 @@ if (empty($h5pNode)) {
                             title="'.$h5pNode['title'].'">
                         </iframe>
                     </div>';
-        }
+            }
 
-        if (!isset($htmlContent)) {
-            Display::addFlash(
-                Display::return_message($plugin->get_lang('h5p_error_loading'), 'danger')
-            );
-        } else {
-            $htmlContent .= '<script> H5PIntegration = '.json_encode($integration).'</script>';
+            if (!isset($htmlContent)) {
+                Display::addFlash(
+                    Display::return_message($plugin->get_lang('h5p_error_loading'), 'danger')
+                );
+            } else {
+                $htmlContent .= '<script> H5PIntegration = '.json_encode($integration).'</script>';
+            }
         }
     }
+} else {
+    $frmNewAttempt = new FormValidator(
+        'view',
+        'post',
+        $plugin->getViewUrl($h5pImport).'&view=1',
+        '',
+        ['target' => $formTarget],
+        FormValidator::LAYOUT_INLINE
+    );
+    $frmNewAttempt->addHidden('id', $h5pImport->getIid());
+    $frmNewAttempt->addButton(
+        'submit',
+        $plugin->get_lang('start_attempt'),
+        'external-link fa-fw',
+        'success'
+    );
+    $htmlContent = Display::div(
+        $frmNewAttempt->returnForm(),
+        ['class' => 'exercise_overview_options']
+    );
 }
 
 $view = new Template($h5pImport->getName());

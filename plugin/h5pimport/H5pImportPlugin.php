@@ -235,29 +235,20 @@ class H5pImportPlugin extends Plugin
      * Updates and returns the total duration in the view of an H5P learning path item in a course.
      *
      * @param int $lpItemId     The ID of the learning path item
-     * @param int $lpItemViewId The ID of the learning path item view
      * @param int $userId       The user ID
-     * @param int $courseId     The course ID
-     * @param int $sessionId    The session ID
      *
      * @return int The updated total duration in the learning path item view
      */
     public static function fixTotalTimeInLpItemView(
         int $lpItemId,
-        int $lpItemViewId,
-        int $userId,
-        int $courseId,
-        int $sessionId
+        int $userId
     ): int {
-        $sessionCondition = api_get_session_condition($sessionId);
         $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         $sql = "SELECT iid, score
             FROM $lpItemViewTable
             WHERE
-                c_id = $courseId AND
-                lp_item_id = $lpItemId AND
-                lp_view_id = $lpItemViewId
+                iid = $lpItemId
             ORDER BY view_count DESC
             LIMIT 1";
         $responseItemView = Database::query($sql);
@@ -268,20 +259,29 @@ class H5pImportPlugin extends Plugin
             FROM plugin_h5p_import_results
             WHERE
                 user_id = '.$userId.' AND
-                c_lp_item_view_id = '.$lpItemView['iid'].' AND
-                c_id = '.$courseId .
-            $sessionCondition .
+                c_lp_item_view_id = '.$lpItemView['iid'].
             ' ORDER BY total_time DESC';
         $sumScoreResult = Database::query($sql);
         $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
 
-        // Update the total duration in the learning path item view
-        $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
+        if (!empty($durationRow['exe_duration'])) {
+            // Update the total duration in the learning path item view
+            $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
                 SET total_time = '.$durationRow['exe_duration'].'
                 WHERE iid = '.$lpItemView['iid'];
-        Database::query($sqlUpdate);
+            Database::query($sqlUpdate);
 
-        return (int)$durationRow['exe_duration'];
+            return (int)$durationRow['exe_duration'];
+        } else {
+            // Update c_lp_item_view status
+            $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
+                SET status = "not attempted",
+                total_time = 0
+                WHERE iid = '.$lpItemView['iid'];
+            Database::query($sqlUpdate);
+
+            return 0;
+        }
     }
 
     /**

@@ -47,8 +47,12 @@ if ($action === 'set_finished' && $h5pId !== 0) {
             $lpObject = Session::read('oLP');
             $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
             /** @var CLpItemView|null $lpItemView */
-            $lpItemView = $clpItemViewRepo->findOneBy(['lpViewId' => $lpObject->lp_view_id, 'lpItemId' => $lpObject->current]);
-
+            $lpItemView = $clpItemViewRepo->findOneBy(
+                [
+                    'lpViewId' => $lpObject->lp_view_id,
+                    'lpItemId' => $lpObject->current,
+                ]
+            );
             /** @var CLpItem|null $lpItem */
             $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
             if ('h5p' !== $lpItem->getItemType()) {
@@ -57,6 +61,8 @@ if ($action === 'set_finished' && $h5pId !== 0) {
 
             $lpItemView->setScore($_POST['score']);
             $lpItemView->setMaxScore($_POST['maxScore']);
+            $lpItemView->setStatus('completed');
+            $lpItemView->setTotalTime($lpItemView->getTotalTime() + $h5pImportResults->getTotalTime());
             $lpItem->setMaxScore($_POST['maxScore']);
             $h5pImportResults->setCLpItemView($lpItemView);
             $entityManager->persist($h5pImportResults);

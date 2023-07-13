@@ -697,6 +697,7 @@ define('RESOURCE_WORK', 'work');
 define('RESOURCE_SESSION_COURSE', 'session_course');
 define('RESOURCE_GRADEBOOK', 'gradebook');
 define('RESOURCE_XAPI_TOOL', 'xapi_tool');
+define('RESOURCE_H5P_TOOL', 'h5p_tool');
 define('ADD_THEMATIC_PLAN', 6);
 
 // Max online users to show per page (whoisonline)

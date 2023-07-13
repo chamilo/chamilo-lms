@@ -1567,11 +1567,8 @@ class Tracking
                     // This is necessary for fix the total time
                     if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
                         $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
-                            $row['myid'],
-                            $row['mylpviewid'],
+                            $row['iv_id'],
                             $user_id,
-                            $course_id,
-                            $session_id
                         );
                     }
                     while ($tmp_row = Database::fetch_array($result)) {
@@ -1685,16 +1682,20 @@ class Tracking
                             }
                             break;
                         case 'h5p':
-                            if (api_get_plugin_setting('h5pimport', 'tool_enable')) {
-                                $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
-                                    $row['myid'],
-                                    $row['mylpviewid'],
-                                    $user_id,
-                                    $course_id,
-                                    $session_id
-                                );
+                            if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                                $sql = "SELECT iid, score
+                                    FROM $TBL_LP_ITEM_VIEW
+                                    WHERE
+                                        c_id = $course_id AND
+                                        lp_item_id = '".(int) $my_id."' AND
+                                        lp_view_id = '".(int) $my_lp_view_id."'
+                                    ORDER BY view_count DESC
+                                    LIMIT 1";
+                                $res_score = Database::query($sql);
+                                $row_score = Database::fetch_array($res_score);
+
+                                H5pImportPlugin::fixTotalTimeInLpItemView($row_score['iid'], $user_id);
                             }
-                            $maxscore = $row['mymaxscore'];
                             break;
                         default:
                             $maxscore = $row['mymaxscore'];
@@ -2055,9 +2056,9 @@ class Tracking
                                 }
                                 if ('h5p' === $row['item_type'] && api_get_plugin_setting('h5pimport', 'tool_enable')) {
                                     $em = Database::getManager();
-                                    $cLpItemViewRepo = $em
+                                    $h5pImportResultsRepo = $em
                                         ->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
-                                    $h5pResults = $cLpItemViewRepo
+                                    $h5pResults = $h5pImportResultsRepo
                                         ->findBy(
                                             [
                                                 'user' => $user_id, 'cLpItemView' => $row['iv_id'],
@@ -2097,7 +2098,7 @@ class Tracking
                                                     }
                                                 }
                                             }
-                                            $my_lesson_status = learnpathitem::humanize_status('completed');
+                                            $my_lesson_status = learnpathitem::humanize_status($row['status']);
                                             $timeRow = '<td class="lp_time" colspan="2">'.$timeAttempt.'</td>';
                                             if ($hideTime) {
                                                 $timeRow = '';

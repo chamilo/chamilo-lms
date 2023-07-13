@@ -353,7 +353,7 @@ function LMSInitialize() {
             xajax_start_timer();
         }
 
-        if (olms.lms_item_type == 'quiz') {
+        if (olms.lms_item_type == 'quiz' || olms.lms_item_type == 'h5p') {
             update_toc(olms.lesson_status, olms.lms_item_id);
         }
 
@@ -1208,10 +1208,10 @@ function lms_save_asset() {
        olms.execute_stats = false;
     }
 
-    if (olms.lms_item_type == 'quiz') {
+    if (olms.lms_item_type == 'quiz' || olms.lms_item_type == 'h5p') {
         olms.execute_stats = true;
     }
-
+    console.log(olms);
     if (olms.lms_item_type != 'sco') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);

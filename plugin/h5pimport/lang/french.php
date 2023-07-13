@@ -20,3 +20,4 @@ $strings['h5p_error_invalid_token'] = "Invalid security token";
 $strings['h5p_save_content_state'] = "Enregistrer les résultats de l'utilisateur";
 $strings['h5p_save_content_freq'] = "Fréquence d'enregistrement";
 $strings['h5p_save_freq_help'] = "À quelle fréquence l'état actuel du contenu doit être enregistré, en secondes";
+$strings['start_attempt'] = "Commencer la tentative";

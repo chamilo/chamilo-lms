@@ -56,6 +56,7 @@ class CourseRestorer
         'links',
         'works',
         'xapi_tool',
+        'h5p_tool',
         'surveys',
         'learnpath_category',
         'learnpaths',
@@ -70,6 +71,7 @@ class CourseRestorer
     /** Setting per tool */
     public $tool_copy_settings = [];
     public $isXapiEnabled = false;
+    public $isH5pEnabled = false;
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now).
@@ -159,6 +161,7 @@ class CourseRestorer
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
         $this->isXapiEnabled = \XApiPlugin::create()->isEnabled();
+        $this->isH5pEnabled = \H5pImportPlugin::create()->isEnabled();
 
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -196,6 +199,9 @@ class CourseRestorer
 
         foreach ($this->tools_to_restore as $tool) {
             if ('xapi_tool' == $tool && !$this->isXapiEnabled) {
+                continue;
+            }
+            if ('h5p_tool' == $tool && !$this->isH5pEnabled) {
                 continue;
             }
             $function_build = 'restore_'.$tool;
@@ -3339,6 +3345,10 @@ class CourseRestorer
 
         if ('xapi' === $tool && $this->isXapiEnabled) {
             $tool = RESOURCE_XAPI_TOOL;
+        }
+
+        if ('h5p' === $tool && $this->isH5pEnabled) {
+            $tool = RESOURCE_H5P_TOOL;
         }
 
         if (isset($this->course->resources[$tool][$ref]) &&

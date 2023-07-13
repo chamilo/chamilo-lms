@@ -20,3 +20,4 @@ $strings['h5p_error_invalid_token'] = "Token no valido";
 $strings['h5p_save_content_state'] = "Guardar resultados del usuario";
 $strings['h5p_save_content_freq'] = "Frecuencia guardado";
 $strings['h5p_save_freq_help'] = "Con qué frecuencia se debe guardar el estado actual del contenido, en segundos";
+$strings['start_attempt'] = "Comenzar intento";

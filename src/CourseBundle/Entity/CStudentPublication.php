@@ -48,6 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['c_student_publication:write'],
     ],
+    order: ['sentDate' => 'DESC'],
 )]
 #[ApiFilter(
     OrderFilter::class,

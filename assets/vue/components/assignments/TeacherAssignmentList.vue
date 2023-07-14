@@ -1,11 +1,10 @@
 <template>
   <DataTable
-    ref="dt"
+    v-model:rows="loadParams.itemsPerPage"
     v-model:selection="selected"
     :loading="loading"
-    :rows="10"
+    :multi-sort-meta="sortFields"
     :rows-per-page-options="[10, 20, 50]"
-    :sort-order="-1"
     :total-records="totalRecords"
     :value="assignments"
     current-page-report-template="Showing {first} to {last} of {totalRecords}"
@@ -13,9 +12,9 @@
     lazy
     paginator
     paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    sort-field="sendDate"
+    removable-sort
     sort-mode="multiple"
-    table-style="min-width: 50rem"
+    striped-rows
     @page="onPage"
     @sort="onSort"
   >
@@ -28,9 +27,7 @@
     <Column
       :header="t('Send date')"
       :sortable="true"
-      class="text-center"
       field="sentDate"
-      header-class="text-center"
     >
       <template #body="slotProps">
         {{ useAbbreviatedDatetime(slotProps.data.sentDate) }}
@@ -137,18 +134,18 @@ const notification = useNotification()
 
 const confirm = useConfirm()
 
-const dt = ref()
+const sortFields = ref([{ field: "sentDate", order: -1 }])
 const loadParams = reactive({
   page: 1,
-  itemsPerPage: 0,
+  itemsPerPage: 10,
 })
 
-const loadData = (params) => {
+function loadData() {
   loading.value = true
 
   cStudentPublicationService
     .findAll({
-      params: { ...params, cid, sid, gid },
+      params: { ...loadParams, cid, sid, gid },
     })
     .then((response) => response.json())
     .then((json) => {
@@ -161,7 +158,6 @@ const loadData = (params) => {
 
 const onPage = (event) => {
   loadParams.page = event.page + 1
-  loadParams.itemsPerPage = event.rows
 }
 
 const onSort = (event) => {
@@ -172,16 +168,14 @@ const onSort = (event) => {
   event.multiSortMeta.forEach((sortItem) => {
     loadParams[`order[${sortItem.field}]`] = -1 === sortItem.order ? "desc" : "asc"
   })
-
-  loadParams.itemsPerPage = event.rows
 }
 
 onMounted(() => {
-  loadParams.itemsPerPage = dt.value.rows
+  loadData()
 })
 
-watch(loadParams, (newLoadParams) => {
-  loadData(newLoadParams)
+watch(loadParams, () => {
+  loadData()
 })
 
 function onClickMultipleDelete() {
@@ -205,7 +199,7 @@ function onClickMultipleDelete() {
         selected.value = []
       }
 
-      loadData(loadParams)
+      loadData()
 
       notification.showSuccessNotification(t("Assignments deleted"))
     },

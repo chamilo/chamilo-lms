@@ -1,10 +1,10 @@
 <template>
-  <AssignmentsListForTeacher
+  <TeacherAssignmentList
     v-if="isUserTeacher"
   />
 </template>
 <script setup>
-import AssignmentsListForTeacher from "../../components/assignments/AssignmentsListForTeacher.vue"
+import TeacherAssignmentList from "../../components/assignments/TeacherAssignmentList.vue"
 import { computed } from "vue"
 import { useStore } from "vuex"
 

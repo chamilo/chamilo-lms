@@ -59,6 +59,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
             $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
+            error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
             if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);
                 $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
@@ -125,6 +126,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $path = 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
             $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
+            error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
             if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);
                 $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);

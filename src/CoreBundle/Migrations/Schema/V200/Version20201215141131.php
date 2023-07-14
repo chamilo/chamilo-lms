@@ -37,9 +37,6 @@ final class Version20201215141131 extends AbstractMigrationChamilo
         $linkRepo = $container->get(CLinkRepository::class);
         $linkCategoryRepo = $container->get(CLinkCategoryRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
 
         $admin = $this->getAdmin();
 

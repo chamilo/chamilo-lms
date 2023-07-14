@@ -16,8 +16,10 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -28,6 +30,32 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
     private ?EntityManager $manager = null;
     private ?ContainerInterface $container = null;
+
+    private static array $processedFiles = [];
+
+    private LoggerInterface $logger;
+
+    public function __construct(Connection $connection, LoggerInterface $logger)
+    {
+        parent::__construct($connection, $logger);
+
+        $this->logger = $logger;
+        $migrationClassName = static::class;
+        $migrationFileName = $this->getMigrationFileName();
+        $migrationDescription = $this->getDescription();
+
+        if (!in_array($migrationFileName, self::$processedFiles, true)) {
+            self::$processedFiles[] = $migrationFileName;
+
+            $message = sprintf(
+                'MIGRATIONS :: FILE -- %s - %s',
+                $migrationClassName,
+                $migrationDescription
+            );
+            $this->logger->info($message);
+            error_log($message);
+        }
+    }
 
     public function setEntityManager(EntityManager $manager): void
     {
@@ -321,5 +349,16 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public function fileExists($filePath): bool
     {
         return file_exists($filePath) && !is_dir($filePath) && is_readable($filePath);
+    }
+
+    private function getMigrationFileName(): string
+    {
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+
+        if (isset($backtrace[1]['file'])) {
+            return basename($backtrace[1]['file']);
+        }
+
+        return '';
     }
 }

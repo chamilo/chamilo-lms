@@ -121,7 +121,7 @@ class ResourceNode implements Stringable
 
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ["persist"], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 

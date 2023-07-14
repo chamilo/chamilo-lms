@@ -73,7 +73,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            learnpath::sortItemByOrderList($rootItem, $orderList, true);
+            learnpath::sortItemByOrderList($rootItem, $orderList, true, $em, $lpItemRepo);
             if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

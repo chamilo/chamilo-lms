@@ -3445,7 +3445,7 @@ class CourseManager
         );
 
         if (!empty($result)) {
-            if (1 == $result['value']) {
+            if (1 == $result['field_value']) {
                 return true;
             }
         }

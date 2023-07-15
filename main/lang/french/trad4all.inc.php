@@ -2415,7 +2415,7 @@ $CreateSubgroupsInfo = "Cette options vous permet de créer de nouveaux groupes 
 $CreateNumberOfGroups = "Créer";
 $WithUsersFrom = "groupes avec des membres de";
 $FillGroup = "Compléter aléatoirement le groupe avec des apprenants du cours";
-$EmptyGroup = "désinscrire tous les utilisateurs";
+$EmptyGroup = "Désinscrire tous les utilisateurs";
 $MaxGroupsPerUserInvalid = "Le nombre maximum de groupes par utilisateur que vous avez soumis est invalide. Il y a actuellement des utilisateurs qui sont inscrits dans plus de groupes que le nombre que vous proposez.";
 $GroupOverview = "Aperçu du groupe";
 $GroupCategory = "Catégorie du groupe";
@@ -5971,7 +5971,7 @@ $ContactInformationDescription = "Cher utilisateur,<br />
 <br />
 Vous êtes sur le point de commencer à utiliser l'une des meilleures plateformes e-learning de logiciel libre du marché. Comme beaucoup d'autres projets de logiciel libre, celui-ci est supporté par une grande communauté d'étudiants, d'enseignants, de développeurs et de créateurs de contenu qui aimeraient pouvoir promouvoir le projet dans les meilleures conditions.<br /><br />
 Au travers d'une meilleure connaissance de notre public et de l'un de nos plus importants utilisateurs, vous, qui gèrerez ce système e-learning, nous pourrons nous assurer de faire savoir au plus grand nombre que notre logiciel est utilisé, et nous pourrons vous informer directement sur les événements importants à vos yeux.<br /><br />
-En complétant ce formulaire, vous acceptez que l'Association Chamilo ou ses membres puissent vous envoyer des informations par courriel au sujet d'événements importants ou de mises à jours du logiciel ou de la communauté. Ceci aidera la communauté à croître comme une entité organisée au sein de laquelle l'information se propage, au travers d'un respect permanent de votre temps et de votre vie privée.<br /><br />
+En complétant ce formulaire, vous acceptez que l'Association Chamilo ou ses membres puissent vous envoyer des informations par courriel au sujet d'événements importants ou de mises à jour du logiciel ou de la communauté. Ceci aidera la communauté à croître comme une entité organisée au sein de laquelle l'information se propage, au travers d'un respect permanent de votre temps et de votre vie privée.<br /><br />
 Veuillez prendre en considération que vous n'êtes <b>pas obligé</b> de compléter ce formulaire. Si vous désirez rester anonyme, nous perdrons la possibilité de vous offrir les privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur \"Suivant\". De même, une fois l'envoi de l'information du formulaire ci-dessous confirmé, vous devrez cliquer sur \"Suivant\".";
 $CompanyActivity = "Activité de votre entreprise";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Merci de nous donner un moment pour vous inscrire à l'un de nos cours. Si vous pensez avoir été oublié, merci de contacter les administrateurs du site. Vous pouvez généralement trouver leurs informations de contact dans le pied de page.";
@@ -7934,7 +7934,7 @@ $Avatar = "Avatar";
 $StudyCycle = "Semestre";
 $ReadingComprehension = "Compréhension à la lecture";
 $ReadingQuestionCongratsSpeedXNotReachedForYWords = "Désolé, il semblerait que la vitesse de %s mots/minute soit trop rapide pour vous pour l'instant, selon cette tentative sur un texte de %s mots.";
-$ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitacions, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
+$ReadingQuestionCongratsSpeedXReachedForYWords = "Félicitations, vous avez atteint la vitesse de %s mots/minute en comprenant correctement un texte de %s mots.";
 $ReadingComprehensionLevelX = "%s mots par minute";
 $TutorXIsNotSubscribedToCourse = "Le coach %s n'est pas inscrit dans ce cours";
 $UpdateTitleInLps = "Mettre ce titre à jour dans les parcours";
@@ -8753,9 +8753,9 @@ $OptionsToHideInExport = "Options pour masquer dans l'export";
 $HideAssignment = "Masquer les travaux";
 $AddSurveyToCourse = "Ajouter l'enquête au cours";
 $MoveTheCurrentSurvey = "Aller à l'enquête suivante";
-$ShareEventsInSessions = "Partager les événnements dans les sessions";
-$AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Les événnements du cours seront visibles dans toutes les sessions";
-$AgendaEventsOnlyVisibleInCurrentCourse = "Les événnements du cours ne sont visibles que dans le cours de base";
+$ShareEventsInSessions = "Partager les événements dans les sessions";
+$AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Les événements du cours seront visibles dans toutes les sessions";
+$AgendaEventsOnlyVisibleInCurrentCourse = "Les événements du cours ne sont visibles que dans le cours de base";
 $TestResult = "Résultat du test";
 $FilterByLp = "Filtrer par parcours";
 $ShareForumsInSessions = "Partager les forums avec toutes les sessions";

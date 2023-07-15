@@ -114,13 +114,12 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseDropdrown from "../basecomponents/BaseDropdown.vue";
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue";
 import useVuelidate from "@vuelidate/core";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { maxValue, minValue, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
-import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
 import { useCidReq } from "../../composables/cidReq";
+import { useRoute } from "vue-router"
 
 defineProps({
   isFormLoading: {
@@ -132,20 +131,9 @@ defineProps({
 
 const emit = defineEmits(["submit"]);
 
+const route = useRoute();
 const { t } = useI18n();
 const { cid, sid, gid } = useCidReq();
-
-const course = ref(null);
-
-onMounted(async () => {
-  try {
-    const { data } = await axios.get(`${ENTRYPOINT}courses/${cid}`);
-
-    course.value = data;
-  } catch (e) {
-    console.log(e);
-  }
-});
 
 const showAdvancedSettings = ref(false);
 
@@ -222,7 +210,7 @@ const onSubmit = async () => {
       expiresOn: null,
       endsOn: null,
     },
-    parentResourceNode: course.value.resourceNode.replace("/api/resource_nodes/", "") * 1,
+    parentResourceNode: route.params.node * 1,
     resourceLinkList: [
       {
         cid,

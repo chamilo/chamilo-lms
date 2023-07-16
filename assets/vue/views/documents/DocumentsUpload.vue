@@ -13,7 +13,7 @@
       />
     </div>
 
-    <BaseAdvancedSettingsButton>
+    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
         <BaseCheckbox id="uncompress" v-model="isUncompressZipEnabled" :label="t('Uncompres zip')" name="uncompress" />
@@ -63,6 +63,8 @@ const router = useRouter();
 const { gid, sid, cid } = useCidReq();
 const { onCreated, onError } = useUpload();
 const { t } = useI18n();
+
+const showAdvancedSettings = ref(false);
 
 const parentResourceNodeId = ref(Number(route.params.node));
 const resourceLinkList = ref(

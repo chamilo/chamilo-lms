@@ -5,44 +5,36 @@
       class="mr-auto"
       icon="cog"
       type="black"
-      @click="advancedSettingsClicked"
+      @click="$emit('update:modelValue', !modelValue)"
     />
   </div>
 
-  <div v-if="showAdvancedSettings">
+  <div v-if="modelValue">
     <slot></slot>
   </div>
 </template>
 
 <script setup>
 import BaseButton from "./BaseButton.vue";
-import { computed, ref } from "vue";
+import { computed } from "vue"
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    required: false,
-    default: () => false,
+    required: true,
   }
 })
-const emit = defineEmits(['update:modelValue']);
+
+defineEmits(['update:modelValue'])
 
 const { t } = useI18n();
 
-const showAdvancedSettings = ref(props.modelValue);
-
 const showAdvancedSettingsLabel = computed(() => {
-  if (showAdvancedSettings.value) {
+  if (props.modelValue) {
     return t("Hide advanced settings");
   }
 
   return t("Show advanced settings");
 });
-
-const advancedSettingsClicked = () => {
-  showAdvancedSettings.value = !showAdvancedSettings.value;
-
-  emit('update:modelValue', showAdvancedSettings.value);
-};
 </script>

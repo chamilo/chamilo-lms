@@ -2479,3 +2479,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Enable use of a custom course logo in mail & PDF headers
 // $_configuration['mail_header_from_custom_course_logo'] = false;
+
+// Enable additional_webservices.php for *remote* PPT2PNG/Oogie service
+//$_configuration['webservice_remote_ppt2png_enable'] = false;

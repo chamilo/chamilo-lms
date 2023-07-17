@@ -47,14 +47,13 @@ function wsConvertPpt($pptData)
     // Add additional cleaning of .php and .htaccess files
     $fullFileName = Security::filter_filename($sanitizedFileName);
     $size = $pptData['service_ppt2lp_size'];
-    $w = '800';
-    $h = '600';
+    $w = 800;
+    $h = 600;
     if (!empty($size)) {
         list($w, $h) = explode('x', $size);
+        $w = (int) $w;
+        $h = (int) $h;
     }
-
-    $w = (int) $w;
-    $h = (int) $h;
 
     $tempArchivePath = api_get_path(SYS_ARCHIVE_PATH);
     $tempPath = $tempArchivePath.'wsConvert/'.$fileName.'/';

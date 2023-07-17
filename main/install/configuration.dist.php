@@ -1689,3 +1689,235 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
+// Update user expiration in x days or months when login the first time
+/*$_configuration['update_student_expiration_x_date'] = [
+    'days' => 0,
+    'months' => 0,
+];*/
+
+// Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
+//$_configuration['user_status_show_options_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true
+/*$_configuration['user_status_show_option'] = [
+        'COURSEMANAGER' => true,
+        'STUDENT' => true,
+        'DRH' => false,
+        'SESSIONADMIN' => false,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+];*/
+
+// Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+//$_configuration['lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'] = false;
+
+// Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
+//$_configuration['user_status_option_only_for_admin_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
+/*$_configuration['user_status_option_show_only_for_admin'] = [
+        'COURSEMANAGER' => false,
+        'STUDENT' => false,
+        'DRH' => false,
+        'SESSIONADMIN' => true,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+
+// Set the default expiration date when a user is created by role and days
+/*$_configuration['user_number_of_days_for_default_expiration_date_per_role'] = [
+        'COURSEMANAGER' => 365,
+        'STUDENT' => 31,
+        'DRH' => 31,
+        'SESSIONADMIN' => 60,
+        'STUDENT_BOSS' => 60,
+        'INVITEE' => 31
+];*/
+
+// Course extra fields to be presented on main/create_course/add_course.php
+//$_configuration['course_creation_by_teacher_extra_fields_to_show'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Configuration setting to make some extra field required in course creation form.
+//$_configuration['course_creation_form_set_extra_fields_mandatory'] = ['fields' => ['fieldLabel1','fieldLabel2']];
+
+// Course extra fields to be presented on course settings
+//$_configuration['course_configuration_tool_extra_fields_to_show_and_edit'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php
+/*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+    ]
+];*/
+
+// Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
+// $_configuration['student_follow_page_hide_lp_tests_average'] = false;
+
+// Add navigation to the next or previous lp without going to the list.
+// Requires DB change:
+// ALTER TABLE c_lp ADD next_lp_id int(11) NOT NULL DEFAULT '0';
+//$_configuration['lp_enable_flow'] = false;
+
+// User extra fields to be check on user edition to generate a specific process if it was modified
+//$_configuration['user_edition_extra_field_to_check'] = 'ExtrafieldLabel';
+
+// Enable skills in subcategory to work independant on assignement
+// Require DB changes:
+// ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NULL DEFAULT '1';
+// Requires edit Entity GradebookCategory: src/Chamilo/CoreBundle/Entity/GradebookCategory.php uncomment "allowSkillsBySubcategory" variable.
+//$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
+
+// Shows the deleted quizzes in my progress page.
+//$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
+
+// Hide IP in exercises reports
+// $_configuration['exercise_hide_ip'] = false;
+
+// Enable signature in attendance sheet for users
+// Require DB changes:
+// ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
+// ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php  add the @ symbol for attribute $signature into ORM\Column() line.
+// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php add the @ symbol for attribute $blocked into ORM\Column() line.
+//$_configuration['enable_sign_attendance_sheet'] = false;
+
+// Make sessions by duration always accessible to coaches (otherwise
+// they are only accessible during the active duration).
+//$_configuration['session_coach_access_after_duration_end'] = false;
+
+// Restrict the list of students to subscribe in the course session. And disable
+// registration for users in all courses from Resume Session page
+//$_configuration['session_course_users_subscription_limited_to_session_users'] = false;
+
+// Disable tab to add classes in course session for non-admins
+//$_configuration['session_classes_tab_disable'] = false;
+
+// Disable the possibility for teachers to edit course visibility
+//$_configuration['course_visibility_change_only_admin'] = false;
+
+// Allow DRH user to access all students from reporting.
+// $_configuration['drh_allow_access_to_all_students'] = false;
+
+// Disable links in gradebook view for students
+// $_configuration['gradebook_hide_link_to_item_for_student'] = false;
+
+// It adds option to define if a document can be downloaded or not.
+// Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
+// $_configuration['documents_hide_download_icon'] = false;
+
+// Add the username value to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
+
+// Add the "remember password" link to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
+
+// Add a custom extra footer for notificacions emails for a specific language, for example for
+// privacy policy notices. Multiple languages and paragraphs can be added.
+/*$_configuration['notifications_extended_footer_message'] = ['english' => ['paragraphs' => [
+    'Change or delete this paragraph or add another one'
+]]];*/
+
+// Option to define duration for a calendar in attendance sheet.
+// Create an attendance calendar extra field with field label "duration" of type "text".
+// $_configuration['attendance_calendar_set_duration'] = false;
+
+// Enable comments in attendance sheet for users
+// Require DB changes:
+//CREATE TABLE c_attendance_result_comment (iid int not null PRIMARY KEY AUTO_INCREMENT, attendance_sheet_id int not null, user_id int not null, created_at datetime not null, updated_at datetime not null, comment text not null, author_user_id int not null);
+//CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
+// Then add the "@" symbol to CAttendanceResultComment class in the ORM\Entity() line.
+//$_configuration['attendance_allow_comments'] = false;
+
+// Enable categories in Wiki tool.
+// 1. Run the following DB changes:
+/*
+CREATE TABLE c_wiki_rel_category (wiki_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_AC88945BAA948DBE (wiki_id), INDEX IDX_AC88945B12469DE2 (category_id), PRIMARY KEY(wiki_id, category_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE c_wiki_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_17F1099A91D79BD3 (c_id), INDEX IDX_17F1099A613FECDF (session_id), INDEX IDX_17F1099AA977936C (tree_root), INDEX IDX_17F1099A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945BAA948DBE FOREIGN KEY (wiki_id) REFERENCES c_wiki (iid) ON DELETE CASCADE;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945B12469DE2 FOREIGN KEY (category_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099AA977936C FOREIGN KEY (tree_root) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (parent_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+*/
+// 2. Add an "@" before "ORM\ManyToMany" and "@ORM\JoinTable" in the "CWiki::$categories" property definition (in src/Chamilo/CourseBundle/Entity/CWiki.php)
+// 3. Add an "@" before "ORM\Entity" in the "CWikiCategory" class definition (in src/Chamilo/CourseBundle/Entity/CWikiCategory.php)
+//$_configuration['wiki_categories_enabled'] = false;
+
+// Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php
+/*$_configuration['session_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'client' => 'client',
+        'region' => 'region',
+    ]
+];*/
+
+// It adds option to define prerequisites with start and end dates for learnpath items.
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'start_date', 'StartDate', '', 0, 1, 0, 1, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'end_date', 'EndDate', '', 0, 1, 0, 1, 0, NOW());
+*/
+//$_configuration['lp_item_prerequisite_dates'] = false;
+
+// Configuration setting to make some extra field required in session creation form on main/session/session_add.php.
+// $_configuration['session_creation_form_set_extra_fields_mandatory'] = ['fields' => ['client','region']];
+
+// Ask REST webservices (v2.php) to return another identifier for fields related to user ID.
+// This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps
+// the external system match the user data return with some external data that is know to Chamilo. For example, if
+// you use an external authentication system, you can return the extra field used to match the user with the
+// external authentication system rather than user.id.
+// $_configuration['webservice_return_user_field'] = 'oauth2_id';
+
+// Add support for careers hierarchy - refs BT#20711
+// 1. This requires the following DB change:
+// ALTER TABLE career add parent_id INT
+// ALTER TABLE career add constraint career_career_id_fk foreign key (parent_id) references career (id);
+// 2. Add an "@" before "var int" and "ORM\Column..." in the "Career::$parentId" property definition (in src/Chamilo/CoreBundle/Entity/Career.php)
+// 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
+// $_configuration['career_hierarchy_enable'] = false;
+
+// KEEP THIS AT THE END
+// -------- Custom DB changes
+// Set to true to hide settings completely in a sub-URL if the setting is disabled in the
+// main URL (where the access_url_changeable field = 0)
+// $_configuration['multiple_url_hide_disabled_settings'] = false;
+
+// List of learner certificates - User extra fields to include at the exported CSV as columns
+//$_configuration['certificate_export_report_user_extra_fields'] = ['extra_fields' => ['office_address', 'office_phone_extension']];
+
+// Only courses with this option will be visible in catalogue
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(2, 3, 'show_in_catalogue', 'Show in catalogue', '', 0, 1, 1, 1, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Yes', NULL, NULL, 1),
+(@ef_id, '0', 'No', NULL, NULL, 2);
+*/
+//$_configuration['show_courses_in_catalogue'] = false;
+
+// Allows defining one or several categories of courses that will be visible in the course catalog
+// $_configuration['courses_catalogue_show_only_category'] = ['Cat1','Cat2'];
+
+//Hides the link to the course catalog in the menu when the catalog is public.
+// $_configuration['catalog_hide_public_link'] = false;
+
+// Display the Portal News link in the admin page to session admin users
+//$_configuration['session_admin_access_system_announcement'] = false;
+
+// File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
+//$_configuration['file_upload_size_limit_for_teacher'] = 0;
+
+// Add user activation by confirmation email
+// This option prevents the new user to login in the platform if your account is not confirmed via email
+// You need add a new option called "confirmation" to the registration settings
+//INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
+
+// Enable use of a custom course logo in mail & PDF headers
+// $_configuration['mail_header_from_custom_course_logo'] = false;
+
+// Enable additional_webservices.php for *remote* PPT2PNG/Oogie service
+//$_configuration['webservice_remote_ppt2png_enable'] = false;

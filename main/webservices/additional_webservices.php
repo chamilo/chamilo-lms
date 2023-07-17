@@ -7,6 +7,14 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$enableThis = api_get_configuration_value('webservice_remote_ppt2png_enable');
+if (!$enableThis) {
+    echo "Remote PPT2PNG service is disabled. \n";
+    echo "To enable, add \$_configuration['webservice_remote_ppt2png_enable'] = true; to your configuration.php";
+    exit;
+}
+api_protect_webservices();
+
 /**
  * Function to convert from ppt to png
  * This function is used from Chamilo Rapid Lesson.

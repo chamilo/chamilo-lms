@@ -632,7 +632,9 @@ class Security
      */
     public static function sanitizeExecParam(string $param): string
     {
-        return preg_replace('/[`;&|]/', '', $param);
+        $param = preg_replace('/[`;&|]/', '', $param);
+
+        return escapeshellarg($param);
     }
 
     private static function generateSecTokenVariable(string $prefix = ''): string

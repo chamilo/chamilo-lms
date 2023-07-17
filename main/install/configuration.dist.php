@@ -683,6 +683,14 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 // Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Add selected user extra fields to the scheduled announcement tags
+/*
+$_configuration['scheduled_announcements_user_extra_fields_as_tags'] =  [
+    'extraFields' => [
+        'corporate_address',
+        'car_license_plate',
+    ]
+];*/
 // Add the list of emails as a bcc when sending an email.
 // Configure a cron task pointing at main/cron/scheduled_announcement.php
 /*

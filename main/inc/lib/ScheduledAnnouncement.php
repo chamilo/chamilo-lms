@@ -412,6 +412,16 @@ class ScheduledAnnouncement extends Model
                                 '((lp_progress))' => $progress,
                             ];
 
+                            $scheduledAnnouncementsUserExtraFieldsAsTags = api_get_configuration_value('scheduled_announcements_user_extra_fields_as_tags');
+                            if ($scheduledAnnouncementsUserExtraFieldsAsTags && $scheduledAnnouncementsUserExtraFieldsAsTags['extraFields']) {
+                                foreach ($scheduledAnnouncementsUserExtraFieldsAsTags['extraFields'] as $extraField) {
+                                    $extraValue = UserManager::get_extra_user_data_by_field($user['user_id'], $extraField);
+                                    $tagValue = $extraValue[$extraField];
+
+                                    $tags["(($extraField))"] = $tagValue;
+                                }
+                            }
+
                             $message = str_replace(array_keys($tags), $tags, $message);
                             $message .= $attachments;
 
@@ -461,6 +471,13 @@ class ScheduledAnnouncement extends Model
             '((user_picture))',
             '((lp_progress))',
         ];
+
+        $scheduledAnnouncementsUserExtraFieldsAsTags = api_get_configuration_value('scheduled_announcements_user_extra_fields_as_tags');
+        if ($scheduledAnnouncementsUserExtraFieldsAsTags && $scheduledAnnouncementsUserExtraFieldsAsTags['extraFields']) {
+            foreach ($scheduledAnnouncementsUserExtraFieldsAsTags['extraFields'] as $extraField) {
+                array_push($tags, "(($extraField))");
+            }
+        }
 
         return $tags;
     }

@@ -4,7 +4,7 @@
       v-if="to"
       :aria-labelledby="`course-tool-${tool.ctool.iid}`"
       :to="to"
-      class="course-tool__link"
+      class="course-tool__link hover:primary-gradient"
       :class="cardCustomClass"
     >
       <span
@@ -65,7 +65,10 @@
         v-if="isCurrentTeacher && isCustomizing"
         href="#"
       >
-        <BaseIcon icon="edit" size="small" />
+        <BaseIcon
+          icon="edit"
+          size="small"
+        />
       </a>
 
       <!-- a
@@ -82,24 +85,24 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex";
-import { computed, inject } from "vue";
-import BaseIcon from "../basecomponents/BaseIcon.vue";
+import { useStore } from "vuex"
+import { computed, inject } from "vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
-const store = useStore();
+const store = useStore()
 
-const isSorting = inject("isSorting");
-const isCustomizing = inject("isCustomizing");
+const isSorting = inject("isSorting")
+const isCustomizing = inject("isCustomizing")
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
   course: {
     type: Object,
-    required: true
+    required: true,
   },
   tool: {
     type: Object,
-    required: true
+    required: true,
   },
   url: {
     type: String,
@@ -113,36 +116,35 @@ const props = defineProps({
   },
   changeVisibility: {
     type: Function,
-    required: true
+    required: true,
   },
   goToSettingCourseTool: {
     type: Function,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 const cardCustomClass = computed(() => {
   if (!isVisible.value) {
-    return 'bg-primary-bgdisabled border-primary-borderdisabled shadow-none ';
+    return "bg-primary-bgdisabled hover:bg-gray-50/25 border-primary-borderdisabled shadow-none "
   }
   if (isSorting.value) {
-    return 'border-2 border-dashed border-primary '
+    return "border-2 border-dashed border-primary hover:bg-primary-gradient/10 "
   }
-  return '';
+  return "hover:bg-primary-gradient/10 "
 })
 const iconCustomClass = computed(() => {
   if (!isVisible.value) {
-    return 'bg-gradient-to-b from-gray-50 to-gray-25 ';
+    return "bg-gradient-to-b from-gray-50 to-gray-25 "
   }
-  return 'bg-primary-bgdisabled ';
-
+  return "bg-primary-bgdisabled "
 })
 const titleCustomClass = computed(() => {
   if (!isVisible.value) {
-    return 'text-gray-90 ';
+    return "text-gray-90 "
   }
-  return '';
+  return ""
 })
-const isVisible = computed(() => props.tool.ctool.resourceNode.resourceLinks[0].visibility === 2);
+const isVisible = computed(() => props.tool.ctool.resourceNode.resourceLinks[0].visibility === 2)
 </script>

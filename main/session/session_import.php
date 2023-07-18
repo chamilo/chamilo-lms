@@ -168,9 +168,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
-                        $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
-                        $rs = Database::query($sql);
-                        list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
+                        $rs = Database::select(
+                            ['user_id', 'lastname', 'firstname'],
+                            $tbl_user,
+                            ['where' => ['username = ?' => $username]],
+                            'first',
+                            'NUM'
+                        );
+                        list($user_id, $lastname, $firstname) = $rs;
 
                         $params['teachers'] = $user_id;
                         CourseManager::create_course($params);

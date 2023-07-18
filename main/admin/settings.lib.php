@@ -580,7 +580,7 @@ function handleStylesheets()
                     echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
             } else {
-                Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
+                echo Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
             }
         }
     }

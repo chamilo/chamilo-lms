@@ -4,9 +4,6 @@
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
-use DocumentManager;
-use Exception;
-use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -64,12 +61,9 @@ class ZipPackageImporter extends H5pPackageImporter
         'css',
     ];
 
-    /**
-     * {@inheritDoc}
-     */
     public function import(): string
     {
-        $zipFile = new PclZip($this->packageFileInfo['tmp_name']);
+        $zipFile = new \PclZip($this->packageFileInfo['tmp_name']);
         $zipContent = $zipFile->listContent();
 
         if ($this->validateH5pPackageContent($zipContent)) {
@@ -89,19 +83,19 @@ class ZipPackageImporter extends H5pPackageImporter
 
             return "$packageDirectoryPath";
         } else {
-            throw new Exception('Invalid H5P package');
+            throw new \Exception('Invalid H5P package');
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function validateEnoughSpace(int $packageSize)
     {
-        $courseSpaceQuota = DocumentManager::get_course_quota($this->course->getCode());
+        $courseSpaceQuota = \DocumentManager::get_course_quota($this->course->getCode());
 
         if (!enough_size($packageSize, $this->courseDirectoryPath, $courseSpaceQuota)) {
-            throw new Exception('Not enough space to store package.');
+            throw new \Exception('Not enough space to store package.');
         }
     }
 
@@ -111,6 +105,7 @@ class ZipPackageImporter extends H5pPackageImporter
      * and if the files are in a file whitelist (ALLOWED_FILES).
      *
      * @param array $h5pPackageContent The content of the H5P package.
+     *
      * @return bool Whether the H5P package is valid or not.
      */
     private function validateH5pPackageContent(array $h5pPackageContent): bool

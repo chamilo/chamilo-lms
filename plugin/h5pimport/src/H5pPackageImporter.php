@@ -5,7 +5,6 @@
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Exception;
 
 /**
  * Class H5pPackageImporter.
@@ -19,7 +18,8 @@ abstract class H5pPackageImporter
      */
     protected $course;
     /**
-     * Path to course directory
+     * Path to course directory.
+     *
      * @var string
      */
     protected $courseDirectoryPath;
@@ -28,11 +28,13 @@ abstract class H5pPackageImporter
      */
     protected $packageFileInfo;
     /**
-     * The package type is usually a MIME type
+     * The package type is usually a MIME type.
+     *
      * @var string
      */
     protected $packageType;
     protected $h5pJsonContent;
+
     /**
      * H5pPackageImporter constructor.
      */
@@ -44,11 +46,9 @@ abstract class H5pPackageImporter
         $this->packageType = $fileInfo['type'];
 
     }
+
     /**
-     * @param array $fileInfo
-     * @param Course $course
-     * @return ZipPackageImporter
-     * @throws Exception
+     * @throws \Exception
      */
     public static function create(array $fileInfo, Course $course): ZipPackageImporter
     {
@@ -56,7 +56,7 @@ abstract class H5pPackageImporter
             'application/octet-stream' !== $fileInfo['type']
             && pathinfo($fileInfo['name'], PATHINFO_EXTENSION) !== 'h5p'
         ) {
-            throw new Exception('Not a H5P package');
+            throw new \Exception('Not a H5P package');
         }
 
         return new ZipPackageImporter($fileInfo, $course);
@@ -64,12 +64,14 @@ abstract class H5pPackageImporter
     }
 
     /**
-     * Check the package and unzip it, checking if it has the 'h5p.json' file or some php script
-     * @throws Exception
+     * Check the package and unzip it, checking if it has the 'h5p.json' file or some php script.
+     *
+     * @throws \Exception
      *
      * @return mixed
      */
     abstract public function import(): string;
+
     public function getPackageType(): string
     {
         return $this->packageType;

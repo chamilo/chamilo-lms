@@ -51,7 +51,7 @@ class H5pPackageTools
         $h5pDir = dirname($extractedDir, 2);
         $sharedLibrariesDir = $h5pDir.'/libraries';
 
-        //Move 'content' directory one level back (H5P specification)
+        // Move 'content' directory one level back (H5P specification)
         $filesystem->mirror($extractedDir.'/content', $extractedDir, null, ['override' => true]);
         $filesystem->remove($extractedDir.'/content');
         // Get the list of preloaded dependencies
@@ -98,7 +98,7 @@ class H5pPackageTools
         Session $session = null,
         array $values = null
     ) {
-        $entityManager = Database::getManager();
+        $entityManager = \Database::getManager();
         // Go back 2 directories
         $h5pDir = dirname($packagePath, 2);
         $sharedLibrariesDir = $h5pDir.'/libraries';
@@ -170,7 +170,7 @@ class H5pPackageTools
     public static function deleteH5pPackage(H5pImport $h5pImport): bool
     {
         $packagePath = $h5pImport->getPath();
-        $entityManager = Database::getManager();
+        $entityManager = \Database::getManager();
         $entityManager->remove($h5pImport);
         $entityManager->flush();
 
@@ -191,11 +191,11 @@ class H5pPackageTools
      * Get core settings for H5P content.
      *
      * @param H5pImport $h5pImport The H5pImport object.
-     * @param H5PCore   $h5pCore   The H5PCore object.
+     * @param \H5PCore  $h5pCore   The H5PCore object.
      *
      * @return array The core settings for H5P content.
      */
-    public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
+    public static function getCoreSettings(H5pImport $h5pImport, \H5PCore $h5pCore): array
     {
         $originIsLearnpath = api_get_origin() === 'learnpath';
 
@@ -204,8 +204,8 @@ class H5pPackageTools
             'url' => $h5pImport->getRelativePath(),
             'postUserStatistics' => true,
             'ajax' => [
-                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.H5PCore::createToken('result'),
-                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.H5PCore::createToken('content'),
+                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.\H5PCore::createToken('result'),
+                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.\H5PCore::createToken('content'),
             ],
             'saveFreq' => false,
             'l10n' => [
@@ -243,7 +243,7 @@ class H5pPackageTools
         ];
 
         // Add CSS assets
-        foreach (H5PCore::$styles as $style) {
+        foreach (\H5PCore::$styles as $style) {
             $auxAssetPath = 'vendor/h5p/h5p-core/'.$style;
             $assets['css'][] = api_get_path(WEB_PATH).$auxAssetPath;
             if (!file_exists(api_get_path(SYS_PATH).$auxAssetPath)) {
@@ -252,7 +252,7 @@ class H5pPackageTools
         }
 
         // Add JS assets
-        foreach (H5PCore::$scripts as $script) {
+        foreach (\H5PCore::$scripts as $script) {
             $auxAssetPath = 'vendor/h5p/h5p-core/'.$script;
             $auxUrl = api_get_path(WEB_PATH).$auxAssetPath;
             $assets['js'][] = $auxUrl;
@@ -266,10 +266,8 @@ class H5pPackageTools
 
     /**
      * Return the content body for the H5PIntegration javascript object.
-     *
-     * @param $h5pNode
      */
-    public static function getContentSettings($h5pNode, H5PCore $h5pCore): array
+    public static function getContentSettings($h5pNode, \H5PCore $h5pCore): array
     {
         $filtered = $h5pCore->filterParameters($h5pNode);
         $contentUserData = [
@@ -278,7 +276,7 @@ class H5pPackageTools
             ],
         ];
 
-        //ToDo Use $h5pCore->getDisplayOptionsForView() function
+        // ToDo Use $h5pCore->getDisplayOptionsForView() function
         $displayOptions = [
             'frame' => api_get_course_plugin_setting('h5pimport', 'frame'),
             'embed' => api_get_course_plugin_setting('h5pimport', 'embed'),
@@ -288,7 +286,7 @@ class H5pPackageTools
         ];
 
         return [
-            'library' => H5PCore::libraryToString($h5pNode['library']),
+            'library' => \H5PCore::libraryToString($h5pNode['library']),
             'jsonContent' => $h5pNode['params'],
             'fullScreen' => $h5pNode['library']['fullscreen'],
             'exportUrl' => '',

@@ -123,9 +123,6 @@ class Tracking
     /**
      * Get the lp quizzes result as content for pdf export.
      *
-     * @param $userId
-     * @param $sessionId
-     *
      * @return string
      */
     public static function getLpQuizContentToPdf(
@@ -191,9 +188,6 @@ class Tracking
 
     /**
      * Get the tables html as contents to export lp certificate pdf .
-     *
-     * @param $userId
-     * @param $sessionId
      *
      * @return array
      */
@@ -460,11 +454,6 @@ class Tracking
 
     /**
      * It gets table html of Lp stats used to export in pdf.
-     *
-     * @param $userId
-     * @param $courseInfo
-     * @param $sessionId
-     * @param $lpId
      *
      * @return string
      */
@@ -1214,8 +1203,8 @@ class Tracking
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            1 === (int) $row_result_disabled[0]
+                        if (Database::num_rows($res_result_disabled) > 0
+                            && 1 === (int) $row_result_disabled[0]
                         ) {
                             $result_disabled_ext_all = true;
                         }
@@ -1284,19 +1273,19 @@ class Tracking
                         $extend_this_attempt = 0;
 
                         if ($timeCourse) {
-                            //$attemptResult = 0;
-                            if (isset($timeCourse['learnpath_detailed']) &&
-                                isset($timeCourse['learnpath_detailed'][$lp_id]) &&
-                                isset($timeCourse['learnpath_detailed'][$lp_id][$my_item_id])
+                            // $attemptResult = 0;
+                            if (isset($timeCourse['learnpath_detailed'])
+                                && isset($timeCourse['learnpath_detailed'][$lp_id])
+                                && isset($timeCourse['learnpath_detailed'][$lp_id][$my_item_id])
                             ) {
                                 $attemptResult = $timeCourse['learnpath_detailed'][$lp_id][$my_item_id][$row['iv_view_count']];
                             }
                         }
                         if ((
-                            learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0
-                            ) &&
-                            !$extend_all
+                            learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0
+                            || learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0
+                        )
+                        && !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
                                 // The extend button for this attempt has been clicked.
@@ -1518,8 +1507,8 @@ class Tracking
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            (int) $row_result_disabled[0] === 1
+                        if (Database::num_rows($res_result_disabled) > 0
+                            && (int) $row_result_disabled[0] === 1
                         ) {
                             $result_disabled_ext_all = true;
                         }
@@ -1632,8 +1621,8 @@ class Tracking
 
                             $score = 0;
                             $subtotal_time = 0;
-                            if (Database::num_rows($res_score) > 0 &&
-                                Database::num_rows($res_time) > 0
+                            if (Database::num_rows($res_score) > 0
+                                && Database::num_rows($res_time) > 0
                             ) {
                                 $score = (float) $row_score['score'];
                                 $subtotal_time = (int) $row_time['total_time'];
@@ -1669,9 +1658,9 @@ class Tracking
                             $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
-                                if ($exeDuration != $subtotal_time &&
-                                    !empty($row_score['iid']) &&
-                                    !empty($exeDuration)
+                                if ($exeDuration != $subtotal_time
+                                    && !empty($row_score['iid'])
+                                    && !empty($exeDuration)
                                 ) {
                                     $subtotal_time = $exeDuration;
                                     // Update c_lp_item_view.total_time
@@ -1747,9 +1736,9 @@ class Tracking
                             $showRowspan = false;
                             if ($num > 0) {
                                 $linkId = 'link_'.$my_id;
-                                if ($extendedAttempt == 1 &&
-                                    $lp_id == $my_lp_id &&
-                                    $lp_item_id == $my_id
+                                if ($extendedAttempt == 1
+                                    && $lp_id == $my_lp_id
+                                    && $lp_item_id == $my_id
                                 ) {
                                     $showRowspan = true;
                                     $correct_test_link = Display::url(
@@ -1782,9 +1771,9 @@ class Tracking
                             $showRowspan = false;
                             if ($count > 0) {
                                 $linkId = 'link_'.$my_id;
-                                if ($extendedAttempt == 1 &&
-                                    $lp_id == $my_lp_id &&
-                                    $lp_item_id == $my_id
+                                if ($extendedAttempt == 1
+                                    && $lp_id == $my_lp_id
+                                    && $lp_item_id == $my_id
                                 ) {
                                     $showRowspan = true;
                                     $correct_test_link = Display::url(
@@ -1942,8 +1931,8 @@ class Tracking
                     // Attempts listing by exercise.
                     if ($lp_id == $my_lp_id && $lp_item_id == $my_id && $extendedAttempt) {
                         // Get attempts of an exercise.
-                        if (!empty($lp_id) &&
-                            !empty($lp_item_id)
+                        if (!empty($lp_id)
+                            && !empty($lp_item_id)
                         ) {
                             $sql = "SELECT path FROM $TBL_LP_ITEM
                                     WHERE
@@ -1957,11 +1946,11 @@ class Tracking
                                 if ('quiz' === $row['item_type']) {
                                     $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
                                     WHERE
-                                        exe_exo_id = '.(int)$row_path['path'].' AND
+                                        exe_exo_id = '.(int) $row_path['path'].' AND
                                         status <> "incomplete" AND
                                         exe_user_id='.$user_id.' AND
-                                        orig_lp_id = '.(int)$lp_id.' AND
-                                        orig_lp_item_id = '.(int)$lp_item_id.' AND
+                                        orig_lp_id = '.(int) $lp_id.' AND
+                                        orig_lp_item_id = '.(int) $lp_item_id.' AND
                                         c_id = '.$course_id.' AND
                                         session_id = '.$session_id.'
                                     ORDER BY exe_date';
@@ -2043,7 +2032,7 @@ class Tracking
                                                             <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                                     } else {
                                                         $output .= '<td>
-                                                                <a href="../exercise/exercise_show.php?cidReq='.$courseCode . '&origin=correct_exercise_in_lp&id='.$my_exe_id.'" target="_parent">
+                                                                <a href="../exercise/exercise_show.php?cidReq='.$courseCode.'&origin=correct_exercise_in_lp&id='.$my_exe_id.'" target="_parent">
                                                                 <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                                     }
                                                 }
@@ -2055,8 +2044,8 @@ class Tracking
                                     $output .= '<tr><td colspan="12">&nbsp;</td></tr>';
                                 }
                                 if (
-                                    'h5p' === $row['item_type'] &&
-                                    'true' === api_get_plugin_setting('h5pimport', 'tool_enable')
+                                    'h5p' === $row['item_type']
+                                    && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')
                                 ) {
                                     $em = Database::getManager();
                                     $h5pImportResultsRepo = $em
@@ -2107,10 +2096,10 @@ class Tracking
                                                 $timeRow = '';
                                             }
 
-                                            $output .= '<tr class="' . $oddclass . '" >
+                                            $output .= '<tr class="'.$oddclass.'" >
                                                 <td></td>
-                                                <td>' . $extend_attempt_link . '</td>
-                                                <td colspan="3">'.get_lang('Attempt').' '.$n .'</td>
+                                                <td>'.$extend_attempt_link.'</td>
+                                                <td colspan="3">'.get_lang('Attempt').' '.$n.'</td>
                                                 <td colspan="2">'.$my_lesson_status.'</td>
                                                 <td colspan="2">'.$view_score.'</td>'.$timeRow;
 
@@ -2122,18 +2111,18 @@ class Tracking
                                                         </td>';
                                                     } else {
                                                         $output .= '<td>
-                                                        <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$result->getIid() . '&cidReq='.$courseCode.'" target="_parent">
+                                                        <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$result->getIid().'&cidReq='.$courseCode.'" target="_parent">
                                                         <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
                                                         </a></td>';
                                                     }
                                                 } else {
                                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                         $output .= '<td>
-                                                            <img src="' . Display::returnIconPath('quiz_na.gif').'" alt="' . get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
+                                                            <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                                     } else {
                                                         $output .= '<td>
                                                                 <a href="../exercise/exercise_show.php?cidReq='.$courseCode.'&origin=correct_exercise_in_lp&id='.$result->getIid().'" target="_parent">
-                                                                <img src="' . Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
+                                                                <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                                     }
                                                 }
                                             }
@@ -2394,15 +2383,15 @@ class Tracking
         } else {
             if (api_is_drh() && $allowDhrAccessToAllStudents) {
                 $studentList = UserManager::get_user_list(
-                        ['status' => STUDENT],
-                        [],
-                        false,
-                        false,
-                        null,
-                        null,
-                        null,
-                        $getCount
-                    );
+                    ['status' => STUDENT],
+                    [],
+                    false,
+                    false,
+                    null,
+                    null,
+                    null,
+                    $getCount
+                );
             } else {
                 $studentList = UserManager::getUsersFollowedByUser(
                     $userId,
@@ -2939,8 +2928,8 @@ class Tracking
                         $timestamp = api_strtotime($last_login_date, 'UTC');
                         $currentTimestamp = time();
 
-                        //If the last connection is > than 7 days, the text is red
-                        //345600 = 7 days in seconds
+                        // If the last connection is > than 7 days, the text is red
+                        // 345600 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
                             return '<span style="color: #F00;">'.api_format_date($last_login_date, $dateFormat).'</span>';
                         } else {
@@ -3080,11 +3069,11 @@ class Tracking
                     if (empty($last_login_date)) {
                         return false;
                     }
-                    //see #5736
+                    // see #5736
                     $last_login_date_timestamp = api_strtotime($last_login_date);
                     $now = time();
-                    //If the last connection is > than 7 days, the text is red
-                    //345600 = 7 days in seconds
+                    // If the last connection is > than 7 days, the text is red
+                    // 345600 = 7 days in seconds
                     if ($now - $last_login_date_timestamp > 604800) {
                         if ($convert_date) {
                             $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
@@ -3208,7 +3197,7 @@ class Tracking
                     session_id = $session_id
                     $month_filter";
 
-        //This query can be very slow (several seconds on an indexed table
+        // This query can be very slow (several seconds on an indexed table
         // with 14M rows). As such, we'll try to use APCu if it is
         // available to store the resulting value for a few seconds
         $cacheAvailable = api_get_configuration_value('apc');
@@ -3216,8 +3205,8 @@ class Tracking
             $apc = apcu_cache_info(true);
             $apc_end = $apc['start_time'] + $apc['ttl'];
             $apc_var = api_get_configuration_value('apc_prefix').'course_access_'.$courseId.'_'.$session_id.'_'.strtotime($roundedStart).'_'.strtotime($roundedStop);
-            if (apcu_exists($apc_var) && (time() < $apc_end) &&
-                apcu_fetch($apc_var) > 0
+            if (apcu_exists($apc_var) && (time() < $apc_end)
+                && apcu_fetch($apc_var) > 0
             ) {
                 $count = apcu_fetch($apc_var);
             } else {
@@ -3287,8 +3276,6 @@ class Tracking
     /**
      * Gets the score average from all tests in a course by student.
      *
-     * @param $student_id
-     * @param $course_code
      * @param int  $exercise_id
      * @param null $session_id
      * @param int  $active_filter 2 for consider all tests
@@ -3959,7 +3946,7 @@ class Tracking
         }
 
         // Getting latest LP result for a student
-        //@todo problem when a  course have more than 1500 users
+        // @todo problem when a  course have more than 1500 users
         $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
                 FROM $lp_view_table
                 WHERE
@@ -4191,7 +4178,7 @@ class Tracking
                             echo '$count_items: '.$count_items;
                         }
                     }
-                } //end for
+                } // end for
 
                 $score_of_scorm_calculate += $count_items ? (($lpPartialTotal / $count_items) * 100) : 0;
                 $global_result += $score_of_scorm_calculate;
@@ -4231,7 +4218,7 @@ class Tracking
 
         if ($lp_with_quiz != 0) {
             if (!$return_array) {
-                $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
+                $score_of_scorm_calculate = round($global_result / $lp_with_quiz, 2);
                 if ($debug) {
                     var_dump($score_of_scorm_calculate);
                 }
@@ -4448,9 +4435,9 @@ class Tracking
                             $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
-                                if ($exeDuration != $totalTimeInLpItemView &&
-                                    !empty($lpItemViewId) &&
-                                    !empty($exeDuration)
+                                if ($exeDuration != $totalTimeInLpItemView
+                                    && !empty($lpItemViewId)
+                                    && !empty($exeDuration)
                                 ) {
                                     // Update c_lp_item_view.total_time
                                     $sqlUpdate = "UPDATE $lpItemViewTable SET total_time = '$exeDuration'
@@ -4879,8 +4866,6 @@ class Tracking
      * @param string $orderByName
      * @param string $orderByDirection
      * @param array  $options
-     *
-     * @return mixed
      */
     public static function get_sessions_coached_by_user(
         $coach_id,
@@ -6118,8 +6103,8 @@ class Tracking
                         $progress = $progress.'%';
                     }
 
-                    $filterByCourse = isset($_GET['course']) && $course_code == $_GET['course'] &&
-                        empty($_GET['session_id']);
+                    $filterByCourse = isset($_GET['course']) && $course_code == $_GET['course']
+                        && empty($_GET['session_id']);
 
                     $url = api_get_course_url($course_code, $session_id);
                     $course_url = Display::url($course_title, $url, ['target' => SESSION_LINK_TARGET]);
@@ -6206,7 +6191,7 @@ class Tracking
                         $exercise_obj = new Exercise($course_data['real_id']);
                         $exercise_obj->read($exercise_data['iid']);
                         // Exercise is not necessary to be visible to show results check the result_disable configuration instead
-                        //$visible_return = $exercise_obj->is_visible();
+                        // $visible_return = $exercise_obj->is_visible();
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
                             $best_average = (int)
                                 ExerciseLib::get_best_average_score_by_exercise(
@@ -6254,7 +6239,7 @@ class Tracking
             if (!empty($my_results) && !empty($all_exercise_graph_list)) {
                 asort($all_exercise_start_time);
 
-                //Fix exams order
+                // Fix exams order
                 $final_all_exercise_graph_name_list = [];
                 $my_results_final = [];
                 $final_all_exercise_graph_list = [];
@@ -6421,9 +6406,9 @@ class Tracking
                         'details' => get_lang('Details'),
                     ],
                     function ($column, $key) use ($trackingColumns) {
-                        if (isset($trackingColumns['course_session']) &&
-                            in_array($key, $trackingColumns['course_session']) &&
-                            $trackingColumns['course_session'][$key]
+                        if (isset($trackingColumns['course_session'])
+                            && in_array($key, $trackingColumns['course_session'])
+                            && $trackingColumns['course_session'][$key]
                         ) {
                             return true;
                         }
@@ -6556,12 +6541,12 @@ class Tracking
                         $last_connection = '';
                     }
 
-                    if ($course_code == $courseCodeFromGet &&
-                        $_GET['session_id'] == $session_id_from_get
+                    if ($course_code == $courseCodeFromGet
+                        && $_GET['session_id'] == $session_id_from_get
                     ) {
                         $details = Display::url(
                             Display::return_icon('2rightarrow_na.png', get_lang('Details')),
-                        '#course_session_data'
+                            '#course_session_data'
                         );
                     } else {
                         $url = api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
@@ -6736,7 +6721,7 @@ class Tracking
      */
     public static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        //$exercise_title = $attempts['title'];
+        // $exercise_title = $attempts['title'];
         $attempts = $attempts['data'];
         $my_exercise_result_array = $exercise_result = [];
         if (empty($attempts)) {
@@ -6775,17 +6760,17 @@ class Tracking
                 $sum = 0;
             }
             $min = ($i - 1) * $part + $sum;
-            $max = ($i) * $part;
+            $max = $i * $part;
             $x_axis[] = $min." - ".$max;
             $count = 0;
             foreach ($exercise_result as $result) {
                 $percentage = $result * 100;
                 if ($percentage >= $min && $percentage <= $max) {
-                    //echo ' is > ';
+                    // echo ' is > ';
                     $count++;
                 }
             }
-            //echo '<br />';
+            // echo '<br />';
             $final_array[] = $count;
 
             if ($my_exercise_result >= $min && $my_exercise_result <= $max) {
@@ -6798,7 +6783,7 @@ class Tracking
         // Fix to remove the data of the user with my data
         for ($i = 0; $i <= count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
-                $my_final_array[$i] = $final_array[$i] + 1; //Add my result
+                $my_final_array[$i] = $final_array[$i] + 1; // Add my result
                 $final_array[$i] = 0;
             }
         }
@@ -6842,8 +6827,8 @@ class Tracking
             $myPicture->setFontProperties(
                 [
                     'FontName' => api_get_path(
-                            SYS_FONTS_PATH
-                        ).'opensans/OpenSans-Regular.ttf',
+                        SYS_FONTS_PATH
+                    ).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => $fontSize,
                 ]
             );
@@ -6942,7 +6927,7 @@ class Tracking
             }
         }
 
-        //Getting best result
+        // Getting best result
         rsort($my_exercise_result_array);
         $my_exercise_result = 0;
         if (isset($my_exercise_result_array[0])) {
@@ -6962,7 +6947,7 @@ class Tracking
                 $sum = 0;
             }
             $min = ($i - 1) * $part + $sum;
-            $max = ($i) * $part;
+            $max = $i * $part;
             $x_axis[] = $min." - ".$max;
             $count = 0;
             foreach ($exercise_result as $result) {
@@ -6980,11 +6965,11 @@ class Tracking
             }
         }
 
-        //Fix to remove the data of the user with my data
+        // Fix to remove the data of the user with my data
 
         for ($i = 0; $i <= count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
-                $my_final_array[$i] = $final_array[$i] + 1; //Add my result
+                $my_final_array[$i] = $final_array[$i] + 1; // Add my result
                 $final_array[$i] = 0;
             }
         }
@@ -7030,8 +7015,8 @@ class Tracking
             $myPicture->setFontProperties(
                 [
                     'FontName' => api_get_path(
-                            SYS_FONTS_PATH
-                        ).'opensans/OpenSans-Regular.ttf',
+                        SYS_FONTS_PATH
+                    ).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10,
                 ]
             );
@@ -7103,8 +7088,6 @@ class Tracking
 
     /**
      * @param FormValidator $form
-     *
-     * @return mixed
      */
     public static function setUserSearchForm($form, $displayExtraFields = false)
     {
@@ -7199,13 +7182,13 @@ class Tracking
                 $sessions[$sessionItem['id']] = $sessionItem;
             }
         } elseif (!empty($courseId) && !empty($sessionId)) {
-            //none is empty
+            // none is empty
             $course = api_get_course_info_by_id($courseId);
             $courses[$courseId] = [$course['code']];
             $courses[$courseId]['code'] = $course['code'];
             $sessions[$sessionId] = api_get_session_info($sessionId);
         } else {
-            //both are empty, not enough data, return an empty array
+            // both are empty, not enough data, return an empty array
             return [];
         }
         // Now we have two arrays of courses and sessions with enough data to proceed
@@ -7304,7 +7287,7 @@ class Tracking
             $questionIds = [];
             $answerIds = [];
             while ($row = Database::fetch_array($rs)) {
-                //only show if exercise is visible
+                // only show if exercise is visible
                 if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
                     $userIds[$row['user_id']] = $row['user_id'];
                     $questionIds[$row['question_id']] = $row['question_id'];
@@ -7616,6 +7599,7 @@ class Tracking
      * @param string If defined and return_as_link if true, will be used as the text to be shown as the link
      *
      * @return string IP address (or false on error)
+     *
      * @assert (0,0) === false
      */
     public static function get_ip_from_user_event(
@@ -7640,7 +7624,7 @@ class Tracking
             $row_ip = Database::fetch_row($res_ip);
             if ($return_as_link) {
                 $ip = Display::url(
-                    (empty($body_replace) ? $row_ip[1] : $body_replace),
+                    empty($body_replace) ? $row_ip[1] : $body_replace,
                     'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
                     ['title' => get_lang('TraceIP'), 'target' => '_blank']
                 );
@@ -7752,11 +7736,11 @@ class Tracking
     public static function isAllowToTrack($sessionId)
     {
         return
-            api_is_platform_admin(true, true) ||
-            SessionManager::user_is_general_coach(api_get_user_id(), $sessionId) ||
-            api_is_allowed_to_create_course() ||
-            api_is_course_tutor() ||
-            api_is_course_admin();
+            api_is_platform_admin(true, true)
+            || SessionManager::user_is_general_coach(api_get_user_id(), $sessionId)
+            || api_is_allowed_to_create_course()
+            || api_is_course_tutor()
+            || api_is_course_admin();
     }
 
     public static function getCourseLpProgress($userId, $sessionId)
@@ -7766,7 +7750,7 @@ class Tracking
         $courseList = $data['courses'];
         $result = [];
         if ($courseList) {
-            //$counter = 1;
+            // $counter = 1;
             foreach ($courseList as $course) {
                 $courseId = $course['course_id'];
                 $courseInfo = api_get_course_info_by_id($courseId);
@@ -7779,7 +7763,7 @@ class Tracking
                 // total progress
                 $list = new LearnpathList(
                     $userId,
-                     $courseInfo,
+                    $courseInfo,
                     0,
                     'lp.publicatedOn ASC',
                     true,
@@ -7883,8 +7867,8 @@ class Tracking
         $TBL_DROPBOX_POST = Database::get_course_table(TABLE_DROPBOX_POST);
         $TBL_AGENDA = Database::get_course_table(TABLE_AGENDA);
 
-        //1. track_e_exercises
-        //ORIGINAL COURSE
+        // 1. track_e_exercises
+        // ORIGINAL COURSE
         $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                 WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
         $res = Database::query($sql);
@@ -8024,9 +8008,9 @@ class Tracking
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             // Checking if the LP exist in the new session
-            //if (in_array($row['lp_id'], array_keys($flat_list))) {
+            // if (in_array($row['lp_id'], array_keys($flat_list))) {
             $list[$row['id']] = $row;
-            //}
+            // }
         }
 
         if (!empty($list)) {
@@ -8080,10 +8064,10 @@ class Tracking
 
             $list = [];
             while ($row = Database::fetch_array($res, 'ASSOC')) {
-                //Checking if the LP exist in the new session
-                //if (in_array($row['lp_id'], array_keys($flat_list))) {
+                // Checking if the LP exist in the new session
+                // if (in_array($row['lp_id'], array_keys($flat_list))) {
                 $list[$row['id']] = $row;
-                //}
+                // }
             }
 
             if (!empty($list)) {
@@ -8168,7 +8152,7 @@ class Tracking
                     $base_work_dir = $course_dir.'/work';
 
                     // Creating the parent folder in the session if does not exists already
-                    //@todo ugly fix
+                    // @todo ugly fix
                     $search_this = "folder_moved_from_session_id_$origin_session_id";
                     $search_this2 = $parent_data['url'];
                     $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
@@ -8243,7 +8227,7 @@ class Tracking
                         }
                     }
 
-                    //Creating student_publication_assignment if exists
+                    // Creating student_publication_assignment if exists
                     $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION_ASSIGNMENT
                             WHERE publication_id = $parent_id AND c_id = $course_id";
                     if ($debug) {
@@ -8359,8 +8343,8 @@ class Tracking
             }
         }
 
-        //9. Survey   Pending
-        //10. Dropbox - not neccesary to move categories (no presence of session_id)
+        // 9. Survey   Pending
+        // 10. Dropbox - not neccesary to move categories (no presence of session_id)
         $sql = "SELECT id FROM $TBL_DROPBOX_FILE
                 WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
         if ($debug) {
@@ -8530,7 +8514,7 @@ class Tracking
             if ($resLogoutDate < time() - $lifeTime) {
                 // it isn't, we should create a fresh entry
                 Event::eventLogin($userId);
-            // now that it's created, we can get its ID and carry on
+                // now that it's created, we can get its ID and carry on
             } else {
                 $sql = "UPDATE $tblTrackLogin SET logout_date = '$now'
                     WHERE login_id = '$iIdLastConnection'";
@@ -8546,11 +8530,6 @@ class Tracking
 
     /**
      * Get results of user in exercises by dates.
-     *
-     * @param $userId
-     * @param $courseId
-     * @param $startDate
-     * @param $endDate
      *
      * @return array
      */
@@ -8686,7 +8665,7 @@ class Tracking
                 continue;
             }
 
-            //For graphics
+            // For graphics
             $bestExerciseAttempts = Event::get_best_exercise_results_by_user(
                 $exercices['iid'],
                 $courseInfo['real_id'],
@@ -8746,7 +8725,7 @@ class Tracking
 
                 $myScore = !empty($weighting) && intval($weighting) != 0 ? $score / $weighting : 0;
 
-                //@todo this function slows the page
+                // @todo this function slows the page
                 if (is_int($userList)) {
                     $userList = [$userList];
                 }

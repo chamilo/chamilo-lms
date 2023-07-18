@@ -5,7 +5,6 @@ namespace Chamilo\PluginBundle\Entity\H5pImport;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,16 +17,49 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @package Chamilo\PluginBundle\Entity\H5pImport
  *
  * @ORM\Entity()
+ *
  * @ORM\Table(name="plugin_h5p_import")
  */
-
 class H5pImport
 {
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="text", nullable=false)
+     */
+    protected $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relative_path", type="text", nullable=false)
+     */
+    protected $relativePath;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
+     *
+     * @ORM\Column(name="modified_at", type="datetime", nullable=false)
+     */
+    protected $modifiedAt;
     /**
      * @var int
      *
      * @ORM\Column(name="iid", type="integer")
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
      */
     private $iid;
@@ -36,6 +68,7 @@ class H5pImport
      * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     *
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     private $course;
@@ -44,6 +77,7 @@ class H5pImport
      * @var Session|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     *
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     private $session;
@@ -56,13 +90,6 @@ class H5pImport
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="text", nullable=false)
-     */
-    protected $path;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -70,74 +97,41 @@ class H5pImport
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="relative_path", type="text", nullable=false)
-     */
-    protected $relativePath;
-
-    /**
      * @var Collection<int, H5pImportLibrary>
+     *
      * @ORM\ManyToMany(targetEntity="H5pImportLibrary", mappedBy="h5pImports", cascade={"persist"})
      */
     private $libraries;
 
     /**
      * @var H5pImportLibrary
+     *
      * @ORM\ManyToOne(targetEntity="H5pImportLibrary")
+     *
      * @ORM\JoinColumn(name="main_library_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     private $mainLibrary;
-
-    /**
-     * @var DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
-
-    /**
-     * @var DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="modified_at", type="datetime", nullable=false)
-     */
-    protected $modifiedAt;
 
     public function __construct()
     {
         $this->libraries = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     */
     public function setIid(int $iid): void
     {
         $this->iid = $iid;
     }
 
-    /**
-     * @return Course
-     */
     public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     * @return H5pImport
-     */
     public function setCourse(Course $course): H5pImport
     {
         $this->course = $course;
@@ -145,18 +139,11 @@ class H5pImport
         return $this;
     }
 
-    /**
-     * @return Session|null
-     */
     public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @param Session|null $session
-     * @return H5pImport
-     */
     public function setSession(?Session $session): H5pImport
     {
         $this->session = $session;
@@ -164,18 +151,11 @@ class H5pImport
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return H5pImport
-     */
     public function setName(string $name): H5pImport
     {
         $this->name = $name;
@@ -183,18 +163,11 @@ class H5pImport
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @param string $path
-     * @return H5pImport
-     */
     public function setPath(string $path): H5pImport
     {
         $this->path = $path;
@@ -202,73 +175,48 @@ class H5pImport
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     * @return H5pImport
-     */
     public function setDescription(?string $description): H5pImport
     {
         $this->description = $description;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRelativePath(): string
     {
         return $this->relativePath;
     }
 
-    /**
-     * @param string $relativePath
-     * @return H5pImport
-     */
     public function setRelativePath(string $relativePath): H5pImport
     {
         $this->relativePath = $relativePath;
+
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param DateTime $createdAt
-     * @return H5pImport
-     */
-    public function setCreatedAt(DateTime $createdAt): H5pImport
+    public function setCreatedAt(\DateTime $createdAt): H5pImport
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getModifiedAt(): DateTime
+    public function getModifiedAt(): \DateTime
     {
         return $this->modifiedAt;
     }
 
-    /**
-     * @param DateTime $modifiedAt
-     */
-    public function setModifiedAt(DateTime $modifiedAt): void
+    public function setModifiedAt(\DateTime $modifiedAt): void
     {
         $this->modifiedAt = $modifiedAt;
     }
@@ -277,6 +225,7 @@ class H5pImport
     {
         $library->addH5pImport($this);
         $this->libraries[] = $library;
+
         return $this;
     }
 
@@ -303,5 +252,4 @@ class H5pImport
     {
         return $this->mainLibrary;
     }
-
 }

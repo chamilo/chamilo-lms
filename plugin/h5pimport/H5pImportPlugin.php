@@ -141,20 +141,6 @@ class H5pImportPlugin extends Plugin
     }
 
     /**
-     * Add course tools for all courses.
-     */
-    private function addCourseTools(): void
-    {
-        $courses = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
-            ->getResult();
-
-        foreach ($courses as $course) {
-            $this->addCourseTool($course['id']);
-        }
-    }
-
-    /**
      * Generates the LP resource block for H5P imports.
      *
      * @param int $lpId The LP ID.
@@ -219,8 +205,8 @@ class H5pImportPlugin extends Plugin
     /**
      * Updates and returns the total duration in the view of an H5P learning path item in a course.
      *
-     * @param int $lpItemId     The ID of the learning path item
-     * @param int $userId       The user ID
+     * @param int $lpItemId The ID of the learning path item
+     * @param int $userId   The user ID
      *
      * @return int The updated total duration in the learning path item view
      */
@@ -256,10 +242,10 @@ class H5pImportPlugin extends Plugin
                 WHERE iid = '.$lpItemView['iid'];
             Database::query($sqlUpdate);
 
-            return (int)$durationRow['exe_duration'];
+            return (int) $durationRow['exe_duration'];
         } else {
             // Update c_lp_item_view status
-            $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
+            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
                 SET status = "not attempted",
                 total_time = 0
                 WHERE iid = '.$lpItemView['iid'];
@@ -269,9 +255,6 @@ class H5pImportPlugin extends Plugin
         }
     }
 
-    /**
-     * @param int $courseId
-     */
     public function addCourseTool(int $courseId)
     {
         // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
@@ -284,6 +267,20 @@ class H5pImportPlugin extends Plugin
             0,
             'authoring'
         );
+    }
+
+    /**
+     * Add course tools for all courses.
+     */
+    private function addCourseTools(): void
+    {
+        $courses = Database::getManager()
+            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->getResult();
+
+        foreach ($courses as $course) {
+            $this->addCourseTool($course['id']);
+        }
     }
 
     private function deleteCourseToolLinks()
@@ -303,7 +300,7 @@ class H5pImportPlugin extends Plugin
         $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $courseInfo =  api_get_course_info_by_id($row['id']);
+            $courseInfo = api_get_course_info_by_id($row['id']);
             $fs->remove($courseInfo['course_sys_path'].'/h5p');
         }
     }

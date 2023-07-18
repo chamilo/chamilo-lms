@@ -4,16 +4,9 @@ namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
-use Database;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use H5PCore;
-use H5PFrameworkInterface;
-use Plugin;
 
-class H5pImplementation implements H5PFrameworkInterface
+class H5pImplementation implements \H5PFrameworkInterface
 {
-
     private $h5pImport;
     private $h5pImportLibraries;
 
@@ -23,89 +16,56 @@ class H5pImplementation implements H5PFrameworkInterface
         $this->h5pImportLibraries = $h5pImport->getLibraries();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getPlatformInfo()
     {
         // TODO: Implement getPlatformInfo() method.
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function fetchExternalData($url, $data = null, $blocking = TRUE, $stream = null)
+    public function fetchExternalData($url, $data = null, $blocking = true, $stream = null)
     {
         // TODO: Implement fetchExternalData() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setLibraryTutorialUrl($machineName, $tutorialUrl)
     {
         // TODO: Implement setLibraryTutorialUrl() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setErrorMessage($message, $code = null)
     {
         // TODO: Implement setErrorMessage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setInfoMessage($message)
     {
         // TODO: Implement setInfoMessage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getMessages($type)
     {
         // TODO: Implement getMessages() method.
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function t($message, $replacements = array())
+    public function t($message, $replacements = [])
     {
-       return get_lang($message);
+        return get_lang($message);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLibraryFileUrl($libraryFolderName, $fileName)
     {
         // TODO: Implement getLibraryFileUrl() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getUploadedH5pFolderPath()
     {
         // TODO: Implement getUploadedH5pFolderPath() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getUploadedH5pPath()
     {
         // TODO: Implement getUploadedH5pPath() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadAddons()
     {
         $addons = [];
@@ -121,161 +81,104 @@ class H5pImplementation implements H5PFrameworkInterface
                 WHERE l2.machine_name IS null
         ";
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $addons[] = H5PCore::snakeToCamel($row);
+        $result = \Database::query($sql);
+        while ($row = \Database::fetch_array($result)) {
+            $addons[] = \H5PCore::snakeToCamel($row);
         }
 
         return $addons;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLibraryConfig($libraries = null)
     {
         // TODO: Implement getLibraryConfig() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadLibraries()
     {
         // TODO: Implement loadLibraries() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getAdminUrl()
     {
         // TODO: Implement getAdminUrl() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLibraryId($machineName, $majorVersion = null, $minorVersion = null)
     {
         // TODO: Implement getLibraryId() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getWhitelist($isLibrary, $defaultContentWhitelist, $defaultLibraryWhitelist)
     {
         // TODO: Implement getWhitelist() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function isPatchedLibrary($library)
     {
         // TODO: Implement isPatchedLibrary() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function isInDevMode()
     {
         // TODO: Implement isInDevMode() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function mayUpdateLibraries()
     {
         // TODO: Implement mayUpdateLibraries() method.
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function saveLibraryData(&$libraryData, $new = TRUE)
+    public function saveLibraryData(&$libraryData, $new = true)
     {
         // TODO: Implement saveLibraryData() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function insertContent($content, $contentMainId = null)
     {
         // TODO: Implement insertContent() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function updateContent($content, $contentMainId = null)
     {
         // TODO: Implement updateContent() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function resetContentUserData($contentId)
     {
         // TODO: Implement resetContentUserData() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function saveLibraryDependencies($libraryId, $dependencies, $dependency_type)
     {
         // TODO: Implement saveLibraryDependencies() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function copyLibraryUsage($contentId, $copyFromId, $contentMainId = null)
     {
         // TODO: Implement copyLibraryUsage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function deleteContentData($contentId)
     {
         // TODO: Implement deleteContentData() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function deleteLibraryUsage($contentId)
     {
         // TODO: Implement deleteLibraryUsage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function saveLibraryUsage($contentId, $librariesInUse)
     {
         // TODO: Implement saveLibraryUsage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getLibraryUsage($libraryId, $skipContent = FALSE)
+    public function getLibraryUsage($libraryId, $skipContent = false)
     {
         // TODO: Implement getLibraryUsage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadLibrary($machineName, $majorVersion, $minorVersion)
     {
         if ($this->h5pImportLibraries) {
@@ -304,57 +207,36 @@ class H5pImplementation implements H5PFrameworkInterface
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion)
     {
         // TODO: Implement loadLibrarySemantics() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion)
     {
         // TODO: Implement alterLibrarySemantics() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function deleteLibraryDependencies($libraryId)
     {
         // TODO: Implement deleteLibraryDependencies() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function lockDependencyStorage()
     {
         // TODO: Implement lockDependencyStorage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function unlockDependencyStorage()
     {
         // TODO: Implement unlockDependencyStorage() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function deleteLibrary($library)
     {
         // TODO: Implement deleteLibrary() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadContent($id): array
     {
         $contentJson = H5pPackageTools::getJson($this->h5pImport->getPath().'/content.json');
@@ -390,9 +272,6 @@ class H5pImplementation implements H5PFrameworkInterface
         return [];
     }
 
-    /**
-     * @inheritDoc
-     */
     public function loadContentDependencies($id, $type = null): array
     {
         $h5pImportLibraries = $this->h5pImportLibraries;
@@ -414,129 +293,81 @@ class H5pImplementation implements H5PFrameworkInterface
         return $dependencies;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getOption($name, $default = null)
     {
         return api_get_course_plugin_setting('h5pimport', $name);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function setOption($name, $value)
     {
         // TODO: Implement setOption() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function updateContentFields($id, $fields)
     {
         // TODO: Implement updateContentFields() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function clearFilteredParameters($library_ids)
     {
         // TODO: Implement clearFilteredParameters() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getNumNotFiltered()
     {
         // TODO: Implement getNumNotFiltered() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getNumContent($libraryId, $skip = null)
     {
         // TODO: Implement getNumContent() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function isContentSlugAvailable($slug)
     {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLibraryStats($type)
     {
         // TODO: Implement getLibraryStats() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getNumAuthors()
     {
         // TODO: Implement getNumAuthors() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function saveCachedAssets($key, $libraries)
     {
         // TODO: Implement saveCachedAssets() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function deleteCachedAssets($library_id)
     {
         // TODO: Implement deleteCachedAssets() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getLibraryContentCount()
     {
         // TODO: Implement getLibraryContentCount() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function afterExportCreated($content, $filename)
     {
         // TODO: Implement afterExportCreated() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function hasPermission($permission, $id = null)
     {
         // TODO: Implement hasPermission() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function replaceContentTypeCache($contentTypeCache)
     {
         // TODO: Implement replaceContentTypeCache() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function libraryHasUpgrade($library)
     {
         // TODO: Implement libraryHasUpgrade() method.

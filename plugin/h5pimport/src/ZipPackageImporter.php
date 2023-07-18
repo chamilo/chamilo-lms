@@ -1,6 +1,6 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+// For licensing terms, see /license.txt
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
@@ -8,8 +8,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class ZipPackageImporter.
- *
- * @package Chamilo\PluginBundle\H5pImport\Importer
  */
 class ZipPackageImporter extends H5pPackageImporter
 {
@@ -81,10 +79,10 @@ class ZipPackageImporter extends H5pPackageImporter
             $packageDirectoryPath = $this->generatePackageDirectory($pathInfo['filename']);
             $zipFile->extract($packageDirectoryPath);
 
-            return "$packageDirectoryPath";
-        } else {
-            throw new \Exception('Invalid H5P package');
+            return "{$packageDirectoryPath}";
         }
+
+        throw new \Exception('Invalid H5P package');
     }
 
     /**
@@ -104,9 +102,9 @@ class ZipPackageImporter extends H5pPackageImporter
      * Check if 'h5p.json' and 'content/content.json' files exist
      * and if the files are in a file whitelist (ALLOWED_FILES).
      *
-     * @param array $h5pPackageContent The content of the H5P package.
+     * @param array $h5pPackageContent the content of the H5P package
      *
-     * @return bool Whether the H5P package is valid or not.
+     * @return bool whether the H5P package is valid or not
      */
     private function validateH5pPackageContent(array $h5pPackageContent): bool
     {
@@ -116,7 +114,7 @@ class ZipPackageImporter extends H5pPackageImporter
             foreach ($h5pPackageContent as $content) {
                 $filename = $content['filename'];
 
-                if (preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename) !== 0) {
+                if (0 !== preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename)) {
                     // Skip any file or folder starting with a . or _
                     continue;
                 }
@@ -124,7 +122,7 @@ class ZipPackageImporter extends H5pPackageImporter
                 $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
 
                 if (in_array($fileExtension, self::ALLOWED_FILES)) {
-                    $validPackage = $filename === 'h5p.json' || $filename === 'content/content.json';
+                    $validPackage = 'h5p.json' === $filename || 'content/content.json' === $filename;
                     if ($validPackage) {
                         break;
                     }
@@ -150,7 +148,7 @@ class ZipPackageImporter extends H5pPackageImporter
             while ($fs->exists($directoryPath)) {
                 $modifiedName = $safeName.'_'.$counter;
                 $directoryPath = $baseDirectory.$modifiedName;
-                $counter++;
+                ++$counter;
             }
         }
 

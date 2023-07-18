@@ -1,5 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
+
+// For licensing terms, see /license.txt
 
 namespace Chamilo\PluginBundle\Entity\H5pImport;
 
@@ -13,8 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class H5pImport.
- *
- * @package Chamilo\PluginBundle\Entity\H5pImport
  *
  * @ORM\Entity()
  *
@@ -37,7 +36,7 @@ class H5pImport
     protected $relativePath;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="create")
      *
@@ -46,13 +45,14 @@ class H5pImport
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
     protected $modifiedAt;
+
     /**
      * @var int
      *
@@ -74,7 +74,7 @@ class H5pImport
     private $course;
 
     /**
-     * @var Session|null
+     * @var null|Session
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      *
@@ -83,14 +83,14 @@ class H5pImport
     private $session;
 
     /**
-     * @var string|null
+     * @var null|string
      *
      * @ORM\Column(name="name", type="text", nullable=true)
      */
     private $name;
 
     /**
-     * @var string|null
+     * @var null|string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
@@ -199,24 +199,24 @@ class H5pImport
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): H5pImport
+    public function setCreatedAt(DateTime $createdAt): H5pImport
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getModifiedAt(): \DateTime
+    public function getModifiedAt(): DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(\DateTime $modifiedAt): void
+    public function setModifiedAt(DateTime $modifiedAt): void
     {
         $this->modifiedAt = $modifiedAt;
     }

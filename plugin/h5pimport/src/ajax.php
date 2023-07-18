@@ -19,14 +19,13 @@ $em = Database::getManager();
 $h5pImportRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImport');
 $user = api_get_user_entity(api_get_user_id());
 
-if ($action === 'set_finished' && $h5pId !== 0) {
+if ('set_finished' === $action && 0 !== $h5pId) {
     if (!H5PCore::validToken('result', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
     }
 
     if (is_numeric($_POST['score']) && is_numeric($_POST['maxScore'])) {
-
-        /** @var H5pImport|null $h5pImport */
+        /** @var null|H5pImport $h5pImport */
         $h5pImport = $h5pImportRepo->find($h5pId);
         $entityManager = Database::getManager();
 
@@ -43,17 +42,19 @@ if ($action === 'set_finished' && $h5pId !== 0) {
         $entityManager->persist($h5pImportResults);
 
         // If it comes from an LP, update in c_lp_item_view
-        if ($_REQUEST['learnpath'] == 1 && Session::has('oLP')) {
+        if (1 == $_REQUEST['learnpath'] && Session::has('oLP')) {
             $lpObject = Session::read('oLP');
             $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
-            /** @var CLpItemView|null $lpItemView */
+
+            /** @var null|CLpItemView $lpItemView */
             $lpItemView = $clpItemViewRepo->findOneBy(
                 [
                     'lpViewId' => $lpObject->lp_view_id,
                     'lpItemId' => $lpObject->current,
                 ]
             );
-            /** @var CLpItem|null $lpItem */
+
+            /** @var null|CLpItem $lpItem */
             $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
             if ('h5p' !== $lpItem->getItemType()) {
                 return null;
@@ -75,12 +76,12 @@ if ($action === 'set_finished' && $h5pId !== 0) {
     } else {
         H5PCore::ajaxError();
     }
-} elseif ($action === 'content_user_data' && $h5pId !== 0) {
+} elseif ('content_user_data' === $action && 0 !== $h5pId) {
     if (!H5PCore::validToken('content', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
     }
 
-    /** @var H5pImport|null $h5pImport */
+    /** @var null|H5pImport $h5pImport */
     $h5pImport = $h5pImportRepo->find($h5pId);
 } else {
     H5PCore::ajaxError(get_lang('InvalidAction'));

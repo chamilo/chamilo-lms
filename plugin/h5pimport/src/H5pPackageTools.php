@@ -27,7 +27,7 @@ class H5pPackageTools
 
             // Decode the data
             $json = json_decode($contents, $assoc);
-            if ($json === null) {
+            if (null === $json) {
                 // JSON cannot be decoded or the recursion limit has been reached.
                 return false;
             }
@@ -40,10 +40,10 @@ class H5pPackageTools
      * Checks the integrity of an H5P package by verifying the existence of libraries
      * and moves them to the "libraries" directory.
      *
-     * @param object $h5pJson      The H5P JSON object.
-     * @param string $extractedDir The path to the extracted directory.
+     * @param object $h5pJson      the H5P JSON object
+     * @param string $extractedDir the path to the extracted directory
      *
-     * @return bool True if the package integrity is valid, false otherwise.
+     * @return bool true if the package integrity is valid, false otherwise
      */
     public static function checkPackageIntegrity(object $h5pJson, string $extractedDir): bool
     {
@@ -83,13 +83,11 @@ class H5pPackageTools
     /**
      * Stores the H5P package information in the database.
      *
-     * @param string       $packagePath The path to the H5P package file.
-     * @param object       $h5pJson     The parsed H5P JSON object.
-     * @param Course       $course      The course entity related to the package.
-     * @param Session|null $session     The session entity related to the package.
-     * @param array|null   $values      The advance options in upload form.
-     *
-     * @return void
+     * @param string       $packagePath the path to the H5P package file
+     * @param object       $h5pJson     the parsed H5P JSON object
+     * @param Course       $course      the course entity related to the package
+     * @param null|Session $session     the session entity related to the package
+     * @param null|array   $values      the advance options in upload form
      */
     public static function storeH5pPackage(
         string $packagePath,
@@ -129,7 +127,8 @@ class H5pPackageTools
                         'minorVersion' => $libraryData->minorVersion,
                         'course' => $course,
                     ]
-                );
+                )
+            ;
 
             if (null === $library) {
                 $auxFullName = $libraryData->machineName.'-'.$libraryData->majorVersion.'.'.$libraryData->minorVersion;
@@ -163,9 +162,9 @@ class H5pPackageTools
     /**
      * Deletes an H5P package from the database and the disk.
      *
-     * @param H5pImport $h5pImport The H5P import entity representing the package to delete.
+     * @param H5pImport $h5pImport the H5P import entity representing the package to delete
      *
-     * @return bool True if the package was successfully deleted, false otherwise.
+     * @return bool true if the package was successfully deleted, false otherwise
      */
     public static function deleteH5pPackage(H5pImport $h5pImport): bool
     {
@@ -190,14 +189,14 @@ class H5pPackageTools
     /**
      * Get core settings for H5P content.
      *
-     * @param H5pImport $h5pImport The H5pImport object.
-     * @param \H5PCore  $h5pCore   The H5PCore object.
+     * @param H5pImport $h5pImport the H5pImport object
+     * @param \H5PCore  $h5pCore   the H5PCore object
      *
-     * @return array The core settings for H5P content.
+     * @return array the core settings for H5P content
      */
     public static function getCoreSettings(H5pImport $h5pImport, \H5PCore $h5pCore): array
     {
-        $originIsLearnpath = api_get_origin() === 'learnpath';
+        $originIsLearnpath = 'learnpath' === api_get_origin();
 
         $settings = [
             'baseUrl' => api_get_path(WEB_PATH),
@@ -211,10 +210,10 @@ class H5pPackageTools
             'l10n' => [
                 'H5P' => $h5pCore->getLocalization(),
             ],
-//            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
+            //            'hubIsEnabled' => variable_get('h5p_hub_is_enabled', TRUE) ? TRUE : FALSE,
             'crossorigin' => false,
-//            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
-//            'libraryConfig' => $core->h5pF->getLibraryConfig(),
+            //            'crossoriginCacheBuster' => variable_get('h5p_crossorigin_cache_buster', NULL),
+            //            'libraryConfig' => $core->h5pF->getLibraryConfig(),
             'pluginCacheBuster' => '?0',
             'libraryUrl' => $h5pImport->getMainLibrary()->getLibraryPath().'/js',
         ];
@@ -233,7 +232,7 @@ class H5pPackageTools
     /**
      * Get the core assets.
      *
-     * @return array[]|bool An array containing CSS and JS assets or false if some core assets missing.
+     * @return array[]|bool an array containing CSS and JS assets or false if some core assets missing
      */
     public static function getCoreAssets()
     {
@@ -266,6 +265,8 @@ class H5pPackageTools
 
     /**
      * Return the content body for the H5PIntegration javascript object.
+     *
+     * @param mixed $h5pNode
      */
     public static function getContentSettings($h5pNode, \H5PCore $h5pCore): array
     {
@@ -282,7 +283,6 @@ class H5pPackageTools
             'embed' => api_get_course_plugin_setting('h5pimport', 'embed'),
             'copyright' => api_get_course_plugin_setting('h5pimport', 'copyright'),
             'icon' => api_get_course_plugin_setting('h5pimport', 'icon'),
-
         ];
 
         return [
@@ -305,9 +305,9 @@ class H5pPackageTools
     /**
      * Convert H5P dependencies to a library list.
      *
-     * @param array $dependencies The H5P dependencies.
+     * @param array $dependencies the H5P dependencies
      *
-     * @return array The library list with machine names as keys and version information as values.
+     * @return array the library list with machine names as keys and version information as values
      */
     public static function h5pDependenciesToLibraryList(array $dependencies): array
     {

@@ -1,5 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
+
+// For licensing terms, see /license.txt
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pImplementation;
@@ -25,13 +26,13 @@ $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
 
 $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$originIsLearnpath = api_get_origin() === 'learnpath';
+$originIsLearnpath = 'learnpath' === api_get_origin();
 
 if (!$h5pImportId) {
     api_not_allowed(true);
 }
 
-/** @var H5pImport|null $h5pImport */
+/** @var null|H5pImport $h5pImport */
 $h5pImport = $embedRepo->find($h5pImportId);
 
 if (!$h5pImport) {
@@ -111,7 +112,7 @@ if ($_REQUEST['view']) {
                 $htmlHeadXtra[] = api_get_css($style);
             }
 
-            if ($embedType === 'div') {
+            if ('div' === $embedType) {
                 foreach ($files['scripts'] as $script) {
                     $htmlHeadXtra[] = api_get_js_simple($script->path.$script->version);
                     $integration['loadedJs'] = $script->path.$script->version;
@@ -122,7 +123,7 @@ if ($_REQUEST['view']) {
                 }
 
                 $htmlContent = '<div class="h5p-content" data-content-id="'.$h5pNode['contentId'].'"></div>';
-            } elseif ($embedType === 'iframe') {
+            } elseif ('iframe' === $embedType) {
                 $integration['core']['scripts'] = $coreAssets['js'];
                 $integration['core']['styles'] = $coreAssets['css'];
                 $integration['contents']['cid-'.$h5pNode['contentId']]['styles'] =

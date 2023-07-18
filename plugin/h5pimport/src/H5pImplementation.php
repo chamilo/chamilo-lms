@@ -188,7 +188,6 @@ class H5pImplementation implements \H5PFrameworkInterface
                 }
             )->first();
             if ($foundLibrary) {
-
                 return [
                     'libraryId' => $foundLibrary->getIid(),
                     'title' => $foundLibrary->getTitle(),
@@ -199,7 +198,6 @@ class H5pImplementation implements \H5PFrameworkInterface
                     'runnable' => $foundLibrary->getRunnable(),
                     'preloadedJs' => $foundLibrary->getPreloadedJsFormatted(),
                     'preloadedCss' => $foundLibrary->getPreloadedCssFormatted(),
-
                 ];
             }
         }

@@ -1,6 +1,6 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+// For licensing terms, see /license.txt
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
@@ -8,8 +8,6 @@ use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class H5pPackageImporter.
- *
- * @package Chamilo\PluginBundle\H5pImport\H5pImporter
  */
 abstract class H5pPackageImporter
 {
@@ -17,16 +15,19 @@ abstract class H5pPackageImporter
      * @var Course
      */
     protected $course;
+
     /**
      * Path to course directory.
      *
      * @var string
      */
     protected $courseDirectoryPath;
+
     /**
      * @var array
      */
     protected $packageFileInfo;
+
     /**
      * The package type is usually a MIME type.
      *
@@ -44,7 +45,6 @@ abstract class H5pPackageImporter
         $this->course = $course;
         $this->courseDirectoryPath = api_get_path(SYS_COURSE_PATH).$this->course->getDirectory();
         $this->packageType = $fileInfo['type'];
-
     }
 
     /**
@@ -54,21 +54,20 @@ abstract class H5pPackageImporter
     {
         if (
             'application/octet-stream' !== $fileInfo['type']
-            && pathinfo($fileInfo['name'], PATHINFO_EXTENSION) !== 'h5p'
+            && 'h5p' !== pathinfo($fileInfo['name'], PATHINFO_EXTENSION)
         ) {
             throw new \Exception('Not a H5P package');
         }
 
         return new ZipPackageImporter($fileInfo, $course);
-
     }
 
     /**
      * Check the package and unzip it, checking if it has the 'h5p.json' file or some php script.
      *
-     * @throws \Exception
-     *
      * @return mixed
+     *
+     * @throws \Exception
      */
     abstract public function import(): string;
 

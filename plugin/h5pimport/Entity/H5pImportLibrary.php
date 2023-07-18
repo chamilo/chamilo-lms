@@ -1,5 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
+
+// For licensing terms, see /license.txt
 
 namespace Chamilo\PluginBundle\Entity\H5pImport;
 
@@ -13,8 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class H5pImportLibrary.
- *
- * @package Chamilo\PluginBundle\Entity\H5pImport
  *
  * @ORM\Entity()
  *
@@ -39,6 +38,7 @@ class H5pImportLibrary extends EntityRepository
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
     protected $modifiedAt;
+
     /**
      * @var int
      *
@@ -338,7 +338,7 @@ class H5pImportLibrary extends EntityRepository
     /**
      * Get the preloaded JS array of the imported library formatted as a comma-separated string.
      *
-     * @return string The preloaded JS array of the imported library formatted as a comma-separated string.
+     * @return string the preloaded JS array of the imported library formatted as a comma-separated string
      */
     public function getPreloadedJsFormatted(): string
     {
@@ -356,7 +356,7 @@ class H5pImportLibrary extends EntityRepository
     /**
      * Get the preloaded CSS array of the imported library formatted as a comma-separated string.
      *
-     * @return string The preloaded CSS array of the imported library formatted as a comma-separated string.
+     * @return string the preloaded CSS array of the imported library formatted as a comma-separated string
      */
     public function getPreloadedCssFormatted(): string
     {
@@ -374,7 +374,7 @@ class H5pImportLibrary extends EntityRepository
     /**
      * Get the embed types array formatted as a comma-separated string.
      *
-     * @return string The embed types array formatted as a comma-separated string.
+     * @return string the embed types array formatted as a comma-separated string
      */
     public function getEmbedTypesFormatted(): string
     {

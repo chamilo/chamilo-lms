@@ -35,6 +35,66 @@ class H5pImportPlugin extends Plugin
         );
     }
 
+    public static function create(): ?H5pImportPlugin
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
+    }
+
+    /**
+     * Updates and returns the total duration in the view of an H5P learning path item in a course.
+     *
+     * @param int $lpItemId The ID of the learning path item
+     * @param int $userId   The user ID
+     *
+     * @return int The updated total duration in the learning path item view
+     */
+    public static function fixTotalTimeInLpItemView(
+        int $lpItemId,
+        int $userId
+    ): int {
+        $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+        $sql = "SELECT iid, score
+            FROM $lpItemViewTable
+            WHERE
+                iid = $lpItemId
+            ORDER BY view_count DESC
+            LIMIT 1";
+        $responseItemView = Database::query($sql);
+        $lpItemView = Database::fetch_array($responseItemView);
+
+        // Get the total execution duration of the user in the learning path item view
+        $sql = 'SELECT SUM(total_time) AS exe_duration
+            FROM plugin_h5p_import_results
+            WHERE
+                user_id = '.$userId.' AND
+                c_lp_item_view_id = '.$lpItemView['iid'].
+            ' ORDER BY total_time DESC';
+        $sumScoreResult = Database::query($sql);
+        $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
+
+        if (!empty($durationRow['exe_duration'])) {
+            // Update the total duration in the learning path item view
+            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
+                SET total_time = '.$durationRow['exe_duration'].'
+                WHERE iid = '.$lpItemView['iid'];
+            Database::query($sqlUpdate);
+
+            return (int) $durationRow['exe_duration'];
+        } else {
+            // Update c_lp_item_view status
+            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
+                SET status = "not attempted",
+                total_time = 0
+                WHERE iid = '.$lpItemView['iid'];
+            Database::query($sqlUpdate);
+
+            return 0;
+        }
+    }
+
     public function getToolTitle(): string
     {
         $title = $this->get_lang('plugin_title');
@@ -44,13 +104,6 @@ class H5pImportPlugin extends Plugin
         }
 
         return $this->get_title();
-    }
-
-    public static function create(): ?H5pImportPlugin
-    {
-        static $result = null;
-
-        return $result ? $result : $result = new self();
     }
 
     /**
@@ -81,6 +134,20 @@ class H5pImportPlugin extends Plugin
             ]
         );
         $this->addCourseTools();
+    }
+
+    public function addCourseTool(int $courseId)
+    {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
+        $this->createLinkToCourseTool(
+            $this->get_lang('plugin_title'),
+            $courseId,
+            'plugin_h5p_import.png',
+            '../plugin/h5pimport/start.php',
+            0,
+            'authoring'
+        );
     }
 
     public function uninstall()
@@ -200,73 +267,6 @@ class H5pImportPlugin extends Plugin
         $return .= '</ul>';
 
         return $return;
-    }
-
-    /**
-     * Updates and returns the total duration in the view of an H5P learning path item in a course.
-     *
-     * @param int $lpItemId The ID of the learning path item
-     * @param int $userId   The user ID
-     *
-     * @return int The updated total duration in the learning path item view
-     */
-    public static function fixTotalTimeInLpItemView(
-        int $lpItemId,
-        int $userId
-    ): int {
-        $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
-        $sql = "SELECT iid, score
-            FROM $lpItemViewTable
-            WHERE
-                iid = $lpItemId
-            ORDER BY view_count DESC
-            LIMIT 1";
-        $responseItemView = Database::query($sql);
-        $lpItemView = Database::fetch_array($responseItemView);
-
-        // Get the total execution duration of the user in the learning path item view
-        $sql = 'SELECT SUM(total_time) AS exe_duration
-            FROM plugin_h5p_import_results
-            WHERE
-                user_id = '.$userId.' AND
-                c_lp_item_view_id = '.$lpItemView['iid'].
-            ' ORDER BY total_time DESC';
-        $sumScoreResult = Database::query($sql);
-        $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
-
-        if (!empty($durationRow['exe_duration'])) {
-            // Update the total duration in the learning path item view
-            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
-                SET total_time = '.$durationRow['exe_duration'].'
-                WHERE iid = '.$lpItemView['iid'];
-            Database::query($sqlUpdate);
-
-            return (int) $durationRow['exe_duration'];
-        } else {
-            // Update c_lp_item_view status
-            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
-                SET status = "not attempted",
-                total_time = 0
-                WHERE iid = '.$lpItemView['iid'];
-            Database::query($sqlUpdate);
-
-            return 0;
-        }
-    }
-
-    public function addCourseTool(int $courseId)
-    {
-        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
-        // Otherwise, the link en the course tool will link to "/main/" URL.
-        $this->createLinkToCourseTool(
-            $this->get_lang('plugin_title'),
-            $courseId,
-            'plugin_h5p_import.png',
-            '../plugin/h5pimport/start.php',
-            0,
-            'authoring'
-        );
     }
 
     /**

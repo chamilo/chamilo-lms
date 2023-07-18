@@ -1999,15 +1999,7 @@ class CourseBuilder
 
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-        if ($withBaseContent) {
-            $sessionCondition = api_get_session_condition(
-                $sessionId,
-                true,
-                true
-            );
-        } else {
-            $sessionCondition = api_get_session_condition($sessionId, true);
-        }
+        $sessionCondition = api_get_session_condition($sessionId, true, $withBaseContent);
 
         $idCondition = '';
         if (!empty($idList)) {

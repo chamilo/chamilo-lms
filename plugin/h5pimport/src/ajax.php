@@ -35,9 +35,9 @@ if ($action === 'set_finished' && $h5pId !== 0) {
         $h5pImportResults->setCourse($course);
         $h5pImportResults->setSession($session);
         $h5pImportResults->setUser($user);
-        $h5pImportResults->setScore($_POST['score']);
-        $h5pImportResults->setMaxScore($_POST['maxScore']);
-        $h5pImportResults->setStartTime($_POST['opened']);
+        $h5pImportResults->setScore((int) $_POST['score']);
+        $h5pImportResults->setMaxScore((int) $_POST['maxScore']);
+        $h5pImportResults->setStartTime((int) $_POST['opened']);
         $h5pImportResults->setTotalTime(time() - $_POST['opened']);
 
         $entityManager->persist($h5pImportResults);

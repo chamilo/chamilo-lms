@@ -17,22 +17,22 @@ abstract class H5pPackageImporter
     /**
      * @var Course
      */
-    protected Course $course;
+    protected $course;
     /**
      * Path to course directory
      * @var string
      */
-    protected string $courseDirectoryPath;
+    protected $courseDirectoryPath;
     /**
      * @var array
      */
-    protected array $packageFileInfo;
+    protected $packageFileInfo;
     /**
      * The package type is usually a MIME type
      * @var string
      */
-    protected string $packageType;
-    protected string $h5pJsonContent;
+    protected $packageType;
+    protected $h5pJsonContent;
     /**
      * H5pPackageImporter constructor.
      */

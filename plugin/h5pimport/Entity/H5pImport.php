@@ -30,7 +30,7 @@ class H5pImport
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private int $iid;
+    private $iid;
 
     /**
      * @var Course
@@ -38,7 +38,7 @@ class H5pImport
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    private Course $course;
+    private $course;
 
     /**
      * @var Session|null
@@ -46,35 +46,35 @@ class H5pImport
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private ?Session $session;
+    private $session;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="name", type="text", nullable=true)
      */
-    private ?string $name;
+    private $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="path", type="text", nullable=false)
      */
-    protected string $path;
+    protected $path;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private ?string $description;
+    private $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="relative_path", type="text", nullable=false)
      */
-    protected string $relativePath;
+    protected $relativePath;
 
     /**
      * @var Collection<int, H5pImportLibrary>
@@ -87,7 +87,7 @@ class H5pImport
      * @ORM\ManyToOne(targetEntity="H5pImportLibrary")
      * @ORM\JoinColumn(name="main_library_id", referencedColumnName="iid", onDelete="SET NULL")
      */
-    private H5pImportLibrary $mainLibrary;
+    private $mainLibrary;
 
     /**
      * @var DateTime
@@ -95,7 +95,7 @@ class H5pImport
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected DateTime $createdAt;
+    protected $createdAt;
 
     /**
      * @var DateTime
@@ -103,7 +103,7 @@ class H5pImport
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
-    protected DateTime $modifiedAt;
+    protected $modifiedAt;
 
     public function __construct()
     {

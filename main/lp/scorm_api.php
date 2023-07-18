@@ -1211,7 +1211,7 @@ function lms_save_asset() {
     if (olms.lms_item_type == 'quiz' || olms.lms_item_type == 'h5p') {
         olms.execute_stats = true;
     }
-    console.log(olms);
+
     if (olms.lms_item_type != 'sco') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);

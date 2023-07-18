@@ -85,22 +85,7 @@ class H5pImportPlugin extends Plugin
 
     public function uninstall()
     {
-        $settings = [
-            'tool_enable',
-            'frame' => 'boolean',
-            'embed' => 'boolean',
-            'copyright' => 'boolean',
-            'icon' => 'boolean',
-        ];
-
         $em = Database::getManager();
-        $tableSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $urlId = api_get_current_access_url_id();
-
-        foreach ($settings as $variable) {
-            $sql = "DELETE FROM $tableSettings WHERE variable = '$variable' AND access_url = $urlId";
-            Database::query($sql);
-        }
 
         if (!$em->getConnection()
             ->getSchemaManager()
@@ -152,7 +137,7 @@ class H5pImportPlugin extends Plugin
      */
     public function getViewUrl(H5pImport $h5pImport): string
     {
-        return api_get_path(WEB_PLUGIN_PATH).'h5pimport\view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'h5pimport/view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
     }
 
     /**
@@ -266,7 +251,7 @@ class H5pImportPlugin extends Plugin
 
         if (!empty($durationRow['exe_duration'])) {
             // Update the total duration in the learning path item view
-            $sqlUpdate = 'UPDATE ' .$lpItemViewTable.'
+            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
                 SET total_time = '.$durationRow['exe_duration'].'
                 WHERE iid = '.$lpItemView['iid'];
             Database::query($sqlUpdate);

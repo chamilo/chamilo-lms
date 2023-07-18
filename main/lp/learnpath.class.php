@@ -7771,7 +7771,7 @@ class learnpath
         if ($h5pImportPlugin->isEnabled()) {
             $headers[] = Display::return_icon(
                 'plugin_h5p_import_upload.png',
-                get_lang($h5pImportPlugin->get_lang('plugin_title')),
+                $h5pImportPlugin->get_lang('plugin_title'),
                 [],
                 ICON_SIZE_BIG
             );
@@ -13954,7 +13954,7 @@ EOD;
                     .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
                     ."?id=$id&$extraParams";
             case TOOL_H5P:
-                if (api_get_plugin_setting('h5pimport', 'tool_enable')){
+                if ('true' === api_get_plugin_setting('h5pimport', 'tool_enable')){
                     $toolLaunch = $em->find(H5pImport::class, $id);
 
                     if (empty($toolLaunch)) {

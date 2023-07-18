@@ -23,11 +23,7 @@ class H5pPackageTools
         $json = false;
 
         if ($fs->exists($file)) {
-            $contents = '';
-            $fileContent = fopen($file, "r");
-            while (!feof($fileContent)) {
-                $contents .= fread($fileContent, 2);
-            }
+            $contents = file_get_contents($file);
 
             // Decode the data
             $json = json_decode($contents, $assoc);

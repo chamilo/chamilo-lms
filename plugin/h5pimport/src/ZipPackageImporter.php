@@ -106,8 +106,12 @@ class ZipPackageImporter extends H5pPackageImporter
     }
 
     /**
-     * Validate a H5P package.
-     * Check if exits h5p.json, content.json file and if the files are in a file whitelist (ALLOWED_FILES).
+     * Validate an H5P package.
+     * Check if 'h5p.json' and 'content/content.json' files exist
+     * and if the files are in a file whitelist (ALLOWED_FILES).
+     *
+     * @param array $h5pPackageContent The content of the H5P package.
+     * @return bool Whether the H5P package is valid or not.
      */
     private function validateH5pPackageContent(array $h5pPackageContent): bool
     {
@@ -115,22 +119,27 @@ class ZipPackageImporter extends H5pPackageImporter
 
         if (!empty($h5pPackageContent)) {
             foreach ($h5pPackageContent as $content) {
-                if (preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $content['filename']) !== 0) {
+                $filename = $content['filename'];
+
+                if (preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename) !== 0) {
                     // Skip any file or folder starting with a . or _
-                } elseif (!in_array(pathinfo($content['filename'], PATHINFO_EXTENSION), self::ALLOWED_FILES)) {
-                    $validPackage = false;
-                    break;
-                } elseif ($content['filename'] === 'h5p.json') {
-                    $validPackage = true;
-                } elseif ($content['filename'] === 'content/content.json') {
-                    $validPackage = true;
+                    continue;
+                }
+
+                $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+
+                if (in_array($fileExtension, self::ALLOWED_FILES)) {
+                    $validPackage = $filename === 'h5p.json' || $filename === 'content/content.json';
+                    if ($validPackage) {
+                        break;
+                    }
                 }
             }
         }
 
         return $validPackage;
-
     }
+
     private function generatePackageDirectory(string $name): string
     {
         $baseDirectory = $this->courseDirectoryPath.'/h5p/content/';

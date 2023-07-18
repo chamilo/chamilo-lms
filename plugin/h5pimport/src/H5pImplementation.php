@@ -14,8 +14,8 @@ use Plugin;
 class H5pImplementation implements H5PFrameworkInterface
 {
 
-    private H5pImport $h5pImport;
-    private Collection $h5pImportLibraries;
+    private $h5pImport;
+    private $h5pImportLibraries;
 
     public function __construct(H5pImport $h5pImport)
     {
@@ -34,7 +34,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function fetchExternalData($url, $data = NULL, $blocking = TRUE, $stream = NULL)
+    public function fetchExternalData($url, $data = null, $blocking = TRUE, $stream = null)
     {
         // TODO: Implement fetchExternalData() method.
     }
@@ -50,7 +50,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function setErrorMessage($message, $code = NULL)
+    public function setErrorMessage($message, $code = null)
     {
         // TODO: Implement setErrorMessage() method.
     }
@@ -118,7 +118,7 @@ class H5pImplementation implements H5PFrameworkInterface
                     (l1.major_version < l2.major_version OR
                     (l1.major_version = l2.major_version AND
                     l1.minor_version < l2.minor_version))
-                WHERE l2.machine_name IS NULL
+                WHERE l2.machine_name IS null
         ";
 
         $result = Database::query($sql);
@@ -132,7 +132,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getLibraryConfig($libraries = NULL)
+    public function getLibraryConfig($libraries = null)
     {
         // TODO: Implement getLibraryConfig() method.
     }
@@ -156,7 +156,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getLibraryId($machineName, $majorVersion = NULL, $minorVersion = NULL)
+    public function getLibraryId($machineName, $majorVersion = null, $minorVersion = null)
     {
         // TODO: Implement getLibraryId() method.
     }
@@ -204,7 +204,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function insertContent($content, $contentMainId = NULL)
+    public function insertContent($content, $contentMainId = null)
     {
         // TODO: Implement insertContent() method.
     }
@@ -212,7 +212,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function updateContent($content, $contentMainId = NULL)
+    public function updateContent($content, $contentMainId = null)
     {
         // TODO: Implement updateContent() method.
     }
@@ -236,7 +236,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function copyLibraryUsage($contentId, $copyFromId, $contentMainId = NULL)
+    public function copyLibraryUsage($contentId, $copyFromId, $contentMainId = null)
     {
         // TODO: Implement copyLibraryUsage() method.
     }
@@ -417,7 +417,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getOption($name, $default = NULL)
+    public function getOption($name, $default = null)
     {
         return api_get_course_plugin_setting('h5pimport', $name);
     }
@@ -457,7 +457,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function getNumContent($libraryId, $skip = NULL)
+    public function getNumContent($libraryId, $skip = null)
     {
         // TODO: Implement getNumContent() method.
     }
@@ -521,7 +521,7 @@ class H5pImplementation implements H5PFrameworkInterface
     /**
      * @inheritDoc
      */
-    public function hasPermission($permission, $id = NULL)
+    public function hasPermission($permission, $id = null)
     {
         // TODO: Implement hasPermission() method.
     }

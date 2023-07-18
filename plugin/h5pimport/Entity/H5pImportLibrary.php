@@ -30,57 +30,57 @@ class H5pImportLibrary extends EntityRepository
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private int $iid;
+    private $iid;
 
     /**
      * @ORM\Column(name="title", type="string", nullable=true)
      */
-    private string $title;
+    private $title;
 
     /**
      * @ORM\Column(name="machine_name", type="string")
      */
-    private string $machineName;
+    private $machineName;
 
     /**
      * @ORM\Column(name="major_version", type="integer")
      */
-    private int $majorVersion;
+    private $majorVersion;
 
     /**
      * @ORM\Column(name="minor_version", type="integer")
      */
-    private int $minorVersion;
+    private $minorVersion;
 
     /**
      * @ORM\Column(name="patch_version", type="integer")
      */
-    private int $patchVersion;
+    private $patchVersion;
 
     /**
      * @ORM\Column(name="runnable", type="integer", nullable=true)
      */
-    private ?int $runnable;
+    private $runnable;
 
     /**
      * @ORM\Column(name="embed_types", type="array", nullable=true)
      */
-    private ?array $embedTypes;
+    private $embedTypes;
 
     /**
      * @ORM\Column(name="preloaded_js" , type="array", nullable=true)
      */
-    private ?array $preloadedJs;
+    private $preloadedJs;
 
     /**
      * @ORM\Column(name="preloaded_css", type="array", nullable=true)
      */
-    private ?array $preloadedCss;
+    private $preloadedCss;
 
     /**
      * @ORM\Column(name="library_path", type="string", length=255)
      */
-    private string $libraryPath;
+    private $libraryPath;
 
     /**
      * @var Collection<int, H5pImport>
@@ -99,7 +99,7 @@ class H5pImportLibrary extends EntityRepository
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
-    private Course $course;
+    private $course;
 
     /**
      * @var DateTime
@@ -107,7 +107,7 @@ class H5pImportLibrary extends EntityRepository
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected DateTime $createdAt;
+    protected $createdAt;
 
     /**
      * @var DateTime
@@ -115,7 +115,7 @@ class H5pImportLibrary extends EntityRepository
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
-    protected DateTime $modifiedAt;
+    protected $modifiedAt;
 
     public function __construct()
     {

@@ -63,6 +63,7 @@ switch ($action) {
         $form->addHtml('</div>');
         $form->addButtonUpdate(get_lang('Add'));
         $form->addHidden('action', 'add');
+        $form->protect();
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -114,7 +115,7 @@ switch ($action) {
     case 'delete':
         $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
-        if (!$h5pImportId) {
+        if (!$h5pImportId && !Security::check_token('get')) {
             break;
         }
 
@@ -209,7 +210,11 @@ switch ($action) {
                     if ($isAllowedToEdit) {
                         $actions[] = Display::url(
                             Display::return_icon('delete.png', get_lang('Delete')),
-                            api_get_self().'?action=delete&id='.$value->getIid()
+                            api_get_self().'?'.http_build_query([
+                                'action' => 'delete',
+                                'id' => $value->getIid(),
+                                'sec_token' => Security::getTokenFromSession(),
+                            ])
                         );
                     }
 

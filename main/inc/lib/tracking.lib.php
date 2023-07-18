@@ -1565,10 +1565,10 @@ class Tracking
                     $subtotal_time = $row['mytime'];
 
                     // This is necessary for fix the total time
-                    if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                    if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
                         $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
                             $row['iv_id'],
-                            $user_id,
+                            $user_id
                         );
                     }
                     while ($tmp_row = Database::fetch_array($result)) {
@@ -1614,8 +1614,8 @@ class Tracking
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
                                         c_id = $course_id AND
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'
+                                        lp_item_id = '.(int) $my_id.' AND
+                                        lp_view_id = '.(int) $my_lp_view_id.'
                                     ORDER BY view_count DESC
                                     LIMIT 1";
                             $res_score = Database::query($sql);
@@ -1625,8 +1625,8 @@ class Tracking
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
                                         c_id = $course_id AND
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'";
+                                        lp_item_id = '.(int) $my_id.' AND
+                                        lp_view_id = '.(int) $my_lp_view_id.'";
                             $res_time = Database::query($sql);
                             $row_time = Database::fetch_array($res_time);
 
@@ -1682,13 +1682,13 @@ class Tracking
                             }
                             break;
                         case 'h5p':
-                            if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                            if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
                                 $sql = "SELECT iid, score
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
                                         c_id = $course_id AND
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'
+                                        lp_item_id = '.(int) $my_id.' AND
+                                        lp_view_id = '.(int) $my_lp_view_id.'
                                     ORDER BY view_count DESC
                                     LIMIT 1";
                                 $res_score = Database::query($sql);
@@ -1774,7 +1774,7 @@ class Tracking
                                 }
                             }
                         }
-                        if ($row['item_type'] === 'h5p' && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                        if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
                             $em = Database::getManager();
                             $cLpItemViewRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
                             $count = $cLpItemViewRepo->count(['user' => $user_id, 'cLpItemView' => $row['iv_id']]);
@@ -1955,15 +1955,15 @@ class Tracking
 
                             if (Database::num_rows($res_path) > 0) {
                                 if ('quiz' === $row['item_type']) {
-                                    $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
+                                    $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
                                     WHERE
-                                        exe_exo_id="'.(int)$row_path['path'] . '" AND
+                                        exe_exo_id = '.(int)$row_path['path'].' AND
                                         status <> "incomplete" AND
-                                        exe_user_id="'.$user_id.'" AND
-                                        orig_lp_id = "'.(int)$lp_id.'" AND
-                                        orig_lp_item_id = "'.(int)$lp_item_id.'" AND
-                                        c_id = '.$course_id . '  AND
-                                        session_id = '.session_id.'
+                                        exe_user_id='.$user_id.' AND
+                                        orig_lp_id = '.(int)$lp_id.' AND
+                                        orig_lp_item_id = '.(int)$lp_item_id.' AND
+                                        c_id = '.$course_id.' AND
+                                        session_id = '.$session_id.'
                                     ORDER BY exe_date';
                                     $res_attempts = Database::query($sql);
                                     $num_attempts = Database::num_rows($res_attempts);
@@ -2054,7 +2054,10 @@ class Tracking
                                     }
                                     $output .= '<tr><td colspan="12">&nbsp;</td></tr>';
                                 }
-                                if ('h5p' === $row['item_type'] && api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                                if (
+                                    'h5p' === $row['item_type'] &&
+                                    'true' === api_get_plugin_setting('h5pimport', 'tool_enable')
+                                ) {
                                     $em = Database::getManager();
                                     $h5pImportResultsRepo = $em
                                         ->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');

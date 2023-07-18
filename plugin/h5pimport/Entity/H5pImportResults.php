@@ -27,21 +27,21 @@ class H5pImportResults
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private int $iid;
+    private $iid;
 
     /**
      * @var int
      *
      * @ORM\Column(name="score", type="integer")
      */
-    private int $score;
+    private $score;
 
     /**
      * @var int
      *
      * @ORM\Column(name="max_score", type="integer")
      */
-    private int $maxScore;
+    private $maxScore;
 
     /**
      * @var Course
@@ -49,7 +49,7 @@ class H5pImportResults
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private Course $course;
+    private $course;
 
     /**
      * @var Session|null
@@ -57,7 +57,7 @@ class H5pImportResults
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private ?Session $session;
+    private $session;
 
     /**
      * @var H5pImport
@@ -65,7 +65,7 @@ class H5pImportResults
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\H5pImport\H5pImport")
      * @ORM\JoinColumn(name="plugin_h5p_import_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
-    private H5pImport $h5pImport;
+    private $h5pImport;
 
     /**
      * @var User
@@ -73,7 +73,7 @@ class H5pImportResults
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private User $user;
+    private $user;
 
     /**
      * @var CLpItemView
@@ -81,28 +81,28 @@ class H5pImportResults
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItemView")
      * @ORM\JoinColumn(name="c_lp_item_view_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    private CLpItemView $cLpItemView;
+    private $cLpItemView;
 
     /**
      * @var int
      *
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      */
-    protected int $startTime;
+    protected $startTime;
 
     /**
      * @var int
      *
      * @ORM\Column(name="total_time", type="integer", nullable=false)
      */
-    protected int $totalTime;
+    protected $totalTime;
     /**
      * @var DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private DateTime $createdAt;
+    private $createdAt;
 
     /**
      * @var DateTime
@@ -110,7 +110,7 @@ class H5pImportResults
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modified_at", type="datetime", nullable=false)
      */
-    private DateTime $modifiedAt;
+    private $modifiedAt;
 
     /**
      * @return int

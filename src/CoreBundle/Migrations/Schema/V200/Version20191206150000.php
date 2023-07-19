@@ -22,7 +22,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('helper_text')) {
             $this->addSql('ALTER TABLE extra_field ADD helper_text text DEFAULT NULL AFTER display_text');
         }
-        $this->addSql('ALTER TABLE extra_field_values CHANGE value value LONGTEXT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE extra_field_values CHANGE field_value field_value LONGTEXT DEFAULT NULL;');
         if (false === $table->hasColumn('description')) {
             $this->addSql('ALTER TABLE extra_field ADD description LONGTEXT DEFAULT NULL');
         }
@@ -31,7 +31,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE extra_field_values SET created_at = NOW() WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE extra_field_values SET updated_at = NOW() WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00'");
-        $this->addSql('ALTER TABLE extra_field_values MODIFY COLUMN value LONGTEXT NULL');
+        $this->addSql('ALTER TABLE extra_field_values MODIFY COLUMN field_value LONGTEXT NULL');
 
         if (!$table->hasIndex('idx_efv_item')) {
             $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');

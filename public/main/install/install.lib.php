@@ -15,6 +15,7 @@ use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
+use Symfony\Component\Dotenv\Dotenv;
 
 /*
  * Chamilo LMS
@@ -1661,6 +1662,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.11.10':
         case '1.11.12':
         case '1.11.14':
+        case '1.11.16':
             $start = time();
             // Migrate using the migration files located in:
             // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
@@ -1723,4 +1725,111 @@ function checkCanCreateFile(string $file): bool
     }
 
     return false;
+}
+
+/**
+ * Checks if the update option is available.
+ *
+ * Checks the existence of the "app" folder and the "configuration.php" file
+ * to determine if an update is available from version 1.11.x.
+ *
+ * @param string $baseDir The base directory.
+ * @return bool True if the update is available, false otherwise.
+ */
+function isUpdateAvailable(string $baseDir): bool
+{
+    // Path to the "app" folder
+    $appFolder = $baseDir.'/../app';
+
+    // Path to the "configuration.php" file
+    $configFile = $baseDir.'/../app/config/configuration.php';
+
+    // Check the existence of the "app" folder and the "configuration.php" file
+    return is_dir($appFolder) && file_exists($configFile);
+}
+
+function checkMigrationStatus(): array
+{
+    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+    $dotenv = new Dotenv();
+    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+    $dotenv->loadEnv($envFile);
+
+    $database = connectToDatabase(
+        $_ENV['DATABASE_HOST'],
+        $_ENV['DATABASE_USER'],
+        $_ENV['DATABASE_PASSWORD'],
+        $_ENV['DATABASE_NAME'],
+        $_ENV['DATABASE_PORT']
+    );
+    $manager = $database->getManager();
+
+    $connection = $manager->getConnection();
+
+    // Loading migration configuration.
+    $config = new PhpFile('./migrations.php');
+    $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+
+    // Check if old "version" table exists from 1.11.x, use new version.
+    $schema = $manager->getConnection()->getSchemaManager();
+    $hasOldVersionTable = false;
+    $anyVersionYet = !$schema->tablesExist('version');
+    $isVersionEmpty = false;
+    $executedMigrations = 0;
+    $currentMigration = '';
+    if ($schema->tablesExist('version')) {
+        $columns = $schema->listTableColumns('version');
+        if (in_array('id', array_keys($columns), true)) {
+            $hasOldVersionTable = true;
+        }
+        $query = $connection->createQueryBuilder()
+            ->select('*')
+            ->from('version');
+        $result = $query->execute();
+        $executedMigrations = $result->rowCount();
+        $isVersionEmpty = ($executedMigrations == 0);
+        if (!$isVersionEmpty) {
+            $query = $connection->createQueryBuilder()
+                ->select('*')
+                ->from('version')
+                ->orderBy('executed_at', 'DESC')
+                ->setMaxResults(1);
+            $result = $query->execute()->fetch();
+            $currentMigration = $result['version'];
+        }
+    }
+
+    if (!$hasOldVersionTable) {
+        // Loading migrations.
+        $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
+        $result = '';
+        $input = new Symfony\Component\Console\Input\StringInput($result);
+        $planCalculator = $dependency->getMigrationPlanCalculator();
+        $migrations = $planCalculator->getMigrations();
+        $totalMigrations = $migrations->count();
+        $lastVersion = $migrations->getLast();
+
+        if ($anyVersionYet || $isVersionEmpty) {
+            $currentMigration = '';
+            $executedMigrations = 0;
+        }
+
+        // Calculate progress percentage
+        $progressPercentage = ceil(($executedMigrations / $totalMigrations) * 100);
+        $resultStatus = [
+            'status' => ($progressPercentage >= 100),
+            'message' => ($progressPercentage >= 100) ? 'All migrations have been executed.' : 'Migrations are pending.',
+            'current_migration' => ($progressPercentage >= 100) ? null : $currentMigration,
+            'progress_percentage' => $progressPercentage
+        ];
+    } else {
+        $resultStatus = [
+            'status' => false,
+            'message' => 'Error executing migrations status command.',
+            'current_migration' => null,
+            'progress_percentage' => 0
+        ];
+    }
+
+    return $resultStatus;
 }

@@ -42,20 +42,39 @@
 
     <hr>
 
-    <div class="formgroup-inline">
+    <div class="formgroup">
+
+      <Message
+        v-if="installerData.isUpdateAvailable"
+        id="pleasewait"
+        :closable="false"
+        severity="warn"
+      >
+        <p class="update-message-text">
+          {{ t('An update is available. Click the button below to proceed with the update.') }}
+        </p>
+        <p>{{ installerData.checkMigrationStatus.message }}</p>
+        <p v-if="installerData.checkMigrationStatus.current_migration">
+          Current Migration: {{ installerData.checkMigrationStatus.current_migration }}
+        </p>
+        <p v-if="installerData.checkMigrationStatus.progress_percentage">
+          Progress: {{ installerData.checkMigrationStatus.progress_percentage }}%
+        </p>
+        <hr>
+      </Message>
       <Button
         :label="t('Next')"
-        class="p-button-secondary"
+        :class="[installerData.isUpdateAvailable ? 'p-button-secondary' : 'p-button-success']"
         icon="mdi mdi-page-next"
-        name="step1"
+        :name="installerData.isUpdateAvailable ? 'step5' : 'step1'"
         type="submit"
       />
       <input
         id="is_executable"
         name="is_executable"
         type="hidden"
-        value="step1"
-      >
+        :value="!installerData.isUpdateAvailable ? 'step1' : '-'"
+      />
     </div>
   </div>
 </template>

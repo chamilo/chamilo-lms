@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,5 +60,33 @@ class IndexController extends BaseController
             '@ChamiloCore/Layout/layout_one_col.html.twig',
             ['content' => $content]
         );
+    }
+
+    /**
+     * Toggle the student view action.
+     */
+    #[Route('/toggle_student_view', methods: ['GET'])]
+    #[Security("is_granted('ROLE_TEACHER')")]
+    public function toggleStudentViewAction(Request $request, SettingsManager $settingsManager): Response
+    {
+        if (!api_is_allowed_to_edit(false, false, false, false)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ('true' !== $settingsManager->getSetting('course.student_view_enabled')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $studentView = $request->getSession()->get('studentview');
+
+        if (empty($studentView) || 'studentview' === $studentView) {
+            $content = 'teacherview';
+        } else {
+            $content = 'studentview';
+        }
+
+        $request->getSession()->set('studentview', $content);
+
+        return new Response($content);
     }
 }

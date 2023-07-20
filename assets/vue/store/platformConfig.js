@@ -5,7 +5,7 @@ import { ref } from "vue";
 export const usePlatformConfig = defineStore("platformConfig", () => {
   const isLoading = ref(false);
   const settings = ref(null);
-  const studentView = ref(null);
+  const isStudentViewActive = ref(false);
 
   function getSetting(variable) {
     if (settings.value && settings.value[variable]) {
@@ -18,12 +18,17 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   async function findSettingsRequest() {
     isLoading.value = true;
 
-    const { data } = await axios.get("/platform-config/list");
+    try {
+      const { data } = await axios.get("/platform-config/list")
 
-    settings.value = data.settings;
-    studentView.value = data.studentview;
+      settings.value = data.settings
 
-    isLoading.value = false;
+      isStudentViewActive.value = 'studentview' === data.studentview
+    } catch (e) {
+      console.log(e)
+    } finally {
+      isLoading.value = false
+    }
   }
 
   async function initialize() {
@@ -33,7 +38,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   return {
     isLoading,
     settings,
-    studentView,
+    isStudentViewActive,
     initialize,
     getSetting,
   };

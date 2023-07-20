@@ -1,6 +1,6 @@
 <template>
   <BaseToggleButton
-    v-if="isCurrentTeacher && 'true' === platformConfigurationStore.getSetting('course.student_view_enabled')"
+    v-if="isCurrentTeacher && 'true' === platformConfigStore.getSetting('course.student_view_enabled')"
     v-model="isStudentView"
     :off-label="t('Switch to student view')"
     :on-label="t('Switch to teacher view')"
@@ -11,27 +11,33 @@
 
 <script setup>
 import BaseToggleButton from "./basecomponents/BaseToggleButton.vue";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { usePlatformConfig } from "../store/platformConfig";
+import { usePlatformConfig } from "../store/platformConfig"
+import axios from "axios"
 
-const route = useRoute();
 const store = useStore();
 const { t } = useI18n();
+const platformConfigStore = usePlatformConfig()
 
-const platformConfigurationStore = usePlatformConfig();
+const isStudentView = ref(platformConfigStore.isStudentViewActive)
 
-const isStudentView = ref('studentview' === platformConfigurationStore.studentView);
+const isLoading = ref(false);
 
-watch(isStudentView, (newValue) => {
-  const params = new URLSearchParams(window.location.search);
-  params.delete('isStudentView');
-  params.append('isStudentView', newValue ? 'true' : 'false');
+watch(isStudentView, async () => {
+  isLoading.value = true
 
-  window.location.href = route.path + '?' + params.toString();
-});
+  try {
+    const { data } = await axios.get(`${window.location.origin}/toggle_student_view`)
+
+    platformConfigStore.isStudentViewActive = 'studentview' === data
+  } catch (e) {
+    console.log(e)
+  } finally {
+    isLoading.value = false
+  }
+})
 
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 </script>

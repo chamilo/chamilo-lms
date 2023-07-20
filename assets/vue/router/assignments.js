@@ -18,5 +18,10 @@ export default {
       path: "new",
       component: () => import("../views/assignments/AssignmentsCreate.vue"),
     },
+    {
+      name: "AssigmnentsUpdate",
+      path: "edit",
+      component: () => import("../views/assignments/AssignmentsUpdate.vue"),
+    },
   ],
 };

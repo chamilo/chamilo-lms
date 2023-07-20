@@ -114,14 +114,19 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseDropdrown from "../basecomponents/BaseDropdown.vue";
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue";
 import useVuelidate from "@vuelidate/core";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch, watchEffect } from "vue"
 import { maxValue, minValue, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
 import { useCidReq } from "../../composables/cidReq";
 import { useRoute } from "vue-router"
 
-defineProps({
+const props = defineProps({
+  defaultAssignment: {
+    type: Object,
+    required: false,
+    default: () => null,
+  },
   isFormLoading: {
     type: Boolean,
     required: false,
@@ -159,6 +164,51 @@ const assignment = reactive({
   addToCalendar: false,
   allowTextAssignment: documentTypes.value[2],
 });
+
+watchEffect(() => {
+  const defaultAssignment = props.defaultAssignment
+
+  if (!defaultAssignment) {
+    return
+  }
+
+  assignment.title = defaultAssignment.title
+  assignment.description = defaultAssignment.description
+
+  assignment.qualification = defaultAssignment.qualification
+  assignment.addToCalendar = defaultAssignment.assignment.eventCalendarId > 0
+
+  if (defaultAssignment.weight > 0) {
+    chkAddToGradebook.value = true
+    //assignment.gradebookId.id = defaultAssignment.gradebookCategoryId
+    assignment.weight = defaultAssignment.weight
+  }
+
+  if (defaultAssignment.assignment.expiresOn) {
+    chkExpiresOn.value = true
+    assignment.expiresOn = new Date(defaultAssignment.assignment.expiresOn)
+  }
+
+  if (defaultAssignment.assignment.endsOn) {
+    chkEndsOn.value = true
+    assignment.endsOn = new Date(defaultAssignment.assignment.endsOn)
+  }
+
+  assignment.allowTextAssignment = documentTypes.value.find(
+    (documentType) => documentType.value === defaultAssignment.allowTextAssignment,
+  )
+
+  if (
+    defaultAssignment.qualification ||
+    defaultAssignment.assignment.eventCalendarId ||
+    defaultAssignment.weight ||
+    defaultAssignment.assignment.expiresOn ||
+    defaultAssignment.assignment.endsOn ||
+    defaultAssignment.allowTextAssignment
+  ) {
+    showAdvancedSettings.value = true
+  }
+})
 
 const rules = computed(() => {
   const localRules = {
@@ -240,6 +290,11 @@ const onSubmit = async () => {
     }
 
     publicationStudent.allowTextAssignment = assignment.allowTextAssignment.value;
+  }
+
+  if (props.defaultAssignment) {
+    publicationStudent["@id"] = props.defaultAssignment["@id"]
+    publicationStudent.assignment["@id"] = props.defaultAssignment.assignment["@id"]
   }
 
   emit("submit", publicationStudent);

@@ -90,6 +90,7 @@
           only-icon
           size="small"
           type="black"
+          @click="onClickEdit(slotProps.data)"
         />
       </template>
     </Column>
@@ -120,8 +121,10 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../resource_links/
 import { useNotification } from "../../composables/notification"
 import { useConfirm } from "primevue/useconfirm"
 import resourceLinkService from "../../services/resourcelink"
+import { useRouter } from "vue-router"
 
 const { t } = useI18n()
+const router = useRouter()
 
 const assignments = ref([])
 const selected = ref([])
@@ -218,5 +221,12 @@ async function onClickVisibility(assignment) {
   } catch (e) {
     notification.showErrorNotification(e)
   }
+}
+
+function onClickEdit(assignment) {
+  router.push({
+    name: "AssigmnentsUpdate",
+    query: { id: assignment["@id"], cid, sid, gid },
+  })
 }
 </script>

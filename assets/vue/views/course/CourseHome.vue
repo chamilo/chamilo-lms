@@ -40,7 +40,7 @@
       />
 
       <BaseButton
-        v-if="course && isCurrentTeacher"
+        v-if="course && isCurrentTeacher && !platformConfigStore.isStudentViewActive"
         icon="cog"
         only-icon
         popup-identifier="course-tmenu"
@@ -53,7 +53,7 @@
 
     <hr class="mt-1 mb-1">
 
-    <div v-if="isCurrentTeacher" class="mb-4">
+    <div v-if="isCurrentTeacher && !platformConfigStore.isStudentViewActive" class="mb-4">
       <div v-if="intro" class="flex flex-col gap-4">
         <div v-html="intro.introText" />
 
@@ -85,49 +85,55 @@
 
     <div v-if="isCurrentTeacher" class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
-      <BaseToggleButton
-        :model-value="false"
-        :on-label="t('Show all')"
-        :off-label="t('Show all')"
-        :disabled="isSorting || isCustomizing"
-        on-icon="eye-on"
-        off-icon="eye-on"
-        size="small"
+
+      <div
+        v-if="!platformConfigStore.isStudentViewActive"
         class="ml-auto"
-        without-borders
-        @click="onClickShowAll"
-      />
-      <BaseToggleButton
-        :model-value="false"
-        :on-label="t('Hide all')"
-        :off-label="t('Hide all')"
-        :disabled="isSorting || isCustomizing"
-        on-icon="eye-off"
-        off-icon="eye-off"
-        size="small"
-        without-borders
-        @click="onClickHideAll"
-      />
-      <BaseToggleButton
-        v-model="isSorting"
-        :disabled="isCustomizing"
-        :on-label="t('Sort')"
-        on-icon="swap-vertical"
-        :off-label="t('Sort')"
-        off-icon="swap-vertical"
-        size="small"
-        without-borders
-      />
-      <BaseToggleButton
-        v-model="isCustomizing"
-        :disabled="isSorting"
-        :on-label="t('Customize')"
-        on-icon="customize"
-        :off-label="t('Customize')"
-        off-icon="customize"
-        size="small"
-        without-borders
-      />
+      >
+        <BaseToggleButton
+          :model-value="false"
+          :on-label="t('Show all')"
+          :off-label="t('Show all')"
+          :disabled="isSorting || isCustomizing"
+          on-icon="eye-on"
+          off-icon="eye-on"
+          size="small"
+          class="ml-auto"
+          without-borders
+          @click="onClickShowAll"
+        />
+        <BaseToggleButton
+          :model-value="false"
+          :on-label="t('Hide all')"
+          :off-label="t('Hide all')"
+          :disabled="isSorting || isCustomizing"
+          on-icon="eye-off"
+          off-icon="eye-off"
+          size="small"
+          without-borders
+          @click="onClickHideAll"
+        />
+        <BaseToggleButton
+          v-model="isSorting"
+          :disabled="isCustomizing"
+          :on-label="t('Sort')"
+          on-icon="swap-vertical"
+          :off-label="t('Sort')"
+          off-icon="swap-vertical"
+          size="small"
+          without-borders
+        />
+        <BaseToggleButton
+          v-model="isCustomizing"
+          :disabled="isSorting"
+          :on-label="t('Customize')"
+          on-icon="customize"
+          :off-label="t('Customize')"
+          off-icon="customize"
+          size="small"
+          without-borders
+        />
+      </div>
     </div>
     <hr class="mt-0 mb-4" />
 
@@ -173,11 +179,14 @@ import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
 import Sortable from 'sortablejs';
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
 const { t } = useI18n();
+
+const platformConfigStore = usePlatformConfig()
 
 const course = ref(null);
 const session = ref(null);

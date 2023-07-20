@@ -47,6 +47,10 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
+        if ($publication->getQualification() > 0) {
+            $assignment->setEnableQualification(true);
+        }
+
         if ($publication->addToCalendar) {
             $event = $this->saveCalendarEvent($publication, $assignment, $courseLink, $course, $session, $group);
 

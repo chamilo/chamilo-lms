@@ -1776,6 +1776,7 @@ $_configuration['course_catalog_settings'] = [
         'variable5' => -1,
         'variable6' => 1,
     ],
+    'pre_filter_on_language' => 1, // By default, filter the courses catalogue on user language (prevents searching without language)
 ];
 */
 

@@ -2072,6 +2072,10 @@ class CoursesAndSessionsCatalog
         bool $returnHtml = false
     ): ?string {
         $settings = api_get_configuration_value('course_catalog_settings');
+        $preFilterOnLanguage = false;
+        if (!empty($settings['pre_filter_on_language'])) {
+            $preFilterOnLanguage = true;
+        }
 
         $courseCatalogSettings = [
             'info_url' => 'course_description_popup',
@@ -2158,6 +2162,14 @@ class CoursesAndSessionsCatalog
 
         $sortKeys = isset($_REQUEST['sortKeys']) ? Security::remove_XSS($_REQUEST['sortKeys']) : '';
         $languageSelect = isset($_REQUEST['course_language']) ? Security::remove_XSS($_REQUEST['course_language']) : '';
+        if ($preFilterOnLanguage && empty($languageSelect)) {
+            $languageSelect = api_get_user_info()['language'];
+        }
+        // Check the language is active
+        $languagesList = SubLanguageManager::getAllLanguages(true);
+        if (empty($languagesList[$languageSelect])) {
+            $languageSelect = '';
+        }
         $defaults['sortKeys'] = $sortKeys;
         $defaults['search_term'] = $searchTerm;
         $defaults['category_code'] = $categoryCode;

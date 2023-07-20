@@ -2483,3 +2483,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Enable additional_webservices.php for *remote* PPT2PNG/Oogie service
 //$_configuration['webservice_remote_ppt2png_enable'] = false;
+
+// Add more speed options to reading comprehension question type (type id = 21) in words per minute
+//$_configuration['exercise_question_reading_comprehension_extra_speeds'] = ['speeds' => [70, 110, 170]];

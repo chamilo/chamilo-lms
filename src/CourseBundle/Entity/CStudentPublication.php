@@ -34,7 +34,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Put(security: "is_granted('EDIT', object.resourceNode)"),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(
+            normalizationContext: [
+                'groups' => ['student_publication:read', 'student_publication:item:get']
+            ],
+            security: "is_granted('VIEW', object.resourceNode)",
+        ),
         new GetCollection(),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
@@ -72,7 +77,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected ?string $description;
 
     #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
@@ -103,7 +108,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?bool $viewProperties = null;
 
     #[ORM\Column(name: 'qualification', type: 'float', precision: 6, scale: 2, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected float $qualification;
 
     #[ORM\Column(name: 'date_of_qualification', type: 'datetime', nullable: true)]
@@ -145,11 +150,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected float $weight = 0;
 
     #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected int $allowTextAssignment;
 
     #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]

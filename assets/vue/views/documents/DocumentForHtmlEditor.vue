@@ -114,6 +114,7 @@ import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: 'DocumentForHtmlEditor',
@@ -127,17 +128,18 @@ export default {
     DataFilter
   },
   mixins: [ListMixin],
-  data() {
-    return {
+  setup() {
+    const { t } = useI18n();
+    const data = {
       sortBy: 'title',
       sortDesc: false,
       columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
-        { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
+        { label: t('Title'), field: 'title', name: 'title', sortable: true},
+        { label: t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
+        { label: t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
+        { label: t('Actions'), name: 'action', sortable: false}
       ],
-      pageOptions: [10, 20, 50, this.$i18n.t('All')],
+      pageOptions: [10, 20, 50, t('All')],
       selected: [],
       isBusy: false,
       options: [],
@@ -150,6 +152,8 @@ export default {
       filters: {},
       submitted: false,
     };
+
+    return data;
   },
   created() {
     console.log('created - vue/views/documents/DocumentsList.vue');

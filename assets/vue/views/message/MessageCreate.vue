@@ -128,4 +128,52 @@ const onSubmit = () => {
     });
   });
 };
+
+const browser = (callback, value, meta) => {
+
+  let url = '/resources/personal_files/';
+
+  if (meta.filetype === "image") {
+    url = url + "&type=images";
+  } else {
+    url = url + "&type=files";
+  }
+
+  window.addEventListener("message", function (event) {
+    var data = event.data;
+    if (data.url) {
+      url = data.url;
+      console.log(meta); // {filetype: "image", fieldname: "src"}
+      callback(url);
+    }
+  });
+
+  tinymce.activeEditor.windowManager.openUrl(
+    {
+      url: url,
+      title: "file manager",
+    },
+    {
+      oninsert: function (file, fm) {
+        var url, reg, info;
+
+        url = fm.convAbsUrl(file.url);
+
+        info = file.name + " (" + fm.formatSize(file.size) + ")";
+
+        if (meta.filetype === "file") {
+          callback(url, { text: info, title: info });
+        }
+
+        if (meta.filetype === "image") {
+          callback(url, { alt: info });
+        }
+
+        if (meta.filetype === "media") {
+          callback(url);
+        }
+      },
+    }
+  );
+};
 </script>

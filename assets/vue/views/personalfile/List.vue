@@ -75,6 +75,15 @@
       </template>
     </Column>
 
+    <Column :exportable="false">
+      <template #body="slotProps">
+        <div class="flex flex-row gap-2">
+          <Button label="Select" class="p-button-sm p-button p-mr-2" @click="returnToEditor(slotProps.data)" />
+        </div>
+      </template>
+    </Column>
+
+
 <!--    <template #paginatorLeft>-->
 <!--      <Button type="button" icon="pi pi-refresh" class="p-button-text" />-->
 <!--    </template>-->
@@ -142,6 +151,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: 'PersonalFileList',
@@ -155,23 +165,24 @@ export default {
     DataFilter
   },
   mixins: [ListMixin],
-  data() {
-    return {
+  setup() {
+    const { t } = useI18n();
+    const data = {
       sortBy: 'title',
       sortDesc: false,
       columnsQua: [
-        {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
-        {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
-        {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
-        {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
+        {align: 'left', name: 'resourceNode.title', label: t('Title'), field: 'resourceNode.title', sortable: true},
+        {align: 'left', name: 'resourceNode.updatedAt', label: t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
+        {name: 'resourceNode.resourceFile.size', label: t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
+        {name: 'action', label: t('Actions'), field: 'action', sortable: false}
       ],
       columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
-        { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
+        { label: t('Title'), field: 'title', name: 'title', sortable: true},
+        { label: t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
+        { label: t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
+        { label: t('Actions'), name: 'action', sortable: false}
       ],
-      pageOptions: [10, 20, 50, this.$i18n.t('All')],
+      pageOptions: [10, 20, 50, t('All')],
       selected: [],
       isBusy: false,
       options: [],
@@ -184,6 +195,8 @@ export default {
       filters: {shared: 0, loadNode: 1},
       submitted: false,
     };
+
+    return data;
   },
   created() {
     this.resetList = true;
@@ -315,6 +328,31 @@ export default {
     },
     clearSelected() {
       this.$refs.selectableTable.clearSelected()
+    },
+    returnToEditor(item) {
+      const url = item.contentUrl;
+
+      // Tiny mce.
+      window.parent.postMessage({
+        url: url
+      }, '*');
+
+      if (parent.tinymce) {
+        parent.tinymce.activeEditor.windowManager.close();
+      }
+
+      // Ckeditor
+      function getUrlParam(paramName) {
+        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
+        var match = window.location.search.match(reParam);
+        return (match && match.length > 1) ? match[1] : '';
+      }
+
+      var funcNum = getUrlParam('CKEditorFuncNum');
+      if (window.opener.CKEDITOR) {
+        window.opener.CKEDITOR.tools.callFunction(funcNum, url);
+        window.close();
+      }
     },
     async deleteSelected() {
       console.log('deleteSelected');

@@ -597,6 +597,7 @@ class CoursesAndSessionsCatalog
                             $where
                             $categoryFilter
                             $sqlInjectWhere
+                            $courseLanguageWhere
                             $avoidCoursesCondition
                             $showCoursesCondition
                             $visibilityCondition

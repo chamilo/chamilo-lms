@@ -6701,6 +6701,8 @@ class SessionManager
      * @param int $courseId
      *
      * @return bool
+     *
+     * @deprecated
      */
     public static function installCourse($sessionId, $courseId)
     {

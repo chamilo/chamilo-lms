@@ -762,7 +762,7 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['exercise_attempts_report_show_username'] = false;
 // Allow extends allowed question types for embeddable exercises.
 /* By default, only the following question types are allowed: 1, 2, 17
-Add this types to allow them in embeddable exercises:
+Add these types to allow them in embeddable exercises:
  1 = Multiple choice
  2 = Multiple answers
  3 = Fill blanks or form

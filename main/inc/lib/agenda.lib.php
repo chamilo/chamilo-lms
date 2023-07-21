@@ -326,7 +326,7 @@ class Agenda
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
                 }
-
+                $this->deleteEventIfAlreadyExit($start, $end, $allDay, $title);
                 $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
 
@@ -496,6 +496,44 @@ class Agenda
         }
 
         return $id;
+    }
+    
+        /**
+     * @param string $start                 datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $end                   datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $allDay                (true, false)
+     *  @param string $title
+     * 
+     * Prevent duplicate event to the course calendar
+     *
+     * @return bool
+     */
+    public function deleteEventIfAlreadyExit(
+        $start,
+        $end,
+        $allDay,
+        $title
+    ) {
+        $courseId = $this->course['real_id'];
+        $start = Database::escape_string($start);
+        $end = Database::escape_string($end);
+        $allDay = (int) $allDay;
+        $title = Database::escape_string($title);
+        $sql = "SELECT id FROM ".$this->tbl_course_agenda."
+                WHERE c_id = $courseId
+                AND start_date = '$start'
+                AND end_date = '$end'
+                AND all_day = $allDay
+                AND title = '$title'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res, 'ASSOC');
+            $id = $row['id'];
+            $this->deleteEvent($id);
+            return true;
+        }
+
+        return false;
     }
 
     /**

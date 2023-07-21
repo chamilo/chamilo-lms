@@ -165,9 +165,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     /**
      * @param string $variable
      */
-    public function getConfigurationValue($variable)
+    public function getConfigurationValue($variable, $configuration = null)
     {
         global $_configuration;
+
+        if (isset($configuration)) {
+            $_configuration = $configuration;
+        }
+
         if (isset($_configuration[$variable])) {
             return $_configuration[$variable];
         }

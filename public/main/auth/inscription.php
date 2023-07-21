@@ -26,7 +26,7 @@ $allowedFields = [
     'address',
 ];
 
-$allowedFieldsConfiguration = api_get_setting('profile.allow_fields_inscription', true);
+$allowedFieldsConfiguration = api_get_setting('registration.allow_fields_inscription', true);
 if (false !== $allowedFieldsConfiguration) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
@@ -451,7 +451,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
-        $requiredFields = api_get_setting('profile.required_extra_fields_in_inscription', true);
+        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }

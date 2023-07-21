@@ -183,6 +183,9 @@ class ResourceListener
         }
 
         if ($resource instanceof PersonalFile) {
+            if (null === $currentUser) {
+                $currentUser = $parentNode->getCreator();
+            }
             $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername() ||
                      $parentNode->getId() === $currentUser->getResourceNode()->getId();
 

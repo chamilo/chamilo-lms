@@ -11,9 +11,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -33,14 +36,14 @@ final class Version20230215072918 extends AbstractMigrationChamilo
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $lpRepo = $container->get(CLp::class);
+        $lpRepo = $container->get(CLpRepository::class);
 
         /** @var CLpRelUserRepository $cLpRelUserRepo */
-        $cLpRelUserRepo = $container->get(CLpRelUser::class);
+        $cLpRelUserRepo = $container->get(CLpRelUserRepository::class);
 
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(Session::class);
-        $userRepo = $container->get(User::class);
+        $sessionRepo = $container->get(SessionRepository::class);
+        $userRepo = $container->get(UserRepository::class);
 
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');

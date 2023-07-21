@@ -134,6 +134,7 @@ $upgradeFromVersion = [
     '1.11.11',
     '1.11.12',
     '1.11.14',
+    '1.11.16',
 ];
 
 $my_old_version = '';
@@ -165,6 +166,8 @@ if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
 }
 
+$checkMigrationStatus =  checkMigrationStatus();
+$isUpdateAvailable = isUpdateAvailable(api_get_path(SYS_PATH));
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
         $installType = 'new';
@@ -188,7 +191,7 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
     }
 } elseif (isset($_POST['step1'])) {
     $_POST['updatePath'] = '';
-    $installType = '';
+    $installType = $_GET['installType'] ?? '';
     $updateFromConfigFile = '';
     unset($_GET['running']);
 } else {
@@ -428,11 +431,24 @@ if (isset($_POST['step2'])) {
     $stepData['institutionUrlForm'] = $institutionUrlForm;
     $stepData['encryptPassForm'] = $encryptPassForm;
 
-    $stepData['dbHostForm'] = $dbHostForm;
-    $stepData['dbPortForm'] = $dbPortForm;
-    $stepData['dbUsernameForm'] = $dbUsernameForm;
-    $stepData['dbPassForm'] = str_repeat('*', api_strlen($dbPassForm));
-    $stepData['dbNameForm'] = $dbNameForm;
+    $isPendingMigration = ($isUpdateAvailable && false === $checkMigrationStatus['status']);
+    if ($isPendingMigration) {
+        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+        $dotenv = new Dotenv();
+        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+        $dotenv->loadEnv($envFile);
+        $stepData['dbHostForm'] = $_ENV['DATABASE_HOST'];
+        $stepData['dbPortForm'] = $_ENV['DATABASE_PORT'];
+        $stepData['dbUsernameForm'] = $_ENV['DATABASE_USER'];
+        $stepData['dbPassForm'] = str_repeat('*', api_strlen($_ENV['DATABASE_PASSWORD']));
+        $stepData['dbNameForm'] = $_ENV['DATABASE_NAME'];
+    } else {
+        $stepData['dbHostForm'] = $dbHostForm;
+        $stepData['dbPortForm'] = $dbPortForm;
+        $stepData['dbUsernameForm'] = $dbUsernameForm;
+        $stepData['dbPassForm'] = str_repeat('*', api_strlen($dbPassForm));
+        $stepData['dbNameForm'] = $dbNameForm;
+    }
 } elseif (isset($_POST['step6'])) {
     //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
@@ -452,24 +468,30 @@ if (isset($_POST['step2'])) {
         $perm = octdec('0777');
         $perm_file = octdec('0777');
 
-        // Create .env.local file
-        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
-        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
+        if (!$isUpdateAvailable) {
+            $installType = 'update';
+            // Create .env.local file
+            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+            $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+            $params = [
+                '{{DATABASE_HOST}}' => $dbHostForm,
+                '{{DATABASE_PORT}}' => $dbPortForm,
+                '{{DATABASE_NAME}}' => $dbNameForm,
+                '{{DATABASE_USER}}' => $dbUsernameForm,
+                '{{DATABASE_PASSWORD}}' => $dbPassForm,
+                '{{APP_INSTALLED}}' => 1,
+                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+                '{{APP_SECRET}}' => generateRandomToken(),
+            ];
+            error_log('Update env file');
+            updateEnvFile($distFile, $envFile, $params);
+            (new Dotenv())->load($envFile);
 
-        $params = [
-            '{{DATABASE_HOST}}' => $dbHostForm,
-            '{{DATABASE_PORT}}' => $dbPortForm,
-            '{{DATABASE_NAME}}' => $dbNameForm,
-            '{{DATABASE_USER}}' => $dbUsernameForm,
-            '{{DATABASE_PASSWORD}}' => $dbPassForm,
-            '{{APP_INSTALLED}}' => 1,
-            '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-            '{{APP_SECRET}}' => generateRandomToken(),
-        ];
-
-        error_log('Update env file');
-        updateEnvFile($distFile, $envFile, $params);
-        (new Dotenv())->load($envFile);
+        } else {
+            $dotenv = new Dotenv();
+            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+            $dotenv->loadEnv($envFile);
+        }
 
         // Load Symfony Kernel
         $kernel = new Kernel('dev', true);
@@ -629,6 +651,9 @@ if (isset($_POST['step2'])) {
     $stepData['installationProfile'] = $installationProfile;
 }
 
+if ($isUpdateAvailable) {
+    $installType = 'update';
+}
 $installerData = [
     'poweredBy' => 'Powered by <a href="https://chamilo.org" target="_blank">Chamilo</a> &copy; '.date('Y'),
 
@@ -678,9 +703,10 @@ $installerData = [
     'old_version' => api_htmlentities($my_old_version, ENT_QUOTES),
     'new_version' => api_htmlentities($new_version, ENT_QUOTES),
     'installationProfile' => api_htmlentities($installationProfile, ENT_QUOTES),
-
     'currentStep' => $current_step,
-
+    'isUpdateAvailable' => $isUpdateAvailable,
+    'checkMigrationStatus' => $checkMigrationStatus,
+    'logUrl' => '/main/install/get_migration_status.php',
     'stepData' => $stepData,
 ];
 ?>

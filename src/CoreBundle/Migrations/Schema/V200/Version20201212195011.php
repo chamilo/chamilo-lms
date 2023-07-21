@@ -88,7 +88,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
             $extraFieldId = (int) $extraFieldId;
             $sql = "SELECT DISTINCT(item_id)
                     FROM extra_field_values
-                    WHERE field_id = $extraFieldId AND value = 1 ";
+                    WHERE field_id = $extraFieldId AND field_value= 1 ";
             $result = $connection->executeQuery($sql);
             $specialCourses = $result->fetchAllAssociative();
             if (!empty($specialCourses)) {

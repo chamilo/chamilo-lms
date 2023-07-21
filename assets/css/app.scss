@@ -132,7 +132,17 @@
   .progress {
     @apply rounded-sm ring-1 text-center min-h-full ml-12 mr-4;
   }
-  .progress .progress-bar {
+
+  .log-container {
+    height: 300px;
+    overflow-y: scroll;
+    background-color: #000;
+    padding: 10px;
+  }
+
+  .terminal {
+    color: #00ff00; /* Green */
+    font-family: monospace;
   }
 
   // Pager

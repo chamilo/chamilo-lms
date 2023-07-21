@@ -43,6 +43,7 @@ class Version20191206150030 extends AbstractMigrationChamilo
                     continue;
                 }
                 $filePath = $rootPath.'/app/upload/'.$path;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 if ($this->fileExists($filePath)) {
                     $fileName = basename($path);
                     $mimeType = mime_content_type($filePath);

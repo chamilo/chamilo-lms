@@ -1308,8 +1308,8 @@ class Template
         $plugin = null;
         if ($pluginKeycloak) {
             $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?sso';
-            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-primary']);
-            $html .= '<div>'.$pluginUrl.'</div>';
+            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-block btn-primary']);
+            $html .= '<div style="margin-top: 10px">'.$pluginUrl.'</div>';
         }
 
         $html .= '<div></div>';

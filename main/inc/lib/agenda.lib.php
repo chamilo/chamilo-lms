@@ -326,7 +326,7 @@ class Agenda
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
                 }
-
+                $this->deleteEventIfAlreadyExists($start, $end, $allDay, $title);
                 $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
 
@@ -496,6 +496,45 @@ class Agenda
         }
 
         return $id;
+    }
+
+    /**
+     * Checks if an event exists and delete it (right before inserting a modified version in addEvent())
+     * @param string $start datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $end   datetime format: 2012-06-14 09:00:00 in local time
+     * @param int $allDay   (true = 1, false = 0)
+     * @param string $title
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteEventIfAlreadyExists(
+        string $start,
+        string $end,
+        int $allDay,
+        string $title
+    ): bool {
+        $courseId = $this->course['real_id'];
+        $start = Database::escape_string($start);
+        $end = Database::escape_string($end);
+        $title = Database::escape_string($title);
+        $sql = "SELECT id FROM ".$this->tbl_course_agenda."
+                WHERE c_id = $courseId
+                AND session_id = ".$this->sessionId."
+                AND start_date = '$start'
+                AND end_date = '$end'
+                AND all_day = $allDay
+                AND title = '$title'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res, 'ASSOC');
+            $id = $row['id'];
+            $this->deleteEvent($id);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

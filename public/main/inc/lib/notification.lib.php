@@ -478,7 +478,7 @@ class Notification extends Model
                 continue;
             }
 
-            $gcmRegistrationIds[] = $valueInfo['value'];
+            $gcmRegistrationIds[] = $valueInfo['field_value'];
         }
 
         if (!$gcmRegistrationIds) {

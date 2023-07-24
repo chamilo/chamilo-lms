@@ -188,6 +188,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_career_users',
                 'community_managers_user_list',
                 'allow_social_map_fields',
+                'hide_username_in_course_chat',
             ],
             'Admin' => [
                 'user_status_option_only_for_admin_enabled',
@@ -380,7 +381,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'video_player_renderers',
             ],
             'Chat' => [
-                'hide_username_in_course_chat',
                 'hide_chat_video',
                 'course_chat_restrict_to_coach',
             ],
@@ -482,6 +482,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         ];
         foreach ($configurationValues as $category => $variables) {
             foreach ($variables as $variable) {
+                $category = strtolower($category);
                 $result = $connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '{$category}'"
@@ -496,7 +497,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                     );
                 } else {
                     $this->addSql(
-                        "UPDATE settings_current SET selected_value = '{$selectedValue}' WHERE variable = '$variable' AND category = '{$category}'"
+                        "UPDATE settings_current SET selected_value = '{$selectedValue}', category = '{$category}' WHERE variable = '$variable' AND category = '{$category}'"
                     );
                 }
             }
@@ -764,7 +765,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
             'Chat' => [
                 'course_chat_restrict_to_coach',
                 'hide_chat_video',
-                'hide_username_in_course_chat',
             ],
             'Editor' => [
                 'video_player_renderers',
@@ -957,6 +957,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'user_status_option_only_for_admin_enabled',
             ],
             'Profile' => [
+                'hide_username_in_course_chat',
                 'allow_social_map_fields',
                 'community_managers_user_list',
                 'allow_career_users',

@@ -1037,7 +1037,7 @@ EOT;
                 });
                 </script>
                 <div class="mt-4 rounded-lg">
-                    <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
+                    <div class="px-4 bg-gray-100 border border-gray-50 custom-collapse" id="card_'.$id.'">
                         <h5>
                             <a role="button"
                                 class="'.(($open) ? 'collapse' : ' ').'"
@@ -1052,7 +1052,7 @@ EOT;
                     </div>
                     <div
                         id="collapse_'.$id.'"
-                        class="px-4 border border-gray-50 bg-white hidden collapse '.(($open) ? 'show' : ' ').'"
+                        class="px-4 border border-gray-50 bg-white hidden collapse custom-collapse '.(($open) ? 'show' : ' ').'"
                         aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">
                     <div id="collapse_contant_'.$id.'"  class="card-body ">';
 

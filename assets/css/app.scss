@@ -14,6 +14,12 @@
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
 
+@layer utilities {
+  .custom-collapse {
+    visibility: visible;
+  }
+}
+
 @layer components {
   .card {
     @apply rounded shadow-lg w-full;

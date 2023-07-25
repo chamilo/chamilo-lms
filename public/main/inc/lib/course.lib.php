@@ -4745,7 +4745,7 @@ class CourseManager
                 WHERE
                     tcf.item_type = $extraFieldType AND
                     tcf.variable = 'popular_courses' AND
-                    tcfv.value = 1 AND
+                    tcfv.field_value = 1 AND
                     visibility <> ".Course::CLOSED." AND
                     visibility <> ".Course::HIDDEN." $where_access_url";
 

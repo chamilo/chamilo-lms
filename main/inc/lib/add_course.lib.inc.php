@@ -1048,7 +1048,7 @@ class AddCourse
             $question->position = 1;
             $question->course = $courseInfo;
             $question->save($exercise);
-            $questionId = $question->id;
+            $questionId = $question->iid;
 
             $answer = new Answer($questionId, $courseInfo['real_id']);
 

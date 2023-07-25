@@ -3167,15 +3167,15 @@ JAVASCRIPT;
 
         $value = implode("','", $cleanOptions);
 
-        $sql = "SELECT DISTINCT t.*, v.value, o.display_text
+        $sql = "SELECT DISTINCT t.*, v.field_value as value, o.display_text
                 FROM $tagRelExtraTable te
                 INNER JOIN $tagTable t
                 ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
                 INNER JOIN $table v
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
-                ON (o.option_value = v.value)
-                WHERE v.value IN ('".$value."')
+                ON (o.option_value = v.field_value)
+                WHERE v.field_value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
         $result = Database::query($sql);

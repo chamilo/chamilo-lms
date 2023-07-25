@@ -8137,7 +8137,7 @@ class learnpath
     public static function getSubscriptionSettings()
     {
         $subscriptionSettings = api_get_setting('lp.lp_subscription_settings', true);
-        if (empty($subscriptionSettings)) {
+        if (!is_array($subscriptionSettings)) {
             // By default, allow both settings
             $subscriptionSettings = [
                 'allow_add_users_to_lp' => true,

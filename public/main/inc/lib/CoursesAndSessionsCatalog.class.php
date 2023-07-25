@@ -87,7 +87,7 @@ class CoursesAndSessionsCatalog
                 WHERE
                     tcf.item_type = $extraFieldType AND
                     tcf.variable = 'hide_from_catalog' AND
-                    tcfv.value = 1
+                    tcfv.field_value = 1
                 ";
 
         $result = Database::query($sql);
@@ -813,7 +813,7 @@ class CoursesAndSessionsCatalog
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
-                            $qb->expr()->eq('fv.value ', 1)
+                            $qb->expr()->eq('fv.fieldValue ', 1)
                         )
                         ->getDQL()
                 )

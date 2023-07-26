@@ -30,6 +30,15 @@ export default {
         isAdmin(state, getters) {
             return getters.isAuthenticated && (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN'));
         },
+        isCourseAdmin(state, getters) {
+          if (getters.isAdmin) {
+            return true
+          }
+
+          return getters.isAuthenticated
+            && getters.hasRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+            && getters.hasRole("ROLE_CURRENT_COURSE_TEACHER")
+        },
         isCurrentTeacher(state, getters) {
             if (!getters.isAuthenticated) {
                 return false;

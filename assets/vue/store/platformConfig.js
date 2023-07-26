@@ -5,7 +5,7 @@ import { ref } from "vue";
 export const usePlatformConfig = defineStore("platformConfig", () => {
   const isLoading = ref(false);
   const settings = ref(null);
-  const isStudentViewActive = ref(false);
+  const studentView = ref('teacherview');
 
   function getSetting(variable) {
     if (settings.value && settings.value[variable]) {
@@ -23,7 +23,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
 
       settings.value = data.settings
 
-      isStudentViewActive.value = 'studentview' === data.studentview
+      studentView.value = data.studentview
     } catch (e) {
       console.log(e)
     } finally {
@@ -35,11 +35,16 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     await findSettingsRequest();
   }
 
+  function isStudentViewActive() {
+    return 'studentview' === studentView.value
+  }
+
   return {
     isLoading,
     settings,
-    isStudentViewActive,
+    studentView,
     initialize,
     getSetting,
+    isStudentViewActive,
   };
 });

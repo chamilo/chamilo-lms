@@ -1012,49 +1012,48 @@ EOT;
     public function addStartPanel(string $id, string $title, bool $open = false)
     {
         $parent = null;
-        $html = '
-                <script>
-                 document.addEventListener("DOMContentLoaded", function() {
-                    const query = window.location.hash.replace("#", "#collapse_");
-                    if (query) {
-                        const selected = document.querySelector(query);
-                        if (selected) {
-                             if (selected.classList.contains("hidden")) {
-                                selected.classList.remove("hidden");
-                            }
-                        }
-                    }
+        $javascript = '
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const buttons = document.querySelectorAll("#card_'.$id.' a");
+                const menus = document.querySelectorAll("#collapse_'.$id.'");
 
-                    const button = document.querySelector("#card_'.$id.'");
-                        button.addEventListener("click", (e) => {
-                        let menu = document.querySelector("#collapse_'.$id.'");
-                        if (menu.classList.contains("hidden")) {
-                            menu.classList.remove("hidden");
-                        } else {
-                            menu.classList.add("hidden");
-                        }
+                buttons.forEach((button, index) => {
+                    button.addEventListener("click", function() {
+                        menus.forEach((menu, menuIndex) => {
+                            if (index === menuIndex) {
+                                menu.classList.toggle("active");
+                            } else {
+                                menu.classList.remove("active");
+                            }
+                        });
                     });
                 });
-                </script>
-                <div class="mt-4 rounded-lg">
-                    <div class="px-4 bg-gray-100 border border-gray-50 custom-collapse" id="card_'.$id.'">
-                        <h5>
-                            <a role="button"
-                                class="'.(($open) ? 'collapse' : ' ').'"
-                                data-toggle="collapse"
-                                data-target="#collapse_'.$id.'"
-                                aria-expanded="true"
-                                aria-controls="collapse_'.$id.'"
-                            >
-                                '.$title.'
-                            </a>
-                        </h5>
-                    </div>
-                    <div
-                        id="collapse_'.$id.'"
-                        class="px-4 border border-gray-50 bg-white hidden collapse custom-collapse '.(($open) ? 'show' : ' ').'"
-                        aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">
-                    <div id="collapse_contant_'.$id.'"  class="card-body ">';
+            });
+        </script>';
+
+        $this->addHtml($javascript);
+
+        $html = '
+        <div class="mt-4 rounded-lg">
+            <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
+                <h5>
+                    <a role="button"
+                        class="block cursor-pointer"
+                        data-toggle="collapse"
+                        data-target="#collapse_'.$id.'"
+                        aria-expanded="'.(($open) ? 'true' : 'false').'"
+                        aria-controls="collapse_'.$id.'"
+                    >
+                        '.$title.'
+                    </a>
+                </h5>
+            </div>
+            <div
+                id="collapse_'.$id.'"
+                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'show' : '').'"
+            >
+                <div id="collapse_contant_'.$id.'"  class="card-body ">';
 
         $this->addHtml($html);
     }

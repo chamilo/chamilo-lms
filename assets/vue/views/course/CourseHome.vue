@@ -29,7 +29,7 @@
         <small v-if="session"> ({{ session.name }}) </small>
       </h2>
 
-      <StudentViewButton v-if="course" />
+      <StudentViewButton v-if="course" @change="onStudentViewChanged" />
 
       <BaseButton
         v-if="showUpdateIntroductionButton"
@@ -40,7 +40,7 @@
       />
 
       <BaseButton
-        v-if="course && isCurrentTeacher && !platformConfigStore.isStudentViewActive"
+        v-if="isAllowedToEdit"
         icon="cog"
         only-icon
         popup-identifier="course-tmenu"
@@ -53,7 +53,7 @@
 
     <hr class="mt-1 mb-1">
 
-    <div v-if="isCurrentTeacher && !platformConfigStore.isStudentViewActive" class="mb-4">
+    <div v-if="isAllowedToEdit" class="mb-4">
       <div v-if="intro" class="flex flex-col gap-4">
         <div v-html="intro.introText" />
 
@@ -83,11 +83,10 @@
     </div>
     <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
 
-    <div v-if="isCurrentTeacher" class="flex items-center gap-6">
+    <div v-if="isAllowedToEdit" class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
 
       <div
-        v-if="!platformConfigStore.isStudentViewActive"
         class="ml-auto"
       >
         <BaseToggleButton
@@ -163,7 +162,7 @@
 </template>
 
 <script setup>
-import {computed, provide, ref, watch} from "vue";
+import {computed, onMounted, provide, ref, watch} from "vue"
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -179,14 +178,14 @@ import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue";
 import StudentViewButton from "../../components/StudentViewButton.vue";
 import Sortable from 'sortablejs';
-import { usePlatformConfig } from "../../store/platformConfig"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useCidReqStore } from "../../store/cidReq"
 
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
 const { t } = useI18n();
-
-const platformConfigStore = usePlatformConfig()
+const cidReqStore = useCidReqStore()
 
 const course = ref(null);
 const session = ref(null);
@@ -231,6 +230,10 @@ axios
   .then(({ data }) => {
     course.value = data.course;
     session.value = data.session;
+
+    cidReqStore.course = data.course
+    cidReqStore.session = data.session
+
     tools.value = data.tools.map((element) => {
       if (routerTools.includes(element.ctool.name)) {
         element.to = element.url;
@@ -410,5 +413,15 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   } catch (error) {
     console.log(error);
   }
+}
+
+const isAllowedToEdit = ref(false)
+
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit()
+})
+
+const onStudentViewChanged = async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit()
 }
 </script>

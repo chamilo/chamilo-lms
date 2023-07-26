@@ -96,6 +96,7 @@ class SessionRelCourseRelUser
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 
+    #[Groups(['session:item:read'])]
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 

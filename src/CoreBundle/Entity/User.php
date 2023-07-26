@@ -125,6 +125,7 @@ class User implements
         'user_json:read',
         'message:read',
         'user_rel_user:read',
+        'session:item:read',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

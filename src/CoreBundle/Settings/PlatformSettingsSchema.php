@@ -191,8 +191,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Login' => '0',
-                        'Course' => '1',
+                        'Login' => 'login',
+                        'Course' => 'course',
                     ],
                 ]
             )

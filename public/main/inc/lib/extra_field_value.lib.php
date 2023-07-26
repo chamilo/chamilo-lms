@@ -725,6 +725,7 @@ class ExtraFieldValue extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
+            $result['value'] = $result['field_value'];
             if ($transform) {
                 $fieldType = $result['value_type'];
                 if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $fieldType) {

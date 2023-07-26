@@ -24,10 +24,11 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_user_id exe_user_id INT NOT NULL');
 
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('UPDATE track_e_exercises SET session_id = NULL WHERE session_id = 0');
 
         $this->addSql('DELETE FROM track_e_exercises WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
-        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
+
 
         if (!$schema->hasTable('attempt_file')) {
             $this->addSql("CREATE TABLE attempt_file (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', attempt_id INT DEFAULT NULL, asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_4F22BDF0B191BE6B (attempt_id), INDEX IDX_4F22BDF05DA1941 (asset_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");

@@ -48,7 +48,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'data_protection_officer_role' => '',
                     'data_protection_officer_email' => '',
                     'hide_user_field_from_list' => '',
-                    'allow_fields_inscription' => '',
                     'send_notification_when_user_added' => '',
                     'show_conditions_to_user' => '',
                     'allow_teachers_to_classes' => 'false',
@@ -56,7 +55,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'user_import_settings' => '',
                     'user_search_on_extra_fields' => '',
                     'allow_career_users' => 'false',
-                    'required_extra_fields_in_inscription' => '',
                     'community_managers_user_list' => '',
                     'allow_social_map_fields' => '',
                     'career_diagram_legend' => 'false',
@@ -150,15 +148,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add(
-                'allow_fields_inscription',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Only shows the fields in this list').
-                        $this->settingArrayHelpValue('allow_fields_inscription'),
-                ]
-            )
-            ->add(
                 'send_notification_when_user_added',
                 TextareaType::class,
                 [
@@ -206,15 +195,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_career_users', YesNoType::class)
             ->add(
-                'required_extra_fields_in_inscription',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Set extra fields as required in the inscription.php page').
-                        $this->settingArrayHelpValue('required_extra_fields_in_inscription'),
-                ]
-            )
-            ->add(
                 'community_managers_user_list',
                 TextareaType::class,
                 [
@@ -245,19 +225,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             'hide_user_field_from_list' => "<pre>
                 ['fields' => ['username']]
                 </pre>",
-            'allow_fields_inscription' => "<pre>
-                [
-                    'fields' => [
-                        'official_code',
-                        'phone',
-                        'status',
-                        'language'
-                    ],
-                    'extra_fields' => [
-                        'birthday'
-                    ]
-                ]
-                </pre>",
             'send_notification_when_user_added' => "<pre>
                 ['admins' => [1]]
                 </pre>",
@@ -281,12 +248,19 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 [
                     'options' => [
                         'vcard' => false,
-                        'firstname' => false,
-                        'lastname' => false,
+                        'firstname' => true,
+                        'lastname' => true,
                         'photo' => true,
-                        'email' => true,
+                        'email' => false,
+                        'language' => true,
                         'chat' => true,
-                        'terms_ville' => false, // extra field value
+                        'terms_ville' => true, // extra field value
+                        'terms_datedenaissance' => true,
+                        'terms_paysresidence' => false,
+                        'filiere_user' => true,
+                        'terms_villedustage' => true,
+                        'hobbies' => true,
+                        'langue_cible' => true,
                     ]
                 ]
                 </pre>",
@@ -299,14 +273,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 </pre>",
             'user_search_on_extra_fields' => "<pre>
                 ['extra_fields' => ['variable1', 'variable2']]
-                </pre>",
-            'required_extra_fields_in_inscription' => "<pre>
-                [
-                    'options' => [
-                        'terms_ville',
-                        'terms_paysresidence',
-                    ],
-                ]
                 </pre>",
             'community_managers_user_list' => "<pre>
                 ['users' => [1]]

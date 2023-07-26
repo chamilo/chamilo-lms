@@ -47,6 +47,7 @@ class Version20210813150011 extends AbstractMigrationChamilo
             }
 
             $filePath = $rootPath.'/app/upload/badges/'.$icon;
+            error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
             if ($this->fileExists($filePath)) {
                 $mimeType = mime_content_type($filePath);
                 $fileName = basename($filePath);

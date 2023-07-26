@@ -2226,12 +2226,12 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = $useRequirements ? api_get_setting('security.password_requirements', true) : [];
+    $passwordRequirements = $useRequirements ? Security::getPasswordRequirements() : [];
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
 
-    if (!empty($passwordRequirements)) {
+    if (is_array($passwordRequirements)) {
         $length = $passwordRequirements['min']['length'];
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
@@ -2627,8 +2627,18 @@ function api_get_setting($variable, $isArray = false, $key = null)
             return $newResult;
             break;
         default:
-            $settingValue = $settingsManager->getSetting($variable);
+            $settingValue = $settingsManager->getSetting($variable, true);
             if ($isArray && !empty($settingValue)) {
+                // Check if the value is a valid JSON string
+                $decodedValue = json_decode($settingValue, true);
+
+                // If it's a valid JSON string and the result is an array, return it
+                if (is_array($decodedValue)) {
+                    return $decodedValue;
+                }
+
+                // If it's not an array, continue with the normal flow
+                // Optional: If you need to evaluate the value using eval
                 $strArrayValue = rtrim($settingValue, ';');
                 $value = eval("return $strArrayValue;");
                 if (is_array($value)) {
@@ -2636,6 +2646,7 @@ function api_get_setting($variable, $isArray = false, $key = null)
                 }
             }
 
+            // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
             if (!empty($key) && isset($settingValue[$variable][$key])) {
                 return $settingValue[$variable][$key];
             }

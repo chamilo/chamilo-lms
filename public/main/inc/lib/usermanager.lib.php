@@ -487,7 +487,7 @@ class UserManager
                     if (!empty($emailBodyTemplate)) {
                         $emailBody = $emailBodyTemplate;
                     }
-                    $sendToInbox = ('true' === api_get_setting('mail.send_inscription_msg_to_inbox'));
+                    $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
                     if ($sendToInbox) {
                         $adminList = self::get_all_administrators();
                         $senderId = 1;
@@ -2220,7 +2220,7 @@ class UserManager
                     $tags = self::get_user_tags_to_string($user_id, $row['id'], false);
                     $extra_data['extra_'.$row['fvar']] = $tags;
                 } else {
-                    $sqlu = "SELECT value as fval
+                    $sqlu = "SELECT field_value as fval
                             FROM $t_ufv
                             WHERE field_id=".$row['id']." AND item_id = ".$user_id;
                     $resu = Database::query($sqlu);

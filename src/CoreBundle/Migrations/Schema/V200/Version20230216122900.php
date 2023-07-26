@@ -179,7 +179,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'data_protection_officer_role',
                 'data_protection_officer_email',
                 'hide_user_field_from_list',
-                'allow_fields_inscription',
                 'send_notification_when_user_added',
                 'show_conditions_to_user',
                 'allow_teachers_to_classes',
@@ -187,9 +186,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'user_import_settings',
                 'user_search_on_extra_fields',
                 'allow_career_users',
-                'required_extra_fields_in_inscription',
                 'community_managers_user_list',
                 'allow_social_map_fields',
+                'hide_username_in_course_chat',
             ],
             'Admin' => [
                 'user_status_option_only_for_admin_enabled',
@@ -382,7 +381,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'video_player_renderers',
             ],
             'Chat' => [
-                'hide_username_in_course_chat',
                 'hide_chat_video',
                 'course_chat_restrict_to_coach',
             ],
@@ -443,7 +441,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'mail_content_style',
                 'allow_email_editor_for_anonymous',
                 'messages_hide_mail_content',
-                'send_inscription_msg_to_inbox',
                 'send_two_inscription_confirmation_mail',
                 'show_user_email_in_notification',
                 'send_notification_score_in_percentage',
@@ -477,19 +474,30 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'attendance_calendar_set_duration',
                 'attendance_allow_comments',
             ],
+            'Registration' => [
+                'required_extra_fields_in_inscription',
+                'allow_fields_inscription',
+                'send_inscription_msg_to_inbox',
+            ],
         ];
         foreach ($configurationValues as $category => $variables) {
             foreach ($variables as $variable) {
+                $category = strtolower($category);
                 $result = $connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '{$category}'"
                     )
                 ;
                 $count = $result->fetchNumeric()[0];
+                $selectedValue = $this->getConfigurationSelectedValue($variable);
+                error_log('Migration: Setting variable '.$variable.' category '.$category.' value '.$selectedValue);
                 if (empty($count)) {
-                    $selectedValue = $this->getConfigurationSelectedValue($variable);
                     $this->addSql(
                         "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
+                    );
+                } else {
+                    $this->addSql(
+                        "UPDATE settings_current SET selected_value = '{$selectedValue}', category = '{$category}' WHERE variable = '$variable' AND category = '{$category}'"
                     );
                 }
             }
@@ -658,6 +666,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
     {
         $connection = $this->getEntityManager()->getConnection();
         $configurationValues = [
+            'Registration' => [
+                'send_inscription_msg_to_inbox',
+                'allow_fields_inscription',
+                'required_extra_fields_in_inscription',
+            ],
             'Attendance' => [
                 'attendance_allow_comments',
                 'attendance_calendar_set_duration',
@@ -752,7 +765,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
             'Chat' => [
                 'course_chat_restrict_to_coach',
                 'hide_chat_video',
-                'hide_username_in_course_chat',
             ],
             'Editor' => [
                 'video_player_renderers',
@@ -945,9 +957,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'user_status_option_only_for_admin_enabled',
             ],
             'Profile' => [
+                'hide_username_in_course_chat',
                 'allow_social_map_fields',
                 'community_managers_user_list',
-                'required_extra_fields_in_inscription',
                 'allow_career_users',
                 'user_search_on_extra_fields',
                 'user_import_settings',
@@ -955,7 +967,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'allow_teachers_to_classes',
                 'show_conditions_to_user',
                 'send_notification_when_user_added',
-                'allow_fields_inscription',
                 'hide_user_field_from_list',
                 'data_protection_officer_email',
                 'data_protection_officer_role',
@@ -1245,18 +1256,24 @@ class Version20230216122900 extends AbstractMigrationChamilo
 
     public function getConfigurationSelectedValue(string $variable): string
     {
+        global $_configuration;
+        $container = $this->getContainer();
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+        $oldConfigPath = $rootPath.'/config/configuration.php';
+        $configFileLoaded = in_array($oldConfigPath, get_included_files());
+        if (!$configFileLoaded) {
+            include_once $oldConfigPath;
+        }
+
         $selectedValue = '';
-        $settingValue = $this->getConfigurationValue($variable);
-        if (!empty($settingValue)) {
-            if (\is_array($settingValue)) {
-                $selectedValue = var_export($settingValue, true);
-            } elseif (true === $settingValue) {
-                $selectedValue = 'true';
-            } elseif (false === $settingValue) {
-                $selectedValue = 'false';
-            } else {
-                $selectedValue = (string) $settingValue;
-            }
+        $settingValue = $this->getConfigurationValue($variable, $_configuration);
+        if (\is_array($settingValue)) {
+            $selectedValue = json_encode($settingValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } elseif (is_bool($settingValue)) {
+            $selectedValue = var_export($settingValue, true);
+        } else {
+            $selectedValue = (string) $settingValue;
         }
 
         return $selectedValue;

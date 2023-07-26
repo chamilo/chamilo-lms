@@ -3445,7 +3445,7 @@ class CourseManager
         );
 
         if (!empty($result)) {
-            if (1 == $result['value']) {
+            if (1 == $result['field_value']) {
                 return true;
             }
         }
@@ -4745,7 +4745,7 @@ class CourseManager
                 WHERE
                     tcf.item_type = $extraFieldType AND
                     tcf.variable = 'popular_courses' AND
-                    tcfv.value = 1 AND
+                    tcfv.field_value = 1 AND
                     visibility <> ".Course::CLOSED." AND
                     visibility <> ".Course::HIDDEN." $where_access_url";
 

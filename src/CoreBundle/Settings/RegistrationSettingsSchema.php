@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class RegistrationSettingsSchema extends AbstractSettingsSchema
@@ -36,6 +37,9 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'drh_autosubscribe' => '',
                     'sessionadmin_autosubscribe' => '',
                     'platform_unsubscribe_allowed' => 'false',
+                    'required_extra_fields_in_inscription' => '',
+                    'allow_fields_inscription' => '',
+                    'send_inscription_msg_to_inbox' => 'false',
                 ]
             )
             ->setTransformer(
@@ -140,6 +144,82 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('drh_autosubscribe')//?
             ->add('sessionadmin_autosubscribe')// ?
             ->add('platform_unsubscribe_allowed', YesNoType::class)
+            ->add(
+                'required_extra_fields_in_inscription',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Set extra fields as required in the inscription.php page').
+                        $this->settingArrayHelpValue('required_extra_fields_in_inscription'),
+                ]
+            )
+            ->add(
+                'allow_fields_inscription',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Only shows the fields in this list').
+                        $this->settingArrayHelpValue('allow_fields_inscription'),
+                ]
+            )
+            ->add('send_inscription_msg_to_inbox', YesNoType::class)
         ;
     }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'required_extra_fields_in_inscription' => "<pre>
+                [
+                    'options' => [
+                        'terms_adresse',
+                        'terms_codepostal',
+                        'terms_ville',
+                        'terms_paysresidence',
+                        'terms_datedenaissance',
+                        'terms_genre',
+                        'filiere_user',
+                        'terms_formation_niveau',
+                        'langue_cible',
+                    ]
+                ]
+                </pre>",
+            'allow_fields_inscription' => "<pre>
+                [
+                    'fields' => [
+                        'lastname',
+                        'firstname',
+                        'email',
+                        'language',
+                        'phone',
+                        'address',
+                    ],
+                    'extra_fields' => [
+                        'terms_nationalite',
+                        'terms_numeroderue',
+                        'terms_nomderue',
+                        'terms_codepostal',
+                        'terms_paysresidence',
+                        'terms_ville',
+                        'terms_datedenaissance',
+                        'terms_genre',
+                        'filiere_user',
+                        'terms_formation_niveau',
+                        'terms_villedustage',
+                        'terms_adresse',
+                        'gdpr',
+                        'langue_cible'
+                    ]
+                ]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+        }
+
+        return $returnValue;
+    }
+
 }

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\EntityManager;
 use DocumentManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -32,10 +33,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+        /** @var EntityManager $em */
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
+        /* @var CDocumentRepository $documentRepo */
         $documentRepo = $container->get(CDocumentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
         $attemptRepo = $em->getRepository(TrackEAttempt::class);
@@ -68,7 +71,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $path = str_replace('/../exercises/teacher_audio/', '', $path);
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/exercises/teacher_audio/'.$path;
-
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 if ($this->fileExists($filePath)) {
                     preg_match('#/(.*)/#', '/'.$path, $matches);
                     if (isset($matches[1]) && !empty($matches[1])) {
@@ -138,6 +141,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $path = str_replace('/../exercises/', '', $path);
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/exercises/'.$path;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 if ($this->fileExists($filePath)) {
                     $fileName = basename($filePath);
                     preg_match('#/(.*)/(.*)/(.*)/(.*)/#', '/'.$path, $matches);
@@ -217,12 +221,14 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 $parent = null;
                 if ('.' !== \dirname($documentPath)) {
-                    $parentId = (int) DocumentManager::get_document_id(
-                        [
-                            'real_id' => $courseId,
-                        ],
-                        \dirname($documentPath)
-                    );
+                    $currentPath = \dirname($documentPath);
+                    $sql = "SELECT iid FROM c_document
+                    WHERE
+                          c_id = {$courseId} AND
+                          path LIKE '$currentPath'";
+                    $result = $connection->executeQuery($sql);
+                    $parentId = $result->fetchOne();
+
                     if (!empty($parentId)) {
                         $parent = $documentRepo->find($parentId);
                     }
@@ -237,8 +243,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 if (false === $result) {
                     continue;
                 }
-
+                $documentPath = ltrim($documentPath, '/');
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
                 $em->persist($document);
 

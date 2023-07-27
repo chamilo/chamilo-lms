@@ -166,7 +166,7 @@ if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
 }
 
-$checkMigrationStatus =  checkMigrationStatus();
+$checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable(api_get_path(SYS_PATH));
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
@@ -431,7 +431,14 @@ if (isset($_POST['step2'])) {
     $stepData['institutionUrlForm'] = $institutionUrlForm;
     $stepData['encryptPassForm'] = $encryptPassForm;
 
-    $isPendingMigration = ($isUpdateAvailable && false === $checkMigrationStatus['status']);
+    $isPendingMigration = false;
+
+    if ($isUpdateAvailable) {
+        $checkMigrationStatus = checkMigrationStatus();
+
+        $isPendingMigration = false === $checkMigrationStatus['status'];
+    }
+
     if ($isPendingMigration) {
         $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
         $dotenv = new Dotenv();

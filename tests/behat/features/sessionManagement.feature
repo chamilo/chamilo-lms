@@ -8,7 +8,7 @@ Feature: Session management tool
   Scenario: Create a session category
     Given I am on "/main/session/session_category_add.php"
     And I fill in the following:
-      | name | category_1 |
+      | category-name | category_1 |
     And I press "Add category"
     And wait very long for the page to be loaded
     Then I should see "The category has been added"

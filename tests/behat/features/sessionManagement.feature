@@ -10,7 +10,7 @@ Feature: Session management tool
     When I fill in the following:
       | name | category_1 |
     And I press "Add category"
-    Then wait for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "The category has been added"
 
   @javascript
@@ -20,7 +20,7 @@ Feature: Session management tool
       | name | Session1 |
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
     And I press "submit"
-    Then wait for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "Add courses to this session (Session1)"
     Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
     And I press "add_course"
@@ -92,5 +92,5 @@ Feature: Session management tool
     Given I am on "/main/session/session_category_list.php"
     And I follow "Delete"
     And I confirm the popup
-    Then wait for the page to be loaded
+    And wait for the page to be loaded
     Then I should see "The selected categories have been deleted"

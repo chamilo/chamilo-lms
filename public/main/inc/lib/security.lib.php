@@ -548,7 +548,7 @@ class Security
         ];
 
         $passwordRequirements = api_get_setting('security.password_requirements', true);
-        if (is_array($passwordRequirements)) {
+        if (!empty($passwordRequirements)) {
             $requirements = $passwordRequirements;
         }
 

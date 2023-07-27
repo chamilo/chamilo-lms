@@ -2231,7 +2231,7 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
 
-    if (is_array($passwordRequirements)) {
+    if (!empty($passwordRequirements)) {
         $length = $passwordRequirements['min']['length'];
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];

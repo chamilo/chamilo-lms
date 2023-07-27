@@ -9,7 +9,8 @@ Feature: Session management tool
     Given I am on "/main/session/session_category_add.php"
     And I fill in the following:
       | category-name | category_1 |
-    And I press "Add category"
+    And wait for the page to be loaded
+    Then I press "submit-category"
     And wait very long for the page to be loaded
     Then I should see "The category has been added"
 

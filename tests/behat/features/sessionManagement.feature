@@ -11,9 +11,8 @@ Feature: Session management tool
       | name | category_1 |
     And I press "Add category"
     And wait very long for the page to be loaded
-    And wait very long for the page to be loaded
-    And wait very long for the page to be loaded
-    Then I should see "The category has been added"
+    Given I am on "/main/session/session_category_list.php"
+    Then I should see "category_1"
 
   @javascript
   Scenario: Create a session

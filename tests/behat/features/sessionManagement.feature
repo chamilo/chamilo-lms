@@ -10,6 +10,7 @@ Feature: Session management tool
     When I fill in the following:
       | name | category_1 |
     And I press "Add category"
+    Then wait for the page to be loaded
     Then I should see "The category has been added"
 
   @javascript
@@ -91,4 +92,5 @@ Feature: Session management tool
     Given I am on "/main/session/session_category_list.php"
     And I follow "Delete"
     And I confirm the popup
+    Then wait for the page to be loaded
     Then I should see "The selected categories have been deleted"

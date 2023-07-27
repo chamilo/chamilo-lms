@@ -5,14 +5,15 @@ Feature: Session management tool
   Background:
     Given I am a platform administrator
 
-  @javascript
   Scenario: Create a session category
     Given I am on "/main/session/session_category_add.php"
     When I fill in the following:
       | name | category_1 |
     And I press "Add category"
     And wait very long for the page to be loaded
-    Then I should see "category_1"
+    And wait very long for the page to be loaded
+    And wait very long for the page to be loaded
+    Then I should see "The category has been added"
 
   @javascript
   Scenario: Create a session

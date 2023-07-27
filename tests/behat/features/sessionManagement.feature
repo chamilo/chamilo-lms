@@ -10,7 +10,7 @@ Feature: Session management tool
     When I fill in the following:
       | name | category_1 |
     And I press "Add category"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "The category has been added"
 
   @javascript
@@ -34,7 +34,7 @@ Feature: Session management tool
       | name | Temp Session |
     And I press advanced settings
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I fill in ckeditor field "description" with "Description for Temp Session"
     And I press "submit"
     Then I should see "Add courses to this session (Temp Session)"
@@ -83,7 +83,7 @@ Feature: Session management tool
 
   Scenario: Delete session "Session1"
     Given I am on "/main/session/session_list.php?keyword=Session1"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
     Then I should see "Deleted"

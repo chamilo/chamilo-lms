@@ -1,70 +1,68 @@
 <template>
-  <Toolbar  >
-    <template v-slot:right>
+  <ButtonToolbar>
+    <BaseButton
+      type="black"
+      icon="user-add"
+      :disabled="isLoading"
+      :label="t('Add friend')"
+      @click="goToAdd"
+    />
 
-      <v-btn
-          tile
-          icon
-          :loading="isLoading"
-          :to="'/resources/friends/add'"
-      >
-        <v-icon icon="mdi-account-plus-outline" />
-      </v-btn>
+    <BaseButton
+      type="black"
+      icon="refresh"
+      :label="t('Refresh')"
+      :disabled="isLoading"
+      @click="reloadHandler"
+    />
 
-        <v-btn
-            tile
-            icon
-            :loading="isLoading"
-            @click="reloadHandler"
-        >
-          <v-icon icon="mdi-refresh" />
-        </v-btn>
-
-         <v-btn
-            tile
-            icon
-            @click="confirmDeleteMultiple"
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-         >
-          <v-icon icon="mdi-delete" />
-        </v-btn>
-<!--        :disabled="!selectedItems || !selectedItems.length"-->
-
-    </template>
-  </Toolbar>
+    <BaseButton
+      type="black"
+      icon="delete-multiple-user"
+      :label="t('Delete friends')"
+      :disabled="isLoading || !selectedItems.length"
+      @click="confirmDeleteMultiple"
+    />
+  </ButtonToolbar>
 
   <div v-if="friendRequests.length">
-    <div class="text-h4 q-mb-md">
-      Requests
-    </div>
+    <div
+      class="text-h4 mb-2"
+      v-t="'Requests'"
+    />
 
-    <v-card
-        v-for="request in friendRequests"
+    <div
+        v-for="(request, i) in friendRequests"
+        :key="i"
+        class="flex flex-row gap-2 items-center"
     >
-      <q-avatar size="40px">
-        <img :src="request.user.illustrationUrl + '?w=80&h=80&fit=crop'" />
-      </q-avatar>
+      <BaseUserAvatar
+        :image-url="request.user.illustrationUrl + '?w=80&h=80&fit=crop'"
+      />
+
       {{ request.user.username }}
 
-      <v-btn
-          tile
-          icon
-          @click="addFriend(request)" >
-        <v-icon icon="mdi-plus" />
-      </v-btn>
-    </v-card>
+      <BaseButton
+        type="black"
+        icon="user-add"
+        only-icon
+        @click="addFriend(request)"
+      />
+    </div>
   </div>
 
-  <v-card
-      v-for="request in waitingRequests"
+  <div
+      v-for="(request, i) in waitingRequests"
+      :key="i"
   >
-    <q-avatar size="40px">
-      <img :src="request.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
-    </q-avatar>
+    <BaseUserAvatar
+      :image-url="request.friend.illustrationUrl + '?w=80&h=80&fit=crop'"
+    />
+
     {{ request.friend.username }}
 
-    <v-chip>Waiting</v-chip>
-  </v-card>
+    <BaseTag :label="t('Waiting')"  type="info"/>
+  </div>
 
   <div class="flex flex-row pt-2">
     <div class="w-full">
@@ -125,18 +123,11 @@
   </div>
 
   <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
-    <div class="p-field">
-      <label for="name">{{ $t('Name') }}</label>
-      <InputText
-          autocomplete="off"
-          id="title"
-          v-model.trim="item.title"
-          required="true"
-          autofocus
-          :class="{'p-invalid': submitted && !item.title}"
-      />
-      <small class="p-error" v-if="submitted && !item.title">$t('Title is required')</small>
-    </div>
+    <BaseInputText
+      id="title"
+      v-model.trim="item.title"
+      :label="t('Name')"
+    />
 
     <template #footer>
       <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
@@ -172,7 +163,6 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
-import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 
 import DataFilter from '../../components/DataFilter';
@@ -182,16 +172,29 @@ import { useStore } from 'vuex';
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import BaseTag from "../../components/basecomponents/BaseTag.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import { useI18n } from "vue-i18n"
+import { useRouter } from "vue-router"
 
 export default {
   name: 'UserRelUserList',
   servicePrefix: 'userreluser',
   components: {
-    Toolbar,
+    BaseInputText,
+    BaseTag,
+    BaseUserAvatar,
+    BaseButton,
+    ButtonToolbar,
   },
   mixins: [ListMixin],
   setup() {
     const store = useStore();
+    const router = useRouter()
+    const { t } = useI18n()
     const user = store.getters["security/getUser"];
     const isLoadingSelect = ref(false);
     const deleteItemDialog = ref(false);
@@ -245,7 +248,32 @@ export default {
 
     reloadHandler();
 
+    const columns = ref([
+      { label: t('User'), field: 'friend.username', name: 'friend', sortable: true},
+      { label: t('Sent'), field: 'createdAt', name: 'createdAt', sortable: true},
+      { label: t('Actions'), name: 'action', sortable: false}
+    ])
+    const pageOptions = ref([10, 20, 50, t('All')])
+    const selected = ref([])
+    const selectedItems = ref([])
+    const itemDialog = ref(false)
+    const deleteMultipleDialog = ref(false)
+    const submitted = ref(false)
+
+    const goToAdd = () => {
+      router.push({ name: 'UserRelUserAdd' })
+    }
+
     return {
+      t,
+      columns,
+      pageOptions,
+      selected,
+      selectedItems,
+      itemDialog,
+      deleteMultipleDialog,
+      submitted,
+      goToAdd,
       addFriend,
       reloadHandler,
       deleteItemButton,
@@ -255,22 +283,6 @@ export default {
       friendFilter,
       deleteItemDialog
     }
-  },
-  data() {
-    return {
-      columns: [
-        { label: this.$i18n.t('User'), field: 'friend.username', name: 'friend', sortable: true},
-        { label: this.$i18n.t('Sent'), field: 'createdAt', name: 'createdAt', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
-      ],
-      pageOptions: [10, 20, 50, this.$i18n.t('All')],
-      selected: [],
-      selectedItems: [],
-      // prime vue
-      itemDialog: false,
-      deleteMultipleDialog: false,
-      submitted: false,
-    };
   },
   computed: {
     // From crud.js list function

@@ -1,22 +1,18 @@
 <template>
-  <Toolbar  >
-    <template v-slot:right>
-      <v-btn
-          tile
-          icon
-          :to="{ name: 'UserRelUserList' }"
-      >
-        <v-icon icon="mdi-arrow-left" />
-      </v-btn>
-    </template>
-  </Toolbar>
+  <ButtonToolbar>
+    <BaseButton
+      type="black"
+      icon="back"
+      @click="goToBack"
+    />
+  </ButtonToolbar>
 
   <div class="flex flex-row pt-2">
     <div class="w-full">
-      <div class="text-h4 q-mb-md">Search</div>
+      <div class="text-h4 q-mb-md" v-t="'Search'" />
 
       <VueMultiselect
-          placeholder="Add"
+          :placeholder="t('Add')"
           :loading="isLoadingSelect"
           :options="users"
           :multiple="true"
@@ -48,18 +44,25 @@ import { useStore } from 'vuex';
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
+import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import { useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
 
 export default {
   name: 'UserRelUserAdd',
   servicePrefix: 'userreluser',
   components: {
-    Toolbar,
+    BaseButton,
+    ButtonToolbar,
     VueMultiselect
   },
   setup() {
     const users = ref([]);
     const isLoadingSelect = ref(false);
     const store = useStore();
+    const router = useRouter()
+    const { t } = useI18n()
     const user = store.getters["security/getUser"];
 
     function asyncFind (query) {
@@ -96,27 +99,39 @@ export default {
       });
     }
 
-    return {v$: useVuelidate(), users, asyncFind, addFriend, isLoadingSelect};
-  },
-  data() {
+    const goToBack = () => {
+      router.push({ name: 'UserRelUserList' })
+    }
+
+    const selectedItems = ref([])
+    const itemDialog = ref(false)
+    const deleteItemDialog = ref(false)
+    const deleteMultipleDialog = ref(false)
+    const item = ref({})
+    const submitted = ref(false)
+
+    const isAuthenticated = computed(() => store.getters['security/isAuthenticated'])
+    const isAdmin = computed(() => store.getters['security/isAdmin'])
+    const currentUser = computed(() => store.getters['security/getUser'])
+
     return {
-      selectedItems: [],
-      // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
-      deleteMultipleDialog: false,
-      item: {},
-      submitted: false,
+      v$: useVuelidate(),
+      users,
+      asyncFind,
+      addFriend,
+      isLoadingSelect,
+      goToBack,
+      t,
+      selectedItems,
+      itemDialog,
+      deleteItemDialog,
+      deleteMultipleDialog,
+      item,
+      submitted,
+      isAuthenticated,
+      isAdmin,
+      currentUser,
     };
   },
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'currentUser': 'security/getUser',
-    }),
-  },
-  methods: {
-  }
 };
 </script>

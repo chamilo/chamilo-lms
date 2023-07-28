@@ -379,14 +379,14 @@ class Version20 extends AbstractMigrationChamilo
 
         // Rename extra_field field_type and extra_field_type to item_type and value_type, also, the term "value" in exta_field_values.value renamed to field_value
         $table = $schema->getTable('extra_field');
-        if (false === $table->hasColumn('extra_field_type')) {
+        if ($table->hasColumn('extra_field_type')) {
             $this->addSql('ALTER TABLE extra_field CHANGE extra_field_type item_type INT NOT NULL');
         }
-        if (false === $table->hasColumn('field_type')) {
+        if ($table->hasColumn('field_type')) {
             $this->addSql('ALTER TABLE extra_field CHANGE field_type value_type INT NOT NULL');
         }
         $table = $schema->getTable('extra_field_values');
-        if (false === $table->hasColumn('value')) {
+        if ($table->hasColumn('value')) {
             $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
         }
         

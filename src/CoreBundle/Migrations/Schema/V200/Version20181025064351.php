@@ -72,6 +72,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql('UPDATE gradebook_category SET parent_id = NULL WHERE parent_id = 0');
 
         $this->addSql('DELETE FROM gradebook_category WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
+        $this->addSql('DELETE FROM gradebook_category WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM gradebook_category)');
 
         if (false === $table->hasForeignKey('FK_96A4C705727ACA70')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');

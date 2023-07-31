@@ -209,7 +209,7 @@ if (!$is_certificate_mode) {
             'name' => get_lang('GroupSpace').' '.$group_properties['name'],
         ];
         $path = explode('/', $dir);
-        if ('/'.$path[1] != $group_properties['directory']) {
+        if (strcasecmp('/' . $path[1], $group_properties['directory']) !== 0) {
             api_not_allowed(true);
         }
     }

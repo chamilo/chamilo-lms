@@ -39,7 +39,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $year_end = $_POST['year_end'];
     $month_end = $_POST['month_end'];
     $day_end = $_POST['day_end'];
-
     $return = SessionManager::create_category_session(
         $name,
         $year_start,
@@ -49,6 +48,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $month_end,
         $day_end
     );
+
     if ($return == strval(intval($return))) {
         Display::addFlash(Display::return_message(get_lang('SessionCategoryAdded')));
         header('Location: session_category_list.php');
@@ -74,8 +74,8 @@ if (!empty($return)) {
             <div class="form-group">
                 <label class="col-sm-3 control-label"><?php echo get_lang('SessionCategoryName'); ?></label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="name" id="category-name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="<?php if ($formSent) {
-    echo api_htmlentities($name, ENT_QUOTES);
+                    <input type="text" class="form-control" name="name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="<?php if ($formSent) {
+    echo api_htmlentities($name, ENT_QUOTES, $charset);
 } ?>">
                 </div>
                 <div class="col-md-3"></div>
@@ -309,7 +309,7 @@ if (!empty($return)) {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
-                    <button class="btn btn-success" type="submit" id="submit-category" value="<?php echo get_lang('AddACategory'); ?>"><em class="fa fa-plus"></em> <?php echo get_lang('AddACategory'); ?></button>
+                    <button class="btn btn-success" type="submit" value="<?php echo get_lang('AddACategory'); ?>"><em class="fa fa-plus"></em> <?php echo get_lang('AddACategory'); ?></button>
                 </div>
                 <div class="col-md-3"></div>
             </div>

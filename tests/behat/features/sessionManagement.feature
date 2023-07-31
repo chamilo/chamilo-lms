@@ -8,12 +8,11 @@ Feature: Session management tool
   @javascript
   Scenario: Create a session category
     Given I am on "/main/session/session_category_add.php"
+    And wait for the page to be loaded
     When I fill in the following:
       | category-name | category_1 |
-    And wait for the page to be loaded
     And print last response
     And I press "submit-category"
-    And print last response
     And wait very long for the page to be loaded
     Then I should see "The category has been added"
 

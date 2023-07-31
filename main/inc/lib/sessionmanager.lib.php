@@ -3050,26 +3050,16 @@ class SessionManager
         $smonth_end,
         $sday_end
     ) {
-        print_r('<pre>entra</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
-        print_r('<pre>.$year_start.</pre>');
         $month_start = intval($smonth_start);
-        print_r('<pre>.$month_start.</pre>');
         $day_start = intval($sday_start);
-        print_r('<pre>.$day_start.</pre>');
         $year_end = intval($syear_end);
-        print_r('<pre>.$year_end.</pre>');
         $month_end = intval($smonth_end);
-        print_r('<pre>.$month_end.</pre>');
         $day_end = intval($sday_end);
-        print_r('<pre>.$day_end.</pre>');
-        print_r('<pre>antes fechas</pre>');
         $date_start = "$year_start-".(($month_start < 10) ? "0$month_start" : $month_start)."-".(($day_start < 10) ? "0$day_start" : $day_start);
-        print_r('<pre>'.$date_start.'</pre>');
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
-        die();
         if (empty($name)) {
             $msg = get_lang('SessionCategoryNameIsRequired');
 
@@ -3102,8 +3092,6 @@ class SessionManager
             $params['date_end'] = $date_end;
         }
 
-        print_r('<pre>'.$return.'</pre>');
-        die();
         $id = Database::insert($tbl_session_category, $params);
 
         // Add event to system log

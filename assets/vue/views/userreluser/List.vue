@@ -78,7 +78,7 @@
         :value="items"
         class="p-datatable-sm"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-        dataKey="id"
+        dataKey="@id"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         responsiveLayout="scroll"
         sortBy="sendDate"
@@ -98,10 +98,14 @@
           field="sender"
         >
           <template #body="slotProps">
-            <q-avatar size="40px">
-              <img :src="slotProps.data.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
-            </q-avatar>
-            {{ slotProps.data.friend.username }}
+            <div v-if="slotProps.data.user['@id'] === user['@id']">
+              <BaseUserAvatar :image-url="slotProps.data.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
+              {{ slotProps.data.friend.username }}
+            </div>
+            <div v-else>
+              <BaseUserAvatar :image-url="slotProps.data.user.illustrationUrl + '?w=80&h=80&fit=crop'" />
+              {{ slotProps.data.user.username }}
+            </div>
           </template>
         </Column>
 
@@ -275,6 +279,11 @@ export default {
       relationType: 3, // friend status
     }
 
+    const friendBackFilter = {
+      friend: user.id,
+      relationType: 3, // friend status
+    }
+
     function addFriend(friend) {
       // Change from request to friend
       axios
@@ -292,7 +301,11 @@ export default {
 
     function reloadHandler() {
       store.dispatch("userreluser/resetList")
-      store.dispatch("userreluser/fetchAll", friendFilter)
+
+      Promise.all([
+        store.dispatch("userreluser/fetchAll", friendFilter),
+        store.dispatch("userreluser/fetchAll", friendBackFilter),
+      ])
       store.dispatch("userreluser/findAll", friendRequestFilter).then((response) => {
         friendRequests.value = response
       })
@@ -343,6 +356,7 @@ export default {
       waitingRequests,
       friendFilter,
       deleteItemDialog,
+      user,
     }
   },
   computed: {

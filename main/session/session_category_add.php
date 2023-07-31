@@ -30,7 +30,7 @@ $interbreadcrumb[] = [
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-if (isset($_POST['formSent'])) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
     $name = $_POST['name'];
     $year_start = $_POST['year_start'];
@@ -39,6 +39,14 @@ if (isset($_POST['formSent'])) {
     $year_end = $_POST['year_end'];
     $month_end = $_POST['month_end'];
     $day_end = $_POST['day_end'];
+    print_r('<pre>'.$name.'</pre>');
+    print_r('<pre>'.$year_start.'</pre>');
+    print_r('<pre>'.$month_start.'</pre>');
+    print_r('<pre>'.$day_start.'</pre>');
+    print_r('<pre>'.$year_end.'</pre>');
+    print_r('<pre>'.$month_end.'</pre>');
+    print_r('<pre>'.$day_end.'</pre>');
+die();
     $return = SessionManager::create_category_session(
         $name,
         $year_start,

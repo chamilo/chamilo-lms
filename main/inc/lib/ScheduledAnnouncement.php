@@ -301,6 +301,11 @@ class ScheduledAnnouncement extends Model
         $result = $this->get_all();
         $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
 
+        // get user extra fields list (only visible to self and filter-able)
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
+
+
         foreach ($result as $result) {
             if (empty($result['sent'])) {
                 if (!empty($result['date']) && $result['date'] < $now) {
@@ -412,6 +417,19 @@ class ScheduledAnnouncement extends Model
                                 '((lp_progress))' => $progress,
                             ];
 
+                            if (!empty($extraFields)) {
+                                $efv = new ExtraFieldValue('user');
+
+                                foreach ($extraFields as $extraField) {
+                                    $valueExtra = $efv->get_values_by_handler_and_field_variable(
+                                        $user['user_id'],
+                                        $extraField['variable'],
+                                        true
+                                    );
+                                    $tags['(('.strtolower($extraField['variable']).'))'] = $valueExtra['value'];
+                                }
+                            }
+
                             $message = str_replace(array_keys($tags), $tags, $message);
                             $message .= $attachments;
 
@@ -461,6 +479,14 @@ class ScheduledAnnouncement extends Model
             '((user_picture))',
             '((lp_progress))',
         ];
+        // get user extra fields list (only visible to self and filter-able)
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extraField) {
+                $tags[] = '(('.strtolower($extraField['variable']).'))';
+            }
+        }
 
         return $tags;
     }

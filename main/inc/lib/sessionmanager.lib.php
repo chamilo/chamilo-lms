@@ -3052,8 +3052,8 @@ class SessionManager
     ) {
         print_r('<pre>entra</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        print_r('<pre>'.$tbl_session_category.'</pre>');
         $name = html_filter(trim($sname));
+        print_r('<pre>'.$name.'</pre>');
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3082,6 +3082,7 @@ class SessionManager
             print_r('<pre>'.$msg.'</pre>');
             return $msg;
         }
+        print_r('<pre>'.'sale if'.'</pre>');
         $access_url_id = api_get_current_access_url_id();
 
         $params = [

@@ -32,7 +32,7 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
-    $name = $_POST['name'];
+    $name = html_filter($_POST['name']);
     $year_start = $_POST['year_start'];
     $month_start = $_POST['month_start'];
     $day_start = $_POST['day_start'];

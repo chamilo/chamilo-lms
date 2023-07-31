@@ -411,7 +411,7 @@ class LegalManager
                 $newParams = [
                     'item_id' => $userId,
                     'field_id' => $extraFieldInfo['id'],
-                    'value' => 1,
+                    'field_value' => 1,
                     'comment' => '',
                 ];
                 $extraFieldValue->save($newParams);

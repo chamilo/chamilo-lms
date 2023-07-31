@@ -334,9 +334,9 @@ class UserManager
                 $userFieldValue->saveFieldValues(
                     $extra,
                     true,
-                    null,
-                    null,
-                    null,
+                    false,
+                    [],
+                    [],
                     true
                 );
             } else {

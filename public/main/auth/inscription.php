@@ -32,10 +32,14 @@ if (false !== $allowedFieldsConfiguration) {
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
-$webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
-$hash = api_get_plugin_setting('logintcc', 'hash');
+$pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
+$isTccEnabled = (is_dir($pluginTccDirectoryPath) && 'true' === api_get_plugin_setting('logintcc', 'tool_enable'));
+$webserviceUrl = '';
+$hash = '';
 
-if (!empty($webserviceUrl)) {
+if ($isTccEnabled) {
+    $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
+    $hash = api_get_plugin_setting('logintcc', 'hash');
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
         $("#search_user").click(function() {
@@ -168,7 +172,7 @@ if (!empty($course_code_redirect)) {
 }
 
 if (false === $userAlreadyRegisteredShowTerms &&
-    'false' !== api_get_setting('allow_registration')
+    'true' === api_get_setting('allow_registration')
 ) {
     // EMAIL
     $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
@@ -176,7 +180,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
         $form->addRule('email', get_lang('Required field'), 'required');
     }
 
-    if (!empty($webserviceUrl)) {
+    if ($isTccEnabled) {
         $form->addButtonSearch(get_lang('SearchTCC'), 'search', ['id' => 'search_user']);
     }
 
@@ -464,10 +468,9 @@ if (false === $userAlreadyRegisteredShowTerms &&
             false,
             $extraFieldList,
             [],
-            false,
-            false,
-            false,
             [],
+            false,
+            false,
             [],
             [],
             false,
@@ -843,10 +846,12 @@ if ($form->validate()) {
         // Moved here to include extra fields when creating a user. Formerly placed after user creation
         // Register extra fields
         $extras = [];
+        $extraParams = [];
         foreach ($values as $key => $value) {
-            if ('extra_' == substr($key, 0, 6)) {
+            if ('extra_' === substr($key, 0, 6)) {
                 //an extra field
                 $extras[substr($key, 6)] = $value;
+                $extraParams[$key] = $value;
             }
         }
 
@@ -882,7 +887,7 @@ if ($form->validate()) {
             null,
             1,
             0,
-            $extras,
+            $extraParams,
             null,
             true,
             false,

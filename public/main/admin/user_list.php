@@ -1105,6 +1105,7 @@ $status_options[COURSEMANAGER] = get_lang('Trainer');
 $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
+$status_options[STUDENT_BOSS] = get_lang('RoleStudentBoss');
 
 $form->addSelect(
     'keyword_status',

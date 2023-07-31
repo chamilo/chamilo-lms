@@ -23,7 +23,7 @@ class FeatureContext extends MinkContext
     {
         $this->iAmOnHomepage();
         $this->fillField('login', 'admin');
-        $this->fillField('password', 'anon');
+        $this->fillField('password', 'admin');
         $this->pressButton('submitAuth');
         $this->getSession()->back();
     }

@@ -615,7 +615,7 @@ class Tracking
                             }
                             break;
                         case 'quiz':
-                            // Get score and total time from last attempt of a exercise en lp.
+                            // Get score and total time from last attempt of an exercise en lp.
                             $sql = "SELECT iid, score
                                     FROM $tblLpItemView
                                     WHERE
@@ -1600,22 +1600,23 @@ class Tracking
                         case 'quiz':
                             // Get score and total time from last attempt of a exercise en lp.
                             $sql = "SELECT iid, score
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        c_id = $course_id AND
-                                        lp_item_id = '.(int) $my_id.' AND
-                                        lp_view_id = '.(int) $my_lp_view_id.'
-                                    ORDER BY view_count DESC
-                                    LIMIT 1";
+                                FROM $TBL_LP_ITEM_VIEW
+                                WHERE
+                                    c_id = ".(int) $course_id." AND
+                                    lp_item_id = ".(int) $my_id." AND
+                                    lp_view_id = ".(int) $my_lp_view_id."
+                                ORDER BY view_count DESC
+                                LIMIT 1";
+
                             $res_score = Database::query($sql);
                             $row_score = Database::fetch_array($res_score);
 
-                            $sql = "SELECT SUM(total_time) as total_time
+                            $sql = "SELECT SUM(total_time) AS total_time
                                     FROM $TBL_LP_ITEM_VIEW
                                     WHERE
-                                        c_id = $course_id AND
-                                        lp_item_id = '.(int) $my_id.' AND
-                                        lp_view_id = '.(int) $my_lp_view_id.'";
+                                        c_id = ".(int) $course_id." AND
+                                        lp_item_id = ".(int) $my_id." AND
+                                        lp_view_id = ".(int) $my_lp_view_id;
                             $res_time = Database::query($sql);
                             $row_time = Database::fetch_array($res_time);
 
@@ -1673,13 +1674,13 @@ class Tracking
                         case 'h5p':
                             if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
                                 $sql = "SELECT iid, score
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        c_id = $course_id AND
-                                        lp_item_id = '.(int) $my_id.' AND
-                                        lp_view_id = '.(int) $my_lp_view_id.'
-                                    ORDER BY view_count DESC
-                                    LIMIT 1";
+                                        FROM $TBL_LP_ITEM_VIEW
+                                        WHERE
+                                            c_id = ".(int) $course_id." AND
+                                            lp_item_id = ".(int) $my_id." AND
+                                            lp_view_id = ".(int) $my_lp_view_id."
+                                        ORDER BY view_count DESC
+                                        LIMIT 1";
                                 $res_score = Database::query($sql);
                                 $row_score = Database::fetch_array($res_score);
 

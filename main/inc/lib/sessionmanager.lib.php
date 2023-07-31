@@ -3035,6 +3035,7 @@ class SessionManager
         $smonth_end,
         $sday_end
     ) {
+        print_r('<pre>entra</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = trim($sname);
         $year_start = intval($syear_start);
@@ -3043,10 +3044,11 @@ class SessionManager
         $year_end = intval($syear_end);
         $month_end = intval($smonth_end);
         $day_end = intval($sday_end);
-
+        print_r('<pre>antes fechas</pre>');
         $date_start = "$year_start-".(($month_start < 10) ? "0$month_start" : $month_start)."-".(($day_start < 10) ? "0$day_start" : $day_start);
+        print_r('<pre>'.$date_start.'</pre>');
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
-        print_r('<pre>'.'entra'.'</pre>');
+        die();
         if (empty($name)) {
             $msg = get_lang('SessionCategoryNameIsRequired');
 

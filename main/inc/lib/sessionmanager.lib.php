@@ -3051,9 +3051,8 @@ class SessionManager
         $sday_end
     ) {
         print_r('<pre>entra</pre>');
-        print_r('<pre>'.$sname.'</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+        $name = 'category_1';
         print_r('<pre>'.$name.'</pre>');
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);

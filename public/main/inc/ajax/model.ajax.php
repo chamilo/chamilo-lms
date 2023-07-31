@@ -1940,6 +1940,21 @@ switch ($action) {
         }
 
         $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        $limit = 20;
+        $total_pages = 0;
+        if ($count > 0) {
+            if (!empty($limit)) {
+                $total_pages = ceil((float) $count / (float) $limit);
+            }
+        }
+        if ($page > $total_pages) {
+            $page = $total_pages;
+        }
+
+        $start = $limit * $page - $limit;
+        if ($start < 0) {
+            $start = 0;
+        }
         switch ($listType) {
             case 'complete':
                 $result = SessionManager::get_sessions_admin_complete(

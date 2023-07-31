@@ -44,7 +44,10 @@ if ($diagnosisComplete && isset($diagnosisComplete['value']) && 1 == $diagnosisC
     }
 }
 
-$hide = true;
+$hide = false;
+$defaultValueStatus = '';
+/*
+$hide = false;
 if (false !== $wantStage) {
     $hide = 'yes' === $wantStage['value'];
 }
@@ -53,6 +56,7 @@ $defaultValueStatus = 'extraFiliere.hide()';
 if (false === $hide) {
     $defaultValueStatus = '';
 }
+*/
 
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
@@ -80,19 +84,31 @@ switch ($targetLanguage) {
         break;
 }
 
-$htmlHeadXtra[] = '<script>
+$htmlHeadXtra[] = '
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var targetBlock = window.location.hash;
+      var targetBlockWithoutHash = targetBlock.substring(1);
+      const diapoButton = document.querySelector("#card_"+targetBlockWithoutHash+" a");
+
+      setTimeout(function() {
+        diapoButton.click();
+      }, 500);
+    });
+</script>
+<script>
 $(function() {
     var themeDefault = "extra_'.$theme.'";
     var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent();
     '.$defaultValueStatus.'
 
-    $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
+    /*$("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
         if ($(this).val() == "no") {
             extraFiliere.show();
         } else {
             extraFiliere.hide();
         }
-    });
+    });*/
 
     $("#extra_theme").parent().append(
         $("<a>", {

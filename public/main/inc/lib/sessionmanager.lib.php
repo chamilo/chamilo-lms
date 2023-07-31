@@ -743,7 +743,7 @@ class SessionManager
                         $fieldDataToString = '';
                         if (!empty($fieldData)) {
                             foreach ($fieldData as $data) {
-                                $fieldDataArray[] = $data['value'];
+                                $fieldDataArray[] = $data['field_value'];
                             }
                             $fieldDataToString = implode(', ', $fieldDataArray);
                         }
@@ -832,7 +832,7 @@ class SessionManager
                     $fieldDataToString = '';
                     if (!empty($fieldData)) {
                         foreach ($fieldData as $data) {
-                            $fieldDataArray[] = $data['value'];
+                            $fieldDataArray[] = $data['field_value'];
                         }
                         $fieldDataToString = implode(', ', $fieldDataArray);
                     }
@@ -9717,7 +9717,7 @@ class SessionManager
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
             ],*/
         ];
-
+        $default = null;
         switch ($listType) {
             case 'all':
                 $default = 1;

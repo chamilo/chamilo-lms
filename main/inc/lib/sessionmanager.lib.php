@@ -3051,6 +3051,7 @@ class SessionManager
         $sday_end
     ) {
         print_r('<pre>entra</pre>');
+        print_r('<pre>.$sname.</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = html_filter(trim($sname));
         print_r('<pre>'.$name.'</pre>');

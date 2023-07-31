@@ -49,8 +49,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $month_end,
         $day_end
     );
-    print_r('<pre>'.$return.'</pre>');
-    die();
     if ($return == strval(intval($return))) {
         Display::addFlash(Display::return_message(get_lang('SessionCategoryAdded')));
         header('Location: session_category_list.php');

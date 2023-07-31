@@ -3046,7 +3046,7 @@ class SessionManager
 
         $date_start = "$year_start-".(($month_start < 10) ? "0$month_start" : $month_start)."-".(($day_start < 10) ? "0$day_start" : $day_start);
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
-
+        print_r('<pre>'.'entra'.'</pre>');
         if (empty($name)) {
             $msg = get_lang('SessionCategoryNameIsRequired');
 
@@ -3066,8 +3066,9 @@ class SessionManager
 
             return $msg;
         }
-
+        print_r('<pre>'.$msg.'</pre>');
         $access_url_id = api_get_current_access_url_id();
+        print_r('<pre>'.$access_url_id.'</pre>');
         $params = [
             'name' => $name,
             'date_start' => $date_start,
@@ -3078,6 +3079,8 @@ class SessionManager
             $params['date_end'] = $date_end;
         }
 
+        print_r('<pre>'.$return.'</pre>');
+        die();
         $id = Database::insert($tbl_session_category, $params);
 
         // Add event to system log

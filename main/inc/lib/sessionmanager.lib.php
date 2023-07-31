@@ -3051,17 +3051,17 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+
+        $name = Database::escape_string(trim($sname));
+
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
         $year_end = intval($syear_end);
         $month_end = intval($smonth_end);
         $day_end = intval($sday_end);
-
         $date_start = "$year_start-".(($month_start < 10) ? "0$month_start" : $month_start)."-".(($day_start < 10) ? "0$day_start" : $day_start);
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
-
         if (empty($name)) {
             $msg = get_lang('SessionCategoryNameIsRequired');
 
@@ -3081,8 +3081,8 @@ class SessionManager
 
             return $msg;
         }
-
         $access_url_id = api_get_current_access_url_id();
+
         $params = [
             'name' => $name,
             'date_start' => $date_start,

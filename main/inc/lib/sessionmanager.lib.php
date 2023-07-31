@@ -3080,6 +3080,7 @@ class SessionManager
             print_r('<pre>'.$msg.'</pre>');
             return $msg;
         }
+        print_r('<pre>'.'sale if'.'</pre>');
         $access_url_id = api_get_current_access_url_id();
 
         $params = [

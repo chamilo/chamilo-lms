@@ -30,7 +30,7 @@ $interbreadcrumb[] = [
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
+if (isset($_POST['formSent'])) {
     $formSent = 1;
     $name = $_POST['name'];
     $year_start = $_POST['year_start'];
@@ -74,7 +74,9 @@ if (!empty($return)) {
             <div class="form-group">
                 <label class="col-sm-3 control-label"><?php echo get_lang('SessionCategoryName'); ?></label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="name" id="category-name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="category_1">
+                    <input type="text" class="form-control" name="name" id="category-name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="<?php if ($formSent) {
+    echo api_htmlentities($name, ENT_QUOTES);
+} ?>">
                 </div>
                 <div class="col-md-3"></div>
             </div>

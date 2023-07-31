@@ -3036,7 +3036,7 @@ class SessionManager
         $sday_end
     ) {
         print_r('<pre>entra</pre>');
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tbl_session_category = 'session_category';
         print_r('<pre>.$tbl_session_category.</pre>');
         $name = trim($sname);
         print_r('<pre>.$name.</pre>');

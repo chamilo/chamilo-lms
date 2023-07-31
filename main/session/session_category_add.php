@@ -39,14 +39,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $year_end = $_POST['year_end'];
     $month_end = $_POST['month_end'];
     $day_end = $_POST['day_end'];
-    print_r('<pre>'.$name.'</pre>');
-    print_r('<pre>'.$year_start.'</pre>');
-    print_r('<pre>'.$month_start.'</pre>');
-    print_r('<pre>'.$day_start.'</pre>');
-    print_r('<pre>'.$year_end.'</pre>');
-    print_r('<pre>'.$month_end.'</pre>');
-    print_r('<pre>'.$day_end.'</pre>');
-die();
+
     $return = SessionManager::create_category_session(
         $name,
         $year_start,
@@ -56,7 +49,8 @@ die();
         $month_end,
         $day_end
     );
-
+    print_r('<pre>'.$return.'</pre>');
+    die();
     if ($return == strval(intval($return))) {
         Display::addFlash(Display::return_message(get_lang('SessionCategoryAdded')));
         header('Location: session_category_list.php');

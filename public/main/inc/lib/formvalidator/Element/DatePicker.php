@@ -41,7 +41,9 @@ class DatePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
         }
 
+        $label = $this->getLabel();
         return '
+            <div>'.$label.'</div>
             <div id="'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
@@ -97,6 +99,9 @@ class DatePicker extends HTML_QuickForm_text
                     }
                 };
                 $('#{$id}').flatpickr(config);
+                if ($('label[for=\"".$id."\"]').length > 0) {
+                    $('label[for=\"".$id."\"]').hide();
+                }
              });
         </script>";
 

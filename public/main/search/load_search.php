@@ -508,6 +508,22 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addEndPanel();
 
 $form->addButtonSave(get_lang('Save Diagnostic Changes'), 'save');
+
+// Get list of session status
+if (api_get_configuration_value('allow_session_status')) {
+    $statusList = SessionManager::getStatusList();
+    $statusSelectList[0] = ' -- '.get_lang('All').' --';
+    foreach ($statusList as $nro => $name) {
+        $statusSelectList[$nro] = $name;
+    }
+    $form->addSelect(
+        'filter_status',
+        get_lang('SessionStatus'),
+        $statusSelectList,
+        ['id' => 'filter_status']
+    );
+}
+
 $form->addButtonSearch(get_lang('Search Sessions'), 'search');
 
 $extraFieldsToFilter = $extraField->get_all(['variable = ?' => 'temps_de_travail']);
@@ -579,17 +595,6 @@ if (!empty($filters)) {
             if ($count > 5) {
                 if (isset($filters[$column['name']])) {
                     $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                    /*switch ($column['name']) {
-                        case 'extra_theme_it':
-                        case 'extra_theme_de':
-                        case 'extra_theme_es':
-                        case 'extra_theme_fr':
-                            break;
-                        case 'extra_domaine':
-                            break;
-                        case '':
-                            break;
-                    }*/
                     $filterToSend['rules'][] = [
                         'field' => $column['name'],
                         'op' => 'cn',
@@ -655,6 +660,10 @@ if ($form->validate()) {
                     $count++;
                 }
             }
+        }
+
+        if (!empty($_REQUEST['filter_status'])) {
+            $filterToSend['filter_status'] = (int) $_REQUEST['filter_status'];
         }
     }
 
@@ -968,7 +977,7 @@ if (!empty($filterToSend)) {
 
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
-        $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
+       $extraFieldListToString.'&filters2='.$filterToSend;
     if (isset($params['search_using_2'])) {
         $url .= '&lang='.$lang;
     }
@@ -1130,6 +1139,9 @@ if ($data) {
 }
 
 $numHours = $total - $sumHours;
+if ($numHours < 0) {
+    $numHours = 0;
+}
 $headers = [
     get_lang('Total Available Hours') => $total,
     get_lang('Sum Hours Sessions Subscribed') => $sumHours,

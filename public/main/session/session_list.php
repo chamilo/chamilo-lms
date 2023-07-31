@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+ini_set('memory_limit', '2024M');
+
 /**
  * List sessions in an efficient and usable way.
  */

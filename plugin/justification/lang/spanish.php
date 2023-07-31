@@ -1,7 +1,7 @@
 <?php
 
 $strings['plugin_title'] = "Justification Plugin";
-$strings['plugin_comment'] = "";
+$strings['plugin_comment'] = "Exige la subida de documentos de parte de los alumnos para validación de temas administrativos.";
 $strings['tool_enable'] = "Activar el plugin";
 
 $strings['ValidityDuration'] = "Periodo de validez en días";

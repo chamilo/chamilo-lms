@@ -81,7 +81,7 @@ $buttonBack = isset($_POST['buttonBack']) ? true : false;
 $nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
 if ($submitAnswers || $buttonBack) {
-    if (in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
+    if (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
         }
@@ -133,7 +133,7 @@ if ($submitAnswers || $buttonBack) {
                     $questionWeighting += $weighting[$i];
                 }
 
-                if (HOT_SPOT_GLOBAL == $answerType) {
+                if (HOT_SPOT_COMBINATION == $answerType) {
                     $weighting[$i] = 0;
                 }
 
@@ -152,7 +152,7 @@ if ($submitAnswers || $buttonBack) {
             $objAnswer->save();
 
             // sets the total weighting of the question
-            if (HOT_SPOT_GLOBAL == $answerType) {
+            if (HOT_SPOT_COMBINATION == $answerType) {
                 $questionWeighting = $httpRequest->request->get('questionWeighting');
             }
             $objQuestion->updateWeighting($questionWeighting);
@@ -629,7 +629,7 @@ if (isset($modifyAnswers)) {
                     } else {
                         echo '<th colspan="2">'.get_lang('Comment').'</th>';
                     } ?>
-                    <?php if (HOT_SPOT_GLOBAL !== $answerType) { ?>
+                    <?php if (HOT_SPOT_COMBINATION !== $answerType) { ?>
                         <th><?php echo get_lang('QuestionWeighting'); ?> *</th>
                     <?php } ?>
                 </tr>
@@ -981,9 +981,9 @@ if (isset($modifyAnswers)) {
                                 <?php
                             }
                         }
-        if (in_array($answerType, [HOT_SPOT_GLOBAL, HOT_SPOT])) {
+        if (in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
             ?>
-                            <?php if (HOT_SPOT_GLOBAL === $answerType) { ?>
+                            <?php if (HOT_SPOT_COMBINATION === $answerType) { ?>
                                 <input class="form-control" type="hidden" name="weighting[<?php echo $i; ?>]" value="1" />
                             <?php } else { ?>
                                 <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
@@ -1111,7 +1111,7 @@ if (isset($modifyAnswers)) {
                 </tbody>
             </table>
         </div>
-        <?php if (HOT_SPOT_GLOBAL === $answerType) { ?>
+        <?php if (HOT_SPOT_COMBINATION === $answerType) { ?>
             <div class="form-group ">
                 <label for="question_admin_form_questionWeighting" class="col-sm-2 control-label">
                     <span class="form_required">*</span>

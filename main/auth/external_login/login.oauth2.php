@@ -23,11 +23,16 @@ if ('oauth2' === $uData['auth_source']) {
 
     $provider = $plugin->getProvider();
 
+    // Redirect to OAuth2 login.
     $authUrl = $provider->getAuthorizationUrl();
 
     ChamiloSession::write('oauth2state', $provider->getState());
 
-    // Redirect to OAuth2 login.
+    if (OAuth2::isFirstLoginAfterAuthSource($uData['user_id'])) {
+        ChamiloSession::write('aouth2_authorization_url', $authUrl);
+        $authUrl = api_get_path(WEB_PLUGIN_PATH).'oauth2/redirect_info.php';
+    }
+
     header('Location: '.$authUrl);
     // Avoid execution from here in local.inc.php script.
     exit;

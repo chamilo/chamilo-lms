@@ -448,7 +448,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['user_id'] == $user_id || $row['user_id'] == "") {
+            if ((!empty($row['user_id']) && ($row['user_id'] == $user_id || $row['user_id'] == "")) || empty($row)) {
                 CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
                 Display::addFlash(
                     Display::return_message(get_lang('UserUnsubscribed'))

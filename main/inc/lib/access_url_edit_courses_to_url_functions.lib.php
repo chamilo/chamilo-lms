@@ -39,7 +39,7 @@ class Accessurleditcoursestourl
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
             $needle = Database::escape_string($needle);
             // search courses where username or firstname or lastname begins likes $needle
-            $sql = 'SELECT code, title FROM '.$tbl_course.' u '.
+            $sql = 'SELECT id, code, title FROM '.$tbl_course.' u '.
                    ' WHERE (title LIKE "'.$needle.'%" '.
                    ' OR code LIKE "'.$needle.'%" '.
                    ' ) '.
@@ -50,7 +50,7 @@ class Accessurleditcoursestourl
             while ($course = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_url('.addslashes($course['id']).',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
                 } else {
                     $return .= '...<br />';
                 }

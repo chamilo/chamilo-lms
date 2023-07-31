@@ -29,3 +29,4 @@ $strings['PlatformConnectionAdded'] = 'La nouvelle connexion inter-plateforme a 
 $strings['ToolProvider'] = 'Outil fournisseur';
 $strings['SelectOneActivity'] = 'Sélectionnez une activité';
 $strings['Quizzes'] = 'Exercices';
+$strings['KeySetUrlJwks'] = 'Keyset url (jwks)';

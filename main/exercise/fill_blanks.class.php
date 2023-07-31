@@ -63,7 +63,7 @@ class FillBlanks extends Question
             }
         }
 
-        $questionTypes = [FILL_IN_BLANKS => 'fillblanks', FILL_IN_BLANKS_GLOBAL => 'fillblanks_global'];
+        $questionTypes = [FILL_IN_BLANKS => 'fillblanks', FILL_IN_BLANKS_COMBINATION => 'fillblanks_combination'];
         echo '<script>
             var questionType = "'.$questionTypes[$this->type].'";
             var firstTime = true;
@@ -367,7 +367,7 @@ class FillBlanks extends Question
         // setting the save button here and not in the question class.php
         $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
 
-        if (FILL_IN_BLANKS_GLOBAL === $this->type) {
+        if (FILL_IN_BLANKS_COMBINATION === $this->type) {
             //only 1 answer the all deal ...
             $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
             if (!empty($this->iid)) {
@@ -468,7 +468,7 @@ class FillBlanks extends Question
                 $this->weighting += (float) $form->getSubmitValue('weighting['.$i.']');
             }
 
-            if (FILL_IN_BLANKS_GLOBAL === $this->type) {
+            if (FILL_IN_BLANKS_COMBINATION === $this->type) {
                 $this->weighting = $form->getSubmitValue('questionWeighting');
             }
 

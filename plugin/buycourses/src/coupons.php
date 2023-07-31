@@ -86,7 +86,7 @@ $template = new Template($templateName);
 
 $toolbar = Display::url(
     Display::returnFontAwesomeIcon('fas fa-plus').
-    get_lang('CouponAdd'),
+    $plugin->get_lang('CouponAdd'),
     api_get_path(WEB_PLUGIN_PATH).'buycourses/src/coupon_add.php',
     ['class' => 'btn btn-primary']
 );

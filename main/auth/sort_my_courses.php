@@ -223,7 +223,7 @@ function generateUnsubscribeForm(string $courseCode, string $secToken): string
     );
     $form->addHidden('action', 'unsubscribe');
     $form->addHidden('sec_token', $secToken);
-    $form->addHidden('unsubscribe', $courseCode);
+    $form->addHidden('course_code', $courseCode);
     $form->addButton('unsub', get_lang('Unsubscribe'));
 
     return $form->returnForm();

@@ -59,6 +59,7 @@
         "doctrine/orm": "~2.5",
         "emojione/emojione": "1.3.0",
         "endroid/qr-code": "2.5.*",
+        "enshrined/svg-sanitize": "^0.16.0",
         "essence/essence": "2.6.1",
         "ezyang/htmlpurifier": "~4.9",
         "facebook/php-sdk-v4": "~5.0",
@@ -142,10 +143,12 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "post-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctrineProxies"
         ],
         "post-update-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles",
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::generateDoctrineProxies"
         ],
         "update-css": "Chamilo\\CoreBundle\\Composer\\ScriptHandler::updateCss"
     },

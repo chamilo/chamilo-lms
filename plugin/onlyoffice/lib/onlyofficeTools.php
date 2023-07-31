@@ -1,6 +1,7 @@
 <?php
 /**
- * (c) Copyright Ascensio System SIA 2021.
+ *
+ * (c) Copyright Ascensio System SIA 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +14,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-class OnlyofficeTools
-{
+
+class OnlyofficeTools {
+
     /**
-     * Return button-link to onlyoffice editor for file.
+     * Return button-link to onlyoffice editor for file
      */
     public static function getButtonEdit(array $document_data): string
     {
+
         $plugin = OnlyofficePlugin::create();
 
         $isEnable = $plugin->get("enable_onlyoffice_plugin") === "true";
@@ -28,7 +32,7 @@ class OnlyofficeTools
             return '';
         }
 
-        $urlToEdit = api_get_path(WEB_PLUGIN_PATH)."onlyoffice/editor.php";
+        $urlToEdit = api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php";
 
         $extension = strtolower(pathinfo($document_data["title"], PATHINFO_EXTENSION));
 
@@ -37,19 +41,24 @@ class OnlyofficeTools
 
         $groupId = api_get_group_id();
         if (!empty($groupId)) {
-            $urlToEdit = $urlToEdit."?groupId=".$groupId."&";
+            $urlToEdit = $urlToEdit . "?groupId=" . $groupId . "&";
         } else {
-            $urlToEdit = $urlToEdit."?";
+            $urlToEdit = $urlToEdit . "?";
         }
 
         $documentId = $document_data["id"];
-        $urlToEdit = $urlToEdit."docId=".$documentId;
+        $urlToEdit = $urlToEdit . "docId=" . $documentId;
 
         if ($canEdit || $canView) {
+            $tooltip = $plugin->get_lang('openByOnlyoffice');
+            if ($extension === "oform") {
+                $tooltip = $plugin->get_lang('fillInFormInOnlyoffice');
+            }
+
             return Display::url(
                 Display::return_icon(
                     '../../plugin/onlyoffice/resources/onlyoffice_edit.png',
-                    $plugin->get_lang('openByOnlyoffice')
+                    $tooltip
                 ),
                 $urlToEdit
             );
@@ -59,10 +68,11 @@ class OnlyofficeTools
     }
 
     /**
-     * Return button-link to onlyoffice editor for view file.
+     * Return button-link to onlyoffice editor for view file
      */
-    public static function getButtonView(array $document_data): string
+    public static function getButtonView (array $document_data): string
     {
+
         $plugin = OnlyofficePlugin::create();
 
         $isEnable = $plugin->get("enable_onlyoffice_plugin") === "true";
@@ -70,7 +80,7 @@ class OnlyofficeTools
             return '';
         }
 
-        $urlToEdit = api_get_path(WEB_PLUGIN_PATH)."onlyoffice/editor.php";
+        $urlToEdit = api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php";
 
         $sessionId = api_get_session_id();
         $courseInfo = api_get_course_info();
@@ -89,9 +99,9 @@ class OnlyofficeTools
             $docInfoGroup = api_get_item_property_info(api_get_course_int_id(), 'document', $documentId, $sessionId);
             $isGroupAccess = GroupManager::allowUploadEditDocument($userId, $courseInfo["code"], $groupProperties, $docInfoGroup);
 
-            $urlToEdit = $urlToEdit."?groupId=".$groupId."&";
+            $urlToEdit = $urlToEdit . "?groupId=" . $groupId . "&";
         } else {
-            $urlToEdit = $urlToEdit."?";
+            $urlToEdit = $urlToEdit . "?";
         }
 
         $isAllowToEdit = api_is_allowed_to_edit(true, true);
@@ -99,7 +109,7 @@ class OnlyofficeTools
 
         $accessRights = $isAllowToEdit || $isMyDir || $isGroupAccess;
 
-        $urlToEdit = $urlToEdit."docId=".$documentId;
+        $urlToEdit = $urlToEdit . "docId=" . $documentId;
 
         if ($canView && !$accessRights) {
             return Display::url(Display::return_icon('../../plugin/onlyoffice/resources/onlyoffice_view.png', $plugin->get_lang('openByOnlyoffice')), $urlToEdit, ["style" => "float:right; margin-right:8px"]);
@@ -109,10 +119,11 @@ class OnlyofficeTools
     }
 
     /**
-     * Return button-link to onlyoffice create new.
+     * Return button-link to onlyoffice create new
      */
-    public static function getButtonCreateNew(): string
+    public static function getButtonCreateNew (): string
     {
+
         $plugin = OnlyofficePlugin::create();
 
         $isEnable = $plugin->get("enable_onlyoffice_plugin") === "true";
@@ -125,12 +136,12 @@ class OnlyofficeTools
         $groupId = api_get_group_id();
         $userId = api_get_user_id();
 
-        $urlToCreate = api_get_path(WEB_PLUGIN_PATH)."onlyoffice/create.php"
-                                                        ."?folderId=".(empty($_GET["id"]) ? '0' : (int) $_GET["id"])
-                                                        ."&courseId=".$courseId
-                                                        ."&groupId=".$groupId
-                                                        ."&sessionId=".$sessionId
-                                                        ."&userId=".$userId;
+        $urlToCreate = api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/create.php"
+                                                        ."?folderId=" . (empty($_GET["id"])?'0':(int)$_GET["id"])
+                                                        . "&courseId=" . $courseId
+                                                        . "&groupId=" . $groupId
+                                                        . "&sessionId=" . $sessionId
+                                                        . "&userId=" . $userId;
 
         return Display::url(
             Display::return_icon(

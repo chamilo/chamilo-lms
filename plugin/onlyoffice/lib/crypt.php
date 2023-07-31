@@ -1,6 +1,7 @@
 <?php
 /**
- * (c) Copyright Ascensio System SIA 2021.
+ *
+ * (c) Copyright Ascensio System SIA 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +14,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-require_once __DIR__."/../../../main/inc/global.inc.php";
 
-class Crypt
-{
+require_once __DIR__ . "/../../../main/inc/global.inc.php";
+
+class Crypt {
+
     /**
-     * Generate token for the object.
+     * Generate token for the object
      *
      * @param array $object - object to signature
      *
@@ -31,7 +34,7 @@ class Crypt
     }
 
     /**
-     * Create an object from the token.
+     * Create an object from the token
      *
      * @param string $token - token
      *
@@ -45,11 +48,10 @@ class Crypt
             return [$result, "token is empty"];
         }
         try {
-            $result = \Firebase\JWT\JWT::decode($token, api_get_security_key(), ["HS256"]);
+            $result = \Firebase\JWT\JWT::decode($token, api_get_security_key(), array("HS256"));
         } catch (\UnexpectedValueException $e) {
             $error = $e->getMessage();
         }
-
         return [$result, $error];
     }
 }

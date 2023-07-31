@@ -58,9 +58,12 @@ $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
-if (empty($exercise_id)) {
-    api_not_allowed(true);
+if ('export_all_exercises_results' !== $action) {
+    if (empty($exercise_id)) {
+        api_not_allowed(true);
+    }
 }
 
 $blockPage = true;
@@ -148,6 +151,15 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
+
+switch ($action) {
+    case 'export_all_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
+
+        break;
+}
 
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
@@ -429,11 +441,18 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="stats_attempts.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
+            Display::return_icon('survey_reporting_complete.png', get_lang('ReportByAttempts'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= Display::url(
             Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+
+        $actions .= Display::url(
+            Display::return_icon('export_pdf.png', get_lang('ExportExerciseAllResults'), [], ICON_SIZE_MEDIUM),
+            api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
         // clean result before a selected date icon

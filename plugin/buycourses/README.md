@@ -6,6 +6,9 @@ This plugin transforms your Chamilo installation in an online shop by adding a c
 If the user is not registered or logged in, he/she will be requested to register/login
 before he/she can resume buying items.
 
+Do not enable this plugin in any "Region". This is a known issue, but it works without 
+region assignation.
+
 Once the course or session is chosen, the plugin displays the available payment methods
 and lets the user proceed with the purchase.
 Currently, the plugin allows users to pay through:

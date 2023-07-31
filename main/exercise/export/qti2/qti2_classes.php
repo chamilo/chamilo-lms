@@ -45,7 +45,7 @@ class Ims2Question extends Question
                 return $answer;
             case MCMA:
             case MULTIPLE_ANSWER_DROPDOWN:
-            case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+            case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                 $answer = new ImsAnswerMultipleChoice($this->iid);
 
                 return $answer;
@@ -67,7 +67,7 @@ class Ims2Question extends Question
 
                 return $answer;
             case HOT_SPOT:
-            case HOT_SPOT_GLOBAL:
+            case HOT_SPOT_COMBINATION:
                 $answer = new ImsAnswerHotspot($this->iid);
 
                 return $answer;
@@ -135,7 +135,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         $this->answerList = $this->getAnswersList(true);
         $type = $this->getQuestionType();
-        if (in_array($type, [MCMA, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
+        if (in_array($type, [MCMA, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
             $cardinality = 'multiple';
         } else {
             $cardinality = 'single';
@@ -158,7 +158,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
         if (is_array($this->answerList)) {
             $out .= '    <mapping';
 
-            if (MULTIPLE_ANSWER_DROPDOWN_GLOBAL == $this->getQuestionType()) {
+            if (MULTIPLE_ANSWER_DROPDOWN_COMBINATION == $this->getQuestionType()) {
                 $out .= ' defaultValue="'.$question->selectWeighting().'"';
             }
 

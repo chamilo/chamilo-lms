@@ -41,16 +41,16 @@
     }
     .question-reading-comprehension-text .text-highlight {
         color: transparent;
-        -webkit-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        -khtml-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        -moz-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        -ms-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        -webkit-transition: color .5s linear, text-shadow .5s linear;
-        -khtml-transition: color .5s linear, text-shadow .5s linear;
-        -moz-transition: color .5s linear, text-shadow .5s linear;
-        -ms-transition: color .5s linear, text-shadow .5s linear;
-        transition: color .5s linear, text-shadow .5s linear;
+        -webkit-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        -khtml-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        -moz-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        -ms-text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        -webkit-transition: color .8s linear, text-shadow .8s linear;
+        -khtml-transition: color .8s linear, text-shadow .8s linear;
+        -moz-transition: color .8s linear, text-shadow .8s linear;
+        -ms-transition: color .8s linear, text-shadow .8s linear;
+        transition: color .8s linear, text-shadow .8s linear;
     }
     .question-reading-comprehension-text .text-highlight.active {
         color: #000;
@@ -59,11 +59,11 @@
         -moz-text-shadow: none;
         -ms-text-shadow: none;
         text-shadow: none;
-        -webkit-transition: color .5s linear, text-shadow .5s linear;
-        -khtml-transition: color .5s linear, text-shadow .5s linear;
-        -moz-transition: color .5s linear, text-shadow .5s linear;
-        -ms-transition: color .5s linear, text-shadow .5s linear;
-        transition: color .5s linear, text-shadow .5s linear;
+        -webkit-transition: color .8s linear, text-shadow .8s linear;
+        -khtml-transition: color .8s linear, text-shadow .8s linear;
+        -moz-transition: color .8s linear, text-shadow .8s linear;
+        -ms-transition: color .8s linear, text-shadow .8s linear;
+        transition: color .8s linear, text-shadow .8s linear;
     }
     .question-reading-comprehension-text .text-highlight.border {
         color: #bbb;
@@ -72,11 +72,11 @@
         -moz-text-shadow: none;
         -ms-text-shadow: none;
         text-shadow: none;
-        -webkit-transition: color .5s linear, text-shadow .5s linear;
-        -khtml-transition: color .5s linear, text-shadow .5s linear;
-        -moz-transition: color .5s linear, text-shadow .5s linear;
-        -ms-transition: color .5s linear, text-shadow .5s linear;
-        transition: color .5s linear, text-shadow .5s linear;
+        -webkit-transition: color .8s linear, text-shadow .8s linear;
+        -khtml-transition: color .8s linear, text-shadow .8s linear;
+        -moz-transition: color .8s linear, text-shadow .8s linear;
+        -ms-transition: color .8s linear, text-shadow .8s linear;
+        transition: color .8s linear, text-shadow .8s linear;
     }
     .question-reading-comprehension-text br {
         margin-bottom: 1em;

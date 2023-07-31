@@ -452,19 +452,14 @@ switch ($action) {
                 5
             );
             $userIdList = array_column($userIdList, 'user_id');
-
+            $courseCodeList = array_merge(
+                    $courseCodeList,
+                    CourseManager::getAllCoursesCode()
+            );
             //get students session courses
             if ($sessionId == -1) {
                 $sessionList = SessionManager::get_sessions_list();
                 $sessionIdList = array_column($sessionList, 'id');
-                $courseCodeList = [];
-                foreach ($sessionList as $session) {
-                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
-                    $courseCodeList = array_merge(
-                        $courseCodeList,
-                        array_column($courses, 'code')
-                    );
-                }
             }
             $searchByGroups = true;
         }
@@ -513,7 +508,15 @@ switch ($action) {
         }
 
         if ($action === 'get_user_course_report') {
-            $count = CourseManager::get_count_user_list_from_course_code(
+            $countCourse = CourseManager::get_count_user_list_from_course_code(
+                false,
+                null,
+                $courseCodeList,
+                $userIdList,
+                null,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
+            );
+            $countCourseSession = CourseManager::get_count_user_list_from_course_code(
                 false,
                 null,
                 $courseCodeList,
@@ -521,6 +524,7 @@ switch ($action) {
                 $sessionIdList,
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
+            $count = $countCourse + $countCourseSession;
         } else {
             $count = CourseManager::get_count_user_list_from_course_code(
                 true,
@@ -2343,7 +2347,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions', 'external_career_id'];
+        $columns = ['name', 'description', 'parent_id', 'actions', 'external_career_id'];
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }

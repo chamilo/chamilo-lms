@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = "Pause training";
-$strings['plugin_comment'] = "";
+$strings['plugin_comment'] = "Adds a 'Pause training' tab on the user profile edition page, to let users indicate if they are to be considered on pause for an (optional) specific timeframe. Can be used to send alerts to specific users (admins or a generic alert e-mail) when this happens.";
 $strings['tool_enable'] = 'Enable plugin';
 $strings['tool_enable_help'] = '';
 $strings['PauseTraining'] = "Pause training";

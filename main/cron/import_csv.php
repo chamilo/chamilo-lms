@@ -1264,9 +1264,9 @@ class ImportCsv
                 if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
                     $date = new \DateTime($sessionInfo['access_start_date']);
                     $intervalInput = '7';
-                    if (!empty($sessionInfo['dateinterval'])) {
-                        if ((int) $sessionInfo['dateinterval'] >= 0) {
-                            $intervalInput = (int) $sessionInfo['dateinterval'];
+                    if (!empty($row['dateinterval'])) {
+                        if ((int) $row['dateinterval'] >= 0) {
+                            $intervalInput = (int) $row['dateinterval'];
                         }
                     }
                     $interval = new \DateInterval('P'.$intervalInput.'D');

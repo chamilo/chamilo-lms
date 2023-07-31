@@ -20,6 +20,7 @@ $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
+$exportTypeAllResults = ('export' === $_GET['action'] && 'all_results' === $_GET['export_type']);
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -38,15 +39,17 @@ $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
 $isBossOfStudent = false;
-if (api_is_student_boss()) {
-    // Check if boss has access to user info.
-    if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
-        $isBossOfStudent = true;
+if (!$exportTypeAllResults) {
+    if (api_is_student_boss()) {
+        // Check if boss has access to user info.
+        if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
+            $isBossOfStudent = true;
+        } else {
+            api_not_allowed($printHeaders);
+        }
     } else {
-        api_not_allowed($printHeaders);
+        api_protect_course_script($printHeaders, false, true);
     }
-} else {
-    api_protect_course_script($printHeaders, false, true);
 }
 
 // Database table definitions
@@ -93,7 +96,8 @@ $is_allowedToEdit =
     api_is_course_tutor() ||
     api_is_session_admin() ||
     api_is_drh() ||
-    api_is_student_boss();
+    api_is_student_boss() ||
+    $exportTypeAllResults;
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -442,20 +446,20 @@ foreach ($questionList as $questionId) {
         case MULTIPLE_ANSWER:
         case MULTIPLE_ANSWER_TRUE_FALSE:
         case FILL_IN_BLANKS:
-        case FILL_IN_BLANKS_GLOBAL:
+        case FILL_IN_BLANKS_COMBINATION:
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
         case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
-        case MATCHING_GLOBAL:
+        case MATCHING_COMBINATION:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
-        case MATCHING_DRAGGABLE_GLOBAL:
+        case MATCHING_DRAGGABLE_COMBINATION:
         case MULTIPLE_ANSWER_DROPDOWN:
-        case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+        case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
             $question_result = $objExercise->manage_answer(
                 $id,
                 $questionId,
@@ -492,7 +496,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
-        case HOT_SPOT_GLOBAL:
+        case HOT_SPOT_COMBINATION:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
 //                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
@@ -596,7 +600,7 @@ foreach ($questionList as $questionId) {
         echo '</table>';
     }
 
-    if ($show_results && !in_array($answerType, [HOT_SPOT_GLOBAL, HOT_SPOT])) {
+    if ($show_results && !in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
         echo '</table>';
     }
 
@@ -982,7 +986,24 @@ if ('export' === $action) {
         'orientation' => 'P',
     ];
     $pdf = new PDF('A4', $params['orientation'], $params);
-    $pdf->html_to_pdf_with_template($content, false, false, true);
+    if ('all_results' === $_GET['export_type']) {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exercise_id;
+        $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+        $folderName = 'pdfexport-'.$exportName;
+        $exportFolderPath = $baseDir.$folderName;
+        if (!is_dir($exportFolderPath)) {
+            @mkdir($exportFolderPath);
+        }
+        $pdfFileName = $user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
+        $pdfFileName = api_replace_dangerous_char($pdfFileName);
+        $fileNameToSave = $exportFolderPath.'/'.$pdfFileName;
+        $pdf->html_to_pdf_with_template($content, true, false, true, [], 'F', $fileNameToSave);
+    } else {
+        $pdf->html_to_pdf_with_template($content, false, false, true);
+    }
+
     exit;
 }
 

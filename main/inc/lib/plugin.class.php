@@ -924,7 +924,7 @@ class Plugin
      *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         $settings = api_get_settings_params_simple(
             [

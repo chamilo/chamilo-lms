@@ -82,12 +82,16 @@ class FrmEdit extends FormValidator
             } elseif ($this->tool->getVersion() === ImsLti::V_1P3) {
                 $this->addText('client_id', $plugin->get_lang('ClientId'), true);
                 $this->freeze(['client_id']);
-                $this->addTextarea(
-                    'public_key',
-                    $plugin->get_lang('PublicKey'),
-                    ['style' => 'font-family: monospace;', 'rows' => 5],
-                    true
-                );
+                if (!empty($this->tool->getJwksUrl())) {
+                    $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'));
+                } else {
+                    $this->addTextarea(
+                        'public_key',
+                        $plugin->get_lang('PublicKey'),
+                        ['style' => 'font-family: monospace;', 'rows' => 5],
+                        true
+                    );
+                }
                 $this->addUrl('login_url', $plugin->get_lang('LoginUrl'));
                 $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'));
             }
@@ -207,6 +211,7 @@ class FrmEdit extends FormValidator
                 'version' => $this->tool->getVersion(),
                 'client_id' => $this->tool->getClientId(),
                 'public_key' => $this->tool->publicKey,
+                'jwks_url' => $this->tool->getJwksUrl(),
                 'login_url' => $this->tool->getLoginUrl(),
                 'redirect_url' => $this->tool->getRedirectUrl(),
                 '1p3_ags' => $advServices['ags'],

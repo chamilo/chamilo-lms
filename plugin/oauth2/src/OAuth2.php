@@ -1,6 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\TrackELogin;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -46,6 +49,11 @@ class OAuth2 extends Plugin
     public const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
     public const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
     public const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS = 'response_resource_owner_teacher_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS = 'response_resource_owner_sessadmin_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS = 'response_resource_owner_drh_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS = 'response_resource_owner_student_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS = 'response_resource_owner_anon_status';
     public const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
     public const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
 
@@ -103,6 +111,11 @@ class OAuth2 extends Plugin
                 self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME => 'text',
 
@@ -136,10 +149,13 @@ class OAuth2 extends Plugin
 
     public function getProvider(): GenericProvider
     {
+        $redirectUri = api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php';
+        // In cases not precisely defined yet, this alternative version might be necessary - see BT#20611
+        //$redirectUri = api_get_path(WEB_PATH).'authorization-code/callback';
         $options = [
             'clientId' => $this->get(self::SETTING_CLIENT_ID),
             'clientSecret' => $this->get(self::SETTING_CLIENT_SECRET),
-            'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php',
+            'redirectUri' => $redirectUri,
             'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
             'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
         ];
@@ -249,11 +265,7 @@ class OAuth2 extends Plugin
                     $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
                     $this->get_lang('DefaultLastname')
                 );
-                $status = $this->getValueByKey(
-                    $response,
-                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                    STUDENT
-                );
+                $status = $this->mapUserStatusFromResponse($response);
                 $email = $this->getValueByKey(
                     $response,
                     $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
@@ -307,6 +319,8 @@ class OAuth2 extends Plugin
     public function getSignInURL(): string
     {
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
+        // In cases not precisely defined yet, this alternative version might be necessary - see BT#20611
+        //return api_get_path(WEB_PATH).'authorization-code/callback';
     }
 
     public function getLogoutUrl(): string
@@ -333,6 +347,74 @@ class OAuth2 extends Plugin
             $this->get_lang('OAuth2Id'),
             ''
         );
+    }
+
+    public static function isFirstLoginAfterAuthSource(int $userId): bool
+    {
+        $em = Database::getManager();
+
+        $lastLogin = $em
+            ->getRepository(TrackELogin::class)
+            ->findOneBy(
+                ['loginUserId' => $userId],
+                ['loginDate' => 'DESC']
+            )
+        ;
+
+        if (!$lastLogin) {
+            return false;
+        }
+
+        $objExtraField = new ExtraField('user');
+        $field = $objExtraField->getHandlerEntityByFieldVariable(self::EXTRA_FIELD_OAUTH2_ID);
+
+        $fieldValue = $em
+            ->getRepository(ExtraFieldValues::class)
+            ->findOneBy(
+                ['itemId' => $userId, 'field' => $field]
+            )
+        ;
+
+        if (!$fieldValue) {
+            return false;
+        }
+
+        return $fieldValue->getCreatedAt() >= $lastLogin->getLoginDate();
+    }
+
+    private function mapUserStatusFromResponse(array $response, int $defaultStatus = STUDENT): int
+    {
+        $status = $this->getValueByKey(
+            $response,
+            $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+            $defaultStatus
+        );
+
+        $responseStatus = [];
+
+        if ($teacherStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_TEACHER_STATUS)) {
+            $responseStatus[COURSEMANAGER] = $teacherStatus;
+        }
+
+        if ($sessAdminStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_SESSADMIN_STATUS)) {
+            $responseStatus[SESSIONADMIN] = $sessAdminStatus;
+        }
+
+        if ($drhStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_DRH_STATUS)) {
+            $responseStatus[DRH] = $drhStatus;
+        }
+
+        if ($studentStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STUDENT_STATUS)) {
+            $responseStatus[STUDENT] = $studentStatus;
+        }
+
+        if ($anonStatus = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ANON_STATUS)) {
+            $responseStatus[ANONYMOUS] = $anonStatus;
+        }
+
+        $map = array_flip($responseStatus);
+
+        return $map[$status] ?? $status;
     }
 
     /**
@@ -368,6 +450,9 @@ class OAuth2 extends Plugin
         return $values;
     }
 
+    /**
+     * @throws Exception
+     */
     private function updateUser($userId, $response)
     {
         $user = UserManager::getRepository()->find($userId);
@@ -401,13 +486,11 @@ class OAuth2 extends Plugin
                 $user->getEmail()
             )
         );
-        $user->setStatus(
-            $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                $user->getStatus()
-            )
+        $status = $this->mapUserStatusFromResponse(
+            $response,
+            $user->getStatus()
         );
+        $user->setStatus($status);
         $user->setAuthSource('oauth2');
         $configFilePath = __DIR__.'/../config.php';
         if (file_exists($configFilePath)) {
@@ -417,7 +500,12 @@ class OAuth2 extends Plugin
                 $functionName($response, $user);
             }
         }
-        UserManager::getManager()->updateUser($user);
+
+        try {
+            UserManager::getManager()->updateUser($user);
+        } catch (UniqueConstraintViolationException $exception) {
+            throw new Exception(get_lang('UserNameUsedTwice'));
+        }
     }
 
     /**

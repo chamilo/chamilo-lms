@@ -3,6 +3,10 @@
 /**
  * Responses to AJAX calls for course chat.
  */
+
+use Symfony\Component\HttpFoundation\JsonResponse as HttpResponse;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 require_once __DIR__.'/../global.inc.php';
 
 if (!api_protect_course_script(false)) {
@@ -15,7 +19,16 @@ $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $json = ['status' => false];
 
+$httpRequest = HttpRequest::createFromGlobals();
+$httpResponse = HttpResponse::create();
+
 $courseChatUtils = new CourseChatUtils($courseId, $userId, $sessionId, $groupId);
+
+$token = Security::getTokenFromSession('course_chat');
+
+if ($httpRequest->headers->get('x-token') !== $token) {
+    $_REQUEST['action'] = 'error';
+}
 
 switch ($_REQUEST['action']) {
     case 'chat_logout':
@@ -78,5 +91,8 @@ switch ($_REQUEST['action']) {
         break;
 }
 
-header('Content-Type: application/json');
-echo json_encode($json);
+$token = Security::get_token('course_chat');
+
+$httpResponse->headers->set('x-token', $token);
+$httpResponse->setData($json);
+$httpResponse->send();

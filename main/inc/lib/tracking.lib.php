@@ -2596,16 +2596,16 @@ class Tracking
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
             $tableUrl = ", ".$tableUrlRelUser." as url_users";
-            $urlCondition = " AND u.login_user_id = url_users.user_id AND access_url_id = $accessUrlId";
+            $urlCondition = " AND teca.user_id = url_users.user_id AND url_users.access_url_id = $accessUrlId";
         }
 
         if (!empty($dateFrom) && !empty($dateUntil)) {
             $dateFrom = Database::escape_string($dateFrom);
             $dateUntil = Database::escape_string($dateUntil);
-            $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
+            $conditionTime = " (teca.login_course_date >= '$dateFrom' AND teca.logout_course_date <= '$dateUntil' ) ";
         }
-        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
-    	        FROM $tableTrackLogin u $tableUrl
+        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, teca.login_course_date, teca.logout_course_date)) diff
+    	        FROM $tableTrackLogin teca $tableUrl
                 WHERE $conditionTime $urlCondition";
 
         $rs = Database::query($sql);
@@ -2734,7 +2734,7 @@ class Tracking
      *
      * @return string|bool Date format long without day or false if there are no connections
      */
-    public static function get_first_connection_date($student_id)
+    public static function get_first_connection_date($student_id, $dateFormat = DATE_FORMAT_SHORT)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date
@@ -2748,7 +2748,7 @@ class Tracking
             if ($first_login_date = Database::result($rs, 0, 0)) {
                 return api_convert_and_format_date(
                     $first_login_date,
-                    DATE_FORMAT_SHORT
+                    $dateFormat
                 );
             }
         }
@@ -2769,7 +2769,8 @@ class Tracking
     public static function get_last_connection_date(
         $student_id,
         $warning_message = false,
-        $return_timestamp = false
+        $return_timestamp = false,
+        $dateFormat = DATE_FORMAT_SHORT
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date
@@ -2786,7 +2787,7 @@ class Tracking
                     return api_strtotime($last_login_date, 'UTC');
                 } else {
                     if (!$warning_message) {
-                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        return api_format_date($last_login_date, $dateFormat);
                     } else {
                         $timestamp = api_strtotime($last_login_date, 'UTC');
                         $currentTimestamp = time();
@@ -2794,9 +2795,9 @@ class Tracking
                         //If the last connection is > than 7 days, the text is red
                         //345600 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
-                            return '<span style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</span>';
+                            return '<span style="color: #F00;">'.api_format_date($last_login_date, $dateFormat).'</span>';
                         } else {
-                            return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            return api_format_date($last_login_date, $dateFormat);
                         }
                     }
                 }
@@ -3123,6 +3124,19 @@ class Tracking
         return $nb_courses;
     }
 
+    public static function countSessionsPerStudent(int $userId): int
+    {
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = 'SELECT DISTINCT id
+            FROM '.$tblSessionUser.'
+            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
+
+        $rs = Database::query($sql);
+
+        return Database::num_rows($rs);
+    }
+
     /**
      * Gets the score average from all tests in a course by student.
      *
@@ -3345,6 +3359,86 @@ class Tracking
         $count_attempts = $row[0];
 
         return $count_attempts;
+    }
+
+    /**
+     * It gets the last finalization date of learnpaths in a course.
+     *
+     * @return string finalization date formatted or false if it is empty.
+     */
+    public static function getCourseLpFinalizationDate(
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
+    ) {
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+        $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
+                FROM $tblLpItemView liv
+                INNER JOIN
+                    $tblLpView lv ON lv.iid = liv.lp_view_id
+                INNER JOIN
+                    $tblLpItem li ON li.iid = liv.lp_item_id
+                WHERE
+                    lv.user_id = $userId AND
+                    lv.c_id = $courseId AND
+                    lv.session_id = $sessionId AND
+                    li.item_type = '".TOOL_LP_FINAL_ITEM."' AND
+                    liv.status = 'completed'
+                ORDER BY start_date DESC
+                LIMIT 1";
+
+        $rs = Database::query($sql);
+        $lpFinalDate = Database::result($rs, 0, 0);
+
+        if (empty($lpFinalDate)) {
+            return false;
+        }
+
+        if ($convertDate) {
+            return api_convert_and_format_date($lpFinalDate, DATE_FORMAT_SHORT);
+        }
+
+        return $lpFinalDate;
+    }
+
+    /**
+     * It gets the last finalization date of exercises in a course.
+     *
+     * @return string finalization date formatted or false if it is empty.
+     */
+    public static function getCourseQuizLastFinalizationDate(
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
+    ) {
+        $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT ex.exe_date
+                FROM $tblTrackExercise AS ex
+                WHERE
+                    ex.c_id = $courseId AND
+                    ex.session_id  = $sessionId AND
+                    ex.exe_user_id = $userId AND
+                    ex.status = ''
+                ORDER BY ex.exe_date DESC
+                LIMIT 1";
+        $rs = Database::query($sql);
+        $exeDate = Database::result($rs, 0, 0);
+
+        if (empty($exeDate)) {
+            return false;
+        }
+
+        if ($convertDate) {
+            return api_convert_and_format_date($exeDate, DATE_FORMAT_SHORT);
+        }
+
+        return $exeDate;
     }
 
     /**
@@ -8759,5 +8853,9 @@ class Tracking
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    private static function countSubscribedCoursesPerUser()
+    {
     }
 }

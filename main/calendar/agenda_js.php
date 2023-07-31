@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
+
 $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
@@ -99,7 +101,7 @@ switch ($type) {
             $tpl->assign('google_calendar_url', $googleCalendarUrl);
         }
         $this_section = SECTION_MYAGENDA;
-        if (!api_is_anonymous()) {
+        if (!api_is_anonymous() && ('true' === api_get_setting('allow_personal_agenda'))) {
             $can_add_events = 1;
         }
         break;
@@ -237,6 +239,7 @@ $form = new FormValidator(
     null,
     ['id' => 'add_event_form']
 );
+$form->addHeader(get_lang('Events'));
 
 $form->addHtml('<span id="calendar_course_info"></span><div id="visible_to_input">');
 
@@ -280,6 +283,7 @@ if ('course' === $agenda->type) {
 }
 
 if (api_get_configuration_value('agenda_collective_invitations') && 'personal' === $agenda->type) {
+    $form->addHeader(get_lang('Invitations'));
     $form->addSelectAjax(
         'invitees',
         get_lang('Invitees'),
@@ -290,6 +294,48 @@ if (api_get_configuration_value('agenda_collective_invitations') && 'personal' =
         ]
     );
     $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+}
+
+if (
+    api_is_platform_admin()
+    && api_get_configuration_value('agenda_event_subscriptions') && 'personal' === $agenda->type
+) {
+    $form->addHeader(get_lang('Subscriptions'));
+    $form->addHtml('<div id="form_subscriptions_container" style="position: relative;">');
+    $form->addSelect(
+        'subscription_visibility',
+        get_lang('AllowSubscriptions'),
+        [
+            AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+            AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+            AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
+        ],
+        [
+            'onchange' => 'document.getElementById(\'max_subscriptions\').disabled = this.value == 0; document.getElementById(\'form_subscription_item\').disabled = this.value != 2',
+        ]
+    );
+    $form->addSelectAjax(
+        'subscription_item',
+        get_lang('SocialGroup').' / '.get_lang('Class'),
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+            'disabled' => 'disabled',
+            'dropdownParent' => '#form_subscriptions_container',
+        ]
+    );
+    $form->addNumeric(
+        'max_subscriptions',
+        ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+        [
+            'disabled' => 'disabled',
+            'step' => 1,
+            'min' => 0,
+            'value' => 0,
+        ]
+    );
+    $form->addHtml('</div>');
+    $form->addHtml('<div id="form_subscriptions_edit" style="display: none;"></div>');
 }
 
 if (api_get_configuration_value('agenda_reminders')) {
@@ -309,6 +355,7 @@ if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' ===
 }
 
 $form->addHtml('<div id="attachment_block" style="display: none">');
+$form->addHeader(get_lang('FilesAttachment'));
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');
 
@@ -321,6 +368,8 @@ $tpl->assign('on_hover_info', $onHoverInfo);
 $extraSettings = Agenda::returnFullCalendarExtraSettings();
 
 $tpl->assign('fullcalendar_settings', $extraSettings);
+
+$tpl->assign('group_id', (!empty($group_id) ? $group_id : 0));
 
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);

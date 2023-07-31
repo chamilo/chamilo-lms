@@ -5970,7 +5970,13 @@ function getWorkUserListData(
  */
 function downloadFile($id, $course_info, $isCorrection)
 {
-    return getFile($id, $course_info, true, $isCorrection, true);
+    return getFile(
+        $id,
+        $course_info,
+        true,
+        $isCorrection,
+        api_is_course_admin() || api_is_coach()
+    );
 }
 
 /**
@@ -6055,7 +6061,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
                 $forceAccessForCourseAdmins
             );
 
-            if (empty($isAllow)) {
+            if (!$isAllow) {
                 return false;
             }
 
@@ -6093,9 +6099,9 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
             $is_editor = api_is_allowed_to_edit(true, true, true);
             $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
 
-            if (($forceAccessForCourseAdmins && $isAllow) ||
-                $is_editor ||
+            if ($is_editor ||
                 $student_is_owner_of_work ||
+                ($forceAccessForCourseAdmins && $isAllow) ||
                 ($doc_visible_for_all && $work_is_visible)
             ) {
                 $title = $row['title'];

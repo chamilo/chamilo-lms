@@ -1,4 +1,4 @@
-# Chamilo ONLYOFFICE integration plugin
+﻿# Chamilo ONLYOFFICE integration plugin
 
 This app enables users to edit office documents from [Chamilo](https://chamilo.org) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
@@ -13,7 +13,7 @@ The plugin allows teachers to:
 
 Supported formats:
 
-* For editing: DOCX, XLSX, PPTX.
+* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM.
 
 ## Installing ONLYOFFICE Docs
 
@@ -23,21 +23,61 @@ ONLYOFFICE Document Server and Chamilo can be installed either on different comp
 
 You can install the free Community version of ONLYOFFICE Docs or scalable Enterprise Edition with pro features.
 
-To install the free Community version, use [Docker](https://github.com/onlyoffice/Docker-DocumentServer) (recommended) or follow [these instructions](https://helpcenter.onlyoffice.com/server/linux/document/linux-installation.aspx) for Debian, Ubuntu, or derivatives.  
+To install the free Community version, use [Docker](https://github.com/onlyoffice/Docker-DocumentServer) (recommended) or follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-community-install-ubuntu.aspx) for Debian, Ubuntu, or derivatives.  
 
-To install the Enterprise Edition, follow instructions [here](https://helpcenter.onlyoffice.com/server/integration-edition/index.aspx).
+To install the Enterprise Edition, follow instructions [here](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx).
 
 The Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffice-docs-editions).
 
-To use ONLYOFFICE behind a proxy, please refer to [this article](https://helpcenter.onlyoffice.com/server/document/document-server-proxy.aspx).
+To use ONLYOFFICE behind a proxy, please refer to [this article](https://helpcenter.onlyoffice.com/installation/docs-community-proxy.aspx).
+
+## Collect Chamilo ONLYOFFICE integration plugin
+
+1. Get the latest version of this repository running the command:
+    ```
+    git clone https://github.com/ONLYOFFICE/onlyoffice-chamilo
+    cd onlyoffice-chamilo
+    ```
+
+2. Get a submodule:
+    ```
+    git submodule update --init --recursive
+    ```
+
+3. Collect all files
+    ```
+    mkdir /tmp/onlyoffice-deploy
+    mkdir /tmp/onlyoffice-deploy/onlyoffice
+    cp -r ./ /tmp/onlyoffice-deploy/onlyoffice
+    cd /tmp/onlyoffice-deploy/onlyoffice
+    rm -rf ./.git*
+    ```
+
+4. Archive
+    ```
+    cd ../
+    zip onlyoffice.zip -r onlyoffice
+    ```
 
 ## Installing Chamilo ONLYOFFICE integration plugin
 
-The plugin comes integrated into Chamilo 1.11.16.
+The plugin has been integrated into Chamilo since version 1.11.16.
 
 To enable, go to the plugins list, select the ONLYOFFICE plugin, and click _Enable_ the selected plugins.
 
-If you want more up-to-date versions of the plugin, you can update the plugin/onlyoffice/ folder with the original plugin code [here](https://github.com/ONLYOFFICE/onlyoffice-chamilo) together with the compilation instructions.
+If you want more up-to-date versions of the plugin, you need to replace the pre-installed default plugin folder with the newly collected plugin: 
+
+`/var/www/html/chamilo-1.11.16/plugin/onlyoffice`
+
+where `chamilo-1.11.16` is your current Chamilo version.
+
+If your Chamilo version is lower than 1.11.16, go to Chamilo Administration -> Plugins -> Upload plugin.
+
+Upload `onlyoffice.zip` (you'll find it in the Releases section). You'll see the plugin list.
+
+Then launch `composer install` from the Chamilo root folder. 
+
+Return to the plugin list, select the ONLYOFFICE plugin, and click Enable the selected plugins.
 
 ## Configuring Chamilo ONLYOFFICE integration plugin
 
@@ -77,7 +117,7 @@ The table below will help you to make the right choice.
 
 | Pricing and licensing | Community Edition | Enterprise Edition |
 | ------------- | ------------- | ------------- |
-| | [Get it now](https://www.onlyoffice.com/download.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo)  | [Start Free Trial](https://www.onlyoffice.com/enterprise-edition-free.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo)  |
+| | [Get it now](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-enterprise)  |
 | Cost  | FREE  | [Go to the pricing page](https://www.onlyoffice.com/docs-enterprise-prices.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo)  |
 | Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
 | Number of users | up to 20 recommended | As in chosen pricing plan |
@@ -85,18 +125,17 @@ The table below will help you to make the right choice.
 | **Support** | **Community Edition** | **Enterprise Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-community-index.aspx) | [Help Center](https://helpcenter.onlyoffice.com/installation/docs-enterprise-index.aspx) |
 | Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | One year support included |
-| Premium support | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo) | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo) |
+| Premium support | [Contact us](mailto:sales@onlyoffice.com) | [Contact us](mailto:sales@onlyoffice.com) |
 | **Services** | **Community Edition** | **Enterprise Edition** |
 | Conversion Service                | + | + |
 | Document Builder Service          | + | + |
 | **Interface** | **Community Edition** | **Enterprise Edition** |
 | Tabbed interface                       | + | + |
 | Dark theme                             | + | + |
-| 150% scaling                           | + | + |
+| 125%, 150%, 175%, 200% scaling         | + | + |
 | White Label                            | - | - |
-| Integrated test example (node.js)*     | - | + |
-| Mobile web editors | - | + |
-| Access to pro features via desktop     | - | + |
+| Integrated test example (node.js)      | + | + |
+| Mobile web editors                     | - | +* |
 | **Plugins & Macros** | **Community Edition** | **Enterprise Edition** |
 | Plugins                           | + | + |
 | Macros                            | + | + |
@@ -110,36 +149,39 @@ The table below will help you to make the right choice.
 | **Document Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
-| Adding Content control          | - | + | 
+| Adding Content control          | + | + | 
 | Editing Content control         | + | + | 
 | Layout tools                    | + | + |
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
 | Mail Merge                      | + | + |
-| Comparing Documents             | - | +* |
+| Comparing Documents             | + | + |
 | **Spreadsheet Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Functions, formulas, equations  | + | + |
 | Table templates                 | + | + |
 | Pivot tables                    | + | + |
-| Data validation                 | + | + |
-| Conditional formatting  for viewing | +** | +** |
-| Sheet Views                    | - | + |
+| Data validation           | + | + |
+| Conditional formatting          | + | + |
+| Sparklines                   | + | + |
+| Sheet Views                     | + | + |
 | **Presentation Editor features** | **Community Edition** | **Enterprise Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Transitions                     | + | + |
 | Presenter mode                  | + | + |
 | Notes                           | + | + |
-| | [Get it now](https://www.onlyoffice.com/download.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo)  | [Start Free Trial](https://www.onlyoffice.com/enterprise-edition-free.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo)  |
+| **Form creator features** | **Community Edition** | **Enterprise Edition** |
+| Adding form fields           | + | + |
+| Form preview                    | + | + |
+| Saving as PDF                   | + | + |
+| | [Get it now](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-enterprise)  |
 
-\*  It's possible to add documents for comparison from your local drive, from URL and from Chamilo storage.
-
-\** Support for all conditions and gradient. Adding/Editing capabilities are coming soon
+\* If supported by DMS.
 
 ## Note on SSL
 
-As for all SSL to non-SSL communication, this plugin will not work fully if your 
+As for all SSL to non-SSL communication, this plugin will not work fully if your
 Chamilo portal works in HTTP and your OnlyOffice Document server works in HTTPS, or vice-versa.
 You will need to ensure the same protocol on both sides. 

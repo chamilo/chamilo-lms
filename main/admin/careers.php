@@ -9,6 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+$useCareerHierarchy = api_get_configuration_value('career_hierarchy_enable');
 api_protect_admin_script($allowCareer);
 
 // Add the JS needed to use the jqgrid
@@ -43,7 +44,7 @@ if ($action === 'add') {
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+//The order is important you need to check the $column variable in the model.ajax.php file
 $columns = [get_lang('Name'), get_lang('Description'), get_lang('Actions')];
 
 // Column config
@@ -122,6 +123,9 @@ switch ($action) {
         // The validation or display
         if ($form->validate()) {
             $values = $form->exportValues();
+            if (isset($values['parent_id']) && '0' === $values['parent_id']) {
+                $values['parent_id'] = null;
+            }
             $res = $career->save($values);
             if ($res) {
                 Display::addFlash(
@@ -155,6 +159,9 @@ switch ($action) {
             $values = $form->exportValues();
             $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
             $old_status = $career->get_status($values['id']);
+            if (isset($values['parent_id']) && '0' === $values['parent_id']) {
+                $values['parent_id'] = null;
+            }
             $res = $career->update($values);
 
             $values['item_id'] = $values['id'];
@@ -197,11 +204,18 @@ switch ($action) {
         api_protect_admin_script();
         // Action handling: delete
         if ($check) {
-            $res = $career->delete($_GET['id']);
-            if ($res) {
+            $childCareers = $career->get_all(['parent_id' => $_GET['id']]);
+            if (!empty($childCareers)) {
                 Display::addFlash(
-                    Display::return_message(get_lang('ItemDeleted'), 'confirmation')
+                    Display::return_message(get_lang('CareerCannotBeDeletedAsItHasChildren'), 'warning')
                 );
+            } else {
+                $res = $career->delete($_GET['id']);
+                if ($res) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('ItemDeleted'), 'confirmation')
+                    );
+                }
             }
         }
         header('Location: '.$listUrl);

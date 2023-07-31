@@ -575,7 +575,7 @@ class GDWrapper extends ImageWrapper
                     @imagetruecolortopalette($this->bg, true, $compress);
                 }
 
-                return imagegif($this->bg, $file, $compress);
+                return imagegif($this->bg, $file);
                 break;
             default:
                 return 0;

@@ -156,15 +156,17 @@
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
                     {% if add_extra_quit_to_home_icon %}
-                        <a style="margin: 3px 10px 0 0; position: relative; z-index: 10"
-                           role="button"
-                           title="{{ 'Close'|get_lang }}"
-                           href="{{ button_home_url }}"
-                           class="icon-toolbar pull-right" target="_self"
-                           onclick="window.parent.API.save_asset();"
-                        >
-                            <em class="fa fa-times" aria-hidden="true"></em>
-                        </a>
+                        <div id="extra-quit-lp">
+                            <a style="margin: 3px 10px 0 0; position: relative; z-index: 10"
+                               role="button"
+                               title="{{ 'Close'|get_lang }}"
+                               href="{{ button_home_url }}"
+                               class="icon-toolbar pull-right" target="_self"
+                               onclick="window.parent.API.save_asset();"
+                            >
+                                <em class="fa fa-times" aria-hidden="true"></em>
+                            </a>
+                        </div>
                     {% endif %}
 
                     <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">

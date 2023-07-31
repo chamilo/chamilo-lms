@@ -76,8 +76,8 @@ $form = new FormValidator(
     null,
     ['id' => 'myform']
 );
-$form->addElement('text', 'from', get_lang('From'));
-$form->addElement('text', 'to', get_lang('Until'));
+$form->addElement('text', 'from', get_lang('From'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
+$form->addElement('text', 'to', get_lang('Until'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
 $form->addHidden('user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
@@ -401,8 +401,8 @@ $formByDay = new FormValidator(
     null,
     ['id' => 'by_day']
 );
-$formByDay->addElement('text', 'from', get_lang('From'));
-$formByDay->addElement('text', 'to', get_lang('Until'));
+$formByDay->addElement('text', 'from', get_lang('From'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
+$formByDay->addElement('text', 'to', get_lang('Until'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
 $formByDay->addCheckBox('reduced', null, get_lang('ReducedReport'));
 $formByDay->addHidden('user_id', $userId);
 $formByDay->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
@@ -588,7 +588,7 @@ if ($formByDay->validate()) {
 $formByDay->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 Display::display_header('');
-echo Display::page_header(get_lang('DetailsStudentInCourse'));
+echo Display::page_header(get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementHelp'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );

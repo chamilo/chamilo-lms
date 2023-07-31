@@ -30,8 +30,8 @@ $hasRelation = SocialManager::get_relation_between_contacts(
     $userId,
     true
 );
-if ($hasRelation == 0) {
-    /* if has not relation, check if are admin */
+if ($userId !== $currentUserId && $hasRelation == 0) {
+    /* if not the same user && has no relationship, bypass only if admin */
     api_protect_admin_script();
 }
 

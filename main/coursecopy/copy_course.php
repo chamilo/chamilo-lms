@@ -115,7 +115,15 @@ if (Security::check_token('post') && (
             'post',
             api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
         );
-        $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $courses);
+        $form->addElement(
+            'select',
+            'destination_course',
+            [
+                get_lang('SelectDestinationCourse'),
+                get_lang('YouCanOnlyCopyThisCourseToACourseYouTeach'),
+            ],
+            $courses
+        );
 
         $group = [];
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');

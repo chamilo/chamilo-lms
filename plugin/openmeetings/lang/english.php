@@ -7,7 +7,7 @@
 
 //Needed in order to show the plugin title
 $strings['plugin_title'] = "OpenMeetings";
-$strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using OpenMeetings";
+$strings['plugin_comment'] = "[Deprecated] Add a videoconference room in a Chamilo course using OpenMeetings";
 
 $strings['Videoconference'] = "Videoconference";
 $strings['MeetingOpened'] = "Meeting opened";

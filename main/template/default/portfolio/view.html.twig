@@ -58,7 +58,7 @@
     <section id="portfolio-item-comments">
         <h1 class="h3">
             <span class="fa fa-fw fa-comment-o" aria-hidden="true"></span>
-            {{ 'XComments'|get_lang|format(item.comments.count) }}
+            {{ 'XComments'|get_lang|format(count_comments) }}
         </h1>
 
         {{ comments }}

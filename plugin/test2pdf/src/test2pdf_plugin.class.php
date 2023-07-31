@@ -65,6 +65,16 @@ class Test2pdfPlugin extends Plugin
     }
 
     /**
+     * By default new icon is invisible.
+     *
+     * @return bool
+     */
+    public function isIconVisibleByDefault()
+    {
+        return false;
+    }
+
+    /**
      * This method drops the plugin tables.
      */
     public function uninstall()

@@ -19,6 +19,7 @@ class AppPlugin
         'content_bottom',
         'header_main',
         'header_center',
+        'header_left_logo',
         'header_left',
         'header_right',
         'pre_footer',
@@ -233,6 +234,8 @@ class AppPlugin
             'embedregistry',
             'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
+            'externalnotificationconnect',
+            'extramenufromwebservice',
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',
@@ -282,6 +285,7 @@ class AppPlugin
             'whispeakauth',
             'zoom',
             'xapi',
+            'ai_helper',
         ];
 
         return $officialPlugins;

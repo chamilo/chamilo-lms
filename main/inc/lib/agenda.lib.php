@@ -4,7 +4,10 @@
 
 use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
 use Chamilo\CoreBundle\Entity\AgendaEventInvitee;
+use Chamilo\CoreBundle\Entity\AgendaEventSubscriber;
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -254,12 +257,17 @@ class Agenda
         bool $isCollective = false,
         array $reminders = [],
         int $careerId = 0,
-        int $promotionId = 0
+        int $promotionId = 0,
+        int $subscriptionVisibility = 0,
+        ?int $subscriptionItemId = null,
+        int $maxSubscriptions = 0
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && ($allDay === 'true' || $allDay == 1) ? 1 : 0;
         $id = null;
+
+        $em = Database::getManager();
 
         switch ($this->type) {
             case 'personal':
@@ -281,6 +289,26 @@ class Agenda
                 if (api_get_configuration_value('agenda_collective_invitations')) {
                     Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
                 }
+
+                if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
+                    $personalEvent = $em->find(PersonalAgenda::class, $id);
+                    $personalEvent
+                        ->setSubscriptionVisibility($subscriptionVisibility)
+                        ->setSubscriptionItemId($subscriptionItemId ?: null)
+                    ;
+
+                    $subscription = (new AgendaEventSubscription())
+                        ->setCreator(api_get_user_entity(api_get_user_id()))
+                        ->setMaxAttendees($subscriptionVisibility > 0 ? $maxSubscriptions : 0)
+                    ;
+
+                    $personalEvent
+                        ->setCollective(false)
+                        ->setInvitation($subscription)
+                    ;
+
+                    $em->flush();
+                }
                 break;
             case 'course':
                 $attributes = [
@@ -298,7 +326,7 @@ class Agenda
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
                 }
-
+                $this->deleteEventIfAlreadyExists($start, $end, $allDay, $title);
                 $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
 
@@ -468,6 +496,45 @@ class Agenda
         }
 
         return $id;
+    }
+
+    /**
+     * Checks if an event exists and delete it (right before inserting a modified version in addEvent())
+     * @param string $start datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $end   datetime format: 2012-06-14 09:00:00 in local time
+     * @param int $allDay   (true = 1, false = 0)
+     * @param string $title
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteEventIfAlreadyExists(
+        string $start,
+        string $end,
+        int $allDay,
+        string $title
+    ): bool {
+        $courseId = $this->course['real_id'];
+        $start = Database::escape_string($start);
+        $end = Database::escape_string($end);
+        $title = Database::escape_string($title);
+        $sql = "SELECT id FROM ".$this->tbl_course_agenda."
+                WHERE c_id = $courseId
+                AND session_id = ".$this->sessionId."
+                AND start_date = '$start'
+                AND end_date = '$end'
+                AND all_day = $allDay
+                AND title = '$title'";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res, 'ASSOC');
+            $id = $row['id'];
+            $this->deleteEvent($id);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -865,7 +932,11 @@ class Agenda
         bool $isCollective = false,
         array $remindersList = [],
         int $careerId = 0,
-        int $promotionId = 0
+        int $promotionId = 0,
+        int $subscriptionVisibility = 0,
+        ?int $subscriptionItemId = null,
+        int $maxSubscriptions = 0,
+        array $subscribers = []
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -873,6 +944,8 @@ class Agenda
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
         $currentUserId = api_get_user_id();
         $authorId = empty($authorId) ? $currentUserId : (int) $authorId;
+
+        $em = Database::getManager();
 
         switch ($this->type) {
             case 'personal':
@@ -908,6 +981,24 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_collective_invitations')) {
                     Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
+
+                if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
+                    $personalEvent = $em->find(PersonalAgenda::class, $id);
+                    $personalEvent->setSubscriptionVisibility($subscriptionVisibility);
+
+                    /** @var AgendaEventSubscription $subscription */
+                    $subscription = $personalEvent->getInvitation();
+                    $subscription->setMaxAttendees($subscriptionVisibility > 0 ? $maxSubscriptions : 0);
+
+                    if ($personalEvent->getSubscriptionItemId() != $subscriptionItemId) {
+                        $personalEvent->setSubscriptionItemId($subscriptionItemId ?: null);
+                        $subscription->removeInvitees();
+                    } else {
+                        $subscription->removeInviteesNotInIdList($subscribers);
+                    }
+
+                    $em->flush();
                 }
                 break;
             case 'course':
@@ -1149,17 +1240,22 @@ class Agenda
                 if (isset($attachmentArray) && !empty($attachmentArray)) {
                     $counter = 0;
                     foreach ($attachmentArray as $attachmentItem) {
-                        if (empty($attachmentItems['id'])) {
-                            continue;
+                        if (empty($attachmentItem['id'])) {
+                            $this->addAttachment(
+                                $id,
+                                $attachmentItem,
+                                $attachmentCommentList[$counter],
+                                $this->course
+                            );
+                        } else {
+                            $this->updateAttachment(
+                                $attachmentItem['id'],
+                                $id,
+                                $attachmentItem,
+                                $attachmentCommentList[$counter],
+                                $this->course
+                            );
                         }
-
-                        $this->updateAttachment(
-                            $attachmentItem['id'],
-                            $id,
-                            $attachmentItem,
-                            $attachmentCommentList[$counter],
-                            $this->course
-                        );
                         $counter++;
                     }
                 }
@@ -1304,6 +1400,80 @@ class Agenda
                 }
                 break;
         }
+    }
+
+    public function subscribeCurrentUserToEvent(int $id)
+    {
+        if (false === api_get_configuration_value('agenda_event_subscriptions')) {
+            return;
+        }
+
+        if ('personal' !== $this->type) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        $currentUser = api_get_user_entity(api_get_user_id());
+        $personalEvent = $em->find(PersonalAgenda::class, $id);
+
+        /** @var AgendaEventSubscription $subscription */
+        $subscription = $personalEvent ? $personalEvent->getInvitation() : null;
+
+        if (!$subscription) {
+            return;
+        }
+
+        if ($subscription->getInvitees()->count() >= $subscription->getMaxAttendees()
+            && $subscription->getMaxAttendees() > 0
+        ) {
+            return;
+        }
+
+        if (AgendaEventSubscription::SUBSCRIPTION_CLASS === $personalEvent->getSubscriptionVisibility()) {
+            $objGroup = new UserGroup();
+            $groupList = $objGroup->getUserGroupListByUser($currentUser->getId(), UserGroup::NORMAL_CLASS);
+            $groupIdList = array_column($groupList, 'id');
+
+            if (!in_array($personalEvent->getSubscriptionItemId(), $groupIdList)) {
+                return;
+            }
+        }
+
+        $subscriber = (new AgendaEventSubscriber())
+            ->setUser($currentUser)
+        ;
+
+        $subscription->addInvitee($subscriber);
+
+        $em->flush();
+    }
+
+    public function unsubscribeCurrentUserToEvent(int $id)
+    {
+        if (false === api_get_configuration_value('agenda_event_subscriptions')) {
+            return;
+        }
+
+        if ('personal' !== $this->type) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        $currentUser = api_get_user_entity(api_get_user_id());
+        $personalEvent = $em->find(PersonalAgenda::class, $id);
+
+        /** @var AgendaEventSubscription $subscription */
+        $subscription = $personalEvent ? $personalEvent->getInvitation() : null;
+
+        if (!$subscription) {
+            return;
+        }
+
+        $subscription->removeInviteeUser($currentUser);
+
+        $em->flush();
     }
 
     /**
@@ -1759,56 +1929,113 @@ class Agenda
         $endCondition = '';
 
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        $agendaEventSubscriptions = api_get_configuration_value('agenda_event_subscriptions');
+        $userIsAdmin = api_is_platform_admin();
+
+        $queryParams = [];
 
         if ($start !== 0) {
-            $startDate = api_get_utc_datetime($start, true, true);
-            $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
+            $queryParams['start_date'] = api_get_utc_datetime($start, true, true);
+            $startCondition = "AND pa.date >= :start_date";
         }
-        if ($start !== 0) {
-            $endDate = api_get_utc_datetime($end, false, true);
-            $endCondition = "AND (enddate <= '".$endDate->format('Y-m-d H:i:s')."' OR enddate IS NULL)";
+        if ($end !== 0) {
+            $queryParams['end_date'] = api_get_utc_datetime($end, false, true);
+            $endCondition = "AND (pa.enddate <= :end_date OR pa.enddate IS NULL)";
         }
         $user_id = api_get_user_id();
 
-        $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-                WHERE user = $user_id $startCondition $endCondition";
+        $queryParams['user_id'] = $user_id;
+        $userCondition = "pa.user = :user_id";
 
-        $result = Database::query($sql);
-        $my_events = [];
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $event = [];
-                $event['id'] = 'personal_'.$row['id'];
-                $event['title'] = $row['title'];
-                $event['className'] = 'personal';
-                $event['borderColor'] = $event['backgroundColor'] = $this->event_personal_color;
-                $event['editable'] = true;
-                $event['sent_to'] = get_lang('Me');
-                $event['type'] = 'personal';
+        $objGroup = new UserGroup();
 
-                if (!empty($row['date'])) {
-                    $event['start'] = $this->formatEventDate($row['date']);
-                    $event['start_date_localtime'] = api_get_local_time($row['date']);
-                }
+        if ($agendaEventSubscriptions) {
+            $groupList = $objGroup->getUserGroupListByUser($user_id, UserGroup::NORMAL_CLASS);
 
-                if (!empty($row['enddate'])) {
-                    $event['end'] = $this->formatEventDate($row['enddate']);
-                    $event['end_date_localtime'] = api_get_local_time($row['enddate']);
-                }
+            $userCondition = "(
+                    $userCondition
+                    OR (
+                        pa.subscriptionVisibility = ".AgendaEventSubscription::SUBSCRIPTION_ALL;
 
-                $event['description'] = $row['text'];
-                $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
-                $event['parent_event_id'] = 0;
-                $event['has_children'] = 0;
-
-                if ($agendaCollectiveInvitations) {
-                    $event['collective'] = (bool) $row['collective'];
-                    $event['invitees'] = self::getInviteesForPersonalEvent($row['id']);
-                }
-
-                $my_events[] = $event;
-                $this->events[] = $event;
+            if ($groupList) {
+                $userCondition .= "
+                        OR (
+                            pa.subscriptionVisibility = ".AgendaEventSubscription::SUBSCRIPTION_CLASS."
+                            AND pa.subscriptionItemId IN (".implode(', ', array_column($groupList, 'id')).")
+                        )
+                ";
             }
+
+            $userCondition .= "
+                    )
+                )
+            ";
+        }
+
+        $sql = "SELECT pa FROM ChamiloCoreBundle:PersonalAgenda AS pa WHERE $userCondition $startCondition $endCondition";
+
+        $result = Database::getManager()
+            ->createQuery($sql)
+            ->setParameters($queryParams)
+            ->getResult();
+
+        $my_events = [];
+
+        /** @var PersonalAgenda $row */
+        foreach ($result as $row) {
+            $event = [];
+            $event['id'] = 'personal_'.$row->getId();
+            $event['title'] = $row->getTitle();
+            $event['className'] = 'personal';
+            $event['borderColor'] = $event['backgroundColor'] = $this->event_personal_color;
+            $event['editable'] = $user_id === (int) $row->getUser();
+            $event['sent_to'] = get_lang('Me');
+            $event['type'] = 'personal';
+
+            if (!empty($row->getDate())) {
+                $event['start'] = $this->formatEventDate($row->getDate());
+                $event['start_date_localtime'] = api_get_local_time($row->getDate());
+            }
+
+            if (!empty($row->getEnddate())) {
+                $event['end'] = $this->formatEventDate($row->getEnddate());
+                $event['end_date_localtime'] = api_get_local_time($row->getEnddate());
+            }
+
+            $event['description'] = $row->getText();
+            $event['allDay'] = $row->getAllDay();
+            $event['parent_event_id'] = 0;
+            $event['has_children'] = 0;
+
+            if ($agendaCollectiveInvitations || $agendaEventSubscriptions) {
+                $subscription = $row->getInvitation();
+
+                if ($subscription instanceof AgendaEventSubscription) {
+                    $subscribers = $subscription->getInvitees();
+
+                    $event['subscription_visibility'] = $row->getSubscriptionVisibility();
+                    $event['max_subscriptions'] = $subscription->getMaxAttendees();
+                    $event['can_subscribe'] = $subscribers->count() < $subscription->getMaxAttendees()
+                        || $subscription->getMaxAttendees() === 0;
+                    $event['user_is_subscribed'] = $subscription->hasUserAsInvitee(api_get_user_entity($user_id));
+                    $event['count_subscribers'] = $subscribers->count();
+
+                    if ($userIsAdmin) {
+                        $event['subscribers'] = self::getInviteesForPersonalEvent($row->getId(), AgendaEventSubscriber::class);
+                    }
+
+                    if (AgendaEventSubscription::SUBSCRIPTION_CLASS === $row->getSubscriptionVisibility()) {
+                        $groupInfo = $objGroup->get($row->getSubscriptionItemId());
+                        $event['usergroup'] = $groupInfo['name'];
+                    }
+                } else {
+                    $event['collective'] = $row->isCollective();
+                    $event['invitees'] = self::getInviteesForPersonalEvent($row->getId());
+                }
+            }
+
+            $my_events[] = $event;
+            $this->events[] = $event;
         }
 
         if ($agendaCollectiveInvitations) {
@@ -1837,13 +2064,21 @@ class Agenda
         return $my_events;
     }
 
-    public static function getInviteesForPersonalEvent($eventId): array
+    public static function getInviteesForPersonalEvent($eventId, $type = AgendaEventInvitee::class): array
     {
         $em = Database::getManager();
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
 
-        $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
-        $invitees = $inviteeRepo->findByInvitation($event->getInvitation());
+        $invitation = $event->getInvitation();
+
+        if ($invitation instanceof AgendaEventSubscription
+            && AgendaEventInvitee::class === $type
+        ) {
+            return [];
+        }
+
+        $inviteeRepo = $em->getRepository($type);
+        $invitees = $inviteeRepo->findByInvitation($invitation);
 
         $inviteeList = [];
 
@@ -2291,6 +2526,7 @@ class Agenda
                     );
                     $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
                     $event['type'] = 'group';
+                    $event['group_id'] = $row['to_group_id'];
                 }
 
                 // Event sent to a user?
@@ -2680,6 +2916,9 @@ class Agenda
         $action = isset($params['action']) ? Security::remove_XSS($params['action']) : null;
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
+        $em = Database::getManager();
+        $personalEvent = 'personal' === $this->type && $id ? $em->find('ChamiloCoreBundle:PersonalAgenda', $id) : null;
+
         $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         if ($this->type == 'course') {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
@@ -2894,16 +3133,15 @@ class Agenda
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
 
         if ($agendaCollectiveInvitations && 'personal' === $this->type) {
-            $em = Database::getManager();
-
             $invitees = [];
             $isCollective = false;
+            $allowInvitees = true;
 
-            if ($id) {
-                $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $id);
-                $eventInvitation = $event->getInvitation();
+            if ($personalEvent) {
+                $eventInvitation = $personalEvent->getInvitation();
+                $allowInvitees = !$eventInvitation instanceof AgendaEventSubscription;
 
-                if ($eventInvitation) {
+                if ($eventInvitation && $allowInvitees) {
                     foreach ($eventInvitation->getInvitees() as $invitee) {
                         $inviteeUser = $invitee->getUser();
 
@@ -2911,26 +3149,29 @@ class Agenda
                     }
                 }
 
-                $isCollective = $event->isCollective();
+                $isCollective = $personalEvent->isCollective();
             }
 
-            $form->addSelectAjax(
-                'invitees',
-                get_lang('Invitees'),
-                $invitees,
-                [
-                    'multiple' => 'multiple',
-                    'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
-                ]
-            );
-            $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+            if ($allowInvitees) {
+                $form->addSelectAjax(
+                    'invitees',
+                    get_lang('Invitees'),
+                    $invitees,
+                    [
+                        'multiple' => 'multiple',
+                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+                    ]
+                );
+                $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+                $form->addHtml('<hr>');
 
-            $params['invitees'] = array_keys($invitees);
-            $params['collective'] = $isCollective;
+                $params['invitees'] = array_keys($invitees);
+                $params['collective'] = $isCollective;
+            }
         }
 
         if (api_get_configuration_value('agenda_reminders')) {
-            $form->addHtml('<hr><div id="notification_list">');
+            $form->addHtml('<div id="notification_list">');
 
             if ($id) {
                 $this->addFieldsForRemindersToForm($id, $form);
@@ -2939,6 +3180,83 @@ class Agenda
             $form->addHtml('</div>');
             $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
             $form->addHtml('<hr>');
+        }
+
+        if (api_is_platform_admin()
+            && true === api_get_configuration_value('agenda_event_subscriptions')
+        ) {
+            $form->addHtml('<hr>');
+            $form->addSelect(
+                'subscription_visibility',
+                get_lang('AllowSubscriptions'),
+                [
+                    AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+                    AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+                    AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
+                ]
+            );
+            $slctItem = $form->addSelectAjax(
+                'subscription_item',
+                get_lang('SocialGroup').' / '.get_lang('Class'),
+                [],
+                [
+                    'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+                    'disabled' => 'disabled',
+                ]
+            );
+
+            $form->addNumeric(
+                'max_subscriptions',
+                ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+                [
+                    'disabled' => 'disabled',
+                    'step' => 1,
+                    'min' => 0,
+                    'value' => 0,
+                ]
+            );
+            $form->addHtml("<script>
+                $(function () {
+                    $('#add_event_subscription_visibility')
+                        .on('change', function () {
+                            $('#max_subscriptions').prop('disabled', this.value == 0);
+                            $('#add_event_subscription_item').prop('disabled', this.value != 2);
+                        })
+                        .trigger('change');
+                })
+                </script>
+            ");
+
+            if ($personalEvent) {
+                $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
+                $subscribers = array_combine(
+                    array_column($subscribers, 'id'),
+                    array_column($subscribers, 'name')
+                );
+
+                $params['subscribers'] = array_keys($subscribers);
+
+                $form->addSelect(
+                    'subscribers',
+                    get_lang('Subscribers'),
+                    $subscribers,
+                    ['multiple' => 'multiple']
+                );
+
+                /** @var AgendaEventSubscription $subscription */
+                $subscription = $personalEvent->getInvitation();
+                $params['max_subscriptions'] = $subscription->getMaxAttendees();
+
+                $groupId = $personalEvent->getSubscriptionItemId();
+
+                if ($groupId) {
+                    $objUserGroup = new UserGroup();
+
+                    $groupInfo = $objUserGroup->get($groupId);
+
+                    $slctItem->addOption($groupInfo['name'], $groupId);
+                }
+            }
         }
 
         if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $this->type) {
@@ -3380,24 +3698,17 @@ class Agenda
         return false;
     }
 
-    /**
-     * @param int    $filter
-     * @param string $view
-     *
-     * @return string
-     */
-    public function displayActions($view, $filter = 0)
+    public function displayActions(string $view, ?string $filter = ''): string
     {
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
-        $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
+        $groupIid = $groupInfo['iid'] ?? 0;
 
         $codePath = api_get_path(WEB_CODE_PATH);
 
         $currentUserId = api_get_user_id();
         $cidReq = api_get_cidreq();
 
-        $actionsLeft = '';
-        $actionsLeft .= Display::url(
+        $actionsLeft = Display::url(
             Display::return_icon('calendar.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
             $codePath."calendar/agenda_js.php?type={$this->type}&$cidReq"
         );
@@ -3406,10 +3717,12 @@ class Agenda
             $codePath."calendar/agenda_list.php?type={$this->type}&$cidReq"
         );
 
+        $isAllowedToEdit = api_is_allowed_to_edit(false, true);
+
         $form = '';
-        if (api_is_allowed_to_edit(false, true) ||
-            ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda')) ||
-            (
+        if ($isAllowedToEdit
+            || ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda'))
+            || (
                 '1' === api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() &&
                 api_is_allowed_to_session_edit(false, true))
             || (
@@ -3445,6 +3758,18 @@ class Agenda
                     $this->showToForm($form, $selectedValues, $attributes);
                     $form = $form->returnForm();
                 }
+
+                if (true === api_get_configuration_value('agenda_reminders') && $isAllowedToEdit) {
+                    $actionsLeft .= Display::url(
+                        Display::return_icon(
+                            'course_request_pending.png',
+                            get_lang('ImportCourseEvents'),
+                            [],
+                            ICON_SIZE_MEDIUM
+                        ),
+                        $codePath."calendar/agenda.php?action=import_course_agenda_reminders&type={$this->type}&$cidReq"
+                    );
+                }
             }
         }
 
@@ -3462,15 +3787,15 @@ class Agenda
             }
         }
 
-        if (api_is_platform_admin() ||
-            api_is_teacher() ||
-            api_is_student_boss() ||
-            api_is_drh() ||
-            api_is_session_admin() ||
-            api_is_coach()
+        if (api_is_platform_admin()
+            || api_is_teacher()
+            || api_is_student_boss()
+            || api_is_drh()
+            || api_is_session_admin()
+            || api_is_coach()
         ) {
             if ($this->type == 'personal') {
-                $form = null;
+                $form = '';
                 if (!isset($_GET['action'])) {
                     $form = new FormValidator(
                         'form-search',
@@ -3516,12 +3841,10 @@ class Agenda
             $actionsRight .= $form;
         }
 
-        $toolbar = Display::toolbarAction(
+        return Display::toolbarAction(
             'toolbar-agenda',
             [$actionsLeft, $actionsRight]
         );
-
-        return $toolbar;
     }
 
     /**
@@ -4584,10 +4907,15 @@ class Agenda
      */
     public function formatEventDate($utcTime)
     {
-        $utcTimeZone = new DateTimeZone('UTC');
+        if ($utcTime instanceof DateTime) {
+            $eventDate = $utcTime;
+        } else {
+            $utcTimeZone = new DateTimeZone('UTC');
+            $eventDate = new DateTime($utcTime, $utcTimeZone);
+        }
+
         $platformTimeZone = new DateTimeZone(api_get_timezone());
 
-        $eventDate = new DateTime($utcTime, $utcTimeZone);
         $eventDate->setTimezone($platformTimeZone);
 
         return $eventDate->format(DateTime::ISO8601);
@@ -4604,24 +4932,33 @@ class Agenda
 
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
 
-        $invitation = new AgendaEventInvitation();
-        $invitation->setCreator(api_get_user_entity(api_get_user_id()));
+        $invitation = $event->getInvitation();
 
-        $event
-            ->setCollective($isCollective)
-            ->setInvitation($invitation)
-        ;
+        if ($invitation instanceof AgendaEventSubscription) {
+            return;
+        }
 
-        $em->persist($event);
+        if (!$invitation) {
+            $invitation = new AgendaEventInvitation();
+            $invitation->setCreator(api_get_user_entity(api_get_user_id()));
+
+            $event->setInvitation($invitation);
+        }
+
+        $event->setCollective($isCollective);
 
         foreach ($inviteeUserList as $inviteeId) {
-            $invitee = new AgendaEventInvitee();
-            $invitee
-                ->setUser(api_get_user_entity($inviteeId))
-                ->setInvitation($invitation)
-            ;
+            $userInvitee = api_get_user_entity($inviteeId);
 
-            $em->persist($invitee);
+            if (!$invitation->hasUserAsInvitee($userInvitee)) {
+                $invitee = new AgendaEventInvitee();
+                $invitee
+                    ->setUser($userInvitee)
+                    ->setInvitation($invitation)
+                ;
+
+                $em->persist($invitee);
+            }
         }
 
         $em->flush();

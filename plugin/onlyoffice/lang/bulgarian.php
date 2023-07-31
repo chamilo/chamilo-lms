@@ -1,6 +1,7 @@
 <?php
 /**
  * @author ASENSIO SYSTEM SIA
+ *
  */
 $strings["plugin_title"] = "ONLYOFFICE";
 $strings['plugin_comment'] = "ONLYOFFICE конекторът ви позволява да преглеждате, редактирате и да си сътрудничите с текстови документи, таблици и презентациив рамките на Chamilo с помощта на ONLYOFFICE Docs.";
@@ -18,3 +19,6 @@ $strings["create"] = "Създай";
 $strings["fileIsExist"] = "Файлът вече съществува";
 $strings["impossibleCreateFile"] = "Не може да се създаде файл";
 $strings["createNewDocument"] = "Създай нов документ";
+$strings["formTemplate"] = "Шаблон на формуляр";
+$strings["fillInFormInOnlyoffice"] = "Попълнете формуляр в ONLYOFFICE";
+$strings["UpdateOnlyoffice"] = "Молим да актуализирате ONLYOFFICE Docs към версия 7.0, за да работи с онлайн формуляри за попълване";

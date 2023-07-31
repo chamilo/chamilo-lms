@@ -12,6 +12,8 @@
  * @todo test and reorganise
  */
 
+use enshrined\svgSanitize\Sanitizer;
+
 /**
  * Changes the file name extension from .php to .phps
  * Useful for securing a site.
@@ -28,7 +30,7 @@ function php2phps($file_name)
 }
 
 /**
- * Renames .htaccess & .HTACCESS to htaccess.txt.
+ * Renames .htaccess & .HTACCESS & .htAccess to htaccess.txt.
  *
  * @param string $filename
  *
@@ -36,7 +38,9 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    return str_replace(['.htaccess', '.HTACCESS'], ['htaccess.txt', 'htaccess.txt'], $filename);
+    $filename = strtolower($filename);
+
+    return str_replace('.htaccess', 'htaccess.txt', $filename);
 }
 
 /**
@@ -189,6 +193,22 @@ function process_uploaded_file($uploaded_file, $show_output = true)
 
     // case 0: default: We assume there is no error, the file uploaded with success.
     return true;
+}
+
+function sanitizeSvgFile(string $fullPath)
+{
+    $fileType = mime_content_type($fullPath);
+
+    if ('image/svg+xml' !== $fileType) {
+        return;
+    }
+
+    $svgContent = file_get_contents($fullPath);
+
+    $sanitizer = new Sanitizer();
+    $cleanSvg = $sanitizer->sanitize($svgContent);
+
+    file_put_contents($fullPath, $cleanSvg);
 }
 
 /**
@@ -394,6 +414,7 @@ function handle_uploaded_document(
                     $fileExists = file_exists($fullPath);
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
 
                         if ($fileExists && $docId) {
@@ -577,6 +598,7 @@ function handle_uploaded_document(
                     $filePath = $uploadPath.$fileSystemName;
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
                         // Put the document data in the database
                         $documentId = add_document(
@@ -739,17 +761,11 @@ function handle_uploaded_document(
     }
 }
 
-/**
- * @param string $file
- * @param string $storePath
- *
- * @return bool
- */
-function moveUploadedFile($file, $storePath)
+function moveUploadedFile(array $file, string $storePath): bool
 {
-    $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
-    $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
-    $copyFile = isset($file['copy_file']) && $file['copy_file'] ? true : false;
+    $handleFromFile = isset($file['from_file']) && $file['from_file'];
+    $moveFile = isset($file['move_file']) && $file['move_file'];
+    $copyFile = isset($file['copy_file']) && $file['copy_file'];
     if ($moveFile) {
         $copied = copy($file['tmp_name'], $storePath);
 
@@ -2183,10 +2199,29 @@ function add_all_documents_in_folder_to_database(
  *
  * @return int
  */
-function getIniMaxFileSizeInBytes()
+function getIniMaxFileSizeInBytes($humanReadable = false, $checkMessageSetting = false)
 {
     $maxSize = 0;
-    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
+    $uploadMaxFilesize = ini_get('upload_max_filesize');
+    $fileSizeForTeacher = getFileUploadSizeLimitForTeacher();
+    if (!empty($fileSizeForTeacher)) {
+        $uploadMaxFilesize = $fileSizeForTeacher.'M';
+    }
+
+    if (empty($fileSizeForTeacher) && $checkMessageSetting) {
+        $uploadMaxFilesize = api_get_setting('message_max_upload_filesize'); // in bytes
+        if ($humanReadable) {
+            $uploadMaxFilesize = format_file_size($uploadMaxFilesize);
+        }
+
+        return $uploadMaxFilesize;
+    }
+
+    if ($humanReadable) {
+        return $uploadMaxFilesize;
+    }
+
+    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', $uploadMaxFilesize, $matches)) {
         // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
         switch (strtoupper($matches['2'])) {
             case 'G':
@@ -2205,4 +2240,20 @@ function getIniMaxFileSizeInBytes()
     $maxSize = (int) $maxSize;
 
     return $maxSize;
+}
+
+/**
+ * Get the uploax max filesize from configuration.php for trainers in bytes.
+ *
+ * @return int
+ */
+function getFileUploadSizeLimitForTeacher()
+{
+    $size = 0;
+    $settingValue = (int) api_get_configuration_value('file_upload_size_limit_for_teacher'); // setting value in MB
+    if ($settingValue > 0 && (api_is_allowed_to_create_course() && !api_is_platform_admin())) {
+        $size = $settingValue;
+    }
+
+    return $size;
 }

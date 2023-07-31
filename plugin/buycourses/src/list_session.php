@@ -41,7 +41,7 @@ $interbreadcrumb[] = [
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 
-$templateName = $plugin->get_lang('AvailableCourses');
+$templateName = $plugin->get_lang('Sessions');
 
 $tpl = new Template($templateName);
 

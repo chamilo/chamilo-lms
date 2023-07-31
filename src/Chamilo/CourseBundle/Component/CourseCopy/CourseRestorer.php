@@ -77,6 +77,8 @@ class CourseRestorer
     public $add_text_in_items = false;
     public $destination_course_id;
 
+    public $copySessionContent = false;
+
     /**
      * CourseRestorer constructor.
      *
@@ -1512,11 +1514,13 @@ class CourseRestorer
             $tool_intro_table = Database::get_course_table(TABLE_TOOL_INTRO);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
-                $sql = "DELETE FROM $tool_intro_table
+                if (!$this->copySessionContent) {
+                    $sql = "DELETE FROM $tool_intro_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
                             id='".self::DBUTF8escapestring($tool_intro->id)."'";
-                Database::query($sql);
+                    Database::query($sql);
+                }
 
                 $tool_intro->intro_text = DocumentManager::replaceUrlWithNewCourseCode(
                     $tool_intro->intro_text,
@@ -1581,6 +1585,40 @@ class CourseRestorer
                     $sql = "UPDATE $table SET id = iid WHERE iid = $new_event_id";
                     Database::query($sql);
 
+                    // Choose default visibility
+                    $toolVisibility = api_get_setting('tool_visible_by_default_at_creation');
+                    $defaultLpVisibility = 'invisible';
+                    if (isset($toolVisibility['learning_path']) && $toolVisibility['learning_path'] == 'true') {
+                        $defaultLpVisibility = 'visible';
+                    }
+
+                    api_item_property_update(
+                        $this->destination_course_info,
+                        TOOL_CALENDAR_EVENT,
+                        $new_event_id,
+                        'AgendaAdded',
+                        api_get_user_id(),
+                        0,
+                        0,
+                        0,
+                        0,
+                        $sessionId
+                    );
+
+                    // Set the new Agenda to visible
+                    api_item_property_update(
+                        $this->destination_course_info,
+                        TOOL_CALENDAR_EVENT,
+                        $new_event_id,
+                        $defaultLpVisibility,
+                        api_get_user_id(),
+                        0,
+                        0,
+                        0,
+                        0,
+                        $sessionId
+                    );
+
                     if (!isset($this->course->resources[RESOURCE_EVENT][$id])) {
                         $this->course->resources[RESOURCE_EVENT][$id] = new stdClass();
                     }
@@ -1644,8 +1682,8 @@ class CourseRestorer
                                 'c_id' => $this->destination_course_id,
                                 'path' => self::DBUTF8($new_filename),
                                 'comment' => self::DBUTF8($event->attachment_comment),
-                                'size' => isset($event->size) ? $event->size : '',
-                                'filename' => isset($event->filename) ? $event->filename : '',
+                                'size' => isset($event->attachment_size) ? $event->attachment_size : '',
+                                'filename' => isset($event->attachment_filename) ? $event->attachment_filename : '',
                                 'agenda_id' => $new_event_id,
                             ];
                             $id = Database::insert($table_attachment, $params);
@@ -1653,6 +1691,14 @@ class CourseRestorer
                             if ($id) {
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $id";
                                 Database::query($sql);
+
+                                api_item_property_update(
+                                    $this->destination_course_info,
+                                    'calendar_event_attachment',
+                                    $id,
+                                    'AgendaAttachmentAdded',
+                                    api_get_user_id()
+                                );
                             }
                         }
                     }
@@ -2907,7 +2953,7 @@ class CourseRestorer
                     'debug' => self::DBUTF8($lp->debug),
                     'theme' => '',
                     'session_id' => $session_id,
-                    'prerequisite' => $lp->prerequisite,
+                    'prerequisite' => (int) $lp->prerequisite,
                     'hide_toc_frame' => self::DBUTF8(isset($lp->hideTableOfContents) ? $lp->hideTableOfContents : 0),
                     'subscribe_users' => self::DBUTF8(isset($lp->subscribeUsers) ? $lp->subscribeUsers : 0),
                     'seriousgame_mode' => 0,

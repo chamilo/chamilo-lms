@@ -45,7 +45,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 $limitDate = gmdate($limitDateFormat, strtotime("$limitDate -$resubscriptionOffset"));
             }
 
-            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = session_id";
+            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." ON id = session_id";
 
             // User sessions and courses
             $userSessions = Database::select(

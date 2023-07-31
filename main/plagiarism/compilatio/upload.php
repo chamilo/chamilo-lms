@@ -21,7 +21,7 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
     $docs = explode('a', $_REQUEST['doc']);
     for ($k = 0; $k < count($docs) - 1; $k++) {
         $documentId = 0;
-        if (!isset($docs[$k])) {
+        if (isset($docs[$k])) {
             $documentId = (int) $docs[$k];
         }
 
@@ -78,6 +78,7 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
                 /*we verify that the docmuent's id is an hash_md5*/
                 if (Compilatio::isMd5($compilatioId)) {
                     $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
+                    sleep(10);
                     $soapRes = $compilatio->startAnalyse($compilatioId);
                 }
             }
@@ -133,6 +134,7 @@ function sendDocument($documentId, $courseInfo)
 
     if (Compilatio::isMd5($compilatioId)) {
         $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
+        sleep(10);
         $compilatio->startAnalyse($compilatioId);
         echo Display::return_message(get_lang('Uploaded'));
     } else {

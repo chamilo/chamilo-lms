@@ -12,6 +12,7 @@ use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
 use Chamilo\PluginBundle\Zoom\API\RecordingFile;
 use Chamilo\PluginBundle\Zoom\API\RecordingList;
+use Chamilo\PluginBundle\Zoom\API\ServerToServerOAuthClient;
 use Chamilo\PluginBundle\Zoom\API\WebinarRegistrantSchema;
 use Chamilo\PluginBundle\Zoom\API\WebinarSchema;
 use Chamilo\PluginBundle\Zoom\API\WebinarSettings;
@@ -38,6 +39,11 @@ class ZoomPlugin extends Plugin
     public const RECORDING_TYPE_CLOUD = 'cloud';
     public const RECORDING_TYPE_LOCAL = 'local';
     public const RECORDING_TYPE_NONE = 'none';
+    public const SETTING_ACCOUNT_ID = 'account_id';
+    public const SETTING_CLIENT_ID = 'client_id';
+    public const SETTING_CLIENT_SECRET = 'client_secret';
+    public const SETTING_SECRET_TOKEN = 'secret_token';
+
     public $isCoursePlugin = true;
 
     /**
@@ -60,6 +66,10 @@ class ZoomPlugin extends Plugin
                 'apiKey' => 'text',
                 'apiSecret' => 'text',
                 'verificationToken' => 'text',
+                self::SETTING_ACCOUNT_ID => 'text',
+                self::SETTING_CLIENT_ID => 'text',
+                self::SETTING_CLIENT_SECRET => 'text',
+                self::SETTING_SECRET_TOKEN => 'text',
                 'enableParticipantRegistration' => 'boolean',
                 'enableCloudRecording' => [
                     'type' => 'select',
@@ -77,6 +87,7 @@ class ZoomPlugin extends Plugin
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
                         STUDENT_BOSS => get_lang('StudentBoss'),
+                        SESSIONADMIN => get_lang('SessionsAdmin'),
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],
@@ -85,7 +96,16 @@ class ZoomPlugin extends Plugin
         );
 
         $this->isAdminPlugin = true;
-        $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+
+        $accountId = $this->get(self::SETTING_ACCOUNT_ID);
+        $clientId = $this->get(self::SETTING_CLIENT_ID);
+        $clientSecret = $this->get(self::SETTING_CLIENT_SECRET);
+
+        if (!empty($accountId) && !empty($clientId) && !empty($clientSecret)) {
+            $this->jwtClient = new ServerToServerOAuthClient($accountId, $clientId, $clientSecret);
+        } else {
+            $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+        }
     }
 
     /**
@@ -461,52 +481,53 @@ class ZoomPlugin extends Plugin
     /**
      * @param Meeting $meeting
      * @param string  $returnURL
-     *
-     * @return false
      */
-    public function deleteMeeting($meeting, $returnURL)
+    public function deleteMeeting($meeting, $returnURL): bool
     {
         if (null === $meeting) {
             return false;
         }
 
-        $em = Database::getManager();
+        // No need to delete a instant meeting.
+        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
+            return false;
+        }
+
         try {
-            // No need to delete a instant meeting.
-            if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT != $meeting->getMeetingInfoGet()->type) {
-                $meeting->getMeetingInfoGet()->delete();
-            }
-
-            $em->remove($meeting);
-            $em->flush();
-
-            Display::addFlash(
-                Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
-            );
-            api_location($returnURL);
+            $meeting->getMeetingInfoGet()->delete();
         } catch (Exception $exception) {
             $this->handleException($exception);
         }
+
+        $em = Database::getManager();
+        $em->remove($meeting);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
+        );
+        api_location($returnURL);
+
+        return true;
     }
 
     public function deleteWebinar(Webinar $webinar, string $returnURL)
     {
-        $em = Database::getManager();
-
         try {
             $webinar->getWebinarSchema()->delete();
-
-            $em->remove($webinar);
-            $em->flush();
-
-            Display::addFlash(
-                Display::return_message($this->get_lang('WebinarDeleted'), 'success')
-            );
-
-            api_location($returnURL);
         } catch (Exception $exception) {
             $this->handleException($exception);
         }
+
+        $em = Database::getManager();
+        $em->remove($webinar);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message($this->get_lang('WebinarDeleted'), 'success')
+        );
+
+        api_location($returnURL);
     }
 
     /**
@@ -1302,9 +1323,12 @@ class ZoomPlugin extends Plugin
         return Database::getManager()->getRepository(Recording::class);
     }
 
-    public function getToolbar($returnUrl = '')
+    public function getToolbar(string $returnUrl = ''): string
     {
-        if (!api_is_platform_admin()) {
+        $isPlatformOrSessionAdmin = api_is_platform_admin(true);
+        $isSessionAdmin = api_is_session_admin();
+
+        if (!$isPlatformOrSessionAdmin) {
             return '';
         }
 
@@ -1332,19 +1356,19 @@ class ZoomPlugin extends Plugin
             );
         }
 
-        if (api_is_platform_admin()) {
+        if (!$isSessionAdmin) {
             $actionsLeft .= Display::url(
                 Display::return_icon('agenda.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
                 'calendar.php'
             );
-            $actionsLeft .=
-                Display::url(
-                    Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
-                ).$back;
+
+            $actionsLeft .= Display::url(
+                Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+            );
         }
 
-        return Display::toolbarAction('toolbar', [$actionsLeft]);
+        return Display::toolbarAction('toolbar', [$back.PHP_EOL.$actionsLeft]);
     }
 
     public function getRecordingSetting()

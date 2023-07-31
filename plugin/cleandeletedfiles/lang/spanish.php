@@ -1,6 +1,6 @@
 <?php
 $strings['plugin_title'] = "Limpiar ficheros borrados";
-$strings['plugin_comment'] = "Elimina de forma definitiva los ficheros marcados como eliminados";
+$strings['plugin_comment'] = "Elimina de forma definitiva los ficheros marcados como eliminados. Active el plugin en la región 'menu_administrator' y acceda desde la página principal de administración.";
 $strings['tool_enable'] = "Activar plugin";
 $strings['FileList'] = "Lista de archivos marcados como eliminados";
 $strings['SizeTotalAllDir'] = "Tamaño total (todos los directorios)";

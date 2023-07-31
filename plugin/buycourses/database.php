@@ -477,6 +477,68 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE)) {
     $couponService->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION)) {
+    $subscriptionTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION);
+    $subscriptionTable->addColumn(
+        'product_type',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn(
+        'product_id',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn(
+        'duration',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn('currency_id', Types::INTEGER);
+    $subscriptionTable->addColumn('price', Types::DECIMAL);
+    $subscriptionTable->addColumn('tax_perc', Types::INTEGER);
+    $subscriptionTable->setPrimaryKey(['product_type', 'product_id', 'duration']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE)) {
+    $subscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE);
+    $subscriptionSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $subscriptionSaleTable->addColumn('currency_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('reference', Types::STRING);
+    $subscriptionSaleTable->addColumn('date', Types::DATETIME_MUTABLE);
+    $subscriptionSaleTable->addColumn('user_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('product_type', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('product_name', Types::STRING);
+    $subscriptionSaleTable->addColumn('product_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('price', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('price_without_tax', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('tax_perc', Types::INTEGER, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('tax_amount', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('status', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('payment_type', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('invoice', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('price_without_discount', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('discount_amount', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('subscription_end', Types::DATETIME_MUTABLE);
+    $subscriptionSaleTable->addColumn('expired', Types::BOOLEAN);
+    $subscriptionSaleTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD)) {
+    $subscriptionPeriodTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD);
+    $subscriptionPeriodTable->addColumn(
+        'duration',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionPeriodTable->addColumn('name', Types::STRING);
+    $subscriptionPeriodTable->setPrimaryKey(['duration']);
+}
+
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SALE)) {
     $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SALE);
     $couponSaleTable->addColumn(
@@ -530,6 +592,18 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_CECABANK)) {
     $tpvCecabankTable->addColumn('supported_payment', Types::STRING);
     $tpvCecabankTable->addColumn('url', Types::STRING);
     $tpvCecabankTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE)) {
+    $couponSubscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE);
+    $couponSubscriptionSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponSubscriptionSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSubscriptionSaleTable->addColumn('sale_id', Types::INTEGER);
+    $couponSubscriptionSaleTable->setPrimaryKey(['id']);
 }
 
 $queries = $pluginSchema->toSql($platform);

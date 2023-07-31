@@ -139,6 +139,16 @@ if ($form->validate()) {
     exit;
 }
 
+$formDefaults = [
+    'code' => '',
+    'discount_type' => null,
+    'discount_amount' => 0,
+    'active' => 0,
+    'courses' => [],
+    'sessions' => [],
+    'services' => [],
+];
+
 $form->setDefaults($formDefaults);
 
 $templateName = $plugin->get_lang('CouponAdd');

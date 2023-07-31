@@ -945,7 +945,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
         $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
-        $isAllow = api_is_allowed_to_edit(null, true);
+        $isAllowed = api_is_allowed_to_edit(null, true);
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
@@ -977,7 +977,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $certificate
                 );
 
-                if ($isAllow && api_get_setting('gradebook_enable_grade_model') === 'true') {
+                if ($isAllowed && api_get_setting('gradebook_enable_grade_model') === 'true') {
                     // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
@@ -991,16 +991,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
-                $loadStats = [];
-                if (!$isAllow) {
-                    if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-                        $loadStats = [1, 2, 3];
-                    } else {
-                        if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
-                            $loadStats = [2];
-                        }
-                    }
-                }
+                $loadStats = $isAllowed ? [] : GradebookTable::getExtraStatsColumnsToDisplay();
 
                 $gradebookTable = new GradebookTable(
                     $cat,
@@ -1015,14 +1006,14 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $loadStats
                 );
 
-                if ($isAllow) {
+                if ($isAllowed) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
                 }
 
                 $table = '';
-                if ($isAllow) {
+                if ($isAllowed) {
                     $table = $gradebookTable->return_table();
                 } else {
                     if ($allowTable) {

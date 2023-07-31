@@ -14,14 +14,14 @@ from the outside world, although we will thoroughly review them before integrati
 to make sure they do not introduce security vulnerabilities or degrade the ease
 of use of the platform.
 
-The 1.10.x (that you're currently looking at) is a development branch for the 
-1.10.0 release, that we hope to be releasing around mid-2015. It is a 
+The 1.11.x (that you're currently looking at) is a development branch for the 
+1.11.0 release, that we hope to be releasing around mid-2015. It is a 
 transitional version that partially uses a series of Symfony 2 modules but relies
 heavily on Composer to manage the dependencies towards common libraries. Version 
-2.0 has already been worked a lot on, and has served as an inspiration for 1.10.0,
-but due to the huge success of the 1.9.x series, we decided to take a transitional
+2.0 has already been worked a lot on, and has served as an inspiration for 1.11.0,
+but due to the huge success of the 1.9.x and 1.10.x series, we decided to take a transitional
 step towards 2.0 to ensure a smooth migration of all our user base to the newer
-version (to be released sometime in 2016).
+version (to be released sometime in 2024).
 
 # Contributing patches or new features
 

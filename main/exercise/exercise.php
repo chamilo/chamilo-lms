@@ -19,38 +19,6 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
-$htmlHeadXtra[] = '
-<div class="modal fade" id="NotificarUsuarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="#" class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-6" id="myModalLabel">'.get_lang('EmailNotifySubscription').'</div>
-                        <div class="col-md-6">
-                            <select class="selectpicker form-control" multiple="multiple" id="toUsers" name="toUsers">
-                                <option value="">-</option>
-                            </select>
-                        </div>
-                    </div>
-                    <input class="hidden" id="urlTo" type="hidden">
-               </form>
-               <div class="clearfix clear-fix"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="sendNotificationToUsers()" data-dismiss="modal">'
-                    .get_lang('SendMailToUsers').'
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">'.get_lang('Close').'</button>
-            </div>
-        </div>
-    </div>
-</div>';
 $htmlHeadXtra[] = '<script>
 function sendNotificationToUsers() {
    var sendTo = $("#toUsers").val().join(",");
@@ -163,6 +131,12 @@ $nameTools = get_lang('Exercises');
 // Simple actions
 if ($is_allowedToEdit) {
     switch ($action) {
+        case 'export_all_exercises_results':
+            $sessionId = api_get_session_id();
+            $courseId = api_get_course_int_id();
+            ExerciseLib::exportAllExercisesResultsZip($sessionId, $courseId);
+
+            break;
         case 'clean_all_test':
             if ($check) {
                 if (false === $allowClean) {
@@ -501,12 +475,10 @@ if ($is_allowedToEdit) {
                                      [],
                                     false
                                 );
-                                $toUsers = [];
-                                foreach ($temo as $item) {
-                                    $toUsers[] = $item['user_id'];
-                                }
+                                $toUsers = array_column($temo, 'user_id');
+                            } else {
+                                $toUsers = explode(',', $toUsers);
                             }
-                            $toUsers = explode(',', $toUsers);
                             api_set_more_memory_and_time_limits();
                             Exercise::notifyUsersOfTheExercise(
                                 $exerciseId,
@@ -694,6 +666,11 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
         );
     }
 
+    $actionsLeft .= Display::url(
+        Display::return_icon('export_pdf.png', get_lang('ExportAllExercisesAllResults'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=export_all_exercises_results'
+    );
+
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {
             $actionsLeft .= $cleanAll;
@@ -778,6 +755,38 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
         echo Exercise::exerciseGrid($category['iid'], $keyword);
     }
 }
+
+echo '<div class="modal fade" id="NotificarUsuarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6" id="myModalLabel">'.get_lang('EmailNotifySubscription').'</div>
+                        <div class="col-md-6">
+                            <select class="selectpicker form-control" multiple="multiple" id="toUsers" name="toUsers">
+                                <option value="">-</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input class="hidden" id="urlTo" type="hidden">
+               </form>
+               <div class="clearfix clear-fix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="sendNotificationToUsers()" data-dismiss="modal">'
+    .get_lang('SendMailToUsers').'
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">'.get_lang('Close').'</button>
+            </div>
+        </div>
+    </div>
+</div>';
 
 if ('learnpath' !== $origin) {
     // We are not in learnpath tool

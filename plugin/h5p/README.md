@@ -1,11 +1,13 @@
 H5P plugin
 ===
+
 This plugin is only compatible with Chamilo version 1.11.10 and above.
 
 This plugin allows you to create H5P resources directly from inside Chamilo,
 using the Open Source H5P library.
 
 To enable:
+
 * install the plugin
 * mark it as "enabled" (inside the plugin configuration page)
 * set the plugin to the region "pre_footer"
@@ -29,5 +31,6 @@ We suggest you consider this plugin as a Beta version.
 
 To enable tools in the document editor, please enable it in region pre_footer.
 
-Other docs : 
+Other docs: 
+
 https://www.ludiscape.com/ressources/resources-elearning-en/integration-of-h5p-into-our-lms-chamilo/

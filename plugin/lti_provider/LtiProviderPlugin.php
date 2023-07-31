@@ -18,12 +18,13 @@ class LtiProviderPlugin extends Plugin
     public const LAUNCH_PATH = 'lti_provider/tool/start.php';
     public const LOGIN_PATH = 'lti_provider/tool/login.php';
     public const REDIRECT_PATH = 'lti_provider/tool/start.php';
+    public const JWKS_URL = 'lti_provider/tool/jwks.php';
 
     public $isAdminPlugin = true;
 
     protected function __construct()
     {
-        $version = '1.0';
+        $version = '1.1';
         $author = 'Christian Beeznest';
 
         $message = Display::return_message($this->get_lang('Description'));
@@ -31,6 +32,8 @@ class LtiProviderPlugin extends Plugin
         $launchUrlHtml = '';
         $loginUrlHtml = '';
         $redirectUrlHtml = '';
+        $jwksUrlHtml = '';
+
         if ($this->areTablesCreated()) {
             $publicKey = $this->getPublicKey();
 
@@ -54,6 +57,11 @@ class LtiProviderPlugin extends Plugin
                 'redirect_url',
                 api_get_path(WEB_PLUGIN_PATH).self::REDIRECT_PATH
             );
+            $jwksUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('KeySetUrlJwks'),
+                'jwks_url',
+                api_get_path(WEB_PLUGIN_PATH).self::JWKS_URL
+            );
         } else {
             $pkHtml = $this->get_lang('GenerateKeyPairInfo');
         }
@@ -64,6 +72,7 @@ class LtiProviderPlugin extends Plugin
             $launchUrlHtml => 'html',
             $loginUrlHtml => 'html',
             $redirectUrlHtml => 'html',
+            $jwksUrlHtml => 'html',
             $pkHtml => 'html',
             'enabled' => 'boolean',
         ];

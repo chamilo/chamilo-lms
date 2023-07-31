@@ -63,11 +63,23 @@ foreach ($logs as $log) {
             continue;
         }
     }
-    // Check for Minor importance messages to ignore...
-    if (strncasecmp($log['message'], 'Minor', 5) === 0) {
-        //Skip minor messages
-        continue;
+
+    // Replace "Something - Something" by "Something: Something"
+    $matches = array();
+    if (preg_match('/^(\w*)\s-\s(.*)/', $log['message'], $matches)) {
+        $log['message'] = $matches[1].': '.$matches[2];
     }
+    // Replace "Something - Something" by "Something: Something"
+    $matches = array();
+    if (preg_match('/^(\w*\s\w*)\s-\s(.*)/', $log['message'], $matches)) {
+        $log['message'] = $matches[1].': '.$matches[2];
+    }
+    // Replace "Something : Something" by "Something: Something"
+    $matches = array();
+    if (preg_match('/^(\w*)\s:\s(.*)/', $log['message'], $matches)) {
+        $log['message'] = $matches[1].': '.$matches[2];
+    }
+
     //Skip language update messages (not important)
     $langMsg = array(
         'Update language terms',
@@ -84,6 +96,14 @@ foreach ($logs as $log) {
             continue 2;
         }
     }
+    $log['message'] = sanitizeCategory($log['message']);
+
+    // Check for Minor importance messages to ignore...
+    if (strncasecmp($log['message'], 'Minor', 5) === 0) {
+        //Skip minor messages
+        continue;
+    }
+
     // Look for tasks references
     $issueLink = '';
     $matches = array();
@@ -92,7 +112,7 @@ foreach ($logs as $log) {
         if (substr($issue, 0, 1) == '#') {
             // not a BeezNest task
             $num = substr($issue, 1);
-            if ($num > 4000) {
+            if ($num > 10000) {
                 //should be Chamilo support site
                 if ($formatHTML) {
                     $issueLink = ' - <a href="https://support.chamilo.org/issues/' . $num . '">CT#' . $num . '</a>';
@@ -127,7 +147,12 @@ foreach ($logs as $log) {
         if ($hasRefs = stripos($log['message'], ' -refs ')) {
             $log['message'] = substr($log['message'], 0, $hasRefs);
         }
-
+        if ($hasRefs = stripos($log['message'], ' - refs ')) {
+            $log['message'] = substr($log['message'], 0, $hasRefs);
+        }
+        if ($hasRefs = stripos($log['message'], ' '.$matches[0][0])) {
+            $log['message'] = substr($log['message'], 0, $hasRefs);
+        }
     }
     $commitLink = '';
     if ($formatHTML) {
@@ -150,3 +175,89 @@ foreach ($logs as $log) {
     $i++;
 }
 echo "Printed $i commits of $number requested (others were minor)".PHP_EOL;
+
+/**
+ * Get a message string and replace prefixes that do not match specs
+ * in /documentation/changelog.html#terminology with prefixes that do
+ * @param string $message
+ * @return string The modified log message
+ */
+function sanitizeCategory(string $message): string {
+    $knownMistakes = [
+        'Quiz' => 'Exercise',
+        'Exercises' => 'Exercise',
+        'LP' => 'Learnpath',
+        'Learning Paths' => 'Learnpath',
+        'LearningPath' => 'Learnpath',
+        'Learnpaths' => 'Learnpath',
+        'Documents' => 'Document',
+        'Announcements' => 'Announcement',
+        'RemedialCourse' => 'Plugin: RemedialCourse',
+        'Groups' => 'Group',
+        'Survey report' => 'Survey',
+        'Survey list export' => 'Survey',
+        'Learnpath report' => 'Learnpath',
+        'TopLink' => 'Plugin: TopLinks',
+        'TopLinks' => 'Plugin: TopLinks',
+        'Sessions' => 'Session',
+        'Cas' => 'Authentication: CAS',
+        'Webservices' => 'Webservice',
+        'WebService' => 'Webservice',
+        'Web services' => 'Webservice',
+        'BBB' => 'Plugin: BigBlueButton',
+        'My Progress' => 'Tracking',
+        'My Progres' => 'Tracking',
+        'Reports' => 'Tracking',
+        'Courses' => 'Display',
+        '[LP]' => 'Learnpath',
+        'Student follow page' => 'Tracking: Student follow-up',
+        'REST' => 'Webservice: REST',
+        'Import CSV' => 'Admin: CSV import',
+        'ImportCSV' => 'Admin: CSV import',
+        'Import_csv.php' => 'Admin: CSV import',
+        '[Minor]' => 'Minor:',
+        '[usergroup]' => 'Group',
+        '[admin]' => 'Admin',
+        'MySpace' => 'Tracking',
+        'Career diagram' => 'Career',
+        'Careers' => 'Career',
+        'Users' => 'User',
+        'Style:' => 'Display:',
+        'Course Announcement' => 'Announcement',
+        'Testing' => 'CI',
+        'Blogs' => 'Blog',
+        'Gradebook eval' => 'Gradebook',
+        'Survey test' => 'CI: Survey',
+        'Editor' => 'WYSIWYG',
+        'Global' => 'Internal',
+        'Extra field' => 'Extra Fields',
+        'Settings' => 'Admin',
+        'Changelog' => 'Documentation',
+        'Session import' => 'Admin: Session import',
+        'XAPI' => 'xAPI',
+        'CourseCopy' => 'Maintenance',
+        'Course Copy' => 'Maintenance',
+        'Reporting' => 'Tracking',
+        'Course Backup' => 'Maintenance',
+        'SSO' => 'Authentication: Single Sign On',
+        'Skills' => 'Skill',
+        'Messages' => 'Message',
+        'Security fixes -' => 'Security:',
+        'Assignments' => 'Work',
+        'Improve code' => 'Internal: Improve code',
+        'Pending works' => 'Work',
+        'Thematic' => 'Course Progress',
+        'Thematic advance' => 'Course Progress',
+        'Agenda' => 'Calendar',
+        'Course import' => 'Maintenance',
+        'Student publication' => 'Work',
+        'Student publications' => 'Work',
+    ];
+    foreach ($knownMistakes as $term => $fix) {
+        if (strncasecmp($message, $term, strlen($term)) === 0) {
+            //Skip minor messages
+            $message = $fix.substr($message, strlen($term));
+        }
+    }
+    return $message;
+}

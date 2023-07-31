@@ -74,9 +74,7 @@ if (!empty($return)) {
             <div class="form-group">
                 <label class="col-sm-3 control-label"><?php echo get_lang('SessionCategoryName'); ?></label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="name" id="category-name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="<?php if ($formSent) {
-    echo api_htmlentities($name, ENT_QUOTES);
-} ?>">
+                    <input type="text" class="form-control" name="name" id="category-name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="">
                 </div>
                 <div class="col-md-3"></div>
             </div>

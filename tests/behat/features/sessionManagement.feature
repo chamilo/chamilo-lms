@@ -11,7 +11,6 @@ Feature: Session management tool
     And wait for the page to be loaded
     When I fill in the following:
       | category-name | category_1 |
-    And print last response
     And I press "submit-category"
     And wait very long for the page to be loaded
     Then I should see "The category has been added"

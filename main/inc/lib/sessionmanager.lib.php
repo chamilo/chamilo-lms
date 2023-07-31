@@ -3050,7 +3050,9 @@ class SessionManager
         $smonth_end,
         $sday_end
     ) {
+        print_r('<pre>entra</pre>');
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        print_r('<pre>'.$tbl_session_category.'</pre>');
         $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
@@ -3077,11 +3079,11 @@ class SessionManager
         } elseif ($date_start >= $date_end) {
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
 
+            print_r('<pre>'.$msg.'</pre>');
             return $msg;
         }
-        print_r('<pre>'.$msg.'</pre>');
         $access_url_id = api_get_current_access_url_id();
-        print_r('<pre>'.$access_url_id.'</pre>');
+
         $params = [
             'name' => $name,
             'date_start' => $date_start,

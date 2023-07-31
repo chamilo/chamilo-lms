@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-$strings['plugin_title'] = 'IMS/LTI';
-$strings['plugin_comment'] = 'IMS/LTI';
+$strings['plugin_title'] = 'Cliente IMS/LTI';
+$strings['plugin_comment'] = 'Añade el soporte de actividades IMS/LTI donde Chamilo actua como cliente.';
 
 $strings['enabled'] = 'Activado';
 $strings['client_id'] = 'ID cliente';
@@ -49,6 +49,10 @@ $strings['PublicKey'] = 'Llave pública';
 $strings['PrivateKey'] = 'Llave privada';
 $strings['PlatformDateUpdated'] = 'Datos de la plataforma actualizados.';
 $strings['LtiVersion'] = 'Versión LTI';
+$strings['PublicKeyType'] = 'Tipo de clave pública';
+$strings['KeySetUrl'] = 'KeySet URL';
+$strings['RsaKey'] = 'Clave RSA';
+$strings['PublicKeyset'] = 'URL de Jwks';
 $strings['LoginUrl'] = 'URL de Login';
 $strings['RedirectUrl'] = 'URL de redirección';
 $strings['AssigmentAndGradesService'] = 'Servicio de tareas y notas';

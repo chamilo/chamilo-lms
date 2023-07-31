@@ -73,6 +73,7 @@ if ($form->validate()) {
                         'nrps' => $formValues['1p3_nrps'],
                     ]
                 )
+                ->setJwksUrl($formValues['jwks_url'])
                 ->publicKey = $formValues['public_key'];
         }
 

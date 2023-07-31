@@ -22,37 +22,46 @@ Una vez activada, aparecerá en las páginas principales de todos los cursos. Lo
 <strong>iniciar</strong> una conferencia y los alumnos <strong>juntarse</strong> a ella.
 <br/>
 Este plugin requiere una cuenta Zoom para gestionar las conferencias.
-El API de Zoom utiliza los <em>JSON Web Tokens (JWT)</em> para autorizar el acceso a una cuenta.
-<strong>Una <em>clave</em> y un <em>código secreto</em> de API son necesarios</strong> para identificarse con JWT.
-Para obtenerlos, crea una <em>app JWT</em> :
-<br/>1. logéase en <a href=\"https://zoom.us/profile\">Su perfil Zoom</a>
-<br/>2. de clic en <em>Avanzado / Marketplace de aplicaciones</em>
-<br/>3. de clic en <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
-<br/>4. escoja <em>JWT / Create</em>
-<br/>5. Information: ingrese algunas informaciones sobre vuestra \"App\"
+<p>El API de Zoom utiliza los <em>JSON Web Tokens (JWT)</em> para autorizar el acceso a una cuenta.
+Para obtenerlos, crea una <em>app JWT</em> o una aplicación Server-to-Server OAuth:</p>
+<blockquote>
+  <p>Desde el 1 de junio de 2023, Zoom recomienda que usted cree una aplicación Server-to-Server OAuth para reemplazar
+  la funcionalidad de una aplicación JWT en tu cuenta.</p>
+</blockquote>
+<ol>
+<li>logéase en <a href=\"https://zoom.us/profile\">Su perfil Zoom</a></li>
+<li>de clic en <em>Avanzado / Marketplace de aplicaciones</em></li>
+<li>de clic en <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em></li>
+<li>escoja <em>JWT o Sever-to-Server OAuth y luego Create</em></li>
+<li>Information: ingrese algunas informaciones sobre vuestra \"App\"
 (nombres de la aplicación, de la empresa, nombre y dirección de correo de contacto)
-<br/>6. de clic en <em>Continue</em>
-<br/>7. App Credentials:
-muestra la clave (API Key) y el código secreto (API Secret) por ingresar aquí.
-<strong>copiez la clé (API Key) et le code secret (API Secret) dans les champs ci-dessous.</strong>
-<br/>8. de clic en <em>Continue</em>
-<br/>9. Feature :
-activez <em>Event Subscriptions</em> para agregar uno con su endpoint URL
-<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
-y agrega este tipo de eventos:
-<br/>- Start Meeting
-<br/>- End Meeting
-<br/>- Participant/Host joined meeting
-<br/>- Participant/Host left meeting
-<br/>- Start Webinar
-<br/>- End Webinar
-<br/>- Participant/Host joined webinar
-<br/>- Participant/Host left webinar
-<br/>- All Recordings have completed
-<br/>- Recording transcript files have completed
-<br/>de clic en <em>Done</em> y luego en <em>Save</em>
-y <strong>copie su Verification Token en el campo a continuación</strong>.
-<br/>10. de clic en <em>Continue</em>
+<li>de clic en <em>Continue</em></li>
+<li>App Credentials:
+<ol>
+<li>Para una aplicación JWT: copia la clave (API Key) y el código secreto (API Secret) por ingresar aquí.</li>
+<li>Para una aplicación Server-to-Server OAuth: Copia los valores de <em>Account ID</em>, <em>Client ID</em> y <em>Client secret</em> para ingresar aquí</li>
+</ol>
+<li>de clic en <em>Continue</em></li>
+<li><p>Feature : activez <em>Event Subscriptions</em> para agregar uno con su endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code> (valida el endpoint para permitir activar la aplicación)
+y agrega este tipo de eventos:</p>
+<ul>
+<li>Start Meeting</li>
+<li>End Meeting</li>
+<li>Participant/Host joined meeting</li>
+<li>Participant/Host left meeting</li>
+<li>Start Webinar</li>
+<li>End Webinar</li>
+<li>Participant/Host joined webinar</li>
+<li>Participant/Host left webinar</li>
+<li>All Recordings have completed</li>
+<li>Recording transcript files have completed</li>
+</ul>
+<p>Luego de clic en <em>Done</em> y luego en <em>Save</em> y copie su <em>Verification Token</em> si tiene una aplicación JWT o el <em>Secret token</em> si tiene una aplicación Server-to-Server OAuth para ingresar aquí</li>
+<li>de clic en <em>Continue</em></li>
+<li>Scopes (solo para una aplicación Server-to-Server OAuth): click en <em>Add Scopes</em> y seleccione <em>meeting:write:admin</em>,
+<em>webinar:write:admin</em>, <em>recording:write:admin</em>. Luego, haga click en Done.</li>
+</ol>
 <br/>
 <strong>Atención</strong> :
 <br/>Zoom <em>NO ES</em> un software libre, y reglas específicas de protección de datos se aplican a este.

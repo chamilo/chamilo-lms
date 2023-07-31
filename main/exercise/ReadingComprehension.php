@@ -58,6 +58,12 @@ class ReadingComprehension extends UniqueAnswer
      * @var int
      */
     private $exerciseType = 2;
+    /**
+     * All speeds (static $speeds + extra speeds defined in configuration.php as 'exercise_question_reading_comprehension_extra_speeds'
+     *
+     * @var array
+     */
+    public $allSpeeds = [];
 
     /**
      * Constructor.
@@ -67,12 +73,20 @@ class ReadingComprehension extends UniqueAnswer
         parent::__construct();
         $this->type = READING_COMPREHENSION;
         $this->isContent = $this->getIsContent();
+        $customSpeeds = api_get_configuration_value('exercise_question_reading_comprehension_extra_speeds')['speeds'];
+        if (!empty($customSpeeds) && is_array($customSpeeds)) {
+            $this->allSpeeds = self::$speeds;
+            foreach ($customSpeeds as $speed) {
+                $this->allSpeeds[] = $speed;
+            }
+            asort($this->allSpeeds);
+        }
     }
 
     public function processText($text)
     {
         // Refresh is set to 5s, but speed is in words per minute
-        $wordsPerSecond = self::$speeds[$this->level] / 60;
+        $wordsPerSecond = $this->allSpeeds[$this->level] / 60;
         $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
 
         if (empty($text)) {
@@ -135,7 +149,7 @@ class ReadingComprehension extends UniqueAnswer
         $tabCat = TestCategory::getCategoriesIdAndName();
         $form->addSelect('questionCategory', get_lang('Category'), $tabCat);
         // Advanced parameters
-        $levels = self::get_default_levels();
+        $levels = $this->getReadingSpeeds();
         $form->addSelect('questionLevel', get_lang('Difficulty'), $levels);
         $form->addElement('hidden', 'answerType', READING_COMPREHENSION);
         $form->addTextarea('questionDescription', get_lang('Text'), ['rows' => 20]);
@@ -180,6 +194,7 @@ class ReadingComprehension extends UniqueAnswer
      */
     public static function get_default_levels()
     {
+
         return [
             1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
             2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
@@ -187,6 +202,20 @@ class ReadingComprehension extends UniqueAnswer
             4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
             5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
         ];
+    }
+
+    /**
+     * Return the augmented speeds (using, if defined, the 'exercise_question_reading_comprehension_extra_speeds' setting
+     * @return array
+     */
+    public function getReadingSpeeds(): array
+    {
+        $defaultLevels = [];
+        foreach ($this->allSpeeds as $i => $v) {
+            $defaultLevels[$i] = sprintf(get_lang('ReadingComprehensionLevelX'), $this->allSpeeds[$i]);
+        }
+
+        return $defaultLevels;
     }
 
     /**

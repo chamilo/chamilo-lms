@@ -326,6 +326,18 @@ $defaults['expired_on'] = (!empty($expired_on))
     ? api_get_local_time($expired_on)
     : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
+
+$display = api_get_configuration_value('lp_view_settings')['display'] ?? [];
+
+if (!empty($display)) {
+    $addExtraQuitToHomeIcon = $display['add_extra_quit_to_home_icon'] ?? false;
+    $value = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($lpId, 'add_extra_quit_button');
+
+    if (!is_array($value) && $addExtraQuitToHomeIcon) {
+        $defaults['extra_add_extra_quit_button[extra_add_extra_quit_button]'] = true;
+    }
+}
+
 $form->setDefaults($defaults);
 
 Display::display_header(get_lang('CourseSettings'), 'Path');

@@ -3490,8 +3490,8 @@ class DocumentManager
 
         // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
         $lp_visibility_condition = null;
-        if ($lp_id) {
-            if ($showInvisibleFiles) {
+        if ($lp_id || $showOnlyFolders) {
+            if ($showInvisibleFiles || $showOnlyFolders) {
                 $lp_visibility_condition .= ' OR last.visibility = 0';
             }
         }
@@ -3600,6 +3600,14 @@ class DocumentManager
                     api_get_user_id()
                 );
 
+                if ($showOnlyFolders) {
+                    $isFolder = ('folder' === $resource['filetype']);
+                    $visibility = (int) $resource['visibility'];
+                    if (!$isFolder && 0 == $visibility) {
+                        continue;
+                    }
+                }
+
                 if ($showInvisibleFiles === false) {
                     if (!$is_visible) {
                         continue;
@@ -3642,8 +3650,9 @@ class DocumentManager
 
         $return .= $writeResult;
         $lpAjaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
+        $extraAjaxParams = ($showOnlyFolders ? '&showOnlyFolders='.(int) $showOnlyFolders : '');
         if ($lp_id === false) {
-            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'].$extraAjaxParams;
             $return .= "<script>
             $(function() {
                 $('.close_div').click(function() {
@@ -3657,7 +3666,7 @@ class DocumentManager
             </script>";
         } else {
             // For LPs
-            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.(int) $lp_id.'&'.api_get_cidreq();
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.(int) $lp_id.'&'.api_get_cidreq().$extraAjaxParams;
         }
 
         if (!empty($overwrite_url)) {
@@ -5226,6 +5235,8 @@ class DocumentManager
         global $dbl_click_id;
         $www = $documentWebPath;
 
+        $secToken = Security::getTokenFromSession();
+
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
         $webODFList = self::get_web_odf_extension_list();
@@ -5257,8 +5268,8 @@ class DocumentManager
         if (!$show_as_icon) {
             // Build download link (icon)
             $forcedownload_link = $filetype === 'folder'
-                ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
-                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+                ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id'].'&sec_token='.$secToken
+                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'].'&sec_token='.$secToken;
             // Folder download or file download?
             $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
@@ -5371,7 +5382,7 @@ class DocumentManager
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
             ) {
-                $copy_myfiles_link = $filetype === 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
+                $copy_myfiles_link = $filetype === 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'].'&sec_token='.$secToken : api_get_self().'?'.$courseParams.'&sec_token='.$secToken;
                 if ($filetype === 'file') {
                     $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
@@ -5388,7 +5399,7 @@ class DocumentManager
                 api_get_setting('students_export2pdf') == 'true' &&
                 in_array($extension, ['html', 'htm'])
             ) {
-                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
+                $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&sec_token='.$secToken.'&curdirpath='.$curdirpath.'">'.
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
             }
 
@@ -5675,6 +5686,8 @@ class DocumentManager
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
 
+        $secToken = Security::getTokenFromSession();
+
         if ($type == 'link') {
             $parent_id = self::get_document_id(
                 api_get_course_info(),
@@ -5757,7 +5770,7 @@ class DocumentManager
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
                     $modify_icons[] = Display::url(
                         Display::return_icon('wizard.png', get_lang('AddAsTemplate')),
-                        api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
+                        api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id&sec_token=$secToken"
                     );
                 }
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') || $is_certificate_mode) {//allow attach certificate to course
@@ -5774,12 +5787,12 @@ class DocumentManager
                     if (isset($_GET['selectcat'])) {
                         $modify_icons[] = Display::url(
                             Display::return_icon($visibility_icon_certificate.'.png', $certificate),
-                            api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id"
+                            api_get_self()."?$courseParams&curdirpath=$curdirpath&selectcat=".intval($_GET['selectcat'])."&set_certificate=$id&sec_token=$secToken"
                         );
                         if ($is_preview) {
                             $modify_icons[] = Display::url(
                                 Display::return_icon('preview_view.png', $preview),
-                                api_get_self()."?$courseParams&curdirpath=$curdirpath&set_preview=$id"
+                                api_get_self()."?$courseParams&curdirpath=$curdirpath&set_preview=$id&sec_token=$secToken"
                             );
                         }
                     }
@@ -5787,13 +5800,13 @@ class DocumentManager
             } else {
                 $modify_icons[] = Display::url(
                     Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate')),
-                    api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id"
+                    api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id&sec_token=$secToken"
                 );
             }
 
             $modify_icons[] = Display::url(
                 Display::return_icon('pdf.png', get_lang('Export2PDF')),
-                api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
+                api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath&sec_token=$secToken"
             );
         }
         if ($type == 'file') {
@@ -5809,7 +5822,7 @@ class DocumentManager
             $form = new FormValidator(
                 'upload',
                 'POST',
-                api_get_self().'?'.api_get_cidreq(),
+                api_get_self().'?'.api_get_cidreq()."&sec_token=$secToken",
                 '',
                 ['enctype' => 'multipart/form-data']
             );
@@ -7367,7 +7380,11 @@ class DocumentManager
             }
         }
 
-        $urlMoveParams = http_build_query(['id' => $parentId, 'move' => $document_id]);
+        $urlMoveParams = http_build_query([
+            'id' => $parentId,
+            'move' => $document_id,
+            'sec_token' => Security::getTokenFromSession(),
+        ]);
 
         return Display::url(
             $iconEn,
@@ -7410,10 +7427,11 @@ class DocumentManager
 
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
             $tip_visibility = $visibility_icon == 'invisible' ? get_lang('Show') : get_lang('Hide');
+            $secToken = Security::getTokenFromSession();
 
             return Display::url(
                 Display::return_icon($visibility_icon.'.png', $tip_visibility),
-                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}"
+                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}&sec_token=$secToken"
             );
         }
 
@@ -7457,6 +7475,7 @@ class DocumentManager
             'action' => 'delete_item',
             'id' => $parentId,
             'deleteid' => $documentData['id'],
+            'sec_token' => Security::getTokenFromSession(),
         ]);
 
         $btn = Display::url(

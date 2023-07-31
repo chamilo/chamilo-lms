@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -60,7 +61,7 @@ class LessonAnswersMultipleAnswerLoader implements LoaderInterface
             $question->countAnswers() + 1,
             null,
             null,
-            '0@@0@@0@@0'
+            CQuizAnswer::DEFAULT_DESTINATION
         );
 
         $answer->save();

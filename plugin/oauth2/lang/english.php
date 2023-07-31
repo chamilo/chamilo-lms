@@ -80,6 +80,16 @@ $strings['response_resource_owner_status_help'] = 'The value at this array key s
  <dt>5</dt><dd>Student</dd>
  <dt>6</dt><dd>Anonymous</dd>
 </dl>';
+$strings['response_resource_owner_teacher_status'] = 'Response Resource Owner status value for Course Manager / Teacher';
+$strings['response_resource_owner_teacher_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Course Manager / Teacher';
+$strings['response_resource_owner_sessadmin_status'] = 'Response Resource Owner status value for Session Administrator';
+$strings['response_resource_owner_sessadmin_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Session Administrator';
+$strings['response_resource_owner_drh_status'] = 'Response Resource Owner status value for HRM';
+$strings['response_resource_owner_drh_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of HRM';
+$strings['response_resource_owner_student_status'] = 'Response Resource Owner status value for Student';
+$strings['response_resource_owner_student_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Student';
+$strings['response_resource_owner_anon_status'] = 'Response Resource Owner status value for Anonymous';
+$strings['response_resource_owner_anon_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Anonymous';
 $strings['response_resource_owner_email'] = 'Response Resource Owner email key';
 $strings['response_resource_owner_username'] = 'Response Resource Owner username key';
 
@@ -130,3 +140,5 @@ $strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on th
 $strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';
 $strings['IssuerNotFound'] = 'Issuer not found';
 $strings['AuthorizeUrlNotAllowed'] = 'Authorize URL not allowed';
+
+$strings['MessageInfoAboutRedirectToProvider'] = 'You are getting redirected to the common authentication system. Your credentials there are the ones that you typically use for other applications of your organisation. These might be different from the ones you used here previously.';

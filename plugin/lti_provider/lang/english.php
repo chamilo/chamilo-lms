@@ -31,3 +31,4 @@ $strings['PlatformConnectionAdded'] = 'A platform connection has been added.';
 $strings['ToolProvider'] = 'Provider tool';
 $strings['SelectOneActivity'] = 'Select one activity';
 $strings['Quizzes'] = 'Exercises';
+$strings['KeySetUrlJwks'] = 'Keyset url (jwks)';

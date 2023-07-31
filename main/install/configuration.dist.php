@@ -415,6 +415,8 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 //$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
 // Show the LP not marked as invisible by teacher in tracking page
 //$_configuration['student_follow_page_include_not_subscribed_lp_students'] = false;
+// Show certificate of achievement icon from the student details in course tracking
+//$_configuration['course_tracking_student_detail_show_certificate_of_achievement'] = false;
 // Allow change the order to show the tools in "My progress" page.
 /*$_configuration['my_progress_course_tools_order'] = [
     'order' => ['quizzes', 'learning_paths', 'skills'],
@@ -462,6 +464,24 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
+
+// It allows to other users to subscribe for events.
+// Requires enable agenda_collective_invitations before.
+// Requires DB changes:
+/*
+ALTER TABLE personal_agenda ADD subscription_visibility INT DEFAULT 0 NOT NULL, ADD subscription_item_id INT DEFAULT NULL;
+ALTER TABLE agenda_event_invitee ADD type VARCHAR(255) NOT NULL;
+ALTER TABLE agenda_event_invitation ADD type VARCHAR(255) NOT NULL, ADD max_attendees INT DEFAULT 0;
+UPDATE agenda_event_invitation SET type = 'invitation';
+UPDATE agenda_event_invitee SET type = 'invitee';
+*/
+// Then uncomment the "use EventSubscribableTrait;" line in the PersonalAgenda class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitation class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscription class.
+// Then add the "@" symbol in ORM\InheritanceType, ORM\DiscriminatorColumn and ORM\DiscriminatorMap lines in the AgendaEventInvitee class.
+// Then add the "@" symbol in @ORM\Entity line in the AgendaEventSubscriber class.
+//$_configuration['agenda_event_subscriptions'] = false;
+
 // Enable reminders for agenda events. Requires database changes:
 /*
  CREATE TABLE agenda_reminder (id BIGINT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT '(DC2Type:dateinterval)', sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
@@ -742,7 +762,7 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['exercise_attempts_report_show_username'] = false;
 // Allow extends allowed question types for embeddable exercises.
 /* By default, only the following question types are allowed: 1, 2, 17
-Add this types to allow them in embeddable exercises:
+Add these types to allow them in embeddable exercises:
  1 = Multiple choice
  2 = Multiple answers
  3 = Fill blanks or form
@@ -1031,6 +1051,10 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
         'add_extra_quit_to_home_icon' => false,
     ],
 ];*/
+// To enable the add_extra_quit_to_home_icon feature for single LP, add the following extrafield:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (6, 13, 'add_extra_quit_button', 'Add extra quit button', '', 0, 1, 0, 1, 0, NOW());
+*/
 
 // Force to hide the invisible course documents in sessions
 //$_configuration['hide_invisible_course_documents_in_sessions'] = false;
@@ -1083,9 +1107,21 @@ ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (se
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
+// Allow advanced selection of who can view the posts and comments. It requires DB changes:
+// ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;
+// Then add the "@" symbol to the CPortfolioComment::$visibility property in the ORM\Column() line.
+//$_configuration['portfolio_advanced_sharing'] = false;
 
+// DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats
 //$_configuration['gradebook_enable_best_score'] = false;
+/*
+Enable specific columns in gradebook table.
+[1] = Ranking
+[2] = Best Score
+[3] = Average
+*/
+//$_configuration['gradebook_display_extra_stats'] = ['columns' => [1, 2, 3]];
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;
@@ -1204,6 +1240,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 
 // Do not unsubscribe users from session when sessions are unsubscribe to class
 // $_configuration['usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'] = false;
+
+// Show all users in selector as initial list when subscribing users to class
+//$_configuration['usergroup_add_user_show_all_student_by_default'] = false;
 
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
@@ -1513,6 +1552,7 @@ CREATE TABLE c_plagiarism_compilatio_docs (
 ALTER TABLE c_plagiarism_compilatio_docs drop primary key;
 ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;
 ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
+ALTER TABLE c_plagiarism_compilatio_docs MODIFY compilatio_id VARCHAR(40) NOT NULL;
 
 requires extension "php-soap"  sudo apt-get install php-soap
 */
@@ -1736,6 +1776,7 @@ $_configuration['course_catalog_settings'] = [
         'variable5' => -1,
         'variable6' => 1,
     ],
+    'pre_filter_on_language' => 1, // By default, filter the courses catalogue on user language (prevents searching without language)
 ];
 */
 
@@ -1945,6 +1986,9 @@ $_configuration['auth_password_links'] = [
 
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;
+
+// Show official_code and order user based on this field in the multiple access url user management page
+//$_configuration['multiple_access_url_user_management_show_and_order_by_official_code'] = false;
 
 // Add option to copy a session with its course-session content BT#17832
 //$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
@@ -2289,12 +2333,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Hide IP in exercises reports
 // $_configuration['exercise_hide_ip'] = false;
 
-// Enable sign in attendance sheet for users
+// Enable signature in attendance sheet for users
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
 // ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
-// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php uncomment "signature" variable.
-// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php uncomment "blocked" variable.
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php  add the @ symbol for attribute $signature into ORM\Column() line.
+// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php add the @ symbol for attribute $blocked into ORM\Column() line.
 //$_configuration['enable_sign_attendance_sheet'] = false;
 
 // Make sessions by duration always accessible to coaches (otherwise
@@ -2321,10 +2365,124 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
+// Add the username value to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
+
+// Add the "remember password" link to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
+
+// Add a custom extra footer for notificacions emails for a specific language, for example for
+// privacy policy notices. Multiple languages and paragraphs can be added.
+/*$_configuration['notifications_extended_footer_message'] = ['english' => ['paragraphs' => [
+    'Change or delete this paragraph or add another one'
+]]];*/
+
+// Option to define duration for a calendar in attendance sheet.
+// Create an attendance calendar extra field with field label "duration" of type "text".
+// $_configuration['attendance_calendar_set_duration'] = false;
+
+// Enable comments in attendance sheet for users
+// Require DB changes:
+//CREATE TABLE c_attendance_result_comment (iid int not null PRIMARY KEY AUTO_INCREMENT, attendance_sheet_id int not null, user_id int not null, created_at datetime not null, updated_at datetime not null, comment text not null, author_user_id int not null);
+//CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
+// Then add the "@" symbol to CAttendanceResultComment class in the ORM\Entity() line.
+//$_configuration['attendance_allow_comments'] = false;
+
+// Enable categories in Wiki tool.
+// 1. Run the following DB changes:
+/*
+CREATE TABLE c_wiki_rel_category (wiki_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_AC88945BAA948DBE (wiki_id), INDEX IDX_AC88945B12469DE2 (category_id), PRIMARY KEY(wiki_id, category_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE c_wiki_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_17F1099A91D79BD3 (c_id), INDEX IDX_17F1099A613FECDF (session_id), INDEX IDX_17F1099AA977936C (tree_root), INDEX IDX_17F1099A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945BAA948DBE FOREIGN KEY (wiki_id) REFERENCES c_wiki (iid) ON DELETE CASCADE;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945B12469DE2 FOREIGN KEY (category_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099AA977936C FOREIGN KEY (tree_root) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (parent_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+*/
+// 2. Add an "@" before "ORM\ManyToMany" and "@ORM\JoinTable" in the "CWiki::$categories" property definition (in src/Chamilo/CourseBundle/Entity/CWiki.php)
+// 3. Add an "@" before "ORM\Entity" in the "CWikiCategory" class definition (in src/Chamilo/CourseBundle/Entity/CWikiCategory.php)
+//$_configuration['wiki_categories_enabled'] = false;
+
+// Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php
+/*$_configuration['session_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'client' => 'client',
+        'region' => 'region',
+    ]
+];*/
+
+// It adds option to define prerequisites with start and end dates for learnpath items.
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'start_date', 'StartDate', '', 0, 1, 0, 1, 0, NOW());
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(7, 7, 'end_date', 'EndDate', '', 0, 1, 0, 1, 0, NOW());
+*/
+//$_configuration['lp_item_prerequisite_dates'] = false;
+
+// Configuration setting to make some extra field required in session creation form on main/session/session_add.php.
+// $_configuration['session_creation_form_set_extra_fields_mandatory'] = ['fields' => ['client','region']];
+
+// Ask REST webservices (v2.php) to return another identifier for fields related to user ID.
+// This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps
+// the external system match the user data return with some external data that is know to Chamilo. For example, if
+// you use an external authentication system, you can return the extra field used to match the user with the
+// external authentication system rather than user.id.
+// $_configuration['webservice_return_user_field'] = 'oauth2_id';
+
+// Add support for careers hierarchy - refs BT#20711
+// 1. This requires the following DB change:
+// ALTER TABLE career add parent_id INT
+// ALTER TABLE career add constraint career_career_id_fk foreign key (parent_id) references career (id);
+// 2. Add an "@" before "var int" and "ORM\Column..." in the "Career::$parentId" property definition (in src/Chamilo/CoreBundle/Entity/Career.php)
+// 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
+// $_configuration['career_hierarchy_enable'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
+// Set to true to hide settings completely in a sub-URL if the setting is disabled in the
+// main URL (where the access_url_changeable field = 0)
+// $_configuration['multiple_url_hide_disabled_settings'] = false;
+
+// List of learner certificates - User extra fields to include at the exported CSV as columns
+//$_configuration['certificate_export_report_user_extra_fields'] = ['extra_fields' => ['office_address', 'office_phone_extension']];
+
+// Only courses with this option will be visible in catalogue
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(2, 3, 'show_in_catalogue', 'Show in catalogue', '', 0, 1, 1, 1, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Yes', NULL, NULL, 1),
+(@ef_id, '0', 'No', NULL, NULL, 2);
+*/
+//$_configuration['show_courses_in_catalogue'] = false;
+
+// Allows defining one or several categories of courses that will be visible in the course catalog
+// $_configuration['courses_catalogue_show_only_category'] = ['Cat1','Cat2'];
+
+//Hides the link to the course catalog in the menu when the catalog is public.
+// $_configuration['catalog_hide_public_link'] = false;
+
+// Display the Portal News link in the admin page to session admin users
+//$_configuration['session_admin_access_system_announcement'] = false;
+
+// File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
+//$_configuration['file_upload_size_limit_for_teacher'] = 0;
+
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
-// ------ (End) Custom DB changes
+
+// Enable use of a custom course logo in mail & PDF headers
+// $_configuration['mail_header_from_custom_course_logo'] = false;
+
+// Enable additional_webservices.php for *remote* PPT2PNG/Oogie service
+//$_configuration['webservice_remote_ppt2png_enable'] = false;
+
+// Add more speed options to reading comprehension question type (type id = 21) in words per minute
+//$_configuration['exercise_question_reading_comprehension_extra_speeds'] = ['speeds' => [70, 110, 170]];

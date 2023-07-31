@@ -630,7 +630,7 @@ class SurveyUtil
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
-        $lpItemsArray = $qb->select('sa.lpItemId, li.title, l.name')
+        $qb->select('sa.lpItemId, li.title, l.name')
             ->distinct()
             ->from('ChamiloCourseBundle:CSurveyAnswer', 'sa')
             ->innerJoin(
@@ -646,12 +646,16 @@ class SurveyUtil
                 'l.iid = li.lpId'
             )
             ->where('sa.cId = :cId')
-            ->andWhere('sa.sessionId = :sessionId')
             ->andWhere('sa.surveyId = :surveyId')
             ->setParameter('cId', $courseId)
-            ->setParameter('sessionId', $sessionId)
-            ->setParameter('surveyId', $surveyId)
-            ->getQuery()
+            ->setParameter('surveyId', $surveyId);
+
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $qb->andWhere('sa.sessionId = :sessionId')
+               ->setParameter('sessionId', $sessionId);
+        }
+
+        $lpItemsArray = $qb->getQuery()
             ->getArrayResult();
 
         $options = [];
@@ -853,7 +857,7 @@ class SurveyUtil
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset, $lpItemId);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
-                echo '<div class="open-question">';
+                echo '<div class="open-question" style="padding: 1px 0;">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
@@ -2993,6 +2997,11 @@ class SurveyUtil
                 true
             );
         } else {
+            $extraParameters = [];
+            if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+                $extraParameters = ['logo' => CourseManager::getCourseEmailPicture($_course)];
+            }
+
             @api_mail_html(
                 '',
                 $invitedUser,
@@ -3000,7 +3009,11 @@ class SurveyUtil
                 $full_invitation_text,
                 $sender_name,
                 $sender_email,
-                $replyto
+                $replyto,
+                [],
+                false,
+                $extraParameters,
+                ''
             );
         }
     }

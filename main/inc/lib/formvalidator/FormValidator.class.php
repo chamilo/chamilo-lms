@@ -216,6 +216,7 @@ EOT;
         }
 
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'html_filter');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -1819,7 +1820,9 @@ EOT;
         if (!empty($urlToRedirect)) {
             $redirectCondition = "window.location.replace('$urlToRedirect'); ";
         }
+        $maxFileSize = getIniMaxFileSizeInBytes();
         $icon = Display::return_icon('file_txt.gif');
+        $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
         $this->addHtml("
         <script>
         $(function () {
@@ -1852,6 +1855,7 @@ EOT;
                     });
                 });
 
+            var maxFileSize = parseInt('".$maxFileSize."');
             var counter = 0,
                 total = 0;
             $('#".$inputName."').fileupload({
@@ -1884,19 +1888,39 @@ EOT;
 
             }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" />').appendTo('#files');
+                var errs = [];
                 $.each(data.files, function (index, file) {
-                    var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
-                    node.appendTo(data.context);
-                    var iconLoading = $('<div class=\"col-sm-3\">').html(
-                        $('<span id=\"image-loading'+index+'\"/>').html('".Display::return_icon('loading1.gif', get_lang('Uploading'), [], ICON_SIZE_MEDIUM)."')
-                    );
-                    $(data.context.children()[index]).parent().append(iconLoading);
-                    total++;
+                    // check size
+                    if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
+                        errs.push(\"".$errorUploadMessage."\");
+                    } else {
+                        // array for all errors
+                        var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
+                        node.appendTo(data.context);
+                        var iconLoading = $('<div class=\"col-sm-3\">').html(
+                            $('<span id=\"image-loading'+index+'\"/>').html('".Display::return_icon('loading1.gif', get_lang('Uploading'), [], ICON_SIZE_MEDIUM)."')
+                        );
+                        $(data.context.children()[index]).parent().append(iconLoading);
+                        total++;
+                    }
                 });
+
+                // Output errors or submit data
+                if (errs.length > 0) {
+                    alert(\"".get_lang('AnErrorOccured')."\\n\" + errs.join(' '));
+                    return false;
+                } else {
+                    data.submit();
+                }
+
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
                     file = data.files[index],
                     node = $(data.context.children()[index]);
+
+                if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
+                    return false;
+                }
                 if (file.preview) {
                     data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
                 } else {

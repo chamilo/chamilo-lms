@@ -13,7 +13,7 @@
         </div>
         <p>
             {% if comment.comment is not empty %}
-                {{ comment.comment }}
+                {{ comment.comment|remove_xss }}
             {% else %}
                 {{ 'HereIsYourFeedback' | get_lang }}
             {% endif %}

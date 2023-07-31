@@ -99,7 +99,7 @@ if ($debug) {
 if (api_is_multiple_url_enabled()) {
     $accessUrls = api_get_access_urls(0,100000,'id');
     $multipleUrlLDAPConfig = true;
-    if (array_key_exists('host', $extldap_config) && !empty($extldap_config['host'])) {
+    if (!empty($extldap_config) && array_key_exists('host', $extldap_config) && !empty($extldap_config['host'])) {
         $multipleUrlLDAPConfig = false;
     }    
 }
@@ -114,8 +114,12 @@ if ($debug) {
 foreach ($accessUrls as $accessUrl) {
     $tableFields = [];
     $extraFields = [];
-    $extraFieldMap = [];   
+    $extraFieldMap = [];
     $accessUrlId = $accessUrl['id'];
+    global $_configuration;
+    $_configuration['access_url'] = $accessUrlId;
+    $extldap_config[$accessUrlId] = api_get_configuration_value('extldap_config');
+    $generalTableFieldMap[$accessUrlId] = $extldap_user_correspondance[$accessUrlId] = api_get_configuration_value('extldap_user_correspondance');
     $ldapAttributes = $extraLdapAttributes[$accessUrlId];
     if (array_key_exists($accessUrlId, $generalTableFieldMap) && is_array($generalTableFieldMap[$accessUrlId])) {
         $tableFieldMap = $generalTableFieldMap[$accessUrlId];

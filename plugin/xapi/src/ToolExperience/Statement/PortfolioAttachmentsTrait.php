@@ -4,7 +4,9 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
+use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
+use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
 use Chamilo\UserBundle\Entity\User;
 use UserManager;
 use Xabbuh\XApi\Model\Attachment;
@@ -63,5 +65,25 @@ trait PortfolioAttachmentsTrait
         }
 
         return $attachments;
+    }
+
+    protected function generateAttachmentsForItem(Portfolio $item): array
+    {
+        $itemAttachments = \Database::getManager()
+            ->getRepository(PortfolioAttachment::class)
+            ->findFromItem($item)
+        ;
+
+        return $this->generateAttachments($itemAttachments, $item->getUser());
+    }
+
+    protected function generateAttachmentsForComment(PortfolioCommentEntity $comment): array
+    {
+        $commentAttachments = \Database::getManager()
+            ->getRepository(PortfolioAttachment::class)
+            ->findFromComment($this->comment)
+        ;
+
+        return $this->generateAttachments($commentAttachments, $comment->getAuthor());
     }
 }

@@ -44,13 +44,13 @@ abstract class Question
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
         FILL_IN_BLANKS => ['fill_blanks.class.php', 'FillBlanks'],
-        FILL_IN_BLANKS_GLOBAL => ['FillBlanksGlobal.php', 'FillBlanksGlobal'],
+        FILL_IN_BLANKS_COMBINATION => ['FillBlanksCombination.php', 'FillBlanksCombination'],
         MATCHING => ['matching.class.php', 'Matching'],
-        MATCHING_GLOBAL => ['MatchingGlobal.php', 'MatchingGlobal'],
+        MATCHING_COMBINATION => ['MatchingCombination.php', 'MatchingCombination'],
         FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
         ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
         HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
-        HOT_SPOT_GLOBAL => ['HotSpotGlobal.php', 'HotSpotGlobal'],
+        HOT_SPOT_COMBINATION => ['HotSpotCombination.php', 'HotSpotCombination'],
         HOT_SPOT_DELINEATION => ['HotSpotDelineation.php', 'HotSpotDelineation'],
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
@@ -68,13 +68,13 @@ abstract class Question
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
-        MATCHING_DRAGGABLE_GLOBAL => ['MatchingDraggableGlobal.php', 'MatchingDraggableGlobal'],
+        MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
         MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
-        MULTIPLE_ANSWER_DROPDOWN_GLOBAL => ['MultipleAnswerDropdownGlobal.php', 'MultipleAnswerDropdownGlobal'],
+        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination'],
     ];
 
     /**
@@ -103,12 +103,12 @@ abstract class Question
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
-            MATCHING_GLOBAL,
+            MATCHING_COMBINATION,
             MATCHING_DRAGGABLE,
-            MATCHING_DRAGGABLE_GLOBAL,
+            MATCHING_DRAGGABLE_COMBINATION,
             DRAGGABLE,
             FILL_IN_BLANKS,
-            FILL_IN_BLANKS_GLOBAL,
+            FILL_IN_BLANKS_COMBINATION,
             FREE_ANSWER,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
@@ -1109,7 +1109,7 @@ abstract class Question
                 );
 
                 // If hotspot, create first answer
-                if (in_array($type, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_ORDER])) {
+                if (in_array($type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_ORDER])) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
@@ -1831,7 +1831,7 @@ abstract class Question
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                 case MULTIPLE_ANSWER_DROPDOWN:
-                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -2352,7 +2352,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
+        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
             $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
 
             return $header;
@@ -2575,9 +2575,9 @@ abstract class Question
     {
         $oppositeAnswers = [
             UNIQUE_ANSWER => [MULTIPLE_ANSWER],
-            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION],
             MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
-            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => [MULTIPLE_ANSWER],
         ];
         $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
@@ -2589,7 +2589,7 @@ abstract class Question
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
             MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
-            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => 'MultipleAnswerDropdownGlobal',
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => 'MultipleAnswerDropdownCombination',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {

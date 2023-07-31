@@ -22,7 +22,7 @@ if (empty($driverList)) {
     ];
     $block = api_get_configuration_value('block_editor_file_manager_for_students');
     $newDriverList = [];
-    if ($block && !api_is_allowed_to_edit()) {
+    if (($block) && !api_is_allowed_to_edit()) {
         foreach ($driverList as $driver) {
             if ($driver === 'CourseDriver') {
                 continue;

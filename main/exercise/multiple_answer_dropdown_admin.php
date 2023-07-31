@@ -16,7 +16,7 @@ if (!is_object($objQuestion)) {
     $objQuestion = Question::read($questionId);
 }
 
-$isGlobal = MULTIPLE_ANSWER_DROPDOWN_GLOBAL === (int) $objQuestion->type;
+$isGlobal = MULTIPLE_ANSWER_DROPDOWN_COMBINATION === (int) $objQuestion->type;
 
 $objAnswer = new Answer($objQuestion->iid, 0, $objExercise);
 $options = [];

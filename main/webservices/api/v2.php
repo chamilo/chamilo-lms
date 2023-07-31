@@ -195,7 +195,9 @@ try {
             break;
         case Rest::GET_PROFILES_BY_EXTRA_FIELD:
             Event::addEvent(LOG_WS.$action, 'extra_field_name', $_POST['field_name']);
-            $users = $restApi->getUsersProfilesByExtraField($_POST['field_name'], $_POST['field_value']);
+            $active = !empty($_POST['active']) && $_POST['active'] == 1 ? 1 : 0;
+            // If "active" is set, will drop inactive users (user.active = 0) from the response
+            $users = $restApi->getUsersProfilesByExtraField($_POST['field_name'], $_POST['field_value'], $active);
             $restResponse->setData($users);
             break;
         case Rest::GET_COURSES_DETAILS_BY_EXTRA_FIELD:
@@ -223,7 +225,8 @@ try {
             break;
         case Rest::GET_COURSE_DESCRIPTIONS:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
-            $descriptions = $restApi->getCourseDescriptions();
+            $fields = $_POST['fields'] ?? [];
+            $descriptions = $restApi->getCourseDescriptions($fields);
             $restResponse->setData($descriptions);
             break;
         case Rest::GET_COURSE_DOCUMENTS:
@@ -300,6 +303,13 @@ try {
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData(
                 $restApi->getCourseWorks()
+            );
+            break;
+        case Rest::GET_COURSE_EXERCISES:
+            Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
+            $fields = $_POST['fields'] ?? [];
+            $restResponse->setData(
+                $restApi->getCourseExercises($fields)
             );
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:
@@ -618,8 +628,12 @@ try {
             );
             break;
         case Rest::GET_COURSES:
-            Event::addEvent(LOG_WS.$action, 'id_campus', (int) $_POST['id_campus']);
-            $data = $restApi->getCoursesCampus($_POST);
+            $campusId = api_get_current_access_url_id();
+            if (!empty($_POST['id_campus'])) {
+                $campusId = (int) $_POST['id_campus'];
+            }
+            Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
+            $data = $restApi->getCoursesCampus($campusId);
             $restResponse->setData($data);
             break;
         case Rest::GET_COURSES_FROM_EXTRA_FIELD:
@@ -737,6 +751,15 @@ try {
             $users = $restApi->getUsersSubscribedToCourse();
             $restResponse->setData($users);
             break;
+        case Rest::GET_SESSIONS:
+            $campusId = api_get_current_access_url_id();
+            if (!empty($_POST['id_campus'])) {
+                $campusId = (int) $_POST['id_campus'];
+            }
+            Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
+            $data = $restApi->getSessionsCampus($campusId);
+            $restResponse->setData($data);
+            break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
             Event::addEvent(
@@ -747,7 +770,17 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::ADD_USERS_SESSION:
+        case Rest::SUBSCRIBE_USERS_TO_SESSION:
             $data = $restApi->addUsersSession($_POST);
+            Event::addEvent(
+                LOG_WS.$action,
+                'session_id-users_ids',
+                (int) $_POST['id_session'].':'.implode(',', $_POST['list_users'])
+            );
+            $restResponse->setData($data);
+            break;
+        case Rest::UNSUBSCRIBE_USERS_FROM_SESSION:
+            $data = $restApi->unsubscribeUsersFromSession($_POST);
             Event::addEvent(
                 LOG_WS.$action,
                 'session_id-users_ids',
@@ -766,6 +799,11 @@ try {
                 (int) $_POST['sessionId'].':'.Database::escape_string($_POST['loginname'])
             );
             $restResponse->setData([$subscribed]);
+            break;
+        case Rest::GET_USERS_SUBSCRIBED_TO_SESSION:
+            Event::addEvent(LOG_WS.$action, 'session_id', (int) $_POST['id_session']);
+            $users = $restApi->getUsersSubscribedToSession($_POST['id_session'], $_POST['move_info']);
+            $restResponse->setData($users);
             break;
         case Rest::GET_COURSE_QUIZ_MDL_COMPAT:
             Event::addEvent(LOG_WS.$action, 'course_id', (int) $_POST['course']);
@@ -812,8 +850,9 @@ try {
             break;
         case Rest::GET_TEST_UPDATES_LIST:
             Event::addEvent(LOG_WS.$action, 'success', 'true');
+            $fields = $_POST['fields'] ?? [];
             $restResponse->setData(
-                $restApi->getTestUpdatesList()
+                $restApi->getTestUpdatesList($fields)
             );
             break;
         case Rest::GET_TEST_AVERAGE_RESULTS_LIST:

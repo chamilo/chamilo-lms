@@ -14,10 +14,16 @@ if (!empty($course_info)) {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
+$group_id = api_get_group_id();
+
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
-        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        if (!empty($group_id)) {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq().'&user_id=GROUP:'.$group_id;
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        }
     } else {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?';
     }
@@ -31,7 +37,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = $_REQUEST['id'] ?? null;
 $type = $event_type = $_GET['type'] ?? null;
@@ -174,6 +179,9 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -194,7 +202,10 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -254,6 +265,10 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
+                $subscribers = $_REQUEST['subscribers'] ?? [];
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -307,7 +322,11 @@ if ($allowToEdit) {
                     $values['collective'] ?? false,
                     $reminders,
                     (int) $careerId,
-                    (int) $promotionId
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions,
+                    $subscribers
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -369,6 +388,14 @@ if ($allowToEdit) {
                 $content = $agenda->deleteEvent($eventId);
             }
             break;
+        case 'import_course_agenda_reminders':
+            if (!empty($course_info)) {
+                header('Location: '.api_get_path(WEB_CODE_PATH)
+                    .'admin/import_course_agenda_reminders.php?'.api_get_cidreq().'&type=course'
+                );
+
+                exit();
+            }
     }
 }
 

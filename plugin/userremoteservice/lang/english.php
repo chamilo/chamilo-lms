@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'User Remote Services';
-$strings['plugin_comment'] = 'Appends site-specific iframe-targetted user-identifying links to the menu bar.';
+$strings['plugin_comment'] = 'Appends site-specific iframe-targeted user-identifying links to the menu bar.';
 
 $strings['salt'] = 'Salt';
 $strings['salt_help'] =

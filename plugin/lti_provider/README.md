@@ -20,6 +20,14 @@ temporarily writeable by the web server.*
 4. Add the LTI connection details to try out the little demo app (Configuration page)
 5. Configure the LMS platforms for registration and deployment
 
+To be able to acces LTI content from a different domain in an iframe, the hosting provider will have to enable it by activating this configuration in the app/config/configuration.php file :
+```
+// Enable samesite:None parameter for session cookie.
+// More info: https://www.chromium.org/updates/same-site
+// Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+$_configuration['security_session_cookie_samesite_none'] = true;
+```
+
 # DB tables
 
 These tables are normally created during the activation of the plugin. They are mentioned here for practical purposes. 
@@ -65,3 +73,12 @@ CREATE TABLE plugin_lti_provider_result (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
+
+## v1.1
+### Database changes
+You need to execute this SQL query in your database after updating your Chamilo after version 1.11.18 if the plugin was already installed before.
+
+```sql
+ALTER TABLE plugin_lti_provider_result MODIFY client_uid varchar(255) NOT NULL;
+```
+

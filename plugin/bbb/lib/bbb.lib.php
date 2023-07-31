@@ -409,6 +409,7 @@ class bbb
             if (!empty($meetingDuration)) {
                 $duration = $meetingDuration;
             }
+            $url = api_get_access_url(api_get_current_access_url_id())['url'];
             $bbbParams = array(
                 'meetingId' => $params['remote_id'], // REQUIRED
                 'meetingName' => $meetingName, // REQUIRED
@@ -422,6 +423,7 @@ class bbb
                 'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
                 'record' => $record, // New. 'true' will tell BBB to record the meeting.
                 'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
+                'meta_OriginURL' => $url, // Add url information to BBB meeting info (see 'meta' info at https://docs.bigbluebutton.org/dev/api.html#create)
                 //'meta_category' => '',  // Use to pass additional info to BBB server. See API docs.
             );
 
@@ -636,9 +638,8 @@ class bbb
             $this->table,
             array(
                 'where' => array(
-                    'meeting_name = ? AND status = 1 AND access_url = ?' => array(
+                    'meeting_name = ? AND status = 1' => array(
                         $meetingName,
-                        $this->accessUrl,
                     ),
                 ),
             ),
@@ -915,10 +916,9 @@ class bbb
         $sessionId = api_get_session_id();
         $conditions = array(
             'where' => array(
-                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
-                    array($courseId, $sessionId, $meetingName, $this->accessUrl),
-            ),
-        );
+                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1' =>
+                 array($courseId, $sessionId, $meetingName),
+        ));
 
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();
@@ -999,7 +999,8 @@ class bbb
         $isAdminReport = false,
         $dateRange = [],
         $start = 0,
-        $limit = 0
+        $limit = 0,
+        $order = "ASC"
     ) {
         $em = Database::getManager();
         $manager = $this->isConferenceManager();
@@ -1061,7 +1062,7 @@ class bbb
             );
         }
 
-        $conditions['order'] = 'created_at ASC';
+        $conditions['order'] = 'created_at ' . $order;
 
         if ($limit) {
             $conditions['limit'] = "$start , $limit";

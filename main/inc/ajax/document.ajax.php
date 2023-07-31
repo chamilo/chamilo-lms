@@ -10,14 +10,14 @@ $action = $_REQUEST['a'];
 switch ($action) {
     case 'get_dir_size':
         api_protect_course_script(true);
-        $path = isset($_GET['path']) ? $_GET['path'] : '';
+        $path = $_GET['path'] ?? '';
         $isAllowedToEdit = api_is_allowed_to_edit();
         $size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
         echo format_file_size($size);
         break;
     case 'get_dirs_size':
         api_protect_course_script(true);
-        $requests = isset($_GET['requests']) ? $_GET['requests'] : '';
+        $requests = $_GET['requests'] ?? '';
         $isAllowedToEdit = api_is_allowed_to_edit();
         $response = [];
         $requests = explode(',', $requests);
@@ -27,7 +27,7 @@ switch ($action) {
                 'id' => $request,
                 'size' => format_file_size($fileSize),
             ];
-            array_push($response, $data);
+            $response[] = $data;
         }
         echo json_encode($response);
         break;
@@ -74,7 +74,6 @@ switch ($action) {
             ]);
             exit;
         } else {
-
             // User access same as upload.php
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -93,7 +92,11 @@ switch ($action) {
                 $groupInfo = GroupManager::get_group_properties(api_get_group_id());
                 // Only course admin or group members allowed
                 if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupInfo)) {
-                    if (!GroupManager::allowUploadEditDocument(api_get_user_id(), api_get_course_int_id(), $groupInfo)) {
+                    if (!GroupManager::allowUploadEditDocument(
+                        api_get_user_id(),
+                        api_get_course_int_id(),
+                        $groupInfo
+                    )) {
                         exit;
                     }
                 } else {
@@ -111,7 +114,7 @@ switch ($action) {
             $directoryParentId = isset($_POST['directory_parent_id']) ? (int) $_POST['directory_parent_id'] : 0;
             $currentDirectory = '';
             if (empty($directoryParentId)) {
-                $currentDirectory = isset($_REQUEST['curdirpath']) ? $_REQUEST['curdirpath'] : '';
+                $currentDirectory = $_REQUEST['curdirpath'] ?? '';
             } else {
                 $documentData = DocumentManager::get_document_data_by_id($directoryParentId, api_get_course_id());
                 if ($documentData) {
@@ -121,7 +124,7 @@ switch ($action) {
             if (empty($currentDirectory)) {
                 $currentDirectory = DIRECTORY_SEPARATOR;
             }
-            $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : '';
+            $ifExists = $_POST['if_exists'] ?? '';
             $unzip = isset($_POST['unzip']) ? 1 : 0;
 
             if (empty($ifExists)) {
@@ -186,7 +189,7 @@ switch ($action) {
                             get_lang('Uploaded')
                         );
                     } else {
-                        $json['name'] = isset($file['name']) ? $file['name'] : get_lang('Unknown');
+                        $json['name'] = $file['name'] ?? get_lang('Unknown');
                         $json['url'] = '';
                         $json['error'] = get_lang('Error');
                     }
@@ -272,7 +275,7 @@ switch ($action) {
         break;
     case 'document_destination':
         //obtained the bootstrap-select selected value via ajax
-        $dirValue = isset($_POST['dirValue']) ? $_POST['dirValue'] : null;
+        $dirValue = $_POST['dirValue'] ?? null;
         echo Security::remove_XSS($dirValue);
         break;
 }

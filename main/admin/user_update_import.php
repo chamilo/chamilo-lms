@@ -105,9 +105,9 @@ function updateUsers(
             }
 
             $user_id = $userInfo['user_id'];
-            $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
-            $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
-            $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
+            $firstName = $user['FirstName'] ?? $userInfo['firstname'];
+            $lastName = $user['LastName'] ?? $userInfo['lastname'];
+            $userName = $user['NewUserName'] ?? $userInfo['username'];
             $changePassMethod = 0;
             $password = null;
             $authSource = $userInfo['auth_source'];
@@ -126,12 +126,12 @@ function updateUsers(
                 }
             }
 
-            $email = isset($user['Email']) ? $user['Email'] : $userInfo['email'];
-            $status = isset($user['Status']) ? $user['Status'] : $userInfo['status'];
-            $officialCode = isset($user['OfficialCode']) ? $user['OfficialCode'] : $userInfo['official_code'];
-            $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
-            $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_uri'];
-            $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
+            $email = $user['Email'] ?? $userInfo['email'];
+            $status = $user['Status'] ?? $userInfo['status'];
+            $officialCode = $user['OfficialCode'] ?? $userInfo['official_code'];
+            $phone = $user['PhoneNumber'] ?? $userInfo['phone'];
+            $pictureUrl = $user['PictureUri'] ?? $userInfo['picture_uri'];
+            $expirationDate = $user['ExpiryDate'] ?? $userInfo['expiration_date'];
             $active = $userInfo['active'];
             if (isset($user['Active'])) {
                 $user['Active'] = (int) $user['Active'];
@@ -143,7 +143,7 @@ function updateUsers(
 
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
-            $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
+            $language = $user['Language'] ?? $userInfo['language'];
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
             //$sendEmail = false;
             // see BT#17893
@@ -299,7 +299,7 @@ $form->addGroup($group, '', get_lang('SendMailToUsers'));
 $defaults['sendMail'] = 0;
 
 if ($form->validate()) {
-    if (Security::check_token('post')) {
+    if (Security::check_token()) {
         Security::clear_token();
         $formValues = $form->exportValues();
 
@@ -359,14 +359,12 @@ if ($form->validate()) {
             );
             Display::addFlash(Display::return_message($warningMessage, 'warning', false));
         }
-
-        header('Location: '.api_get_self());
-        exit;
     } else {
         Display::addFlash(Display::return_message(get_lang('LinkExpired'), 'warning', false));
-        header('Location: '.api_get_self());
-        exit;
     }
+
+    header('Location: '.api_get_self());
+    exit;
 }
 
 Display::display_header($tool_name);

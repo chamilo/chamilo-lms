@@ -58,6 +58,13 @@ class Career
     protected $updatedAt;
 
     /**
+     * var int.
+     *
+     * ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    //protected $parentId;
+
+    /**
      * Get id.
      *
      * @return int

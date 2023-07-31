@@ -362,6 +362,15 @@ if (!$formSent) {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
 }
 
+// Relation to prefill session extra field with user extra field
+$fillExtraField = api_get_configuration_value('session_creation_user_course_extra_field_relation_to_prefill');
+if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {
+    foreach ($fillExtraField['fields'] as $sessionVariable => $userVariable) {
+        $extraValue = UserManager::get_extra_user_data_by_field(api_get_user_id(), $userVariable);
+        $formDefaults['extra_'.$sessionVariable] = isset($extraValue[$userVariable]) ? $extraValue[$userVariable] : '';
+    }
+}
+
 $form->setDefaults($formDefaults);
 
 if ($form->validate()) {

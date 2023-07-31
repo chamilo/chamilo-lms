@@ -102,7 +102,7 @@ $htmlHeadXtra[] = '
         $(".li_container .order_items").click(function(e) {
             var dir = $(this).data("dir");
             var itemId = $(this).data("id");
-            var jItems = $("#lp_item_list li.li_container");
+            var jItems = $("#lp_item_list li.li_container:not(#final_item)");
             var jItem = $("#"+ itemId);
             var index = jItems.index(jItem);
             var total = jItems.length;
@@ -615,6 +615,33 @@ switch ($action) {
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
 
                     if ($_POST['type'] == TOOL_DOCUMENT) {
+
+                        // form validations after submit.
+                        $error = false;
+                        $errMsg = '';
+                        if (true === api_get_configuration_value('lp_item_prerequisite_dates')) {
+                            if (!isset($_POST['extra_start_date'])) {
+                                $_POST['extra_start_date'] = 0;
+                            }
+                            if (!isset($_POST['extra_end_date'])) {
+                                $_POST['extra_end_date'] = 0;
+                            }
+                            $extraStartDate = $_POST['extra_start_date'];
+                            $extraEndDate = $_POST['extra_end_date'];
+                            if (!empty($extraStartDate) && !empty($extraEndDate)) {
+                                $error = !(strtotime($extraEndDate) >= strtotime($extraStartDate));
+                            }
+                            if ($error) {
+                                $errMsg = get_lang('StartDateMustBeBeforeTheEndDate');
+                            }
+                        }
+
+                        if ($error) {
+                            Display::addFlash(Display::return_message($errMsg, 'error'));
+                            header('Location: '.api_request_uri());
+                            exit;
+                        }
+
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
@@ -629,7 +656,7 @@ switch ($action) {
                             }
                         }
 
-                        $_SESSION['oLP']->add_item(
+                        $lastItemId = $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             $type,
@@ -638,6 +665,13 @@ switch ($action) {
                             $description,
                             $prerequisites
                         );
+
+                        if (!empty($lastItemId)) {
+                            $params = $_POST;
+                            $params['item_id'] = $lastItemId;
+                            $extraFieldValues = new ExtraFieldValue('lp_item');
+                            $extraFieldValues->saveFieldValues($params, true);
+                        }
                     } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
@@ -738,6 +772,12 @@ switch ($action) {
         }
         require 'lp_add_category.php';
         break;
+    case 'ai_helper':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        require 'lp_add_ai_helper.php';
+        break;
     case 'move_up_category':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -827,7 +867,7 @@ switch ($action) {
                     $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
                     $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
-                    $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
+                    $accumulateScormTime = $_REQUEST['accumulate_scorm_time'] ?? 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
@@ -900,6 +940,32 @@ switch ($action) {
                 $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                 $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
                 $url = isset($_POST['url']) ? $_POST['url'] : '';
+
+                // form validations after submit.
+                $error = false;
+                $errMsg = '';
+                if (true === api_get_configuration_value('lp_item_prerequisite_dates')) {
+                    if (!isset($_POST['extra_start_date'])) {
+                        $_POST['extra_start_date'] = 0;
+                    }
+                    if (!isset($_POST['extra_end_date'])) {
+                        $_POST['extra_end_date'] = 0;
+                    }
+                    $extraStartDate = $_POST['extra_start_date'];
+                    $extraEndDate = $_POST['extra_end_date'];
+                    if (!empty($extraStartDate) && !empty($extraEndDate)) {
+                        $error = !(strtotime($extraEndDate) >= strtotime($extraStartDate));
+                    }
+                    if ($error) {
+                        $errMsg = get_lang('StartDateMustBeBeforeTheEndDate');
+                    }
+                }
+
+                if ($error) {
+                    Display::addFlash(Display::return_message($errMsg, 'error'));
+                    header('Location: '.api_request_uri());
+                    exit;
+                }
 
                 $_SESSION['oLP']->edit_item(
                     $_REQUEST['id'],

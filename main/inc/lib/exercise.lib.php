@@ -75,7 +75,7 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
         if ($answerType != HOT_SPOT &&
-            $answerType != HOT_SPOT_GLOBAL &&
+            $answerType != HOT_SPOT_COMBINATION &&
             $answerType != HOT_SPOT_DELINEATION &&
             $answerType != ANNOTATION
         ) {
@@ -139,9 +139,9 @@ class ExerciseLib
             $num_suggestions = 0;
             switch ($answerType) {
                 case MATCHING:
-                case MATCHING_GLOBAL:
+                case MATCHING_COMBINATION:
                 case DRAGGABLE:
-                case MATCHING_DRAGGABLE_GLOBAL:
+                case MATCHING_DRAGGABLE_COMBINATION:
                 case MATCHING_DRAGGABLE:
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
@@ -342,7 +342,7 @@ class ExerciseLib
                     $s .= $form->returnForm();
                     break;
                 case MULTIPLE_ANSWER_DROPDOWN:
-                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                     if ($debug_mark_answer) {
                         $s .= '<p><strong>'
                             .(
@@ -967,7 +967,7 @@ class ExerciseLib
                         $s .= '</tr>';
                         break;
                     case FILL_IN_BLANKS:
-                    case FILL_IN_BLANKS_GLOBAL:
+                    case FILL_IN_BLANKS_COMBINATION:
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
@@ -1198,7 +1198,7 @@ class ExerciseLib
                         }
                         break;
                     case MATCHING:
-                    case MATCHING_GLOBAL:
+                    case MATCHING_COMBINATION:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
                         if ($answerCorrect != 0) {
@@ -1358,7 +1358,7 @@ class ExerciseLib
                             $s .= '</li>';
                         }
                         break;
-                    case MATCHING_DRAGGABLE_GLOBAL:
+                    case MATCHING_DRAGGABLE_COMBINATION:
                     case MATCHING_DRAGGABLE:
                         if ($answerId == 1) {
                             echo $objAnswerTmp->getJs();
@@ -1469,7 +1469,7 @@ HTML;
                         }
                         break;
                     case MULTIPLE_ANSWER_DROPDOWN:
-                    case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                    case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                         if ($debug_mark_answer && $answerCorrect) {
                             $s .= '<p>'
                                 .(
@@ -1484,7 +1484,7 @@ HTML;
                 }
             }
 
-            if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])
+            if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])
                 && !$debug_mark_answer
             ) {
                 $userChoiceList = array_unique($userChoiceList);
@@ -1536,9 +1536,9 @@ HTML;
                 $answerType,
                 [
                     MATCHING,
-                    MATCHING_GLOBAL,
+                    MATCHING_COMBINATION,
                     MATCHING_DRAGGABLE,
-                    MATCHING_DRAGGABLE_GLOBAL,
+                    MATCHING_DRAGGABLE_COMBINATION,
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
@@ -1580,7 +1580,7 @@ HTML;
 //                $s .= '</div>';
             }
 
-            if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
+            if (in_array($answerType, [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION])) {
                 $s .= '</div>'; //drag_question
             }
 
@@ -1594,7 +1594,7 @@ HTML;
                 return $s;
             }
             echo $s;
-        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_GLOBAL])) {
+        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_COMBINATION])) {
             global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
@@ -1674,7 +1674,7 @@ HTML;
                         </div>
                     </div>
                     <script>
-                        new ".(in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL]) ? "HotspotQuestion" : "DelineationQuestion")."({
+                        new ".(in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION]) ? "HotspotQuestion" : "DelineationQuestion")."({
                             questionId: $questionId,
                             exerciseId: {$exercise->iid},
                             exeId: 0,
@@ -1922,6 +1922,133 @@ HOTSPOT;
         }
 
         echo $html;
+    }
+
+    /**
+     * Get the table as array of results of exercises attempts with questions score.
+     *
+     * @return array
+     */
+    public static function getTrackExerciseAttemptsTable(Exercise $objExercise)
+    {
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $exerciseId = $objExercise->iid;
+        $courseId = $objExercise->course_id;
+        $sessionId = (int) $objExercise->sessionId;
+        $questionList = $objExercise->getQuestionForTeacher(0, $objExercise->getQuestionCount());
+
+        $headers = [
+            get_lang('UserName'),
+            get_lang('Email'),
+        ];
+
+        $extraField = new ExtraField('user');
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraFieldQuestion = new ExtraFieldValue('question');
+
+        $extraFields = $extraField->get_all(['filter = ?' => 1]);
+        $userExtraFields = [];
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extra) {
+                $headers[] = $extra['display_text'];
+                $userExtraFields[] = $extra['variable'];
+            }
+        }
+
+        $headersXls = $headers;
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $questionObj = Question::read($questionId);
+                $questionName = cut($questionObj->question, 200);
+                $headers[] = '<a href="#" title="'.$questionName.'">'.$questionId.'</a>';
+                $headersXls[] = $questionName;
+            }
+        }
+
+        $sql = "SELECT
+                    te.exe_id,
+                    te.exe_user_id
+                FROM
+                    $tblTrackExercises te
+                INNER JOIN
+                    $tblQuiz q ON (q.iid = te.exe_exo_id AND q.c_id = te.c_id)
+                WHERE
+                    te.c_id = $courseId AND
+                    te.session_id = $sessionId AND
+                    te.status = '' AND
+                    te.exe_exo_id = $exerciseId
+                ";
+        $rs = Database::query($sql);
+        $data = [];
+        if (Database::num_rows($rs) > 0) {
+            $x = 0;
+            while ($row = Database::fetch_array($rs)) {
+                $userInfo = api_get_user_info($row['exe_user_id']);
+                $data[$x]['username'] = $userInfo['username'];
+                $data[$x]['email'] = $userInfo['email'];
+                if (!empty($userExtraFields)) {
+                    foreach ($userExtraFields as $variable) {
+                        $extra = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $row['exe_user_id'],
+                            $variable
+                        );
+                        $data[$x][$variable] = $extra['value'] ?? '';
+                    }
+                }
+
+                // the questions
+                if (!empty($questionList)) {
+                    foreach ($questionList as $questionId) {
+                        $questionObj = Question::read($questionId);
+                        $questionName = cut($questionObj->question, 200);
+                        $questionResult = $objExercise->manage_answer(
+                            $row['exe_id'],
+                            $questionId,
+                            '',
+                            'exercise_show',
+                            [],
+                            false,
+                            true,
+                            false,
+                            $objExercise->selectPropagateNeg()
+                        );
+
+                        $displayValue = $questionResult['score'];
+                        $differentiation = $extraFieldQuestion->get_values_by_handler_and_field_variable($questionId, 'differentiation');
+                        if (!empty($differentiation['value'])) {
+                            $answerType = $questionObj->selectType();
+                            $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
+                            $userChoice = [];
+                            if (!empty($questionResult['correct_answer_id']) && HOT_SPOT_DELINEATION != $answerType) {
+                                foreach ($questionResult['correct_answer_id'] as $answerId) {
+                                    $answer = $objAnswerTmp->getAnswerByAutoId($answerId);
+                                    if (!empty($answer)) {
+                                        $userChoice[] = $answer['answer'];
+                                    } else {
+                                        $answer = $objAnswerTmp->selectAnswer($answerId);
+                                        $userChoice[] = $answer;
+                                    }
+                                }
+                            }
+                            if (!empty($userChoice)) {
+                                $displayValue = implode('|', $userChoice);
+                            }
+                        }
+                        $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question_attempt&exercise='.$exerciseId.'&question='.$questionId.'&exe_id='.$row['exe_id'];
+                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClickToViewDetails').'">'.$displayValue.'</a>';
+                    }
+                }
+                $x++;
+            }
+        }
+
+        $table['headers'] = $headers;
+        $table['headers_xls'] = $headersXls;
+        $table['rows'] = $data;
+
+        return $table;
     }
 
     /**
@@ -4491,7 +4618,7 @@ EOT;
         $courseId = api_get_course_int_id($course_code);
         $session_id = intval($session_id);
 
-        if (in_array($questionType, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
+        if (in_array($questionType, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
             $listStudentsId = [];
             $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
                 api_get_course_id(),
@@ -4658,14 +4785,14 @@ EOT;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
-            case FILL_IN_BLANKS_GLOBAL:
+            case FILL_IN_BLANKS_COMBINATION:
                 $answer_condition = '';
                 $select_condition = ' e.exe_id, answer ';
                 break;
             case MATCHING:
-            case MATCHING_GLOBAL:
+            case MATCHING_COMBINATION:
             case MATCHING_DRAGGABLE:
-            case MATCHING_DRAGGABLE_GLOBAL:
+            case MATCHING_DRAGGABLE_COMBINATION:
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = ' DISTINCT exe_user_id ';
@@ -4709,7 +4836,7 @@ EOT;
             $good_answers = 0;
             switch ($question_type) {
                 case FILL_IN_BLANKS:
-                case FILL_IN_BLANKS_GLOBAL:
+                case FILL_IN_BLANKS_COMBINATION:
                     while ($row = Database::fetch_array($result, 'ASSOC')) {
                         $fill_blank = self::check_fill_in_blanks(
                             $correct_answer,
@@ -4724,9 +4851,9 @@ EOT;
                     return $good_answers;
                     break;
                 case MATCHING:
-                case MATCHING_GLOBAL:
+                case MATCHING_COMBINATION:
                 case MATCHING_DRAGGABLE:
-                case MATCHING_DRAGGABLE_GLOBAL:
+                case MATCHING_DRAGGABLE_COMBINATION:
                 default:
                     $return = Database::num_rows($result);
             }
@@ -5658,7 +5785,7 @@ EOT;
         $nbrCorrect = 0;
         $nbrOptions = 0;
         switch ($answerType) {
-            case FILL_IN_BLANKS_GLOBAL:
+            case FILL_IN_BLANKS_COMBINATION:
                 if (!empty($listCorrectAnswers)) {
                     foreach ($listCorrectAnswers['student_score'] as $idx => $val) {
                         if (1 === (int) $val) {
@@ -5668,7 +5795,7 @@ EOT;
                     $nbrOptions = (int) $listCorrectAnswers['words_count'];
                 }
                 break;
-            case HOT_SPOT_GLOBAL:
+            case HOT_SPOT_COMBINATION:
                 if (!empty($listCorrectAnswers)) {
                     foreach ($listCorrectAnswers as $idx => $val) {
                         if (1 === (int) $choice[$idx]) {
@@ -5689,8 +5816,8 @@ EOT;
                 }
                 $nbrOptions = $nbrAnswers;
                 break;
-            case MATCHING_GLOBAL:
-            case MATCHING_DRAGGABLE_GLOBAL:
+            case MATCHING_COMBINATION:
+            case MATCHING_DRAGGABLE_COMBINATION:
                 if (isset($listCorrectAnswers['form_values'])) {
                     if (isset($listCorrectAnswers['form_values']['correct'])) {
                         $nbrCorrect = count($listCorrectAnswers['form_values']['correct']);
@@ -6211,10 +6338,10 @@ EOT;
             READING_COMPREHENSION,
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
             UPLOAD_ANSWER,
-            MATCHING_GLOBAL,
-            FILL_IN_BLANKS_GLOBAL,
+            MATCHING_COMBINATION,
+            FILL_IN_BLANKS_COMBINATION,
             MULTIPLE_ANSWER_DROPDOWN,
-            MULTIPLE_ANSWER_DROPDOWN_GLOBAL,
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;
@@ -6919,10 +7046,15 @@ EOT;
                                         $exercise_stat_info,
                                         $studentId
                                     );
+                                    $extraParameters = [];
+                                    if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+                                        $extraParameters = ['logo' => CourseManager::getCourseEmailPicture($courseInfo)];
+                                    }
                                     foreach ($emailList as $email) {
                                         if (empty($email)) {
                                             continue;
                                         }
+
                                         api_mail_html(
                                             null,
                                             $email,
@@ -6931,7 +7063,10 @@ EOT;
                                             null,
                                             null,
                                             [],
-                                            $attachments
+                                            $attachments,
+                                            false,
+                                            $extraParameters,
+                                            ''
                                         );
                                     }
                                 }
@@ -7022,5 +7157,158 @@ EOT;
         $exeId = $_REQUEST['exe_id'] ?? 0;
 
         error_log("Exercise ping received: exe_id = $exeId. _user not found in session.");
+    }
+
+    public static function saveFileExerciseResultPdf(
+        int $exeId,
+        int $courseId,
+        int $sessionId
+    ) {
+        $cinfo = api_get_course_info_by_id($courseId);
+        $courseCode = $cinfo['code'];
+        $cidReq = 'cidReq='.$courseCode.'&id_session='.$sessionId.'&gidReq=0&gradebook=0';
+
+        $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_COOKIE, session_id());
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        if (false === $result) {
+            error_log('saveFileExerciseResultPdf error: '.curl_error($ch));
+        }
+
+        curl_close($ch);
+    }
+
+    public static function exportAllExercisesResultsZip(
+        int $sessionId,
+        int $courseId,
+        $filterDates = []
+    ) {
+        $exercises = self::get_all_exercises_for_course_id(
+            null,
+            $sessionId,
+            $courseId,
+            true
+        );
+
+        $exportOk = false;
+        if (!empty($exercises)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-ALL';
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            if (!is_dir($exportFolderPath)) {
+                @mkdir($exportFolderPath);
+            }
+
+            foreach ($exercises as $exercise) {
+                $exerciseId = $exercise['iid'];
+                self::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, [], $exportFolderPath);
+            }
+
+            // If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \PclZip($exportFilePath);
+                $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
+                rmdirr($exportFolderPath);
+
+                DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                exit;
+            }
+        }
+
+        if (!$exportOk) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return false;
+    }
+
+    public static function exportExerciseAllResultsZip(
+        int $sessionId,
+        int $courseId,
+        int $exerciseId,
+        $filterDates = [],
+        string $mainPath = ''
+    ) {
+        $objExerciseTmp = new Exercise($courseId);
+        $exeResults = $objExerciseTmp->getExerciseAndResult(
+            $courseId,
+            $sessionId,
+            $exerciseId,
+            true,
+            $filterDates
+        );
+
+        $exportOk = false;
+        if (!empty($exeResults)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            // 1. Cleans the export folder if it exists.
+            if (is_dir($exportFolderPath)) {
+                rmdirr($exportFolderPath);
+            }
+
+            // 2. Create the pdfs inside a new export folder path.
+            if (!empty($exeResults)) {
+                foreach ($exeResults as $exeResult) {
+                    $exeId = (int) $exeResult['exe_id'];
+                    ExerciseLib::saveFileExerciseResultPdf($exeId, $courseId, $sessionId);
+                }
+            }
+
+            // 3. If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \PclZip($exportFilePath);
+                $zip->create($exportFolderPath, PCLZIP_OPT_REMOVE_PATH, $exportFolderPath);
+                rmdirr($exportFolderPath);
+
+                if (!empty($mainPath) && file_exists($exportFilePath)) {
+                    @rename($exportFilePath, $mainPath.'/'.$exportName.'.zip');
+                } else {
+                    DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                    exit;
+                }
+            }
+        }
+
+        if (empty($mainPath) && !$exportOk) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return false;
     }
 }

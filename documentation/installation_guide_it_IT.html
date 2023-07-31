@@ -515,10 +515,10 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p6"><span class="s1">11. Sistema Chamilo Rapid per conversione file PPT</span></p>
 <p class="p14"><span class="s1">Nota: questo passaggio richiede un server dedicato oppure un server virtuale perchè il pacchetto tipicamente non è supportato dalla maggior parte delle soluzioni di hosting condiviso presenti sul mercato.</span></p>
-<p class="p14"><span class="s1">Su un sistema Debian o Ubuntu 11.10 o superiori basta semplicemente installare LibreOffice.org v3 ed avviarlo come server headless:</span></p>
+<p class="p14"><span class="s1">Su un sistema Debian o Ubuntu 22.04 o superiori basta semplicemente installare LibreOffice v7 ed avviarlo come server headless:</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p17"><span class="s1">sudo apt-get install libreoffice</span></p>
-<p class="p17"><span class="s1">sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;</span></p>
+<p class="p17"><span class="s1">/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Poi vai nella pagina di Amministrazione&gt; Chamilo Rapid ed imposta l’host a “localhost”, la porta a “2002”. Salva. Ora vai nel tuo corso, nel tool Percorsi di Apprendimento e dovresti vedere una nuova icona aggiunta. Ora puoi importare un file PPT e dovrebbe funzionare.</span></p>
 <p class="p14"><span class="s1">Nota: qualche volta non funziona così facilmente. Potresti dover necessitare di assistenza da parte di qualche amministratore di sistema con conoscenze di base di Java e PHP o comunque puoi chiedere assistenza ai nostri Provider Ufficiali (con un contratto commerciale di assistenza per questo tipo di servizio)</span></p>

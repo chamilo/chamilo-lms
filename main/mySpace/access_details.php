@@ -54,7 +54,9 @@ $form->addElement(
     ['id' => 'type']
 );
 $form->addElement('hidden', 'student', $user_id);
+$form->applyFilter('student', 'html_filter');
 $form->addElement('hidden', 'course', $course_code);
+$form->applyFilter('course', 'html_filter');
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
 $group = [
@@ -73,7 +75,7 @@ $from = null;
 $to = null;
 $course = $course_code;
 if ($form->validate()) {
-    $values = $form->getSubmitValues();
+    $values = $form->exportValues();
     $from = $values['from'];
     $to = $values['to'];
     $type = $values['type'];

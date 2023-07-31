@@ -17,6 +17,41 @@ $isRequestByAjax = $request->isXmlHttpRequest();
 $action = $_REQUEST['a'];
 
 switch ($action) {
+    case 'comment_attendance':
+        $selected = $_REQUEST['selected'];
+        $comment = $_REQUEST['comment'];
+        $attendanceId = (int) $_REQUEST['attendance_id'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $attendance->saveComment(
+                (int) $userId,
+                (int) $attendanceCalendarId,
+                $comment,
+                $attendanceId
+            );
+            echo 1;
+            exit;
+        }
+        echo 0;
+        break;
+    case 'get_attendance_comment':
+        $selected = $_REQUEST['selected'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $commentInfo = $attendance->getComment(
+                (int) $userId,
+                (int) $attendanceCalendarId
+            );
+            echo json_encode(
+              [
+                  'comment' => $commentInfo['comment'],
+                  'author' => !empty($commentInfo['author']) ? get_lang('Author').': '.$commentInfo['author'] : '',
+              ]
+            );
+        }
+        break;
     case 'block_attendance_calendar':
         $calendarId = (int) $_REQUEST['calendar_id'];
         $attendance = new Attendance();

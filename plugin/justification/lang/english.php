@@ -1,7 +1,7 @@
 <?php
 
 $strings['plugin_title'] = "Justification Plugin";
-$strings['plugin_comment'] = "";
+$strings['plugin_comment'] = "Requires documents from students as administrative justification.";
 
 $strings['tool_enable'] = "Enable";
 

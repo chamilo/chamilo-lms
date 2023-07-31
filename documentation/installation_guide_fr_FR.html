@@ -663,10 +663,16 @@ sudo /etc/init.d/apache2 restart
         <h2><a name="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapide - Conversion de PPT</h2>
         <div>
             <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
-            On Debian or Ubuntu 11.10 and superior, install LibreOffice.org v3 and start it as a headless server:
+            On Debian or Ubuntu 22.04 and superior, install LibreOffice v7 (or superior) and start it as a headless server:
         <pre>
-sudo apt-get install libreoffice
-sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;
+sudo apt-get install libreoffice screen
+sudo adduser rapid
+sudo adduser rapid www-data
+screen
+sudo -s
+su - rapid
+/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"
+CTRL+a, CTRL+d
         </pre>
         Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
         <em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
@@ -801,7 +807,6 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
     RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
     RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
-    RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
 </pre>
@@ -842,6 +847,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+
     rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
@@ -849,6 +855,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
     rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
@@ -862,30 +869,18 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   }
 
   location / {
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
   location /main {
-    rewrite ^/main/admin/$ /main/admin/index.php last;
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
-    try_files $uri /index.php$is_args$args;
+    try_files $uri @rewrite;
 
-    rewrite ^/certificates/$ /certificates/index.php?id=%1  last;
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
-    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
-    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
-
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -913,6 +908,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location ^~ /tests/ {
     deny all;
   }
+
 </pre>
             <h3>IIS</h3>
             <div>
@@ -1016,10 +1012,6 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
                     &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v23" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$" /&gt;
-                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
-                &lt;/rule&gt;
-                &lt;rule name="rule v24" stopProcessing="true"&gt;
                     &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
                     &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;

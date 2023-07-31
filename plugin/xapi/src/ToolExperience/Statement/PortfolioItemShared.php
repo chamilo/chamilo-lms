@@ -4,12 +4,10 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared;
-use Database;
 use Xabbuh\XApi\Model\Statement;
 
 /**
@@ -31,12 +29,7 @@ class PortfolioItemShared extends PortfolioItemStatement
 
         $context = $this->generateContext();
 
-        $itemAttachments = Database::getManager()
-            ->getRepository(PortfolioAttachment::class)
-            ->findFromItem($this->item)
-        ;
-
-        $attachments = $this->generateAttachments($itemAttachments, $itemAuthor);
+        $attachments = $this->generateAttachmentsForItem($this->item);
 
         return new Statement(
             $this->generateStatementId('portfolio-item'),

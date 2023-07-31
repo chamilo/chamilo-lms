@@ -5,6 +5,7 @@
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
+use GuzzleHttp\Client;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
 
@@ -1962,14 +1963,16 @@ class SocialManager extends UserManager
 
         $isOwnWall = $currentUserId == $userIdLoop || $currentUserId == $receiverId;
         if ($isOwnWall) {
-            $comment .= Display::url(
-                    Display::returnFontAwesomeIcon('trash', '', true),
-                'javascript:void(0)',
+            $comment .= Display::button(
+                '',
+                Display::returnFontAwesomeIcon('trash', '', true),
                 [
                     'id' => 'message_'.$message['id'],
                     'title' => get_lang('SocialMessageDelete'),
-                    'onclick' => 'deleteComment('.$message['id'].')',
-                    'class' => 'btn btn-default',
+                    'type' => 'button',
+                    'class' => 'btn btn-default btn-delete-social-comment',
+                    'data-id' => $message['id'],
+                    'data-sectoken' => Security::get_existing_token('social'),
                 ]
             );
         }
@@ -2059,12 +2062,8 @@ class SocialManager extends UserManager
 
     /**
      * get html data with OpenGrap passing the URL.
-     *
-     * @param $link url
-     *
-     * @return string data html
      */
-    public static function readContentWithOpenGraph($link)
+    public static function readContentWithOpenGraph(string $link): string
     {
         if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
             $link = "http://".$link;
@@ -2094,28 +2093,28 @@ class SocialManager extends UserManager
 
     /**
      * verify if Url Exist - Using Curl.
-     *
-     * @param $uri url
-     *
-     * @return bool
      */
-    public static function verifyUrl($uri)
+    public static function verifyUrl(string $uri): bool
     {
-        $curl = curl_init($uri);
-        curl_setopt($curl, CURLOPT_FAILONERROR, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        if (!empty($response)) {
-            return true;
-        }
+        $client = new Client();
 
-        return false;
+        try {
+            $response = $client->request('GET', $uri, [
+                'timeout' => 15,
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+                ],
+            ]);
+
+            if (200 !== $response->getStatusCode()) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -2368,7 +2367,7 @@ class SocialManager extends UserManager
     /**
      * @return string Get the JS code necessary for social wall to load open graph from URLs.
      */
-    public static function getScriptToGetOpenGraph()
+    public static function getScriptToGetOpenGraph(): string
     {
         return '<script>
             $(function() {
@@ -2836,7 +2835,7 @@ class SocialManager extends UserManager
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                             $icon_path = UserManager::get_favicon_from_url($data);
-                            if (self::verifyUrl($icon_path) == false) {
+                            if (!self::verifyUrl($icon_path)) {
                                 break;
                             }
                             $bottom = '0.2';
@@ -3020,30 +3019,6 @@ class SocialManager extends UserManager
         }
 
         $htmlHeadXtra[] = '<script>
-            function deleteMessage(id)
-            {
-                $.ajax({
-                    url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-                    success: function (result) {
-                        if (result) {
-                            $("#message_" + id).parent().parent().parent().parent().html(result);
-                        }
-                    }
-                });
-            }
-
-            function deleteComment(id)
-            {
-                $.ajax({
-                    url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-                    success: function (result) {
-                        if (result) {
-                            $("#message_" + id).parent().parent().parent().html(result);
-                        }
-                    }
-                });
-            }
-
             function submitComment(messageId)
             {
                 var data = $("#form_comment_"+messageId).serializeArray();
@@ -3072,33 +3047,39 @@ class SocialManager extends UserManager
             $(function() {
                 timeAgo();
 
-                /*$(".delete_message").on("click", function() {
-                    var id = $(this).attr("id");
-                    id = id.split("_")[1];
-                    $.ajax({
-                        url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-                        success: function (result) {
+                $("body").on("click", ".btn-delete-social-message", function () {
+                    var id = $(this).data("id");
+                    var secToken = $(this).data("sectoken");
+
+                    $.getJSON(
+                        "'.$socialAjaxUrl.'",
+                        { a: "delete_message", id: id, social_sec_token: secToken },
+                        function (result) {
                             if (result) {
-                                $("#message_" + id).parent().parent().parent().parent().html(result);
+                                $("#message_" + id).parent().parent().parent().parent().html(result.message);
+
+                                $(".btn-delete-social-message").data("sectoken", result.secToken);
                             }
                         }
-                    });
+                    );
                 });
 
+                $("body").on("click", ".btn-delete-social-comment", function () {
+                    var id = $(this).data("id");
+                    var secToken = $(this).data("sectoken");
 
-                $(".delete_comment").on("click", function() {
-                    var id = $(this).attr("id");
-                    id = id.split("_")[1];
-                    $.ajax({
-                        url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
-                        success: function (result) {
+                    $.getJSON(
+                        "'.$socialAjaxUrl.'",
+                        { a: "delete_message", id: id, social_sec_token: secToken },
+                        function (result) {
                             if (result) {
-                                $("#message_" + id).parent().parent().parent().html(result);
+                                $("#message_" + id).parent().parent().parent().html(result.message);
+
+                                $(".btn-delete-social-comment").data("sectoken", result.secToken);
                             }
                         }
-                    });
+                    );
                 });
-                */
             });
 
             function timeAgo() {
@@ -3470,14 +3451,16 @@ class SocialManager extends UserManager
         );
 
         if ($canEdit) {
-            $htmlDelete = Display::url(
+            $htmlDelete = Display::button(
+                '',
                 Display::returnFontAwesomeIcon('trash', '', true),
-                'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],
                     'title' => get_lang('SocialMessageDelete'),
-                    'onclick' => 'deleteMessage('.$message['id'].')',
-                    'class' => 'btn btn-default',
+                    'type' => 'button',
+                    'class' => 'btn btn-default btn-delete-social-message',
+                    'data-id' => $message['id'],
+                    'data-sectoken' => Security::get_existing_token('social'),
                 ]
             );
 

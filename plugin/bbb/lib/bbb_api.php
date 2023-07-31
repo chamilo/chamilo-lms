@@ -134,7 +134,8 @@ class BigBlueButtonBN
             '&logoutURL='.urlencode($creationParams['logoutUrl']).
             '&maxParticipants='.urlencode($creationParams['maxParticipants']).
             '&record='.urlencode($creationParams['record']).
-            '&duration='.urlencode($creationParams['duration'])
+            '&duration='.urlencode($creationParams['duration']).
+            '&meta_OriginURL'.urlencode($creationParams['meta_OriginURL'])
         ;
 
         //'&meta_category='.urlencode($creationParams['meta_category']);

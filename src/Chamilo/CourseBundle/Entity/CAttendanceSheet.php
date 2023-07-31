@@ -60,9 +60,9 @@ class CAttendanceSheet
     /**
      * @var string
      *
-     * @ORM\Column(name="signature", type="string", nullable=true)
+     * ORM\Column(name="signature", type="string", nullable=true)
      */
-    //protected $signature;
+    protected $signature;
 
     /**
      * Set presence.

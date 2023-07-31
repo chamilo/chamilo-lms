@@ -773,6 +773,12 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
 
+    $table->set_header($headerCounter++, get_lang('LpFinalizationDate'), false);
+    $headers['lp_finalization_date'] = get_lang('LpFinalizationDate');
+
+    $table->set_header($headerCounter++, get_lang('QuizFinalizationDate'), false);
+    $headers['quiz_finalization_date'] = get_lang('QuizFinalizationDate');
+
     $counter = $headerCounter;
     if (api_get_setting('show_email_addresses') === 'true') {
         $table->set_header($counter, get_lang('Email'), false);
@@ -1021,6 +1027,8 @@ if ($export_csv) {
 
     $csv_headers[] = get_lang('FirstLoginInCourse');
     $csv_headers[] = get_lang('LatestLoginInCourse');
+    $csv_headers[] = get_lang('LpFinalizationDate');
+    $csv_headers[] = get_lang('QuizFinalizationDate');
 
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {

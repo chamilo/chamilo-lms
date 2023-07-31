@@ -37,9 +37,9 @@ class Result
     protected $userId;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="client_uid", type="integer", nullable=false)
+     * @ORM\Column(name="client_uid", type="string", nullable=false)
      */
     protected $clientUId;
 
@@ -142,12 +142,12 @@ class Result
         return $this;
     }
 
-    public function getClientUId(): int
+    public function getClientUId(): string
     {
         return $this->clientUId;
     }
 
-    public function setClientUId(int $clientUId): Result
+    public function setClientUId(string $clientUId): Result
     {
         $this->clientUId = $clientUId;
 

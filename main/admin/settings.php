@@ -95,6 +95,12 @@ $form_search_html = $form_search->returnForm();
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
+$flushSettings = false;
+$multipleUrlsEnabled = false;
+
+if (api_is_multiple_url_enabled()) {
+    $multipleUrlsEnabled = true;
+}
 
 // Build the form.
 if (!empty($_GET['category']) &&
@@ -112,7 +118,7 @@ if (!empty($_GET['category']) &&
         $mark_all = false;
         $un_mark_all = false;
 
-        if (api_is_multiple_url_enabled()) {
+        if ($multipleUrlsEnabled) {
             if (isset($values['buttons_in_action_right']) &&
                 isset($values['buttons_in_action_right']['mark_all'])
             ) {
@@ -147,6 +153,7 @@ if (!empty($_GET['category']) &&
                                 ];
                                 api_set_setting_simple($params);
                             }
+                            $flushSettings = true;
                         }
                     }
                 }
@@ -208,6 +215,7 @@ if (!empty($_GET['category']) &&
                         access_url = ".intval($url_id)." AND
                         type IN ('checkbox', 'radio') ";
             $res = Database::query($sql);
+            $flushSettings = true;
         }
 
         // Save the settings.
@@ -286,6 +294,7 @@ if (!empty($_GET['category']) &&
                 foreach ($value as $subkey => $subvalue) {
                     $result = api_set_setting($key, 'true', $subkey, null, $url_id);
                 }
+                $flushSettings = true;
             }
         }
 
@@ -299,7 +308,9 @@ if (!empty($_GET['category']) &&
             api_get_utc_datetime(),
             $user_id
         );
-
+        if ($flushSettings) {
+            api_flush_settings_cache($url_id);
+        }
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
@@ -485,10 +496,12 @@ if (!empty($_GET['category'])) {
             echo '</div>';
 
             echo '</div>';
+            $flushSettings = true;
             break;
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
             handleStylesheets();
+            $flushSettings = true;
             break;
         case 'Search':
             handleSearch();
@@ -509,6 +522,9 @@ if (!empty($_GET['category'])) {
     }
 }
 $content = ob_get_clean();
+if ($flushSettings) {
+    api_flush_settings_cache($url_id);
+}
 
 // Including the header (banner).
 Display::display_header($tool_name);

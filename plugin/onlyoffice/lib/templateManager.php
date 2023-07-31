@@ -1,6 +1,7 @@
 <?php
 /**
- * (c) Copyright Ascensio System SIA 2021.
+ *
+ * (c) Copyright Ascensio System SIA 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +14,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-require_once __DIR__."/../../../main/inc/global.inc.php";
 
-class TemplateManager
-{
+require_once __DIR__ . "/../../../main/inc/global.inc.php";
+
+class TemplateManager {
+
     /**
-     * Mapping local path to templates.
+     * Mapping local path to templates
      *
-     * @var array
+     * @var Array
      */
     private static $localPath = [
         "bg" => "bg-BG",
@@ -44,11 +47,11 @@ class TemplateManager
         "sv" => "sv-SE",
         "uk" => "uk-UA",
         "vi" => "vi-VN",
-        "zh" => "zh-CN",
+        "zh" => "zh-CN"
     ];
 
     /**
-     * Return path to template new file.
+     * Return path to template new file
      */
     public static function getEmptyTemplate($fileExtension): string
     {
@@ -57,8 +60,8 @@ class TemplateManager
         if (!array_key_exists($lang, self::$localPath)) {
             $lang = "en";
         }
-        $templateFolder = api_get_path(SYS_PLUGIN_PATH)."onlyoffice/assets/".self::$localPath[$lang];
+        $templateFolder = api_get_path(SYS_PLUGIN_PATH) . "onlyoffice/assets/" . self::$localPath[$lang];
 
-        return $templateFolder."/".ltrim($fileExtension, ".").".zip";
+        return $templateFolder . "/" . ltrim($fileExtension, ".") . ".zip";
     }
 }

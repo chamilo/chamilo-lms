@@ -734,11 +734,12 @@ if (!empty($student_id) && empty($courseCode)) {
         ['class' => 'ajax', 'data-title' => get_lang('ExportToPDF')]
     );
 }
-
-echo Display::url(
-    Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
-);
+if (true === api_get_configuration_value('course_tracking_student_detail_show_certificate_of_achievement')) {
+    echo Display::url(
+        Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+    );
+}
 
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
@@ -1175,7 +1176,6 @@ $tpl->assign('details', $details);
 $tpl->assign('hide_lp_test_average', $hideLpTestAverageIcon);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
 $content = $tpl->fetch($templateName);
-
 echo $content;
 
 // Careers.
@@ -1749,19 +1749,47 @@ if (empty($details)) {
                 }
 
                 // Get time in lp
+                $linkMinTime = '';
+                $formattedLpTime = '';
                 if (!empty($timeCourse)) {
-                    $lpTime = isset($timeCourse[TOOL_LEARNPATH]) ? $timeCourse[TOOL_LEARNPATH] : 0;
-                    $total_time = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
+                    $lpTime = $timeCourse[TOOL_LEARNPATH] ?? 0;
+                    $totalLpTime = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
+
+                    if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
+                        $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite(
+                            $lp_id,
+                            $courseInfo['real_id']
+                        );
+                        if ($accumulateWorkTime > 0) {
+
+                            // If the time spent is less than necessary,
+                            // then we show an icon in the actions column indicating the warning
+                            $formattedLpTime = api_time_to_hms($totalLpTime);
+                            $formattedWorkTime = api_time_to_hms($accumulateWorkTime * 60);
+
+                            if ($totalLpTime < ($accumulateWorkTime * 60)) {
+                                $linkMinTime = Display::return_icon(
+                                    'warning.png',
+                                    get_lang('LpMinTimeWarning').' - '.
+                                    $formattedLpTime.' / '.
+                                    $formattedWorkTime
+                                );
+                            }
+                        } else {
+                            $formattedLpTime = api_time_to_hms($totalLpTime);
+                        }
+                    }
                 } else {
-                    $total_time = Tracking::get_time_spent_in_lp(
+                    $totalLpTime = Tracking::get_time_spent_in_lp(
                         $student_id,
                         $courseCode,
                         [$lp_id],
                         $sessionId
                     );
+                    $formattedLpTime = api_time_to_hms($totalLpTime);
                 }
 
-                if (!empty($total_time)) {
+                if (!empty($totalLpTime)) {
                     $any_result = true;
                 }
 
@@ -1777,10 +1805,6 @@ if (empty($details)) {
                     $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
                 } else {
                     $start_time = '-';
-                }
-
-                if (!empty($total_time)) {
-                    $any_result = true;
                 }
 
                 // Quiz in lp
@@ -1857,8 +1881,8 @@ if (empty($details)) {
                     echo Display::tag('td', stripslashes($lp_name));
                 }
                 if (in_array('time', $columnHeadersKeys)) {
-                    $contentToExport[] = api_time_to_hms($total_time);
-                    echo Display::tag('td', api_time_to_hms($total_time));
+                    $contentToExport[] = $formattedLpTime;
+                    echo Display::tag('td', $linkMinTime.$formattedLpTime, ['style' => 'width: 10%']);
                 }
 
                 if (in_array('best_score', $columnHeadersKeys)) {

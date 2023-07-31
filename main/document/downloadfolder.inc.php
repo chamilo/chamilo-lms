@@ -275,7 +275,7 @@ if (api_is_allowed_to_edit()) {
 
     // If we get invisible folders, we have to filter out these results from all visible files we found
     if (Database::num_rows($query2) > 0) {
-        $files = [];
+        //$files = [];
         // Add item to an array
         while ($invisible_folders = Database::fetch_assoc($query2)) {
             //3rd: Get all files that are in the found invisible folder (these are "invisible" too)

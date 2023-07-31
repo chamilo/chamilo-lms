@@ -13,7 +13,7 @@ if ($type === 'personal') {
 
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 $group_id = api_get_group_id();
 
 if ($type === 'course') {
@@ -40,17 +40,19 @@ switch ($action) {
         if (false === Security::check_token('get')) {
             exit;
         }
-        $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
-        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
-        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
-        $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
+        $add_as_announcement = $_REQUEST['add_as_annonuncement'] ?? null;
+        $title = $_REQUEST['title'] ?? null;
+        $content = $_REQUEST['content'] ?? null;
+        $comment = $_REQUEST['comment'] ?? null;
+        $userToSend = $_REQUEST['users_to_send'] ?? [];
         $inviteesList = $_REQUEST['invitees'] ?? [];
         $isCollective = isset($_REQUEST['collective']);
         $notificationCount = $_REQUEST['notification_count'] ?? [];
         $notificationPeriod = $_REQUEST['notification_period'] ?? [];
         $careerId = $_REQUEST['career_id'] ?? 0;
         $promotionId = $_REQUEST['promotion_id'] ?? 0;
+        $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+        $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
         $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -71,7 +73,9 @@ switch ($action) {
             $isCollective,
             $reminders,
             (int) $careerId,
-            (int) $promotionId
+            (int) $promotionId,
+            $subscriptionVisibility,
+            $maxSubscriptions
         );
 
         echo $eventId;
@@ -103,7 +107,7 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
-        $deleteAllEventsFromSerie = isset($_REQUEST['delete_all_events']) ? true : false;
+        $deleteAllEventsFromSerie = isset($_REQUEST['delete_all_events']);
         $agenda->deleteEvent($id, $deleteAllEventsFromSerie);
         break;
     case 'resize_event':
@@ -132,8 +136,8 @@ switch ($action) {
         $agenda->move_event($id, $minute_delta, $allDay);
         break;
     case 'get_events':
-        $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
-        $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
+        $filter = $_REQUEST['user_id'] ?? null;
+        $sessionId = $_REQUEST['session_id'] ?? null;
         $result = $agenda->parseAgendaFilter($filter);
 
         $groupId = current($result['groups']);
@@ -223,6 +227,32 @@ switch ($action) {
                 false
             );
         }
+        break;
+    case 'event_subscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->subscribeCurrentUserToEvent($id);
+        break;
+    case 'event_unsubscribe':
+        if (!$agenda->getIsAllowedToEdit()) {
+            break;
+        }
+
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
+        $id = (int) explode('_', $_REQUEST['id'])[1];
+
+        $agenda->unsubscribeCurrentUserToEvent($id);
         break;
     default:
         echo '';

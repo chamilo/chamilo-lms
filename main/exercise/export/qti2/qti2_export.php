@@ -462,7 +462,7 @@ function export_question_qti($questionId, $standalone = true)
         || $qst instanceof MultipleAnswer
         || $qst instanceof FreeAnswer
         || $qst instanceof MultipleAnswerDropdown
-        || $qst instanceof MultipleAnswerDropdownGlobal
+        || $qst instanceof MultipleAnswerDropdownCombination
     ;
 
     if (!$isValid) {

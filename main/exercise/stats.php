@@ -157,7 +157,7 @@ if (!empty($questionList)) {
             // Overwriting values depending of the question
             switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
-                case FILL_IN_BLANKS_GLOBAL:
+                case FILL_IN_BLANKS_COMBINATION:
                     $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
                     $correct_answer = $is_correct;
@@ -240,7 +240,7 @@ if (!empty($questionList)) {
                     }
                     break;
                 case HOT_SPOT:
-                case HOT_SPOT_GLOBAL:
+                case HOT_SPOT_COMBINATION:
                     if ($answer_id == 1) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {

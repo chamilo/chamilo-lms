@@ -2833,7 +2833,7 @@ JAVASCRIPT;
                             }
                             break;
                         default:
-                            $inject_extra_fields .= " fv$counter.value as {$extra['field']}, ";
+                            $inject_extra_fields .= " fv$counter.field_value as {$extra['field']}, ";
                             break;
                     }
 
@@ -2889,7 +2889,7 @@ JAVASCRIPT;
                                  INNER JOIN $this->table_field_options fvo$counter
                                  ON (
                                     fv$counter.field_id = fvo$counter.field_id AND
-                                    fv$counter.value = fvo$counter.option_value
+                                    fv$counter.field_value = fvo$counter.option_value
                                  )
                                 ";
                             break;
@@ -2921,7 +2921,7 @@ JAVASCRIPT;
                             // text, textarea, etc
                             $options['where'] = str_replace(
                                 $extra_info['field'],
-                                'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.value',
+                                'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.field_value',
                                 $options['where']
                             );
                             break;

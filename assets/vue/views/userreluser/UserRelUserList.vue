@@ -21,8 +21,8 @@
     <div class="basis-auto lg:basis-3/4">
       <DataView
         :value="items"
-        layout="grid"
         class="friend-list"
+        layout="grid"
       >
         <template #grid="slotProps">
           <div class="friend-list__block">
@@ -31,12 +31,13 @@
               class="friend-info"
             >
               <img
+                :alt="slotProps.data.friend.username"
+                :src="slotProps.data.friend.illustrationUrl"
                 class="friend-info__avatar"
-                :src="slotProps.data.friend.illustrationUrl" :alt="slotProps.data.friend.username"
               />
               <div
-                v-text="slotProps.data.friend.username"
                 class="friend-info__username"
+                v-text="slotProps.data.friend.username"
               />
             </div>
             <div
@@ -44,24 +45,25 @@
               class="friend-info"
             >
               <img
+                :alt="slotProps.data.user.username"
+                :src="slotProps.data.user.illustrationUrl"
                 class="friend-info__avatar"
-                :src="slotProps.data.user.illustrationUrl" :alt="slotProps.data.user.username"
               />
               <div
-                v-text="slotProps.data.user.username"
                 class="friend-info__username"
+                v-text="slotProps.data.user.username"
               />
             </div>
 
             <div class="friend-options">
               <span
-                v-text="useRelativeDatetime(slotProps.data.createdAt)"
                 class="friend-options__time"
+                v-text="useRelativeDatetime(slotProps.data.createdAt)"
               />
               <BaseButton
-                type="danger"
                 icon="user-delete"
                 only-icon
+                type="danger"
                 @click="onClickDeleteFriend(slotProps.data)"
               />
             </div>
@@ -122,7 +124,7 @@ import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useConfirm } from "primevue/useconfirm"
-import userRelUserService from '../../services/userreluser'
+import userRelUserService from "../../services/userreluser"
 import { useRelativeDatetime } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 
@@ -172,37 +174,37 @@ function addFriend(friend) {
 }
 
 function reloadHandler() {
-  Promise
-    .all([
-      userRelUserService.findAll({
-        params: friendFilter,
-      }),
-      userRelUserService.findAll({
-        params: friendBackFilter,
-      }),
-    ])
-    .then(
-      ([friendshipResponse, friendshipBackResponse]) => Promise.all([friendshipResponse.json(), friendshipBackResponse.json()])
+  Promise.all([
+    userRelUserService.findAll({
+      params: friendFilter,
+    }),
+    userRelUserService.findAll({
+      params: friendBackFilter,
+    }),
+  ])
+    .then(([friendshipResponse, friendshipBackResponse]) =>
+      Promise.all([friendshipResponse.json(), friendshipBackResponse.json()]),
     )
-    .then(
-      ([friendshipJson, friendshipBackJson]) => items.value.push(...friendshipJson['hydra:member'], ...friendshipBackJson['hydra:member'])
+    .then(([friendshipJson, friendshipBackJson]) =>
+      items.value.push(...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]),
     )
-    .catch(e => notification.showErrorNotification(e))
+    .catch((e) => notification.showErrorNotification(e))
 
   userRelUserService
     .findAll({
-      params: friendRequestFilter
+      params: friendRequestFilter,
     })
     .then((response) => response.json())
-    .then((json) => friendRequests.value = json['hydra:member'])
-    .catch(e => notification.showErrorNotification(e))
+    .then((json) => (friendRequests.value = json["hydra:member"]))
+    .catch((e) => notification.showErrorNotification(e))
+
   userRelUserService
     .findAll({
-      params: waitingFilter
+      params: waitingFilter,
     })
     .then((response) => response.json())
-    .then((json) => waitingRequests.value = json['hydra:member'])
-    .catch(e => notification.showErrorNotification(e))
+    .then((json) => (waitingRequests.value = json["hydra:member"]))
+    .catch((e) => notification.showErrorNotification(e))
 }
 
 reloadHandler()
@@ -215,14 +217,14 @@ const confirm = useConfirm()
 
 function onClickDeleteFriend(friendship) {
   confirm.require({
-    icon: 'mdi mdi-alert-outline',
-    header: t('Confirmation'),
-    message: t('Are you sure to delete the friendship?'),
+    icon: "mdi mdi-alert-outline",
+    header: t("Confirmation"),
+    message: t("Are you sure to delete the friendship?"),
     accept: async () => {
       await userRelUserService.del(friendship)
 
       reloadHandler()
-    }
+    },
   })
 }
 </script>

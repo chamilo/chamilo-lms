@@ -99,6 +99,7 @@ export const chamiloIconToClass = {
   "up": "mdi mdi-arrow-up-right",
   "usage": "mdi mdi-chart-donut",
   "user-add": "mdi mdi-account-plus-outline",
+  "user-delete": "mdi mdi-account-minus-outline",
   "view-gallery": "mdi mdi-view-gallery",
   "sessions": "mdi mdi-google-classroom",
   "search": "mdi mdi-magnify",

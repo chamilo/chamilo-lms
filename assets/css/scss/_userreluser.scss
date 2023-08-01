@@ -1,0 +1,25 @@
+.friend-list {
+  &__block {
+    @apply p-4 border border-solid border-support-1 shadow-lg rounded-lg;
+
+    .friend-info {
+      @apply flex flex-col items-center gap-3 py-4;
+
+      &__avatar {
+        @apply w-9 shadow-lg border border-support-1 rounded-lg;
+      }
+
+      &__username {
+        @apply text-body-2 font-semibold;
+      }
+    }
+
+    .friend-options {
+      @apply flex items-baseline justify-between;
+
+      &__time {
+        @apply text-gray-50 uppercase text-tiny;
+      }
+    }
+  }
+}

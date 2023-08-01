@@ -126,7 +126,7 @@ $MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains invalid
 $CountryDialCode = "Include the country dial code";
 $FieldTypeMobilePhoneNumber = "Mobile phone number";
 $CheckUniqueEmail = "Check unique e-mail";
-$EmailUsedTwice = "This email is not available";
+$EmailUsedTwice = "This email is already in use on the platform.";
 $TotalPostsInAllForums = "Total posts in all forums.";
 $AddMeAsCoach = "Add me as coach";
 $AddMeAsTeacherInCourses = "Add me as teacher in the imported courses.";
@@ -9033,4 +9033,5 @@ $HideCareersHierarchy = "Hide hierarchies";
 $ShowCareersHierarchy = "Show hierarchies";
 $ParentCareer = "Parent career";
 $CareerCannotBeDeletedAsItHasChildren = "This career cannot be deleted until all of its children have been deleted or moved to another career.";
+$EmailUsedTwiceInImportFile = "This email is already in use by another user in the same file.";
 ?>

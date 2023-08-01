@@ -8967,4 +8967,5 @@ $HideCareersHierarchy = "Masquer les hiérarchies";
 $ShowCareersHierarchy = "Montrer les hiérarchies";
 $ParentCareer = "Filière parente";
 $CareerCannotBeDeletedAsItHasChildren = "Cette filière ne peut pas être supprimée tant que tous ses enfants n'ont pas été supprimés ou déplacés vers une autre filière.";
+$EmailUsedTwiceInImportFile = "Ce courriel est déjà utilisé par un autre utilisateur du même fichier.";
 ?>

@@ -9058,4 +9058,5 @@ $HideCareersHierarchy = "Ocultar jerarquías";
 $ShowCareersHierarchy = "Mostrar jerarquías";
 $ParentCareer = "Carrera padre";
 $CareerCannotBeDeletedAsItHasChildren = "Esta carrera no puede ser eliminada hasta que las carreras hijas a ésta sean eliminadas o movidas a otra carrera.";
+$EmailUsedTwiceInImportFile = "Este correo electrónico ya está usado por otro usuario en el mismo archivo.";
 ?>

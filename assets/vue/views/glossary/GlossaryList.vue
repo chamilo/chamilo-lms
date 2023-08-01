@@ -4,39 +4,34 @@
       <BaseButton
         :label="t('Add new glossary term')"
         icon="plus"
-        class="mb-2 mr-2"
         type="black"
         @click="addNewTerm"
       />
       <BaseButton
         :label="t('Import glossary')"
         icon="import"
-        class="mb-2 mr-2"
         type="black"
         @click="importGlossary"
       />
       <BaseButton
         :label="t('Export glossary')"
         icon="file-export"
-        class="mb-2 mr-2"
         type="black"
         @click="exportGlossary"
       />
       <BaseButton
         :label="view === 'table' ? t('List view') : t('Table view')"
         :icon="view === 'table' ? 'list' : 'table'"
-        class="mb-2 mr-2"
         type="black"
         @click="changeView(view)"
       />
       <BaseButton
         :label="t('Export to Documents')"
         icon="export"
-        class="mb-2 mr-2"
         type="black"
         @click="exportToDocuments"
       />
-      <StudentViewButton class="mb-2 mr-2" />
+      <StudentViewButton />
     </ButtonToolbar>
 
     <BaseInputText

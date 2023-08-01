@@ -1,9 +1,7 @@
 <template>
   <Toolbar :class="toolbarClass">
     <template #start>
-      <div class="flex flex-wrap">
-        <slot></slot>
-      </div>
+      <slot></slot>
     </template>
   </Toolbar>
 </template>

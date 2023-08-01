@@ -4,25 +4,22 @@
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
-        class="mb-2 mr-2"
         type="black"
         @click="redirectToCreateLink"
       />
       <BaseButton
         :label="t('Add a category')"
         icon="folder-plus"
-        class="mb-2 mr-2"
         type="black"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
         :label="t('Export to PDF')"
         icon="file-pdf"
-        class="mb-2 mr-2"
         type="black"
         @click="exportToPDF"
       />
-      <StudentViewButton class="mb-2 mr-2" />
+      <StudentViewButton />
     </ButtonToolbar>
 
     <LinkCategoryCard v-if="isLoading">

@@ -3,33 +3,30 @@
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
       :label="t('Back')"
-      class="mr-2 mb-2"
       icon="back"
       type="black"
       @click="back"
     />
-    <BaseButton :label="t('New document')" class="mr-2 mb-2" icon="file-add" type="black" @click="goToNewDocument" />
-    <BaseButton :disabled="true" :label="t('New drawing')" class="mr-2 mb-2" icon="drawing" type="black" />
+    <BaseButton :label="t('New document')" icon="file-add" type="black" @click="goToNewDocument" />
+    <BaseButton :disabled="true" :label="t('New drawing')" icon="drawing" type="black" />
     <BaseButton
       :label="t('Record audio')"
-      class="mr-2 mb-2"
       icon="record-add"
       type="black"
       @click="showRecordAudioDialog"
     />
-    <BaseButton :label="t('Upload')" class="mr-2 mb-2" icon="file-upload" type="black" @click="goToUploadFile" />
-    <BaseButton :label="t('New folder')" class="mr-2 mb-2" icon="folder-plus" type="black" @click="openNew" />
-    <BaseButton :disabled="true" :label="t('New cloud file')" class="mr-2 mb-2" icon="file-cloud-add" type="black" />
+    <BaseButton :label="t('Upload')" icon="file-upload" type="black" @click="goToUploadFile" />
+    <BaseButton :label="t('New folder')" icon="folder-plus" type="black" @click="openNew" />
+    <BaseButton :disabled="true" :label="t('New cloud file')" icon="file-cloud-add" type="black" />
     <BaseButton
       :disabled="!hasImageInDocumentEntries"
       :label="t('Slideshow')"
-      class="mr-2 mb-2"
       icon="view-gallery"
       type="black"
       @click="showSlideShowWithFirstImage"
     />
-    <BaseButton :label="t('Usage')" class="mr-2 mb-2" icon="usage" type="black" @click="showUsageDialog" />
-    <BaseButton :disabled="true" :label="t('Download all')" class="mr-2 mb-2" icon="download" type="black" />
+    <BaseButton :label="t('Usage')" icon="usage" type="black" @click="showUsageDialog" />
+    <BaseButton :disabled="true" :label="t('Download all')" icon="download" type="black" />
   </ButtonToolbar>
 
   <DataTable
@@ -117,12 +114,11 @@
   </DataTable>
 
   <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher" show-top-border>
-    <BaseButton :label="t('Select all')" class="mr-2 mb-2" icon="select-all" type="black" @click="selectAll" />
-    <BaseButton :label="t('Unselect all')" class="mr-2 mb-2" icon="unselect-all" type="black" @click="unselectAll" />
+    <BaseButton :label="t('Select all')" icon="select-all" type="black" @click="selectAll" />
+    <BaseButton :label="t('Unselect all')" icon="unselect-all" type="black" @click="unselectAll" />
     <BaseButton
       :disabled="!selectedItems || !selectedItems.length"
       :label="t('Delete selected')"
-      class="mr-2 mb-2"
       icon="delete"
       type="danger"
       @click="showDeleteMultipleDialog"

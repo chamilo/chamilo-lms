@@ -65,7 +65,7 @@ class H5pPackageTools
             $majorVersion = $dependency->majorVersion;
             $minorVersion = $dependency->minorVersion;
 
-            $libraryFolderName = $libraryName.'-'.$majorVersion.'.'.$minorVersion;
+            $libraryFolderName = api_replace_dangerous_char($libraryName.'-'.$majorVersion.'.'.$minorVersion);
             $libraryPath = $extractedDir.'/'.$libraryFolderName;
 
             // Check if the library folder exists

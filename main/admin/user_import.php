@@ -68,6 +68,7 @@ function validate_data($users, $checkUniqueEmail = false)
 {
     global $defined_auth_sources;
     $usernames = [];
+    $previousMails = [];
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
@@ -141,10 +142,17 @@ function validate_data($users, $checkUniqueEmail = false)
 
         if ($checkUniqueEmail) {
             if (!empty($user['Email'])) {
-                $userFromEmail = api_get_user_info_from_email($user['Email']);
-                if (!empty($userFromEmail)) {
-                    $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
+                if (in_array($user['Email'], $previousMails)) {
+                    $user['message'] .= Display::return_message(get_lang('EmailUsedTwiceInImportFile'), 'warning');
                     $user['has_error'] = true;
+                } else {
+                    $userFromEmail = api_get_user_info_from_email($user['Email']);
+                    if (!empty($userFromEmail)) {
+                        $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
+                        $user['has_error'] = true;
+                    } else {
+                        $previousMails[] = $user['Email'];
+                    }
                 }
             }
         }
@@ -428,7 +436,6 @@ function save_data(
                 $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
                 $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
                 $csv_content[] = $csv_row;
-                error_log(print_r($csv_row, 1));
             }
             saveCsvFile($csv_content, $targetFolder.'user_error_'.count($userError));
         }

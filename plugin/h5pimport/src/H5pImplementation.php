@@ -1,5 +1,7 @@
 <?php
 
+// For licensing terms, see /license.txt
+
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;

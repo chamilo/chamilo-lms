@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -11,7 +12,11 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ZipPackageImporter extends H5pPackageImporter
 {
-    private const ALLOWED_FILES = [
+    /*
+     * Allowed file extensions
+     * List obtained from H5P: https://h5p.org/allowed-file-extensions
+     * */
+    private const ALLOWED_EXTENSIONS = [
         'json',
         'png',
         'jpg',
@@ -59,6 +64,13 @@ class ZipPackageImporter extends H5pPackageImporter
         'css',
     ];
 
+    /**
+     * Import an H5P package. No DB change.
+     *
+     * @return string The path to the extracted package directory.
+     *
+     * @throws Exception When the H5P package is invalid.
+     */
     public function import(): string
     {
         $zipFile = new \PclZip($this->packageFileInfo['tmp_name']);
@@ -82,25 +94,25 @@ class ZipPackageImporter extends H5pPackageImporter
             return "{$packageDirectoryPath}";
         }
 
-        throw new \Exception('Invalid H5P package');
+        throw new Exception('Invalid H5P package');
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function validateEnoughSpace(int $packageSize)
     {
         $courseSpaceQuota = \DocumentManager::get_course_quota($this->course->getCode());
 
         if (!enough_size($packageSize, $this->courseDirectoryPath, $courseSpaceQuota)) {
-            throw new \Exception('Not enough space to store package.');
+            throw new Exception('Not enough space to store package.');
         }
     }
 
     /**
      * Validate an H5P package.
-     * Check if 'h5p.json' and 'content/content.json' files exist
-     * and if the files are in a file whitelist (ALLOWED_FILES).
+     * Check if 'h5p.json' or 'content/content.json' files exist
+     * and if the files are in a file whitelist (ALLOWED_EXTENSIONS).
      *
      * @param array $h5pPackageContent the content of the H5P package
      *
@@ -121,7 +133,7 @@ class ZipPackageImporter extends H5pPackageImporter
 
                 $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
 
-                if (in_array($fileExtension, self::ALLOWED_FILES)) {
+                if (in_array($fileExtension, self::ALLOWED_EXTENSIONS)) {
                     $validPackage = 'h5p.json' === $filename || 'content/content.json' === $filename;
                     if ($validPackage) {
                         break;

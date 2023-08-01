@@ -1,5 +1,7 @@
 <?php
 
+// For licensing terms, see /license.txt
+
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;

@@ -123,6 +123,9 @@ class Tracking
     /**
      * Get the lp quizzes result as content for pdf export.
      *
+     * @param $userId
+     * @param $sessionId
+     *
      * @return string
      */
     public static function getLpQuizContentToPdf(
@@ -1554,7 +1557,8 @@ class Tracking
                     $subtotal_time = $row['mytime'];
 
                     // This is necessary for fix the total time
-                    if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                    $h5pImportEnable = api_get_plugin_setting('h5pimport', 'tool_enable');
+                    if ($row['item_type'] === 'h5p' && 'true' === $h5pImportEnable) {
                         $subtotal_time = H5pImportPlugin::fixTotalTimeInLpItemView(
                             $row['iv_id'],
                             $user_id
@@ -1672,7 +1676,7 @@ class Tracking
                             }
                             break;
                         case 'h5p':
-                            if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                            if ($row['item_type'] === 'h5p' && 'true' === $h5pImportEnable) {
                                 $sql = "SELECT iid, score
                                         FROM $TBL_LP_ITEM_VIEW
                                         WHERE
@@ -1764,7 +1768,7 @@ class Tracking
                                 }
                             }
                         }
-                        if ($row['item_type'] === 'h5p' && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
+                        if ($row['item_type'] === 'h5p' && 'true' === $h5pImportEnable) {
                             $em = Database::getManager();
                             $cLpItemViewRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
                             $count = $cLpItemViewRepo->count(['user' => $user_id, 'cLpItemView' => $row['iv_id']]);
@@ -2042,11 +2046,10 @@ class Tracking
                                             $n++;
                                         }
                                     }
-                                    $output .= '<tr><td colspan="12">&nbsp;</td></tr>';
                                 }
-                                if (
+                                elseif (
                                     'h5p' === $row['item_type']
-                                    && 'true' === api_get_plugin_setting('h5pimport', 'tool_enable')
+                                    && 'true' === $h5pImportEnable
                                 ) {
                                     $em = Database::getManager();
                                     $h5pImportResultsRepo = $em
@@ -2131,6 +2134,8 @@ class Tracking
                                             $n++;
                                         }
                                     }
+                                }
+                                else {
                                     $output .= '<tr><td colspan="12">&nbsp;</td></tr>';
                                 }
                             }
@@ -2930,7 +2935,7 @@ class Tracking
                         $currentTimestamp = time();
 
                         // If the last connection is > than 7 days, the text is red
-                        // 345600 = 7 days in seconds
+                        // 604800 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
                             return '<span style="color: #F00;">'.api_format_date($last_login_date, $dateFormat).'</span>';
                         } else {
@@ -3074,7 +3079,7 @@ class Tracking
                     $last_login_date_timestamp = api_strtotime($last_login_date);
                     $now = time();
                     // If the last connection is > than 7 days, the text is red
-                    // 345600 = 7 days in seconds
+                    // 604800 = 7 days in seconds
                     if ($now - $last_login_date_timestamp > 604800) {
                         if ($convert_date) {
                             $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
@@ -3277,6 +3282,8 @@ class Tracking
     /**
      * Gets the score average from all tests in a course by student.
      *
+     * @param $student_id
+     * @param $course_code
      * @param int  $exercise_id
      * @param null $session_id
      * @param int  $active_filter 2 for consider all tests

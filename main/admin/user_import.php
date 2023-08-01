@@ -408,55 +408,58 @@ function save_data(
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userSaved as $user) {
+            foreach ($userSaved as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.'user_success_'.count($userSaved));
         }
+        unset($userItem);
         if (count($userError) != 0) {
             // Save user with error
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userError as $user) {
+            foreach ($userError as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '-';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '-';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.'user_error_'.count($userError));
         }
+        unset($userItem);
         if (count($userWarning) != 0) {
             // Save user with warning
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userWarning as $user) {
+            foreach ($userWarning as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.'user_warning_'.count($userWarning));
         }
+        unset($userItem);
     }
 
     return $users;

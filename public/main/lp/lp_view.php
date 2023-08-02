@@ -554,7 +554,7 @@ $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $oLP->get_current_item_id());
 
 $menuLocation = 'left';
-if (!empty(api_get_setting('lp.lp_menu_location'))) {
+if ('false' !== api_get_setting('lp.lp_menu_location')) {
     $menuLocation = api_get_setting('lp.lp_menu_location');
 }
 $template->assign('menu_location', $menuLocation);

@@ -1,7 +1,7 @@
 <template>
   <ButtonToolbar>
     <BaseButton
-      :disabled="isLoading"
+      :disabled="loadingFriends"
       :label="t('Add friend')"
       icon="user-add"
       type="black"
@@ -9,7 +9,7 @@
     />
 
     <BaseButton
-      :disabled="isLoading"
+      :disabled="loadingFriends"
       :label="t('Refresh')"
       icon="refresh"
       type="black"
@@ -19,7 +19,19 @@
 
   <div class="flex flex-col lg:flex-row gap-4">
     <div class="basis-auto lg:basis-3/4">
+      <div
+        v-if="loadingFriends"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <Skeleton
+          v-for="i in 6"
+          :key="i"
+          height="10.5rem"
+        />
+      </div>
+
       <DataView
+        v-else
         :value="items"
         class="friend-list"
         layout="grid"
@@ -72,61 +84,28 @@
       </DataView>
     </div>
 
-    <div
-      v-if="friendRequests.length || waitingRequests.length"
-      class="basis-auto lg:basis-1/4"
-    >
-      <h3 v-t="'Requests'" />
-
-      <div
-        v-for="(request, i) in friendRequests"
-        :key="i"
-        class="flex flex-row gap-2 items-center"
-      >
-        <BaseUserAvatar :image-url="request.user.illustrationUrl" />
-
-        {{ request.user.username }}
-
-        <BaseButton
-          icon="user-add"
-          only-icon
-          type="black"
-          @click="addFriend(request)"
-        />
-      </div>
-
-      <div
-        v-for="(request, i) in waitingRequests"
-        :key="i"
-        class="flex flex-row gap-2 items-center"
-      >
-        <BaseUserAvatar :image-url="request.friend.illustrationUrl" />
-
-        {{ request.friend.username }}
-
-        <BaseTag
-          :label="t('Waiting')"
-          type="info"
-        />
-      </div>
+    <div class="basis-auto lg:basis-1/4">
+      <UserRelUserRequestsList
+        ref="requestList"
+        @accept-friend="reloadHandler"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { useStore } from "vuex"
-import { ref } from "vue"
-import axios from "axios"
+import { onMounted, ref } from "vue"
 import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
-import BaseTag from "../../components/basecomponents/BaseTag.vue"
+import Skeleton from "primevue/skeleton"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useConfirm } from "primevue/useconfirm"
 import userRelUserService from "../../services/userreluser"
 import { useRelativeDatetime } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
+import UserRelUserRequestsList from "../../components/userreluser/UserRelUserRequestsList.vue"
 
 const store = useStore()
 const router = useRouter()
@@ -138,15 +117,7 @@ const waitingRequests = ref([])
 
 const notification = useNotification()
 
-const friendRequestFilter = {
-  friend: user.id,
-  relationType: 10, // friend request
-}
-
-const waitingFilter = {
-  user: user.id,
-  relationType: 10,
-}
+const loadingFriends = ref(true)
 
 const friendFilter = {
   user: user.id,
@@ -158,22 +129,15 @@ const friendBackFilter = {
   relationType: 3, // friend status
 }
 
-function addFriend(friend) {
-  // Change from request to friend
-  axios
-    .put(friend["@id"], {
-      relationType: 3,
-    })
-    .then((response) => {
-      console.log(response)
-      reloadHandler()
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
+const requestList = ref()
 
 function reloadHandler() {
+  loadingFriends.value = true
+
+  items.value = []
+  friendRequests.value = []
+  waitingRequests.value = []
+
   Promise.all([
     userRelUserService.findAll({
       params: friendFilter,
@@ -189,25 +153,14 @@ function reloadHandler() {
       items.value.push(...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]),
     )
     .catch((e) => notification.showErrorNotification(e))
+    .finally(() => (loadingFriends.value = false))
 
-  userRelUserService
-    .findAll({
-      params: friendRequestFilter,
-    })
-    .then((response) => response.json())
-    .then((json) => (friendRequests.value = json["hydra:member"]))
-    .catch((e) => notification.showErrorNotification(e))
-
-  userRelUserService
-    .findAll({
-      params: waitingFilter,
-    })
-    .then((response) => response.json())
-    .then((json) => (waitingRequests.value = json["hydra:member"]))
-    .catch((e) => notification.showErrorNotification(e))
+  requestList.value.loadRequests()
 }
 
-reloadHandler()
+onMounted(() => {
+  reloadHandler()
+})
 
 const goToAdd = () => {
   router.push({ name: "UserRelUserAdd" })

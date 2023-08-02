@@ -2,33 +2,22 @@
   <Button
     :class="buttonClass"
     :disabled="disabled"
+    :icon="chamiloIconToClass[icon]"
     :label="label"
     :outlined="primeOutlinedProperty"
+    :plain="primePlainProperty"
+    :severity="primeSeverityProperty"
     :size="size"
     :text="primeTextProperty"
     :type="isSubmit ? 'submit' : 'button'"
-    class="cursor-pointer"
-    plain
     @click="$emit('click', $event)"
-  >
-    <BaseIcon
-      :icon="icon"
-      :size="size"
-      class="text-inherit"
-    />
-    <span
-      v-if="!onlyIcon && label"
-      class="text-inherit hidden md:block"
-    >
-      {{ label }}
-    </span>
-  </Button>
+  />
 </template>
 
 <script setup>
 import Button from "primevue/button"
-import BaseIcon from "./BaseIcon.vue"
 import { computed } from "vue"
+import { chamiloIconToClass } from "./ChamiloIcons";
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 
 const props = defineProps({
@@ -74,6 +63,22 @@ const props = defineProps({
 
 defineEmits(["click"])
 
+const primeSeverityProperty = computed(() => {
+  if (["primary", "secondary", "success", "danger"].includes(props.type)) {
+    return props.type
+  }
+
+  return undefined
+})
+
+const primePlainProperty = computed(() => {
+  if ("black" === props.type) {
+    return true
+  }
+
+  return undefined
+})
+
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
     return "p-3"
@@ -86,26 +91,7 @@ const buttonClass = computed(() => {
     case "small":
       result += "py-2 px-3.5 "
   }
-  let commonDisabled =
-    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled"
-  switch (props.type) {
-    case "primary":
-      result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `
-      break
-    case "secondary":
-      result +=
-        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled"
-      break
-    case "success":
-      result += `bg-success hover:bg-success-gradient ${commonDisabled} `
-      break
-    case "danger":
-      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `
-      break
-    case "black":
-      result += "bg-white text-black hover:bg-gray-90 hover:text-white "
-      break
-  }
+
   return result
 })
 

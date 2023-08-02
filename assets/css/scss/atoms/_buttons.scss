@@ -192,11 +192,11 @@ $border-color_12: #9333EA;
     &:focus,
     &:active {
       @if ('warning' == $color) {
-        @apply bg-#{$color} text-gray-90;
+        @apply bg-#{$color} border-#{$color} text-gray-90;
       } @else if('black' == $color) {
         @apply bg-gray-90 border-gray-90 text-white;
       } @else {
-        @apply bg-#{$color} text-white;
+        @apply bg-#{$color} border-#{$color} text-white;
       }
     }
   }
@@ -264,7 +264,8 @@ $border-color_12: #9333EA;
   }
 
   .p-button-label {
-    @apply align-middle flex-none font-semibold inline;
+    @apply align-middle flex-none font-semibold hidden
+      md:inline;
   }
 
   &.p-button-icon-only {

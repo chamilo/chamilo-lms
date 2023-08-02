@@ -2185,13 +2185,19 @@ if ($isAllowedToEdit ||
     $table->set_column_filter(
         $column - 1,
         function ($value) {
-            return DocumentManager::build_edit_icons(
-                $value['document_data'],
-                $value['key'],
-                $value['is_template'],
-                $value['readonly'],
-                $value['is_visible']
-            );
+            if (is_array($value['document_data'])) {
+                // If the document is not visible by the user, the document_data is an empty string so we cannot call
+                // the method.
+                return DocumentManager::build_edit_icons(
+                    $value['document_data'],
+                    $value['key'],
+                    $value['is_template'],
+                    $value['readonly'],
+                    $value['is_visible']
+                );
+            } else {
+                return '';
+            }
         }
     );
 }

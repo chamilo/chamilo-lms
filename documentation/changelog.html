@@ -109,7 +109,8 @@
     <table class="table" id="index">
 
     </table>
-
+    <div class="version" aria-label="1.11.22">
+        <a id="1.11.22"></a>
         <h1>Chamilo 1.11.22 - , ?/07/2023</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.22 is mainly a security fix release on top of 1.11.20.</p>
@@ -124,11 +125,19 @@
             <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/75e9b3e0acac6f7a643da6ff19a00d55a94417a1">75e9b3e0</a>) Admin: filter HTML when updating language</li>
             <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c263933d1d958edee3999820f636c8cb919d03d1">c263933d</a>) Course: filter HTML when saving/updating category</li>
             <li>[2023-06-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4f7b5ebf90c35999917c231276e47a4184275690">4f7b5ebf</a>) Skill: filter HTML when saving profiles</li>
+            <li>[2023-07-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/3650e4463de22412b1de11962ecf6f30d0eef7d2">3650e446</a>) Social: Secure requests to delete posts and comments</li>
+            <li>[2023-07-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc7bfce429fbd843a95a57c184b6992c4d709549">dc7bfce4</a>) Security: Rename htaccess file by replacing case-insensitively</li>
+            <li>[2023-07-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/37be9ce7243a30259047dd4517c48ff8b21d657a">37be9ce7</a>) Security: Avoid relative path traversal to execute ppt2png and escape shell command used to execute PPT converter</li>
+            <li>[2023-07-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c69b294f927db62092e01b70ac9bd6e32d5b48b">4c69b294</a>) Security: Add configuration setting 'webservice_remote_ppt2png_enable' to disable additional_webservices.php by default</li>
+            <li>[2023-07-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/258eb11aee0b04dbbeac99792d9e2b639d0835de">258eb11a</a>) Security: Session: Avoid SQL when importing session</li>
+
         </ul>
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
         These features are immediately available to users through the web interface.<br />
         <ul aria-live="off">
+            <li>[2023-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/1c39f4d57784d56c288b6b6ffe50023a1814d6f8">1c39f4d5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4816">GH#4816</a>) Session: Scheduled announcements: Add user extra fields to scheduled announcements editor</li>
+            <li>[2023-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/c85e9852dff1f380094a947ce3ab39e723458d2f">c85e9852</a> - <a href="https://task.beeznest.com/issues/20717">BT#20717</a>) Plugin: H5P Import: Add first H5P import plugin implementation</li>
         </ul>
         <h4>For developers and sysadmins</h4>
         Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
@@ -137,10 +146,32 @@
             <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/e71b8232801930b04c48a2d5c0017a6e3148cbac">e71b8232</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: Add configuration setting 'multiple_access_url_user_management_show_and_order_by_official_code' to enable official code presentation and ordering in user management page</li>
             <li>[2023-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/969914366bc28baa1dbf2e615bf56e4dbfacebc6">96991436</a> - <a href="https://task.beeznest.com/issues/20825">BT#20825</a>) Plugin: Buycourse: Add plugin configuration setting 'hide_shopping_cart_from_course_catalogue' to not show the shopping cart in the catalogue but the same subscribe button even if the course is on sale</li>
             <li>[2023-07-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/68025447a06218e72eacb2ec79f30a0f42e8721d">68025447</a>) Admin: Add sec_token to delete courses</li>
+            <li>[2023-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/51bc2cc968d59313e3e390fa8d4cba17088ccf7e">51bc2cc9</a>) Exercise: Add configuration setting 'exercise_question_reading_comprehension_extra_speeds' to customize reading comprehension questions' speeds (adds support for Belgian FRALA referencial)</li>
+            <li>[2023-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d3f0a73736d3362029493c244e14b79ccf59694">1d3f0a73</a>) Catalogue: Add configuration setting $_configuration['course_catalog_settings']['pre_filter_on_language'] to enable pre-filtering on user's language (only works for the courses catalogue as sessions may contain courses in different languages)</li>
+            <li>[2023-07-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/660e9832cc9c8878a014fcd5a864c3918254792c">660e9832</a>) Mail: Use api_get_mail_configuration_value() to get SMTP_UNIQUE_SENDER. Fix issue using unique sender on multi-URL portals</li>
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         In reverse chronological order...
         <ul aria-live="off">
+            <li>[2023-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/342c2d54f38af0a3a7a8287ab802e7380ca359c9">342c2d54</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4825">GH#4825</a>) Plugin: Resubscription: Fix SQL query using old end date field name</li>
+            <li>[2023-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/0cb5a5eb5a0013b40d25e761934fd1f429a8c66b">0cb5a5eb</a>) Plugin: H5P Import: Add plugin to official plugins list</li>
+            <li>[2023-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/efbca8972d99bba1849a7350bf54f03fccbf4f58">efbca897</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4829">GH#4829</a>) Group: Fix issue preventing group members from seeing documents uploaded by the teacher</li>
+            <li>[2023-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/14798e43143b41edbcb11bff9b5bd2c8f5455e71">14798e43</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4809">GH#4809</a>) Display: Fix error when updating tool icon on the course homepage (introduced in 1.11.20 through security updates)</li>
+            <li>[2023-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/85efc6ebce82d2125f0867aebb8500e583c54d86">85efc6eb</a> - <a href="https://task.beeznest.com/issues/20717">BT#20717</a>) Plugin: H5P Import: Update README and French translations</li>
+            <li>[2023-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/08587c65c3f6c8eca211e404eef4d8e4981df0fa">08587c65</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4761">GH#4761</a>) Admin: User import: Fix off-by-one issue caused by re-using the $user variable, previously set by reference</li>
+            <li>[2023-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/8f76a304fbce3c3f2d5b626eb700015488ad0a6c">8f76a304</a>) Admin: Make user CSV/XML import stricter on unique e-mails by detecting same e-mails in the uploaded file</li>
+            <li>[2023-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ed5e70879809969768dddcaac4216a5643b1586">5ed5e708</a>) Plugin: BBB: Fix global chat not available in admin list (avoid overwriting _p array with plugin paths)</li>
+            <li>[2023-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/7651c63de11effcf300ecc7d1fd345439dde21f5">7651c63d</a>) Fix example quiz when adding default course content</li>
+            <li>[2023-07-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/6c27db40de54a3f735e2fe9a99471da1897d0529">6c27db40</a>) Internal: Remove automated testing on PHP 7.2 and 7.3: we officially only support 7.4 now (which is a temporary situation until the release of 2.0).</li>
+            <li>[2023-07-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/78fdb229efce3f7e03cd4c50d75ec4f3503c0201">78fdb229</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4737">GH#4737</a>) Calendar: Add session management to deleteEventIfAlreadyExists() (and rename method to fix English typo). Fix code conventions</li>
+            <li>[2023-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/36c06b4c029b72848f8d1edf94ac4670fd1ab684">36c06b4c</a>) Exercise: Increase blurriness of text in reading comprehension questions (better resolutions make it possible to read)</li>
+            <li>[2023-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d796a4762cca626c6e4bf8dc81161765ed50e52">0d796a47</a>) Catalogue: Fix language filter when multi-URL</li>
+            <li>[2023-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/23a67025420ddd23d39930b4a7c91979770540b8">23a67025</a>) Glossary: Fix visibility conditions for glossary terms</li>
+            <li>[2023-07-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/43dedbc7c84f124d7b6d256a94075ab9aa85decc">43dedbc7</a>) Internal: Format code +  add undefined variables + code readability</li>
+            <li>[2023-07-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/209d4f1dc9f75e0d4c0e4b51aa4f78c4b6a7373c">209d4f1d</a>) Internal: Mark function as deprecated</li>
+            <li>[2023-07-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/b15c1407758df30494c2f3380aed9aac2e9ece56">b15c1407</a>) Social: Fix not being able to download one's own vCard</li>
+            <li>[2023-07-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/0807cf945769fe47c25790bf4641da8a629c3bad">0807cf94</a>) Admin: Fix message when header logo has invalid dimensions</li>
+            <li>[2023-07-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/82af4f587127b325ef9294d0abe0316d0678005b">82af4f58</a>) Plugin: Keycloak: Align properly the Keycloak login button</li>
             <li>[2023-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/8e1e3a436cec2c95d9e62753f6e8c88421ddb517">8e1e3a43</a> - <a href="https://task.beeznest.com/issues/20825">BT#20825</a>) Plugin: Buycourse: adapt documentation for webhook configuration on Stripe to work with new API</li>
             <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/00c90f056ce358151a9f81c9eee77d86269d83bd">00c90f05</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: fix select option presentation to add option to enable official code presentation and ordering in user management page</li>
             <li>[2023-07-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0c780587ba32d5e11f164c742daee16aa586250">b0c78058</a> - <a href="https://task.beeznest.com/issues/20863">BT#20863</a>) User: Access URLs: fix option name to add option to enable official code presentation and ordering in user management page</li>

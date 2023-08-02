@@ -61,7 +61,7 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 if ($time_control) {
     // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time, 'UTC') - time();

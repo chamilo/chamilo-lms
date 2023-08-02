@@ -8566,18 +8566,19 @@ class learnpath
     public static function getUserIdentifierForExternalServices()
     {
         $scormApiExtraFieldUseStudentId = api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id');
-        if ('true' === api_get_setting('lp.scorm_api_username_as_student_id')) {
-            return api_get_user_info(api_get_user_id())['username'];
-        } elseif (!empty($scormApiExtraFieldUseStudentId)) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
-                api_get_user_id(),
-                $scormApiExtraFieldUseStudentId
-            );
-
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
+            api_get_user_id(),
+            $scormApiExtraFieldUseStudentId
+        );
+        if (is_array($extrafield) && isset($extrafield['value'])) {
             return $extrafield['value'];
         } else {
-            return api_get_user_id();
+            if ('true' === $scormApiExtraFieldUseStudentId) {
+                return api_get_user_info(api_get_user_id())['username'];
+            } else {
+                return api_get_user_id();
+            }
         }
     }
 
@@ -8586,13 +8587,17 @@ class learnpath
      *
      * @param array $orderList A associative array with id and parent_id keys.
      */
-    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true)
+    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true, $lpItemRepo = null, $em = null)
     {
         if (empty($orderList)) {
             return true;
         }
-        $lpItemRepo = Container::getLpItemRepository();
-        $em = Database::getManager();
+        if (!isset($lpItemRepo)) {
+            $lpItemRepo = Container::getLpItemRepository();
+        }
+        if (!isset($em)) {
+            $em = Database::getManager();
+        }
         $counter = 2;
         $rootItem->setDisplayOrder(1);
         $rootItem->setPreviousItemId(null);
@@ -8618,17 +8623,10 @@ class learnpath
             /** @var CLpItem $itemEntity */
             $itemEntity = $lpItemRepo->find($itemId);
             $itemEntity->setParent($parent);
-            $previousId = (int) $itemEntity->getPreviousItemId();
-            //if (0 === $previousId) {
-                $itemEntity->setPreviousItemId(null);
-            //}
-
-            $nextId = (int) $itemEntity->getNextItemId();
-            //if (0 === $nextId) {
-                $itemEntity->setNextItemId(null);
-            //}
-
+            $itemEntity->setPreviousItemId(null);
+            $itemEntity->setNextItemId(null);
             $itemEntity->setDisplayOrder($counter);
+
             $em->persist($itemEntity);
             if ($flush) {
                 $em->flush();
@@ -8636,7 +8634,6 @@ class learnpath
             $counter++;
         }
 
-        $em->flush();
         $lpItemRepo->recoverNode($rootItem, 'displayOrder');
         $em->persist($rootItem);
         if ($flush) {

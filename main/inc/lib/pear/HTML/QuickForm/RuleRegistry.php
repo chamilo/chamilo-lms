@@ -152,7 +152,8 @@ class HTML_QuickForm_RuleRegistry
             'mimetype' => 'HTML_QuickForm_Rule_MimeType',
             'filename' => 'HTML_QuickForm_Rule_FileName',
             'validquestiontype' => 'HTML_QuickForm_Rule_QuestionType',
-            'mintext' => 'Html_Quickform_Rule_MinText'
+            'mintext' => 'Html_Quickform_Rule_MinText',
+            'internal_url' => 'HTML_QuickForm_Rule_InternalUrl',
         );
 
         $class = $rules[$ruleName];

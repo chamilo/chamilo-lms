@@ -225,6 +225,36 @@ EOT;
     }
 
     /**
+     * Adds a text field to the form to be used as internal url (URL without the domain part).
+     * A trim-filter is attached to the field.
+     *
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
+     *
+     * @return HTML_QuickForm_text
+     */
+    public function addInternalUrl($name, $label, $required = true, $attributes = [], $createElement = false)
+    {
+        if ($createElement) {
+            $element = $this->createElement('text', $name, $label, $attributes);
+        } else {
+            $element = $this->addElement('text', $name, $label, $attributes);
+        }
+
+        $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'plain_url_filter');
+        $this->addRule($name, get_lang('InsertAValidUrl'), 'internal_url');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        return $element;
+    }
+
+    /**
      * Add hidden course params.
      */
     public function addCourseHiddenParams()
@@ -1268,6 +1298,7 @@ EOT;
     {
         $this->addElement('url', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
+
         $this->addRule($name, get_lang('InsertAValidUrl'), 'url');
 
         if ($required) {
@@ -2047,4 +2078,21 @@ function mobile_phone_number_filter($mobilePhoneNumber)
     $mobilePhoneNumber = str_replace(['+', '(', ')'], '', $mobilePhoneNumber);
 
     return ltrim($mobilePhoneNumber, '0');
+}
+
+/**
+ * Cleans JS from a URL.
+ *
+ * @param string $html URL to clean
+ * @param int    $mode (optional)
+ *
+ * @return string The cleaned URL
+ */
+function plain_url_filter($html, $mode = NO_HTML)
+{
+    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
+    $html = kses_no_null($html);
+    $html = kses_js_entities($html);
+    $allowed_html_fixed = kses_array_lc($allowed_tags);
+    return kses_split($html, $allowed_html_fixed, array('http', 'https'));
 }

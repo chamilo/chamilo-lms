@@ -55,7 +55,7 @@ switch ($action) {
         $form->addHeader(get_lang('EditIcon'));
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
-        $form->addText('link', get_lang('Links'));
+        $form->addInternalUrl('link', get_lang('Links'));
         $allowedPictureTypes = ['jpg', 'jpeg', 'png'];
         $form->addFile('icon', get_lang('CustomIcon'));
         $form->addRule(

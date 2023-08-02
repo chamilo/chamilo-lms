@@ -55,6 +55,12 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 continue;
             }
 
+            // Execute the update query for item_root
+            $connection->executeUpdate('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
+                'rootId' => $rootItem->getIid(),
+                'lpId' => $lpId,
+            ]);
+
             // Migrate c_lp_item
             $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId AND path <> 'root'
                     ORDER BY display_order";
@@ -73,7 +79,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            learnpath::sortItemByOrderList($rootItem, $orderList, true);
+            learnpath::sortItemByOrderList($rootItem, $orderList, true, $lpItemRepo, $em);
             if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

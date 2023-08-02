@@ -242,6 +242,7 @@ class AppPlugin
             'google_meet',
             'grading_electronic',
             'h5p',
+            'h5pimport',
             'hello_world',
             'ims_lti',
             'justification',

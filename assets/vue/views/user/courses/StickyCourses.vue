@@ -14,20 +14,24 @@
 
 <script setup>
 import CourseCardList from '../../../components/course/CourseCardList.vue'
-import {computed} from "vue"
+import { computed, ref, watchEffect } from "vue"
 import {useStore} from 'vuex'
 import {GET_STICKY_COURSES} from "../../../graphql/queries/Course"
-import {useSession} from "../sessions/session"
+import { useQuery } from "@vue/apollo-composable"
 
 const store = useStore()
 
-let user = computed(() => store.getters['security/getUser'])
-const {sessions: result} = useSession(user, null, null, GET_STICKY_COURSES)
+let isAuthenticated = computed(() => store.getters['security/isAuthenticated'])
 
-const courses = computed(() => {
-  if (result.value === null) {
-    return []
-  }
-  return result.value
-})
+const queryResponse = ref({})
+
+if (isAuthenticated.value) {
+  const { result } = useQuery(GET_STICKY_COURSES)
+
+  watchEffect(() => {
+    queryResponse.value = result.value
+  })
+}
+
+const courses = computed(() => queryResponse.value?.courses?.edges?.map(({node}) => node) ?? [])
 </script>

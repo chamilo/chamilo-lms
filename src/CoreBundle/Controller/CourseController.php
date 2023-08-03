@@ -228,7 +228,7 @@ class CourseController extends ToolBaseController
 
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
-        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
+        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki', 'course_homepage'];
         $qb->andWhere($qb->expr()->notIn('resource.name', $skipTools));
         $qb->addOrderBy('resource.position', 'ASC');
 

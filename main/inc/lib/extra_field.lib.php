@@ -77,6 +77,7 @@ class ExtraField extends Model
     public $pageUrl;
     public $extraFieldType = 0;
 
+    public $table;
     public $table_field_options;
     public $table_field_values;
     public $table_field_tag;
@@ -3617,5 +3618,56 @@ JAVASCRIPT;
                 return $option['option_value'] == $parentId;
             }
         );
+    }
+
+    /**
+     * For one given field ID, get all the item_id + value
+     *
+     * @param int $fieldId
+     *
+     * @return array
+     */
+    public function getAllValuesByFieldId(int $fieldId)
+    {
+        $type = $this->get_field_type_by_id($fieldId);
+        $sql = "SELECT item_id, value FROM ".$this->table_field_values." WHERE field_id = $fieldId";
+        $res = Database::query($sql);
+        $values = [];
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                if (is_null($row['value'])) {
+                    // If the entry exists but is NULL, consider it an empty string (to reproduce the behaviour of UserManager::get_extra_user_data()
+                    $values[$row['item_id']] = '';
+                } else {
+                    if ($type == UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE) {
+                        $values[$row['item_id']] = explode(';', $row['value']);
+                    } else {
+                        $values[$row['item_id']] = $row['value'];
+                    }
+                }
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Gets the default value for one specific field
+     *
+     * @param   int  $fieldId   Field ID
+     *
+     * @return  mixed  Default value for the field (could be null, or usually a string)
+     */
+    public function getDefaultValueByFieldId(int $fieldId)
+    {
+        $sql = "SELECT default_value FROM $this->table WHERE id = $fieldId";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
+
+            return $row['default_value'];
+        }
+
+        return null;
     }
 }

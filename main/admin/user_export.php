@@ -183,20 +183,24 @@ if ($form->validate()) {
             }
         }
 
-        $studentData = UserManager::get_extra_user_data(
-            $user['UserId'],
-            true,
-            false
-        );
-        foreach ($studentData as $key => $value) {
-            $key = substr($key, 6);
-            if (is_array($value)) {
-                $user[$key] = $value['extra_'.$key];
+        $data[$user['UserId']] = $user;
+    }
+
+    foreach ($extra_fields as $fieldInfo) {
+        $extraField = new ExtraField('user');
+        $default = $extraField->getDefaultValueByFieldId($fieldInfo[0]);
+        $fieldValues = $extraField->getAllValuesByFieldId($fieldInfo[0]);
+        foreach ($data as $userId => &$values) {
+            if (isset($fieldValues[$userId])) {
+                if (is_array($fieldValues[$userId])) {
+                    $values['extra_'.$fieldInfo[1]] = $fieldValues[$userId];
+                } else {
+                    $values[$fieldInfo[1]] = $fieldValues[$userId];
+                }
             } else {
-                $user[$key] = $value;
+                $values[$fieldInfo[1]] = $default;
             }
         }
-        $data[] = $user;
     }
 
     switch ($file_type) {

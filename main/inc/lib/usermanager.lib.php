@@ -3296,7 +3296,6 @@ class UserManager
                     // get default value
                     $sql_df = "SELECT default_value as fval_df FROM $t_uf
                                WHERE id=".$row['id'];
-                    $res_df = Database::query($sql_df);
 
                     if (Database::num_rows($resu) > 0) {
                         $rowu = Database::fetch_array($resu);
@@ -3305,6 +3304,7 @@ class UserManager
                             $fval = explode(';', $rowu['fval']);
                         }
                     } else {
+                        $res_df = Database::query($sql_df);
                         $row_df = Database::fetch_array($res_df);
                         $fval = $row_df['fval_df'];
                     }

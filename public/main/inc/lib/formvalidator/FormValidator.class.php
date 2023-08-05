@@ -53,7 +53,7 @@ class FormValidator extends HTML_QuickForm
                 $attributes['class'] = 'form--search';
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'gap-3 ';
+                $attributes['class'] = 'flex flex-row gap-3 ';
                 break;
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'ch flex gap-1 ';

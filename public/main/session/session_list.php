@@ -363,11 +363,8 @@ if (api_is_platform_admin()) {
 
 echo $actions;
 if (api_is_platform_admin()) {
-    $actionsRight .= '<div class="pull-right">';
     $actionsRight .= $sessionFilter->returnForm();
-    $actionsRight .= '</div>';
 
-    $actionsRight .= '<div class="pull-right">';
     // Create a search-box
     $form = new FormValidator(
         'search_simple',
@@ -380,7 +377,7 @@ if (api_is_platform_admin()) {
     $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
     $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
-    $actionsRight .= $form->returnForm().'</div>';
+    $actionsRight .= $form->returnForm();
 }
 
 echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);

@@ -8341,26 +8341,23 @@ class SessionManager
                 ];
 
                 $columnModel = [
-                    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
-                    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
+                    ['name' => 'name', 'index' => 'name', 'align' => 'left'],
+                    ['name' => 'date', 'index' => 'access_start_date', 'align' => 'left'],
                     [
                         'name' => 'course_per_session',
                         'index' => 'course_per_session',
-                        'width' => '150',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'student_per_session',
                         'index' => 'student_per_session',
-                        'width' => '100',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'actions',
                         'index' => 'actions',
-                        'width' => '100',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
@@ -8382,13 +8379,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
                         'index' => 's.name',
-                        'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8396,7 +8391,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8404,7 +8398,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8415,7 +8408,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8426,7 +8418,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8437,7 +8428,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8447,7 +8437,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8464,7 +8453,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'status',
                         'index' => 'status',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8491,13 +8479,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
                         'index' => 's.name',
-                        'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8505,7 +8491,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8513,7 +8498,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8524,7 +8508,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8535,7 +8518,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8546,7 +8528,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8556,7 +8537,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8570,7 +8550,7 @@ class SessionManager
                         $listToString .= $statusId.':'.$status.';';
                     }
 
-                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
                         // for the bottom bar
                         'searchoptions' => [
                             'defaultValue' => '1',
@@ -8593,7 +8573,6 @@ class SessionManager
                     [
                         'name' => 'name',
                         'index' => 's.name',
-                        'width' => '200',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8601,7 +8580,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators],
@@ -8609,7 +8587,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators],
@@ -8617,7 +8594,6 @@ class SessionManager
                     [
                         'name' => 'coach_name',
                         'index' => 'coach_name',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'false',
                         'searchoptions' => ['sopt' => $operators],
@@ -8625,7 +8601,6 @@ class SessionManager
                     [
                         'name' => 'session_active',
                         'index' => 'session_active',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8644,14 +8619,12 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'course_title',
                         'index' => 'course_title',
-                        'width' => '50',
                         'hidden' => 'true',
                         'search' => 'true',
                         'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators],
@@ -8673,13 +8646,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
                         'index' => 's.name',
-                        'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8687,7 +8658,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8695,7 +8665,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8706,7 +8675,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8717,7 +8685,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8728,7 +8695,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8738,7 +8704,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8755,7 +8720,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'status',
                         'index' => 'status',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8776,7 +8740,6 @@ class SessionManager
                 $columnModel[] = [
                     'name' => $field['variable'],
                     'index' => $field['variable'],
-                    'width' => '80',
                     'align' => 'center',
                     'search' => 'false',
                 ];
@@ -8794,7 +8757,6 @@ class SessionManager
             $columnModel[] = [
                 'name' => 'actions',
                 'index' => 'actions',
-                'width' => '80',
                 'align' => 'left',
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',

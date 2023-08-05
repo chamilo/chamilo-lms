@@ -10,6 +10,10 @@
   th,
   td {
     @apply p-1;
+
+    img {
+      @apply inline-block;
+    }
   }
 
   th {

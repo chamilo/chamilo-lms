@@ -7213,7 +7213,7 @@ $ShowUsersNotAddedInTheURL = "URL اظهار المستخدمين الذين ل�
 $UserNotAddedInURL = "URL المستخدمين الذين لم يتم اضافتهم الى الرابط";
 $UsersRegisteredInNoSession = "المستخدمين الذي لم يتم تسجيلهم الى اي دورة";
 $CommandLineInterpreter = "CLI مفسر خط الامر";
-$PleaseVisitOurWebsite = "http://www.chamilo.org يرجى زيارة موقعنا الالكتروني";
+$PleaseVisitOurWebsite = "https://chamilo.org/download يرجى زيارة موقعنا الالكتروني";
 $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "Windows لا يمكن قياس المساحة المستخدمة بشكل جيد في منصة";
 $XOldTablesDeleted = "%d جداول قديمة تم حذفها";
 $XOldDatabasesDeleted = "%d قواعد بيانات قديمة تم حذفها";

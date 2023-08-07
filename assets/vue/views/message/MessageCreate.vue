@@ -94,14 +94,14 @@ const usersCc = ref([]);
 
 const receiversTo = computed(() =>
   usersTo.value.map((userTo) => ({
-    receiver: userTo,
+    receiver: userTo.value,
     receiverType: 1,
   }))
 );
 
 const receiversCc = computed(() =>
   usersCc.value.map((userCc) => ({
-    receiver: userCc,
+    receiver: userCc.value,
     receiverType: 2,
   }))
 );

@@ -15,16 +15,19 @@
     <hr />
 
     <div class="flex justify-end gap-2">
-      <BaseChip
-        v-for="tag in myReceiver.tags"
-        :key="tag['@id']"
-        :value="tag"
-        is-removable
-        label-field="tag"
-        @remove="onRemoveTagFromMessage(tag)"
-      />
+      <div v-if="myReceiver">
+        <BaseChip
+          v-for="tag in myReceiver.tags"
+          :key="tag['@id']"
+          :value="tag"
+          is-removable
+          label-field="tag"
+          @remove="onRemoveTagFromMessage(tag)"
+        />
+      </div>
 
       <BaseAutocomplete
+        v-if="item.sender['@id'] !== user['@id']"
         id="search-tags"
         v-model="foundTag"
         :label="t('Tags')"
@@ -220,7 +223,7 @@ function onSearchTags(query) {
 }
 
 async function onItemSelect({ value }) {
-  let newTag;
+  const newTag = computed(() => store.state.messagetag.created)
 
   if (!value["@id"]) {
     try {
@@ -228,10 +231,8 @@ async function onItemSelect({ value }) {
         user: user["@id"],
         tag: value.tag,
       });
-
-      newTag = store.state.messagetag.created;
     } catch (e) {
-      console.log(e);
+      return
     }
   } else {
     const existingIndex = getTagIndex(value["@id"]) >= 0;
@@ -239,14 +240,12 @@ async function onItemSelect({ value }) {
     if (existingIndex) {
       return;
     }
-
-    newTag = value;
   }
 
   foundTag.value = "";
 
-  if (myReceiver.value && newTag) {
-    myReceiver.value.tags.push(newTag);
+  if (myReceiver.value && newTag.value) {
+    myReceiver.value.tags.push(newTag.value);
 
     const newTagIds = mapTagsToIds();
 

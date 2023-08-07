@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use bbb;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -28,6 +30,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration = [
             'settings' => [],
             'studentview' => $requestSession->get('studentview'),
+            'plugins' => [],
         ];
         $variables = [];
 
@@ -70,6 +73,7 @@ class PlatformConfigurationController extends AbstractController
                 'session.allow_session_admin_read_careers',
             ];
 
+            /** @var User $user */
             $user = $this->getUser();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
@@ -83,6 +87,14 @@ class PlatformConfigurationController extends AbstractController
                     $configuration['settings']['display.show_link_ticket_notification'] = 'true';
                 }
             }
+
+            $configuration['plugins']['bbb'] = [
+                'show_global_conference_link' => bbb::showGlobalConferenceLink([
+                    'username' => $user->getUserIdentifier(),
+                    'status' => $user->getStatus(),
+                ]),
+                'listingURL' => (new bbb('', '', true, $user->getId()))->getListingUrl()
+            ];
         }
 
         foreach ($variables as $variable) {

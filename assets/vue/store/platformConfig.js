@@ -6,6 +6,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const isLoading = ref(false);
   const settings = ref(null);
   const studentView = ref('teacherview');
+  const plugins = ref([])
 
   function getSetting(variable) {
     if (settings.value && settings.value[variable]) {
@@ -24,6 +25,8 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
       settings.value = data.settings
 
       studentView.value = data.studentview
+
+      plugins.value = data.plugins
     } catch (e) {
       console.log(e)
     } finally {
@@ -43,6 +46,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     isLoading,
     settings,
     studentView,
+    plugins,
     initialize,
     getSetting,
     isStudentViewActive,

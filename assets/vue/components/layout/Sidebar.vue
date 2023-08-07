@@ -44,9 +44,11 @@ import PanelMenu from "primevue/panelmenu"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useStore } from "vuex"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
 
 const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
 const isAdmin = computed(() => store.getters["security/isAdmin"])
@@ -142,6 +144,14 @@ const items = ref([
 ])
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+
+if (platformConfigStore.plugins?.bbb?.show_global_conference_link) {
+  items.value.push({
+    label: t('Videoconference'),
+    url: platformConfigStore.plugins.bbb.listingURL,
+    icon: 'mdi mdi-video-box'
+  })
+}
 
 watch(
   sidebarIsOpen,

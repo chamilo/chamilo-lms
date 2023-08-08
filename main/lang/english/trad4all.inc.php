@@ -9034,4 +9034,5 @@ $ShowCareersHierarchy = "Show hierarchies";
 $ParentCareer = "Parent career";
 $CareerCannotBeDeletedAsItHasChildren = "This career cannot be deleted until all of its children have been deleted or moved to another career.";
 $EmailUsedTwiceInImportFile = "This email is already in use by another user in the same file.";
+$NotificationInYourForums = "You have new posts in the following forums of your courses.";
 ?>

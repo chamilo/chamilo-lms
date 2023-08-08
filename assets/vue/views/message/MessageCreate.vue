@@ -1,11 +1,26 @@
 <template>
   <!--        :handle-submit="onSendMessageForm"-->
-  <MessageForm v-model:attachments="attachments" :values="item">
+  <MessageForm
+    v-model:attachments="attachments"
+    :values="item"
+  >
     <!--          @input="v$.item.receiversTo.$touch()"-->
 
-    <BaseAutocomplete id="to" v-model="usersTo" :label="t('To')" :search="asyncFind" is-multiple />
+    <BaseAutocomplete
+      id="to"
+      v-model="usersTo"
+      :label="t('To')"
+      :search="asyncFind"
+      is-multiple
+    />
 
-    <BaseAutocomplete id="cc" v-model="usersCc" :label="t('Cc')" :search="asyncFind" is-multiple />
+    <BaseAutocomplete
+      id="cc"
+      v-model="usersCc"
+      :label="t('Cc')"
+      :search="asyncFind"
+      is-multiple
+    />
 
     <div class="field">
       <TinyEditor
@@ -31,28 +46,33 @@
       />
     </div>
 
-    <BaseButton :label="t('Send')" icon="plus" type="primary" @click="onSubmit" />
+    <BaseButton
+      :label="t('Send')"
+      icon="plus"
+      type="primary"
+      @click="onSubmit"
+    />
   </MessageForm>
   <Loading :visible="isLoading" />
 </template>
 
 <script setup>
-import { useStore } from "vuex";
-import MessageForm from "../../components/message/Form.vue";
-import Loading from "../../components/Loading.vue";
-import { computed, ref } from "vue";
-import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
-import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue";
-import BaseButton from "../../components/basecomponents/BaseButton.vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { MESSAGE_TYPE_INBOX } from "../../components/message/constants";
+import { useStore } from "vuex"
+import MessageForm from "../../components/message/Form.vue"
+import Loading from "../../components/Loading.vue"
+import { computed, ref } from "vue"
+import axios from "axios"
+import { ENTRYPOINT } from "../../config/entrypoint"
+import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import { useI18n } from "vue-i18n"
+import { useRoute, useRouter } from "vue-router"
+import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
 
-const store = useStore();
-const router = useRouter();
-const route = useRoute();
-const { t } = useI18n();
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
+const { t } = useI18n()
 
 const asyncFind = (query) => {
   return axios
@@ -62,21 +82,21 @@ const asyncFind = (query) => {
       },
     })
     .then((response) => {
-      let data = response.data;
+      let data = response.data
 
       return (
         data["hydra:member"]?.map((member) => ({
           name: member.fullName,
           value: member["@id"],
         })) ?? []
-      );
+      )
     })
     .catch(function (error) {
-      console.log(error);
-    });
-};
+      console.log(error)
+    })
+}
 
-const currentUser = computed(() => store.getters["security/getUser"]);
+const currentUser = computed(() => store.getters["security/getUser"])
 
 const item = ref({
   sender: currentUser.value["@id"],
@@ -84,33 +104,33 @@ const item = ref({
   msgType: MESSAGE_TYPE_INBOX,
   title: "",
   content: "",
-});
+})
 
-const attachments = ref([]);
+const attachments = ref([])
 
-const usersTo = ref([]);
+const usersTo = ref([])
 
-const usersCc = ref([]);
+const usersCc = ref([])
 
 const receiversTo = computed(() =>
   usersTo.value.map((userTo) => ({
     receiver: userTo.value,
     receiverType: 1,
-  }))
-);
+  })),
+)
 
 const receiversCc = computed(() =>
   usersCc.value.map((userCc) => ({
     receiver: userCc.value,
     receiverType: 2,
-  }))
-);
+  })),
+)
 
-const isLoading = computed(() => store.getters["message/isLoading"]);
-const messageCreated = computed(() => store.state.message.created);
+const isLoading = computed(() => store.getters["message/isLoading"])
+const messageCreated = computed(() => store.state.message.created)
 
 const onSubmit = () => {
-  item.value.receivers = [...receiversTo.value, ...receiversCc.value];
+  item.value.receivers = [...receiversTo.value, ...receiversCc.value]
 
   store.dispatch("message/create", item.value).then(() => {
     if (attachments.value.length > 0) {
@@ -118,35 +138,34 @@ const onSubmit = () => {
         store.dispatch("messageattachment/createWithFormData", {
           messageId: messageCreated.value.id,
           file: attachment,
-        })
-      );
+        }),
+      )
     }
 
     router.push({
       name: "MessageList",
       query: route.query,
-    });
-  });
-};
+    })
+  })
+}
 
 const browser = (callback, value, meta) => {
-
-  let url = '/resources/personal_files/';
+  let url = "/resources/personal_files/"
 
   if (meta.filetype === "image") {
-    url = url + "&type=images";
+    url = url + "&type=images"
   } else {
-    url = url + "&type=files";
+    url = url + "&type=files"
   }
 
   window.addEventListener("message", function (event) {
-    var data = event.data;
+    var data = event.data
     if (data.url) {
-      url = data.url;
-      console.log(meta); // {filetype: "image", fieldname: "src"}
-      callback(url);
+      url = data.url
+      console.log(meta) // {filetype: "image", fieldname: "src"}
+      callback(url)
     }
-  });
+  })
 
   tinymce.activeEditor.windowManager.openUrl(
     {
@@ -155,25 +174,25 @@ const browser = (callback, value, meta) => {
     },
     {
       oninsert: function (file, fm) {
-        var url, reg, info;
+        var url, reg, info
 
-        url = fm.convAbsUrl(file.url);
+        url = fm.convAbsUrl(file.url)
 
-        info = file.name + " (" + fm.formatSize(file.size) + ")";
+        info = file.name + " (" + fm.formatSize(file.size) + ")"
 
         if (meta.filetype === "file") {
-          callback(url, { text: info, title: info });
+          callback(url, { text: info, title: info })
         }
 
         if (meta.filetype === "image") {
-          callback(url, { alt: info });
+          callback(url, { alt: info })
         }
 
         if (meta.filetype === "media") {
-          callback(url);
+          callback(url)
         }
       },
-    }
-  );
-};
+    },
+  )
+}
 </script>

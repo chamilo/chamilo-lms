@@ -6,7 +6,16 @@
   >
     <!--          @input="v$.item.receiversTo.$touch()"-->
 
+    <div
+      v-if="sendToUser"
+      class="field"
+    >
+      <span v-t="'To'" />
+      <BaseUserAvatar :image-url="sendToUser.illustrationUrl" />
+      <span v-text="sendToUser.fullName" />
+    </div>
     <BaseAutocomplete
+      v-else
       id="to"
       v-model="usersTo"
       :label="t('To')"
@@ -15,6 +24,7 @@
     />
 
     <BaseAutocomplete
+      v-if="!sendToUser"
       id="cc"
       v-model="usersCc"
       :label="t('Cc')"
@@ -53,7 +63,7 @@
       @click="onSubmit"
     />
   </MessageForm>
-  <Loading :visible="isLoading" />
+  <Loading :visible="isLoading || isLoadingUser" />
 </template>
 
 <script setup>
@@ -68,11 +78,16 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
+import userService from "../../services/user"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import { useNotification } from "../../composables/notification"
 
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
+
+const notification = useNotification()
 
 const asyncFind = (query) => {
   return axios
@@ -194,5 +209,26 @@ const browser = (callback, value, meta) => {
       },
     },
   )
+}
+
+const isLoadingUser = ref(false)
+const sendToUser = ref()
+
+if (route.query.send_to_user) {
+  isLoadingUser.value = true
+
+  userService
+    .find('/api/users/' + parseInt(route.query.send_to_user))
+    .then((response) => response.json())
+    .then((user) => {
+      sendToUser.value = user
+
+      usersTo.value.push({
+        name: user.fullName,
+        value: user['@id'],
+      })
+    })
+    .catch((e) => notification.showErrorNotification(e))
+    .finally(() => (isLoadingUser.value = false))
 }
 </script>

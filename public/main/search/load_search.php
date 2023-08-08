@@ -1157,7 +1157,6 @@ foreach ($headers as $header => $value) {
 $button = '';
 $userReportButton = '';
 if ($userToLoad) {
-    var_dump($userToLoadInfo);
     $button = Display::url(
         get_lang('Ofaj End Of LearnPath'),
         api_get_path(WEB_PATH).'resources/messages/new?'.http_build_query(['send_to_user' => $userToLoad]),

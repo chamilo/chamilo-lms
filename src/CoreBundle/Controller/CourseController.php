@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -21,6 +23,7 @@ use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
@@ -34,6 +37,7 @@ use Event;
 use Exercise;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -598,6 +602,132 @@ class CourseController extends ToolBaseController
         return $this->render('@ChamiloCore/Course/welcome.html.twig', [
             'course' => $course,
         ]);
+    }
+
+    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
+    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    {
+        $sessionId = (int) $request->get('sid');
+        error_log('Session id -> '.$sessionId);
+
+        //$session = $this->getSession();
+        $responseData = [];
+        $ctoolRepo = $em->getRepository(CTool::class);
+        $sessionRepo = $em->getRepository(Session::class);
+        $createInSession = false;
+
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $qb = $em->createQueryBuilder();
+        $query = $qb->select('ct')
+            ->from('Chamilo\CourseBundle\Entity\CTool', 'ct')
+            ->where('ct.course = :c_id')
+            ->andWhere('ct.name = :name')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->eq('ct.session', ':session_id'),
+                    $qb->expr()->isNull('ct.session')
+                )
+            )
+            ->setParameters([
+                'c_id' => $course->getId(),
+                'name' => 'course_homepage',
+                'session_id' => 0
+            ])
+            ->getQuery();
+
+        $ctool = $query->getOneOrNullResult();
+
+        if ($session) {
+            error_log('Session actual -> '.$session->getId());
+            error_log('Course actual -> '.$course->getId());
+            $ctoolSession = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
+            if (!$ctoolSession) {
+                $createInSession = true;
+            } else {
+                $createInSession = false;
+                $ctool = $ctoolSession;
+            }
+        }
+
+
+        error_log('$ctool -> '.$ctool->getIid());
+        error_log('$createInSession -> '.$createInSession);
+
+        if ($ctool) {
+            $ctoolintroRepo = $em->getRepository(CToolIntro::class);
+            /** @var CToolIntro $ctoolintro */
+            $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
+            if ($ctoolintro) {
+                $responseData = [
+                    'iid' => $ctoolintro->getIid(),
+                    'introText' => $ctoolintro->getIntroText(),
+                    'createInSession' => $createInSession,
+                    'cToolId' => $ctool->getIid(),
+                ];
+            }
+            $responseData['c_tool'] = $ctool;
+        }
+
+        return new JsonResponse($responseData);
+    }
+
+    #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
+    public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    {
+        error_log('In addToolIntro');
+
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $ctoolintroId = $data->iid;
+        $sessionId = $data->sid;
+
+        $sessionRepo = $em->getRepository(Session::class);
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $ctool = $em->getRepository(CTool::class);
+        $check = $ctool->findOneBy(['name' => 'course_homepage', 'session' => $session]);
+        if (!$check) {
+            $toolRepo = $em->getRepository(Tool::class);
+            $toolEntity = $toolRepo->findOneBy(['name' => 'course_homepage']);
+            $courseTool = (new CTool())
+                ->setTool($toolEntity)
+                ->setName('course_homepage')
+                ->setCourse($course)
+                ->setPosition(1)
+                ->setVisibility(true)
+                ->setParent($course)
+                ->setCreator($course->getCreator())
+                ->setSession($session)
+                ->addCourseLink($course)
+            ;
+            $em->persist($courseTool);
+            $em->flush();
+            if ($courseTool && !empty($ctoolintroId)) {
+                $ctoolintroRepo = Container::getToolIntroRepository();
+                /** @var CToolIntro $ctoolintro */
+                $ctoolintro = $ctoolintroRepo->find($ctoolintroId);
+                $ctoolintro->setCourseTool($courseTool);
+                $ctoolintroRepo->update($ctoolintro);
+            }
+        }
+        $responseData = [];
+        $json = $this->serializer->serialize(
+            $responseData,
+            'json',
+            [
+                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
+            ]
+        );
+
+        return new JsonResponse($responseData);
+
     }
 
     private function autoLaunch(): void

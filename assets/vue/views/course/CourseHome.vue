@@ -63,7 +63,7 @@
           class="ml-auto"
           icon="plus"
           type="primary"
-          @click="addIntro(course, introTool)"
+          @click="addIntro(course, intro)"
         />
       </div>
       <EmptyState
@@ -77,7 +77,7 @@
           class="mt-4"
           icon="plus"
           type="primary"
-          @click="addIntro(course, introTool)"
+          @click="addIntro(course, intro)"
         />
       </EmptyState>
     </div>
@@ -266,37 +266,24 @@ const toggleCourseTMenu = (event) => {
 };
 
 async function getIntro() {
-  // Searching for the CTool called 'course_homepage'.
-  let currentIntroTool = course.value.tools.find((element) => element.name === "course_homepage");
-
-  if (!introTool.value) {
-    introTool.value = currentIntroTool;
-
-    if (sessionId) {
-      createInSession.value = true;
-    }
-
-    // Search CToolIntro for this
-    const filter = {
-      courseTool: currentIntroTool.iid,
+  axios.get('/course/'+courseId+'/getToolIntro', {
+    params: {
       cid: courseId,
       sid: sessionId,
-    };
-
-    try {
-      const response = await store.dispatch("ctoolintro/findAll", filter);
-      if (response) {
-        if (sessionId) {
-          createInSession.value = false;
-        }
-        // first item
-        intro.value = response[0];
-        translateHtml();
-      }
-    } catch (e) {
-      console.error(e);
     }
-  }
+  }).
+  then(response => {
+    intro.value = response.data;
+    introTool.value = response.data.c_tool;
+
+
+    console.log('response.data ',response.data);
+
+    createInSession.value = response.data.createInSession;
+    translateHtml();
+  }).catch(function (error) {
+    console.log(error);
+  });
 }
 
 function addIntro(course, introTool) {
@@ -307,6 +294,7 @@ function addIntro(course, introTool) {
       cid: courseId,
       sid: sessionId,
       parentResourceNodeId: course.resourceNode.id,
+      ctoolId: introTool.cToolId,
     },
   });
 }
@@ -314,11 +302,13 @@ function addIntro(course, introTool) {
 function updateIntro(intro) {
   return router.push({
     name: "ToolIntroUpdate",
-    params: { id: intro["@id"] },
+    params: {'id': '/api/c_tool_intros/'+intro.iid },
     query: {
       cid: courseId,
       sid: sessionId,
-      id: intro["@id"],
+      ctoolintroIid: intro.iid,
+      ctoolId: intro.c_tool.iid,
+      id: '/api/c_tool_intros/'+intro.iid,
     },
   });
 }

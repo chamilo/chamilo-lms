@@ -1601,9 +1601,13 @@ class Rest extends WebService
     {
         self::protectAdminEndpoint();
 
-        $conditions = [
-            'status' => $params['status'],
-        ];
+        if ('*' === $params['status']) {
+            $conditions = [];
+        } else {
+            $conditions = [
+                'status' => $params['status']
+            ];
+        }
         $idCampus = !empty($params['id_campus']) ?? 1;
         $fields = [];
         if (!empty($params['extra_fields'])) {

@@ -66,6 +66,7 @@ export default {
     }
 
     let toolId = route.params.courseTool;
+    let ctoolId = route.query.ctoolId;
 
     // Get the current intro text.
     axios.get(ENTRYPOINT + 'c_tool_intros/' + toolId).then(response => {
@@ -76,7 +77,7 @@ export default {
     });
 
     item.value['parentResourceNodeId'] = Number(route.query.parentResourceNodeId);
-    item.value['courseTool'] = '/api/c_tools/'+toolId;
+    item.value['courseTool'] = '/api/c_tools/' + ctoolId;
 
     item.value['resourceLinkList'] = [{
       sid: route.query.sid,
@@ -86,7 +87,15 @@ export default {
 
     function onCreated(item) {
       showNotification(t('Updated'));
-      router.go(-1);
+      axios.post('/course/'+cid+'/addToolIntro', {
+        iid: item.iid,
+        cid: route.query.cid,
+        sid: route.query.sid
+      }).then(response => {
+        router.go(-1);
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
 
     return {v$: useVuelidate(), users, isLoadingSelect, item, onCreated};

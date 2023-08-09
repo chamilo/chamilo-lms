@@ -28,9 +28,9 @@ export default function translateHtml() {
     }
 
     // it checks content from old version
-    const langs = document.querySelectorAll(
-      "span[lang]:not(.mce-translatehtml)"
-    );
+    const langSpans = document.querySelectorAll('span[lang]');
+    const langs = [...langSpans].filter(span => !span.classList.contains('mce-translatehtml'));
+
     if (langs.length > 0) {
       // it hides all contents with lang
       langs.forEach(function (el) {

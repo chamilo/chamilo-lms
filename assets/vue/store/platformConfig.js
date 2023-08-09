@@ -6,7 +6,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const isLoading = ref(false);
   const settings = ref(null);
   const studentView = ref('teacherview');
-  const plugins = ref([]);
+  const plugins = ref([])
 
   function getSetting(variable) {
     if (settings.value && settings.value[variable]) {
@@ -20,17 +20,17 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     isLoading.value = true;
 
     try {
-      const { data } = await axios.get("/platform-config/list");
+      const { data } = await axios.get("/platform-config/list")
 
-      settings.value = data.settings;
+      settings.value = data.settings
 
-      studentView.value = data.studentview;
+      studentView.value = data.studentview
 
-      plugins.value = data.plugins;
+      plugins.value = data.plugins
     } catch (e) {
-      console.log(e);
+      console.log(e)
     } finally {
-      isLoading.value = false;
+      isLoading.value = false
     }
   }
 
@@ -39,7 +39,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   }
 
   function isStudentViewActive() {
-    return 'studentview' === studentView.value;
+    return 'studentview' === studentView.value
   }
 
   return {

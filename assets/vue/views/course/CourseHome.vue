@@ -275,12 +275,7 @@ async function getIntro() {
   then(response => {
     intro.value = response.data;
     introTool.value = response.data.c_tool;
-
-
-    console.log('response.data ',response.data);
-
     createInSession.value = response.data.createInSession;
-    translateHtml();
   }).catch(function (error) {
     console.log(error);
   });
@@ -409,6 +404,9 @@ const isAllowedToEdit = ref(false)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
+  setTimeout(() => {
+    translateHtml();
+  }, 1000);
 })
 
 const onStudentViewChanged = async () => {

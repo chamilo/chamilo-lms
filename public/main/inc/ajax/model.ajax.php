@@ -1989,7 +1989,7 @@ switch ($action) {
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,
-                        'order' => "s.access_start_date, s.name",
+                        'order' => "$sidx $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],

@@ -81,6 +81,7 @@ import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
 import userService from "../../services/user"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
+import { capitalize } from "lodash"
 
 const store = useStore()
 const router = useRouter()
@@ -227,6 +228,13 @@ if (route.query.send_to_user) {
         name: user.fullName,
         value: user['@id'],
       })
+
+      if (route.query.prefill) {
+        const prefill = capitalize(route.query.prefill)
+
+        item.value.title = t(prefill + 'EndLPSubject')
+        item.value.content = t(prefill + 'EndLpDescription', [user.firstname, user.lastname])
+      }
     })
     .catch((e) => notification.showErrorNotification(e))
     .finally(() => (isLoadingUser.value = false))

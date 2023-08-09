@@ -9,31 +9,27 @@
     :values="item"
     :errors="violations"
   >
-   <div v-if="item.originalSender">
-     To: <v-chip>{{ item.originalSender.username }}</v-chip>
+   <div
+     v-if="item.originalSender"
+     class="field"
+   >
+     <span v-t="'To'" />
+     <BaseChip
+       :value="item.originalSender"
+       image-field="illustrationUrl"
+       label-field="username"
+     />
    </div>
 
     <div v-if="item.receiversCc">
-<!--        <VueMultiselect-->
-<!--            id="cc"-->
-<!--            placeholder="Cc"-->
-<!--            v-model="item.receiversCc"-->
-<!--            :options="usersCc"-->
-<!--            :multiple="true"-->
-<!--            :searchable="false"-->
-<!--            :internal-search="false"-->
-<!--            limit-text="3"-->
-<!--            limit="3"-->
-<!--            label="username"-->
-<!--            track-by="id"-->
-<!--        />-->
-
-        Cc:
-      <span v-for="messageRelUser in item.receiversCc">
-        <v-chip>
-          {{ messageRelUser.receiver.username }}
-        </v-chip>
-      </span>
+      Cc:
+      <BaseChip
+        v-for="messageRelUser in item.receiversCc"
+        :key="messageRelUser['@id']"
+        :value="messageRelUser.receiver"
+        image-field="illustrationUrl"
+        label-field="username"
+      />
     </div>
 
   <TinyEditor
@@ -78,7 +74,7 @@ import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 const servicePrefix = 'Message';
 
-import VueMultiselect from 'vue-multiselect'
+import BaseChip from "../../components/basecomponents/BaseChip.vue"
 const { mapFields } = createHelpers({
   getterType: 'message/getField',
   mutationType: 'message/updateField'
@@ -89,7 +85,7 @@ export default {
   servicePrefix,
   mixins: [CreateMixin],
   components: {
-    VueMultiselect,
+    BaseChip,
     Loading,
     Toolbar,
     MessageForm

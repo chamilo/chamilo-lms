@@ -99,6 +99,10 @@ watchEffect(() => {
 
   if (content) {
     legacyContainer.value.appendChild(content);
+
+    const chEditors = window.chEditors || []
+    chEditors.forEach((editorConfig) => tinymce.init(editorConfig))
+
     content.style.display = "block";
   }
 });

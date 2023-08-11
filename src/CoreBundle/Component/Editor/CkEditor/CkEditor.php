@@ -71,9 +71,8 @@ class CkEditor extends Editor
 
         return "<script>
             document.addEventListener('DOMContentLoaded', function() {
-                tinymce.init(
-                    $javascript
-                );
+                window.chEditors = window.chEditors || [];
+                window.chEditors.push($javascript)
            });
            </script>";
     }

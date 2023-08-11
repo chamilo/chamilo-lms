@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -562,7 +563,7 @@ $user['language'] = 'french';
 $userInfo = api_get_user_info();
 if (!empty($userInfo)) {
     $langInfo = api_get_language_from_iso($userInfo['language']);
-    $user['language'] = $langInfo->getEnglishName();
+//    $user['language'] = $langInfo->getEnglishName();
 }
 
 $toolName = get_lang('Registration');
@@ -740,6 +741,7 @@ if (false === $userAlreadyRegisteredShowTerms) {
     );
 }
 
+
 if ($blockButton) {
     if (false !== $termActivated) {
         $form->addButton(
@@ -756,7 +758,7 @@ if ($blockButton) {
 } else {
     $allow = ('true' === api_get_setting('platform.allow_double_validation_in_registration'));
 
-    if (false === $allow && $termActivated) {
+    if ($allow && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {
@@ -1100,6 +1102,36 @@ if ($form->validate()) {
     $usersCanCreateCourse = api_is_allowed_to_create_course();
 
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
+
+    global $kernel;
+    if ('AppCache' == get_class($kernel)) {
+        $kernel = $kernel->getKernel();
+    }
+    $container = $kernel->getContainer();
+    $entityManager = $container->get('doctrine.orm.default_entity_manager');
+    $userRepository = $entityManager->getRepository(User::class);
+    $userEntity = $userRepository->find($userId);
+
+    $providerKey = 'main';
+    $roles = $userEntity->getRoles();
+    $token = new UsernamePasswordToken($userEntity, null, $providerKey, $roles);
+
+    $container->get('security.token_storage')->setToken($token);
+    $container->get('session')->set('_security_' . $providerKey, serialize($token));
+    $session = $container->get('session');
+    $userData = [
+        'firstName' => stripslashes($values['firstname']),
+        'lastName' => stripslashes($values['lastname']),
+        'mail' => $values['email'],
+        'language' => $values['language'],
+        'user_id' => $userId
+    ];
+
+    $session->set('_user', $userData);
+
+    $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
+    $session->set('is_allowedCreateCourse', $is_allowedCreateCourse);
+
 
     // Stats
     //Event::eventLogin($user_id);

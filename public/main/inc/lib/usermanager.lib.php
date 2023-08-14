@@ -1066,7 +1066,11 @@ class UserManager
             $expiration_date = new \DateTime($expiration_date, new DateTimeZone('UTC'));
         }
 
+        $previousStatus = $user->getStatus();
+        $previousRole = $user->getRoleFromStatus($previousStatus);
+
         $user
+            ->removeRole($previousRole)
             ->setLastname($lastname)
             ->setFirstname($firstname)
             ->setUsername($username)

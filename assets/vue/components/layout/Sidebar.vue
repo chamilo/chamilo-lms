@@ -27,7 +27,7 @@
     />
   </aside>
 
-  <Teleport to=".p-megamenu .p-megamenu-end">
+  <Teleport to=".app-topbar__end">
     <a
       class="app-sidebar__topbar-button"
       tabindex="0"

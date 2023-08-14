@@ -108,4 +108,5 @@ export const chamiloIconToClass = {
   "courses": "mdi mdi-book-open-page-variant",
   "anonymous": "mdi mdi-incognito",
   "settings": "mdi mdi-tools",
+  "ticket": "mdi mdi-ticket-account",
 };

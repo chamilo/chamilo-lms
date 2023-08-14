@@ -1,51 +1,50 @@
 <template>
-  <MegaMenu
-    :model="menuItems"
-    class="app-topbar"
-  >
-    <template #start>
+  <div class="app-topbar">
+    <div class="app-topbar__start">
       <img
         :src="headerLogo"
         alt="Chamilo LMS"
       />
-    </template>
+    </div>
+    <div class="app-topbar__items">
+      <PrimeButton
+        v-if="'true' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        :icon="chamiloIconToClass['ticket']"
+        class="item-button"
+        icon-class="item-button__icon"
+        link
+        unstyled
+        @click="btnTicketsOnClick"
+      />
 
-    <template #item="{ item }">
-      <router-link
-        v-if="item.to"
-        :to="item.to"
-        class="p-menuitem-link"
-      >
-        <span
-          :class="item.icon"
-          class="p-menuitem-icon mx-0"
-        />
-        <span class="p-menuitem-text hidden">{{ item.label }}</span>
-      </router-link>
-      <a
-        v-if="item.url"
-        :href="item.url"
-        aria-controls="user-submenu"
-        aria-haspopup="true"
-        class="p-menuitem-link"
-      >
-        <span
-          :class="item.icon"
-          class="p-menuitem-icon mx-0"
-        />
-        <span class="p-menuitem-text hidden">{{ item.label }}</span>
-      </a>
-    </template>
+      <PrimeButton
+        :icon="chamiloIconToClass['account']"
+        class="item-button"
+        icon-class="item-button__icon"
+        link
+        unstyled
+        @click="btnProfileOnClick"
+      />
 
-    <template #end>
+      <PrimeButton
+        :icon="chamiloIconToClass['inbox']"
+        class="item-button"
+        icon-class="item-button__icon"
+        link
+        unstyled
+        @click="btnInboxOnClick"
+      />
+    </div>
+    <div class="app-topbar__end">
       <Avatar
         :image="currentUser.illustrationUrl"
-        class="cursor-pointer"
+        class="user-avatar"
         shape="circle"
+        unstyled
         @click="toogleUserMenu"
       />
-    </template>
-  </MegaMenu>
+    </div>
+  </div>
 
   <Menu
     id="user-submenu"
@@ -58,12 +57,14 @@
 
 <script setup>
 import { ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRouter } from "vue-router"
 
-import MegaMenu from "primevue/megamenu"
 import Avatar from "primevue/avatar"
 import Menu from "primevue/menu"
+import PrimeButton from "primevue/button"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { chamiloIconToClass } from "../basecomponents/ChamiloIcons"
+import { useCidReq } from "../../composables/cidReq"
 
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 
@@ -75,39 +76,19 @@ const props = defineProps({
   },
 })
 
-const route = useRoute()
+const router = useRouter()
 
 const platformConfigStore = usePlatformConfig()
 
-const menuItems = ref([
-  {
-    label: "Tickets",
-    icon: "pi pi-fw pi-ticket",
-    url: (function () {
-      const queryParams = new URLSearchParams(window.location.href)
+const btnTicketsOnClick = () => {
+  const { cid, sid, gid } = useCidReq()
 
-      const cid = route.query.cid || route.params.id || queryParams.get("cid") || 0
-      const sid = route.query.sid || queryParams.get("sid") || 0
-      const gid = route.query.gid || queryParams.get("gid") || 0
+  window.location = window.location.origin + `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`
+}
 
-      return `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`
-    })(),
-    visible: "true" !== platformConfigStore.getSetting("display.show_link_ticket_notification"),
-    items: [],
-  },
-  {
-    label: "Profile",
-    icon: "pi pi-fw pi-user",
-    to: "/account/home",
-    items: [],
-  },
-  {
-    label: "Inbox",
-    icon: "pi pi-fw pi-inbox",
-    to: "/resources/messages",
-    items: [],
-  },
-])
+const btnProfileOnClick = async () => await router.push({ name: "AccountHome" })
+
+const btnInboxOnClick = async () => await router.push({ name: "MessageList" })
 
 const elUserSubmenu = ref(null)
 const userSubmenuItems = [

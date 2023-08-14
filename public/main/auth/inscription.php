@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use \Symfony\Component\Security\Core\User\UserInterface;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -1132,6 +1133,8 @@ if ($form->validate()) {
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
     $session->set('is_allowedCreateCourse', $is_allowedCreateCourse);
 
+    $token = $container->get('security.token_storage')->getToken();
+    $isLogged = ($token && $token->getUser() instanceof UserInterface);
 
     // Stats
     //Event::eventLogin($user_id);
@@ -1247,6 +1250,18 @@ if ($form->validate()) {
     }
 
     $textAfterRegistration .= $formRegister->returnForm();
+    if ($isLogged) {
+        $homeLink = Display::url(
+            get_lang('here'),
+            api_get_path(WEB_PATH),
+            [
+                'class' => 'btn btn--plain',
+                'data-title' => get_lang('home'),
+                'data-size' => 'lg',
+            ]
+        );
+        $textAfterRegistration .= ' Click '.$homeLink.' to redirect to the platform home page';
+    }
 
     // Just in case
     Session::erase('course_redirect');

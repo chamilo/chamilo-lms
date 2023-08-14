@@ -27,8 +27,11 @@
       />
 
       <PrimeButton
+        :badge="btnInboxBadge"
+        :class="{ 'item-button--unread': btnInboxBadge > 0 }"
         :icon="chamiloIconToClass['inbox']"
         class="item-button"
+        badge-class="item-button__badge"
         icon-class="item-button__icon"
         link
         unstyled
@@ -108,4 +111,23 @@ function toogleUserMenu(event) {
 }
 
 const headerLogo = headerLogoPath
+
+import { useNotification } from "../../composables/notification"
+import messageRelUSerService from "../../services/messagereluser"
+
+const notification = useNotification()
+
+const btnInboxBadge = ref()
+
+messageRelUSerService
+  .findAll({
+    params: { read: false, receiver: props.currentUser["@id"], itemsPerPage: 1 },
+  })
+  .then((response) => response.json())
+  .then((json) => {
+    const totalItems = json["hydra:totalItems"]
+
+    btnInboxBadge.value = totalItems > 9 ? "9+" : totalItems
+  })
+  .catch(e => notification.showErrorNotification(e))
 </script>

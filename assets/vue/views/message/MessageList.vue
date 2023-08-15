@@ -1,10 +1,24 @@
 <template>
   <div class="flex gap-4 items-center">
-    <h2 class="mr-auto" v-text="title" />
+    <h2
+      class="mr-auto"
+      v-text="title"
+    />
 
-    <BaseButton icon="email-plus" only-icon type="black" @click="goToCompose" />
+    <BaseButton
+      icon="email-plus"
+      only-icon
+      type="black"
+      @click="goToCompose"
+    />
 
-    <BaseButton :disabled="isLoading" icon="refresh" only-icon type="black" @click="refreshMessages" />
+    <BaseButton
+      :disabled="isLoading"
+      icon="refresh"
+      only-icon
+      type="black"
+      @click="refreshMessages"
+    />
 
     <BaseButton
       :disabled="0 === selectedItems.length || isLoading"
@@ -23,7 +37,11 @@
       @click="mToggleMessagesList"
     />
 
-    <BaseMenu id="course-messages-list-tmenu" ref="mMessageList" :model="mItemsMarkAs" />
+    <BaseMenu
+      id="course-messages-list-tmenu"
+      ref="mMessageList"
+      :model="mItemsMarkAs"
+    />
   </div>
 
   <hr />
@@ -31,11 +49,26 @@
   <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
     <div class="space-y-4">
       <div class="flex md:flex-col gap-2">
-        <BaseButton :label="t('Inbox')" icon="inbox" type="black" @click="showInbox" />
+        <BaseButton
+          :label="t('Inbox')"
+          icon="inbox"
+          type="black"
+          @click="showInbox"
+        />
 
-        <BaseButton :label="t('Unread')" icon="email-unread" type="black" @click="showUnread" />
+        <BaseButton
+          :label="t('Unread')"
+          icon="email-unread"
+          type="black"
+          @click="showUnread"
+        />
 
-        <BaseButton :label="t('Sent')" icon="sent" type="black" @click="showSent" />
+        <BaseButton
+          :label="t('Sent')"
+          icon="sent"
+          type="black"
+          @click="showSent"
+        />
 
         <BaseButton
           v-for="tag in tags"
@@ -84,7 +117,12 @@
               {{ slotProps.data.title }}
             </div>
 
-            <BaseTag v-for="tag in findMyReceiver(slotProps.data)?.tags" :key="tag.id" :label="tag.tag" type="info" />
+            <BaseTag
+              v-for="tag in findMyReceiver(slotProps.data)?.tags"
+              :key="tag.id"
+              :label="tag.tag"
+              type="info"
+            />
           </template>
         </Column>
         <Column :header="t('Send date')">
@@ -94,7 +132,12 @@
         </Column>
         <Column :header="t('Actions')">
           <template #body="slotProps">
-            <BaseButton icon="delete" size="small" type="danger" @click="showDlgConfirmDeleteSingle(slotProps)" />
+            <BaseButton
+              icon="delete"
+              size="small"
+              type="danger"
+              @click="showDlgConfirmDeleteSingle(slotProps)"
+            />
           </template>
         </Column>
       </DataTable>
@@ -103,35 +146,35 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { useRelativeDatetime } from "../../composables/formatDate";
-import BaseButton from "../../components/basecomponents/BaseButton.vue";
-import BaseMenu from "../../components/basecomponents/BaseMenu.vue";
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue";
-import BaseTag from "../../components/basecomponents/BaseTag.vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import { useConfirm } from "primevue/useconfirm";
-import { useQuery } from "@vue/apollo-composable";
-import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/message/constants";
-import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag";
-import { useNotification } from "../../composables/notification";
+import { computed, onMounted, ref } from "vue"
+import { useStore } from "vuex"
+import { useI18n } from "vue-i18n"
+import { useRoute, useRouter } from "vue-router"
+import { useRelativeDatetime } from "../../composables/formatDate"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import BaseTag from "../../components/basecomponents/BaseTag.vue"
+import DataTable from "primevue/datatable"
+import Column from "primevue/column"
+import { useConfirm } from "primevue/useconfirm"
+import { useQuery } from "@vue/apollo-composable"
+import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/message/constants"
+import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
+import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
-const route = useRoute();
-const router = useRouter();
-const store = useStore();
-const { t } = useI18n();
+const route = useRoute()
+const router = useRouter()
+const store = useStore()
+const { t } = useI18n()
 
-const confirm = useConfirm();
-const notification = useNotification();
+const confirm = useConfirm()
+const notification = useNotification()
 
 const messageRelUserStore = useMessageRelUserStore()
 
-const user = computed(() => store.getters["security/getUser"]);
+const user = computed(() => store.getters["security/getUser"])
 
 const mItemsMarkAs = ref([
   {
@@ -144,15 +187,15 @@ const mItemsMarkAs = ref([
           return undefined
         }
 
-        myReceiver.read = true;
+        myReceiver.read = true
 
-        return store.dispatch("messagereluser/update", myReceiver);
+        return store.dispatch("messagereluser/update", myReceiver)
       })
 
       Promise.all(promises)
         .then(() => messageRelUserStore.findUnreadCount())
         .catch((e) => notification.showErrorNotification(e))
-        .finally(() => selectedItems.value = [])
+        .finally(() => (selectedItems.value = []))
     },
   },
   {
@@ -165,76 +208,76 @@ const mItemsMarkAs = ref([
           return undefined
         }
 
-        myReceiver.read = false;
+        myReceiver.read = false
 
-        return store.dispatch("messagereluser/update", myReceiver);
+        return store.dispatch("messagereluser/update", myReceiver)
       })
 
       Promise.all(promises)
         .then(() => messageRelUserStore.findUnreadCount())
         .catch((e) => notification.showErrorNotification(e))
-        .finally(() => selectedItems.value = [])
+        .finally(() => (selectedItems.value = []))
     },
   },
-]);
+])
 
-const mMessageList = ref(null);
+const mMessageList = ref(null)
 
-const mToggleMessagesList = (event) => mMessageList.value.toggle(event);
+const mToggleMessagesList = (event) => mMessageList.value.toggle(event)
 
-const dtMessages = ref(null);
-const initialRowsPerPage = 10;
+const dtMessages = ref(null)
+const initialRowsPerPage = 10
 
 const goToCompose = () => {
   router.push({
     name: "MessageCreate",
     query: route.query,
-  });
-};
+  })
+}
 
 const { result: messageTagsResult } = useQuery(
   GET_USER_MESSAGE_TAGS,
   { user: user.value["@id"] },
-  { fetchPolicy: "cache-and-network" }
-);
+  { fetchPolicy: "cache-and-network" },
+)
 
-const tags = computed(() => messageTagsResult.value?.messageTags?.edges.map(({ node }) => node) ?? []);
+const tags = computed(() => messageTagsResult.value?.messageTags?.edges.map(({ node }) => node) ?? [])
 
-const items = computed(() => store.getters["message/getRecents"]);
-const isLoading = computed(() => store.getters["message/isLoading"]);
-const totalItems = computed(() => store.getters["message/getTotalItems"]);
+const items = computed(() => store.getters["message/getRecents"])
+const isLoading = computed(() => store.getters["message/isLoading"])
+const totalItems = computed(() => store.getters["message/getTotalItems"])
 
-const title = ref(null);
+const title = ref(null)
 
-const selectedItems = ref([]);
+const selectedItems = ref([])
 
 const rowClass = (data) => {
-  const myReceiver = findMyReceiver(data);
+  const myReceiver = findMyReceiver(data)
 
   if (!myReceiver) {
-    return [];
+    return []
   }
 
-  return [{ "font-semibold": !myReceiver.read }];
-};
+  return [{ "font-semibold": !myReceiver.read }]
+}
 
 let fetchPayload = {
   "order[sendDate]": "desc",
   itemsPerPage: initialRowsPerPage,
   page: 1,
-};
+}
 
 function loadMessages(reset = true) {
   if (reset) {
-    store.dispatch("message/resetList");
-    dtMessages.value.resetPage();
+    store.dispatch("message/resetList")
+    dtMessages.value.resetPage()
   }
 
-  store.dispatch("message/fetchAll", fetchPayload);
+  store.dispatch("message/fetchAll", fetchPayload)
 }
 
 function showInbox() {
-  title.value = t("Inbox");
+  title.value = t("Inbox")
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
@@ -242,13 +285,13 @@ function showInbox() {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
-  };
+  }
 
-  loadMessages();
+  loadMessages()
 }
 
 function showInboxByTag(tag) {
-  title.value = tag.tag;
+  title.value = tag.tag
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
@@ -257,13 +300,13 @@ function showInboxByTag(tag) {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
-  };
+  }
 
-  loadMessages();
+  loadMessages()
 }
 
 function showUnread() {
-  title.value = t("Unread");
+  title.value = t("Unread")
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
@@ -272,13 +315,13 @@ function showUnread() {
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
     page: 1,
-  };
+  }
 
-  loadMessages();
+  loadMessages()
 }
 
 function showSent() {
-  title.value = t("Sent");
+  title.value = t("Sent")
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
@@ -286,23 +329,23 @@ function showSent() {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
-  };
+  }
 
-  loadMessages();
+  loadMessages()
 }
 
 function refreshMessages() {
-  fetchPayload.itemsPerPage = initialRowsPerPage;
-  fetchPayload.page = 1;
+  fetchPayload.itemsPerPage = initialRowsPerPage
+  fetchPayload.page = 1
 
-  loadMessages();
+  loadMessages()
 }
 
 function onPage(event) {
-  fetchPayload.page = event.page + 1;
-  fetchPayload.itemsPerPage = event.rows;
+  fetchPayload.page = event.page + 1
+  fetchPayload.itemsPerPage = event.rows
 
-  loadMessages(false);
+  loadMessages(false)
 }
 
 function onRowClick({ data }) {
@@ -311,25 +354,25 @@ function onRowClick({ data }) {
     query: {
       id: data["@id"],
     },
-  });
+  })
 }
 
 function findMyReceiver(message) {
-  const receivers = [...message.receiversTo, ...message.receiversCc];
+  const receivers = [...message.receiversTo, ...message.receiversCc]
 
-  return receivers.find(({ receiver }) => receiver["@id"] === user.value["@id"]);
+  return receivers.find(({ receiver }) => receiver["@id"] === user.value["@id"])
 }
 
 async function deleteMessage(message) {
   if (message.sender["@id"] === user.value["@id"]) {
-    message.status = MESSAGE_STATUS_DELETED;
+    message.status = MESSAGE_STATUS_DELETED
 
-    await store.dispatch("message/update", message);
+    await store.dispatch("message/update", message)
   } else {
-    const myReceiver = findMyReceiver(message);
+    const myReceiver = findMyReceiver(message)
 
     if (myReceiver) {
-      await store.dispatch("messagereluser/del", myReceiver);
+      await store.dispatch("messagereluser/del", myReceiver)
     }
   }
 }
@@ -339,13 +382,13 @@ function showDlgConfirmDeleteSingle({ data }) {
     header: t("Confirmation"),
     message: t(`Are you sure you want to delete "${data.title}"?`),
     accept: async () => {
-      await deleteMessage(data);
+      await deleteMessage(data)
 
-      loadMessages();
+      loadMessages()
 
-      notification.showSuccessNotification(t("Message deleted"));
+      notification.showSuccessNotification(t("Message deleted"))
     },
-  });
+  })
 }
 
 function showDlgConfirmDeleteMultiple() {
@@ -354,19 +397,19 @@ function showDlgConfirmDeleteMultiple() {
     message: t("Are you sure you want to delete the selected items?"),
     accept: async () => {
       for (const message of selectedItems.value) {
-        await deleteMessage(message);
+        await deleteMessage(message)
       }
 
-      loadMessages();
+      loadMessages()
 
-      notification.showSuccessNotification(t("Messages deleted"));
+      notification.showSuccessNotification(t("Messages deleted"))
 
-      selectedItems.value = [];
+      selectedItems.value = []
     },
-  });
+  })
 }
 
 onMounted(() => {
-  showInbox();
-});
+  showInbox()
+})
 </script>

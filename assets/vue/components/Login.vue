@@ -71,52 +71,52 @@
 </template>
 
 <script setup>
-import {useStore} from 'vuex';
-import {computed, ref} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import InputSwitch from 'primevue/inputswitch';
-import {useI18n} from "vue-i18n";
+import { useStore } from "vuex"
+import { computed, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import Button from "primevue/button"
+import InputText from "primevue/inputtext"
+import Password from "primevue/password"
+import InputSwitch from "primevue/inputswitch"
+import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
 
-const route = useRoute();
-const router = useRouter();
-const store = useStore();
-const {t} = useI18n();
+const route = useRoute()
+const router = useRouter()
+const store = useStore()
+const { t } = useI18n()
 const securityStore = useSecurityStore()
 
-const login = ref('');
-const password = ref('');
-const remember = ref(false);
+const login = ref("")
+const password = ref("")
+const remember = ref(false)
 
-const isLoading = computed(() => store.getters['security/isLoading']);
+const isLoading = computed(() => store.getters["security/isLoading"])
 
-let redirect = route.query.redirect;
+let redirect = route.query.redirect
 
 if (store.getters["security/isAuthenticated"]) {
   if (typeof redirect !== "undefined") {
-    router.push({path: redirect.toString()});
+    router.push({ path: redirect.toString() })
   } else {
-    router.replace({name: 'Home'});
+    router.replace({ name: "Home" })
   }
 }
 
 async function performLogin() {
-  let payload = {login: login.value, password: password.value};
-  let redirect = route.query.redirect;
+  let payload = { login: login.value, password: password.value }
+  let redirect = route.query.redirect
 
-  await store.dispatch("security/login", payload);
+  await store.dispatch("security/login", payload)
 
   if (!store.getters["security/hasError"]) {
     securityStore.user = store.state["security/user"]
 
     if (typeof redirect !== "undefined") {
-      await router.push({path: redirect.toString()});
+      await router.push({ path: redirect.toString() })
     } else {
       // router.replace({path: "/home"});
-      window.location.href = '/home';
+      window.location.href = "/home"
     }
   }
 }

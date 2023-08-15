@@ -15,25 +15,25 @@
         class="app-sidebar__logout-link"
         href="/logout"
       >
-        <span class="pi pi-fw pi-sign-out" />
+        <span class="mdi mdi-logout-variant" />
         <span class="logout-text">{{ t("Sign out") }}</span>
       </a>
     </div>
     <ToggleButton
       v-model="sidebarIsOpen"
       class="app-sidebar__button"
-      off-icon="pi pi-fw pi-chevron-right"
-      on-icon="pi pi-fw pi-chevron-left"
+      off-icon="mdi mdi-chevron-right"
+      on-icon="mdi mdi-chevron-left"
     />
   </aside>
 
   <Teleport to=".app-topbar__end">
     <a
-      class="app-sidebar__topbar-button"
+      class="app-sidebar__topbar-button item-button"
       tabindex="0"
       @click="sidebarIsOpen = !sidebarIsOpen"
     >
-      <i class="pi pi-times" />
+      <i class="mdi mdi-close" />
     </a>
   </Teleport>
 </template>

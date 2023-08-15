@@ -9,11 +9,12 @@
   }
 
   &__top {
-    @apply sm:hidden font-bold pt-14 px-9 text-gray-90 text-[32px];
+    @apply sm:hidden font-bold pt-10 px-9 text-gray-90 text-[32px];
   }
 
   &__panel {
-    @apply py-6 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none;
+    @apply pt-8 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none
+      sm:pt-5;
   }
 
   &__bottom {
@@ -23,7 +24,7 @@
   &__logout-link {
     @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
 
-    .pi {
+    .mdi {
       @apply leading-normal text-body-2;
     }
 
@@ -37,8 +38,10 @@
   }
 
   &__button {
-    @apply bg-white border border-solid border-gray-25 rounded-full top-7 -right-4 text-tiny text-primary p-3;
+    @apply bg-white border border-solid border-gray-25 rounded-full top-6 -right-4 text-primary p-1.5;
     display: none !important;
+    font-size: 20px;
+    line-height: 20px;
     position: absolute !important;
     z-index: 11;
 
@@ -109,8 +112,7 @@
 }
 
 .app-sidebar__topbar-button {
-  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center
-    sm:hidden;
+  @apply text-center sm:hidden;
 }
 
 #app {
@@ -144,7 +146,7 @@
       }
 
       &__logout-link {
-        @apply md:mx-5 md:my-3 md:py-3 md:px-3 text-center;
+        @apply sm:mx-5 sm:my-3 sm:py-3 sm:px-3 text-center;
 
         .logout-text {
           @apply sm:hidden sm:mr-0;
@@ -153,9 +155,9 @@
     }
 
     .app-sidebar__topbar-button {
-      .pi.pi-times {
+      .mdi.mdi-close {
         &::before {
-          content: "\e91d";
+          content: "\F035C";
         }
       }
     }

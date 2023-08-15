@@ -11,12 +11,12 @@ export function useSidebarMenu() {
     {
       label: t("Home"),
       to: { name: "Home" },
-      icon: "pi pi-fw pi-home",
+      icon: "mdi mdi-home",
     },
 
     {
       label: t("Courses"),
-      icon: "pi pi-fw pi-book",
+      icon: "mdi mdi-book-open-page-variant",
       visible: securityStore.isAuthenticated,
       items: [
         {
@@ -32,32 +32,32 @@ export function useSidebarMenu() {
     {
       label: t("Events"),
       to: { name: "CCalendarEventList" },
-      icon: "pi pi-fw pi-calendar",
+      icon: "mdi mdi-calendar-text",
       visible: securityStore.isAuthenticated,
     },
     {
       label: t("My progress"),
       url: "/main/auth/my_progress.php",
-      icon: "pi pi-fw pi-chart-line",
+      icon: "mdi mdi-chart-box",
       visible: securityStore.isAuthenticated,
     },
     {
       label: t("Social network"),
       to: { name: "SocialWall" },
-      icon: "pi pi-fw pi-sitemap",
+      icon: "mdi mdi-sitemap-outline",
       visible: securityStore.isAuthenticated,
     },
 
     {
       label: t('Videoconference'),
       url: platformConfigStore.plugins.bbb.listingURL,
-      icon: 'mdi mdi-video-box',
+      icon: 'mdi mdi-video',
       visible: platformConfigStore.plugins?.bbb?.show_global_conference_link,
     },
 
     {
       label: t("Diagnosis"),
-      icon: "pi pi-fw pi-search",
+      icon: "mdi mdi-text-box-search",
       visible: securityStore.isStudentBoss || securityStore.isStudent,
       items: [
         {
@@ -74,7 +74,7 @@ export function useSidebarMenu() {
 
     {
       label: t("Administration"),
-      icon: "pi pi-fw pi-table",
+      icon: "mdi mdi-cog",
       visible: securityStore.isAdmin,
       items: [
         {

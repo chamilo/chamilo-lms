@@ -79,11 +79,13 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import InputSwitch from 'primevue/inputswitch';
 import {useI18n} from "vue-i18n";
+import { useSecurityStore } from "../store/securityStore"
 
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
 const {t} = useI18n();
+const securityStore = useSecurityStore()
 
 const login = ref('');
 const password = ref('');
@@ -108,6 +110,8 @@ async function performLogin() {
   await store.dispatch("security/login", payload);
 
   if (!store.getters["security/hasError"]) {
+    securityStore.user = store.state["security/user"]
+
     if (typeof redirect !== "undefined") {
       await router.push({path: redirect.toString()});
     } else {

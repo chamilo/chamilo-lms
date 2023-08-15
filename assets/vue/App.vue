@@ -50,6 +50,7 @@ import {isEmpty} from "lodash";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { useSecurityStore } from "./store/securityStore"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -128,10 +129,12 @@ if (!isEmpty(window.user)) {
 }
 
 const store = useStore();
+const securityStore = useSecurityStore()
 
 const payload = {isAuthenticated, user};
 
 store.dispatch('security/onRefresh', payload);
+securityStore.user = window.user
 
 onMounted(() => {
   const app = document.getElementById('app');

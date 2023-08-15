@@ -28,7 +28,7 @@
 
       <PrimeButton
         :badge="btnInboxBadge"
-        :class="{ 'item-button--unread': btnInboxBadge > 0 }"
+        :class="{ 'item-button--unread': btnInboxBadge }"
         :icon="chamiloIconToClass['inbox']"
         class="item-button"
         badge-class="item-button__badge"

@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
 import Avatar from "primevue/avatar"
@@ -68,8 +68,10 @@ import PrimeButton from "primevue/button"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { chamiloIconToClass } from "../basecomponents/ChamiloIcons"
 import { useCidReq } from "../../composables/cidReq"
+import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
+import { useNotification } from "../../composables/notification"
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -82,6 +84,8 @@ const props = defineProps({
 const router = useRouter()
 
 const platformConfigStore = usePlatformConfig()
+const messageRelUserStore = useMessageRelUserStore()
+const notification = useNotification();
 
 const btnTicketsOnClick = () => {
   const { cid, sid, gid } = useCidReq()
@@ -112,22 +116,8 @@ function toogleUserMenu(event) {
 
 const headerLogo = headerLogoPath
 
-import { useNotification } from "../../composables/notification"
-import messageRelUSerService from "../../services/messagereluser"
+const btnInboxBadge = computed(() => (messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread))
 
-const notification = useNotification()
-
-const btnInboxBadge = ref()
-
-messageRelUSerService
-  .findAll({
-    params: { read: false, receiver: props.currentUser["@id"], itemsPerPage: 1 },
-  })
-  .then((response) => response.json())
-  .then((json) => {
-    const totalItems = json["hydra:totalItems"]
-
-    btnInboxBadge.value = totalItems > 9 ? "9+" : totalItems
-  })
-  .catch(e => notification.showErrorNotification(e))
+messageRelUserStore.findUnreadCount()
+  .catch((e) => notification.showErrorNotification(e))
 </script>

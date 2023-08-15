@@ -110,6 +110,7 @@ import { useI18n } from "vue-i18n";
 import BaseChip from "../../components/basecomponents/BaseChip.vue";
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue";
 import { useRelativeDatetime } from "../../composables/formatDate";
+import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 const confirm = useConfirm();
 const { t } = useI18n();
@@ -120,6 +121,7 @@ const user = store.getters["security/getUser"];
 //const find = store.getters["message/find"];
 const route = useRoute();
 const router = useRouter();
+const messageRelUserStore = useMessageRelUserStore()
 
 let id = route.params.id;
 if (isEmpty(id)) {
@@ -143,7 +145,7 @@ store.dispatch("message/load", id).then((responseItem) => {
     store.dispatch("messagereluser/update", {
       "@id": myReceiver.value["@id"],
       read: true,
-    });
+    }).then(() => messageRelUserStore.findUnreadCount());
   }
 });
 

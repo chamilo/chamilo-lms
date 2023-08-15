@@ -119,6 +119,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/message/constants";
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag";
 import { useNotification } from "../../composables/notification";
+import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 const route = useRoute();
 const router = useRouter();
@@ -126,45 +127,53 @@ const store = useStore();
 const { t } = useI18n();
 
 const confirm = useConfirm();
-const { showSuccessNotification } = useNotification();
+const notification = useNotification();
+
+const messageRelUserStore = useMessageRelUserStore()
 
 const user = computed(() => store.getters["security/getUser"]);
 
 const mItemsMarkAs = ref([
   {
     label: t("As read"),
-    command: async () => {
-      for (const message of selectedItems.value) {
-        const myReceiver = findMyReceiver(message);
+    command: () => {
+      const promises = selectedItems.value.map((message) => {
+        const myReceiver = findMyReceiver(message)
 
         if (!myReceiver) {
-          continue;
+          return undefined
         }
 
         myReceiver.read = true;
 
-        await store.dispatch("messagereluser/update", myReceiver);
-      }
+        return store.dispatch("messagereluser/update", myReceiver);
+      })
 
-      selectedItems.value = [];
+      Promise.all(promises)
+        .then(() => messageRelUserStore.findUnreadCount())
+        .catch((e) => notification.showErrorNotification(e))
+        .finally(() => selectedItems.value = [])
     },
   },
   {
     label: t("As unread"),
     command: async () => {
-      for (const message of selectedItems.value) {
-        const myReceiver = findMyReceiver(message);
+      const promises = selectedItems.value.map((message) => {
+        const myReceiver = findMyReceiver(message)
 
         if (!myReceiver) {
-          continue;
+          return undefined
         }
 
         myReceiver.read = false;
 
-        await store.dispatch("messagereluser/update", myReceiver);
-      }
+        return store.dispatch("messagereluser/update", myReceiver);
+      })
 
-      selectedItems.value = [];
+      Promise.all(promises)
+        .then(() => messageRelUserStore.findUnreadCount())
+        .catch((e) => notification.showErrorNotification(e))
+        .finally(() => selectedItems.value = [])
     },
   },
 ]);
@@ -334,7 +343,7 @@ function showDlgConfirmDeleteSingle({ data }) {
 
       loadMessages();
 
-      showSuccessNotification(t("Message deleted"));
+      notification.showSuccessNotification(t("Message deleted"));
     },
   });
 }
@@ -350,7 +359,7 @@ function showDlgConfirmDeleteMultiple() {
 
       loadMessages();
 
-      showSuccessNotification(t("Messages deleted"));
+      notification.showSuccessNotification(t("Messages deleted"));
 
       selectedItems.value = [];
     },

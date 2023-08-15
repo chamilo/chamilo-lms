@@ -1173,7 +1173,10 @@ if ($form->validate()) {
         }
     } else {
         if (!empty($values['email'])) {
+            $linkDiagnostic = api_get_path(WEB_PATH).'main/search/search.php';
             $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password').'.</p>';
+            $diagnosticPath = '<a href="'.$linkDiagnostic.'">'.$linkDiagnostic.'</a>';
+            $textAfterRegistration .= '<p>'.get_lang('Welcome, please go to diagnostic at '). $diagnosticPath.'</p>';
         }
 
         if ($is_allowedCreateCourse) {

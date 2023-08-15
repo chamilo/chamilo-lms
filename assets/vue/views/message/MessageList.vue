@@ -59,7 +59,7 @@
         :total-records="totalItems"
         :value="items"
         current-page-report-template="{first} to {last} of {totalRecords}"
-        data-key="id"
+        data-key="@id"
         lazy
         paginator
         paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"

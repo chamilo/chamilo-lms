@@ -100,14 +100,14 @@
           <!--          />-->
 
           <Button
-            v-if="isAuthenticated"
+            v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
             icon="mdi mdi-pencil"
             @click="goToEditItem(slotProps.data)"
           />
 
           <Button
-            v-if="isAuthenticated"
+            v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
             icon="mdi mdi-delete"
             @click="confirmDeleteItem(slotProps.data)"
@@ -231,8 +231,10 @@ import { useDatatableList } from '../../composables/datatableList';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'primevue/usetoast';
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore();
+const securityStore = useSecurityStore()
 
 const { t } = useI18n();
 
@@ -246,7 +248,6 @@ onMounted(() => {
   onUpdateOptions(options.value);
 });
 
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
 const isAdmin = computed(() => store.getters['security/isAdmin']);
 
 const items = computed(() => store.state['page'].recents);

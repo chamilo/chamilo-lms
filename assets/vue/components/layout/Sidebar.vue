@@ -11,7 +11,7 @@
         <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
       </div>
       <a
-        v-if="isAuthenticated"
+        v-if="securityStore.isAuthenticated"
         class="app-sidebar__logout-link"
         href="/logout"
       >
@@ -45,12 +45,13 @@ import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useStore } from "vuex"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
+const securityStore = useSecurityStore()
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
 const isAdmin = computed(() => store.getters["security/isAdmin"])
 const isBoss = computed(() => store.getters["security/isBoss"])
 const isStudent = computed(() => store.getters["security/isStudent"])
@@ -65,7 +66,7 @@ const items = ref([
   {
     label: t("Courses"),
     icon: "pi pi-fw pi-book",
-    visible: isAuthenticated,
+    visible: securityStore.isAuthenticated,
     items: [
       {
         label: t("My courses"),
@@ -81,19 +82,19 @@ const items = ref([
     label: t("Events"),
     to: { name: "CCalendarEventList" },
     icon: "pi pi-fw pi-calendar",
-    visible: isAuthenticated,
+    visible: securityStore.isAuthenticated,
   },
   {
     label: t("My progress"),
     url: "/main/auth/my_progress.php",
     icon: "pi pi-fw pi-chart-line",
-    visible: isAuthenticated,
+    visible: securityStore.isAuthenticated,
   },
   {
     label: t("Social network"),
     to: { name: "SocialWall" },
     icon: "pi pi-fw pi-sitemap",
-    visible: isAuthenticated,
+    visible: securityStore.isAuthenticated,
   },
 
   {

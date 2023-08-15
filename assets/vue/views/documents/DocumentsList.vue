@@ -1,5 +1,5 @@
 <template>
-  <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
+  <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
       :label="t('Back')"
@@ -80,7 +80,7 @@
           <BaseButton icon="information" size="small" type="black" @click="btnShowInformationOnClick(slotProps.data)" />
 
           <BaseButton
-            v-if="isAuthenticated && isCurrentTeacher"
+            v-if="securityStore.isAuthenticated && isCurrentTeacher"
             :icon="
               RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility
                 ? 'eye-on'
@@ -94,7 +94,7 @@
           />
 
           <BaseButton
-            v-if="isAuthenticated && isCurrentTeacher"
+            v-if="securityStore.isAuthenticated && isCurrentTeacher"
             icon="edit"
             size="small"
             type="black"
@@ -102,7 +102,7 @@
           />
 
           <BaseButton
-            v-if="isAuthenticated && isCurrentTeacher"
+            v-if="securityStore.isAuthenticated && isCurrentTeacher"
             icon="delete"
             size="small"
             type="danger"
@@ -113,7 +113,7 @@
     </Column>
   </DataTable>
 
-  <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher" show-top-border>
+  <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher" show-top-border>
     <BaseButton :label="t('Select all')" icon="select-all" type="black" @click="selectAll" />
     <BaseButton :label="t('Unselect all')" icon="unselect-all" type="black" @click="unselectAll" />
     <BaseButton
@@ -210,10 +210,12 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue";
 import BaseChart from "../../components/basecomponents/BaseChart.vue";
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue";
 import { useNotification } from "../../composables/notification";
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+const securityStore = useSecurityStore()
 
 const { t } = useI18n();
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents");
@@ -242,7 +244,6 @@ filters.value.loadNode = 1;
 
 const selectedItems = ref([]);
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]);
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
 
 const items = computed(() => store.getters["documents/getRecents"]);

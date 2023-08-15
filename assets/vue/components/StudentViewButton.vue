@@ -18,6 +18,7 @@ import { usePlatformConfig } from "../store/platformConfig"
 import axios from "axios"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../store/cidReq"
+import { useSecurityStore } from "../store/securityStore"
 
 const emit = defineEmits(["change"])
 
@@ -25,6 +26,7 @@ const store = useStore()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
+const securityStore = useSecurityStore()
 
 const isStudentView = computed({
   async set() {
@@ -43,7 +45,6 @@ const isStudentView = computed({
   },
 })
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
 const isCourseAdmin = computed(() => store.getters["security/isCourseAdmin"])
 const isAdmin = computed(() => store.getters["security/isAdmin"])
 const { course, userIsCoach } = storeToRefs(cidReqStore)
@@ -51,7 +52,7 @@ const { course, userIsCoach } = storeToRefs(cidReqStore)
 const user = computed(() => store.getters["security/getUser"])
 
 const showButton = computed(() => {
-  return isAuthenticated.value &&
+  return securityStore.isAuthenticated &&
     course.value &&
     (isCourseAdmin.value || isAdmin.value || userIsCoach.value(user.value.id, 0, false)) &&
     "true" === platformConfigStore.getSetting("course.student_view_enabled");

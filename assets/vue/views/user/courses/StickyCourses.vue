@@ -18,14 +18,14 @@ import { computed, ref, watchEffect } from "vue"
 import {useStore} from 'vuex'
 import {GET_STICKY_COURSES} from "../../../graphql/queries/Course"
 import { useQuery } from "@vue/apollo-composable"
+import { useSecurityStore } from "../../../store/securityStore"
 
 const store = useStore()
-
-let isAuthenticated = computed(() => store.getters['security/isAuthenticated'])
+const securityStore = useSecurityStore()
 
 const queryResponse = ref({})
 
-if (isAuthenticated.value) {
+if (securityStore.isAuthenticated) {
   const { result } = useQuery(GET_STICKY_COURSES)
 
   watchEffect(() => {

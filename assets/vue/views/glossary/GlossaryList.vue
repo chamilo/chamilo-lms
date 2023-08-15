@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
+    <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
         :label="t('Add new glossary term')"
         icon="plus"
@@ -120,10 +120,12 @@ import StudentViewButton from "../../components/StudentViewButton.vue"
 import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
+const securityStore = useSecurityStore()
 const notifications = useNotification()
 
 const { t } = useI18n()
@@ -144,7 +146,6 @@ const resourceLinkList = ref(
   ])
 )
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const glossaries = ref([])

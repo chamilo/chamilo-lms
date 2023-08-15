@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
+    <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -179,16 +179,17 @@ import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.v
 import Skeleton from "primevue/skeleton"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
+const securityStore = useSecurityStore()
 
 const { t } = useI18n()
 
 const notifications = useNotification()
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"])
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const linksWithoutCategory = ref([])

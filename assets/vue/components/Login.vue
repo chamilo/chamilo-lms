@@ -95,7 +95,7 @@ const isLoading = computed(() => store.getters["security/isLoading"])
 
 let redirect = route.query.redirect
 
-if (store.getters["security/isAuthenticated"]) {
+if (securityStore.isAuthenticated) {
   if (typeof redirect !== "undefined") {
     router.push({ path: redirect.toString() })
   } else {

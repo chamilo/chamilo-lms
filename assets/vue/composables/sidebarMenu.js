@@ -39,8 +39,36 @@ export function useSidebarMenu() {
       label: t("My progress"),
       url: "/main/auth/my_progress.php",
       icon: "mdi mdi-chart-box",
-      visible: securityStore.isAuthenticated,
+      visible:
+        securityStore.isAuthenticated &&
+        !securityStore.isTeacher &&
+        !securityStore.isHRM &&
+        !securityStore.isSessionAdmin &&
+        !securityStore.isStudentBoss,
     },
+
+    {
+      label: t("Reporting"),
+      url: () => {
+        if (securityStore.isHRM) {
+          return "/main/my_space/session.php"
+        }
+
+        if (securityStore.isTeacher || securityStore.isSessionAdmin) {
+          return "/main/my_space/index.php"
+        }
+
+        if (securityStore.isStudentBoss) {
+          return "/main/my_space/student.php"
+        }
+
+        return undefined
+      },
+      icon: "mdi mdi-chart-box",
+      visible:
+        securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin || securityStore.isStudentBoss,
+    },
+
     {
       label: t("Social network"),
       to: { name: "SocialWall" },
@@ -49,9 +77,9 @@ export function useSidebarMenu() {
     },
 
     {
-      label: t('Videoconference'),
+      label: t("Videoconference"),
       url: platformConfigStore.plugins.bbb.listingURL,
-      icon: 'mdi mdi-video',
+      icon: "mdi mdi-video",
       visible: platformConfigStore.plugins?.bbb?.show_global_conference_link,
     },
 
@@ -92,10 +120,6 @@ export function useSidebarMenu() {
         {
           label: t("Sessions"),
           url: "/main/session/session_list.php",
-        },
-        {
-          label: t("Reporting"),
-          url: "/main/my_space/index.php",
         },
       ],
     },

@@ -9,15 +9,15 @@ export function useSidebarMenu() {
 
   const items = [
     {
+      icon: "mdi mdi-home",
       label: t("Home"),
       to: { name: "Home" },
-      icon: "mdi mdi-home",
     },
+  ]
 
-    {
-      label: t("Courses"),
+  if (securityStore.isAuthenticated) {
+    items.push({
       icon: "mdi mdi-book-open-page-variant",
-      visible: securityStore.isAuthenticated,
       items: [
         {
           label: t("My courses"),
@@ -28,65 +28,59 @@ export function useSidebarMenu() {
           to: { name: "MySessions" },
         },
       ],
-    },
-    {
+      label: t("Courses"),
+    })
+
+    items.push({
+      icon: "mdi mdi-calendar-text",
       label: t("Events"),
       to: { name: "CCalendarEventList" },
-      icon: "mdi mdi-calendar-text",
-      visible: securityStore.isAuthenticated,
-    },
-    {
-      label: t("My progress"),
-      url: "/main/auth/my_progress.php",
-      icon: "mdi mdi-chart-box",
-      visible:
-        securityStore.isAuthenticated &&
-        !securityStore.isTeacher &&
-        !securityStore.isHRM &&
-        !securityStore.isSessionAdmin &&
-        !securityStore.isStudentBoss,
-    },
+    })
+  }
 
-    {
+  if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
+    let url = "/main/my_space/" + (securityStore.isHRM ? "session.php" : "index.php")
+
+    items.push({
+      icon: "mdi mdi-chart-box",
       label: t("Reporting"),
-      url: () => {
-        if (securityStore.isHRM) {
-          return "/main/my_space/session.php"
-        }
+      url,
+    })
+  } else {
+    if (securityStore.isStudentBoss) {
+      items.push({
+        icon: "mdi mdi-chart-box",
+        label: t("Reporting"),
+        url: "/main/my_space/student.php",
+      })
+    } else {
+      items.push({
+        icon: "mdi mdi-chart-box",
+        label: t("My progress"),
+        url: "/main/auth/my_progress.php",
+      })
+    }
+  }
 
-        if (securityStore.isTeacher || securityStore.isSessionAdmin) {
-          return "/main/my_space/index.php"
-        }
-
-        if (securityStore.isStudentBoss) {
-          return "/main/my_space/student.php"
-        }
-
-        return undefined
-      },
-      icon: "mdi mdi-chart-box",
-      visible:
-        securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin || securityStore.isStudentBoss,
-    },
-
-    {
+  if (securityStore.isAuthenticated) {
+    items.push({
+      icon: "mdi mdi-sitemap-outline",
       label: t("Social network"),
       to: { name: "SocialWall" },
-      icon: "mdi mdi-sitemap-outline",
-      visible: securityStore.isAuthenticated,
-    },
+    })
+  }
 
-    {
+  if (platformConfigStore.plugins?.bbb?.show_global_conference_link) {
+    items.push({
+      icon: "mdi mdi-video",
       label: t("Videoconference"),
       url: platformConfigStore.plugins.bbb.listingURL,
-      icon: "mdi mdi-video",
-      visible: platformConfigStore.plugins?.bbb?.show_global_conference_link,
-    },
+    })
+  }
 
-    {
-      label: t("Diagnosis"),
+  if (securityStore.isStudentBoss || securityStore.isStudent) {
+    items.push({
       icon: "mdi mdi-text-box-search",
-      visible: securityStore.isStudentBoss || securityStore.isStudent,
       items: [
         {
           label: t("Management"),
@@ -98,12 +92,13 @@ export function useSidebarMenu() {
           url: "/main/search/search.php",
         },
       ],
-    },
+      label: t("Diagnosis"),
+    })
+  }
 
-    {
-      label: t("Administration"),
+  if (securityStore.isAdmin) {
+    items.push({
       icon: "mdi mdi-cog",
-      visible: securityStore.isAdmin,
       items: [
         {
           label: t("Administration"),
@@ -122,8 +117,9 @@ export function useSidebarMenu() {
           url: "/main/session/session_list.php",
         },
       ],
-    },
-  ]
+      label: t("Administration"),
+    })
+  }
 
   return items
 }

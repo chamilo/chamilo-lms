@@ -39,8 +39,6 @@ class PlatformConfigurationController extends AbstractController
                 'platform.site_name',
                 'platform.timezone',
                 'platform.theme',
-                'platform.administrator_name',
-                'platform.administrator_surname',
                 'platform.registered',
                 'platform.donotlistcampus',
                 'platform.load_term_conditions_section',
@@ -48,6 +46,8 @@ class PlatformConfigurationController extends AbstractController
                 'platform.show_tabs',
 
                 //'admin.admin_chamilo_announcements_disable',
+                'admin.administrator_name',
+                'admin.administrator_surname',
 
                 'editor.enabled_mathjax',
                 'editor.translate_html',
@@ -99,7 +99,7 @@ class PlatformConfigurationController extends AbstractController
         }
 
         foreach ($variables as $variable) {
-            $value = $settingsManager->getSetting($variable);
+            $value = $settingsManager->getSetting($variable, true);
 
             $configuration['settings'][$variable] = $value;
         }

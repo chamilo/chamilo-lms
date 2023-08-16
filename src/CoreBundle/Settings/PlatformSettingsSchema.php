@@ -18,6 +18,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
+    private static array $tabs = [
+        'TabsCampusHomepage' => 'campus_homepage',
+        'TabsMyCourses' => 'my_courses',
+        'TabsReporting' => 'reporting',
+        'TabsPlatformAdministration' => 'platform_administration',
+        'mypersonalopenarea' => 'my_agenda',
+        'TabsMyAgenda' => 'my_profile',
+        'TabsMyGradebook' => 'my_gradebook',
+        'TabsSocial' => 'social',
+        'TabsDashboard' => 'dashboard',
+    ];
+
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
@@ -49,7 +61,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'prod',
                     // Chamilo mode
-                    'show_tabs' => [],
+                    'show_tabs' => array_values(self::$tabs),
                     'chamilo_database_version' => '2.0.0',
                     //
                     //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
@@ -127,18 +139,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 
     public function buildForm(FormBuilderInterface $builder): void
     {
-        $tabs = [
-            'TabsCampusHomepage' => 'campus_homepage',
-            'TabsMyCourses' => 'my_courses',
-            'TabsReporting' => 'reporting',
-            'TabsPlatformAdministration' => 'platform_administration',
-            'mypersonalopenarea' => 'my_agenda',
-            'TabsMyAgenda' => 'my_profile',
-            'TabsMyGradebook' => 'my_gradebook',
-            'TabsSocial' => 'social',
-            'TabsDashboard' => 'dashboard',
-        ];
-
         $builder
             ->add('institution')
             ->add('institution_url', UrlType::class)
@@ -201,7 +201,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => $tabs,
+                    'choices' => self::$tabs,
                     'label' => 'ShowTabsTitle',
                     'help' => 'ShowTabsComment',
                 ],

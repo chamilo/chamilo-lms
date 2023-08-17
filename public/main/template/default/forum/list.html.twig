@@ -42,8 +42,8 @@
             {% if item.extra_fields is defined %}
                 {% for extra_field in item.extra_fields %}
                     {% if extra_field.variable == 'language' %}
-                        {% set category_language_array = extra_field.value | split(';')  %}
-                        {% set category_language = extra_field.value | replace({';': ' ' })  %}
+                        {% set category_language_array = extra_field.field_value | split(';')  %}
+                        {% set category_language = extra_field.field_value | replace({';': ' ' })  %}
                     {% endif %}
                 {% endfor %}
             {% endif %}

@@ -2936,16 +2936,18 @@ class SurveyUtil
     {
         $hideSurveyEdition = api_get_setting('survey.hide_survey_edition', true);
 
-        if (false === $hideSurveyEdition) {
+        if (empty($hideSurveyEdition) || 'false' === $hideSurveyEdition) {
             return false;
         }
 
-        if ('*' === $hideSurveyEdition['codes']) {
-            return true;
-        }
+        if (is_array($hideSurveyEdition)) {
+            if ('*' === $hideSurveyEdition['codes']) {
+                return true;
+            }
 
-        if (in_array($surveyCode, $hideSurveyEdition['codes'])) {
-            return true;
+            if (in_array($surveyCode, $hideSurveyEdition['codes'])) {
+                return true;
+            }
         }
 
         return false;
@@ -3116,19 +3118,24 @@ class SurveyUtil
     {
         $additionalActions = api_get_setting('survey.survey_additional_teacher_modify_actions', true) ?: [];
 
-        if (empty($additionalActions)) {
+        if (empty($additionalActions) || ('false' === $additionalActions)) {
             return '';
         }
 
-        $actions = [];
-        foreach ($additionalActions as $additionalAction) {
-            $actions[] = call_user_func(
-                $additionalAction,
-                ['survey_id' => $surveyId, 'icon_size' => $iconSize]
-            );
+        $action = '';
+        if (is_array($additionalActions)) {
+            $actions = [];
+            foreach ($additionalActions as $additionalAction) {
+                $actions[] = call_user_func(
+                    $additionalAction,
+                    ['survey_id' => $surveyId, 'icon_size' => $iconSize]
+                );
+            }
+            $action = implode(PHP_EOL, $actions);
         }
 
-        return implode(PHP_EOL, $actions);
+
+        return $action;
     }
 
     /**

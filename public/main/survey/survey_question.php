@@ -429,7 +429,9 @@ class survey_question
                 } else {
                     // keep as is
                     $newAnswers[$key] = $value;
-                    $newAnswersId[$key] = $formData['answersid'][$key];
+                    if (isset($formData['answersid'])) {
+                        $newAnswersId[$key] = $formData['answersid'][$key];
+                    }
                 }
             }
             unset($formData['answers']);
@@ -495,10 +497,9 @@ class survey_question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::saveQuestion($survey, $formData, true, $dataFromDatabase);
-
-            if ('QuestionAdded' === $message || 'QuestionUpdated' === $message) {
-                Display::addFlash(Display::return_message($message));
+            $result = SurveyManager::saveQuestion($survey, $formData, true, $dataFromDatabase);
+            if (false === $result['error']) {
+                Display::addFlash(Display::return_message($result['message']));
                 $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey->getIid().'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;

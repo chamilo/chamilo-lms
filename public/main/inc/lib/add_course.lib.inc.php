@@ -634,13 +634,13 @@ class AddCourse
     /**
      * Function register_course to create a record in the course table of the main database.
      *
-     * @param array $params      Course details (see code for details).
-     * @param int   $accessUrlId Optional.
+     * @param array $params Course details (see code for details).
      *
-     * @todo use an array called $params instead of lots of params
-     * @assert (null) === false
+     * @throws Exception
+     *
+     * @return Course|null
      */
-    public static function register_course($params, $accessUrlId = 1): ?Course
+    public static function register_course(array $params): ?Course
     {
         global $error_msg;
         $title = $params['title'];
@@ -649,21 +649,17 @@ class AddCourse
         $code = $params['code'];
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];
-        $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
+        $tutor_name = $params['tutor_name'] ?? null;
+        $course_language = !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
-        $department_name = isset($params['department_name']) ? $params['department_name'] : null;
-        $department_url = isset($params['department_url']) ? $params['department_url'] : null;
-        $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
+        $department_name = $params['department_name'] ?? null;
+        $department_url = $params['department_url'] ?? null;
+        $disk_quota = $params['disk_quota'] ?? null;
 
         if (!isset($params['visibility'])) {
             $default_course_visibility = api_get_setting('courses_default_creation_visibility');
-            if (isset($default_course_visibility)) {
-                $visibility = $default_course_visibility;
-            } else {
-                $visibility = Course::OPEN_PLATFORM;
-            }
+            $visibility = $default_course_visibility ?? Course::OPEN_PLATFORM;
         } else {
             $visibility = $params['visibility'];
         }
@@ -671,10 +667,8 @@ class AddCourse
         $subscribe = false;
         if (isset($params['subscribe'])) {
             $subscribe = 1 === (int) $params['subscribe'];
-        } else {
-            if (Course::OPEN_PLATFORM == $visibility) {
-                $subscribe = true;
-            }
+        } elseif (Course::OPEN_PLATFORM == $visibility) {
+            $subscribe = true;
         }
 
         //$subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
@@ -720,11 +714,7 @@ class AddCourse
             $disk_quota = api_get_setting('default_document_quotum');
         }
 
-        if (false === stripos($department_url, 'http://') && false === stripos(
-                $department_url,
-                'https://'
-            )
-        ) {
+        if (false === stripos($department_url, 'http://') && false === stripos($department_url, 'https://')) {
             $department_url = 'http://'.$department_url;
         }
 
@@ -755,7 +745,7 @@ class AddCourse
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
-                ->setExpirationDate(new \DateTime($expiration_date))
+                ->setExpirationDate(new DateTime($expiration_date))
                 ->setDepartmentName((string) $department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
@@ -786,7 +776,7 @@ class AddCourse
 
             $sort = api_max_sort_value('0', api_get_user_id());
             // Default true
-            $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
+            $addTeacher = $params['add_user_as_teacher'] ?? true;
             if ($addTeacher) {
                 $iCourseSort = CourseManager::userCourseSort($userId, $code);
                 $courseRelTutor = (new CourseRelUser())

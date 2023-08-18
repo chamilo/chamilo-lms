@@ -3131,8 +3131,27 @@ class Agenda
         }
 
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        $agendaEventSubscriptions = api_is_platform_admin()
+            && true === api_get_configuration_value('agenda_event_subscriptions');
 
-        if ($agendaCollectiveInvitations && 'personal' === $this->type) {
+        $allowCollectiveInvitations = $agendaCollectiveInvitations && 'personal' === $this->type;
+        $allowEventSubscriptions = 'personal' === $this->type && $agendaEventSubscriptions;
+
+        if ($allowCollectiveInvitations && $allowEventSubscriptions) {
+            $form->addRadio(
+                'invintation_type',
+                get_lang('Allow'),
+                [
+                    'invitations' => get_lang('Invitations'),
+                    'subscriptions' => get_lang('Subscriptions'),
+                ],
+                [
+                    'onchange' => "$('#invitations-block, #subscriptions-block').hide(); $('#' + this.value + '-block').show();",
+                ]
+            );
+        }
+
+        if ($allowCollectiveInvitations) {
             $invitees = [];
             $isCollective = false;
             $allowInvitees = true;
@@ -3153,6 +3172,10 @@ class Agenda
             }
 
             if ($allowInvitees) {
+                $form->addHtml(
+                    '<div id="invitations-block" style="display:'.($allowEventSubscriptions ? 'none;' : 'block;').'">'
+                );
+                $form->addHeader(get_lang('Invitations'));
                 $form->addSelectAjax(
                     'invitees',
                     get_lang('Invitees'),
@@ -3164,28 +3187,18 @@ class Agenda
                 );
                 $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
                 $form->addHtml('<hr>');
+                $form->addHtml('</div>');
 
                 $params['invitees'] = array_keys($invitees);
                 $params['collective'] = $isCollective;
             }
         }
 
-        if (api_get_configuration_value('agenda_reminders')) {
-            $form->addHtml('<div id="notification_list">');
-
-            if ($id) {
-                $this->addFieldsForRemindersToForm($id, $form);
-            }
-
-            $form->addHtml('</div>');
-            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
-            $form->addHtml('<hr>');
-        }
-
-        if (api_is_platform_admin()
-            && true === api_get_configuration_value('agenda_event_subscriptions')
-        ) {
-            $form->addHtml('<hr>');
+        if ($agendaEventSubscriptions) {
+            $form->addHtml(
+                '<div id="subscriptions-block" style="display:'.($allowCollectiveInvitations ? 'none;' : 'block;').'">'
+            );
+            $form->addHeader(get_lang('Subscriptions'));
             $form->addSelect(
                 'subscription_visibility',
                 get_lang('AllowSubscriptions'),
@@ -3257,6 +3270,20 @@ class Agenda
                     $slctItem->addOption($groupInfo['name'], $groupId);
                 }
             }
+
+            $form->addHtml('</div>');
+        }
+
+        if (api_get_configuration_value('agenda_reminders')) {
+            $form->addHtml('<div id="notification_list">');
+
+            if ($id) {
+                $this->addFieldsForRemindersToForm($id, $form);
+            }
+
+            $form->addHtml('</div>');
+            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
         }
 
         if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $this->type) {

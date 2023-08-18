@@ -290,8 +290,8 @@ $allowEventSubscriptions = api_is_platform_admin()
 
 if ($allowCollectiveInvitations && $allowEventSubscriptions) {
     $form->addRadio(
-        'invintation_type',
-        get_lang('Allow'),
+        'invitation_type',
+        get_lang('Allowed'),
         [
             'invitations' => get_lang('Invitations'),
             'subscriptions' => get_lang('Subscriptions'),

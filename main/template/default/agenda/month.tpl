@@ -350,6 +350,11 @@ $(function() {
                     $('#form_subscriptions_edit').hide().html('');
                 {% endif %}
 
+                {% if 'personal' == type and agenda_collective_invitations and (agenda_event_subscriptions and api_is_platform_admin()) %}
+                    $('#invitation_type-group').show();
+                    $('#invitations-block, #subscriptions-block').hide();
+                {% endif %}
+
 				$("#dialog-form").dialog("open");
 				$("#dialog-form").dialog({
 					buttons: {
@@ -507,8 +512,12 @@ $(function() {
 
             var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
+            $('#invitations-block, #subscriptions-block').hide();
+
 			// Edit event.
 			if (calEvent.editable) {
+                $('#invitation_type-group').hide();
+
 				$('#visible_to_input').hide();
                 $('#add_as_announcement_div').hide();
                 {% if type != 'admin' %}
@@ -657,6 +666,9 @@ $(function() {
                             if (!calEvent.invitees) {
                                 return '';
                             }
+
+                            $('#invitation_type-group').hide()
+                            $('#invitations-block').show();
 
                             return calEvent.invitees
                                 .map(function (invitee) { return invitee.name; })
@@ -854,6 +866,8 @@ $(function() {
 					}
 				});
 			} else {
+                $('#invitation_type-group').show();
+
 			    // Simple form
                 $('#simple_start_date').html(startDateToString);
                 if (diffDays > 1) {
@@ -938,6 +952,9 @@ $(function() {
                         if (!calEvent.invitees) {
                             return '';
                         }
+
+                        $('#invitation_type-group').hide();
+                        $('#invitations-block').show();
 
                         return calEvent.invitees
                             .map(function (invitee) { return invitee.name; })
@@ -1063,6 +1080,8 @@ $(function() {
         ) {
             return '';
         }
+
+        $('#subscriptions-block').show();
 
         var html = '';
         html += '<dl class="dl-horizontal">';

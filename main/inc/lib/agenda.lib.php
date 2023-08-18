@@ -292,6 +292,13 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
                     $personalEvent = $em->find(PersonalAgenda::class, $id);
+
+                    if ($personalEvent->hasInvitation()
+                        && !($personalEvent->getInvitation() instanceof AgendaEventSubscription)
+                    ) {
+                        break;
+                    }
+
                     $personalEvent
                         ->setSubscriptionVisibility($subscriptionVisibility)
                         ->setSubscriptionItemId($subscriptionItemId ?: null)
@@ -3137,9 +3144,9 @@ class Agenda
         $allowCollectiveInvitations = $agendaCollectiveInvitations && 'personal' === $this->type;
         $allowEventSubscriptions = 'personal' === $this->type && $agendaEventSubscriptions;
 
-        if ($allowCollectiveInvitations && $allowEventSubscriptions) {
+        if ($allowCollectiveInvitations && $allowEventSubscriptions && !$personalEvent->hasInvitation()) {
             $form->addRadio(
-                'invintation_type',
+                'invitation_type',
                 get_lang('Allow'),
                 [
                     'invitations' => get_lang('Invitations'),
@@ -3173,7 +3180,7 @@ class Agenda
 
             if ($allowInvitees) {
                 $form->addHtml(
-                    '<div id="invitations-block" style="display:'.($allowEventSubscriptions ? 'none;' : 'block;').'">'
+                    '<div id="invitations-block" style="display:'.($allowEventSubscriptions && !$allowInvitees ? 'none;' : 'block;').'">'
                 );
                 $form->addHeader(get_lang('Invitations'));
                 $form->addSelectAjax(
@@ -3195,40 +3202,57 @@ class Agenda
         }
 
         if ($agendaEventSubscriptions) {
-            $form->addHtml(
-                '<div id="subscriptions-block" style="display:'.($allowCollectiveInvitations ? 'none;' : 'block;').'">'
-            );
-            $form->addHeader(get_lang('Subscriptions'));
-            $form->addSelect(
-                'subscription_visibility',
-                get_lang('AllowSubscriptions'),
-                [
-                    AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
-                    AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
-                    AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
-                ]
-            );
-            $slctItem = $form->addSelectAjax(
-                'subscription_item',
-                get_lang('SocialGroup').' / '.get_lang('Class'),
-                [],
-                [
-                    'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
-                    'disabled' => 'disabled',
-                ]
-            );
+            $subscribers = [];
+            $allowSubscribers = true;
 
-            $form->addNumeric(
-                'max_subscriptions',
-                ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
-                [
-                    'disabled' => 'disabled',
-                    'step' => 1,
-                    'min' => 0,
-                    'value' => 0,
-                ]
-            );
-            $form->addHtml("<script>
+            if ($personalEvent) {
+                $eventInvitation = $personalEvent->getInvitation();
+                $allowSubscribers = $eventInvitation instanceof AgendaEventSubscription;
+
+                $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
+                $subscribers = array_combine(
+                    array_column($subscribers, 'id'),
+                    array_column($subscribers, 'name')
+                );
+
+                $params['subscribers'] = array_keys($subscribers);
+            }
+
+            if ($allowSubscribers) {
+                $form->addHtml(
+                    '<div id="subscriptions-block" style="display:'.($allowCollectiveInvitations ? 'none;' : 'block;').'">'
+                );
+                $form->addHeader(get_lang('Subscriptions'));
+                $form->addSelect(
+                    'subscription_visibility',
+                    get_lang('AllowSubscriptions'),
+                    [
+                        AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+                        AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+                        AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
+                    ]
+                );
+                $slctItem = $form->addSelectAjax(
+                    'subscription_item',
+                    get_lang('SocialGroup').' / '.get_lang('Class'),
+                    [],
+                    [
+                        'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+                        'disabled' => 'disabled',
+                    ]
+                );
+
+                $form->addNumeric(
+                    'max_subscriptions',
+                    ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+                    [
+                        'disabled' => 'disabled',
+                        'step' => 1,
+                        'min' => 0,
+                        'value' => 0,
+                    ]
+                );
+                $form->addHtml("<script>
                 $(function () {
                     $('#add_event_subscription_visibility')
                         .on('change', function () {
@@ -3239,15 +3263,6 @@ class Agenda
                 })
                 </script>
             ");
-
-            if ($personalEvent) {
-                $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
-                $subscribers = array_combine(
-                    array_column($subscribers, 'id'),
-                    array_column($subscribers, 'name')
-                );
-
-                $params['subscribers'] = array_keys($subscribers);
 
                 $form->addSelect(
                     'subscribers',
@@ -4955,6 +4970,10 @@ class Agenda
      */
     public static function saveCollectiveProperties(array $inviteeUserList, bool $isCollective, int $eventId)
     {
+        if (empty($inviteeUserList)) {
+            return;
+        }
+
         $em = Database::getManager();
 
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);

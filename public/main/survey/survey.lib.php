@@ -940,6 +940,7 @@ class SurveyManager
     {
         $surveyId = $survey->getIid();
 
+        $error = false;
         $message = '';
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
@@ -1043,6 +1044,7 @@ class SurveyManager
                         Database::query($sql);*/
                         $form_content['question_id'] = $question_id;
                         $message = 'The question has been added.';
+                        $error = false;
                     }
                 } else {
                     $repo = $em->getRepository(CSurveyQuestion::class);
@@ -1091,14 +1093,17 @@ class SurveyManager
                     $em->persist($question);
                     $em->flush();
                     $message = 'QuestionUpdated';
+                    $error = false;
                 }
                 // Storing the options of the question
                 self::saveQuestionOptions($survey, $question, $form_content, $dataFromDatabase);
             } else {
                 $message = 'PleasFillAllAnswer';
+                $error = true;
             }
         } else {
             $message = 'PleaseEnterAQuestion';
+            $error = true;
         }
 
         if ($showMessage) {
@@ -1106,8 +1111,12 @@ class SurveyManager
                 Display::addFlash(Display::return_message(get_lang($message)));
             }
         }
+        $result = [
+            'error' => $error,
+            'message' => $message,
+        ];
 
-        return $message;
+        return $result;
     }
 
     /**

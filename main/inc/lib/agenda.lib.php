@@ -991,6 +991,13 @@ class Agenda
 
                 if (api_get_configuration_value('agenda_event_subscriptions') && api_is_platform_admin()) {
                     $personalEvent = $em->find(PersonalAgenda::class, $id);
+
+                    if ($personalEvent->hasInvitation()
+                        && !($personalEvent->getInvitation() instanceof AgendaEventSubscription)
+                    ) {
+                        break;
+                    }
+
                     $personalEvent->setSubscriptionVisibility($subscriptionVisibility);
 
                     /** @var AgendaEventSubscription $subscription */
@@ -4881,6 +4888,17 @@ class Agenda
 
                 $em->persist($invitee);
             }
+        }
+
+        $inviteesToRemove = $invitation->getInvitees()
+            ->filter(function (AgendaEventInvitee $invitee) use ($inviteeUserList): bool {
+                $userInvitee = $invitee->getUser();
+
+                return !in_array($userInvitee->getUserId(), $inviteeUserList);
+            });
+
+        foreach ($inviteesToRemove as $invitee) {
+            $em->remove($invitee);
         }
 
         $em->flush();

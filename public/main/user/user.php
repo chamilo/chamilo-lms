@@ -526,7 +526,7 @@ $table->set_header($header_nr++, get_lang('Group'), false);
 
 $hideFields = api_get_setting('profile.hide_user_field_from_list', true);
 
-if (!empty($hideFields)) {
+if (isset($hideFields['fields'])) {
     $hideFields = $hideFields['fields'];
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {

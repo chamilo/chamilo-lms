@@ -2094,5 +2094,6 @@ function plain_url_filter($html, $mode = NO_HTML)
     $html = kses_no_null($html);
     $html = kses_js_entities($html);
     $allowed_html_fixed = kses_array_lc($allowed_tags);
-    return kses_split($html, $allowed_html_fixed, array('http', 'https'));
+
+    return kses_split($html, $allowed_html_fixed, ['http', 'https']);
 }

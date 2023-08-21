@@ -258,7 +258,7 @@ switch ($action) {
                 SocialManager::deleteMessage($messageId);
                 echo json_encode([
                     'message' => Display::return_message(get_lang('MessageDeleted')),
-                    'secToken' => Security::get_token('social')
+                    'secToken' => Security::get_token('social'),
                 ]);
                 break;
             }

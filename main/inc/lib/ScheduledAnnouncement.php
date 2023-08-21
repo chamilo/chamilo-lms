@@ -305,7 +305,6 @@ class ScheduledAnnouncement extends Model
         $extraField = new ExtraField('user');
         $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
 
-
         foreach ($result as $result) {
             if (empty($result['sent'])) {
                 if (!empty($result['date']) && $result['date'] < $now) {

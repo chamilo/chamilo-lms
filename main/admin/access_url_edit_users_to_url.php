@@ -306,9 +306,8 @@ if (!empty($errorMsg)) {
         foreach ($nosessionUsersList as $enreg) {
             if ($showAndOrderByOfficialCode) {
                 $userOfficialCode = $enreg['official_code'].' - ';
-            }
-            ?>
-    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $userOfficialCode . $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
+            } ?>
+    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $userOfficialCode.$enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
     <?php
         }
         unset($nosessionUsersList); ?>
@@ -344,14 +343,13 @@ if (!empty($errorMsg)) {
     <?php
         foreach ($sessionUsersList as $enreg) {
             if ($showAndOrderByOfficialCode) {
-            $userOfficialCode = $enreg['official_code'].' - ';
-        }
-        ?>
+                $userOfficialCode = $enreg['official_code'].' - ';
+            } ?>
         <option value="<?php echo $enreg['user_id']; ?>">
-            <?php echo $userOfficialCode . $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+            <?php echo $userOfficialCode.$enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
         </option>
     <?php
-    }
+        }
     unset($sessionUsersList);
     ?>
   </select></td>

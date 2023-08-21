@@ -50,6 +50,12 @@ class ReadingComprehension extends UniqueAnswer
      * @var int
      */
     public $refreshTime = 3;
+    /**
+     * All speeds (static $speeds + extra speeds defined in configuration.php as 'exercise_question_reading_comprehension_extra_speeds'.
+     *
+     * @var array
+     */
+    public $allSpeeds = [];
 
     /**
      * Indicates how show the question list.
@@ -58,12 +64,6 @@ class ReadingComprehension extends UniqueAnswer
      * @var int
      */
     private $exerciseType = 2;
-    /**
-     * All speeds (static $speeds + extra speeds defined in configuration.php as 'exercise_question_reading_comprehension_extra_speeds'
-     *
-     * @var array
-     */
-    public $allSpeeds = [];
 
     /**
      * Constructor.
@@ -194,7 +194,6 @@ class ReadingComprehension extends UniqueAnswer
      */
     public static function get_default_levels()
     {
-
         return [
             1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
             2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
@@ -205,8 +204,7 @@ class ReadingComprehension extends UniqueAnswer
     }
 
     /**
-     * Return the augmented speeds (using, if defined, the 'exercise_question_reading_comprehension_extra_speeds' setting
-     * @return array
+     * Return the augmented speeds (using, if defined, the 'exercise_question_reading_comprehension_extra_speeds' setting.
      */
     public function getReadingSpeeds(): array
     {

@@ -13954,7 +13954,7 @@ EOD;
                     .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
                     ."?id=$id&$extraParams";
             case TOOL_H5P:
-                if ('true' === api_get_plugin_setting('h5pimport', 'tool_enable')){
+                if ('true' === api_get_plugin_setting('h5pimport', 'tool_enable')) {
                     $toolLaunch = $em->find(H5pImport::class, $id);
 
                     if (empty($toolLaunch)) {

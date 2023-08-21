@@ -16,7 +16,7 @@ $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = false;
 if ('learnpath' == $origin) {
     $showGlossary = in_array($glossaryExtraTools, ['lp', 'exercise_and_lp']);
-} elseif (isset($glossaryInDocs) && 'none' != $glossaryInDocs)  {
+} elseif (isset($glossaryInDocs) && 'none' != $glossaryInDocs) {
     $showGlossary = true;
 }
 

@@ -2046,8 +2046,7 @@ class Tracking
                                             $n++;
                                         }
                                     }
-                                }
-                                elseif (
+                                } elseif (
                                     'h5p' === $row['item_type']
                                     && 'true' === $h5pImportEnable
                                 ) {
@@ -2134,8 +2133,7 @@ class Tracking
                                             $n++;
                                         }
                                     }
-                                }
-                                else {
+                                } else {
                                     $output .= '<tr><td colspan="12">&nbsp;</td></tr>';
                                 }
                             }
@@ -8522,7 +8520,7 @@ class Tracking
             if ($resLogoutDate < time() - $lifeTime) {
                 // it isn't, we should create a fresh entry
                 Event::eventLogin($userId);
-                // now that it's created, we can get its ID and carry on
+            // now that it's created, we can get its ID and carry on
             } else {
                 $sql = "UPDATE $tblTrackLogin SET logout_date = '$now'
                     WHERE login_id = '$iIdLastConnection'";

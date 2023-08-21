@@ -183,7 +183,6 @@ if ($allowToEdit) {
                 $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
                 $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
 
-
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
                 $eventId = $agenda->addEvent(

@@ -162,7 +162,7 @@ Display::display_header($nameTool);
                     if (api_get_configuration_value('webservice_remote_ppt2png_enable') == true) {
                         $form->addElement('text', 'host', get_lang('Host'));
                     } else {
-                        $form->addElement('text', 'host', [get_lang('Host'),'Remote host disabled - set webservice_remote_ppt2png_enable setting to true in configuration.php to enable']);
+                        $form->addElement('text', 'host', [get_lang('Host'), 'Remote host disabled - set webservice_remote_ppt2png_enable setting to true in configuration.php to enable']);
                     }
                     //$form -> addElement('html','<br /><br />');
                     $form->addElement('text', 'port', get_lang('Port'));

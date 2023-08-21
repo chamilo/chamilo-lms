@@ -506,13 +506,12 @@ class Agenda
     }
 
     /**
-     * Checks if an event exists and delete it (right before inserting a modified version in addEvent())
-     * @param string $start datetime format: 2012-06-14 09:00:00 in local time
-     * @param string $end   datetime format: 2012-06-14 09:00:00 in local time
-     * @param int $allDay   (true = 1, false = 0)
-     * @param string $title
+     * Checks if an event exists and delete it (right before inserting a modified version in addEvent()).
      *
-     * @return bool
+     * @param string $start  datetime format: 2012-06-14 09:00:00 in local time
+     * @param string $end    datetime format: 2012-06-14 09:00:00 in local time
+     * @param int    $allDay (true = 1, false = 0)
+     *
      * @throws Exception
      */
     public function deleteEventIfAlreadyExists(
@@ -3200,138 +3199,6 @@ class Agenda
         return $form;
     }
 
-    private function addCollectiveInvitationsFields(FormValidator $form, ?PersonalAgenda $personalEvent)
-    {
-        $invitees = [];
-        $isCollective = false;
-        $withInvitation = false;
-
-        if ($personalEvent) {
-            $eventInvitation = $personalEvent->getInvitation();
-            $withInvitation = !($eventInvitation instanceof AgendaEventSubscription);
-
-            if ($withInvitation) {
-                foreach ($eventInvitation->getInvitees() as $invitee) {
-                    $inviteeUser = $invitee->getUser();
-
-                    $invitees[$inviteeUser->getId()] = $inviteeUser->getCompleteNameWithUsername();
-                }
-            }
-
-            $isCollective = $personalEvent->isCollective();
-        }
-
-        $form->addHtml(
-            '<div id="invitations-block" style="display: '.($withInvitation ? 'block;' : 'none;').'">'
-        );
-        $form->addHeader(get_lang('Invitations'));
-        $form->addSelectAjax(
-            'invitees',
-            get_lang('Invitees'),
-            $invitees,
-            [
-                'multiple' => 'multiple',
-                'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
-            ]
-        );
-        $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
-        $form->addHtml('<hr>');
-        $form->addHtml('</div>');
-
-        $form->setDefaults([
-            'invitees' => array_keys($invitees),
-            'collective' => $isCollective
-        ]);
-    }
-
-    private function addSubscriptionFields(FormValidator $form, ?PersonalAgenda $personalEvent)
-    {
-        $subscribers = [];
-        $withSubscription = false;
-        $maxSubscriptions = 0;
-        $groupId = null;
-
-        if ($personalEvent) {
-            $eventInvitation = $personalEvent->getInvitation();
-            $withSubscription = $eventInvitation instanceof AgendaEventSubscription;
-            $maxSubscriptions = $withSubscription ? $eventInvitation->getMaxAttendees() : 0;
-            $groupId = $personalEvent->getSubscriptionItemId();
-
-            $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
-            $subscribers = array_combine(
-                array_column($subscribers, 'id'),
-                array_column($subscribers, 'name')
-            );
-        }
-
-        $form->addHtml(
-            '<div id="subscriptions-block" style="display: '.($withSubscription ? 'block;' : 'none;').'">'
-        );
-        $form->addHeader(get_lang('Subscriptions'));
-        $form->addSelect(
-            'subscription_visibility',
-            get_lang('AllowSubscriptions'),
-            [
-                AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
-                AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
-                AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
-            ]
-        );
-        $slctItem = $form->addSelectAjax(
-            'subscription_item',
-            get_lang('SocialGroup').' / '.get_lang('Class'),
-            [],
-            [
-                'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
-                'disabled' => 'disabled',
-            ]
-        );
-
-        $form->addNumeric(
-            'max_subscriptions',
-            ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
-            [
-                'disabled' => 'disabled',
-                'step' => 1,
-                'min' => 0,
-                'value' => 0,
-            ]
-        );
-        $form->addHtml("<script>
-            $(function () {
-                $('#add_event_subscription_visibility')
-                    .on('change', function () {
-                        $('#max_subscriptions').prop('disabled', this.value == 0);
-                        $('#add_event_subscription_item').prop('disabled', this.value != 2);
-                    })
-                    .trigger('change');
-            })
-            </script>
-        ");
-
-        $form->addSelect(
-            'subscribers',
-            get_lang('Subscribers'),
-            $subscribers,
-            ['multiple' => 'multiple']
-        );
-
-        $form->setDefaults([
-            'subscribers' => array_keys($subscribers),
-            'max_subscriptions' => $maxSubscriptions,
-        ]);
-
-        if ($groupId) {
-            $objUserGroup = new UserGroup();
-
-            $groupInfo = $objUserGroup->get($groupId);
-
-            $slctItem->addOption($groupInfo['name'], $groupId);
-        }
-
-        $form->addHtml('</div>');
-    }
-
     public function addFieldsForRemindersToForm(int $eventId, FormValidator $form)
     {
         $remindersList = $this->parseEventReminders(
@@ -5089,6 +4956,138 @@ class Agenda
             'comment' => true,
             'description' => true,
         ];
+    }
+
+    private function addCollectiveInvitationsFields(FormValidator $form, ?PersonalAgenda $personalEvent)
+    {
+        $invitees = [];
+        $isCollective = false;
+        $withInvitation = false;
+
+        if ($personalEvent) {
+            $eventInvitation = $personalEvent->getInvitation();
+            $withInvitation = !($eventInvitation instanceof AgendaEventSubscription);
+
+            if ($withInvitation) {
+                foreach ($eventInvitation->getInvitees() as $invitee) {
+                    $inviteeUser = $invitee->getUser();
+
+                    $invitees[$inviteeUser->getId()] = $inviteeUser->getCompleteNameWithUsername();
+                }
+            }
+
+            $isCollective = $personalEvent->isCollective();
+        }
+
+        $form->addHtml(
+            '<div id="invitations-block" style="display: '.($withInvitation ? 'block;' : 'none;').'">'
+        );
+        $form->addHeader(get_lang('Invitations'));
+        $form->addSelectAjax(
+            'invitees',
+            get_lang('Invitees'),
+            $invitees,
+            [
+                'multiple' => 'multiple',
+                'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+            ]
+        );
+        $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+        $form->addHtml('<hr>');
+        $form->addHtml('</div>');
+
+        $form->setDefaults([
+            'invitees' => array_keys($invitees),
+            'collective' => $isCollective,
+        ]);
+    }
+
+    private function addSubscriptionFields(FormValidator $form, ?PersonalAgenda $personalEvent)
+    {
+        $subscribers = [];
+        $withSubscription = false;
+        $maxSubscriptions = 0;
+        $groupId = null;
+
+        if ($personalEvent) {
+            $eventInvitation = $personalEvent->getInvitation();
+            $withSubscription = $eventInvitation instanceof AgendaEventSubscription;
+            $maxSubscriptions = $withSubscription ? $eventInvitation->getMaxAttendees() : 0;
+            $groupId = $personalEvent->getSubscriptionItemId();
+
+            $subscribers = self::getInviteesForPersonalEvent($personalEvent->getId(), AgendaEventSubscriber::class);
+            $subscribers = array_combine(
+                array_column($subscribers, 'id'),
+                array_column($subscribers, 'name')
+            );
+        }
+
+        $form->addHtml(
+            '<div id="subscriptions-block" style="display: '.($withSubscription ? 'block;' : 'none;').'">'
+        );
+        $form->addHeader(get_lang('Subscriptions'));
+        $form->addSelect(
+            'subscription_visibility',
+            get_lang('AllowSubscriptions'),
+            [
+                AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+                AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+                AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
+            ]
+        );
+        $slctItem = $form->addSelectAjax(
+            'subscription_item',
+            get_lang('SocialGroup').' / '.get_lang('Class'),
+            [],
+            [
+                'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+                'disabled' => 'disabled',
+            ]
+        );
+
+        $form->addNumeric(
+            'max_subscriptions',
+            ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+            [
+                'disabled' => 'disabled',
+                'step' => 1,
+                'min' => 0,
+                'value' => 0,
+            ]
+        );
+        $form->addHtml("<script>
+            $(function () {
+                $('#add_event_subscription_visibility')
+                    .on('change', function () {
+                        $('#max_subscriptions').prop('disabled', this.value == 0);
+                        $('#add_event_subscription_item').prop('disabled', this.value != 2);
+                    })
+                    .trigger('change');
+            })
+            </script>
+        ");
+
+        $form->addSelect(
+            'subscribers',
+            get_lang('Subscribers'),
+            $subscribers,
+            ['multiple' => 'multiple']
+        );
+
+        $form->setDefaults([
+            'subscribers' => array_keys($subscribers),
+            'max_subscriptions' => $maxSubscriptions,
+        ]);
+
+        if ($groupId) {
+            $objUserGroup = new UserGroup();
+
+            $groupInfo = $objUserGroup->get($groupId);
+
+            $slctItem->addOption($groupInfo['name'], $groupId);
+        }
+
+        $form->addHtml('</div>');
     }
 
     private function editReminders(int $eventId, array $reminderList = [])

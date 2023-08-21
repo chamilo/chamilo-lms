@@ -1605,7 +1605,7 @@ class Rest extends WebService
             $conditions = [];
         } else {
             $conditions = [
-                'status' => $params['status']
+                'status' => $params['status'],
             ];
         }
         $idCampus = !empty($params['id_campus']) ?? 1;

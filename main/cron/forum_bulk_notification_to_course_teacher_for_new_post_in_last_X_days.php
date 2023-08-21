@@ -5,7 +5,7 @@
  * Script to send notification to course's teachers when there are activities in a thread of a forum in his courses in the last X days
  * The number of days is defined at the begining of the script with the variable
  * It will send one sigle mail per user to notify with a line for each thread including thread's title, thread link and number of new post.
- * 
+ *
  * @package chamilo.cron
  */
 
@@ -31,17 +31,16 @@ $UpdatedThreads = [];
 $sql = "SELECT * FROM $tableThread WHERE thread_date > '".$startDate."'";
 $result = Database::query($sql);
 while ($row = Database::fetch_array($result)) {
-        $courseInfo = api_get_course_info_by_id($row['c_id']);
-        $updatedThreads[$row['c_id']]['courseName'] = $courseInfo['name'];
-        $sqlNbPost = "SELECT count(*) as nbPost FROM $tablePost WHERE thread_id = '".$row['iid']."' and post_date > '".$startDate."'";
-        $resultNbPost = Database::query($sqlNbPost);
-        $rowNbPost = Database::fetch_array($resultNbPost);
-        $updatedThreads[$row['c_id']][$row['session_id']][$row['iid']] = [
+    $courseInfo = api_get_course_info_by_id($row['c_id']);
+    $updatedThreads[$row['c_id']]['courseName'] = $courseInfo['name'];
+    $sqlNbPost = "SELECT count(*) as nbPost FROM $tablePost WHERE thread_id = '".$row['iid']."' and post_date > '".$startDate."'";
+    $resultNbPost = Database::query($sqlNbPost);
+    $rowNbPost = Database::fetch_array($resultNbPost);
+    $updatedThreads[$row['c_id']][$row['session_id']][$row['iid']] = [
             'threadTitle' => $row['thread_title'],
             'threadNbPost' => $rowNbPost['nbPost'],
-            'threadLink' => api_get_path(WEB_PATH) . 'main/forum/viewthread.php?cidReq=' . $courseInfo['code'] . '&id_session=' . $row['session_id'] . '&gidReq=0&gradebook=0&origin=&forum=' . $row['forum_id'] . '&thread=' . $row['iid']
+            'threadLink' => api_get_path(WEB_PATH).'main/forum/viewthread.php?cidReq='.$courseInfo['code'].'&id_session='.$row['session_id'].'&gidReq=0&gradebook=0&origin=&forum='.$row['forum_id'].'&thread='.$row['iid'],
         ];
-
 }
 foreach ($updatedThreads as $courseId => $sessions) {
     foreach ($sessions as $sessionId => $threads) {
@@ -65,13 +64,11 @@ foreach ($updatedThreads as $courseId => $sessions) {
     }
 }
 foreach ($usersToNotify as $userId => $notifyInfo) {
-    sendMessage ($userId, $notifyInfo);
+    sendMessage($userId, $notifyInfo);
 }
 
-
-
 /**
- * Send the message to notify the specific user for all its courses and threads that have been updated, 
+ * Send the message to notify the specific user for all its courses and threads that have been updated,
  * manage the corresponding template and send through MessageManager::send_message_simple.
  *
  * @param $toUserId
@@ -83,7 +80,6 @@ function sendMessage(
     $toUserId,
     $notifyInfo
 ) {
-
     $userInfo = api_get_user_info($toUserId);
     $language = $userInfo['language'];
     $subject = getUserLang('ForumBulkNotificationMailSubject', $language);
@@ -142,4 +138,3 @@ function getUserLang($variable, $language)
 }
 
 exit();
-

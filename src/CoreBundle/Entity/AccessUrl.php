@@ -39,85 +39,110 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\GeneratedValue]
     #[Groups(['access_url:read', 'access_url:write'])]
     protected ?int $id = null;
+
     /**
-     * @var AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse>
+     * @var Collection<int, AccessUrlRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: AccessUrlRelCourse::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelCourse::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $courses;
+
     /**
-     * @var AccessUrlRelSession[]|Collection<int, AccessUrlRelSession>
+     * @var Collection<int, AccessUrlRelSession>
      */
-    #[ORM\OneToMany(targetEntity: AccessUrlRelSession::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelSession::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessions;
+
     /**
-     * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
+     * @var Collection<int, AccessUrlRelUser>
      */
-    #[ORM\OneToMany(targetEntity: AccessUrlRelUser::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelUser::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
+
     /**
-     * @var Collection<int, SettingsCurrent>|SettingsCurrent[]
+     * @var Collection<int, SettingsCurrent>
      */
-    #[ORM\OneToMany(targetEntity: SettingsCurrent::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: SettingsCurrent::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $settings;
+
     /**
-     * @var Collection<int, SessionCategory>|SessionCategory[]
+     * @var Collection<int, SessionCategory>
      */
-    #[ORM\OneToMany(targetEntity: SessionCategory::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: SessionCategory::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $sessionCategories;
+
     /**
-     * @var AccessUrlRelCourseCategory[]|Collection<int, AccessUrlRelCourseCategory>
+     * @var Collection<int, AccessUrlRelCourseCategory>
      */
-    #[ORM\OneToMany(targetEntity: AccessUrlRelCourseCategory::class, mappedBy: 'url', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelCourseCategory::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $courseCategory;
+
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     protected ?AccessUrl $parent = null;
+
     /**
-     * @var AccessUrl[]|Collection<int, AccessUrl>
+     * @var Collection<int, AccessUrl>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
+
     #[Gedmo\TreeLeft]
     #[ORM\Column(name: 'lft', type: 'integer')]
     protected int $lft;
+
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'lvl', type: 'integer')]
     protected int $lvl;
+
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'rgt', type: 'integer')]
     protected int $rgt;
+
     #[Gedmo\TreeRoot]
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', onDelete: 'CASCADE')]
     protected ?AccessUrl $root = null;
+
     #[Assert\NotBlank]
     #[Groups(['access_url:read', 'access_url:write'])]
     #[ORM\Column(name: 'url', type: 'string', length: 255)]
     protected string $url;
+
     #[ORM\Column(name: 'description', type: 'text')]
     protected ?string $description = null;
+
     #[ORM\Column(name: 'active', type: 'integer')]
     protected int $active;
+
     #[ORM\Column(name: 'created_by', type: 'integer')]
     protected int $createdBy;
+
     #[ORM\Column(name: 'tms', type: 'datetime', nullable: true)]
     protected ?DateTime $tms;
+
     #[ORM\Column(name: 'url_type', type: 'boolean', nullable: true)]
     protected ?bool $urlType = null;
+
     #[ORM\Column(name: 'limit_courses', type: 'integer', nullable: true)]
     protected ?int $limitCourses = null;
+
     #[ORM\Column(name: 'limit_active_courses', type: 'integer', nullable: true)]
     protected ?int $limitActiveCourses = null;
+
     #[ORM\Column(name: 'limit_sessions', type: 'integer', nullable: true)]
     protected ?int $limitSessions = null;
+
     #[ORM\Column(name: 'limit_users', type: 'integer', nullable: true)]
     protected ?int $limitUsers = null;
+
     #[ORM\Column(name: 'limit_teachers', type: 'integer', nullable: true)]
     protected ?int $limitTeachers = null;
+
     #[ORM\Column(name: 'limit_disk_space', type: 'integer', nullable: true)]
     protected ?int $limitDiskSpace = null;
+
     #[Assert\Email]
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
     protected ?string $email = null;
@@ -177,12 +202,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * Get createdBy.
-     *
-     * @return int
-     */
-    public function getCreatedBy()
+    public function getCreatedBy(): int
     {
         return $this->createdBy;
     }
@@ -194,12 +214,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * Get tms.
-     *
-     * @return DateTime
-     */
-    public function getTms()
+    public function getTms(): ?DateTime
     {
         return $this->tms;
     }
@@ -211,12 +226,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * Get urlType.
-     *
-     * @return bool
-     */
-    public function getUrlType()
+    public function getUrlType(): ?bool
     {
         return $this->urlType;
     }
@@ -228,10 +238,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitActiveCourses()
+    public function getLimitActiveCourses(): ?int
     {
         return $this->limitActiveCourses;
     }
@@ -243,10 +250,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitSessions()
+    public function getLimitSessions(): ?int
     {
         return $this->limitSessions;
     }
@@ -258,10 +262,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitUsers()
+    public function getLimitUsers(): ?int
     {
         return $this->limitUsers;
     }
@@ -273,10 +274,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitTeachers()
+    public function getLimitTeachers(): ?int
     {
         return $this->limitTeachers;
     }
@@ -288,10 +286,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitDiskSpace()
+    public function getLimitDiskSpace(): ?int
     {
         return $this->limitDiskSpace;
     }
@@ -303,10 +298,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -319,27 +311,24 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return Collection<int, SettingsCurrent>|SettingsCurrent[]
+     * @return Collection<int, SettingsCurrent>
      */
-    public function getSettings(): Collection|array
+    public function getSettings(): Collection
     {
         return $this->settings;
     }
 
     /**
-     * @param Collection<int, SettingsCurrent>|SettingsCurrent[] $settings
+     * @param Collection<int, SettingsCurrent> $settings
      */
-    public function setSettings(Collection|array $settings): self
+    public function setSettings(Collection $settings): self
     {
         $this->settings = $settings;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimitCourses()
+    public function getLimitCourses(): ?int
     {
         return $this->limitCourses;
     }
@@ -352,35 +341,52 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return Collection<int, AccessUrlRelCourse>|AccessUrlRelCourse[]
+     * @return Collection<int, AccessUrlRelCourse>
      */
-    public function getCourses(): Collection|array
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
 
-    /**
-     * @param AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse> $courses
-     */
-    public function setCourses(array|Collection $courses): self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 
         return $this;
     }
 
+    public function addCourse(Course $course): self
+    {
+        if (!$this->hasCourse($course)) {
+            $urlRelCourse = (new AccessUrlRelCourse())->setCourse($course)->setUrl($this);
+
+            $this->courses->add($urlRelCourse);
+        }
+
+        return $this;
+    }
+
+    public function hasCourse(Course $course): bool
+    {
+        if ($this->courses->count() > 0) {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
+            $found = $this->courses->matching($criteria);
+
+            return $found->count() > 0;
+        }
+
+        return false;
+    }
+
     /**
-     * @return SessionCategory[]|Collection
+     * @return Collection<int, SessionCategory>
      */
-    public function getSessionCategories(): array|Collection
+    public function getSessionCategories(): Collection
     {
         return $this->sessionCategories;
     }
 
-    /**
-     * @param Collection<int, SessionCategory>|SessionCategory[] $sessionCategories
-     */
-    public function setSessionCategories(Collection|array $sessionCategories): self
+    public function setSessionCategories(Collection $sessionCategories): self
     {
         $this->sessionCategories = $sessionCategories;
 
@@ -388,25 +394,25 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return AccessUrlRelSession[]|Collection
+     * @return Collection<int, AccessUrlRelSession>
      */
-    public function getSessions(): array|Collection
+    public function getSessions(): Collection
     {
         return $this->sessions;
     }
 
     /**
-     * @return AccessUrl[]|Collection
+     * @return Collection<int, AccessUrl>
      */
-    public function getChildren(): array|Collection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
-     * @return AccessUrlRelUser[]|Collection
+     * @return Collection<int, AccessUrlRelUser>
      */
-    public function getUsers(): array|Collection
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -434,9 +440,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return AccessUrlRelCourseCategory[]|Collection
+     * @return Collection<int, AccessUrlRelCourseCategory>
      */
-    public function getCourseCategory(): array|Collection
+    public function getCourseCategory(): Collection
     {
         return $this->courseCategory;
     }
@@ -466,12 +472,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this->getId();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

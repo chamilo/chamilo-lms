@@ -134,10 +134,7 @@ class Course extends AbstractResource implements
     #[ORM\OneToMany(
         mappedBy: 'course',
         targetEntity: AccessUrlRelCourse::class,
-        cascade: [
-            'persist',
-            'remove',
-        ],
+        cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
     protected Collection $urls;

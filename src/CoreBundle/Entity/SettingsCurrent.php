@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Platform settings.
  */
 #[ORM\Table(name: 'settings_current', options: ['row_format' => 'DYNAMIC'])]
-#[ORM\Index(name: 'access_url', columns: ['access_url'])]
+#[ORM\Index(columns: ['access_url'], name: 'access_url')]
 #[ORM\UniqueConstraint(name: 'unique_setting', columns: ['variable', 'subkey', 'access_url'])]
 #[ORM\Entity]
 class SettingsCurrent
@@ -23,7 +23,7 @@ class SettingsCurrent
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, inversedBy: 'settings', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'settings')]
     #[ORM\JoinColumn(name: 'access_url', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
@@ -70,6 +70,11 @@ class SettingsCurrent
         $this->scope = '';
     }
 
+    public function getVariable(): string
+    {
+        return $this->variable;
+    }
+
     public function setVariable(string $variable): self
     {
         $this->variable = $variable;
@@ -77,9 +82,9 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getVariable(): string
+    public function getSubkey(): ?string
     {
-        return $this->variable;
+        return $this->subkey;
     }
 
     public function setSubkey(string $subkey): self
@@ -89,14 +94,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get subkey.
-     *
-     * @return string
-     */
-    public function getSubkey()
+    public function getType(): ?string
     {
-        return $this->subkey;
+        return $this->type;
     }
 
     public function setType(string $type): self
@@ -106,14 +106,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return string
-     */
-    public function getType()
+    public function getCategory(): ?string
     {
-        return $this->type;
+        return $this->category;
     }
 
     public function setCategory(?string $category): self
@@ -123,9 +118,9 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getSelectedValue(): ?string
     {
-        return $this->category;
+        return $this->selectedValue;
     }
 
     public function setSelectedValue(?string $selectedValue): self
@@ -135,14 +130,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get selectedValue.
-     *
-     * @return string
-     */
-    public function getSelectedValue()
+    public function getTitle(): string
     {
-        return $this->selectedValue;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -152,14 +142,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getComment(): ?string
     {
-        return $this->title;
+        return $this->comment;
     }
 
     public function setComment(string $comment): self
@@ -169,14 +154,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getScope(): ?string
     {
-        return $this->comment;
+        return $this->scope;
     }
 
     public function setScope(string $scope): self
@@ -186,14 +166,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get scope.
-     *
-     * @return string
-     */
-    public function getScope()
+    public function getSubkeytext(): ?string
     {
-        return $this->scope;
+        return $this->subkeytext;
     }
 
     public function setSubkeytext(string $subkeytext): self
@@ -203,14 +178,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get subkeytext.
-     *
-     * @return string
-     */
-    public function getSubkeytext()
+    public function getAccessUrlChangeable(): int
     {
-        return $this->subkeytext;
+        return $this->accessUrlChangeable;
     }
 
     public function setAccessUrlChangeable(int $accessUrlChangeable): self
@@ -220,14 +190,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get accessUrlChangeable.
-     *
-     * @return int
-     */
-    public function getAccessUrlChangeable()
+    public function getAccessUrlLocked(): int
     {
-        return $this->accessUrlChangeable;
+        return $this->accessUrlLocked;
     }
 
     public function setAccessUrlLocked(int $accessUrlLocked): self
@@ -237,25 +202,12 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getAccessUrlLocked(): int
-    {
-        return $this->accessUrlLocked;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }

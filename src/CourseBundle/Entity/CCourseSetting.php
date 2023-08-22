@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course settings.
  */
 #[ORM\Table(name: 'c_course_setting')]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
 #[ORM\Entity]
 class CCourseSetting
 {
@@ -52,6 +52,11 @@ class CCourseSetting
     #[ORM\Column(name: 'subkeytext', type: 'string', length: 255, nullable: true)]
     protected ?string $subkeytext = null;
 
+    public function getVariable(): string
+    {
+        return $this->variable;
+    }
+
     public function setVariable(string $variable): self
     {
         $this->variable = $variable;
@@ -59,9 +64,9 @@ class CCourseSetting
         return $this;
     }
 
-    public function getVariable(): string
+    public function getSubkey(): ?string
     {
-        return $this->variable;
+        return $this->subkey;
     }
 
     public function setSubkey(string $subkey): self
@@ -71,14 +76,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get subkey.
-     *
-     * @return string
-     */
-    public function getSubkey()
+    public function getType(): ?string
     {
-        return $this->subkey;
+        return $this->type;
     }
 
     public function setType(string $type): self
@@ -88,14 +88,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return string
-     */
-    public function getType()
+    public function getCategory(): ?string
     {
-        return $this->type;
+        return $this->category;
     }
 
     public function setCategory(string $category): self
@@ -105,14 +100,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return string
-     */
-    public function getCategory()
+    public function getValue(): ?string
     {
-        return $this->category;
+        return $this->value;
     }
 
     public function setValue(string $value): self
@@ -122,14 +112,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get value.
-     *
-     * @return string
-     */
-    public function getValue()
+    public function getTitle(): ?string
     {
-        return $this->value;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -139,14 +124,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getComment(): ?string
     {
-        return $this->title;
+        return $this->comment;
     }
 
     public function setComment(string $comment): self
@@ -156,14 +136,9 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getSubkeytext(): ?string
     {
-        return $this->comment;
+        return $this->subkeytext;
     }
 
     public function setSubkeytext(string $subkeytext): self
@@ -173,35 +148,15 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get subkeytext.
-     *
-     * @return string
-     */
-    public function getSubkeytext()
+    public function getCId(): int
     {
-        return $this->subkeytext;
+        return $this->cId;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CCourseSetting
-     */
-    public function setCId(int $cId)
+    public function setCId(int $cId): static
     {
         $this->cId = $cId;
 
         return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

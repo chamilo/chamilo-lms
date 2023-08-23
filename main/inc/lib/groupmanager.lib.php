@@ -2447,10 +2447,10 @@ class GroupManager
                     Display::return_icon('user.png', get_lang('GroupMembers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::return_icon('export_group_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export_users&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
-                    Display::return_icon('export_csv.png', get_lang('ExportUsers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::return_icon('export_users_csv.png', get_lang('ExportUsers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
@@ -2757,7 +2757,7 @@ class GroupManager
 
         return $result;
     }
-    
+
     /**
      * Export all students from a group to an array.
      * This function works only in a context of a course.

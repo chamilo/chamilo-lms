@@ -490,7 +490,7 @@ class Evaluation implements GradebookItem
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
                 FROM '.$table.'
-                WHERE evaluation_id = '.intval($this->get_id());
+                WHERE evaluation_id = '.intval($this->get_id()).' AND score IS NOT NULL';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 

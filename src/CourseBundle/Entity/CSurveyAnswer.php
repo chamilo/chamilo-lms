@@ -42,6 +42,7 @@ class CSurveyAnswer
 
     public function __construct()
     {
+        $this->lpItemId = 0;
     }
 
     public function getIid(): int

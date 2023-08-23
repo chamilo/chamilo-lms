@@ -65,6 +65,7 @@ class CSurveyInvitation
     public function __construct()
     {
         $this->answered = 0;
+        $this->lpItemId = 0;
         $this->invitationDate = new DateTime();
     }
 

@@ -190,6 +190,26 @@
   }
 }
 
+.col-md-offset-0 {
+  margin-left: 0 !important;
+}
+
+.col-md-offset-1 {
+  margin-left: 5% !important;
+}
+
+.col-md-offset-2 {
+  margin-left: 10% !important;
+}
+
+.col-md-offset-3 {
+  margin-left: 15% !important;
+}
+
+.col-md-offset-4 {
+  margin-left: 20% !important;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

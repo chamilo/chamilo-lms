@@ -966,12 +966,11 @@ class Course extends AbstractResource implements
         return $this->urls;
     }
 
-    public function setUrls(Collection $urls): self
+    public function addUrls(AccessUrlRelCourse $urlRelCourse): static
     {
-        $this->urls = new ArrayCollection();
-        foreach ($urls as $url) {
-            $this->addAccessUrl($url);
-        }
+        $urlRelCourse->setCourse($this);
+
+        $this->urls->add($urlRelCourse);
 
         return $this;
     }
@@ -979,7 +978,7 @@ class Course extends AbstractResource implements
     public function addAccessUrl(?AccessUrl $url): self
     {
         $urlRelCourse = (new AccessUrlRelCourse())->setCourse($this)->setUrl($url);
-        $this->addUrlRelCourse($urlRelCourse);
+        $this->addUrls($urlRelCourse);
 
         return $this;
     }

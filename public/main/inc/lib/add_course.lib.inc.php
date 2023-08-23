@@ -753,7 +753,6 @@ class AddCourse
                 ->setVideoUrl($params['video_url'] ?? '')
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
-                ->addAccessUrl(api_get_url_entity())
                 ->setCreator(api_get_user_entity())
             ;
 

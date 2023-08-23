@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -18,16 +17,15 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -50,7 +48,7 @@ class ResourceListener
      *
      * @throws Exception
      */
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    public function prePersist(AbstractResource $resource, PrePersistEventArgs $eventArgs): void
     {
         $em = $eventArgs->getObjectManager();
         $request = $this->request;
@@ -276,7 +274,7 @@ class ResourceListener
         //$this->setLinks($resource, $eventArgs->getEntityManager());
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $eventArgs): void
     {
         //error_log('resource listener postUpdate');
         //$em = $eventArgs->getEntityManager();

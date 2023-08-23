@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
@@ -34,7 +33,7 @@ class SessionListener
      *
      * @throws Exception
      */
-    public function prePersist(Session $session, LifecycleEventArgs $args): void
+    public function prePersist(Session $session, PrePersistEventArgs $args): void
     {
         $em = $args->getObjectManager();
         if (0 === $session->getUrls()->count()) {
@@ -52,7 +51,7 @@ class SessionListener
     /**
      * This code is executed when a session is updated.
      */
-    public function preUpdate(Session $session, LifecycleEventArgs $args): void
+    public function preUpdate(Session $session, PreUpdateEventArgs $args): void
     {
     }
 

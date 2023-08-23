@@ -6,12 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -26,7 +25,7 @@ class SkillRelUserListener
     ) {
     }
 
-    public function postPersist(SkillRelUser $skillRelUser, LifecycleEventArgs $event): void
+    public function postPersist(SkillRelUser $skillRelUser, PostPersistEventArgs $event): void
     {
         $user = $skillRelUser->getUser();
         $skill = $skillRelUser->getSkill();

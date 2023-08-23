@@ -9,7 +9,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
@@ -24,7 +25,7 @@ class UserListener
     /**
      * This code is executed when a new user is created.
      */
-    public function prePersist(User $user, LifecycleEventArgs $args): void
+    public function prePersist(User $user, PrePersistEventArgs $args): void
     {
         $this->userRepository->updateCanonicalFields($user);
         $this->userRepository->updatePassword($user);
@@ -66,7 +67,7 @@ class UserListener
     /**
      * This code is executed when a user is updated.
      */
-    public function preUpdate(User $user, LifecycleEventArgs $args): void
+    public function preUpdate(User $user, PreUpdateEventArgs $args): void
     {
         $this->userRepository->updatePassword($user);
         $this->userRepository->updateCanonicalFields($user);

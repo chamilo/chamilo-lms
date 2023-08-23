@@ -2449,6 +2449,9 @@ class GroupManager
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
+                $edit_actions .= '<a href="'.$url.'group_overview.php?action=export_users&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
+                    Display::return_icon('export_csv.png', get_lang('ExportUsers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
                             Display::return_icon('survey.png', get_lang('ExportSurveyResults'), '', ICON_SIZE_SMALL),
@@ -2753,6 +2756,39 @@ class GroupManager
         }
 
         return $result;
+    }
+    
+    /**
+     * Export all students from a group to an array.
+     * This function works only in a context of a course.
+     *
+     * @param int  $groupId
+     *
+     * @return array
+     */
+    public static function exportStudentsToArray($groupId = null)
+    {
+        if (empty($groupId)) {
+            return false;
+        }
+        $data = [];
+        $data[] = [
+            'OfficialCode',
+            'Lastname',
+            'Firsname',
+            'Email',
+        ];
+        $users = self::getStudents($groupId);
+        $count = 1;
+        foreach ($users as $user) {
+            $user = api_get_user_info($user['user_id']);
+            $data[$count][] = $user['official_code'];
+            $data[$count][] = $user['lastname'];
+            $data[$count][] = $user['firstname'];
+            $data[$count][] = $user['email'];
+            $count++;
+        }
+        return $data;
     }
 
     /**

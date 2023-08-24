@@ -41,7 +41,7 @@ const isStudentView = computed({
     }
   },
   get() {
-    return platformConfigStore.isStudentViewActive()
+    return platformConfigStore.isStudentViewActive
   },
 })
 

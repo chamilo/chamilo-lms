@@ -12,7 +12,7 @@ export const useCidReqStore = defineStore("cidReq", {
       const platformConfigStore = usePlatformConfig()
 
       return (userId, cId = 0, checkStudentView = true) => {
-        if (checkStudentView && platformConfigStore.isStudentViewActive()) {
+        if (checkStudentView && platformConfigStore.isStudentViewActive) {
           return false
         }
 

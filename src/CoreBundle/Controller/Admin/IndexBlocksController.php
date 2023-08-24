@@ -21,8 +21,8 @@ class IndexBlocksController extends BaseController
     private bool $isSessionAdmin = false;
 
     public function __construct(
-        private TranslatorInterface $translator,
-        private SettingsManager $settingsManager
+        private readonly TranslatorInterface $translator,
+        private readonly SettingsManager $settingsManager
     ) {
     }
 
@@ -493,7 +493,7 @@ class IndexBlocksController extends BaseController
 
         $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
 
-        if ($this->isAdmin || ($allowCareer && $this->isSessionAdmin)) {
+        if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
             // option only visible in development mode. Enable through code if required
             if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
                 $items[] = [

@@ -2183,6 +2183,40 @@ class Display
         ';
     }
 
+    /**
+     * @param array  $content
+     * @param array  $colsWidth Optional. Columns width
+     *
+     * @return string
+     */
+    public static function toolbarGradeAction($content, $colsWidth = [])
+    {
+        $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 8 / $col;
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
+        }
+
+        $html = '<div id="grade" class="p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">';
+        for ($i = 0; $i < $col; $i++) {
+            $class = 'col-sm-'.$colsWidth[$i];
+            if ($col > 1) {
+                if ($i > 0 && $i < count($content) - 1) {
+                    $class .= ' text-center';
+                } elseif ($i === count($content) - 1) {
+                    $class .= ' text-right';
+                }
+            }
+            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
     public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';

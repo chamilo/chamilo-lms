@@ -107,7 +107,7 @@ export function useSidebarMenu() {
     })
   }
 
-  if (securityStore.isAdmin) {
+  if (securityStore.isAdmin || securityStore.isSessionAdmin) {
     items.push({
       icon: "mdi mdi-cog",
       items: [
@@ -122,6 +122,7 @@ export function useSidebarMenu() {
         {
           label: t("Courses"),
           url: "/main/admin/course_list.php",
+          visible: securityStore.isAdmin,
         },
         {
           label: t("Sessions"),

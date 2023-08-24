@@ -22,29 +22,31 @@ class DisplayGradebook
                 $links[] = '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
                     Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
-                if ((null != $evalobj->get_course_code()) && !$evalobj->has_results()) {
-                    $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
+                if ('view_result' === $page) {
+                    if ((null != $evalobj->get_course_code()) && !$evalobj->has_results()) {
+                        $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				'.Display::return_icon('evaluation_rate.png', get_lang('Grade learners'), '', ICON_SIZE_MEDIUM).'</a>';
-                }
-
-                if (api_is_platform_admin() || false == $evalobj->is_locked()) {
-                    $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
-                        Display::return_icon('import_evaluation.png', get_lang('Import marks'), '', ICON_SIZE_MEDIUM).'</a>';
-                }
-
-                if ($evalobj->has_results()) {
-                    $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&export=">'.
-                        Display::return_icon('export_evaluation.png', get_lang('PDF Report'), '', ICON_SIZE_MEDIUM).'</a>';
+                    }
 
                     if (api_is_platform_admin() || false == $evalobj->is_locked()) {
-                        $links[] = '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'">'.
-                            Display::return_icon('edit.png', get_lang('Grade learners'), '', ICON_SIZE_MEDIUM).'</a>';
-                        $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
-                            Display::return_icon('delete.png', get_lang('Delete marks'), '', ICON_SIZE_MEDIUM).'</a>';
+                        $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
+                            Display::return_icon('import_evaluation.png', get_lang('Import marks'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
+
+                    if ($evalobj->has_results()) {
+                        $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&export=">'.
+                            Display::return_icon('export_evaluation.png', get_lang('PDF Report'), '', ICON_SIZE_MEDIUM).'</a>';
+
+                        if (api_is_platform_admin() || false == $evalobj->is_locked()) {
+                            $links[] = '<a href="gradebook_edit_result.php?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'">'.
+                                Display::return_icon('edit.png', get_lang('Grade learners'), '', ICON_SIZE_MEDIUM).'</a>';
+                            $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
+                                Display::return_icon('delete.png', get_lang('Delete marks'), '', ICON_SIZE_MEDIUM).'</a>';
+                        }
+                    }
+                    $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
+                        Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
-                $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
-                    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $links[] = '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
                     Display::return_icon('back.png', get_lang('Assessment home'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -118,7 +120,7 @@ class DisplayGradebook
             }
         }
 
-        echo Display::toolbarAction('grade', $links);
+        echo Display::toolbarGradeAction($links);
         echo $evalinfo;
     }
 

@@ -1,64 +1,51 @@
 import { defineStore } from "pinia"
 import { isEmpty } from "lodash"
+import { computed, ref } from "vue"
 
-export const useSecurityStore = defineStore("security", {
-  state: () => ({
-    user: null,
-  }),
+export const useSecurityStore = defineStore("security", () => {
+  const user = ref()
 
-  getters: {
-    isAuthenticated: (state) => !isEmpty(state.user),
+  const isAuthenticated = computed(() => !isEmpty(user.value))
 
-    hasRole: (state) => (role) => {
-      if (state.user && state.user.roles) {
-        return state.user.roles.indexOf(role) !== -1
-      }
+  const hasRole = computed(() => (role) => {
+    if (user.value && user.value.roles) {
+      return user.value.roles.indexOf(role) !== -1
+    }
 
-      return false
-    },
+    return false
+  })
 
-    isStudent() {
-      return this.hasRole("ROLE_STUDENT")
-    },
+  const isStudent = computed(() => hasRole.value("ROLE_STUDENT"))
 
-    isStudentBoss() {
-      return this.hasRole("ROLE_STUDENT_BOSS")
-    },
+  const isStudentBoss = computed(() => hasRole.value("ROLE_STUDENT_BOSS"))
 
-    isHRM() {
-      return this.hasRole("ROLE_RRHH")
-    },
+  const isHRM = computed(() => hasRole.value("ROLE_RRHH"))
 
-    isTeacher() {
-      if (this.isAdmin) {
-        return true
-      }
+  const isTeacher = computed(() => (isAdmin.value ? true : hasRole.value("ROLE_TEACHER")))
 
-      return this.hasRole("ROLE_TEACHER")
-    },
+  const isCurrentTeacher = computed(() => (isAdmin.value ? true : hasRole.value("ROLE_CURRENT_COURSE_TEACHER")))
 
-    isCurrentTeacher() {
-      if (this.isAdmin) {
-        return true
-      }
+  const isCourseAdmin = computed(() =>
+    isAdmin.value
+      ? true
+      : hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER") && hasRole.value("ROLE_CURRENT_COURSE_TEACHER"),
+  )
 
-      return this.hasRole("ROLE_CURRENT_COURSE_TEACHER")
-    },
+  const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
 
-    isCourseAdmin() {
-      if (this.isAdmin) {
-        return true
-      }
+  const isAdmin = computed(() => hasRole.value("ROLE_SUPER_ADMIN") || hasRole.value("ROLE_ADMIN"))
 
-      return this.hasRole("ROLE_CURRENT_COURSE_SESSION_TEACHER") && this.hasRole("ROLE_CURRENT_COURSE_TEACHER")
-    },
-
-    isSessionAdmin() {
-      return this.hasRole("ROLE_SESSION_MANAGER")
-    },
-
-    isAdmin() {
-      return this.hasRole("ROLE_SUPER_ADMIN") || this.hasRole("ROLE_ADMIN")
-    },
-  },
+  return {
+    user,
+    isAuthenticated,
+    hasRole,
+    isStudent,
+    isStudentBoss,
+    isHRM,
+    isTeacher,
+    isCurrentTeacher,
+    isCourseAdmin,
+    isSessionAdmin,
+    isAdmin,
+  }
 })

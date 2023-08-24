@@ -83,17 +83,9 @@ class SessionRepository extends ServiceEntityRepository
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void
     {
-        if (!$session->isActive()) {
-            throw new Exception('Session not active');
-        }
-
         if (!$user->isActive()) {
             throw new Exception('User not active');
         }
-
-        /*if (!$course->isActive()) {
-            throw new Exception('Course not active');
-        }*/
 
         if (!$session->hasCourse($course)) {
             $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());

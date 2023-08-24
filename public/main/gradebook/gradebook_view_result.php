@@ -48,7 +48,7 @@ if (isset($_GET['delete_mark'])) {
 }
 
 if (isset($_GET['selecteval'])) {
-    $allresults = Result :: load(null, null, $select_eval);
+    $allresults = Result :: load(null, null, $select_eval, true);
     $iscourse = !empty(api_get_course_id());
 }
 

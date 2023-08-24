@@ -79,7 +79,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
-$surveyId = $_GET['survey_id'] ?? 0;
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 $repo = Container::getSurveyRepository();
 $survey = null;
 if (!empty($surveyId)) {

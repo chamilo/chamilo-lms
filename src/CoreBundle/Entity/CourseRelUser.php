@@ -68,7 +68,7 @@ class CourseRelUser implements Stringable
 
     #[Groups(['course_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: "CASCADE")]
     protected Course $course;
 
     #[Groups(['course:read', 'user:read'])]

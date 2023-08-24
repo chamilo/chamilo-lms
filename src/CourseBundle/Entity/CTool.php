@@ -50,7 +50,7 @@ class CTool extends AbstractResource implements
     protected ?bool $visibility = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'tools')]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: "CASCADE")]
     #[Gedmo\SortableGroup]
     protected Course $course;
 

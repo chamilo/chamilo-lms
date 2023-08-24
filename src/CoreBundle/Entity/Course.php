@@ -164,7 +164,8 @@ class Course extends AbstractResource implements
         cascade: [
             'persist',
             'remove',
-        ]
+        ],
+        orphanRemoval: true
     )]
     protected Collection $tools;
 

@@ -25,11 +25,11 @@ class AccessUrlRelCourse implements EntityAccessUrlInterface, Stringable
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'urls')]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
-    protected Course $course;
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: "CASCADE")]
+    protected ?Course $course;
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'courses')]
-    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', nullable: false, onDelete: "CASCADE")]
     protected ?AccessUrl $url;
 
     public function __toString(): string
@@ -54,7 +54,7 @@ class AccessUrlRelCourse implements EntityAccessUrlInterface, Stringable
         return $this;
     }
 
-    public function getCourse(): Course
+    public function getCourse(): ?Course
     {
         return $this->course;
     }

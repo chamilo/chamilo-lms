@@ -75,7 +75,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'pdf_img_dpi' => '96',
                     'tracking_skip_generic_data' => 'false',
                     'hide_complete_name_in_whoisonline' => 'false',
-                    'table_default_row' => '50',
+                    'table_default_row' => '0',
                     'allow_double_validation_in_registration' => 'false',
                     'block_my_progress_page' => 'false',
                     'generate_random_login' => 'false',

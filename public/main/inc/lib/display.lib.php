@@ -1204,9 +1204,9 @@ class Display
             $extra_params['rowList'] = $rowList;
         }
 
-        $defaultRow = api_get_setting('platform.table_default_row');
-        if (!empty($defaultRow)) {
-            $obj->rowNum = (int) $defaultRow;
+        $defaultRow = (int) api_get_setting('platform.table_default_row');
+        if ($defaultRow > 0) {
+            $obj->rowNum = $defaultRow;
         }
 
         $json = '';
@@ -1328,6 +1328,7 @@ class Display
         }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
+        $json .= "autowidth: true,";
         //$json .= $beforeSelectRow;
         $json .= $gridComplete;
         $json .= $beforeProcessing;

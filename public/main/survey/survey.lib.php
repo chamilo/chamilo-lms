@@ -2212,15 +2212,18 @@ class SurveyManager
         $sessionId = 0,
         $groupId = 0
     ) {
-        $invitationRepo = Database::getManager()->getRepository(CSurveyInvitation::class);
+        $em = Database::getManager();
+        $invitationRepo = $em->getRepository(CSurveyInvitation::class);
+        $surveyRepo = $em->getRepository(CSurvey::class);
+        $survey = $surveyRepo->findBy(['code' => $surveyCode]);
 
         return $invitationRepo->findBy(
             [
-                'user' => $userId,
-                'cId' => $courseId,
-                'sessionId' => $sessionId,
-                'groupId' => $groupId,
-                'surveyCode' => $surveyCode,
+                'user' => api_get_user_entity($userId),
+                'course' => api_get_course_entity($courseId),
+                'session' => api_get_session_entity($sessionId),
+                'group' => api_get_group_entity($groupId),
+                'survey' => $survey,
             ],
             ['invitationDate' => 'DESC']
         );

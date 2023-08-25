@@ -26,7 +26,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                     'allow_teacher_access_student_skills' => 'false',
                     'skills_teachers_can_assign_skills' => 'false',
                     'hide_skill_levels' => 'false',
-                    'table_of_hierarchical_skill_presentation' => 'false',
+                    'skills_hierarchical_view_in_user_tracking' => 'false',
                     'skill_levels_names' => '',
                     'allow_skill_rel_items' => 'false',
                 ]
@@ -49,7 +49,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
             ->add('allow_teacher_access_student_skills', YesNoType::class)
             ->add('skills_teachers_can_assign_skills', YesNoType::class)
             ->add('hide_skill_levels', YesNoType::class)
-            ->add('table_of_hierarchical_skill_presentation', YesNoType::class)
+            ->add('skills_hierarchical_view_in_user_tracking', YesNoType::class)
             ->add(
                 'skill_levels_names',
                 TextareaType::class,

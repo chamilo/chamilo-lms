@@ -152,7 +152,7 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Classes'),
             ];
 
-            if (api_get_configuration_value('show_link_request_hrm_user')) {
+            if ('true' === $this->settingsManager->getSetting('admin.show_link_request_hrm_user')) {
                 $items[] = [
                     'class' => 'item-user-linking-requests',
                     'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_linking_requests.php']),
@@ -171,23 +171,28 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Classes'),
             ];
 
-            if ('true' === $this->settingsManager->getSetting('limit_session_admin_role')) {
+            if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
                 $items = array_filter($items, function (array $item) {
-                    $urls = ['user_list.php', 'user_add.php'];
+                    $urls = [
+                        $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
+                        $this->generateUrl('legacy_main', ['name' => 'admin/user_add.php']),
+                    ];
 
                     return \in_array($item['url'], $urls, true);
                 });
             }
 
-            if (true === api_get_configuration_value('limit_session_admin_list_users')) {
-                $items = array_filter($items, function (array $item) {
-                    $urls = ['user_list.php'];
+            if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
+                $items = array_filter($items, function (array $item): bool {
+                    $urls = [
+                        $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
+                    ];
 
                     return !\in_array($item['url'], $urls, true);
                 });
             }
 
-            if (api_get_configuration_value('allow_session_admin_extra_access')) {
+            if ('true' === $this->settingsManager->getSetting('session.allow_session_admin_extra_access')) {
                 $items[] = [
                     'class' => 'item-user-import-update',
                     'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_update_import.php']),
@@ -201,7 +206,7 @@ class IndexBlocksController extends BaseController
             }
         }
 
-        return $items;
+        return array_values($items);
     }
 
     private function getItemsCourses(): array
@@ -333,7 +338,7 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Global agenda'),
         ];
 
-        if (true === api_get_configuration_value('agenda_reminders')) {
+        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
             $items[] = [
                 'class' => 'item-agenda-reminders',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/import_course_agenda_reminders.php']),
@@ -579,7 +584,7 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Tickets'),
         ];
 
-        if (api_get_configuration_value('allow_session_status')) {
+        if ('true' === $this->settingsManager->getSetting('session.allow_session_status')) {
             $items[] = [
                 'url' => $this->generateUrl('legacy_main', ['name' => 'session/cron_status.php']),
                 'label' => $this->translator->trans('Update session status'),

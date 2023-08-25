@@ -108,27 +108,40 @@ export function useSidebarMenu() {
   }
 
   if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+    const adminItems = [
+      {
+        label: t("Administration"),
+        to: { name: "AdminIndex" },
+      },
+    ]
+
+    if (securityStore.isSessionAdmin && 'true' === platformConfigStore.getSetting('session.limit_session_admin_list_users')) {
+      adminItems.push({
+        label: t("Add user"),
+        url: "/main/admin/user_add.php",
+      })
+    } else {
+      adminItems.push({
+        label: t("Users"),
+        url: "/main/admin/user_list.php",
+      })
+    }
+
+    if (securityStore.isAdmin) {
+      adminItems.push({
+        label: t("Courses"),
+        url: "/main/admin/course_list.php",
+      })
+    }
+
+    adminItems.push({
+      label: t("Sessions"),
+      url: "/main/session/session_list.php",
+    })
+
     items.push({
       icon: "mdi mdi-cog",
-      items: [
-        {
-          label: t("Administration"),
-          to: { name: "AdminIndex" },
-        },
-        {
-          label: t("Users"),
-          url: "/main/admin/user_list.php",
-        },
-        {
-          label: t("Courses"),
-          url: "/main/admin/course_list.php",
-          visible: securityStore.isAdmin,
-        },
-        {
-          label: t("Sessions"),
-          url: "/main/session/session_list.php",
-        },
-      ],
+      items: adminItems,
       label: t("Administration"),
     })
   }

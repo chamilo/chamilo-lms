@@ -193,14 +193,14 @@ const blockChamilo = ref(null);
 axios.get("/admin/index").then(({ data }) => {
   isLoadingBlocks.value = false;
 
-  blockUsers.value = data.users;
-  blockCourses.value = data.courses;
-  blockSessions.value = data.sessions;
-  blockGradebook.value = data.gradebook;
-  blockSkills.value = data.skills;
-  blockPrivacy.value = data.data_privacy;
-  blockSettings.value = data.settings;
-  blockPlatform.value = data.platform;
-  blockChamilo.value = data.chamilo;
+  blockUsers.value = data.users || null
+  blockCourses.value = data.courses || null
+  blockSessions.value = data.sessions || null
+  blockGradebook.value = data.gradebook || null
+  blockSkills.value = data.skills || null
+  blockPrivacy.value = data.data_privacy || null
+  blockSettings.value = data.settings || null
+  blockPlatform.value = data.platform || null
+  blockChamilo.value = data.chamilo || null
 });
 </script>

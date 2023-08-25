@@ -108,6 +108,7 @@ class SurveyUtil
             $optionId = $optionId.'@:@'.$otherOption;
         }
 
+        $sessionId = api_get_session_id();
         $answer = new CSurveyAnswer();
         $answer
             ->setUser($user)
@@ -115,6 +116,7 @@ class SurveyUtil
             ->setQuestion($question)
             ->setOptionId($optionId)
             ->setValue((int) $optionValue)
+            ->setSessionId($sessionId)
         ;
 
         $em = Database::getManager();

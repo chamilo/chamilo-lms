@@ -503,6 +503,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
             }
         }
 
+        // Rename setting for hierarchical skill presentation.
+        $this->addSql(
+            "UPDATE settings_current SET variable = 'skills_hierarchical_view_in_user_tracking', title = 'skills_hierarchical_view_in_user_tracking' WHERE variable = 'table_of_hierarchical_skill_presentation'"
+        );
+
         // Insert extra fields required.
         $result = $connection
             ->executeQuery(

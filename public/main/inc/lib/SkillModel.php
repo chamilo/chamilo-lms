@@ -192,7 +192,7 @@ class SkillModel extends Model
                 break;
         }
 
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
@@ -711,7 +711,7 @@ class SkillModel extends Model
      */
     public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $subTable = '';
         if ($vertex->getVerticesEdgeTo()->count() > 0) {
             if ($isHierarchicalTable) {
@@ -818,7 +818,7 @@ class SkillModel extends Model
             $tableRows[] = $tableRow;
         }
 
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
         $tableResult = '<div id="skillList">';

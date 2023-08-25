@@ -7861,7 +7861,7 @@ class SessionManager
             $rs = Database::query($sql);
             $countUsers = (int) Database::result($rs, 0, '0');
 
-            if ($countUsers < 50) {
+            if ($countUsers < 1) {
                 $orderClause = 'ORDER BY ';
                 $orderClause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
@@ -9886,23 +9886,23 @@ class SessionManager
         $user = api_get_user_entity();
 
         if (api_is_session_admin() &&
-            'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
+            'true' !== api_get_setting('session.allow_session_admins_to_manage_all_sessions')
         ) {
 
-            if ($session->hasUserAsSessionAdmin($user)) {
-                return true;
+            if (!$session->hasUserAsSessionAdmin($user)) {
+                return false;
             }
         }
 
         if (api_is_teacher() &&
-            'true' === api_get_setting('allow_teachers_to_create_sessions')
+            'true' === api_get_setting('session.allow_teachers_to_create_sessions')
         ) {
-            if ($session->hasUserAsGeneralCoach($user))  {
-                return true;
+            if (!$session->hasUserAsGeneralCoach($user))  {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**

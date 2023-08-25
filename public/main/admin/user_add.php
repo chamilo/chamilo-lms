@@ -462,7 +462,9 @@ if ($form->validate()) {
 
         Display::addFlash(Display::return_message($message, 'normal', false));
 
-        if (isset($_POST['submit_plus'])) {
+        if (isset($_POST['submit_plus'])
+            || (api_is_session_admin() && 'true' === api_get_setting('session.limit_session_admin_list_users'))
+        ) {
             //we want to add more. Prepare report message and redirect to the same page (to clean the form)
             header('Location: user_add.php?sec_token='.$tok);
             exit;

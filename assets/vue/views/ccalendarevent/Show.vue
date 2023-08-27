@@ -2,13 +2,16 @@
   <div>
     <Toolbar
       v-if="item"
-      :handle-edit="editHandler"
       :handle-delete="del"
+      :handle-edit="editHandler"
     >
     </Toolbar>
 
-    <p class="text-lg" v-if="item">
-      {{ item['title'] }}
+    <p
+      v-if="item"
+      class="text-lg"
+    >
+      {{ item["title"] }}
     </p>
 
     <Loading :visible="isLoading" />
@@ -16,39 +19,39 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import Loading from '../../components/Loading.vue';
-import ShowMixin from '../../mixins/ShowMixin';
-import Toolbar from '../../components/Toolbar.vue';
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import Loading from "../../components/Loading.vue"
+import ShowMixin from "../../mixins/ShowMixin"
+import Toolbar from "../../components/Toolbar.vue"
 
-const servicePrefix = 'CCalendarEvent';
+const servicePrefix = "CCalendarEvent"
 
 export default {
-  name: 'CCalendarEventShow',
+  name: "CCalendarEventShow",
   components: {
-      Loading,
-      Toolbar
+    Loading,
+    Toolbar,
   },
   mixins: [ShowMixin],
   computed: {
-    ...mapFields('ccalendarevent', {
-      isLoading: 'isLoading'
+    ...mapFields("ccalendarevent", {
+      isLoading: "isLoading",
     }),
-    ...mapGetters('ccalendarevent', ['find']),
+    ...mapGetters("ccalendarevent", ["find"]),
     ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'isCurrentTeacher': 'security/isCurrentTeacher',
+      isAuthenticated: "security/isAuthenticated",
+      isAdmin: "security/isAdmin",
+      isCurrentTeacher: "security/isCurrentTeacher",
     }),
   },
   methods: {
-    ...mapActions('ccalendarevent', {
-      deleteItem: 'del',
-      reset: 'resetShow',
-      retrieve: 'loadWithQuery'
+    ...mapActions("ccalendarevent", {
+      deleteItem: "del",
+      reset: "resetShow",
+      retrieve: "loadWithQuery",
     }),
   },
-  servicePrefix
-};
+  servicePrefix,
+}
 </script>

@@ -9,7 +9,7 @@
       v-text="useAbbreviatedDatetime(event.endDate)"
     />
 
-    <hr>
+    <hr />
 
     <div v-html="event.content" />
 
@@ -23,15 +23,15 @@
 </template>
 
 <script setup>
-import { useAbbreviatedDatetime } from '../../composables/formatDate.js';
+import { useAbbreviatedDatetime } from "../../composables/formatDate.js"
 
-import ShowLinks from '../resource_links/ShowLinks';
+import ShowLinks from "../resource_links/ShowLinks"
 
 // eslint-disable-next-line no-undef
 defineProps({
   event: {
     type: Object,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 </script>

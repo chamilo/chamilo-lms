@@ -5,8 +5,8 @@
         <InputText
           id="item_title"
           v-model="v$.item.title.$model"
+          :class="{ 'p-invalid': v$.item.title.$invalid }"
           type="text"
-          :class="{'p-invalid': v$.item.title.$invalid}"
         />
         <label
           v-t="'Title'"
@@ -27,9 +27,9 @@
             <Calendar
               id="start_date"
               v-model="v$.item.startDate.$model"
+              :class="{ 'p-invalid': v$.item.startDate.$invalid }"
               :show-icon="true"
               :show-time="true"
-              :class="{'p-invalid': v$.item.startDate.$invalid}"
             />
             <label
               v-t="'From'"
@@ -48,10 +48,10 @@
             <Calendar
               id="end_date"
               v-model="v$.item.endDate.$model"
+              :class="{ 'p-invalid': v$.item.endDate.$invalid }"
+              :manual-input="false"
               :show-icon="true"
               :show-time="true"
-              :class="{'p-invalid': v$.item.endDate.$invalid}"
-              :manual-input="false"
             />
             <label
               v-t="'Until'"
@@ -74,14 +74,15 @@
             relative_urls: false,
             height: 250,
             toolbar_mode: 'sliding',
-            file_picker_callback : browser,
+            file_picker_callback: browser,
             autosave_ask_before_unload: true,
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',
               'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste wordcount emoticons'
+              'insertdatetime media table paste wordcount emoticons',
             ],
-            toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+            toolbar:
+              'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
           }"
           required
         />
@@ -120,16 +121,16 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
-import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
-import InputText from 'primevue/inputtext';
-import Calendar from 'primevue/calendar';
-import EditLinks from '../resource_links/EditLinks.vue';
-import Checkbox from 'primevue/checkbox';
+import { computed, ref } from "vue"
+import { useStore } from "vuex"
+import { useVuelidate } from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
+import InputText from "primevue/inputtext"
+import Calendar from "primevue/calendar"
+import EditLinks from "../resource_links/EditLinks.vue"
+import Checkbox from "primevue/checkbox"
 
-const store = useStore();
+const store = useStore()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -145,9 +146,9 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
-});
+})
 
-const item = computed(() => props.initialValues || props.values);
+const item = computed(() => props.initialValues || props.values)
 
 const rules = computed(() => ({
   item: {
@@ -163,26 +164,26 @@ const rules = computed(() => ({
     endDate: {
       required,
     },
-    collective: {}
-  }
-}));
+    collective: {},
+  },
+}))
 
-const v$ = useVuelidate(rules, { item });
+const v$ = useVuelidate(rules, { item })
 
 // eslint-disable-next-line no-undef
 defineExpose({
   v$,
 })
 
-const linksType = ref('users');
-const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
-const isAdmin = computed(() => store.getters['security/isAdmin']);
+const linksType = ref("users")
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isAdmin = computed(() => store.getters["security/isAdmin"])
 
 if (!isAdmin.value) {
   if (isCurrentTeacher.value) {
-    linksType.value = 'course_students';
+    linksType.value = "course_students"
   } else {
-    linksType.value = 'user_rel_users';
+    linksType.value = "user_rel_users"
   }
 }
 </script>

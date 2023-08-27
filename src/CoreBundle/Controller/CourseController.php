@@ -13,11 +13,13 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -62,7 +64,9 @@ class CourseController extends ToolBaseController
     public function checkTermsAndConditionJson(
         Request $request,
         LegalRepository $legalTermsRepo,
-        LanguageRepository $languageRepository
+        LanguageRepository $languageRepository,
+        ExtraFieldValuesRepository $extraFieldValuesRepository,
+        SettingsManager $settingsManager
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
@@ -72,64 +76,46 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        $termAndConditionStatus = $legalTermsRepo->checkTermCondition($user);
-        if (false === $termAndConditionStatus) {
-            $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
-        } else {
-            $request->getSession()->remove('term_and_condition');
-        }
-        $termsAndCondition = $request->getSession()->get('term_and_condition');
-        if (null !== $termsAndCondition) {
-            // user id
-            $userId = $termsAndCondition['user_id'];
-
-            // Update the terms & conditions
-            $legalType = null;
-
-            // Verify type of terms and conditions
-            if (null !== $request->get('legal_info')) {
-                $infoLegal = explode(':', $request->get('legal_info'));
-                $legalId = (int) $infoLegal[0];
-                $languageId = (int) $infoLegal[1];
-                $legal = $legalTermsRepo->find($legalId);
-                $language = $languageRepository->find($languageId);
-                $legalType = $legalTermsRepo->getTypeOfTermsAndConditions($legal, $language);
+        if ($user && $user->hasRole('ROLE_STUDENT') &&
+            'true' === $settingsManager->getSetting('allow_terms_conditions') &&
+            'course' === $settingsManager->getSetting('load_term_conditions_section')
+        ) {
+            $termAndConditionStatus = false;
+            $extraValue  = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
+            if (!empty($extraValue['value'])) {
+                $result = $extraValue['value'];
+                $userConditions = explode(':', $result);
+                $version = $userConditions[0];
+                $langId = (int) $userConditions[1];
+                $realVersion = $legalTermsRepo->getLastVersion($langId);
+                $termAndConditionStatus = ($version >= $realVersion);
             }
 
-            $legalOption = (empty($legalType));
-            // is necessary verify check
-            if (1 === $legalType) {
-                $legalOption = (null !== $request->get('legal_accept') && 1 === (int) $request->get('legal_accept'));
+            if (false === $termAndConditionStatus) {
+                $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
+            } else {
+                $request->getSession()->remove('term_and_condition');
             }
 
-            if (null !== $request->get('legal_accept_type') && true === $legalOption) {
-                $condArray = explode(':', $request->get('legal_accept_type'));
-                if (!empty($condArray[0]) && !empty($condArray[1])) {
-                    $time = time();
-                    $conditionToSave = (int) ($condArray[0]).':'.(int) ($condArray[1]).':'.$time;
-                    UserManager::update_extra_field_value(
-                        $userId,
-                        'legal_accept',
-                        $conditionToSave
-                    );
+            $termsAndCondition = $request->getSession()->get('term_and_condition');
+            if (null !== $termsAndCondition) {
+                $redirect = true;
+                $allow = 'true' === Container::getSettingsManager()
+                        ->getSetting('course.allow_public_course_with_no_terms_conditions');
+
+                if (true === $allow &&
+                    null !== $course->getVisibility() &&
+                    COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
+                ) {
+                    $redirect = false;
                 }
-            }
-
-            $redirect = true;
-            $allow = 'true' === Container::getSettingsManager()
-                    ->getSetting('course.allow_public_course_with_no_terms_conditions');
-            if (true === $allow &&
-                null !== $course->getVisibility() &&
-                COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
-            ) {
-                $redirect = false;
-            }
-            if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
-                $url = '/main/auth/inscription.php';
-                $responseData = [
-                    'redirect' => $redirect,
-                    'url' => $url,
-                ];
+                if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
+                    $url = '/main/auth/inscription.php';
+                    $responseData = [
+                        'redirect' => $redirect,
+                        'url' => $url,
+                    ];
+                }
             }
         }
 
@@ -653,10 +639,6 @@ class CourseController extends ToolBaseController
             }
         }
 
-
-        error_log('$ctool -> '.$ctool->getIid());
-        error_log('$createInSession -> '.$createInSession);
-
         if ($ctool) {
             $ctoolintroRepo = $em->getRepository(CToolIntro::class);
             /** @var CToolIntro $ctoolintro */
@@ -678,7 +660,6 @@ class CourseController extends ToolBaseController
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
     public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-        error_log('In addToolIntro');
 
         $data = $request->getContent();
         $data = json_decode($data);

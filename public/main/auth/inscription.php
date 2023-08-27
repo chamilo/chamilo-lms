@@ -589,7 +589,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['field_value'].'<br />';
                 }
             } else {
                 echo get_lang('Coming soon...');
@@ -720,7 +720,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
                     //if ($value['variable'] === 'category') {
-                    $form->addLabel($value['display_text'], $value['value']);
+                    $form->addLabel($value['display_text'], $value['field_value']);
                     //}
                 }
             }

@@ -1,168 +1,170 @@
 <template>
-  <div v-if="isCourseLoading" class="flex flex-col gap-4">
-    <div class="flex gap-4 items-center">
-      <Skeleton class="mr-auto" height="2.5rem" width="12rem" />
-      <Skeleton v-if="isCurrentTeacher" height="2.5rem" width="8rem" />
-      <Skeleton v-if="isCurrentTeacher" height="2.5rem" width="3rem" />
-    </div>
-
-    <Skeleton height="16rem" />
-
-    <div class="flex items-center gap-6">
-      <Skeleton height="1.5rem" width="6rem" />
-      <Skeleton v-if="isCurrentTeacher" class="ml-auto" height="1.5rem" width="6rem" />
-      <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
-      <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
-      <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
-    </div>
-
-    <hr class="mt-0 mb-4" />
-
-    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
-      <Skeleton v-for="v in 30" :key="v" class="aspect-square" height="auto" width="7.5rem" />
-    </div>
-  </div>
-  <div v-else class="flex flex-col gap-4">
-    <div class="flex gap-4 items-center">
-      <h2 class="mr-auto">
-        {{ course.title }}
-        <small v-if="session"> ({{ session.name }}) </small>
-      </h2>
-
-      <StudentViewButton v-if="course" @change="onStudentViewChanged" />
-
-      <BaseButton
-        v-if="showUpdateIntroductionButton"
-        :label="t('Edit introduction')"
-        type="black"
-        icon="edit"
-        @click="updateIntro(intro)"
-      />
-
-      <BaseButton
-        v-if="isAllowedToEdit"
-        icon="cog"
-        only-icon
-        popup-identifier="course-tmenu"
-        type="black"
-        @click="toggleCourseTMenu"
-      />
-
-      <BaseMenu id="course-tmenu" ref="courseTMenu" :model="courseItems" />
-    </div>
-
-    <hr class="mt-1 mb-1">
-
-    <div v-if="isAllowedToEdit" class="mb-4">
-      <div v-if="intro" class="flex flex-col gap-4">
-        <div v-html="intro.introText" />
-
-        <BaseButton
-          v-if="createInSession && introTool"
-          :label="t('Course introduction')"
-          class="ml-auto"
-          icon="plus"
-          type="primary"
-          @click="addIntro(course, intro)"
-        />
+  <div id="course-home" class="hide-content">
+    <div v-if="isCourseLoading" class="flex flex-col gap-4">
+      <div class="flex gap-4 items-center">
+        <Skeleton class="mr-auto" height="2.5rem" width="12rem" />
+        <Skeleton v-if="isCurrentTeacher" height="2.5rem" width="8rem" />
+        <Skeleton v-if="isCurrentTeacher" height="2.5rem" width="3rem" />
       </div>
-      <EmptyState
-        v-else-if="introTool"
-        :detail="t('Add a course introduction to display to your students.')"
-        :summary="t('You don\'t have any course content yet.')"
-        icon="courses"
-      >
-        <BaseButton
-          :label="t('Course introduction')"
-          class="mt-4"
-          icon="plus"
-          type="primary"
-          @click="addIntro(course, intro)"
-        />
-      </EmptyState>
-    </div>
-    <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
 
-    <div v-if="isAllowedToEdit" class="flex items-center gap-6">
-      <h6 v-t="'Tools'" />
+      <Skeleton height="16rem" />
 
-      <div
-        class="ml-auto"
-      >
-        <BaseToggleButton
-          :model-value="false"
-          :on-label="t('Show all')"
-          :off-label="t('Show all')"
-          :disabled="isSorting || isCustomizing"
-          on-icon="eye-on"
-          off-icon="eye-on"
-          size="small"
-          class="ml-auto"
-          without-borders
-          @click="onClickShowAll"
-        />
-        <BaseToggleButton
-          :model-value="false"
-          :on-label="t('Hide all')"
-          :off-label="t('Hide all')"
-          :disabled="isSorting || isCustomizing"
-          on-icon="eye-off"
-          off-icon="eye-off"
-          size="small"
-          without-borders
-          @click="onClickHideAll"
-        />
-        <BaseToggleButton
-          v-model="isSorting"
-          :disabled="isCustomizing"
-          :on-label="t('Sort')"
-          on-icon="swap-vertical"
-          :off-label="t('Sort')"
-          off-icon="swap-vertical"
-          size="small"
-          without-borders
-        />
-        <BaseToggleButton
-          v-model="isCustomizing"
-          :disabled="isSorting"
-          :on-label="t('Customize')"
-          on-icon="customize"
-          :off-label="t('Customize')"
-          off-icon="customize"
-          size="small"
-          without-borders
-        />
+      <div class="flex items-center gap-6">
+        <Skeleton height="1.5rem" width="6rem" />
+        <Skeleton v-if="isCurrentTeacher" class="ml-auto" height="1.5rem" width="6rem" />
+        <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
+        <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
+        <Skeleton v-if="isCurrentTeacher" class="aspect-square" height="1.5rem" width="6rem" />
+      </div>
+
+      <hr class="mt-0 mb-4" />
+
+      <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
+        <Skeleton v-for="v in 30" :key="v" class="aspect-square" height="auto" width="7.5rem" />
       </div>
     </div>
-    <hr class="mt-0 mb-4" />
+    <div v-else class="flex flex-col gap-4">
+      <div class="flex gap-4 items-center">
+        <h2 class="mr-auto">
+          {{ course.title }}
+          <small v-if="session"> ({{ session.name }}) </small>
+        </h2>
 
-    <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
-      <CourseTool
-        v-for="(tool, index) in tools"
-        :key="'tool-' + index.toString()"
-        :change-visibility="changeVisibility"
-        :course="course"
-        :to="tool.to"
-        :url="tool.url"
-        :go-to-setting-course-tool="goToSettingCourseTool"
-        :tool="tool"
-        :data-tool="tool.ctool.name"
-        :data-index="index"
-      />
+        <StudentViewButton v-if="course" @change="onStudentViewChanged" />
 
-      <ShortCutList
-        v-for="(shortcut, index) in shortcuts"
-        :key="'shortcut-' + index.toString()"
-        :change-visibility="changeVisibility"
-        :go-to-short-cut="goToShortCut"
-        :shortcut="shortcut"
-      />
+        <BaseButton
+          v-if="showUpdateIntroductionButton"
+          :label="t('Edit introduction')"
+          type="black"
+          icon="edit"
+          @click="updateIntro(intro)"
+        />
+
+        <BaseButton
+          v-if="isAllowedToEdit"
+          icon="cog"
+          only-icon
+          popup-identifier="course-tmenu"
+          type="black"
+          @click="toggleCourseTMenu"
+        />
+
+        <BaseMenu id="course-tmenu" ref="courseTMenu" :model="courseItems" />
+      </div>
+
+      <hr class="mt-1 mb-1">
+
+      <div v-if="isAllowedToEdit" class="mb-4">
+        <div v-if="intro" class="flex flex-col gap-4">
+          <div v-html="intro.introText" />
+
+          <BaseButton
+            v-if="createInSession && introTool"
+            :label="t('Course introduction')"
+            class="ml-auto"
+            icon="plus"
+            type="primary"
+            @click="addIntro(course, intro)"
+          />
+        </div>
+        <EmptyState
+          v-else-if="introTool"
+          :detail="t('Add a course introduction to display to your students.')"
+          :summary="t('You don\'t have any course content yet.')"
+          icon="courses"
+        >
+          <BaseButton
+            :label="t('Course introduction')"
+            class="mt-4"
+            icon="plus"
+            type="primary"
+            @click="addIntro(course, intro)"
+          />
+        </EmptyState>
+      </div>
+      <div v-else-if="intro" v-html="intro.introText" class="mb-4" />
+
+      <div v-if="isAllowedToEdit" class="flex items-center gap-6">
+        <h6 v-t="'Tools'" />
+
+        <div
+          class="ml-auto"
+        >
+          <BaseToggleButton
+            :model-value="false"
+            :on-label="t('Show all')"
+            :off-label="t('Show all')"
+            :disabled="isSorting || isCustomizing"
+            on-icon="eye-on"
+            off-icon="eye-on"
+            size="small"
+            class="ml-auto"
+            without-borders
+            @click="onClickShowAll"
+          />
+          <BaseToggleButton
+            :model-value="false"
+            :on-label="t('Hide all')"
+            :off-label="t('Hide all')"
+            :disabled="isSorting || isCustomizing"
+            on-icon="eye-off"
+            off-icon="eye-off"
+            size="small"
+            without-borders
+            @click="onClickHideAll"
+          />
+          <BaseToggleButton
+            v-model="isSorting"
+            :disabled="isCustomizing"
+            :on-label="t('Sort')"
+            on-icon="swap-vertical"
+            :off-label="t('Sort')"
+            off-icon="swap-vertical"
+            size="small"
+            without-borders
+          />
+          <BaseToggleButton
+            v-model="isCustomizing"
+            :disabled="isSorting"
+            :on-label="t('Customize')"
+            on-icon="customize"
+            :off-label="t('Customize')"
+            off-icon="customize"
+            size="small"
+            without-borders
+          />
+        </div>
+      </div>
+      <hr class="mt-0 mb-4" />
+
+      <div id="course-tools" class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
+        <CourseTool
+          v-for="(tool, index) in tools"
+          :key="'tool-' + index.toString()"
+          :change-visibility="changeVisibility"
+          :course="course"
+          :to="tool.to"
+          :url="tool.url"
+          :go-to-setting-course-tool="goToSettingCourseTool"
+          :tool="tool"
+          :data-tool="tool.ctool.name"
+          :data-index="index"
+        />
+
+        <ShortCutList
+          v-for="(shortcut, index) in shortcuts"
+          :key="'shortcut-' + index.toString()"
+          :change-visibility="changeVisibility"
+          :go-to-short-cut="goToShortCut"
+          :shortcut="shortcut"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {computed, onMounted, provide, ref, watch} from "vue"
+import {computed, onMounted, provide, ref, watch, onBeforeMount} from "vue"
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -401,6 +403,21 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 }
 
 const isAllowedToEdit = ref(false)
+
+onBeforeMount(async () => {
+  try {
+    const response = await axios.get(ENTRYPOINT + `../course/${courseId}/checkLegal.json`);
+
+    if (response.data.redirect) {
+      window.location.href = response.data.url;
+    } else {
+      document.getElementById('course-home').classList.remove('hide-content');
+    }
+  } catch (error) {
+    console.error("Error checking terms and conditions:", error);
+    document.getElementById('course-home').classList.remove('hide-content');
+  }
+});
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()

@@ -44,12 +44,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 if (!in_array($course['code'], $selected_courses)) {
                     continue;
                 }
-                $courses[] = $course;
+                $courses[$course['real_id']] = $course;
             }
         }
     } else {
         // Get all courses
-        $courses = $course_list;
+        foreach ($course_list as $course) {
+            $courses[$course['real_id']] = $course;
+        }
     }
 
     if (!empty($courses)) {
@@ -74,7 +76,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
         }
         $dataToExport = [];
-        foreach ($courses as $course) {
+        foreach ($courses as $courseId => $course) {
             $dataToExport['code'] = str_replace(';', ',', $course['code']);
             $dataToExport['title'] = str_replace(';', ',', $course['title']);
             $dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
@@ -103,13 +105,25 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
                 $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
             }
-            if ($includeExtraFields) {
-                foreach ($allExtraFields as $extra) {
-                    $extraValue = CourseManager::get_course_extra_field_value($extra['variable'], $course['code']);
-                    $dataToExport[$extra['variable']] = isset($extraValue) ? $extraValue : '';
+            $listToExport[$courseId] = $dataToExport;
+        }
+
+        if ($includeExtraFields) {
+            foreach ($allExtraFields as $extra) {
+                $default = $extraField->getDefaultValueByFieldId($extra['id']);
+                $fieldValues = $extraField->getAllValuesByFieldId($extra['id']);
+                foreach ($listToExport as $courseId => &$values) {
+                    if (isset($fieldValues[$courseId])) {
+                        if (is_array($fieldValues[$courseId])) {
+                            $values['extra_'.$extra['variable']] = $fieldValues[$courseId];
+                        } else {
+                            $values[$extra['variable']] = $fieldValues[$courseId];
+                        }
+                    } else {
+                        $values[$extra['variable']] = $default;
+                    }
                 }
             }
-            $listToExport[] = $dataToExport;
         }
 
         switch ($file_type) {

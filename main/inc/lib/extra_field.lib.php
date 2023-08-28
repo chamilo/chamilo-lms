@@ -3209,8 +3209,11 @@ JAVASCRIPT;
                     // If the entry exists but is NULL, consider it an empty string (to reproduce the behaviour of UserManager::get_extra_user_data()
                     $values[$row['item_id']] = '';
                 } else {
-                    if ($type == UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE) {
+                    if ($type == self::FIELD_TYPE_SELECT_MULTIPLE) {
                         $values[$row['item_id']] = explode(';', $row['value']);
+                    } elseif (empty($row['value'])) {
+                        // Avoid "0" values when no value should be set
+                        $values[$row['item_id']] = null;
                     } else {
                         $values[$row['item_id']] = $row['value'];
                     }

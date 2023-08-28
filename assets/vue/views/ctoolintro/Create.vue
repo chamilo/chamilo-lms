@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, useStore} from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields';
 import ToolIntroForm from '../../components/ctoolintro/Form.vue';
 import Loading from '../../components/Loading.vue';
@@ -27,7 +27,8 @@ import axios from 'axios'
 import { ENTRYPOINT } from '../../config/entrypoint'
 import useNotification from "../../components/Notification";
 import {useI18n} from "vue-i18n";
-import toInteger from "lodash/toInteger";
+import { useCidReq } from "../../composables/cidReq"
+import { useCidReqStore } from "../../store/cidReq"
 const servicePrefix = 'ctoolintro';
 
 const { mapFields } = createHelpers({
@@ -52,18 +53,16 @@ export default {
     const router = useRouter();
     const {showNotification} = useNotification();
     const { t } = useI18n();
-    const store = useStore();
+    const cidReqStore = useCidReqStore()
 
     let id = route.params.id;
     if (isEmpty(id)) {
       id = route.query.id;
     }
 
-    const cid = toInteger(route.query.cid);
-    if (cid) {
-      let courseIri = '/api/courses/' + cid;
-      store.dispatch('course/findCourse', { id: courseIri });
-    }
+    const { cid } = useCidReq()
+
+    cidReqStore.setCourseAndSessionById(cid)
 
     let toolId = route.params.courseTool;
     let ctoolId = route.query.ctoolId;

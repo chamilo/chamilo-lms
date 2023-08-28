@@ -212,7 +212,7 @@ provide("isSorting", isSorting);
 provide("isCustomizing", isCustomizing);
 
 // Remove the course session state.
-store.dispatch("session/cleanSession");
+cidReqStore.resetCidReq()
 
 const courseItems = ref([]);
 

@@ -123,10 +123,12 @@ import { useToast } from "primevue/usetoast"
 import { useCidReq } from "../../composables/cidReq"
 import cCalendarEventService from "../../services/ccalendarevent"
 import sessionRelUserService from "../../services/sessionRelUserService"
+import { useCidReqStore } from "../../store/cidReq"
 
 const store = useStore()
 const confirm = useConfirm()
 const platformConfigStore = usePlatformConfig()
+const cidReqStore = useCidReqStore()
 
 const item = ref({})
 const dialog = ref(false)
@@ -151,10 +153,7 @@ const sessionState = reactive({
 
 const { cid, sid, gid } = useCidReq()
 
-if (cid) {
-  let courseIri = "/api/courses/" + cid
-  store.dispatch("course/findCourse", { id: courseIri })
-}
+cidReqStore.setCourseAndSessionById(cid, sid)
 
 async function getCalendarEvents({ startStr, endStr }) {
   const calendarEvents = await cCalendarEventService

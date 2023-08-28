@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, useStore} from 'vuex';
+import {mapActions, mapGetters} from 'vuex'
 import { mapFields } from 'vuex-map-fields';
 import ToolIntroForm from '../../components/ctoolintro/Form.vue';
 import Loading from '../../components/Loading.vue';
@@ -21,12 +21,13 @@ import UpdateMixin from '../../mixins/UpdateMixin';
 import {computed, onMounted, reactive, ref, toRefs} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import toInteger from "lodash/toInteger";
 import useVuelidate from '@vuelidate/core'
 import axios from 'axios'
 import { ENTRYPOINT } from '../../config/entrypoint'
 import { RESOURCE_LINK_PUBLISHED } from '../../components/resource_links/visibility'
 import useNotification from '../../components/Notification'
+import { useCidReqStore } from "../../store/cidReq"
+import { useCidReq } from "../../composables/cidReq"
 
 const servicePrefix = 'ctoolintro';
 
@@ -43,13 +44,12 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const {showNotification} = useNotification();
-    const store = useStore();
+    const cidReqStore = useCidReqStore()
     const item = ref({});
-    const cid = toInteger(route.query.cid);
-    if (cid) {
-      let courseIri = '/api/courses/' + cid;
-      store.dispatch('course/findCourse', { id: courseIri });
-    }
+    const { cid, sid } = useCidReq()
+    const { t } = useI18n()
+
+    cidReqStore.setCourseAndSessionById(cid)
 
     let toolId = route.query.ctoolId;
     let ctoolintroId = route.query.ctoolintroIid;
@@ -66,8 +66,8 @@ export default {
     item.value['courseTool'] = '/api/c_tools/'+toolId;
 
     item.value['resourceLinkList'] = [{
-      sid: route.query.sid,
-      cid: route.query.cid,
+      sid,
+      cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     }];
 

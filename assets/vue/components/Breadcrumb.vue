@@ -12,6 +12,8 @@ import {computed} from "vue";
 import {useRoute} from "vue-router";
 import {useI18n} from "vue-i18n";
 import Breadcrumb from 'primevue/breadcrumb';
+import { useCidReqStore } from "../store/cidReq"
+import { storeToRefs } from "pinia"
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -26,12 +28,13 @@ const props = defineProps({
 });
 
 const store = useStore();
+const cidReqStore = useCidReqStore()
 const route = useRoute();
 const {t} = useI18n();
 
+const { course, session } = storeToRefs(cidReqStore)
+
 const resourceNode = computed(() => store.getters['resourcenode/getResourceNode']);
-const course = computed(() => store.getters['course/getCourse']);
-const session = computed(() => store.getters['session/getSession']);
 
 const home = {
   icon: 'pi pi-home',

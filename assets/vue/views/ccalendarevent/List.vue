@@ -19,15 +19,15 @@
         :values="item"
       />
       <template #footer>
-        <Button
+        <BaseButton
           :label="t('Cancel')"
-          class="p-button-outlined p-button-plain"
-          icon="pi pi-times"
+          icon="close"
+          type="black"
           @click="dialog = false"
         />
-        <Button
+        <BaseButton
           :label="item['@id'] ? t('Edit') : t('Add')"
-          class="p-button-secondary"
+          type="secondary"
           @click="onCreateEventForm"
         />
       </template>
@@ -42,22 +42,22 @@
       <CCalendarEventInfo :event="item" />
 
       <template #footer>
-        <Button
+        <BaseButton
           :label="t('Cancel')"
-          class="p-button-outlined p-button-plain"
-          icon="pi pi-times"
+          icon="close"
+          type="black"
           @click="dialogShow = false"
         />
-        <Button
+        <BaseButton
           :label="t('Delete')"
-          class="p-button-outlined p-button-danger"
-          icon="pi pi-trash"
+          icon="delete"
+          type="danger"
           @click="confirmDelete"
         />
-        <Button
+        <BaseButton
           v-if="isEventEditable"
           :label="t('Edit')"
-          class="p-button-secondary"
+          type="secondary"
           @click="dialog = true"
         />
       </template>
@@ -70,7 +70,7 @@
       :modal="true"
     >
       <div class="flex flex-col gap-4">
-        <h5>{{ sessionState.sessionAsEvent.title }}</h5>
+        <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
           v-if="sessionState.sessionAsEvent.start"
           v-t="{
@@ -105,9 +105,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue"
 import { useStore } from "vuex"
-import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
 import { useConfirm } from "primevue/useconfirm"
 import { useAbbreviatedDatetime } from "../../composables/formatDate.js"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -119,14 +117,11 @@ import interactionPlugin from "@fullcalendar/interaction"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import CCalendarEventForm from "../../components/ccalendarevent/Form.vue"
 import CCalendarEventInfo from "../../components/ccalendarevent/Info"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import allLocales from "@fullcalendar/core/locales-all"
-import toInteger from "lodash/toInteger"
-import Button from "primevue/button"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
 
 const store = useStore()
-const route = useRoute()
 const confirm = useConfirm()
 const platformConfigStore = usePlatformConfig()
 

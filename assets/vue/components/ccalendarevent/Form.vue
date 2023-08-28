@@ -1,24 +1,11 @@
 <template>
   <form>
-    <div class="field">
-      <div class="p-float-label">
-        <InputText
-          id="item_title"
-          v-model="v$.item.title.$model"
-          :class="{ 'p-invalid': v$.item.title.$invalid }"
-          type="text"
-        />
-        <label
-          v-t="'Title'"
-          for="item_title"
-        />
-      </div>
-      <small
-        v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
-        v-t="v$.item.title.required.$message"
-        class="p-error"
-      />
-    </div>
+    <BaseInputText
+      v-model="v$.item.title.$model"
+      :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.title.$error"
+      :label="t('Title')"
+    />
 
     <div class="flex flex-col md:flex-row gap-x-5">
       <div class="md:w-1/2 flex flex-col">
@@ -102,17 +89,12 @@
           show-share-with-user
         />
 
-        <div class="field-checkbox">
-          <Checkbox
-            id="is_collective"
-            v-model="item.collective"
-            :binary="true"
-          />
-          <label
-            v-t="'Is it editable by the invitees?'"
-            for="is_collective"
-          />
-        </div>
+        <BaseCheckbox
+          id="is_collective"
+          v-model="item.collective"
+          :label="t('Is it editable by the invitees?')"
+          name="is_collective"
+        />
       </div>
     </div>
 
@@ -125,12 +107,15 @@ import { computed, ref } from "vue"
 import { useStore } from "vuex"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
-import InputText from "primevue/inputtext"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
 import Calendar from "primevue/calendar"
 import EditLinks from "../resource_links/EditLinks.vue"
-import Checkbox from "primevue/checkbox"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import { useI18n } from "vue-i18n"
 
 const store = useStore()
+
+const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({

@@ -13,7 +13,7 @@
 <script>
 import { mapActions, mapGetters, useStore } from "vuex"
 import { createHelpers } from "vuex-map-fields"
-import CCalendarEventForm from "../../components/ccalendarevent/Form.vue"
+import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventForm.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import CreateMixin from "../../mixins/CreateMixin"

@@ -120,6 +120,9 @@ import CCalendarEventInfo from "../../components/ccalendarevent/Info"
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
+import { useCidReq } from "../../composables/cidReq"
+import cCalendarEventService from "../../services/ccalendarevent"
+import sessionRelUserService from "../../services/sessionRelUserService"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -146,9 +149,7 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-const cid = toInteger(route.query.cid)
-const sid = toInteger(route.query.sid)
-const gid = toInteger(route.query.gid)
+const { cid, sid, gid } = useCidReq()
 
 if (cid) {
   let courseIri = "/api/courses/" + cid
@@ -156,20 +157,19 @@ if (cid) {
 }
 
 async function getCalendarEvents({ startStr, endStr }) {
-  const calendarEvents = await axios.get(ENTRYPOINT + "c_calendar_events", {
-    params: {
-      startDate: startStr,
-      endDate: endStr,
-      //          'startDate[after]': startStr,
-      //          'startDate[before]': startStr,
-      //'startDate[between]': startStr+'..'+endStr,
-      cid: cid,
-      sid: sid,
-      gid: gid,
-    },
-  })
+  const calendarEvents = await cCalendarEventService
+    .findAll({
+      params: {
+        startDate: startStr,
+        endDate: endStr,
+        cid,
+        sid,
+        gid,
+      },
+    })
+    .then((response) => response.json())
 
-  return calendarEvents.data["hydra:member"].map((event) => ({
+  return calendarEvents["hydra:member"].map((event) => ({
     ...event,
     start: event.startDate,
     end: event.endDate,
@@ -181,16 +181,14 @@ async function getSessions({ startStr, endStr }) {
     return []
   }
 
-  const sessions = await axios.get(ENTRYPOINT + `session_rel_users`, {
-    params: {
-      user: currentUser.value["@id"],
-      "displayStartDate[after]": startStr,
-      "displayEndDate[before]": endStr,
-      relationType: 3,
-    },
+  const sessions = await sessionRelUserService.findAll({
+    user: currentUser.value["@id"],
+    "displayStartDate[after]": startStr,
+    "displayEndDate[before]": endStr,
+    relationType: 3,
   })
 
-  return sessions.data["hydra:member"].map((sessionRelUser) => ({
+  return sessions["hydra:member"].map((sessionRelUser) => ({
     ...sessionRelUser.session,
     title: sessionRelUser.session.name,
     start: sessionRelUser.session.displayStartDate,

@@ -828,7 +828,18 @@ $(function() {
 									$("#dialog-form").dialog('close');
 								}
 							});
-						}
+						},
+                                    {% if (agenda_collective_invitations or agenda_event_subscriptions) and 'personal' == type %}
+                                        '{{ "ExportUsers" | get_lang }}' : function() {
+                                            if (isInvitation(calEvent)) {
+                                                url =  "{{ _p.web_main }}calendar/exportEventMembers.php?a=export_invitees&id=" + calEvent.id;
+                                            } else {
+                                                url =  "{{ _p.web_main }}calendar/exportEventMembers.php?a=export_subscribers&id=" + calEvent.id;
+                                            }
+                                            window.location.href = url;
+                                        },
+                                    {% endif %}
+
 					},
 					close: function() {
                         $("#title_edit").hide();
@@ -1073,6 +1084,16 @@ $(function() {
 	});
 
     {{ agenda_reminders_js }}
+
+    function isInvitation (calEvent) {
+        if ((calEvent.invitees && calEvent.invitees.length)
+            || !calEvent.subscription_visibility
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     function showSubcriptionsContainer (calEvent) {
         if ((calEvent.invitees && calEvent.invitees.length)

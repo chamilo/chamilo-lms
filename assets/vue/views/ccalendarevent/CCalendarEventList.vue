@@ -124,6 +124,7 @@ import { useCidReq } from "../../composables/cidReq"
 import cCalendarEventService from "../../services/ccalendarevent"
 import sessionRelUserService from "../../services/sessionRelUserService"
 import { useCidReqStore } from "../../store/cidReq"
+import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -153,7 +154,11 @@ const sessionState = reactive({
 
 const { cid, sid, gid } = useCidReq()
 
-cidReqStore.setCourseAndSessionById(cid, sid)
+if (cid) {
+  cidReqStore.setCourseAndSessionById(cid, sid)
+} else {
+  cidReqStore.resetCidReq()
+}
 
 async function getCalendarEvents({ startStr, endStr }) {
   const calendarEvents = await cCalendarEventService
@@ -352,6 +357,13 @@ function onCreateEventForm() {
   if (itemModel["@id"]) {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
+    if (cidReqStore.course) {
+      itemModel.resourceLinkListFromEntity = [{
+        cid: cidReqStore.course['id'],
+        visibility: RESOURCE_LINK_PUBLISHED,
+      }];
+    }
+
     store.dispatch("ccalendarevent/create", itemModel)
   }
 

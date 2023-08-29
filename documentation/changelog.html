@@ -109,6 +109,64 @@
     <table class="table" id="index">
 
     </table>
+
+    <div class="version" aria-label="1.11.24">
+        <a id="1.11.24"></a>
+        <h1>Chamilo 1.11.24 - </h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.22 is a security fix release on top of 1.11.22.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/">[city (country)]</a> is [description].</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2023-08-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a4561d7efa62a238e9e30765d3ec5aeefb9cfb61">a4561d7e</a>) Security: Add filter on messages forwarding</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>[2023-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/81886b211a3d8eb654509ff228ac76eace9baf10">81886b21</a> - <a href="https://task.beeznest.com/issues/20899">BT#20899</a>) Admin: Optimize users export to CSV/XML by displacing query complexity. Might improve users export speed tenfold on portals with >10k users.</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/e000b17b562987f608c09dda88ae1c5963013e1a">e000b17b</a> - <a href="https://task.beeznest.com/issues/20813">BT#20813</a>) Script: Add script to update course extra fields based on other extra field value</li>
+            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/29cf105944a301c1f64c8fe49020677490248646">29cf1059</a> - <a href="https://task.beeznest.com/issues/20813">BT#20813</a>) Script: Add script to update course extrafield based on specific rules</li>
+            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ef542a60d2ab697d17be0d77eed586c67011407">5ef542a6</a> - <a href="https://task.beeznest.com/issues/20836">BT#20836</a>) Forum: Add cron to send notification of updates in all the courses to the teachers or coaches during the last X days</li>        </ul>
+            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/649c3982fc518a83cc9384341277c403e7e9f07c">649c3982</a> - <a href="https://task.beeznest.com/issues/20460">BT#20460</a>) Webservice: Add possibility to get all users with filter status=* in get_users WS</li>        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2023-08-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/d4ed91abeeb4d3651cda5abbb5f11fdf93460136">d4ed91ab</a> - <a href="https://task.beeznest.com/issues/20899">BT#20899</a>) Admin: Optimize course export with extra fields to CSV/XML (adds "0" and "No" values when default values apply)</li>
+            <li>[2023-08-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/06635d83ba78b3d4ae455054d50e315cef446b03">06635d83</a> - <a href="https://task.beeznest.com/issues/20940">BT#20940</a>) Internal: Fix redirect when creating user and limit_session_admin_list_users is enabled</li>
+            <li>[2023-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/625ad5dba4540021dc3c649281de5229a3f220bd">625ad5db</a> - <a href="https://task.beeznest.com/issues/20952">BT#20952</a>) Display: Add icons for CSV/Excel export of users and groups</li>
+            <li>[2023-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/566675d8833b5547ca7e96bdf5a1c1e3ef83835e">566675d8</a> - <a href="https://task.beeznest.com/issues/20952">BT#20952</a>) Group: add icon to CSV export of student members of a group</li>
+            <li>[2023-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/96afc8a913466d4f507e485f31e73c7af6c20e63">96afc8a9</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Fix to save invited list changed</li>
+            <li>[2023-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/3fbd99d52ca7d2046ff681afa6885faa36912e02">3fbd99d5</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Refactor to save invitations and subscriptions</li>
+            <li>[2023-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/0fb496d46a47f2a0f4377e89cd8d85907c9a8b75">0fb496d4</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Fix to save max subscriptions when saving by ajax</li>
+            <li>[2023-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/de98acedb21e33155d2fcb9c426d72e0f5940369">de98aced</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Move code to function</li>
+            <li>[2023-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/73095bccea4a18b36f429650aa8775c557f659a2">73095bcc</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Fix save invitations or subscribers edit event</li>
+            <li>[2023-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/063b4a6b784613eb6231f4c8d64b975a11568dfc">063b4a6b</a> - <a href="https://task.beeznest.com/issues/20946">BT#20946</a>) Calendar: Allow choice between invitations and subscriptions</li>
+            <li>[2023-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/421461d0e1287203a8ada72d724c8fad9b682e00">421461d0</a>) Internal: Optimize UserManager::get_extra_user_data() to avoid string concat when avoidable</li>
+            <li>[2023-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/4294a8d69e41e82016fe552393df8614850a0862">4294a8d6</a>) Internal: Optimize UserManager::get_extra_user_data() to avoid querying the database when avoidable</li>
+            <li>[2023-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/62a887f4dd936e4a43fbcf7c791afc5d5246e0e8">62a887f4</a>) Internal: Set strict requirement for PHP version 7.4</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>The Zoom plugin fails on one of the endpoints for reasons that seem to be on the Zoom side.</li>
+        </ul>
+    </div>
+
+
     <div class="version" aria-label="1.11.22">
         <a id="1.11.22"></a>
         <h1>Chamilo 1.11.22 - Morella, 3rd of August 2023</h1>

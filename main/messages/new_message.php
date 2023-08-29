@@ -199,7 +199,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     }
 
-    if (isset($_GET['forward_id'])) {
+    if (isset($_GET['forward_id']) && MessageManager::isUserOwner(api_get_user_id(), (int) $_GET['forward_id'])) {
         $forwardId = (int) $_GET['forward_id'];
         $message_reply_info = MessageManager::get_message_by_id($forwardId);
         $attachments = MessageManager::getAttachmentLinkList($forwardId, MessageManager::MESSAGE_TYPE_INBOX);

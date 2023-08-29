@@ -106,7 +106,7 @@ class ExtraFieldType extends AbstractType
                     $defaultOptions['data'] = [];
                     if (!empty($value)) {
                         $parts = explode('::', $value);
-                        $coordinates = explode(',', $parts[1]);
+                        $coordinates = isset($parts[1]) ? explode(',', $parts[1]) : [];
                         $mapArray = [
                             'address' => $parts[0] ?? '',
                             'latitude' => $coordinates[0] ?? '',

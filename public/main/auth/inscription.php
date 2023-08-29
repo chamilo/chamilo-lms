@@ -589,7 +589,9 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    if (!empty($value['field_value'])) {
+                        echo '<h3>' . $value['display_text'] . '</h3><br />' . $value['field_value'] . '<br />';
+                    }
                 }
             } else {
                 echo get_lang('Coming soon...');
@@ -627,6 +629,7 @@ $blockButton = false;
 $termActivated = false;
 $showTerms = false;
 // Terms and conditions
+$infoMessage = '';
 if ('true' === api_get_setting('allow_terms_conditions')) {
     if (!api_is_platform_admin()) {
         if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
@@ -643,25 +646,21 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
 
                 if (false === $termActivated) {
                     $blockButton = true;
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('Term activated is needed description'),
+                    $infoMessage = Display::return_message(
+                            get_lang('The terms and conditions have not yet been validated by your tutor'),
                             'warning',
-                            false
-                        )
-                    );
+                            true
+                        );
                 }
 
                 if (false === $blockButton) {
                     if (1 !== (int) $userInfo['profile_completed']) {
                         $blockButton = true;
-                        Display::addFlash(
-                            Display::return_message(
-                                get_lang('Term your profile is not completed'),
+                        $infoMessage .= Display::return_message(
+                                get_lang('You must first fill your profile to enable the terms and conditions validation'),
                                 'warning',
-                                false
-                            )
-                        );
+                                true
+                            );
                     }
                 }
             }
@@ -686,26 +685,25 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             }
         }
 
-        // ofaj
-        if (false !== $termActivated) {
+        if (!empty($termPreview)) {
             // Version and language
             $form->addElement(
                 'hidden',
                 'legal_accept_type',
-                $termPreview['version'].':'.$termPreview['language_id']
+                $termPreview['version'] . ':' . $termPreview['language_id']
             );
             $form->addElement(
                 'hidden',
                 'legal_info',
-                $termPreview['id'].':'.$termPreview['language_id']
+                $termPreview['id'] . ':' . $termPreview['language_id']
             );
             if (1 == $termPreview['type']) {
                 $form->addElement(
                     'checkbox',
                     'legal_accept',
                     null,
-                    get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.
-                    get_lang('TermsAndConditions').'</a>'
+                    get_lang('IHaveReadAndAgree') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
+                    get_lang('TermsAndConditions') . '</a>'
                 );
                 $form->addRule(
                     'legal_accept',
@@ -719,9 +717,9 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
-                    //if ($value['variable'] === 'category') {
-                    $form->addLabel($value['display_text'], $value['value']);
-                    //}
+                    if (!empty($value['field_value'])) {
+                        $form->addLabel($value['display_text'], $value['field_value']);
+                    }
                 }
             }
         }
@@ -743,18 +741,19 @@ if (false === $userAlreadyRegisteredShowTerms) {
 
 
 if ($blockButton) {
-    if (false !== $termActivated) {
-        $form->addButton(
-            'submit',
-            get_lang('RegisterUserOk'),
-            'check',
-            'primary',
-            null,
-            null,
-            ['disabled' => 'disabled'],
-            false
-        );
+    if (!empty($infoMessage)) {
+        $form->addHtml($infoMessage);
     }
+    $form->addButton(
+        'submit',
+        get_lang('Register User Ok'),
+        'check',
+        'primary',
+        null,
+        null,
+        ['disabled' => 'disabled'],
+        false
+    );
 } else {
     $allow = ('true' === api_get_setting('platform.allow_double_validation_in_registration'));
 
@@ -784,7 +783,7 @@ if ($blockButton) {
         $form->addButton('submit', get_lang('Register'), '', 'primary');
         $form->addHtml('</div>');
     } else {
-        $form->addButtonNext(get_lang('Register User'));
+        $form->addButtonNext(get_lang('Register User Ok'));
     }
     $showTerms = true;
 }

@@ -383,7 +383,7 @@ class ExtraFieldValue extends Model
 
         // ofaj
         // Set user.profile_completed = 1
-        if ('user' === $this->type) {
+        /*if ('user' === $this->type) {
             if ('true' === api_get_setting('show_terms_if_profile_completed')) {
                 $justTermResults = [];
                 foreach ($resultsExist as $term => $value) {
@@ -410,7 +410,7 @@ class ExtraFieldValue extends Model
                 Database::query($sql);
                 Session::write('profile_completed_result', $justTermResults);
             }
-        }
+        }*/
     }
 
     /**

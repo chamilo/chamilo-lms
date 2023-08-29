@@ -82,41 +82,6 @@ class LegalRepository extends ServiceEntityRepository
     }
 
     /**
-     * Checks whether we already approved the last version term and condition.
-     *
-     * @return bool true if we pass false otherwise
-     */
-    public function checkTermCondition(User $user)
-    {
-        if ('true' === api_get_setting('allow_terms_conditions')) {
-            // Check if exists terms and conditions
-            if (0 === $this->countTerms()) {
-                return true;
-            }
-
-            $extraFieldValue = new ExtraFieldValue('user');
-            $data = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $user->getId(),
-                'legal_accept'
-            );
-
-            if (!empty($data) && isset($data['value']) && !empty($data['value'])) {
-                $result = $data['value'];
-                $userConditions = explode(':', $result);
-                $version = $userConditions[0];
-                $langId = (int) $userConditions[1];
-                $realVersion = $this->getLastVersion($langId);
-
-                return $version >= $realVersion;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
-
-    /**
      * Gets the number of terms and conditions available.
      *
      * @return int

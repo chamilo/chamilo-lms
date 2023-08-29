@@ -61,7 +61,7 @@ class LegalManager
             }
         }
 
-        if ($last['content'] != $content || !empty($changeList)) {
+        if ((isset($last['content']) && $last['content'] != $content) || !empty($changeList) || empty($last)) {
             $version = self::getLastVersion($language);
             $version++;
             $params = [
@@ -78,7 +78,7 @@ class LegalManager
             self::updateExtraFields($id, $extraFieldValuesToSave);
 
             return $id;
-        } elseif ($last['type'] != $type && $language == $last['language_id']) {
+        } elseif ((isset($last['type'] ) && $last['type'] != $type) && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
             $params = [
@@ -163,12 +163,15 @@ class LegalManager
                 WHERE language_id = $language
                 ORDER BY version DESC
                 LIMIT 1 ";
+
         $result = Database::query($sql);
         $result = Database::fetch_array($result, 'ASSOC');
 
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
         }
+
+
 
         return $result;
     }

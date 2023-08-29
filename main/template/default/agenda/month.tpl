@@ -719,6 +719,8 @@ $(function() {
 
 				$("#dialog-form").dialog({
 					buttons: {
+// Reduced options to simplify interface
+/*
                         '{{ "ExportiCalConfidential"|get_lang }}' : function() {
                             url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
                             window.location.href = url;
@@ -727,6 +729,7 @@ $(function() {
                             url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
                             window.location.href = url;
 						},
+*/
                         '{{ "ExportiCalPublic"|get_lang }}': function() {
                             url =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
                             window.location.href = url;
@@ -974,6 +977,8 @@ $(function() {
                 {% endif %}
 
                 var buttons = {
+// Reduced options to simplify interface
+/*
                     '{{"ExportiCalConfidential"|get_lang}}' : function() {
                         url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
                         window.location.href = url;
@@ -982,6 +987,7 @@ $(function() {
                         url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
                         window.location.href = url;
                     },
+*/
                     '{{"ExportiCalPublic"|get_lang}}': function() {
                         url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
                         window.location.href = url;

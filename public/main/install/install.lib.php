@@ -365,7 +365,7 @@ function get_config_param_from_db($param = '')
  * @param string $databaseName
  * @param int    $port
  *
- * @return \Database
+ * @return void
  */
 function connectToDatabase(
     $host,
@@ -374,8 +374,7 @@ function connectToDatabase(
     $databaseName,
     $port = 3306
 ) {
-    $database = new \Database();
-    $database->connect(
+    Database::connect(
         [
             'driver' => 'pdo_mysql',
             'host' => $host,
@@ -385,8 +384,6 @@ function connectToDatabase(
             'dbname' => $databaseName,
         ]
     );
-
-    return $database;
 }
 
 /**
@@ -982,8 +979,7 @@ function display_database_settings_form(
 
     try {
         if ('update' === $installType) {
-            /** @var \Database $manager */
-            $manager = connectToDatabase(
+            connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
@@ -991,6 +987,7 @@ function display_database_settings_form(
                 $dbPortForm
             );
 
+            $manager = Database::getManager();
             $connection = $manager->getConnection();
             $connection->connect();
             $schemaManager = $connection->getSchemaManager();
@@ -1008,7 +1005,7 @@ function display_database_settings_form(
                 $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
-            $manager = connectToDatabase(
+            connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
@@ -1016,6 +1013,7 @@ function display_database_settings_form(
                 $dbPortForm
             );
 
+            $manager = Database::getManager();
             $schemaManager = $manager->getConnection()->createSchemaManager();
             $databases = $schemaManager->listDatabases();
             $databaseExists = in_array($dbNameForm, $databases);
@@ -1754,14 +1752,14 @@ function checkMigrationStatus(): array
     $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
     $dotenv->loadEnv($envFile);
 
-    $database = connectToDatabase(
+    connectToDatabase(
         $_ENV['DATABASE_HOST'],
         $_ENV['DATABASE_USER'],
         $_ENV['DATABASE_PASSWORD'],
         $_ENV['DATABASE_NAME'],
         $_ENV['DATABASE_PORT']
     );
-    $manager = $database->getManager();
+    $manager = Database::getManager();
 
     $connection = $manager->getConnection();
 

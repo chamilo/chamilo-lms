@@ -312,14 +312,14 @@ if (isset($_POST['step2'])) {
     // STEP 5 : CONFIGURATION SETTINGS
     if ('update' === $installType) {
         $db_name = $dbNameForm;
-        $database = connectToDatabase(
+        connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
             $dbNameForm,
             $dbPortForm
         );
-        $manager = $database->getManager();
+        $manager = Database::getManager();
 
         $tmp = get_config_param_from_db('platformLanguage');
         if (!empty($tmp)) {
@@ -461,14 +461,14 @@ if (isset($_POST['step2'])) {
     $current_step = 7;
 
     if ('update' === $installType) {
-        $database = connectToDatabase(
+        connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
             $dbNameForm,
             $dbPortForm
         );
-        $manager = $database->getManager();
+        $manager = Database::getManager();
         //$perm = api_get_permissions_for_new_directories();
         //$perm_file = api_get_permissions_for_new_files();
         // @todo fix permissions.
@@ -533,14 +533,14 @@ if (isset($_POST['step2'])) {
         set_file_folder_permissions();
         error_log("connectToDatabase as user $dbUsernameForm");
 
-        $database = connectToDatabase(
+        connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
             null,
             $dbPortForm
         );
-        $manager = $database->getManager();
+        $manager = Database::getManager();
         $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
         // Drop and create the database anyways
@@ -556,7 +556,7 @@ if (isset($_POST['step2'])) {
         $schemaManager->createDatabase($dbNameForm);
 
         error_log("Connect to database $dbNameForm with user $dbUsernameForm");
-        $database = connectToDatabase(
+        connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -564,7 +564,7 @@ if (isset($_POST['step2'])) {
             $dbPortForm
         );
 
-        $manager = $database->getManager();
+        $manager = Database::getManager();
         // Create .env.local file
         $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
         $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';

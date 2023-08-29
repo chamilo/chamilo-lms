@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
@@ -23,7 +22,7 @@ class Database
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\DBAL\Exception
      */
-    public function connect(array $params = [], string $entityRootPath = '')
+    public static function connect(array $params = [], string $entityRootPath = ''): void
     {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
@@ -35,7 +34,6 @@ class Database
         );
 
         $params['charset'] = 'utf8';
-        $sysPath = api_get_path(SYMFONY_SYS_PATH);
 
         // standard annotation reader
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
@@ -57,54 +55,6 @@ class Database
             $cachedAnnotationReader // our cached annotation reader
         );
 
-        AnnotationRegistry::registerLoader(
-            function ($class) use ($sysPath) {
-                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
-                $file = str_replace('Symfony/Component/Validator', '', $file);
-                $file = str_replace('Symfony\Component\Validator', '', $file);
-                $file = str_replace('Symfony/Component/Serializer', '', $file);
-
-                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
-
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-
-                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-
-                $fileToInclude = $sysPath.'vendor/symfony/serializer/'.$file;
-
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-            }
-        );
-
-        AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiResource.php'
-        );
-        AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiFilter.php'
-        );
-        AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiProperty.php'
-        );
-        AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiSubresource.php'
-        );
-
         $entityManager = EntityManager::create($params, $config, $evm);
 
         if (false === Type::hasType('uuid')) {
@@ -112,12 +62,9 @@ class Database
         }
 
         $connection = $entityManager->getConnection();
-        AnnotationRegistry::registerFile(
-            $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php'
-        );
 
-        $this->setConnection($connection);
-        $this->setManager($entityManager);
+        self::setConnection($connection);
+        self::setManager($entityManager);
     }
 
     public static function setManager(EntityManager $em)

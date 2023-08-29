@@ -119,11 +119,14 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->where('s.itemId = :itemId')
             ->andWhere('sf.variable = :variable')
             ->andWhere('sf.itemType = :itemType')
+            ->andWhere('s.fieldValue IS NOT NULL')
+            ->andWhere('s.fieldValue != :emptyString')
             ->orderBy('s.id', 'ASC')
             ->setMaxResults(1)
             ->setParameter('itemId', $itemId)
             ->setParameter('variable', 'legal_accept')
-            ->setParameter('itemType', 1);
+            ->setParameter('itemType', 1)
+            ->setParameter('emptyString', '');
 
         return $qb->getQuery()->getOneOrNullResult();
     }

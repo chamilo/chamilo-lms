@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class AccountController extends BaseController
     use ControllerTrait;
 
     #[Route('/edit', name: 'chamilo_core_account_edit', methods:['GET', 'POST'])]
-    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo): Response
+    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
     {
         $user = $this->getUser();
 
@@ -44,6 +45,9 @@ class AccountController extends BaseController
             if ($illustration) {
                 $illustrationRepo->addIllustration($user, $user, $illustration);
             }
+
+            $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('show_terms_if_profile_completed'));
+            $user->setProfileCompleted($showTermsIfProfileCompleted);
 
             $userRepository->updateUser($user);
             $this->addFlash('success', $this->trans('Updated'));

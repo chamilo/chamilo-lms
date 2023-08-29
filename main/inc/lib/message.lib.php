@@ -3486,4 +3486,24 @@ class MessageManager
             ->setMultiple(true)
         ;
     }
+
+    /**
+     * Reports whether the given user is sender or receiver of the given message
+     * @param int $userId
+     * @param int $messageId
+     * @return bool
+     */
+    public static function isUserOwner(int $userId, int $messageId)
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "SELECT id FROM $table
+          WHERE id = $messageId
+            AND (user_receiver_id = $userId OR user_sender_id = $userId)";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) === 1) {
+            return true;
+        }
+
+        return false;
+    }
 }

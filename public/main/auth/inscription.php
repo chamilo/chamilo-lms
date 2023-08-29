@@ -589,7 +589,9 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['field_value'].'<br />';
+                    if (!empty($value['field_value'])) {
+                        echo '<h3>' . $value['display_text'] . '</h3><br />' . $value['field_value'] . '<br />';
+                    }
                 }
             } else {
                 echo get_lang('Coming soon...');
@@ -715,7 +717,9 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
                 foreach ($values as $value) {
-                    $form->addLabel($value['display_text'], $value['field_value']);
+                    if (!empty($value['field_value'])) {
+                        $form->addLabel($value['display_text'], $value['field_value']);
+                    }
                 }
             }
         }
@@ -742,7 +746,7 @@ if ($blockButton) {
     }
     $form->addButton(
         'submit',
-        get_lang('RegisterUserOk'),
+        get_lang('Register User Ok'),
         'check',
         'primary',
         null,
@@ -779,7 +783,7 @@ if ($blockButton) {
         $form->addButton('submit', get_lang('Register'), '', 'primary');
         $form->addHtml('</div>');
     } else {
-        $form->addButtonNext(get_lang('Register User'));
+        $form->addButtonNext(get_lang('Register User Ok'));
     }
     $showTerms = true;
 }

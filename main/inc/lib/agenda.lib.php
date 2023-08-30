@@ -1414,6 +1414,38 @@ class Agenda
                 break;
         }
     }
+ 
+    public function exportEventMembersToCsv(int $id, $type = "Invitee")
+    {
+        if (false === api_get_configuration_value('agenda_event_subscriptions') && false === api_get_configuration_value('agenda_collective_invitations')) {
+            return;
+        }
+        if ('personal' !== $this->type) {
+            return;
+        }
+        if ($type === "Invitee") {
+            $members = self::getInviteesForPersonalEvent($id, AgendaEventInvitee::class);
+        } elseif ($type === "Subscriber") {
+            $members = self::getInviteesForPersonalEvent($id, AgendaEventSubscriber::class);
+        }
+        $data = [];
+        $data[] = [
+            'OfficialCode',
+            'Lastname',
+            'Firsname',
+            'Email',
+        ];
+        $count = 1;
+        foreach ($members as $member) {
+            $user = api_get_user_info($member['id']);
+            $data[$count][] = $user['official_code'];
+            $data[$count][] = $user['lastname'];
+            $data[$count][] = $user['firstname'];
+            $data[$count][] = $user['email'];
+            $count++;
+        }
+        return $data;
+    }
 
     public function subscribeCurrentUserToEvent(int $id)
     {

@@ -577,9 +577,11 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // HTTP Strict Transport Security is an excellent feature to support on your
 // site and strengthens your implementation of TLS by getting the User Agent
 // to enforce the use of HTTPS. Recommended value
-// "strict-transport-security: max-age=63072000; includeSubDomains; preload".
+// "strict-transport-security: max-age=63072000; includeSubDomains".
 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-//$_configuration['security_strict_transport'] = 'strict-transport-security: max-age=63072000; includeSubDomains; preload';
+// You can include the "preload" suffix, but this has consequences on the
+// top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/.
+//$_configuration['security_strict_transport'] = 'strict-transport-security: max-age=63072000; includeSubDomains';
 //
 // Content Security Policy is an effective measure to protect your site from
 // XSS attacks. By whitelisting sources of approved content, you can prevent

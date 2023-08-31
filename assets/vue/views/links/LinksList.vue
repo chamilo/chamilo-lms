@@ -38,8 +38,8 @@
     <div v-if="!linksWithoutCategory && !categories">
       <!-- Render the image and create button -->
       <EmptyState
-        icon="link"
         :summary="t('Add your first link to this course')"
+        icon="link"
       >
         <BaseButton
           :label="t('Add a link')"
@@ -70,11 +70,11 @@
             <LinkItem
               :link="link"
               @check="checkLink(link.iid, link.url)"
+              @delete="confirmDeleteLink(link)"
               @edit="editLink"
               @toggle="toggleVisibility"
               @move-up="moveUp(link.iid, link.position)"
               @move-down="moveDown(link.iid, link.position)"
-              @delete="confirmDeleteLink(link)"
             />
           </li>
         </ul>
@@ -97,23 +97,23 @@
             <div class="flex gap-2">
               <BaseButton
                 :label="t('Edit')"
-                type="black"
                 icon="edit"
                 size="small"
+                type="black"
                 @click="editCategory(category)"
               />
               <BaseButton
-                :label="t('Change visibility')"
-                type="black"
                 :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
+                :label="t('Change visibility')"
                 size="small"
+                type="black"
                 @click="toggleCategoryVisibility(category)"
               />
               <BaseButton
                 :label="t('Delete')"
-                type="danger"
                 icon="delete"
                 size="small"
+                type="danger"
                 @click="confirmDeleteCategory(category)"
               />
             </div>
@@ -129,11 +129,11 @@
             <LinkItem
               :link="link"
               @check="checkLink(link.iid, link.url)"
+              @delete="confirmDeleteLink(link)"
               @edit="editLink"
               @toggle="toggleVisibility"
               @move-up="moveUp(link.iid, link.position)"
               @move-down="moveDown(link.iid, link.position)"
-              @delete="confirmDeleteLink(link)"
             />
           </li>
         </ul>

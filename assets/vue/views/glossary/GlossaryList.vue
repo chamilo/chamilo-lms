@@ -20,8 +20,8 @@
         @click="exportGlossary"
       />
       <BaseButton
-        :label="view === 'table' ? t('List view') : t('Table view')"
         :icon="view === 'table' ? 'list' : 'table'"
+        :label="view === 'table' ? t('List view') : t('Table view')"
         type="black"
         @click="changeView(view)"
       />
@@ -36,8 +36,8 @@
 
     <BaseInputText
       v-model="searchTerm"
-      class="mb-4"
       :label="t('Search term...')"
+      class="mb-4"
       @update:model-value="debouncedSearch"
     />
 
@@ -77,17 +77,17 @@
       <GlossaryTermList
         v-if="view === 'list'"
         :glossaries="glossaries"
-        :search-term="searchTerm"
         :is-loading="isLoading"
-        @edit="editTerm($event)"
+        :search-term="searchTerm"
         @delete="confirmDeleteTerm($event)"
+        @edit="editTerm($event)"
       />
       <GlossaryTermTable
         v-else
         :glossaries="glossaries"
         :search-term="searchTerm"
-        @edit="editTerm($event)"
         @delete="confirmDeleteTerm($event)"
+        @edit="editTerm($event)"
       />
     </div>
 
@@ -143,7 +143,7 @@ const resourceLinkList = ref(
       cid: route.query.cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
-  ])
+  ]),
 )
 
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])

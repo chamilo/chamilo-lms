@@ -1,7 +1,7 @@
-import {ref} from "vue"
-import {useQuery} from "@vue/apollo-composable"
-import {GET_SESSION_REL_USER, GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser"
-import {DateTime} from 'luxon'
+import { ref } from "vue"
+import { useQuery } from "@vue/apollo-composable"
+import { GET_SESSION_REL_USER, GET_SESSION_REL_USER_CURRENT } from "../../../graphql/queries/SessionRelUser"
+import { DateTime } from "luxon"
 
 export function useSession(user, start, end, query) {
   let sessions = ref(null)
@@ -21,7 +21,7 @@ export function useSession(user, start, end, query) {
     }
 
     isLoading.value = true
-    const {result, loading} = useQuery(finalQuery, variables)
+    const { result, loading } = useQuery(finalQuery, variables)
     sessions.value = result
     return {
       sessions,

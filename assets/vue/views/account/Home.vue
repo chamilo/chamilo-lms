@@ -3,9 +3,9 @@
     <div class="flex mb-4">
       <Avatar
         :image="user.illustrationUrl + '?w=80&h=80&fit=crop'"
+        class="flex-none mr-2"
         shape="circle"
         size="large"
-        class="flex-none mr-2"
       />
       <div class="flex-1">
         <p class="text-body-1">
@@ -25,31 +25,31 @@
 
     <p>
       <router-link to="/resources/friends">
-        {{ t('My friends') }}
+        {{ t("My friends") }}
       </router-link>
     </p>
     <p>
       <router-link to="/resources/personal_files">
-        {{ t('My files') }}
+        {{ t("My files") }}
       </router-link>
     </p>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { computed } from "vue"
+import { useStore } from "vuex"
 
-import Avatar from 'primevue/avatar';
-import { useI18n } from 'vue-i18n';
+import Avatar from "primevue/avatar"
+import { useI18n } from "vue-i18n"
 
-const store = useStore();
+const store = useStore()
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const user = computed(() => store.getters['security/getUser']);
+const user = computed(() => store.getters["security/getUser"])
 
-function btnEditProfileOnClick () {
-  window.location = '/account/edit';
+function btnEditProfileOnClick() {
+  window.location = "/account/edit"
 }
 </script>

@@ -6,9 +6,9 @@
     >
       <EditLinks
         :item="item"
-        links-type="users"
-        :show-status="false"
         :show-share-with-user="false"
+        :show-status="false"
+        links-type="users"
       />
     </DocumentsForm>
     <Loading :visible="isLoading" />
@@ -16,23 +16,18 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex';
-import DocumentsForm from '../../components/documents/Form.vue';
-import Loading from '../../components/Loading.vue';
-import EditLinks from "../../components/resource_links/EditLinks.vue";
-import { useDatatableUpdate } from '../../composables/datatableUpdate';
-import { computed } from 'vue';
+import { useStore } from "vuex"
+import DocumentsForm from "../../components/documents/Form.vue"
+import Loading from "../../components/Loading.vue"
+import EditLinks from "../../components/resource_links/EditLinks.vue"
+import { useDatatableUpdate } from "../../composables/datatableUpdate"
+import { computed } from "vue"
 
-const store = useStore();
+const store = useStore()
 
-const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
-const {
-  item,
-  retrieve,
-  updateItemWithFormData,
-  isLoading,
-} = useDatatableUpdate('Documents');
+const { item, retrieve, updateItemWithFormData, isLoading } = useDatatableUpdate("Documents")
 
-retrieve();
+retrieve()
 </script>

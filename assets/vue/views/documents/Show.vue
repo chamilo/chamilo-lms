@@ -1,14 +1,24 @@
 <template>
   <div>
-    <Toolbar v-if="item && isCurrentTeacher" :handle-delete="del" :handle-edit="editHandler"></Toolbar>
+    <Toolbar
+      v-if="item && isCurrentTeacher"
+      :handle-delete="del"
+      :handle-edit="editHandler"
+    ></Toolbar>
 
-    <div v-if="item" class="flex flex-row">
+    <div
+      v-if="item"
+      class="flex flex-row"
+    >
       <div class="w-1/2">
         <p class="text-lg">
           {{ item["title"] }}
         </p>
 
-        <div v-if="item['resourceNode']['resourceFile']" class="flex justify-center">
+        <div
+          v-if="item['resourceNode']['resourceFile']"
+          class="flex justify-center"
+        >
           <div class="w-4/5">
             <q-img
               v-if="item['resourceNode']['resourceFile']['image']"
@@ -23,7 +33,12 @@
             </span>
 
             <span v-if="'text/html' === item['resourceNode']['resourceFile']['mimeType']">
-              <iframe :src="item['contentUrl']" border="0" height="100%" width="100%" />
+              <iframe
+                :src="item['contentUrl']"
+                border="0"
+                height="100%"
+                width="100%"
+              />
             </span>
 
             <!--            <span v-else>-->
@@ -37,7 +52,10 @@
             <!--              </span>-->
           </div>
         </div>
-        <div v-else class="flex justify-center">
+        <div
+          v-else
+          class="flex justify-center"
+        >
           <v-icon icon="mdi-folder" />
         </div>
       </div>
@@ -87,7 +105,10 @@
               </td>
               <td>
                 <div>
-                  <a :href="item['downloadUrl']" class="btn btn--primary">
+                  <a
+                    :href="item['downloadUrl']"
+                    class="btn btn--primary"
+                  >
                     <v-icon icon="mdi-file-download" />
                     {{ $t("Download file") }}
                   </a>
@@ -109,15 +130,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { mapFields } from "vuex-map-fields";
-import Loading from "../../components/Loading.vue";
-import ShowMixin from "../../mixins/ShowMixin";
-import Toolbar from "../../components/Toolbar.vue";
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import Loading from "../../components/Loading.vue"
+import ShowMixin from "../../mixins/ShowMixin"
+import Toolbar from "../../components/Toolbar.vue"
 
-import ShowLinks from "../../components/resource_links/ShowLinks.vue";
+import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 
-const servicePrefix = "Documents";
+const servicePrefix = "Documents"
 
 export default {
   name: "DocumentsShow",
@@ -146,5 +167,5 @@ export default {
     }),
   },
   servicePrefix,
-};
+}
 </script>

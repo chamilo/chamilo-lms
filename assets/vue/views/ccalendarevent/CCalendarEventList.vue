@@ -358,10 +358,12 @@ function onCreateEventForm() {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
     if (cidReqStore.course) {
-      itemModel.resourceLinkListFromEntity = [{
-        cid: cidReqStore.course['id'],
-        visibility: RESOURCE_LINK_PUBLISHED,
-      }];
+      itemModel.resourceLinkListFromEntity = [
+        {
+          cid: cidReqStore.course["id"],
+          visibility: RESOURCE_LINK_PUBLISHED,
+        },
+      ]
     }
 
     store.dispatch("ccalendarevent/create", itemModel)

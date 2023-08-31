@@ -1,67 +1,69 @@
 <template>
-    <Toolbar
-        :handle-submit="onSendFormData"
-        :handle-reset="resetForm"
-    />
-    <DocumentsForm
-      ref="createForm"
-      :values="item"
-      :errors="violations"
-    />
+  <Toolbar
+    :handle-reset="resetForm"
+    :handle-submit="onSendFormData"
+  />
+  <DocumentsForm
+    ref="createForm"
+    :errors="violations"
+    :values="item"
+  />
 
-    <Loading :visible="isLoading" />
+  <Loading :visible="isLoading" />
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument.vue';
-import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import CreateMixin from '../../mixins/CreateMixin';
-import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import { mapActions } from "vuex"
+import { createHelpers } from "vuex-map-fields"
+import DocumentsForm from "../../components/documents/FormNewDocument.vue"
+import Loading from "../../components/Loading.vue"
+import Toolbar from "../../components/Toolbar.vue"
+import CreateMixin from "../../mixins/CreateMixin"
+import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 
-const servicePrefix = 'Documents';
+const servicePrefix = "Documents"
 
 const { mapFields } = createHelpers({
-  getterType: 'documents/getField',
-  mutationType: 'documents/updateField'
-});
+  getterType: "documents/getField",
+  mutationType: "documents/updateField",
+})
 
 export default {
-  name: 'DocumentsCreateFile',
+  name: "DocumentsCreateFile",
   servicePrefix,
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
+    DocumentsForm,
   },
   mixins: [CreateMixin],
   data() {
     return {
       item: {
         newDocument: true, // Used in FormNewDocument.vue to show the editor
-        filetype: 'file',
+        filetype: "file",
         parentResourceNodeId: null,
         resourceLinkList: null,
-        contentFile: null
+        contentFile: null,
       },
-    };
+    }
   },
   computed: {
-    ...mapFields(['error', 'isLoading', 'created', 'violations'])
+    ...mapFields(["error", "isLoading", "created", "violations"]),
   },
   created() {
-    this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinkList = JSON.stringify([{
-      gid: this.$route.query.gid,
-      sid: this.$route.query.sid,
-      cid: this.$route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    }]);
+    this.item.parentResourceNodeId = this.$route.params.node
+    this.item.resourceLinkList = JSON.stringify([
+      {
+        gid: this.$route.query.gid,
+        sid: this.$route.query.sid,
+        cid: this.$route.query.cid,
+        visibility: RESOURCE_LINK_PUBLISHED,
+      },
+    ])
   },
   methods: {
-    ...mapActions('documents', ['createWithFormData', 'reset'])
-  }
-};
+    ...mapActions("documents", ["createWithFormData", "reset"]),
+  },
+}
 </script>

@@ -2,23 +2,32 @@
   <div>
     <Toolbar
       v-if="item && isCurrentTeacher"
-      :handle-edit="editHandler"
       :handle-delete="del"
+      :handle-edit="editHandler"
     >
     </Toolbar>
 
-    <p class="text-lg" v-if="item">
-      {{ item['title'] }}
+    <p
+      v-if="item"
+      class="text-lg"
+    >
+      {{ item["title"] }}
     </p>
 
-    <div v-if="item" class="flex flex-row">
+    <div
+      v-if="item"
+      class="flex flex-row"
+    >
       <div class="w-1/2">
-        <div class ="flex justify-center" v-if="item['resourceNode']['resourceFile']">
+        <div
+          v-if="item['resourceNode']['resourceFile']"
+          class="flex justify-center"
+        >
           <div class="w-64">
             <q-img
-                spinner-color="primary"
-                v-if="item['resourceNode']['resourceFile']['image']"
-                :src="item['contentUrl'] + '&w=300'"
+              v-if="item['resourceNode']['resourceFile']['image']"
+              :src="item['contentUrl'] + '&w=300'"
+              spinner-color="primary"
             />
             <span v-else-if="item['resourceNode']['resourceFile']['video']">
               <video controls>
@@ -26,67 +35,80 @@
               </video>
             </span>
             <span v-else>
-                <q-btn
-                    class="btn btn--primary"
-                    :to="item['downloadUrl']"
-                >
-                  <v-icon icon="mdi-file-download"/>
-                  {{ $t('Download file') }}
-                </q-btn>
-              </span>
+              <q-btn
+                :to="item['downloadUrl']"
+                class="btn btn--primary"
+              >
+                <v-icon icon="mdi-file-download" />
+                {{ $t("Download file") }}
+              </q-btn>
+            </span>
           </div>
         </div>
-        <div class ="flex justify-center" v-else>
-          <v-icon icon="mdi-folder"/>
+        <div
+          v-else
+          class="flex justify-center"
+        >
+          <v-icon icon="mdi-folder" />
         </div>
       </div>
 
       <span class="w-1/2">
         <q-markup-table>
           <tbody>
-          <tr>
-            <td><strong>{{ $t('Author') }}</strong></td>
-            <td>
-              {{ item['resourceNode'].creator.username }}
-            </td>
-            <td></td>
-            <td />
-          </tr>
-          <tr>
-            <td><strong>{{ $t('Comment') }}</strong></td>
-            <td>
-              {{ item['comment'] }}
-            </td>
-          </tr>
-          <tr>
-            <td><strong>{{ $t('Created at') }}</strong></td>
-            <td>
-              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].createdAt) : ''}}
-            </td>
-            <td />
-          </tr>
-          <tr>
-            <td><strong>{{ $t('Updated at') }}</strong></td>
-            <td>
-              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].updatedAt) : ''}}
-            </td>
-            <td />
-          </tr>
-          <tr v-if="item['resourceNode']['resourceFile']">
-            <td><strong>{{ $t('File') }}</strong></td>
-            <td>
-              <div>
-                <a
-                    class="btn btn--primary"
+            <tr>
+              <td>
+                <strong>{{ $t("Author") }}</strong>
+              </td>
+              <td>
+                {{ item["resourceNode"].creator.username }}
+              </td>
+              <td></td>
+              <td />
+            </tr>
+            <tr>
+              <td>
+                <strong>{{ $t("Comment") }}</strong>
+              </td>
+              <td>
+                {{ item["comment"] }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>{{ $t("Created at") }}</strong>
+              </td>
+              <td>
+                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].createdAt) : "" }}
+              </td>
+              <td />
+            </tr>
+            <tr>
+              <td>
+                <strong>{{ $t("Updated at") }}</strong>
+              </td>
+              <td>
+                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].updatedAt) : "" }}
+              </td>
+              <td />
+            </tr>
+            <tr v-if="item['resourceNode']['resourceFile']">
+              <td>
+                <strong>{{ $t("File") }}</strong>
+              </td>
+              <td>
+                <div>
+                  <a
                     :href="item['downloadUrl']"
-                >
-                  <v-icon icon="mdi-file-download"/>
-                  {{ $t('Download file') }}
-                </a>
-              </div>
-            </td>
-            <td />
-          </tr>
+                    class="btn btn--primary"
+                  >
+                    <v-icon icon="mdi-file-download" />
+                    {{ $t("Download file") }}
+                  </a>
+                </div>
+              </td>
+              <td />
+            </tr>
           </tbody>
         </q-markup-table>
 
@@ -100,42 +122,42 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import Loading from '../../components/Loading.vue';
-import ShowMixin from '../../mixins/ShowMixin';
-import Toolbar from '../../components/Toolbar.vue';
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import Loading from "../../components/Loading.vue"
+import ShowMixin from "../../mixins/ShowMixin"
+import Toolbar from "../../components/Toolbar.vue"
 
-import ShowLinks from "../../components/resource_links/ShowLinks.vue";
+import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 
-const servicePrefix = 'PersonalFile';
+const servicePrefix = "PersonalFile"
 
 export default {
-  name: 'PersonalFileShow',
+  name: "PersonalFileShow",
   components: {
-      Loading,
-      Toolbar,
-      ShowLinks
+    Loading,
+    Toolbar,
+    ShowLinks,
   },
   mixins: [ShowMixin],
   computed: {
-    ...mapFields('personalfile', {
-      isLoading: 'isLoading'
+    ...mapFields("personalfile", {
+      isLoading: "isLoading",
     }),
-    ...mapGetters('personalfile', ['find']),
+    ...mapGetters("personalfile", ["find"]),
     ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'isCurrentTeacher': 'security/isCurrentTeacher',
+      isAuthenticated: "security/isAuthenticated",
+      isAdmin: "security/isAdmin",
+      isCurrentTeacher: "security/isCurrentTeacher",
     }),
   },
   methods: {
-    ...mapActions('personalfile', {
-      deleteItem: 'del',
-      reset: 'resetShow',
-      retrieve: 'loadWithQuery'
+    ...mapActions("personalfile", {
+      deleteItem: "del",
+      reset: "resetShow",
+      retrieve: "loadWithQuery",
     }),
   },
-  servicePrefix
-};
+  servicePrefix,
+}
 </script>

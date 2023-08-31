@@ -11,7 +11,7 @@
 
 <script setup>
 import GlossaryForm from "../../components/glossary/GlossaryForm.vue"
-import { useRouter, useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import { useI18n } from "vue-i18n"
 import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"

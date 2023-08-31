@@ -219,21 +219,21 @@ if (route.query.send_to_user) {
   isLoadingUser.value = true
 
   userService
-    .find('/api/users/' + parseInt(route.query.send_to_user))
+    .find("/api/users/" + parseInt(route.query.send_to_user))
     .then((response) => response.json())
     .then((user) => {
       sendToUser.value = user
 
       usersTo.value.push({
         name: user.fullName,
-        value: user['@id'],
+        value: user["@id"],
       })
 
       if (route.query.prefill) {
         const prefill = capitalize(route.query.prefill)
 
-        item.value.title = t(prefill + 'EndLPSubject')
-        item.value.content = t(prefill + 'EndLpDescription', [user.firstname, user.lastname])
+        item.value.title = t(prefill + "EndLPSubject")
+        item.value.content = t(prefill + "EndLpDescription", [user.firstname, user.lastname])
       }
     })
     .catch((e) => notification.showErrorNotification(e))

@@ -2257,10 +2257,10 @@ class ExtraField extends Model
 
             $form->addText(
                 'display_text',
-                [get_lang('Name'), $translateButton]
+                [get_lang('Title'), $translateButton]
             );
         } else {
-            $form->addText('display_text', get_lang('Name'));
+            $form->addText('display_text', get_lang('Title'));
         }
 
         // Field type
@@ -2274,7 +2274,14 @@ class ExtraField extends Model
             ['id' => 'field_type']
         );
         $form->addLabel(get_lang('Example'), '<div id="example">-</div>');
-        $form->addText('variable', get_lang('FieldLabel'), false);
+        $form->addElement(
+            'text',
+            'variable',
+            [
+                get_lang('SysId'),
+                get_lang('ExtraFieldIdComment')
+            ]
+        );
         $form->addElement(
             'text',
             'field_options',

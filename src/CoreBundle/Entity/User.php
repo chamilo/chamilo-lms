@@ -40,8 +40,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
 
-use function in_array;
-
 /**
  * EquatableInterface is needed to check if the user needs to be refreshed.
  */
@@ -72,15 +70,7 @@ use function in_array;
     ]
 )]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
-class User implements
-    UserInterface,
-    EquatableInterface,
-    ResourceInterface,
-    ResourceIllustrationInterface,
-    PasswordAuthenticatedUserInterface,
-    LegacyPasswordAuthenticatedUserInterface,
-    ExtraFieldItemInterface,
-    Stringable
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -792,6 +782,11 @@ class User implements
         $this->socialPostsFeedbacks = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->username;
+    }
+
     public static function getPasswordConstraints(): array
     {
         return [
@@ -830,11 +825,6 @@ class User implements
                   'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
               ))
           );*/
-    }
-
-    public function __toString(): string
-    {
-        return $this->username;
     }
 
     public function getUuid(): Uuid
@@ -1376,7 +1366,7 @@ class User implements
 
     public function hasGroup(string $name): bool
     {
-        return in_array($name, $this->getGroupNames(), true);
+        return \in_array($name, $this->getGroupNames(), true);
     }
 
     public function getGroupNames(): array
@@ -1697,7 +1687,7 @@ class User implements
 
     public function hasRole(string $role): bool
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
+        return \in_array(strtoupper($role), $this->getRoles(), true);
     }
 
     /**
@@ -1750,7 +1740,7 @@ class User implements
         if ($role === static::ROLE_DEFAULT || empty($role)) {
             return $this;
         }
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -2252,7 +2242,7 @@ class User implements
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
 
         return $this->getSessionRelCourseRelUsers()->matching($criteria)->map(
-            fn(SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession()
+            fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession()
         );
     }
 
@@ -2336,6 +2326,7 @@ class User implements
 
     /**
      * @param null|UserCourseCategory $userCourseCategory the user_course_category
+     *
      * @todo move in a repo
      * Find the largest sort value in a given UserCourseCategory
      * This method is used when we are moving a course to a different category
@@ -2343,7 +2334,6 @@ class User implements
      *
      * Used to be implemented in global function \api_max_sort_value.
      * Reimplemented using the ORM cache.
-     *
      */
     public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
     {
@@ -2354,7 +2344,7 @@ class User implements
         );
 
         return $categoryCourses->isEmpty() ? 0 : max(
-            $categoryCourses->map(fn($courseRelUser) => $courseRelUser->getSort())->toArray()
+            $categoryCourses->map(fn ($courseRelUser) => $courseRelUser->getSort())->toArray()
         );
     }
 
@@ -2362,7 +2352,7 @@ class User implements
     {
         $friends = $this->getFriendsByRelationType($relationType);
 
-        return $friends->exists(fn(int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
+        return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
     }
 
     /**
@@ -2417,7 +2407,7 @@ class User implements
     public function getSocialPostFeedbackBySocialPost(SocialPost $post): ?SocialPostFeedback
     {
         $filtered = $this->getSocialPostsFeedbacks()->filter(
-            fn(SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post
+            fn (SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post
         );
         if ($filtered->count() > 0) {
             return $filtered->first();

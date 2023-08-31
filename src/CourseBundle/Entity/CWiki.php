@@ -112,7 +112,7 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     /**
      * @var Collection<int, CWikiCategory>
      */
-    #[ORM\ManyToMany(targetEntity: CWikiCategory::class, inversedBy: "wikiPages")]
+    #[ORM\ManyToMany(targetEntity: CWikiCategory::class, inversedBy: 'wikiPages')]
     #[ORM\JoinTable(name: 'c_wiki_rel_category')]
     #[ORM\JoinColumn(name: 'wiki_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]

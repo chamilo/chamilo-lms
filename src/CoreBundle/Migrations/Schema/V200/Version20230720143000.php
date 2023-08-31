@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20230720143000 extends AbstractMigrationChamilo
 {
-
     public function getDescription(): string
     {
         return 'Migrate my_files of users to personal_files ';
@@ -33,14 +32,14 @@ final class Version20230720143000 extends AbstractMigrationChamilo
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
         /** @var User $userEntity */
         foreach ($q->toIterable() as $userEntity) {
-
             $id = $userEntity->getId();
             $path = "users/{$id}/";
 
             $variable = 'split_users_upload_directory';
             // Query the 'selected_value' from the 'settings_current' table where the 'variable' is 'split_users_upload_directory'
             $query = $em->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
-                ->setParameter('variable', $variable);
+                ->setParameter('variable', $variable)
+            ;
 
             // Get the result of the query (it should return a single row with the 'selected_value' column)
             $result = $query->getOneOrNullResult();
@@ -53,7 +52,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
             // If the 'split_users_upload_directory' setting is 'true', adjust the path accordingly
             if ('true' === $settingValueAsString) {
-                $path = 'users/' . substr((string) $id, 0, 1) . '/' . $id . '/';
+                $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
 
             $baseDir = $rootPath.'/app/upload/'.$path;
@@ -64,12 +63,11 @@ final class Version20230720143000 extends AbstractMigrationChamilo
             }
 
             // Get all the files in the 'my_files' directory
-            $myFilesDir = $baseDir . 'my_files/';
-            $files = glob($myFilesDir . '*');
+            $myFilesDir = $baseDir.'my_files/';
+            $files = glob($myFilesDir.'*');
 
             // $files now contains a list of all files in the 'my_files' directory
             foreach ($files as $file) {
-
                 if (!is_file($file)) {
                     continue;
                 }
@@ -85,17 +83,19 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                     ->where('n.title = :title')
                     ->andWhere('n.creator = :creator')
                     ->setParameter('title', $title)
-                    ->setParameter('creator', $id);
+                    ->setParameter('creator', $id)
+                ;
 
                 $result = $queryBuilder->getQuery()->getOneOrNullResult();
 
                 if ($result) {
                     // Skip creating a new entity and log a message
-                    error_log('MIGRATIONS :: $file -- ' . $file . ' (Skipped: Already exists) ...');
+                    error_log('MIGRATIONS :: $file -- '.$file.' (Skipped: Already exists) ...');
+
                     continue;
                 }
 
-                error_log('MIGRATIONS :: $file -- ' . $file . ' ...');
+                error_log('MIGRATIONS :: $file -- '.$file.' ...');
                 // Create a new PersonalFile entity if it doesn't already exist
                 $personalFile = new PersonalFile();
                 $personalFile->setTitle($title); // Set the file name as the title
@@ -109,9 +109,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 // Save the object to the database
                 $em->persist($personalFile);
                 $em->flush();
-
             }
         }
     }
-
 }

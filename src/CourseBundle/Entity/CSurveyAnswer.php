@@ -17,11 +17,11 @@ class CSurveyAnswer
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class)]
+    #[ORM\ManyToOne(targetEntity: CSurvey::class)]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestion::class, inversedBy: 'answers')]
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid')]
     protected CSurveyQuestion $question;
 
@@ -35,10 +35,10 @@ class CSurveyAnswer
     protected string $user;
 
     #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
-    protected $sessionId;
+    protected int $sessionId;
 
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
-    protected $lpItemId;
+    protected int $lpItemId;
 
     public function __construct()
     {
@@ -50,13 +50,6 @@ class CSurveyAnswer
         return $this->iid;
     }
 
-    public function setValue(int $value): self
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
     /**
      * Get value.
      *
@@ -65,6 +58,13 @@ class CSurveyAnswer
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function setValue(int $value): self
+    {
+        $this->value = $value;
+
+        return $this;
     }
 
     public function getSurvey(): CSurvey
@@ -91,13 +91,6 @@ class CSurveyAnswer
         return $this;
     }
 
-    public function setUser(string $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * Get user.
      *
@@ -106,6 +99,13 @@ class CSurveyAnswer
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getOptionId(): string

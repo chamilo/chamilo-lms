@@ -201,7 +201,6 @@ class ResourceListener
             ->setParent($parentNode)
         ;
 
-        // Set ResourceFormat.
         $txtTypes = [
             'events',
             'event_attachments',
@@ -214,7 +213,7 @@ class ResourceListener
             'usergroups',
         ];
         $resourceFormatRepo = $em->getRepository(ResourceFormat::class);
-        $formatName = (in_array($name, $txtTypes) ? 'txt' : 'html');
+        $formatName = (\in_array($name, $txtTypes, true) ? 'txt' : 'html');
         $resourceFormat = $resourceFormatRepo->findOneBy([
             'name' => $formatName,
         ]);

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
@@ -12,25 +13,22 @@ use Doctrine\ORM\Exception\NotSupported;
 use Mpdf\Mpdf;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExportCGlossaryAction
 {
-
     public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em, KernelInterface $kernel, TranslatorInterface $translator): Response
     {
         $format = $request->get('format');
         $cid = $request->request->get('cid');
         $sid = $request->request->get('sid');
 
-        if (!in_array($format, ['csv', 'xls', 'pdf'])) {
+        if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format');
         }
 
@@ -77,9 +75,9 @@ class ExportCGlossaryAction
     {
         $csvFilePath = $exportPath.'/glossary.csv';
         $csvContent = '';
-        /* @var CGlossary $item */
+        /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
-            $csvContent .= $item->getName() . ',' . $item->getDescription() . "\n";
+            $csvContent .= $item->getName().','.$item->getDescription()."\n";
         }
         file_put_contents($csvFilePath, $csvContent);
 
@@ -91,11 +89,11 @@ class ExportCGlossaryAction
         $excelFilePath = $exportPath.'/glossary.xlsx';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        /* @var CGlossary $item */
+        /** @var CGlossary $item */
         foreach ($glossaryItems as $index => $item) {
             $row = $index + 1;
-            $sheet->setCellValue('A' . $row, $item->getName());
-            $sheet->setCellValue('B' . $row, $item->getDescription());
+            $sheet->setCellValue('A'.$row, $item->getName());
+            $sheet->setCellValue('B'.$row, $item->getDescription());
         }
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
@@ -106,18 +104,18 @@ class ExportCGlossaryAction
 
     private function generatePdfFile(array $glossaryItems, string $exportPath, TranslatorInterface $translator): string
     {
-        $pdfFilePath = $exportPath . '/glossary.pdf';
+        $pdfFilePath = $exportPath.'/glossary.pdf';
 
         $mpdf = new Mpdf();
 
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table>';
         $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Definition').'</th></tr>';
-        /* @var CGlossary $item */
+        /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';
-            $html .= '<td>' . $item->getName(). '</td>';
-            $html .= '<td>' . $item->getDescription() . '</td>';
+            $html .= '<td>'.$item->getName().'</td>';
+            $html .= '<td>'.$item->getDescription().'</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';

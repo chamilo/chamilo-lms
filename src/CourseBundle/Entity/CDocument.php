@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: UpdateDocumentFileAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             validationContext: [
-                'groups' => ['media_object_create', 'document:write']
+                'groups' => ['media_object_create', 'document:write'],
             ],
             deserialize: false
         ),
@@ -61,13 +61,13 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'filetype' => [
                                         'type' => 'string',
-                                        'enum' => ['folder', 'file']
+                                        'enum' => ['folder', 'file'],
                                     ],
                                     'comment' => ['type' => 'string'],
                                     'contentFile' => ['type' => 'string'],
                                     'uploadFile' => [
                                         'type' => 'string',
-                                        'format' => 'binary'
+                                        'format' => 'binary',
                                     ],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [
@@ -78,15 +78,15 @@ use Symfony\Component\Validator\Constraints as Assert;
                                                 'visibility' => ['type' => 'integer'],
                                                 'cid' => ['type' => 'integer'],
                                                 'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer']
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                                'sid' => ['type' => 'integer'],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
@@ -100,7 +100,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'in' => 'query',
                         'required' => true,
                         'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer']
+                        'schema' => ['type' => 'integer'],
                     ],
                     [
                         'name' => 'cid',
@@ -108,8 +108,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => true,
                         'description' => 'Course id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
+                            'type' => 'integer',
+                        ],
                     ],
                     [
                         'name' => 'sid',
@@ -117,18 +117,18 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => false,
                         'description' => 'Session id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
-                    ]
-                ]
+                            'type' => 'integer',
+                        ],
+                    ],
+                ],
             ]
-        )
+        ),
     ],
     normalizationContext: [
-        'groups' => ['document:read', 'resource_node:read']
+        'groups' => ['document:read', 'resource_node:read'],
     ],
     denormalizationContext: [
-        'groups' => ['document:write']
+        'groups' => ['document:write'],
     ]
 )]
 #[ORM\Table(name: 'c_document')]
@@ -145,7 +145,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'resourceNode.title',
         'resourceNode.createdAt',
         'resourceNode.resourceFile.size',
-        'resourceNode.updatedAt'
+        'resourceNode.updatedAt',
     ]
 )]
 class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable

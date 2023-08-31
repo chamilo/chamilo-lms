@@ -7,13 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -50,7 +47,6 @@ final class Version20230215072918 extends AbstractMigrationChamilo
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
 
-
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -79,7 +75,8 @@ final class Version20230215072918 extends AbstractMigrationChamilo
                         $item
                             ->setUser($user)
                             ->setCourse($course)
-                            ->setLp($lp);
+                            ->setLp($lp)
+                        ;
                         if (!empty($session)) {
                             $item->setSession($session);
                         }

@@ -100,8 +100,8 @@ class ResourceNode implements Stringable
     #[Gedmo\SortableGroup]
     protected ResourceType $resourceType;
 
-    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ["persist", "remove"], inversedBy: "resourceNodes")]
-    #[ORM\JoinColumn(name: "resource_format_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ['persist', 'remove'], inversedBy: 'resourceNodes')]
+    #[ORM\JoinColumn(name: 'resource_format_id', referencedColumnName: 'id')]
     protected ResourceFormat $resourceFormat;
 
     /**
@@ -113,7 +113,6 @@ class ResourceNode implements Stringable
     /**
      * ResourceFile available file for this node.
      */
-
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
     #[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -121,7 +120,7 @@ class ResourceNode implements Stringable
 
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ["persist"], inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 

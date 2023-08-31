@@ -38,8 +38,15 @@ class LegacyListener
     private RouterInterface $router;
     private ParameterBagInterface $parameterBag;
 
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag, private readonly SettingsManager $settingsManager)
-    {
+    public function __construct(
+        Environment $twig,
+        TokenStorageInterface $tokenStorage,
+        UserRepository $userRepository,
+        AccessUrlRepository $accessUrlRepository,
+        RouterInterface $router,
+        ParameterBagInterface $parameterBag,
+        private readonly SettingsManager $settingsManager
+    ) {
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
         $this->userRepository = $userRepository;

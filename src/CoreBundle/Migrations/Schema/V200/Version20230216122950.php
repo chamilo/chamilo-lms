@@ -143,7 +143,6 @@ final class Version20230216122950 extends AbstractMigrationChamilo
                 'CREATE TABLE c_attendance_result_comment (iid INT AUTO_INCREMENT NOT NULL, attendance_sheet_id INT NOT NULL, user_id INT NOT NULL, comment LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", updated_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", author_user_id INT NOT NULL, INDEX attendance_sheet_id (attendance_sheet_id), INDEX user_id (user_id), PRIMARY KEY(iid)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
         }
-
     }
 
     public function down(Schema $schema): void

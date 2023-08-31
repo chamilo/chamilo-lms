@@ -30,8 +30,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use function in_array;
-
 #[ApiResource(
     types: ['https://schema.org/Course'],
     operations: [
@@ -57,12 +55,7 @@ use function in_array;
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
-class Course extends AbstractResource implements
-    ResourceInterface,
-    ResourceWithAccessUrlInterface,
-    ResourceIllustrationInterface,
-    ExtraFieldItemInterface,
-    Stringable
+class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;
@@ -384,6 +377,11 @@ class Course extends AbstractResource implements
         //$this->sharedSurveys = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     public static function getStatusList(): array
     {
         return [
@@ -393,11 +391,6 @@ class Course extends AbstractResource implements
             self::OPEN_WORLD => 'Open world',
             self::HIDDEN => 'Hidden',
         ];
-    }
-
-    public function __toString(): string
-    {
-        return $this->getTitle();
     }
 
     public function getTitle(): string
@@ -502,7 +495,8 @@ class Course extends AbstractResource implements
                 )
                 ->andWhere(
                     Criteria::expr()->eq('relationType', $subscription->getRelationType())
-                );
+                )
+            ;
             $relation = $this->users->matching($criteria);
 
             return $relation->count() > 0;
@@ -517,7 +511,8 @@ class Course extends AbstractResource implements
             ->setCourse($this)
             ->setUser($user)
             ->setRelationType($relationType)
-            ->setStatus($status);
+            ->setStatus($status)
+        ;
         $this->addSubscription($courseRelUser);
 
         return $this;
@@ -894,7 +889,7 @@ class Course extends AbstractResource implements
     {
         $activeVisibilityList = [self::REGISTERED, self::OPEN_PLATFORM, self::OPEN_WORLD];
 
-        return in_array($this->visibility, $activeVisibilityList, true);
+        return \in_array($this->visibility, $activeVisibilityList, true);
     }
 
     /**

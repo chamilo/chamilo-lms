@@ -13,13 +13,13 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: "resource_format")]
+#[ORM\Table(name: 'resource_format')]
 class ResourceFormat
 {
     use TimestampableEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
@@ -30,7 +30,7 @@ class ResourceFormat
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: "resourceFormat", cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceFormat', cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     public function __construct()
@@ -68,9 +68,6 @@ class ResourceFormat
         return $this->resourceNodes;
     }
 
-    /**
-     * @param Rollection<int, ResourceNode>
-     */
     public function setResourceNodes(Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;

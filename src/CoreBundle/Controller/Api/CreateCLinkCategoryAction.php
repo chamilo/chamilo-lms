@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -9,9 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use DateTime;
 use Doctrine\ORM\EntityManager;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class CreateCLinkCategoryAction extends BaseResourceFileAction

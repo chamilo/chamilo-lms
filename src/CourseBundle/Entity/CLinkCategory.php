@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: UpdateCLinkCategoryAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             validationContext: [
-                'groups' => ['media_object_create', 'link_category:write']
+                'groups' => ['media_object_create', 'link_category:write'],
             ],
             deserialize: false
         ),
@@ -70,10 +70,10 @@ use Symfony\Component\Validator\Constraints as Assert;
                                                 'visibility' => ['type' => 'integer'],
                                                 'cid' => ['type' => 'integer'],
                                                 'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer']
-                                            ]
-                                        ]
-                                    ]
+                                                'sid' => ['type' => 'integer'],
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 'required' => ['category_title'],
                             ],
@@ -93,7 +93,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'in' => 'query',
                         'required' => true,
                         'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer']
+                        'schema' => ['type' => 'integer'],
                     ],
                     [
                         'name' => 'cid',
@@ -101,8 +101,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => true,
                         'description' => 'Course id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
+                            'type' => 'integer',
+                        ],
                     ],
                     [
                         'name' => 'sid',
@@ -110,12 +110,12 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => false,
                         'description' => 'Session id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
-                    ]
-                ]
+                            'type' => 'integer',
+                        ],
+                    ],
+                ],
             ]
-        )
+        ),
     ],
     normalizationContext: [
         'groups' => ['link_category:read', 'resource_node:read'],

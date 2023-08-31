@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_attendance_sheet')]
-#[ORM\Index(name: 'presence', columns: ['presence'])]
+#[ORM\Index(columns: ['presence'], name: 'presence')]
 #[ORM\Entity]
 class CAttendanceSheet
 {
@@ -24,16 +24,16 @@ class CAttendanceSheet
     #[ORM\Column(name: 'presence', type: 'boolean', nullable: false)]
     protected bool $presence;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceCalendar::class, inversedBy: 'sheets')]
+    #[ORM\ManyToOne(targetEntity: CAttendanceCalendar::class, inversedBy: 'sheets')]
     #[ORM\JoinColumn(name: 'attendance_calendar_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendanceCalendar $attendanceCalendar;
 
     #[ORM\Column(name: 'signature', type: 'string', nullable: false)]
-    protected $signature;
+    protected string $signature;
 
     public function setPresence(bool $presence): self
     {
@@ -47,24 +47,14 @@ class CAttendanceSheet
         return $this->presence;
     }
 
-    /**
-     * Set signature.
-     *
-     * @return CAttendanceSheet
-     */
-    public function setSignature(string $signature)
+    public function setSignature(string $signature): static
     {
         $this->signature = $signature;
 
         return $this;
     }
 
-    /**
-     * Get signature.
-     *
-     * @return string
-     */
-    public function getSignature()
+    public function getSignature(): string
     {
         return $this->signature;
     }

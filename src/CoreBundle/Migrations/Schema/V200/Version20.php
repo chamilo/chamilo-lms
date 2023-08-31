@@ -389,7 +389,7 @@ class Version20 extends AbstractMigrationChamilo
         if ($table->hasColumn('value')) {
             $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
         }
-        
+
         // Drop unused columns
         $dropColumnsAndIndex = [
             'track_e_uploads' => [

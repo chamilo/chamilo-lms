@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -62,7 +64,8 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
         $publication
             ->setHasProperties($assignment->getIid())
             ->setViewProperties(true)
-            ->setUser($currentUser);
+            ->setUser($currentUser)
+        ;
 
         $this->entityManager->flush();
 
@@ -128,7 +131,8 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
             ->addLink(clone $courseLink)
             ->setStartDate($startDate)
             ->setEndDate($endDate)
-            ->setColor($color);
+            ->setColor($color)
+        ;
 
         $this->entityManager->persist($event);
         $this->entityManager->flush();

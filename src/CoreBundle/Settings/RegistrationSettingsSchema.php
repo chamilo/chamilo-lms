@@ -221,5 +221,4 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
 
         return $returnValue;
     }
-
 }

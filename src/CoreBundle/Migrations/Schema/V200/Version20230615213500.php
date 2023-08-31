@@ -58,7 +58,6 @@ final class Version20230615213500 extends AbstractMigrationChamilo
                         $em->persist($item);
                         $em->flush();
                     }
-
                 }
             }
         }

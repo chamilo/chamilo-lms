@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -26,8 +27,6 @@ use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-
-use function count;
 
 #[ApiResource(
     operations: [
@@ -282,7 +281,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected bool $sendSubscriptionNotification;
 
     /**
-     * Image illustrating the session (was extra field 'image' in 1.11)
+     * Image illustrating the session (was extra field 'image' in 1.11).
      */
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
@@ -317,6 +316,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $this->position = 0;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public static function getRelationTypeList(): array
     {
         return [self::STUDENT, self::DRH, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
@@ -330,11 +334,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             self::INVISIBLE => 'status_invisible',
             self::AVAILABLE => 'status_available',
         ];
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 
     public function getName(): string
@@ -412,7 +411,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
                 )
                 ->andWhere(
                     Criteria::expr()->eq('relationType', $subscription->getRelationType())
-                );
+                )
+            ;
             $relation = $this->getUsers()->matching($criteria);
 
             return $relation->count() > 0;
@@ -559,7 +559,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
                 )
                 ->andWhere(
                     Criteria::expr()->eq('session', $subscription->getSession())
-                );
+                )
+            ;
             $relation = $this->getSessionRelCourseRelUsers()->matching($criteria);
 
             return $relation->count() > 0;
@@ -665,7 +666,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function getGeneralCoaches(): ReadableCollection
     {
         return $this->getGeneralCoachesSubscriptions()
-            ->map(fn(SessionRelUser $subscription) => $subscription->getUser());
+            ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
+        ;
     }
 
     public function getGeneralCoachesSubscriptions(): Collection
@@ -683,7 +685,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
-            );
+            )
+        ;
 
         return $this->users->matching($criteria)->count() > 0;
     }
@@ -716,7 +719,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
-            );
+            )
+        ;
         $subscriptions = $this->users->matching($criteria);
 
         foreach ($subscriptions as $subscription) {
@@ -791,21 +795,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
-    {
-        $now = new Datetime('now');
-
-        if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
-            return true;
-        }
-
-        if (!empty($start) && $now >= $start) {
-            return true;
-        }
-
-        return !empty($end) && $now <= $end;
-    }
-
     public function isActiveForCoach(): bool
     {
         $start = $this->getCoachAccessStartDate();
@@ -872,7 +861,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $relCourse = $this->getCourseSubscription($course);
         if (null !== $relCourse) {
             $this->courses->removeElement($relCourse);
-            $this->setNbrCourses(count($this->courses));
+            $this->setNbrCourses(\count($this->courses));
 
             return true;
         }
@@ -891,7 +880,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             ->setCourse($course)
             ->setUser($user)
             ->setSession($this)
-            ->setStatus($status);
+            ->setStatus($status)
+        ;
 
         $this->addSessionRelCourseRelUser($userRelCourseRelSession);
 
@@ -919,8 +909,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         // If the session is registered in the course session list.
         $exists = $this->getCourses()
             ->exists(
-                fn($key, $element) => $course->getId() === $element->getCourse()->getId()
-            );
+                fn ($key, $element) => $course->getId() === $element->getCourse()->getId()
+            )
+        ;
 
         if ($exists) {
             $this->currentCourse = $course;
@@ -952,7 +943,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             )
             ->andWhere(
                 Criteria::expr()->eq('status', $status)
-            );
+            )
+        ;
 
         return $this->sessionRelCourseRelUsers->matching($criteria);
     }
@@ -1029,7 +1021,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function getSessionAdmins(): ReadableCollection
     {
         return $this->getGeneralAdminsSubscriptions()
-            ->map(fn(SessionRelUser $subscription) => $subscription->getUser());
+            ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
+        ;
     }
 
     public function getGeneralAdminsSubscriptions(): Collection
@@ -1047,7 +1040,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
-            );
+            )
+        ;
 
         return $this->users->matching($criteria)->count() > 0;
     }
@@ -1126,7 +1120,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
-            );
+            )
+        ;
 
         if (null !== $status) {
             $criteria->andWhere(Criteria::expr()->eq('status', $status));
@@ -1152,5 +1147,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function hasStudentInCourse(User $user, Course $course): bool
     {
         return $this->hasUserInCourse($user, $course, self::STUDENT);
+    }
+
+    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
+    {
+        $now = new Datetime('now');
+
+        if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
+            return true;
+        }
+
+        if (!empty($start) && $now >= $start) {
+            return true;
+        }
+
+        return !empty($end) && $now <= $end;
     }
 }

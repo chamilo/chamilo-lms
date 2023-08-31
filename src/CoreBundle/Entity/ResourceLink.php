@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -15,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
-
-use function in_array;
 
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
@@ -259,7 +258,7 @@ class ResourceLink implements Stringable
 
     public function setVisibility(int $visibility): self
     {
-        if (!in_array($visibility, self::getVisibilityList(), true)) {
+        if (!\in_array($visibility, self::getVisibilityList(), true)) {
             $message = sprintf(
                 'The visibility is not valid. Valid options: %s',
                 print_r(self::getVisibilityList(), true)

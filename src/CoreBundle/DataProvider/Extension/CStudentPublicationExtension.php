@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -18,8 +19,10 @@ class CStudentPublicationExtension implements QueryCollectionExtensionInterface
 {
     use CourseLinkExtensionTrait;
 
-    public function __construct(private readonly Security $security, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     public function applyToCollection(

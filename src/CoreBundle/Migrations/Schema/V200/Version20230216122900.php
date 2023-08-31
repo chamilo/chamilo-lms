@@ -1266,7 +1266,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $oldConfigPath = $rootPath.'/config/configuration.php';
-        $configFileLoaded = in_array($oldConfigPath, get_included_files());
+        $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
         if (!$configFileLoaded) {
             include_once $oldConfigPath;
         }
@@ -1275,7 +1275,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         $settingValue = $this->getConfigurationValue($variable, $_configuration);
         if (\is_array($settingValue)) {
             $selectedValue = json_encode($settingValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        } elseif (is_bool($settingValue)) {
+        } elseif (\is_bool($settingValue)) {
             $selectedValue = var_export($settingValue, true);
         } else {
             $selectedValue = (string) $settingValue;

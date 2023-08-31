@@ -49,16 +49,16 @@ class CWikiCategory
     #[ORM\Column(name: 'rgt', type: 'integer')]
     private int $rgt;
 
-    #[ORM\ManyToOne(targetEntity: CWikiCategory::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $root;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: CWikiCategory::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $parent;
 
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CWikiCategory::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     private Collection $children;
 

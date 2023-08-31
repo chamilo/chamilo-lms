@@ -10,7 +10,6 @@ use bbb;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,7 +94,7 @@ class PlatformConfigurationController extends AbstractController
                     'username' => $user->getUserIdentifier(),
                     'status' => $user->getStatus(),
                 ]),
-                'listingURL' => (new bbb('', '', true, $user->getId()))->getListingUrl()
+                'listingURL' => (new bbb('', '', true, $user->getId()))->getListingUrl(),
             ];
         }
 

@@ -35,13 +35,14 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
         $qb = $repo->getResourcesByCourse($course, $session);
         if ($q) {
             $qb->andWhere($qb->expr()->like('resource.name', ':name'))
-                ->setParameter('name', '%' . $q . '%');
+                ->setParameter('name', '%'.$q.'%')
+            ;
         }
         $glossaries = $qb->getQuery()->getResult();
 
         $dataResponse = [];
         if ($glossaries) {
-            /* @var CGlossary $item */
+            /** @var CGlossary $item */
             foreach ($glossaries as $item) {
                 $dataResponse[] =
                     [

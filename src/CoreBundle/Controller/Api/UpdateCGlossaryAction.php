@@ -10,9 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
-use DateTime;
 use Doctrine\ORM\EntityManager;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -40,9 +38,10 @@ class UpdateCGlossaryAction extends BaseResourceFileAction
         // Check if the term already exists
         $qb = $repo->getResourcesByCourse($course, $session)
             ->andWhere('resource.name = :name')
-            ->setParameter('name', $title);
+            ->setParameter('name', $title)
+        ;
         $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
-        if ($existingGlossaryTerm !== null && $existingGlossaryTerm->getIid() !== $glossary->getIid()) {
+        if (null !== $existingGlossaryTerm && $existingGlossaryTerm->getIid() !== $glossary->getIid()) {
             throw new BadRequestHttpException('The glossary term already exists.');
         }
 

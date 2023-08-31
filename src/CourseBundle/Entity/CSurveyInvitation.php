@@ -22,23 +22,23 @@ class CSurveyInvitation
     #[ORM\GeneratedValue]
     protected int $iid;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class)]
+    #[ORM\ManyToOne(targetEntity: CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class, inversedBy: 'invitations')]
+    #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'invitations')]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid')]
     protected CSurvey $survey;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'surveyInvitations')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'surveyInvitations')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
@@ -60,7 +60,7 @@ class CSurveyInvitation
     protected ?DateTime $answeredAt = null;
 
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
-    protected $lpItemId;
+    protected int $lpItemId;
 
     public function __construct()
     {
@@ -93,13 +93,6 @@ class CSurveyInvitation
         return $this;
     }
 
-    public function setInvitationCode(string $invitationCode): self
-    {
-        $this->invitationCode = $invitationCode;
-
-        return $this;
-    }
-
     /**
      * Get invitationCode.
      *
@@ -110,9 +103,9 @@ class CSurveyInvitation
         return $this->invitationCode;
     }
 
-    public function setInvitationDate(DateTime $invitationDate): self
+    public function setInvitationCode(string $invitationCode): self
     {
-        $this->invitationDate = $invitationDate;
+        $this->invitationCode = $invitationCode;
 
         return $this;
     }
@@ -127,9 +120,9 @@ class CSurveyInvitation
         return $this->invitationDate;
     }
 
-    public function setReminderDate(DateTime $reminderDate): self
+    public function setInvitationDate(DateTime $invitationDate): self
     {
-        $this->reminderDate = $reminderDate;
+        $this->invitationDate = $invitationDate;
 
         return $this;
     }
@@ -144,9 +137,9 @@ class CSurveyInvitation
         return $this->reminderDate;
     }
 
-    public function setAnswered(int $answered): self
+    public function setReminderDate(DateTime $reminderDate): self
     {
-        $this->answered = $answered;
+        $this->reminderDate = $reminderDate;
 
         return $this;
     }
@@ -159,6 +152,13 @@ class CSurveyInvitation
     public function getAnswered()
     {
         return $this->answered;
+    }
+
+    public function setAnswered(int $answered): self
+    {
+        $this->answered = $answered;
+
+        return $this;
     }
 
     public function getAnsweredAt(): DateTime
@@ -210,6 +210,16 @@ class CSurveyInvitation
     }
 
     /**
+     * Get LpItemId.
+     *
+     * @return int
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
+    }
+
+    /**
      * Set LpItemId.
      *
      * @param int $lpItemId
@@ -221,15 +231,5 @@ class CSurveyInvitation
         $this->lpItemId = $lpItemId;
 
         return $this;
-    }
-
-    /**
-     * Get LpItemId.
-     *
-     * @return int
-     */
-    public function getLpItemId()
-    {
-        return $this->lpItemId;
     }
 }

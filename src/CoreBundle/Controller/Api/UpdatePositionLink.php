@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\EntityManager;

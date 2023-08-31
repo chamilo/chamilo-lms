@@ -19,7 +19,6 @@ use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManager;
-use DocumentManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20201212203625 extends AbstractMigrationChamilo
@@ -38,7 +37,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        /* @var CDocumentRepository $documentRepo */
+        /** @var CDocumentRepository $documentRepo */
         $documentRepo = $container->get(CDocumentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
         $attemptRepo = $em->getRepository(TrackEAttempt::class);

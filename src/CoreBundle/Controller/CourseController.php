@@ -81,7 +81,7 @@ class CourseController extends ToolBaseController
             'course' === $settingsManager->getSetting('load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
-            $extraValue  = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
+            $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
             if (!empty($extraValue['value'])) {
                 $result = $extraValue['value'];
                 $userConditions = explode(':', $result);
@@ -101,7 +101,8 @@ class CourseController extends ToolBaseController
             if (null !== $termsAndCondition) {
                 $redirect = true;
                 $allow = 'true' === Container::getSettingsManager()
-                        ->getSetting('course.allow_public_course_with_no_terms_conditions');
+                    ->getSetting('course.allow_public_course_with_no_terms_conditions')
+                ;
 
                 if (true === $allow &&
                     null !== $course->getVisibility() &&
@@ -621,9 +622,10 @@ class CourseController extends ToolBaseController
             ->setParameters([
                 'c_id' => $course->getId(),
                 'name' => 'course_homepage',
-                'session_id' => 0
+                'session_id' => 0,
             ])
-            ->getQuery();
+            ->getQuery()
+        ;
 
         $ctool = $query->getOneOrNullResult();
 
@@ -660,7 +662,6 @@ class CourseController extends ToolBaseController
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
     public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-
         $data = $request->getContent();
         $data = json_decode($data);
         $ctoolintroId = $data->iid;
@@ -708,7 +709,6 @@ class CourseController extends ToolBaseController
         );
 
         return new JsonResponse($responseData);
-
     }
 
     private function autoLaunch(): void

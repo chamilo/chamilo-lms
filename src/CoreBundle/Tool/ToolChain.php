@@ -191,7 +191,8 @@ class ToolChain
                     ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
-                    ->addCourseLink($course);
+                    ->addCourseLink($course)
+                ;
                 $course->addTool($courseTool);
             }
         }

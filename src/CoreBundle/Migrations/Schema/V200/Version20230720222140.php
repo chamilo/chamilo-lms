@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\DBAL\Connection;
@@ -51,7 +50,6 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 
             if (!empty($allUrls)) {
                 foreach ($allUrls as $url) {
-
                     // Define a regular expression to search for the "/upload/users" part, numeric values, and filename in the URL
                     $pattern = '/\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)/i';
 
@@ -62,12 +60,12 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                         $filename = $matches[3];
 
                         // Get the full file path
-                        $filePath = $rootPath . "/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
+                        $filePath = $rootPath."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
 
                         // Check if the path corresponds to a file
                         if (is_file($filePath)) {
                             // Output the user id, folder id, and filename
-                            error_log('User ID: ' . $userId . ', Folder ID: ' . $folderId . ', Filename: ' . $filename);
+                            error_log('User ID: '.$userId.', Folder ID: '.$folderId.', Filename: '.$filename);
                             $user = $userRepo->find($userId);
                             $personalFile = $personalRepo->getResourceByCreatorFromTitle(
                                 $filename,
@@ -78,7 +76,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                             $newUrl = $personalRepo->getResourceFileUrl($personalFile);
                             if (!empty($newUrl)) {
                                 // Perform the replacement of the old URL with the new URL in the content
-                                $content = preg_replace('/(src|href)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i', '$1="' . $newUrl . '"', $content);
+                                $content = preg_replace('/(src|href)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i', '$1="'.$newUrl.'"', $content);
                             }
                         }
                     }
@@ -90,9 +88,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                 // Persist the updated social post entity
                 $em->persist($socialPost);
                 $em->flush();
-
             }
         }
     }
-
 }

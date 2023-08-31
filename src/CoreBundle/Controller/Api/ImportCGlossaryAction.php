@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
@@ -8,17 +9,14 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Exception\NotSupported;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ImportCGlossaryAction
 {
-
     public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): Response
     {
         $file = $request->files->get('file');
@@ -42,7 +40,7 @@ class ImportCGlossaryAction
         }
 
         $data = [];
-        if ($fileType === 'csv') {
+        if ('csv' === $fileType) {
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
                 $header = fgetcsv($handle, 0, ';');
                 while (($row = fgetcsv($handle, 0, ';')) !== false) {
@@ -52,13 +50,14 @@ class ImportCGlossaryAction
                 }
                 fclose($handle);
             }
-        } elseif ($fileType === 'xls') {
+        } elseif ('xls' === $fileType) {
             $spreadsheet = IOFactory::load($file->getPathname());
             $sheet = $spreadsheet->getActiveSheet();
             $firstRow = true;
             foreach ($sheet->getRowIterator() as $row) {
                 if ($firstRow) {
                     $firstRow = false;
+
                     continue;
                 }
                 $cellIterator = $row->getCellIterator();
@@ -83,7 +82,7 @@ class ImportCGlossaryAction
             $qb = $repo->getResourcesByCourse($course, $session);
             $allGlossaries = $qb->getQuery()->getResult();
             if ($allGlossaries) {
-                /* @var CGlossary $item */
+                /** @var CGlossary $item */
                 foreach ($allGlossaries as $item) {
                     $termToDelete = $repo->find($item->getIid());
                     if (null !== $termToDelete) {
@@ -91,7 +90,6 @@ class ImportCGlossaryAction
                     }
                 }
             }
-
         }
 
         if ('true' === $update) {
@@ -99,10 +97,11 @@ class ImportCGlossaryAction
                 // Check if the term already exists
                 $qb = $repo->getResourcesByCourse($course, $session)
                     ->andWhere('resource.name = :name')
-                    ->setParameter('name', $termToUpdate);
-                /* @var CGlossary $existingGlossaryTerm */
+                    ->setParameter('name', $termToUpdate)
+                ;
+                /** @var CGlossary $existingGlossaryTerm */
                 $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
-                if ($existingGlossaryTerm !== null) {
+                if (null !== $existingGlossaryTerm) {
                     $existingGlossaryTerm->setDescription($descriptionToUpdate);
                     $repo->update($existingGlossaryTerm);
                     unset($data[$termToUpdate]);
@@ -113,8 +112,9 @@ class ImportCGlossaryAction
         foreach ($data as $term => $description) {
             $qb = $repo->getResourcesByCourse($course, $session)
                 ->andWhere('resource.name = :name')
-                ->setParameter('name', $term);
-            /* @var CGlossary $existingNewGlossaryTerm */
+                ->setParameter('name', $term)
+            ;
+            /** @var CGlossary $existingNewGlossaryTerm */
             $existingNewGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
             if (!$existingNewGlossaryTerm) {
                 $newGlossary = (new CGlossary())
@@ -127,9 +127,6 @@ class ImportCGlossaryAction
             }
         }
 
-        $response = new Response(json_encode($data), Response::HTTP_OK, ['Content-Type' => 'application/json']);
-
-        return $response;
+        return new Response(json_encode($data), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
-
 }

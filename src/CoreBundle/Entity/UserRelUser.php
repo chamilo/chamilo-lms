@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -30,16 +31,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(),
-        new Post(securityPostDenormalize: "is_granted('CREATE', object)")
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: [
         'groups' => [
             'user_rel_user:read',
             'timestampable_created:read',
-        ]
+        ],
     ],
     denormalizationContext: [
-        'groups' => ['user_rel_user:write']
+        'groups' => ['user_rel_user:write'],
     ],
     security: 'is_granted("ROLE_USER")'
 )]

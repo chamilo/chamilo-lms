@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-
 final class Version20201211114900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -42,7 +41,6 @@ final class Version20201211114900 extends AbstractMigrationChamilo
                     'ALTER TABLE c_survey_answer ADD c_lp_item_id INT NOT NULL'
                 );
             }
-
         }
 
         if ($schema->hasTable('c_survey_invitation')) {
@@ -143,8 +141,6 @@ final class Version20201211114900 extends AbstractMigrationChamilo
                 'ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945B12469DE2 FOREIGN KEY (category_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE'
             );
         }
-
-
     }
 
     public function down(Schema $schema): void

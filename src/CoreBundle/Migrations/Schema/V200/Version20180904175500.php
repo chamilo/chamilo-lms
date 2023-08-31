@@ -29,7 +29,6 @@ class Version20180904175500 extends AbstractMigrationChamilo
 
         $this->addSql('DELETE FROM track_e_exercises WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
-
         if (!$schema->hasTable('attempt_file')) {
             $this->addSql("CREATE TABLE attempt_file (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', attempt_id INT DEFAULT NULL, asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_4F22BDF0B191BE6B (attempt_id), INDEX IDX_4F22BDF05DA1941 (asset_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
             $this->addSql('ALTER TABLE attempt_file ADD CONSTRAINT FK_4F22BDF0B191BE6B FOREIGN KEY (attempt_id) REFERENCES track_e_attempt (id) ON DELETE CASCADE;');

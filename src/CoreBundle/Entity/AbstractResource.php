@@ -172,7 +172,8 @@ abstract class AbstractResource
             ->setVisibility($visibility)
             ->setCourse($course)
             ->setSession($session)
-            ->setGroup($group);
+            ->setGroup($group)
+        ;
 
         $rights = [];
         switch ($visibility) {
@@ -181,7 +182,8 @@ abstract class AbstractResource
                 $editorMask = ResourceNodeVoter::getEditorMask();
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
                 $rights[] = $resourceRight;
 
                 break;
@@ -196,7 +198,7 @@ abstract class AbstractResource
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
-                fn($key, $element) => $course === $element->getCourse() &&
+                fn ($key, $element) => $course === $element->getCourse() &&
                     $session === $element->getSession() &&
                     $group === $element->getGroup()
             );
@@ -277,7 +279,8 @@ abstract class AbstractResource
             ->setUser($user)
             ->setCourse($course)
             ->setSession($session)
-            ->setGroup($group);
+            ->setGroup($group)
+        ;
 
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
@@ -321,7 +324,8 @@ abstract class AbstractResource
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+        ;
 
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();

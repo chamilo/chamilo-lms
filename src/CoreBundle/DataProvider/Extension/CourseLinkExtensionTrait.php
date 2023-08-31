@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -8,8 +10,9 @@ use Symfony\Component\Security\Core\Security;
 
 trait CourseLinkExtensionTrait
 {
-    public function __construct(private readonly Security $security)
-    {
+    public function __construct(
+        private readonly Security $security
+    ) {
     }
 
     protected function addCourseLinkWithVisibilityConditions(
@@ -23,7 +26,8 @@ trait CourseLinkExtensionTrait
 
         $queryBuilder
             ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links');
+            ->innerJoin('node.resourceLinks', 'links')
+        ;
 
         if ($checkVisibility) {
             $this->addVisibilityCondition($queryBuilder);
@@ -37,7 +41,8 @@ trait CourseLinkExtensionTrait
         // Do not show deleted resources.
         $queryBuilder
             ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED);
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+        ;
 
         $allowDraft =
             $this->security->isGranted('ROLE_ADMIN') ||
@@ -46,7 +51,8 @@ trait CourseLinkExtensionTrait
         if (!$allowDraft) {
             $queryBuilder
                 ->andWhere('links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT);
+                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
+            ;
         }
     }
 
@@ -58,14 +64,16 @@ trait CourseLinkExtensionTrait
     ): void {
         $queryBuilder
             ->andWhere('links.course = :course')
-            ->setParameter('course', $courseId);
+            ->setParameter('course', $courseId)
+        ;
 
         if (empty($sessionId)) {
             $queryBuilder->andWhere('links.session IS NULL');
         } else {
             $queryBuilder
                 ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId);
+                ->setParameter('session', $sessionId)
+            ;
         }
 
         if (empty($groupId)) {
@@ -73,7 +81,8 @@ trait CourseLinkExtensionTrait
         } else {
             $queryBuilder
                 ->andWhere('links.group = :group')
-                ->setParameter('group', $groupId);
+                ->setParameter('group', $groupId)
+            ;
         }
     }
 }

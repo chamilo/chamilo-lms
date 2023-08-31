@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -29,10 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['session_id'], name: 'session_id')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CToolRepository::class)]
-class CTool extends AbstractResource implements
-    ResourceInterface,
-    ResourceShowCourseResourcesInSessionInterface,
-    Stringable
+class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[Groups(['ctool:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -50,7 +48,7 @@ class CTool extends AbstractResource implements
     protected ?bool $visibility = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'tools')]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Gedmo\SortableGroup]
     protected Course $course;
 

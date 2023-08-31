@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -36,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(security: "is_granted('EDIT', object.resourceNode)"),
         new Get(
             normalizationContext: [
-                'groups' => ['student_publication:read', 'student_publication:item:get']
+                'groups' => ['student_publication:read', 'student_publication:item:get'],
             ],
             security: "is_granted('VIEW', object.resourceNode)",
         ),
@@ -66,6 +67,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['c_student_publication:write'])]
+    public int $gradebookCategoryId = 0;
+
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToCalendar = false;
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -142,12 +151,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
     protected int $qualificatorId;
 
-    #[Groups(['c_student_publication:write'])]
-    public bool $addToGradebook = false;
-
-    #[Groups(['c_student_publication:write'])]
-    public int $gradebookCategoryId = 0;
-
     #[Assert\NotBlank]
     #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
@@ -165,9 +168,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
-
-    #[Groups(['c_student_publication:write'])]
-    public bool $addToCalendar = false;
 
     public function __construct()
     {
@@ -258,9 +258,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get postGroupId.
-     */
     public function getPostGroupId(): int
     {
         return $this->postGroupId;
@@ -528,20 +525,20 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         $userIdList = [];
 
         $reduce = $this->children
-            ->filter(function (CStudentPublication $child) {
-                return $child->postGroupId == $this->postGroupId;
+            ->filter(function (self $child) {
+                return $child->postGroupId === $this->postGroupId;
             })
-            ->reduce(function (int $accumulator, CStudentPublication $child) use (&$userIdList): int {
+            ->reduce(function (int $accumulator, self $child) use (&$userIdList): int {
                 $user = $child->getUser();
 
-                if (!in_array($user->getId(), $userIdList)) {
+                if (!\in_array($user->getId(), $userIdList, true)) {
                     $userIdList[] = $user->getId();
 
                     return $accumulator + 1;
                 }
 
                 return $accumulator;
-            });
+            })
         ;
 
         return $reduce ?: 0;

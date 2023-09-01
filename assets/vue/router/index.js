@@ -165,8 +165,12 @@ router.beforeEach((to, from, next) => {
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
 
-  const cid = parseInt(to.query?.cid ?? 0)
+  let cid = parseInt(to.query?.cid ?? 0)
   const sid = parseInt(to.query?.sid ?? 0)
+
+  if ("CourseHome" === to.name) {
+    cid = parseInt(to.params?.id ?? 0)
+  }
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)

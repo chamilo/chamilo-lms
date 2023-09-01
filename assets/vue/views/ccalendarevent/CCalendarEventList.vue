@@ -154,12 +154,6 @@ const sessionState = reactive({
 
 const { cid, sid, gid } = useCidReq()
 
-if (cid) {
-  cidReqStore.setCourseAndSessionById(cid, sid)
-} else {
-  cidReqStore.resetCidReq()
-}
-
 async function getCalendarEvents({ startStr, endStr }) {
   const calendarEvents = await cCalendarEventService
     .findAll({

@@ -305,10 +305,8 @@ import BaseChart from "../../components/basecomponents/BaseChart.vue"
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
-import { useCidReqStore } from "../../store/cidReq"
 
 const store = useStore()
-const cidReqStore = useCidReqStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
@@ -318,8 +316,6 @@ const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Docu
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
 const { isImage } = useFileUtils()
-
-cidReqStore.setCourseAndSessionById(cid, sid)
 
 const item = ref({})
 const usageData = ref({})

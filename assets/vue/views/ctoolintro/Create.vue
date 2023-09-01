@@ -26,7 +26,6 @@ import { ENTRYPOINT } from "../../config/entrypoint"
 import useNotification from "../../components/Notification"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
-import { useCidReqStore } from "../../store/cidReq"
 
 const servicePrefix = "ctoolintro"
 
@@ -52,7 +51,6 @@ export default {
     const router = useRouter()
     const { showNotification } = useNotification()
     const { t } = useI18n()
-    const cidReqStore = useCidReqStore()
 
     let id = route.params.id
     if (isEmpty(id)) {
@@ -60,8 +58,6 @@ export default {
     }
 
     const { cid } = useCidReq()
-
-    cidReqStore.setCourseAndSessionById(cid)
 
     let toolId = route.params.courseTool
     let ctoolId = route.query.ctoolId

@@ -284,9 +284,6 @@ const isCustomizing = ref(false)
 provide("isSorting", isSorting)
 provide("isCustomizing", isCustomizing)
 
-// Remove the course session state.
-cidReqStore.resetCidReq()
-
 const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]

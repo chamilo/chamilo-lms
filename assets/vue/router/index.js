@@ -33,6 +33,7 @@ import CourseHome from "../views/course/CourseHome.vue"
 import Index from "../pages/Index.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
+import { useCidReqStore } from "../store/cidReq"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -158,6 +159,19 @@ router.beforeEach((to, from, next) => {
   } else {
     //console.log('next');
     next() // make sure to always call next()!
+  }
+})
+
+router.beforeResolve(async (to) => {
+  const cidReqStore = useCidReqStore()
+
+  const cid = parseInt(to.query?.cid ?? 0)
+  const sid = parseInt(to.query?.sid ?? 0)
+
+  if (cid) {
+    await cidReqStore.setCourseAndSessionById(cid, sid)
+  } else {
+    cidReqStore.resetCidReq()
   }
 })
 

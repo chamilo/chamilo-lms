@@ -175,7 +175,7 @@ router.beforeResolve(async (to) => {
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
   } else {
-    cidReqStore.resetCidReq()
+    cidReqStore.resetCid()
   }
 })
 

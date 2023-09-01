@@ -44,7 +44,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   })
 
-  const resetCidReq = () => {
+  const resetCid = () => {
     course.value = null
     session.value = null
   }
@@ -92,7 +92,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
 
     userIsCoach,
 
-    resetCidReq,
+    resetCid,
     setCourseAndSessionByIri,
     setCourseAndSessionById,
   }

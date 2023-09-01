@@ -2,7 +2,7 @@ export default {
   path: '/resources/messages',
   meta: { requiresAuth: true },
   name: 'messages',
-  component: () => import('../components/message/Layout.vue'),
+  component: () => import('../components/message/MessageLayout.vue'),
   redirect: { name: 'MessageList' },
   children: [
     {

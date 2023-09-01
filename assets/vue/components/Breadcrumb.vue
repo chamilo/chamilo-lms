@@ -127,26 +127,6 @@ const foo = computed(() => {
   const { path, matched } = route
   const lastItem = matched[matched.length - 1]
 
-  if (resourceNode.value) {
-    resourceNode.value.path.split("/").forEach((pathItem, i, pathItems) => {
-      let itemParts = pathItem.split("-")
-
-      if (0 === i) {
-        let firstParts = pathItems[i + 1].split("-")
-
-        items.push({
-          label: matched[0].name,
-          to: "/resources/document/" + firstParts[1] + "/?" + queryParams,
-        })
-      } else if (itemParts[0]) {
-        items.push({
-          label: itemParts[0],
-          to: "/resources/document/" + itemParts[1] + "/?" + queryParams,
-        })
-      }
-    })
-  }
-
   matched.forEach((pathItem) => {
     if (pathItem.path) {
       items.push({

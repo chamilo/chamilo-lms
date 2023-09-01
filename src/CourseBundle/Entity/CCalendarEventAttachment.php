@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -46,12 +46,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -63,20 +58,12 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Get filename.
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
@@ -93,9 +80,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();

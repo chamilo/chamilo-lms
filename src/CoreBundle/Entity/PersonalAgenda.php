@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * PersonalAgenda.
  */
 #[ORM\Table(name: 'personal_agenda')]
-#[ORM\Index(name: 'idx_personal_agenda_user', columns: ['user'])]
-#[ORM\Index(name: 'idx_personal_agenda_parent', columns: ['parent_event_id'])]
+#[ORM\Index(columns: ['user'], name: 'idx_personal_agenda_user')]
+#[ORM\Index(columns: ['parent_event_id'], name: 'idx_personal_agenda_parent')]
 #[ORM\Entity]
 class PersonalAgenda
 {
@@ -27,7 +27,7 @@ class PersonalAgenda
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'personalAgendas')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'personalAgendas')]
     #[ORM\JoinColumn(name: 'user', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
@@ -53,14 +53,14 @@ class PersonalAgenda
     #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -70,14 +70,9 @@ class PersonalAgenda
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getText(): string
     {
-        return $this->title;
+        return $this->text;
     }
 
     public function setText(string $text): self
@@ -87,9 +82,9 @@ class PersonalAgenda
         return $this;
     }
 
-    public function getText(): string
+    public function getDate(): ?DateTime
     {
-        return $this->text;
+        return $this->date;
     }
 
     public function setDate(DateTime $date): self
@@ -99,14 +94,9 @@ class PersonalAgenda
         return $this;
     }
 
-    /**
-     * Get date.
-     *
-     * @return DateTime
-     */
-    public function getDate()
+    public function getEndDate(): ?DateTime
     {
-        return $this->date;
+        return $this->endDate;
     }
 
     public function setEndDate(DateTime $value): self
@@ -116,12 +106,9 @@ class PersonalAgenda
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getEndDate()
+    public function getParentEventId(): ?int
     {
-        return $this->endDate;
+        return $this->parentEventId;
     }
 
     public function setParentEventId(int $parentEventId): self
@@ -131,14 +118,9 @@ class PersonalAgenda
         return $this;
     }
 
-    /**
-     * Get parentEventId.
-     *
-     * @return int
-     */
-    public function getParentEventId()
+    public function getAllDay(): int
     {
-        return $this->parentEventId;
+        return $this->allDay;
     }
 
     public function setAllDay(int $allDay): self
@@ -148,20 +130,7 @@ class PersonalAgenda
         return $this;
     }
 
-    /**
-     * Get allDay.
-     *
-     * @return int
-     */
-    public function getAllDay()
-    {
-        return $this->allDay;
-    }
-
-    /**
-     * @return string
-     */
-    public function getColor()
+    public function getColor(): ?string
     {
         return $this->color;
     }

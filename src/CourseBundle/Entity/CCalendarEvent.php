@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -41,8 +41,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: 'is_granted(\'ROLE_USER\')'),
-        new Post(controller: CreateCCalendarEventAction::class, securityPostDenormalize: "is_granted('CREATE', object)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(
+            controller: CreateCCalendarEventAction::class,
+            securityPostDenormalize: "is_granted('CREATE', object)"
+        ),
     ],
     normalizationContext: ['groups' => ['calendar_event:read', 'resource_node:read']],
     denormalizationContext: ['groups' => ['calendar_event:write']],
@@ -85,33 +88,44 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     protected ?CCalendarEvent $parentEvent = null;
 
     /**
-     * @var Collection|CCalendarEvent[]
+     * @var Collection<int, CCalendarEvent>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentEvent')]
+    #[ORM\OneToMany(mappedBy: 'parentEvent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CCalendarEventRepeat[]
+     * @var Collection<int, CCalendarEventRepeat>
      */
-    #[ORM\OneToMany(targetEntity: CCalendarEventRepeat::class, mappedBy: 'event', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'event',
+        targetEntity: CCalendarEventRepeat::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
     protected Collection $repeatEvents;
+
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'all_day', type: 'boolean', nullable: false)]
     protected bool $allDay;
+
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
+
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
+
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room = null;
+
     /**
-     * @var Collection|CCalendarEventAttachment[]
+     * @var Collection<int, CCalendarEventAttachment>
      */
-    #[ORM\OneToMany(targetEntity: 'CCalendarEventAttachment', mappedBy: 'event', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: 'CCalendarEventAttachment', cascade: ['persist', 'remove'])]
     protected Collection $attachments;
+
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean', nullable: false)]
@@ -155,12 +169,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get startDate.
-     *
-     * @return DateTime
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
@@ -172,12 +181,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get endDate.
-     *
-     * @return DateTime
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
@@ -211,17 +215,17 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     }
 
     /**
-     * @return Collection|CCalendarEvent[]
+     * @return Collection<int, CCalendarEvent>
      */
-    public function getChildren(): Collection|array
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
-     * @param Collection|CCalendarEvent[] $children
+     * @param Collection<int, CCalendarEvent> $children
      */
-    public function setChildren(Collection|array $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 
@@ -240,10 +244,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -267,10 +268,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getColor()
+    public function getColor(): ?string
     {
         return $this->color;
     }
@@ -283,9 +281,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, CCalendarEventAttachment>
      */
-    public function getAttachments()
+    public function getAttachments(): Collection
     {
         return $this->attachments;
     }
@@ -305,19 +303,19 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     }
 
     /**
-     * @return Collection|CCalendarEventRepeat[]
+     * @return Collection<int, CCalendarEventRepeat>
      */
-    public function getRepeatEvents(): Collection|array
+    public function getRepeatEvents(): Collection
     {
         return $this->repeatEvents;
     }
 
     /**
-     * @param Collection|CCalendarEventRepeat[] $repeatEvents
+     * @param Collection<int, CCalendarEventRepeat> $repeatEvents
      *
      * @return CCalendarEvent
      */
-    public function setRepeatEvents(Collection|array $repeatEvents)
+    public function setRepeatEvents(Collection $repeatEvents): static
     {
         $this->repeatEvents = $repeatEvents;
 
@@ -329,10 +327,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this->getIid();
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }

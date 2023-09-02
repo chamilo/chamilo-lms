@@ -1,304 +1,246 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import i18n from './i18n';
-import router from './router';
-import store from './store';
-import axios from 'axios'
-import { createPinia } from 'pinia';
+import { createApp } from "vue"
+import App from "./App.vue"
+import i18n from "./i18n"
+import router from "./router"
+import store from "./store"
+import axios from "axios"
+import { createPinia } from "pinia"
 
 // Services.
+import courseCategoryService from "./services/coursecategory"
+import documentsService from "./services/documents"
+import courseService from "./services/course"
+import personalFileService from "./services/personalfile"
+import resourceLinkService from "./services/resourcelink"
+import resourceNodeService from "./services/resourcenode"
+import messageService from "./services/message"
+import messageAttachmentService from "./services/messageattachment"
+import messageRelUserService from "./services/messagereluser"
+import messageTagService from "./services/messagetag"
+import userService from "./services/user"
+import userGroupService from "./services/usergroup"
+import userRelUserService from "./services/userreluser"
+import calendarEventService from "./services/ccalendarevent"
+import toolIntroService from "./services/ctoolintro"
+import pageService from "./services/page"
+import pageCategoryService from "./services/pagecategory"
+import sessionService from "./services/session"
+import socialPostService from "./services/socialpost"
 
-import courseCategoryService from './services/coursecategory';
-import documentsService from './services/documents';
-import courseService from './services/course';
-import personalFileService from './services/personalfile';
-import resourceLinkService from './services/resourcelink';
-import resourceNodeService from './services/resourcenode';
-import messageService from './services/message';
-import messageAttachmentService from './services/messageattachment';
-import messageRelUserService from './services/messagereluser';
-import messageTagService from "./services/messagetag";
-import userService from './services/user';
-import userGroupService from './services/usergroup';
-import userRelUserService from './services/userreluser';
-import calendarEventService from './services/ccalendarevent';
-import toolIntroService from './services/ctoolintro';
-import pageService from './services/page';
-import pageCategoryService from './services/pagecategory';
-import sessionService from './services/session';
-import socialPostService from './services/socialpost';
+import makeCrudModule from "./store/modules/crud"
 
-import makeCrudModule from './store/modules/crud';
-//import vuetify from './plugins/vuetify' // path to vuetify export
+import VueFlatPickr from "vue-flatpickr-component"
+import "flatpickr/dist/flatpickr.css"
+import "@mdi/font/css/materialdesignicons.css"
 
-//require('@fancyapps/fancybox');
-//require('@fancyapps/fancybox/dist/jquery.fancybox.css');
+import DashboardLayout from "./components/layout/DashboardLayout.vue"
+import EmptyLayout from "./components/layout/EmptyLayout.vue"
+// Tinymce
+import Editor from "./components/Editor"
 
-//Vue.use(Vuelidate);
+// Prime
+import PrimeVue from "primevue/config"
+import DataView from "primevue/dataview"
+import DataTable from "primevue/datatable"
+import Dropdown from "primevue/dropdown"
+import Toolbar from "primevue/toolbar"
+import DataViewLayoutOptions from "primevue/dataviewlayoutoptions"
 
-import Toast from 'vue-toastification';
-//import 'vue-toastification/dist/index.css';
-const toastOptions = {
-    transition: 'Vue-Toastification__fade',
-    maxToasts: 20,
-    newestOnTop: true
-};
-import VueFlatPickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
+import Dialog from "primevue/dialog"
+import InputText from "primevue/inputtext"
+import Button from "primevue/button"
+import Column from "primevue/column"
+import ColumnGroup from "primevue/columngroup"
+import ToastService from "primevue/toastservice"
+import ConfirmationService from "primevue/confirmationservice"
+
+import "primevue/resources/primevue.min.css"
+// import 'primeflex/primeflex.css';
+import "primeicons/primeicons.css"
+import Alpine from "alpinejs"
 
 // @todo move in a file:
 store.registerModule(
-    'course',
-    makeCrudModule({
-        service: courseService
-    })
-);
-
-store.registerModule(
-    'coursecategory',
-    makeCrudModule({
-        service: courseCategoryService
-    })
-);
-
-store.registerModule(
-    'documents',
-    makeCrudModule({
-        service: documentsService
-    })
-);
-
-store.registerModule(
-    'ccalendarevent',
-    makeCrudModule({
-        service: calendarEventService
-    })
-);
-
-store.registerModule(
-  'ctoolintro',
+  "course",
   makeCrudModule({
-    service: toolIntroService
-  })
-);
+    service: courseService,
+  }),
+)
 
 store.registerModule(
-    'page',
-    makeCrudModule({
-        service: pageService
-    })
-);
-
-store.registerModule(
-    'pagecategory',
-    makeCrudModule({
-        service: pageCategoryService
-    })
-);
-
-store.registerModule(
-    'session',
-    makeCrudModule({
-        service: sessionService
-    })
-);
-
-store.registerModule(
-    'personalfile',
-    makeCrudModule({
-        service: personalFileService
-    })
-);
-
-store.registerModule(
-    'resourcelink',
-    makeCrudModule({
-        service: resourceLinkService
-    })
-);
-
-store.registerModule(
-    'resourcenode',
-    makeCrudModule({
-        service: resourceNodeService
-    })
-);
-
-store.registerModule(
-    'message',
-    makeCrudModule({
-        service: messageService
-    })
-);
-
-store.registerModule(
-    'messageattachment',
-    makeCrudModule({
-        service: messageAttachmentService
-    })
-);
-
-store.registerModule(
-    'messagereluser',
-    makeCrudModule({
-        service: messageRelUserService
-    })
-);
-
-store.registerModule(
-  'messagetag',
+  "coursecategory",
   makeCrudModule({
-    service: messageTagService
-  })
-);
+    service: courseCategoryService,
+  }),
+)
 
 store.registerModule(
-    'userreluser',
-    makeCrudModule({
-        service: userRelUserService
-    })
-);
+  "documents",
+  makeCrudModule({
+    service: documentsService,
+  }),
+)
 
 store.registerModule(
-    'user',
-    makeCrudModule({
-        service: userService
-    })
-);
+  "ccalendarevent",
+  makeCrudModule({
+    service: calendarEventService,
+  }),
+)
 
 store.registerModule(
-    'usergroup',
-    makeCrudModule({
-        service: userGroupService
-    })
-);
+  "ctoolintro",
+  makeCrudModule({
+    service: toolIntroService,
+  }),
+)
 
 store.registerModule(
-    'socialpost',
-    makeCrudModule({
-        service: socialPostService
-    })
-);
+  "page",
+  makeCrudModule({
+    service: pageService,
+  }),
+)
 
-// Vuetify.
-import '@mdi/font/css/materialdesignicons.css';
-//import 'vuetify/styles'
-import { createVuetify } from 'vuetify';
-import { aliases, mdi } from 'vuetify/lib/iconsets/mdi'
+store.registerModule(
+  "pagecategory",
+  makeCrudModule({
+    service: pageCategoryService,
+  }),
+)
 
-const options = {
-//    components,
-//    directives,
-    defaults: {
-        global: {
-            ripple: false,
-        },
-        VSheet: {
-            elevation: 4,
-        },
-    },
-    icons: {
-        defaultSet: 'mdi',
-        aliases,
-        sets: {
-            mdi,
-        }
-    },
-    theme: {
-        defaultTheme: 'light'
-    },
-}
-const vuetify = createVuetify(options);
+store.registerModule(
+  "session",
+  makeCrudModule({
+    service: sessionService,
+  }),
+)
 
-import DashboardLayout from './components/layout/DashboardLayout.vue'
-import EmptyLayout from './components/layout/EmptyLayout.vue'
+store.registerModule(
+  "personalfile",
+  makeCrudModule({
+    service: personalFileService,
+  }),
+)
+
+store.registerModule(
+  "resourcelink",
+  makeCrudModule({
+    service: resourceLinkService,
+  }),
+)
+
+store.registerModule(
+  "resourcenode",
+  makeCrudModule({
+    service: resourceNodeService,
+  }),
+)
+
+store.registerModule(
+  "message",
+  makeCrudModule({
+    service: messageService,
+  }),
+)
+
+store.registerModule(
+  "messageattachment",
+  makeCrudModule({
+    service: messageAttachmentService,
+  }),
+)
+
+store.registerModule(
+  "messagereluser",
+  makeCrudModule({
+    service: messageRelUserService,
+  }),
+)
+
+store.registerModule(
+  "messagetag",
+  makeCrudModule({
+    service: messageTagService,
+  }),
+)
+
+store.registerModule(
+  "userreluser",
+  makeCrudModule({
+    service: userRelUserService,
+  }),
+)
+
+store.registerModule(
+  "user",
+  makeCrudModule({
+    service: userService,
+  }),
+)
+
+store.registerModule(
+  "usergroup",
+  makeCrudModule({
+    service: userGroupService,
+  }),
+)
+
+store.registerModule(
+  "socialpost",
+  makeCrudModule({
+    service: socialPostService,
+  }),
+)
 
 // Vue setup.
-const app = createApp(App);
+const app = createApp(App)
 
-// Quasar
-import { Quasar } from 'quasar'
-import quasarUserOptions from './quasar-user-options'
+app.use(ToastService)
+app.use(ConfirmationService)
+app.component("Dialog", Dialog)
+app.component("DataView", DataView)
+app.component("DataTable", DataTable)
+app.component("Dropdown", Dropdown)
+app.component("DataViewLayoutOptions", DataViewLayoutOptions)
+app.component("InputText", InputText)
+app.component("Button", Button)
+app.component("Column", Column)
+app.component("ColumnGroup", ColumnGroup)
+app.component("Toolbar", Toolbar)
+app.component("DashboardLayout", DashboardLayout)
+app.component("EmptyLayout", EmptyLayout)
+app.component("TinyEditor", Editor)
 
-// Tinymce
-import Editor from './components/Editor';
-
-// Prime
-import PrimeVue from 'primevue/config'
-import DataView from 'primevue/dataview';
-import DataTable from 'primevue/datatable';
-import Dropdown from 'primevue/dropdown';
-import Toolbar from 'primevue/toolbar';
-import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
-
-import Dialog from 'primevue/dialog';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';
-import ToastService from 'primevue/toastservice';
-import ConfirmationService from 'primevue/confirmationservice';
-
-import 'primevue/resources/primevue.min.css';
-// import 'primeflex/primeflex.css';
-import "primeicons/primeicons.css";
-
-app.use(ToastService);
-app.use(ConfirmationService);
-app.component('Dialog', Dialog);
-app.component('DataView', DataView);
-app.component('DataTable', DataTable);
-app.component('Dropdown', Dropdown);
-app.component('DataViewLayoutOptions', DataViewLayoutOptions);
-app.component('InputText', InputText);
-app.component('Button', Button);
-app.component('Column', Column);
-app.component('ColumnGroup', ColumnGroup);
-app.component('Toolbar', Toolbar);
-app.component('DashboardLayout', DashboardLayout);
-app.component('EmptyLayout', EmptyLayout);
-app.component('TinyEditor', Editor);
-
-app.config.globalProperties.axios = axios;
+app.config.globalProperties.axios = axios
 app.config.globalProperties.window = window
-const prettyBytes = require('pretty-bytes');
-const { DateTime } = require("luxon");
+
+const prettyBytes = require("pretty-bytes")
+const { DateTime } = require("luxon")
 
 app.config.globalProperties.$filters = {
-    /**
-     * @param {string} datetime
-     * @returns {string}
-     */
-    abbreviatedDatetime(datetime) {
-        return DateTime.fromISO(datetime).toLocaleString({ ...DateTime.DATETIME_MED, month: 'long' });
-    },
-    /**
-     * @param {string} datetime
-     * @returns {string}
-     */
-    relativeDatetime(datetime) {
-        return DateTime.fromISO(datetime).toRelative();
-    },
-    prettyBytes,
+  /**
+   * @param {string} datetime
+   * @returns {string}
+   */
+  abbreviatedDatetime(datetime) {
+    return DateTime.fromISO(datetime).toLocaleString({ ...DateTime.DATETIME_MED, month: "long" })
+  },
+  /**
+   * @param {string} datetime
+   * @returns {string}
+   */
+  relativeDatetime(datetime) {
+    return DateTime.fromISO(datetime).toRelative()
+  },
+  prettyBytes,
 }
 
-import Alpine from 'alpinejs'
 window.Alpine = Alpine
-Alpine.start();
+Alpine.start()
 
-const pinia = createPinia();
+const pinia = createPinia()
 
-app
-    .use(PrimeVue, {ripple: false})
-    .use(Quasar, quasarUserOptions)
-    .use(VueFlatPickr)
-    //.use(VuelidatePlugin)
-    // .use(vuetify)
-    .use(router)
-    .use(store)
-    .use(pinia)
-    .use(i18n)
-    .use(Toast, toastOptions)
-;
+app.use(PrimeVue, { ripple: false }).use(VueFlatPickr).use(router).use(store).use(pinia).use(i18n)
 
-app.mount('#app');
+app.mount("#app")

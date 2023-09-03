@@ -33,7 +33,7 @@ export const chamiloIconToClass = {
   "customize": "mdi mdi-format-paint",
   "delete": "mdi mdi-delete",
   "delete-multiple-user": "mdi mdi-account-multiple-minus-outline",
-  "dots-vertical": "",
+  "dots-vertical": "mdi mdi-dots-vertical",
   "down": "mdi mdi-arrow-down-right",
   "download": "mdi mdi-download-box",
   "drawing": "mdi mdi-drawing",

@@ -1,29 +1,4 @@
 <template>
-  <PrimeToolbar v-if="isAdmin">
-    <template #start>
-      <Button
-        :label="t('New page')"
-        class="p-button-outlined"
-        icon="mdi mdi-file-plus"
-        @click="goToAddItem"
-      />
-      <!--      <Button-->
-      <!--        :label="t('New category')"-->
-      <!--        class="p-button-outlined"-->
-      <!--        icon="mdi mdi-folder-plus"-->
-      <!--        @click="openNew"-->
-      <!--      />-->
-
-      <!--      <Button-->
-      <!--        :label="t('Delete selected')"-->
-      <!--        class="p-button-outlined p-button-danger"-->
-      <!--        :disabled="!selectedItems.length > 0"-->
-      <!--        icon="mdi mdi-delete"-->
-      <!--        @click="confirmDeleteMultiple"-->
-      <!--      />-->
-    </template>
-  </PrimeToolbar>
-
   <DataTable
     v-if="isAdmin"
     v-model:filters="filters"
@@ -226,10 +201,9 @@
 </template>
 
 <script setup>
-import PrimeToolbar from "primevue/toolbar"
 import { useStore } from "vuex"
 import { useDatatableList } from "../../composables/datatableList"
-import { computed, onMounted, ref } from "vue"
+import { computed, inject, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { useSecurityStore } from "../../store/securityStore"
@@ -239,15 +213,26 @@ const securityStore = useSecurityStore()
 
 const { t } = useI18n()
 
-const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem, deleteItem } =
+const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } =
   useDatatableList("Page")
 
 const toast = useToast()
+
+const layoutMenuItems = inject("layoutMenuItems")
 
 onMounted(() => {
   filters.value.loadNode = 0
 
   onUpdateOptions(options.value)
+
+  if (isAdmin.value) {
+    layoutMenuItems.value = [
+      {
+        label: t("New page"),
+        to: { name: "PageCreate" },
+      }
+    ]
+  }
 })
 
 const isAdmin = computed(() => store.getters["security/isAdmin"])

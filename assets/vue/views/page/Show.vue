@@ -1,133 +1,123 @@
 <template>
-  <div>
-    <Toolbar
-      v-if="item && isAdmin"
-      :handle-delete="del"
-      :handle-edit="editHandler"
-    >
-    </Toolbar>
+  <div v-if="item">
+    <p
+      class="text-body-1 font-semibold"
+      v-text="item.title"
+    />
 
-    <div
-      v-if="item"
-      class="flex flex-row"
-    >
-      <div class="w-1/2">
-        <p class="text-lg">
-          {{ item["title"] }}
-        </p>
-        <div class="flex justify-center">
-          <div class="w-4/5">
-            <div v-html="item['content']" />
-          </div>
+    <div class="flex flex-row gap-4">
+      <div class="w-2/3 flex justify-center">
+        <div class="w-4/5">
+          <div v-html="item.content" />
         </div>
       </div>
 
-      <span class="w-1/2">
-        <q-markup-table>
-          <tbody>
-            <tr>
-              <td>
-                <strong>{{ $t("Author") }}</strong>
-              </td>
-              <td>
-                {{ item["creator"]["username"] }}
-              </td>
-              <td></td>
-              <td />
-            </tr>
-            <tr>
-              <td>
-                <strong>{{ $t("Locale") }}</strong>
-              </td>
-              <td>
-                {{ item["locale"] }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>{{ $t("Enabled") }}</strong>
-              </td>
-              <td>
-                {{ item["enabled"] }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>{{ $t("Category") }}</strong>
-              </td>
-              <td>
-                {{ item["category"]["title"] }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>{{ $t("Created at") }}</strong>
-              </td>
-              <td>
-                {{ item["createdAt"] ? relativeDatetime(item["createdAt"]) : "" }}
-              </td>
-              <td />
-            </tr>
-            <tr>
-              <td>
-                <strong>{{ $t("Updated at") }}</strong>
-              </td>
-              <td>
-                {{ item["updatedAt"] ? relativeDatetime(item["updatedAt"]) : "" }}
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </span>
-    </div>
+      <div class="w-1/3">
+        <dl class="grid grid-cols-2">
+          <dt
+            v-t="'Author'"
+            class="font-semibold"
+          />
+          <dl v-text="item.creator.username" />
 
-    <Loading :visible="isLoading" />
+          <dt
+            v-t="'Locale'"
+            class="font-semibold"
+          />
+          <dl v-text="item.locale" />
+
+          <dt
+            v-t="'Enabled'"
+            class="font-semibold"
+          />
+          <dl v-t="item.enabled ? 'Yes' : 'No'" />
+
+          <dt
+            v-t="'Category'"
+            class="font-semibold"
+          />
+          <dl v-text="item.category.title" />
+
+          <dt
+            v-t="'Created at'"
+            class="font-semibold"
+          />
+          <dl v-text="item.createdAt ? relativeDatetime(item.createdAt) : ''" />
+
+          <dt
+            v-t="'Updated at'"
+            class="font-semibold"
+          />
+          <dl v-text="item.updatedAt ? relativeDatetime(item.updatedAt) : ''" />
+        </dl>
+      </div>
+    </div>
   </div>
+
+  <Loading :visible="isLoading" />
 </template>
 
-<script>
-import { mapActions, mapGetters } from "vuex"
-import { mapFields } from "vuex-map-fields"
+<script setup>
 import Loading from "../../components/Loading.vue"
-import ShowMixin from "../../mixins/ShowMixin"
-import Toolbar from "../../components/Toolbar.vue"
 import { useFormatDate } from "../../composables/formatDate"
-
-const servicePrefix = "Page"
+import { useConfirm } from "primevue/useconfirm"
+import { useRoute, useRouter } from "vue-router"
+import { inject, ref, watch } from "vue"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
+import pageService from "../../services/page"
+import { useNotification } from "../../composables/notification"
 
 const { relativeDatetime } = useFormatDate()
 
-export default {
-  name: "PageShow",
-  components: {
-    Loading,
-    Toolbar,
-  },
-  data() {
-    return {
-      relativeDatetime,
-    }
-  },
-  mixins: [ShowMixin],
-  computed: {
-    ...mapFields("page", {
-      isLoading: "isLoading",
-    }),
-    ...mapGetters("page", ["find"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
-  },
-  methods: {
-    ...mapActions("page", {
-      deleteItem: "del",
-      reset: "resetShow",
-      retrieve: "loadWithQuery",
-    }),
-  },
-  servicePrefix,
-}
+const securityStore = useSecurityStore()
+const { isAdmin } = storeToRefs(securityStore)
+const route = useRoute()
+const router = useRouter()
+
+const confirm = useConfirm()
+const notification = useNotification()
+
+const isLoading = ref(true)
+const item = ref()
+
+const layoutMenuItems = inject("layoutMenuItems")
+
+watch(item, () => {
+  if (!isAdmin.value) {
+    return
+  }
+
+  layoutMenuItems.value = [
+    {
+      label: "Edit page",
+      to: {
+        name: "PageUpdate",
+        query: { id: item.value["@id"] },
+      },
+    },
+
+    {
+      label: "Delete page",
+      command() {
+        confirm.require({
+          header: "Confirmation",
+          message: "Are you sure you want to delete it?",
+          async accept() {
+            await pageService.del(item.value)
+
+            await router.push({ name: "PageList" })
+          },
+        })
+      },
+    },
+  ]
+})
+
+pageService
+  .find(route.query.id)
+  .then((response) => response.json())
+  .then((json) => (item.value = json))
+  .catch((e) => notification.showErrorNotification(e))
+  .finally(() => (isLoading.value = false))
 </script>

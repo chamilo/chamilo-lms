@@ -61,7 +61,7 @@
           auto-width
         >
           <span v-if="props.row.resourceNode.resourceFile">
-            {{ $filters.prettyBytes(props.row.resourceNode.resourceFile.size) }}
+            {{ prettyBytes(props.row.resourceNode.resourceFile.size) }}
           </span>
         </q-td>
       </template>
@@ -89,6 +89,7 @@ import Toolbar from "../../components/Toolbar.vue"
 import ResourceIcon from "../../components/documents/ResourceIcon.vue"
 import { useRoute } from "vue-router"
 import moment from "moment"
+import prettyBytes from "pretty-bytes"
 
 /*const servicePrefix = 'documents';
 const { getters, actions } = list(servicePrefix);*/
@@ -120,6 +121,7 @@ export default {
       selected: [],
       selectMode: "multi",
       isBusy: false,
+      prettyBytes,
     }
   },
   created() {

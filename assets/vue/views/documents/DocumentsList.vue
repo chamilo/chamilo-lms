@@ -112,7 +112,7 @@
       <template #body="slotProps">
         {{
           slotProps.data.resourceNode.resourceFile
-            ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
             : ""
         }}
       </template>
@@ -305,6 +305,7 @@ import BaseChart from "../../components/basecomponents/BaseChart.vue"
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
+import prettyBytes from "pretty-bytes"
 
 const store = useStore()
 const route = useRoute()

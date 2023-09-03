@@ -84,7 +84,7 @@
       <template #body="slotProps">
         {{
           slotProps.data.resourceNode.resourceFile
-            ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
             : ""
         }}
       </template>
@@ -157,6 +157,7 @@ import DocumentsFilterForm from "../../components/documents/Filter"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
+import prettyBytes from "pretty-bytes"
 
 export default {
   name: "DocumentForHtmlEditor",
@@ -196,6 +197,7 @@ export default {
       filters: {},
       submitted: false,
       relativeDatetime,
+      prettyBytes,
     }
 
     return data

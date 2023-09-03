@@ -49,7 +49,7 @@
       <template #body="slotProps">
         {{
           slotProps.data.resourceNode.resourceFile
-            ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
             : ""
         }}
       </template>
@@ -88,6 +88,7 @@ import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
 import isEmpty from "lodash/isEmpty"
 import { useFormatDate } from "../../composables/formatDate"
+import prettyBytes from "pretty-bytes"
 
 export default {
   name: "PersonalFileShared",
@@ -124,6 +125,7 @@ export default {
       filters: { shared: 1, loadNode: 0 },
       submitted: false,
       relativeDatetime,
+      prettyBytes,
     }
   },
   created() {

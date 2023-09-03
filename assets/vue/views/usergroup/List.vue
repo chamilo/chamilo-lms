@@ -193,7 +193,7 @@
           field="sendDate"
         >
           <template #body="slotProps">
-            {{ $filters.relativeDatetime(slotProps.data.sendDate) }}
+            {{ relativeDatetime(slotProps.data.sendDate) }}
           </template>
         </Column>
 
@@ -333,6 +333,7 @@ import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_OUTBOX } from "../../components/message/constants"
+import { useFormatDate } from "../../composables/formatDate"
 
 export default {
   name: "UserGroupList",
@@ -347,6 +348,8 @@ export default {
   },
   mixins: [ListMixin],
   setup() {
+    const { relativeDatetime } = useFormatDate()
+
     const store = useStore()
     const filters = ref([])
     const filtersSent = ref([])
@@ -427,6 +430,7 @@ export default {
       tags,
       filters,
       title,
+      relativeDatetime,
     }
   },
   data() {

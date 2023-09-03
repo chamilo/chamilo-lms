@@ -70,7 +70,7 @@
             <div class="friend-options">
               <span
                 class="friend-options__time"
-                v-text="useRelativeDatetime(slotProps.data.createdAt)"
+                v-text="relativeDatetime(slotProps.data.createdAt)"
               />
               <BaseButton
                 icon="user-delete"
@@ -103,7 +103,7 @@ import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useConfirm } from "primevue/useconfirm"
 import userRelUserService from "../../services/userreluser"
-import { useRelativeDatetime } from "../../composables/formatDate"
+import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import UserRelUserRequestsList from "../../components/userreluser/UserRelUserRequestsList.vue"
 
@@ -116,6 +116,8 @@ const friendRequests = ref([])
 const waitingRequests = ref([])
 
 const notification = useNotification()
+
+const { relativeDatetime } = useFormatDate()
 
 const loadingFriends = ref(true)
 

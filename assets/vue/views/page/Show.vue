@@ -64,7 +64,7 @@
                 <strong>{{ $t("Created at") }}</strong>
               </td>
               <td>
-                {{ item["createdAt"] ? $luxonDateTime.fromISO(item["createdAt"]).toRelative() : "" }}
+                {{ item["createdAt"] ? relativeDatetime(item["createdAt"]) : "" }}
               </td>
               <td />
             </tr>
@@ -73,7 +73,7 @@
                 <strong>{{ $t("Updated at") }}</strong>
               </td>
               <td>
-                {{ item["updatedAt"] ? $luxonDateTime.fromISO(item["updatedAt"]).toRelative() : "" }}
+                {{ item["updatedAt"] ? relativeDatetime(item["updatedAt"]) : "" }}
               </td>
               <td />
             </tr>
@@ -92,14 +92,22 @@ import { mapFields } from "vuex-map-fields"
 import Loading from "../../components/Loading.vue"
 import ShowMixin from "../../mixins/ShowMixin"
 import Toolbar from "../../components/Toolbar.vue"
+import { useFormatDate } from "../../composables/formatDate"
 
 const servicePrefix = "Page"
+
+const { relativeDatetime } = useFormatDate()
 
 export default {
   name: "PageShow",
   components: {
     Loading,
     Toolbar,
+  },
+  data() {
+    return {
+      relativeDatetime,
+    }
   },
   mixins: [ShowMixin],
   computed: {

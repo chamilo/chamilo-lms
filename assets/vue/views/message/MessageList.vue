@@ -127,7 +127,7 @@
         </Column>
         <Column :header="t('Send date')">
           <template #body="slotProps">
-            {{ useRelativeDatetime(slotProps.data.sendDate) }}
+            {{ relativeDatetime(slotProps.data.sendDate) }}
           </template>
         </Column>
         <Column :header="t('Actions')">
@@ -150,7 +150,7 @@ import { computed, onMounted, ref } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import { useRelativeDatetime } from "../../composables/formatDate"
+import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
@@ -173,6 +173,8 @@ const confirm = useConfirm()
 const notification = useNotification()
 
 const messageRelUserStore = useMessageRelUserStore()
+
+const { relativeDatetime } = useFormatDate()
 
 const user = computed(() => store.getters["security/getUser"])
 

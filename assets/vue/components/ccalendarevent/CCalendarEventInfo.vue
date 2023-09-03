@@ -2,11 +2,11 @@
   <div class="flex flex-col gap-4">
     <h5 v-text="event.title" />
 
-    <p v-text="useAbbreviatedDatetime(event.startDate)" />
+    <p v-text="abbreviatedDatetime(event.startDate)" />
 
     <p
       v-if="event.endDate"
-      v-text="useAbbreviatedDatetime(event.endDate)"
+      v-text="abbreviatedDatetime(event.endDate)"
     />
 
     <hr />
@@ -23,9 +23,11 @@
 </template>
 
 <script setup>
-import { useAbbreviatedDatetime } from "../../composables/formatDate.js"
+import { useFormatDate } from "../../composables/formatDate"
 
 import ShowLinks from "../resource_links/ShowLinks"
+
+const { abbreviatedDatetime } = useFormatDate()
 
 // eslint-disable-next-line no-undef
 defineProps({

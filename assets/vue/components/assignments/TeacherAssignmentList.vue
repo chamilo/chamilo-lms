@@ -30,7 +30,7 @@
       field="sentDate"
     >
       <template #body="slotProps">
-        {{ useAbbreviatedDatetime(slotProps.data.sentDate) }}
+        {{ abbreviatedDatetime(slotProps.data.sentDate) }}
       </template>
     </Column>
     <Column
@@ -39,7 +39,7 @@
       field="assignment.expiresOn"
     >
       <template #body="slotProps">
-        {{ useAbbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
+        {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
       </template>
     </Column>
     <Column :header="t('Number submitted')">
@@ -114,7 +114,7 @@ import { onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useCidReq } from "../../composables/cidReq"
-import { useAbbreviatedDatetime } from "../../composables/formatDate"
+import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
@@ -136,6 +136,8 @@ const { cid, sid, gid } = useCidReq()
 const notification = useNotification()
 
 const confirm = useConfirm()
+
+const { abbreviatedDatetime } = useFormatDate()
 
 const sortFields = ref([{ field: "sentDate", order: -1 }])
 const loadParams = reactive({

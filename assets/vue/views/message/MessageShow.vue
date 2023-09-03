@@ -98,7 +98,7 @@
 
     <hr />
 
-    <p v-text="useRelativeDatetime(item.sendDate)" />
+    <p v-text="relativeDatetime(item.sendDate)" />
 
     <div v-html="item.content" />
 
@@ -147,7 +147,7 @@ import { useConfirm } from "primevue/useconfirm"
 import { useI18n } from "vue-i18n"
 import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
-import { useRelativeDatetime } from "../../composables/formatDate"
+import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 const confirm = useConfirm()
@@ -160,6 +160,8 @@ const user = store.getters["security/getUser"]
 const route = useRoute()
 const router = useRouter()
 const messageRelUserStore = useMessageRelUserStore()
+
+const { relativeDatetime } = useFormatDate()
 
 let id = route.params.id
 if (isEmpty(id)) {

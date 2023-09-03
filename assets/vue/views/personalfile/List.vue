@@ -99,7 +99,7 @@
       field="resourceNode.updatedAt"
     >
       <template #body="slotProps">
-        {{ $filters.relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
+        {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 
@@ -260,6 +260,7 @@ import DataFilter from "../../components/DataFilter"
 import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useI18n } from "vue-i18n"
+import { useFormatDate } from "../../composables/formatDate"
 
 export default {
   name: "PersonalFileList",
@@ -275,6 +276,8 @@ export default {
   mixins: [ListMixin],
   setup() {
     const { t } = useI18n()
+    const { relativeDatetime } = useFormatDate()
+
     const data = {
       sortBy: "title",
       sortDesc: false,
@@ -313,6 +316,7 @@ export default {
       item: {},
       filters: { shared: 0, loadNode: 1 },
       submitted: false,
+      relativeDatetime
     }
 
     return data

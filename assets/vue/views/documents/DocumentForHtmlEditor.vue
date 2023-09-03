@@ -72,7 +72,7 @@
       field="resourceNode.updatedAt"
     >
       <template #body="slotProps">
-        {{ $filters.relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
+        {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 
@@ -156,6 +156,7 @@ import DataFilter from "../../components/DataFilter"
 import DocumentsFilterForm from "../../components/documents/Filter"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useI18n } from "vue-i18n"
+import { useFormatDate } from "../../composables/formatDate"
 
 export default {
   name: "DocumentForHtmlEditor",
@@ -171,6 +172,8 @@ export default {
   mixins: [ListMixin],
   setup() {
     const { t } = useI18n()
+    const { relativeDatetime } = useFormatDate()
+
     const data = {
       sortBy: "title",
       sortDesc: false,
@@ -192,6 +195,7 @@ export default {
       item: {},
       filters: {},
       submitted: false,
+      relativeDatetime,
     }
 
     return data

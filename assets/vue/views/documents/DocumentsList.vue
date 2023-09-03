@@ -124,7 +124,7 @@
       field="resourceNode.updatedAt"
     >
       <template #body="slotProps">
-        {{ useRelativeDatetime(slotProps.data.resourceNode.updatedAt) }}
+        {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 
@@ -292,7 +292,7 @@ import { useI18n } from "vue-i18n"
 import { computed, onMounted, ref, watch } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
-import { useRelativeDatetime } from "../../composables/formatDate"
+import { useFormatDate } from "../../composables/formatDate"
 import axios from "axios"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -316,6 +316,8 @@ const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Docu
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
 const { isImage } = useFileUtils()
+
+const { relativeDatetime } = useFormatDate()
 
 const item = ref({})
 const usageData = ref({})

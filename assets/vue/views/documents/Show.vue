@@ -86,7 +86,7 @@
                 <strong>{{ $t("Created at") }}</strong>
               </td>
               <td>
-                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].createdAt) : "" }}
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
               </td>
               <td />
             </tr>
@@ -95,7 +95,7 @@
                 <strong>{{ $t("Updated at") }}</strong>
               </td>
               <td>
-                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].updatedAt) : "" }}
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].updatedAt) : "" }}
               </td>
               <td />
             </tr>
@@ -138,6 +138,8 @@ import Toolbar from "../../components/Toolbar.vue"
 
 import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 
+import { useFormatDate } from "../../composables/formatDate"
+
 const servicePrefix = "Documents"
 
 export default {
@@ -148,6 +150,13 @@ export default {
     ShowLinks,
   },
   mixins: [ShowMixin],
+  data() {
+    const { relativeDatetime } = useFormatDate()
+
+    return {
+      relativeDatetime
+    }
+  },
   computed: {
     ...mapFields("documents", {
       isLoading: "isLoading",

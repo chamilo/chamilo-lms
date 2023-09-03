@@ -12,10 +12,10 @@
       </q-item-label>
       <q-item-label v-html="comment.content" />
       <q-item-label
-        :title="$filters.abbreviatedDatetime(comment.sendDate)"
+        :title="abbreviatedDatetime(comment.sendDate)"
         caption
       >
-        {{ $filters.relativeDatetime(comment.sendDate) }}
+        {{ relativeDatetime(comment.sendDate) }}
       </q-item-label>
     </q-item-section>
 
@@ -33,6 +33,9 @@
 import {useStore} from "vuex"
 import {computed} from "vue"
 import WallActions from "./Actions"
+import { useFormatDate } from "../../composables/formatDate"
+
+const { abbreviatedDatetime, relativeDatetime } = useFormatDate()
 
 const props = defineProps({
   comment: {

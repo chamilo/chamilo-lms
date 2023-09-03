@@ -47,7 +47,7 @@
     </p>
 
     <p class="text-lg">
-      {{ $filters.relativeDatetime(item["sendDate"]) }}
+      {{ relativeDatetime(item["sendDate"]) }}
     </p>
 
     <h3 class="text-lg">{{ item.title }}</h3>
@@ -77,6 +77,7 @@ import { ENTRYPOINT } from "../../config/entrypoint"
 import useVuelidate from "@vuelidate/core"
 import { useRoute, useRouter } from "vue-router"
 import NotificationMixin from "../../mixins/NotificationMixin"
+import { useFormatDate } from "../../composables/formatDate"
 
 const servicePrefix = "usergroups"
 
@@ -95,6 +96,8 @@ export default {
     const find = store.getters["message/find"]
     const route = useRoute()
     const router = useRouter()
+
+    const { relativeDatetime } = useFormatDate()
 
     let id = route.params.id
     if (isEmpty(id)) {
@@ -233,6 +236,7 @@ export default {
       removeTagFromMessage,
       asyncFind,
       reply,
+      relativeDatetime,
     }
   },
   mixins: [ShowMixin, NotificationMixin],

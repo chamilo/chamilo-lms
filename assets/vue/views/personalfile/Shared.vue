@@ -61,7 +61,7 @@
       field="resourceNode.updatedAt"
     >
       <template #body="slotProps">
-        {{ $filters.relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
+        {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 
@@ -87,6 +87,7 @@ import ResourceIcon from "../../components/documents/ResourceIcon.vue"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
 import isEmpty from "lodash/isEmpty"
+import { useFormatDate } from "../../composables/formatDate"
 
 export default {
   name: "PersonalFileShared",
@@ -99,6 +100,8 @@ export default {
     DataFilter,
   },
   data() {
+    const { relativeDatetime } = useFormatDate()
+
     return {
       sortBy: "title",
       sortDesc: false,
@@ -120,6 +123,7 @@ export default {
       item: {},
       filters: { shared: 1, loadNode: 0 },
       submitted: false,
+      relativeDatetime,
     }
   },
   created() {

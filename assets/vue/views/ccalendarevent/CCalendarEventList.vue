@@ -76,7 +76,7 @@
           v-t="{
             path: 'From: {date}',
             args: {
-              date: useAbbreviatedDatetime(sessionState.sessionAsEvent.start),
+              date: abbreviatedDatetime(sessionState.sessionAsEvent.start),
             },
           }"
         />
@@ -85,7 +85,7 @@
           v-t="{
             path: 'Until: {date}',
             args: {
-              date: useAbbreviatedDatetime(sessionState.sessionAsEvent.end),
+              date: abbreviatedDatetime(sessionState.sessionAsEvent.end),
             },
           }"
         />
@@ -107,7 +107,7 @@ import { computed, reactive, ref, watch } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useConfirm } from "primevue/useconfirm"
-import { useAbbreviatedDatetime } from "../../composables/formatDate.js"
+import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 import Loading from "../../components/Loading.vue"
@@ -130,6 +130,8 @@ const store = useStore()
 const confirm = useConfirm()
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
+
+const { abbreviatedDatetime } = useFormatDate()
 
 const item = ref({})
 const dialog = ref(false)

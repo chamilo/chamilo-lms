@@ -26,7 +26,7 @@
           </div>
 
           <small>
-            {{ $filters.relativeDatetime(post.sendDate) }}
+            {{ relativeDatetime(post.sendDate) }}
           </small>
         </div>
 
@@ -93,6 +93,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
 import BaseCard from "../basecomponents/BaseCard.vue";
 import {SOCIAL_TYPE_PROMOTED_MESSAGE} from "./constants";
+import { useFormatDate } from "../../composables/formatDate"
 
 const props = defineProps({
   post: {
@@ -104,6 +105,8 @@ const props = defineProps({
 const emit = defineEmits(["post-deleted"]);
 
 const store = useStore();
+
+const { relativeDatetime } = useFormatDate()
 
 const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
 let comments = reactive([]);

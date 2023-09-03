@@ -79,7 +79,7 @@
                 <strong>{{ $t("Created at") }}</strong>
               </td>
               <td>
-                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].createdAt) : "" }}
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
               </td>
               <td />
             </tr>
@@ -88,7 +88,7 @@
                 <strong>{{ $t("Updated at") }}</strong>
               </td>
               <td>
-                {{ item["resourceNode"] ? $filters.relativeDatetime(item["resourceNode"].updatedAt) : "" }}
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].updatedAt) : "" }}
               </td>
               <td />
             </tr>
@@ -129,6 +129,7 @@ import ShowMixin from "../../mixins/ShowMixin"
 import Toolbar from "../../components/Toolbar.vue"
 
 import ShowLinks from "../../components/resource_links/ShowLinks.vue"
+import { useFormatDate } from "../../composables/formatDate"
 
 const servicePrefix = "PersonalFile"
 
@@ -138,6 +139,13 @@ export default {
     Loading,
     Toolbar,
     ShowLinks,
+  },
+  data () {
+    const { relativeDatetime } = useFormatDate()
+
+    return {
+      relativeDatetime
+    }
   },
   mixins: [ShowMixin],
   computed: {

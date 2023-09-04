@@ -1,54 +1,44 @@
 <template>
-  <q-card
-    v-if="page"
-    elevation="4"
-  >
-    <q-card-section>
-      <div class="text-h6">
-        {{ page.title }}
+  <BaseCard plain>
+    <template #header>
+      <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
+        <h6 v-text="page.title" />
+        <BaseButton
+          v-if="isAdmin"
+          icon="edit"
+          label="Edit"
+          type="black"
+          @click="handleClick(page)"
+        />
       </div>
-    </q-card-section>
+    </template>
 
-    <q-card-section>
-      <p v-html="page.content" />
-    </q-card-section>
-
-    <q-card-actions v-if="isAdmin">
-      <q-btn
-        v-close-popup
-        flat
-        label="Edit"
-        color="primary"
-        @click="handleClick(page)"
-      />
-    </q-card-actions>
-  </q-card>
+    <div v-html="page.content" />
+  </BaseCard>
 </template>
 
-<script>
+<script setup>
+import { useRouter } from "vue-router"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
+import BaseCard from "../basecomponents/BaseCard.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
-import {mapGetters} from "vuex";
-import {useRouter} from "vue-router";
-import {reactive, toRefs} from "vue";
+const router = useRouter()
+const securityStore = useSecurityStore()
+const { isAdmin } = storeToRefs(securityStore)
 
-export default {
-  name: 'PageCard',
-  props: {
-    page: Object,
+defineProps({
+  page: {
+    type: Object,
+    required: true,
   },
-  setup() {
-    const router = useRouter();
-    const state = reactive({
-      handleClick: function (page) {
-        router.push({name: 'PageUpdate', query: {id: page['@id']}});
-      },
-    });
-    return toRefs(state);
-  },
-  computed: {
-    ...mapGetters({
-      'isAdmin': 'security/isAdmin',
-    }),
-  }
-};
+})
+
+const handleClick = (page) => {
+  router.push({
+    name: "PageUpdate",
+    query: { id: page["@id"] },
+  })
+}
 </script>

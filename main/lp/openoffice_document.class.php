@@ -95,8 +95,8 @@ abstract class OpenofficeDocument extends learnpath
         if (!empty($size)) {
             list($w, $h) = explode('x', $size);
             if (!empty($w) && !empty($h)) {
-                $this->slide_width = $w;
-                $this->slide_height = $h;
+                $this->slide_width = (int) $w;
+                $this->slide_height = (int) $h;
             }
         }
 
@@ -132,6 +132,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
+            $cmd = escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
 
             if ($return != 0) { // If the java application returns an error code.
@@ -237,7 +238,9 @@ abstract class OpenofficeDocument extends learnpath
 
             $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
             // Call to the function implemented by child.
-            $cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.'/'.$this->created_dir.'"';
+            $cmd .= ' "'.Security::sanitizeExecParam($this->base_work_dir.'/'.$this->file_path)
+                .'"  "'
+                .Security::sanitizeExecParam($this->base_work_dir.'/'.$this->created_dir).'"';
             // To allow openoffice to manipulate docs.
             @chmod($this->base_work_dir, $permissionFolder);
             @chmod($this->base_work_dir.'/'.$this->file_path, $permissionFile);
@@ -247,6 +250,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
+            $cmd = escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
             // TODO: Chown is not working, root keep user privileges, should be www-data
             @chown($this->base_work_dir.'/'.$this->created_dir, 'www-data');

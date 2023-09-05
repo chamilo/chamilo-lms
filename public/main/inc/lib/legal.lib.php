@@ -61,7 +61,7 @@ class LegalManager
             }
         }
 
-        if ($last['content'] != $content || !empty($changeList)) {
+        if ((isset($last['content']) && $last['content'] != $content) || !empty($changeList) || empty($last)) {
             $version = self::getLastVersion($language);
             $version++;
             $params = [

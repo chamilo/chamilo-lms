@@ -106,7 +106,7 @@ class CourseController extends ToolBaseController
 
                 if (true === $allow &&
                     null !== $course->getVisibility() &&
-                    COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
+                    Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }

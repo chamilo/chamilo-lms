@@ -111,12 +111,16 @@ async function performLogin() {
 
   if (!store.getters["security/hasError"]) {
     securityStore.user = store.state["security/user"]
+    const responseData = await store.dispatch("security/login", payload);
 
     if (typeof redirect !== "undefined") {
       await router.push({ path: redirect.toString() })
     } else {
-      // router.replace({path: "/home"});
-      window.location.href = "/home"
+      if (responseData.load_terms) {
+        window.location.href = responseData.redirect;
+      } else {
+        window.location.href = "/home"
+      }
     }
   }
 }

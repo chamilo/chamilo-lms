@@ -59,9 +59,12 @@ switch ($action) {
                 }
                 if (!empty($fileList)) {
                     foreach ($fileList as $n => $file) {
-                        $tmpFile = $tempDirectory.$file['name'];
+                        $tmpFile = disable_dangerous_file(
+                            api_replace_dangerous_char($file['name'])
+                        );
+
                         file_put_contents(
-                            $tmpFile,
+                            $tempDirectory.$tmpFile,
                             fopen($file['tmp_name'], 'r'),
                             FILE_APPEND
                         );

@@ -257,7 +257,7 @@ function search_users($needle, $type)
                     }
 
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['id']
-                        .'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
+                        .'\',\''.addslashes(htmlentities($person_name)).' '.'\')">'.$person_name.' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }

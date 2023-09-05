@@ -144,7 +144,7 @@ $termRegistered = Session::read('term_and_condition');
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $userAlreadyRegisteredShowTerms = isset($termRegistered['user_id']);
     // Ofaj change
-    if (true === api_is_anonymous()) {
+    if (true === api_is_anonymous() &&  'course' === api_get_setting('load_term_conditions_section')) {
         $userAlreadyRegisteredShowTerms = false;
     }
 }
@@ -633,11 +633,15 @@ $infoMessage = '';
 if ('true' === api_get_setting('allow_terms_conditions')) {
     if (!api_is_platform_admin()) {
         if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
-            $userInfo = api_get_user_info(api_get_user_id());
+            $userId = api_get_user_id();
+            if (empty($userId)) {
+                $userId = (int) $termRegistered['user_id'];
+            }
+            $userInfo = api_get_user_info($userId);
             if ($userInfo && ANONYMOUS != $userInfo['status']) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    api_get_user_id(),
+                    $userId,
                     'termactivated'
                 );
                 if (isset($value['value'])) {
@@ -668,7 +672,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     }
 
     // Ofaj
-    if (!api_is_anonymous()) {
+    if (!api_is_anonymous() || 'login' === api_get_setting('load_term_conditions_section')) {
         $language = api_get_language_isocode();
         $language = api_get_language_id($language);
         $termPreview = LegalManager::get_last_condition($language);
@@ -676,11 +680,12 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             //we load from the platform
             $language = api_get_setting('platformLanguage');
             $language = api_get_language_id($language);
-            $termPreview = LegalManager::get_last_condition($language);
-
+            if (!empty($language)) {
+                $termPreview = LegalManager::get_last_condition($language);
+            }
             //if is false we load from english
             if (!$termPreview) {
-                $language = api_get_language_id('english'); //this must work
+                $language = api_get_language_id('en_US'); //this must work
                 $termPreview = LegalManager::get_last_condition($language);
             }
         }
@@ -1158,7 +1163,9 @@ if ($form->validate()) {
 
     if ('true' === api_get_setting('allow_terms_conditions') && $userAlreadyRegisteredShowTerms) {
         if ('login' === api_get_setting('load_term_conditions_section')) {
-            $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
+            header('Location: /home');
+            exit;
+            //$formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
         } else {
             $courseInfo = api_get_course_info();
             if (!empty($courseInfo)) {

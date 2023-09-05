@@ -104,13 +104,15 @@ export default {
     },
     actions: {
         async login({commit}, payload) {
-            commit(AUTHENTICATING);
-            await SecurityAPI.login(payload.login, payload.password).then(response => {
-                commit(AUTHENTICATING_SUCCESS, response.data);
-                return response.data;
-            }).catch(error => {
-                commit(AUTHENTICATING_ERROR, error);
-            });
+          commit(AUTHENTICATING);
+          try {
+            const response = await SecurityAPI.login(payload.login, payload.password);
+            commit(AUTHENTICATING_SUCCESS, response.data);
+            return response.data;
+          } catch (error) {
+            commit(AUTHENTICATING_ERROR, error);
+            throw error;
+          }
         },
 
         async logout({commit}) {

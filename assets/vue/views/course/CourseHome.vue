@@ -2,6 +2,7 @@
   <div
     id="course-home"
     class="hide-content"
+    v-if="showContent"
   >
     <div
       v-if="isCourseLoading"
@@ -272,6 +273,7 @@ let courseId = route.params.id
 let sessionId = route.query.sid ?? 0
 
 const isCourseLoading = ref(true)
+const showContent = ref(false)
 
 const showUpdateIntroductionButton = computed(() => {
   return course.value && isCurrentTeacher.value && intro.value && !(createInSession.value && introTool.value)
@@ -475,11 +477,11 @@ onBeforeMount(async () => {
     if (response.data.redirect) {
       window.location.href = response.data.url
     } else {
-      document.getElementById("course-home").classList.remove("hide-content")
+      showContent.value = true;
     }
   } catch (error) {
     console.error("Error checking terms and conditions:", error)
-    document.getElementById("course-home").classList.remove("hide-content")
+    showContent.value = true;
   }
 })
 

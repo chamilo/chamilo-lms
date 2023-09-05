@@ -104,17 +104,22 @@ class LegalRepository extends ServiceEntityRepository
         $result = $qb
             ->select('l.version')
             ->where(
-                $qb->expr()->eq('l.language_id', $languageId)
+                $qb->expr()->eq('l.languageId', $languageId)
             )
             ->setMaxResults(1)
             ->orderBy('l.version', Criteria::DESC)
             ->getQuery()
             ->getOneOrNullResult()
         ;
-        if (!empty($result)) {
-            $version = explode(':', $result);
 
-            return (int) $version[0];
+        if (!empty($result['version'])) {
+            $lastVersion = $result['version'];
+            if (!is_numeric($lastVersion)) {
+                $version = explode(':', $lastVersion);
+                $lastVersion = (int) $version[0];
+            }
+
+            return $lastVersion;
         }
 
         return false;

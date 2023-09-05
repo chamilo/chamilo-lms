@@ -6,16 +6,6 @@ require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 class BigUploadResponse
 {
     /**
-     * Temporary directory for uploading files.
-     */
-    const TEMP_DIRECTORY = '/tmp/';
-
-    /**
-     * Directory files will be moved to after the upload is completed.
-     */
-    const MAIN_DIRECTORY = '../files/';
-
-    /**
      * Max allowed filesize. This is for unsupported browsers and
      * as an additional security check in case someone bypasses the js filesize check.
      */
@@ -27,13 +17,6 @@ class BigUploadResponse
      * @var string
      */
     private $tempDirectory;
-
-    /**
-     * Directory for completed uploads.
-     *
-     * @var string
-     */
-    private $mainDirectory;
 
     /**
      * Name of the temporary file. Used as a reference to make sure chunks get written to the right file.
@@ -49,7 +32,6 @@ class BigUploadResponse
     {
         $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
         $this->setTempDirectory($tempDirectory);
-        $this->setMainDirectory(self::MAIN_DIRECTORY);
         $this->maxSize = getIniMaxFileSizeInBytes();
     }
 
@@ -103,26 +85,6 @@ class BigUploadResponse
     public function getTempDirectory()
     {
         return $this->tempDirectory;
-    }
-
-    /**
-     * Set the name of the main directory.
-     *
-     * @param string $value Main directory
-     */
-    public function setMainDirectory($value)
-    {
-        $this->mainDirectory = $value;
-    }
-
-    /**
-     * Return the name of the main directory.
-     *
-     * @return string Main directory
-     */
-    public function getMainDirectory()
-    {
-        return $this->mainDirectory;
     }
 
     /**
@@ -288,30 +250,6 @@ class BigUploadResponse
 
         return json_encode(['errorStatus' => 0]);
     }
-
-    /**
-     * Basic php file upload function, used for unsupported browsers.
-     * The output on success/failure is very basic, and it would be best to have these errors return the user to index.html
-     * with the errors printed on the form, but that is beyond the scope of this project as it is very application specific.
-     *
-     * @return string Success or failure of upload
-     */
-    public function postUnsupported()
-    {
-        $name = $_FILES['bigUploadFile']['name'];
-        $size = $_FILES['bigUploadFile']['size'];
-        $tempName = $_FILES['bigUploadFile']['tmp_name'];
-
-        if (filesize($tempName) > $this->maxSize) {
-            return get_lang('UplFileTooBig');
-        }
-
-        if (move_uploaded_file($tempName, $this->getMainDirectory().$name)) {
-            return get_lang('FileUploadSucces');
-        } else {
-            return get_lang('UplUnableToSaveFile');
-        }
-    }
 }
 
 $sessionBigUpload = ChamiloSession::read('bigupload', []);
@@ -357,8 +295,5 @@ switch ($_GET['action']) {
 
             ChamiloSession::write('bigupload', $sessionBigUpload);
         }
-        break;
-    case 'post-unsupported':
-        print $bigUpload->postUnsupported();
         break;
 }

@@ -202,7 +202,7 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions,
             [
                 'id' => 'sub_skill_id_'.($counter + 1),
-                'class' => 'sub_skill',
+                'class' => 'sub_skill ',
             ]
         );
 

@@ -2372,6 +2372,22 @@ class SkillModel extends Model
         $entityManager->persist($skillUser);
         $entityManager->flush();
 
+        // Notification of badge assignation
+        $url = $skillUser->getIssueUrlAll();
+        $message = sprintf(
+            get_lang('You %s Have Achieved The Skill %s To See Follow Link %s'),
+            $user->getFirstname(),
+            $skill->getName(),
+            Display::url($url, $url, ['target' => '_blank'])
+        );
+
+        MessageManager::send_message(
+            $user->getId(),
+            get_lang('You Have Achieved A New Skill'),
+            $message
+        );
+
+
         return $skillUser;
     }
 

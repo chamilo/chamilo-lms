@@ -262,6 +262,27 @@ if ($allowExport) {
     }
 }
 
+$returnMessage = '';
+if (api_is_student_boss()) {
+    $user = $skillRelUser->getUser();
+    $returnMessage = Display::return_message(
+        sprintf(
+            get_lang('The skill %s has been assigned to user %s'),
+            $skill->getName(),
+            UserManager::formatUserFullName($user)
+        ),
+        'success'
+    );
+    $returnMessage .= Display::return_message(
+        sprintf(
+            get_lang('To assign a new skill to this user, click <a href="%s">here</a>'),
+            api_get_path(WEB_CODE_PATH) . 'skills/assign.php?' . http_build_query(['user' => $user->getId()])
+        ),
+        'info',
+        false
+    );
+}
+
 $template = new Template(get_lang('Issued badge information'));
 $template->assign('issue_info', $skillRelUserInfo);
 $template->assign('allow_comment', $allowComment);
@@ -282,5 +303,5 @@ $template->assign('personal_badge', $personalBadge);
 $template->assign('show_level', $showLevels);
 $content = $template->fetch($template->get_template('skill/issued.tpl'));
 $template->assign('header', get_lang('Issued badge information'));
-$template->assign('content', $content);
+$template->assign('content', $returnMessage.$content);
 $template->display_one_col_template();

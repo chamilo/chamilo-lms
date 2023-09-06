@@ -720,7 +720,6 @@ class scorm extends learnpath
 
         if ($updateDirContents && $lpToCheck) {
             $originalPath = str_replace('/.', '', $lpToCheck->path);
-            $originalPath = dirname($originalPath);
             if ($originalPath != $newDir) {
                 Display::addFlash(Display::return_message(get_lang('FileError')));
 

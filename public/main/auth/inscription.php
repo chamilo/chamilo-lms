@@ -634,7 +634,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     if (!api_is_platform_admin()) {
         if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
             $userId = api_get_user_id();
-            if (empty($userId)) {
+            if (empty($userId) && isset($termRegistered['user_id'])) {
                 $userId = (int) $termRegistered['user_id'];
             }
             $userInfo = api_get_user_info($userId);

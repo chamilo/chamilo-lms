@@ -113,3 +113,7 @@ AddType application/font-woff .woff .woff2
 #<IfModule mod_headers.c>
 #  Header always set Content-Security-Policy "upgrade-insecure-requests;"
 #</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options nosniff
+</IfModule>

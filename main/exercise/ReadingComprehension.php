@@ -73,7 +73,8 @@ class ReadingComprehension extends UniqueAnswer
         parent::__construct();
         $this->type = READING_COMPREHENSION;
         $this->isContent = $this->getIsContent();
-        $customSpeeds = api_get_configuration_value('exercise_question_reading_comprehension_extra_speeds')['speeds'];
+        $extraSpeeds = api_get_configuration_value('exercise_question_reading_comprehension_extra_speeds');
+        $customSpeeds = $extraSpeeds['speeds'] ?? [];
         if (!empty($customSpeeds) && is_array($customSpeeds)) {
             $this->allSpeeds = self::$speeds;
             foreach ($customSpeeds as $speed) {

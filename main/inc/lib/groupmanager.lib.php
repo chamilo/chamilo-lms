@@ -499,7 +499,7 @@ class GroupManager
             // to_group_id is related to c_group_info.iid
             $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
             $sql = "DELETE FROM $itemPropertyTable
-                    WHERE c_id = $course_id AND to_group_id = $groupIid ";
+                    WHERE to_group_id = $groupIid ";
             Database::query($sql);
 
             // delete the groups

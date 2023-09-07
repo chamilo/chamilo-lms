@@ -15,7 +15,7 @@ export function useNotification() {
   }
 
   const showWarningNotification = (message) => {
-    showMessage(message, 'warning')
+    showMessage(message, 'warn')
   }
 
   const showErrorNotification = (error) => {

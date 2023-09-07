@@ -4,30 +4,6 @@
     v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
-    <Toast position="top-center">
-      <template #message="slotProps">
-        <span
-          :class="{
-            'mdi-close-outline': 'error' === slotProps.message.severity,
-            'mdi-information-outline': 'info' === slotProps.message.severity,
-            'mdi-check-outline': 'success' === slotProps.message.severity,
-            'mdi-alert-outline': 'warn' === slotProps.message.severity,
-          }"
-          class="p-toast-message-icon mdi"
-        />
-        <div class="p-toast-message-text">
-          <span
-            v-if="slotProps.message.summary"
-            class="p-toast-summary"
-            v-text="slotProps.message.summary"
-          />
-          <div
-            class="p-toast-detail"
-            v-html="slotProps.message.detail"
-          />
-        </div>
-      </template>
-    </Toast>
     <slot />
     <div
       id="legacy_content"
@@ -35,20 +11,45 @@
     />
     <ConfirmDialog />
   </component>
+  <Toast position="top-center">
+    <template #message="slotProps">
+      <span
+        :class="{
+          'mdi-close-outline': 'error' === slotProps.message.severity,
+          'mdi-information-outline': 'info' === slotProps.message.severity,
+          'mdi-check-outline': 'success' === slotProps.message.severity,
+          'mdi-alert-outline': 'warn' === slotProps.message.severity,
+        }"
+        class="p-toast-message-icon mdi"
+      />
+      <div class="p-toast-message-text">
+          <span
+            v-if="slotProps.message.summary"
+            class="p-toast-summary"
+            v-text="slotProps.message.summary"
+          />
+        <div
+          class="p-toast-detail"
+          v-html="slotProps.message.detail"
+        />
+      </div>
+    </template>
+  </Toast>
 </template>
 
 <script setup>
-import { computed, onMounted, provide, ref, watch, watchEffect } from "vue"
+import { computed, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core"
 import { useStore } from "vuex"
 import axios from "axios"
-import { isEmpty } from "lodash"
+import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
-import { useToast } from "primevue/usetoast"
 import { useSecurityStore } from "./store/securityStore"
 import { usePlatformConfig } from "./store/platformConfig"
+import Toast from "primevue/toast"
+import { useNotification } from "./composables/notification"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -61,8 +62,6 @@ provide(DefaultApolloClient, apolloClient)
 
 const route = useRoute()
 const router = useRouter()
-
-const toast = useToast()
 
 const layout = computed(() => {
   const queryParams = new URLSearchParams(window.location.search)
@@ -119,13 +118,14 @@ if (!isEmpty(window.user)) {
 
 const store = useStore()
 const securityStore = useSecurityStore()
+const notification = useNotification()
 
 const payload = { isAuthenticated, user }
 
 store.dispatch("security/onRefresh", payload)
 securityStore.user = window.user
 
-onMounted(() => {
+onUpdated(() => {
   const app = document.getElementById("app")
 
   if (!(app && app.dataset.flashes)) {
@@ -135,14 +135,14 @@ onMounted(() => {
   const flashes = JSON.parse(app.dataset.flashes)
 
   for (const key in flashes) {
+    let capitalKey = capitalize(key)
+
     for (const flashText in flashes[key]) {
-      toast.add({
-        severity: key,
-        detail: flashes[key][flashText],
-        life: 3500,
-      })
+      notification[`show${capitalKey}Notification`](flashes[key][flashText])
     }
   }
+
+  app.dataset.flashes = "";
 })
 
 axios.interceptors.response.use(
@@ -150,17 +150,9 @@ axios.interceptors.response.use(
   (error) =>
     new Promise(() => {
       if (401 === error.response.status) {
-        toast.add({
-          severity: "warn",
-          detail: error.response.data.error,
-          life: 3500,
-        })
+        notification.showWarningNotification(error.response.data.error)
       } else if (500 === error.response.status) {
-        toast.add({
-          severity: "warn",
-          detail: error.response.data.detail,
-          life: 3500,
-        })
+        notification.showWarningNotification(error.response.data.detail)
       }
 
       throw error

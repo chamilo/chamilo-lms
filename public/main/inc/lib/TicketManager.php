@@ -2460,6 +2460,11 @@ class TicketManager
         }
 
         foreach ($permissionsLines as $permissionsLine) {
+
+            if (!str_contains($permissionsLine, ':')) {
+                continue;
+            }
+
             [$id, $rolesLine] = explode(':', $permissionsLine, 2);
 
             if (empty($rolesLine)) {

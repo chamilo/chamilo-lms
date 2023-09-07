@@ -11,7 +11,7 @@ require_once '../config.php';
 $plugin = BuyCoursesPlugin::create();
 
 $saleId = $_SESSION['bc_sale_id'];
-$couponId = $_SESSION['bc_coupon_id'];
+$couponId = (!empty($_SESSION['bc_coupon_id']) ?? '');
 
 if (empty($saleId)) {
     api_not_allowed(true);
@@ -19,6 +19,7 @@ if (empty($saleId)) {
 
 $sale = $plugin->getSale($saleId);
 
+$coupon = [];
 if (!empty($couponId)) {
     $coupon = $plugin->getCoupon($couponId, $sale['product_type'], $sale['product_id']);
 }

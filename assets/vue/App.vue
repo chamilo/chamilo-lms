@@ -75,7 +75,7 @@ const layout = computed(() => {
 
 const legacyContainer = ref(null)
 
-watch(route, () => {
+watch(() => route.name, () => {
   if (legacyContainer.value) {
     legacyContainer.value.innerHTML = ""
   }

@@ -27,6 +27,9 @@
     {{ 'NumberOfMatchingCourses'|get_lang }} :
     <strong>{{ total_number_of_matching_courses }}</strong>
 </div>
+<div class="col-md-12 catalog-pagination-top">
+    {{ pagination }}
+</div>
 
 <div class="grid-courses row">
     {% for course in courses %}

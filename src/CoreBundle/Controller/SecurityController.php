@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
@@ -52,7 +51,7 @@ class SecurityController extends AbstractController
             'login' === $settingsManager->getSetting('load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
-            $extraValue  = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
+            $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
             if (!empty($extraValue['value'])) {
                 $result = $extraValue['value'];
                 $userConditions = explode(':', $result);

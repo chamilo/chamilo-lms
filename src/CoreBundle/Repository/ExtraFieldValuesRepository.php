@@ -126,21 +126,19 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->setParameter('itemId', $itemId)
             ->setParameter('variable', 'legal_accept')
             ->setParameter('itemType', 1)
-            ->setParameter('emptyString', '');
+            ->setParameter('emptyString', '')
+        ;
 
         $result = $qb->getQuery()->getOneOrNullResult();
 
-        if ($result === null) {
-
+        if (null === $result) {
             return null;
-        } else {
-            $resultArray = [
-                'id' => $result->getId(),
-                'itemId' => $result->getItemId(),
-                'value' => $result->getFieldValue(),
-            ];
-
-            return $resultArray;
         }
+
+        return [
+            'id' => $result->getId(),
+            'itemId' => $result->getItemId(),
+            'value' => $result->getFieldValue(),
+        ];
     }
 }

@@ -769,12 +769,11 @@ $tpl->assign('grid', '');
 $tpl->assign('grid_js', '');
 $tpl->assign('form_search', '');
 $tpl->assign('form', '');
-if (false === $result) {
-    $tpl->assign('form', $userFormToString);
-} else {
-    Display::addFlash(Display::return_message(get_lang('Your session search diagnosis is saved')));
+if (false !== $result) {
+    $userFormToString =  Display::return_message(get_lang('Your session search diagnosis is saved'));
 }
 
+$tpl->assign('form', $userFormToString);
 $content = $tpl->fetch($tpl->get_template('search/search_extra_field.tpl'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

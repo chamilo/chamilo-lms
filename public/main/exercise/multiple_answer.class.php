@@ -75,10 +75,10 @@ class MultipleAnswer extends Question
         for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
-                $defaults['correct['.$i.']'] = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? '';
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? '';
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : 0;
+                $defaults['correct['.$i.']'] = $answer->correct[$i] ?? '';
             } else {
                 $defaults['answer[1]'] = get_lang('Lack of Vitamin A');
                 $defaults['comment[1]'] = get_lang('The Vitamin A is responsible for...');

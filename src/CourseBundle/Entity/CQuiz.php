@@ -171,6 +171,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
+        $this->hideAttemptsTable = false;
         $this->pageResultConfiguration = [];
         $this->attempts = new ArrayCollection();
     }

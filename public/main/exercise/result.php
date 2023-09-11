@@ -68,7 +68,7 @@ if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSign
 }
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 
 if ($show_headers) {
     $interbreadcrumb[] = [

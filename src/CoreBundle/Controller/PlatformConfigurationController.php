@@ -72,6 +72,7 @@ class PlatformConfigurationController extends AbstractController
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
+                'platform.redirect_index_to_url_for_logged_users',
             ];
 
             /** @var User $user */

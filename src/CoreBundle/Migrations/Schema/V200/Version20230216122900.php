@@ -162,6 +162,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'ticket_project_user_roles',
                 'disable_user_conditions_sender_id',
                 'portfolio_advanced_sharing',
+                'redirect_index_to_url_for_logged_users',
             ],
             'Profile' => [
                 'linkedin_organization_id',
@@ -491,6 +492,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 $count = $result->fetchNumeric()[0];
                 $selectedValue = $this->getConfigurationSelectedValue($variable);
                 error_log('Migration: Setting variable '.$variable.' category '.$category.' value '.$selectedValue);
+
+                // To use by default courses page if this option is not empty.
+                if ('redirect_index_to_url_for_logged_users' === $variable && !empty($selectedValue)) {
+                    $selectedValue = 'courses';
+                }
                 if (empty($count)) {
                     $this->addSql(
                         "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
@@ -989,6 +995,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'linkedin_organization_id',
             ],
             'Platform' => [
+                'redirect_index_to_url_for_logged_users',
                 'portfolio_advanced_sharing',
                 'disable_user_conditions_sender_id',
                 'ticket_project_user_roles',

@@ -905,7 +905,11 @@ class SurveyUtil
                         $row['option_id'] = $parts[0];
                     }
 
-                    $data[$row['option_id']] = $row;
+                    if (!isset($data[$row['option_id']])) {
+                        $data[$row['option_id']] = $row;
+                    } else {
+                        $data[$row['option_id']]['total'] = $data[$row['option_id']]['total'] + $row['total'];
+                    }
                 }
 
                 foreach ($options as $option) {

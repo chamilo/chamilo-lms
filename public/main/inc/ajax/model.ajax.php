@@ -1947,7 +1947,7 @@ switch ($action) {
             }
         }
 
-        if ($_REQUEST['origin'] == 'load_search') {
+        if (isset($_REQUEST['origin'] ) &&  'load_search' === $_REQUEST['origin']) {
             if (!in_array($sidx, $columns)) {
                 $sidx = 'display_start_date';
                 $sord = 'DESC';

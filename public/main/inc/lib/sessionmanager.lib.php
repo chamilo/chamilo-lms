@@ -9723,7 +9723,7 @@ class SessionManager
         $default = 'all';
         $view = api_get_setting('session.default_session_list_view');
 
-        if (!empty($view)) {
+        if ('false' !== $view && !empty($view)) {
             $default = $view;
         }
 

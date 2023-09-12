@@ -71,6 +71,7 @@ class TwigListener
 
             'social.social_enable_messages_feedback',
             'social.disable_dislike_option',
+            'platform.redirect_index_to_url_for_logged_users',
         ];
 
         // @todo get variables in 1 query.

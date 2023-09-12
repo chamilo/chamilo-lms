@@ -112,6 +112,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'ticket_project_user_roles' => '',
                     'disable_user_conditions_sender_id' => '0',
                     'portfolio_advanced_sharing' => 'false',
+                    'redirect_index_to_url_for_logged_users' => '',
                 ]
             )
             ->setTransformer(
@@ -359,7 +360,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             )
             ->add('disable_user_conditions_sender_id', TextType::class)
             ->add('portfolio_advanced_sharing', TextType::class)
-
+            ->add('redirect_index_to_url_for_logged_users', TextType::class)
         ;
     }
 

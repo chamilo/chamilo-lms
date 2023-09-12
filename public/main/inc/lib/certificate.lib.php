@@ -764,7 +764,7 @@ class Certificate extends Model
         // variables for the default template
         $tplContent->assign('complete_name', $userInfo['complete_name']);
         $tplContent->assign('time_in_platform', $time);
-        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
+        $tplContent->assign('certificate_generated_date', isset($myCertificate['created_at']) ? api_get_local_time($myCertificate['created_at']) : '');
         if (!empty($termsValidationDate)) {
             $termsValidationDate = api_get_local_time($termsValidationDate);
         }

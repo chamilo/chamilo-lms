@@ -18,15 +18,6 @@
       />
 
       <PrimeButton
-        :icon="chamiloIconToClass['account']"
-        class="item-button"
-        icon-class="item-button__icon"
-        link
-        unstyled
-        @click="btnProfileOnClick"
-      />
-
-      <PrimeButton
         :badge="btnInboxBadge"
         :class="{ 'item-button--unread': btnInboxBadge }"
         :icon="chamiloIconToClass['inbox']"
@@ -72,6 +63,9 @@ import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useNotification } from "../../composables/notification"
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -103,8 +97,16 @@ const userSubmenuItems = [
     label: props.currentUser.fullName,
     items: [
       {
-        label: "Settings",
-        url: "/account/edit",
+        label: t("My General Certificate"),
+        url: "/main/social/my_skills_report.php?a=generate_custom_skill",
+      },
+      {
+        label: t("My Skills"),
+        url: "/main/social/my_skills_report.php",
+      },
+      {
+        label: t("Settings"),
+        url: "/account/home",
       },
     ],
   },

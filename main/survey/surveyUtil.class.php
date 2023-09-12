@@ -1831,6 +1831,10 @@ class SurveyUtil
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['option_text'];
                 }
                 $possible_answers_type[$row['question_id']] = $row['type'];
+
+                if ($row['type'] == 'multiplechoiceother' && $row['option_text'] == 'other') {
+                    $possible_answers[$row['question_id']][$row['question_option_id'] . '_other'] = $row['question_option_id'] . '_other';
+                }
             }
         }
 
@@ -2144,7 +2148,9 @@ class SurveyUtil
                     );
                     $column++;
                 } else {
-                    for ($ii = 0; $ii < $row['number_of_options']; $ii++) {
+                    $numberOfOptions = $row['number_of_options'];
+                    if ($row['type'] == 'multiplechoiceother') $numberOfOptions++;
+                    for ($ii = 0; $ii < $numberOfOptions; $ii++) {
                         $worksheet->setCellValueByColumnAndRow(
                             $column,
                             $line,
@@ -2199,6 +2205,8 @@ class SurveyUtil
         $result = Database::query($sql);
         $possible_answers = [];
         $possible_answers_type = [];
+        $current_question_type = '';
+        $current_question_id = null;
         while ($row = Database::fetch_array($result)) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
@@ -2207,6 +2215,23 @@ class SurveyUtil
                 (isset($_POST['questions_filter'.$suffixLpItem]) && is_array($_POST['questions_filter'.$suffixLpItem]) &&
                 in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
+                if ($current_question_id != $row['question_id']) {
+                    if ($current_question_type == 'multiplechoiceother') {
+                        $worksheet->setCellValueByColumnAndRow(
+                            $column,
+                            $line,
+                            api_html_entity_decode(
+                                strip_tags(get_lang('Comment')),
+                                ENT_QUOTES
+                            )
+                        );
+                        $column++;
+                    }
+                }
+
+                $current_question_type = $row['type'];
+                $current_question_id   = $row['question_id'];
+
                 $worksheet->setCellValueByColumnAndRow(
                     $column,
                     $line,
@@ -2218,7 +2243,22 @@ class SurveyUtil
                 $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 $possible_answers_type[$row['question_id']] = $row['type'];
                 $column++;
+
+                if ($row['type'] == 'multiplechoiceother' && $row['option_text'] == 'other') {
+                    $possible_answers[$row['question_id']][$row['question_option_id'] . '_other'] = $row['question_option_id'] . '_other';
+                }
             }
+        }
+
+        if ($current_question_type == 'multiplechoiceother') {
+            $worksheet->setCellValueByColumnAndRow(
+                $column,
+                $line,
+                api_html_entity_decode(
+                    strip_tags(get_lang('Comment')),
+                    ENT_QUOTES
+                )
+            );
         }
 
         // To select the answers by Lp item
@@ -2275,7 +2315,8 @@ class SurveyUtil
             $possible_answers,
             $answers_of_user,
             $old_user,
-            true
+            true,
+            $possible_answers_type
         );
 
         // this is to display the last user
@@ -2312,7 +2353,8 @@ class SurveyUtil
         $possible_options,
         $answers_of_user,
         $user,
-        $display_extra_user_fields = false
+        $display_extra_user_fields = false,
+        $questionTypes = true
     ) {
         $return = [];
         if ($survey_data['anonymous'] == 0) {
@@ -2364,6 +2406,18 @@ class SurveyUtil
                                 $return[] = $answers_of_user[$question_id][$option_id]['value'];
                             } else {
                                 $return[] = 'v';
+                            }
+                        } elseif (isset($key[0]) && strpos($key[0], '@:@') !== false) {
+                            list($idAnswer, $other) = explode('@:@', $key[0]);
+                            if ($idAnswer == $option_id) {
+                                if (strlen($other) > 0) {
+                                    $return[] = 'v';
+                                    $return[] = api_html_entity_decode(strip_tags($other), ENT_QUOTES);
+                                } else {
+                                    $return[] = 'v';
+                                }
+                            } else {
+                                $return[] = '';
                             }
                         } else {
                             $return[] = '';

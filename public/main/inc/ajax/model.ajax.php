@@ -816,8 +816,15 @@ switch ($action) {
             }
         }
 
-        if ('custom' === $listType && 'true' === api_get_setting('session.allow_session_status')) {
-            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        if ('true' === api_get_setting('session.allow_session_status')) {
+            if (isset($filters->filter_status)) {
+                $sStatus = (int) $filters->filter_status;
+                $whereCondition .= ' AND s.status = '.$sStatus;
+            } else {
+                if ($listType === 'custom') {
+                    $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+                }
+            }
         }
 
         switch ($listType) {
@@ -835,7 +842,8 @@ switch ($action) {
                     [],
                     $listType,
                     $extraFieldsToLoad,
-                    $search
+                    $search,
+                    $language
                 );
                 break;
             case 'active':
@@ -1939,7 +1947,15 @@ switch ($action) {
             }
         }
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        if ($_REQUEST['origin'] == 'load_search') {
+            if (!in_array($sidx, $columns)) {
+                $sidx = 'display_start_date';
+                $sord = 'DESC';
+            }
+        } else {
+            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        }
+        $orderBy = "$sidx $sord, s.name";
         $limit = 20;
         $total_pages = 0;
         if ($count > 0) {
@@ -1960,7 +1976,7 @@ switch ($action) {
                 $result = SessionManager::get_sessions_admin_complete(
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => $orderBy,
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ]
@@ -1972,7 +1988,7 @@ switch ($action) {
                     api_get_user_id(),
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => $orderBy,
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],
@@ -1980,7 +1996,8 @@ switch ($action) {
                     $sessionColumns,
                     $listType,
                     $extraFieldsToLoad,
-                    $search
+                    $search,
+                    $language
                 );
                 break;
             case 'active':
@@ -1989,7 +2006,7 @@ switch ($action) {
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => $orderBy,
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],

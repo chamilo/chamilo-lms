@@ -1740,7 +1740,9 @@ class SurveyUtil
                     )
                     .';';
                 } else {
-                    for ($ii = 0; $ii < $row['number_of_options']; $ii++) {
+                    $numberOfOptions = $row['number_of_options'];
+                    if ($row['type'] == 'multiplechoiceother') $numberOfOptions++;
+                    for ($ii = 0; $ii < $numberOfOptions; $ii++) {
                         $return .= str_replace(
                             "\r\n",
                             '  ',
@@ -1795,6 +1797,8 @@ class SurveyUtil
         $result = Database::query($sql);
         $possible_answers = [];
         $possible_answers_type = [];
+        $current_question_type = '';
+        $current_question_id = null;
         while ($row = Database::fetch_array($result)) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
@@ -1807,15 +1811,31 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem])
             )
             ) {
+                if ($current_question_id != $row['question_id']) {
+                    if ($current_question_type == 'multiplechoiceother') {
+                        $return .= api_html_entity_decode(strip_tags(get_lang('Comment')), ENT_QUOTES).';';
+                    }
+                }
+
+                $current_question_type = $row['type'];
+                $current_question_id   = $row['question_id'];
+
                 $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
                 if (!$compact) {
                     $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
+
+
+
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 } else {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['option_text'];
                 }
                 $possible_answers_type[$row['question_id']] = $row['type'];
             }
+        }
+
+        if ($current_question_type == 'multiplechoiceother') {
+            $return .= api_html_entity_decode(strip_tags(get_lang('Comment')), ENT_QUOTES).';';
         }
 
         $return .= "\n";
@@ -1856,7 +1876,8 @@ class SurveyUtil
                     $answers_of_user,
                     $old_user,
                     !$survey_data['anonymous'],
-                    $compact
+                    $compact,
+                    $possible_answers_type
                 );
                 $answers_of_user = [];
             }
@@ -1880,7 +1901,8 @@ class SurveyUtil
             $answers_of_user,
             $old_user,
             true,
-            $compact
+            $compact,
+            $possible_answers_type
         );
 
         return $return;
@@ -1908,7 +1930,8 @@ class SurveyUtil
         $answers_of_user,
         $user,
         $display_extra_user_fields = false,
-        $compact = false
+        $compact = false,
+        $questionTypes = true
     ) {
         $return = '';
         if (0 == $survey_data['anonymous']) {
@@ -1994,8 +2017,22 @@ class SurveyUtil
                                     $return .= 'v;';
                                 }
                             }
+                        } elseif (isset($key[0]) && strpos($key[0], '@:@') !== false) {
+                            list($idAnswer, $other) = explode('@:@', $key[0]);
+
+                            if ($idAnswer == $option_id) {
+                                $return .= (
+                                    strlen($other) > 0
+                                    ? 'v;"' . str_replace('"', '""', api_html_entity_decode(strip_tags($other), ENT_QUOTES)) . '";'
+                                    : 'v;'
+                                    );
+                            } else {
+                                if (!$compact) {
+                                    $return .= ';';
+                                }
+                            }
                         } else {
-                            if (!$compact) {
+                            if (!$compact || $questionTypes[$question_id] == 'multipleresponse') {
                                 $return .= ';';
                             }
                         }

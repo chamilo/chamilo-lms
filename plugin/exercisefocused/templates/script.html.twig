@@ -1,0 +1,119 @@
+{% if exercisefocused.show_region %}
+    {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
+    {% set enable_abandonment_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_abandonment_limit') %}
+    {% set abandonment_limit = exercisefocused.plugin_info.obj.get('abandonment_limit') %}
+
+<script>
+    $(function () {
+        var $exerciseFocused = $("#exercisefocused-block").appendTo('body');
+        var $timeLimitBlock = $exerciseFocused.find('#time-limit-block');
+        var $timeLimitTarget = $exerciseFocused.find('#time-limit-target');
+        var $abandonmentLimitBlock = $exerciseFocused.find('#abandonment-limit-block');
+        var $abandonmentLimitTarget = $exerciseFocused.find('#abandonment-limit-target');
+
+        var secToken = "{{ exercisefocused.sec_token }}";
+        var initDocumentTitle = document.title;
+        var countdownInterval;
+        var remainingTime;
+        var enableAbandonmentLimit = {{ enable_abandonment_limit ? 'true' : 'false' }};
+
+        {% if enable_abandonment_limit %}
+            var remainingAbandonments = {{ exercisefocused.remaining_abandonments }};
+        {% endif %}
+
+
+        function finishExam(examType) {
+            $(window).off("blur", onBlur)
+            $(window).off("focus", onFocus)
+
+            if (1 === examType) {
+                save_now_all('validate');
+            } else if (2 === examType) {
+                window.quizTimeEnding = true;
+                $('[name="save_now"]').trigger('click');
+            }
+        }
+
+        function updateCountdown() {
+            var seconds = remainingTime;
+            var strSeconds = `${seconds.toString().padStart(2, '0')}`;
+
+            $timeLimitTarget.text(strSeconds);
+            document.title = $timeLimitTarget.parent().text();
+
+            remainingTime--;
+
+            if (remainingTime < 0) {
+                clearInterval(countdownInterval);
+
+                sendAction('time_limit', function (response) {
+                    finishExam(response.type)
+                });
+            }
+        }
+
+        function sendAction(action, callback) {
+            $.ajax({
+                url: "{{ _p.web_plugin }}exercisefocused/pages/log.php",
+                data: {
+                    action: action,
+                    exercisefocused_sec_token: secToken,
+                },
+                success: function (response) {
+                    if (!response) {
+                        return;
+                    }
+
+                    secToken = response.sec_token;
+
+                    if (callback) {
+                        callback(response)
+                    }
+                },
+            });
+        }
+
+        function onBlur() {
+            $exerciseFocused.show();
+
+            if (enableAbandonmentLimit) {
+                if (remainingAbandonments <= 0) {
+                    $abandonmentLimitBlock.find('p').text("{{ 'AbandonmentLimitExceeded'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}");
+                    $timeLimitBlock.hide();
+
+                    sendAction('abandonment_limit', function (response) {
+                        finishExam(response.type)
+                    });
+
+                    return;
+                } else {
+                    $abandonmentLimitTarget.text(remainingAbandonments);
+                }
+
+                remainingAbandonments--;
+            }
+
+            sendAction('outfocused');
+
+            remainingTime = {{ time_limit }};
+
+            updateCountdown();
+
+            countdownInterval = window.setInterval(updateCountdown, 1000);
+        }
+
+        function onFocus() {
+            sendAction('return');
+
+            document.title = initDocumentTitle;
+
+            $exerciseFocused.hide();
+
+            clearInterval(countdownInterval);
+        }
+
+        $(window).on("blur", onBlur)
+        $(window).on("focus", onFocus)
+    })
+</script>
+{% endif %}

@@ -1,0 +1,55 @@
+{% if exercisefocused.show_region %}
+    {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
+    {% set enable_abandonment_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_abandonment_limit') %}
+    {% set abandonment_limit = exercisefocused.plugin_info.obj.get('abandonment_limit') %}
+
+    <div id="exercisefocused-block" style="display: none;">
+        <div class="exercisefocused-block__container">
+            <div class="exercisefocused-block__message">
+                <div id="time-limit-block">
+                    <p class="h3 text-danger">{{ 'YouHaveLeftTheExercise'|get_plugin_lang('ExerciseFocusedPlugin') }}</p>
+                    <p class="h4">
+                        {{ 'YouHaveXTimeToReturn'|get_plugin_lang('ExerciseFocusedPlugin')|format(time_limit) }}
+                    </p>
+                </div>
+
+                {% if enable_abandonment_limit %}
+                    <div id="abandonment-limit-block">
+                        <p class="h4">{{ 'YouHaveXAbandonmentsAllowed'|get_plugin_lang('ExerciseFocusedPlugin')|format(abandonment_limit) }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <style>
+        #exercisefocused-block {
+            background-color: #CCCC;
+            border: 1px solid #DDD;
+            bottom: 0;
+            left: 0;
+            min-height: 100%;
+            min-width: 100%;
+            position: absolute;
+            right: 0;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            top: 0;
+        }
+        .exercisefocused-block__container {
+            text-align: center;
+        }
+        .exercisefocused-block__message {
+            background-color: #FFF;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 150px;
+            padding: 20px;
+        }
+        .exercisefocused-block__message p,
+        .exercisefocused-block__message span {
+            font-weight: bold;
+        }
+    </style>
+{% endif %}

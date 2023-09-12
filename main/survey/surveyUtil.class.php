@@ -1835,10 +1835,6 @@ class SurveyUtil
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['option_text'];
                 }
                 $possible_answers_type[$row['question_id']] = $row['type'];
-
-                if ($row['type'] == 'multiplechoiceother' && $row['option_text'] == 'other') {
-                    $possible_answers[$row['question_id']][$row['question_option_id'] . '_other'] = $row['question_option_id'] . '_other';
-                }
             }
         }
 
@@ -1977,6 +1973,7 @@ class SurveyUtil
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
+                    $otherPaddingNeeded = ($questionTypes[$question_id] == 'multiplechoiceother' ? true : false);
                     foreach ($possible_option as $option_id => &$value) {
                         // For each option of this question, look if it matches the user's answer
                         $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
@@ -2037,6 +2034,7 @@ class SurveyUtil
                             } else {
                                 if (!$compact) {
                                     $return .= ';';
+                                    $otherPaddingNeeded = false;
                                 }
                             }
                         } else {
@@ -2044,6 +2042,9 @@ class SurveyUtil
                                 $return .= ';';
                             }
                         }
+                    }
+                    if ($otherPaddingNeeded == true) {
+                        $return .= ';';
                     }
                 }
             }
@@ -2247,10 +2248,6 @@ class SurveyUtil
                 $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 $possible_answers_type[$row['question_id']] = $row['type'];
                 $column++;
-
-                if ($row['type'] == 'multiplechoiceother' && $row['option_text'] == 'other') {
-                    $possible_answers[$row['question_id']][$row['question_option_id'] . '_other'] = $row['question_option_id'] . '_other';
-                }
             }
         }
 
@@ -2292,7 +2289,8 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    !$survey_data['anonymous']
+                    !$survey_data['anonymous'],
+                    $possible_answers_type
                 );
                 foreach ($return as $elem) {
                     $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
@@ -2394,6 +2392,7 @@ class SurveyUtil
 
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => &$possible_option) {
+                $otherPaddingNeeded = ($questionTypes[$question_id] == 'multiplechoiceother' ? true : false);
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => &$value) {
                         $my_answers_of_user = isset($answers_of_user[$question_id])
@@ -2417,6 +2416,7 @@ class SurveyUtil
                                 if (strlen($other) > 0) {
                                     $return[] = 'v';
                                     $return[] = api_html_entity_decode(strip_tags($other), ENT_QUOTES);
+                                    $otherPaddingNeeded = false;
                                 } else {
                                     $return[] = 'v';
                                 }
@@ -2426,6 +2426,9 @@ class SurveyUtil
                         } else {
                             $return[] = '';
                         }
+                    }
+                    if ($otherPaddingNeeded == true) {
+                        $return[] = '';
                     }
                 }
             }

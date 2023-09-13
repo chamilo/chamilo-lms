@@ -263,7 +263,7 @@ if ($allowExport) {
 }
 
 $returnMessage = '';
-if (api_is_student_boss()) {
+if (api_is_student_boss() || api_is_platform_admin()) {
     $returnMessage = Display::return_message(
             sprintf(
                 get_lang('To assign a new skill to this user, click <a href="%s">here</a>'),

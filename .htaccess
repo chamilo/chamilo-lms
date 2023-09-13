@@ -87,6 +87,9 @@ RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?ser
 RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
 
 # Deny direct access to user my files
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
 RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 [QSA,L]
 
 # Deny access

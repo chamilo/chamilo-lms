@@ -310,6 +310,8 @@ class Thematic
                     $data[$row['id']] = $row;
                 }
             }
+        } else {
+            return false;
         }
 
         return $data;

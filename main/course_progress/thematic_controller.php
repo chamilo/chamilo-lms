@@ -210,6 +210,10 @@ class ThematicController
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
+                    if ($list === false) {
+                        header('Location: '.api_get_self().'?'.api_get_cidreq());
+                        exit;
+                    }
                     $item = [];
                     $listFinish = [];
                     foreach ($list as $theme) {

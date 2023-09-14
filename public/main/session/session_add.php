@@ -149,15 +149,11 @@ $(function() {
             url: '".$url."',
             data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
             success: function(data) {
-                /*if (data.session_category_id > 0) {
-                    $('#session_category').val(data.session_category_id);
-                    $('#session_category').selectpicker('render');
-                } else {
-                    $('#session_category').val(0);
-                    $('#session_category').selectpicker('render');
-                }*/
-
-                $('#session_category').val(data.session_category_id);
+                var categoryId  = parseInt(data.session_category_id);
+                if (isNaN(categoryId) || !categoryId) {
+                    categoryId = 0;
+                }
+                $('#session_category').val(categoryId);
                 $('#session_category').trigger('change');
 
                 setContentFromEditor('description', data.description);
@@ -183,7 +179,7 @@ $(function() {
                     variables.forEach(function(variable) {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
-                            console.log(data[variableName]);
+                           // console.log(data[variableName]);
                             let parsedDate = data[variableName];
                             if (parsedDate) {
                                  var item = $('#'+variable);
@@ -206,6 +202,7 @@ $(function() {
 
                 $.each(data.extra_fields, function(i, item) {
                     var fieldName = 'extra_'+item.variable;
+                    var valueType = parseInt(item.value_type);
                     /*
                     const FIELD_TYPE_TEXT = 1;
                     const FIELD_TYPE_TEXTAREA = 2;
@@ -230,30 +227,30 @@ $(function() {
                     const FIELD_TYPE_ALPHANUMERIC = 21;
                     const FIELD_TYPE_LETTERS_SPACE = 22;
                     const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;*/
-                    switch (item.value_type) {
-                        case '1': // text
-                        case '6': // date
-                        case '7': // datetime
-                        case '15': // integer
-                        case '17': // float
-                        case '20': // letters only
-                        case '21': // alphanum
+                    switch (valueType) {
+                        case 1: // text
+                        case 6: // date
+                        case 7: // datetime
+                        case 15: // integer
+                        case 17: // float
+                        case 20: // letters only
+                        case 21: // alphanum
                             $('input[name='+fieldName+']').val(item.value);
                             break;
-                        case '2': // textarea
+                        case 2: // textarea
                             setContentFromEditor(fieldName, item.value);
                             break;
-                        case '3': // radio
+                        case 3: // radio
                             var radio = fieldName+'['+fieldName+']';
                             $('[name=\''+radio+'\']').val([item.value]);
                             break;
-                        case '4': // simple select
-                        case '5': // multiple select
+                        case 4: // simple select
+                        case 5: // multiple select
                             var options = item.value.split(';');
                             $('#'+fieldName+'').val(options);
-                            $('#'+fieldName+'').selectpicker('render');
+                            //$('#'+fieldName+'').selectpicker('render');
                             break;
-                        case '8': // double
+                        case 8: // double
                             var first = 'first_'+fieldName;
                             var second = 'second_'+fieldName;
                             // item.value has format : 85::86
@@ -291,8 +288,8 @@ $(function() {
                                 $('#'+second+'').selectpicker('render');
                             }
                             break;
-                        case '10': // tags
-                             // Remove all options
+                        case 10: // tags
+                            // Remove all options
                             $('#'+fieldName+' option').each(function(i, optionItem) {
                                 $(this).remove();
                             });
@@ -314,7 +311,7 @@ $(function() {
                                 });
                             }
                             break;
-                        case '13': // check
+                        case 13: // check
                             var check = fieldName+'['+fieldName+']';
                             // Default is uncheck
                             $('[name=\''+check+'\']').prop('checked', false);
@@ -323,7 +320,7 @@ $(function() {
                                $('[name=\''+check+'\']').prop('checked', true);
                             }
                             break;
-                        case '16':
+                        case 16:
                             if (item.url) {
                                 var url = item.url;
                                 var divFormGroup = fieldName + '-form-group';
@@ -370,7 +367,7 @@ if ($form->validate()) {
     }
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'];
-    $id_session_category = $params['session_category'];
+    $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];

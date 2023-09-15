@@ -9061,4 +9061,5 @@ $CareerCannotBeDeletedAsItHasChildren = "Esta carrera no puede ser eliminada has
 $EmailUsedTwiceInImportFile = "Este correo electrónico ya está usado por otro usuario en el mismo archivo.";
 $NotificationInYourForums = "Hay nuevos posts en los foros siguientes de tus cursos.";
 $ExtraFieldIdComment = "Este identificador es interno al sistema y no debe contener espacios ni caracteres especiales. Podrá ser usado también por plugins para filtrar entre los elementos que lo usan.";
+$IncludeLastLogin = "Incluir último login";
 ?>

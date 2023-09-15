@@ -8970,4 +8970,5 @@ $CareerCannotBeDeletedAsItHasChildren = "Cette filière ne peut pas être suppri
 $EmailUsedTwiceInImportFile = "Ce courriel est déjà utilisé par un autre utilisateur du même fichier.";
 $NotificationInYourForums = "Vous avez de nouveaux posts dans les forums suivants de vos cours.";
 $ExtraFieldIdComment = "Cet identifiant est interne au système et ne doit pas contenir d'espaces ni de caractères spéciaux. Il pourra ensuite être référé depuis des plugins également, pour filtrer les éléments qui auxquels il est rattaché.";
+$IncludeLastLogin = "Inclure dernière connexion";
 ?>

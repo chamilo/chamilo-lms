@@ -9036,4 +9036,5 @@ $CareerCannotBeDeletedAsItHasChildren = "This career cannot be deleted until all
 $EmailUsedTwiceInImportFile = "This email is already in use by another user in the same file.";
 $NotificationInYourForums = "You have new posts in the following forums of your courses.";
 $ExtraFieldIdComment = "This identifier is internal to the system and should not contain spaces nor special characters. It can be used from plugins as well, to filter the elements it is attached to.";
+$IncludeLastLogin = "Include last login";
 ?>

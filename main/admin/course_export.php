@@ -113,6 +113,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 $default = $extraField->getDefaultValueByFieldId($extra['id']);
                 $fieldValues = $extraField->getAllValuesByFieldId($extra['id']);
                 foreach ($listToExport as $courseId => &$values) {
+                    if ($courseId === 0) {
+                        continue;
+                    }
                     if (isset($fieldValues[$courseId])) {
                         if (is_array($fieldValues[$courseId])) {
                             $values['extra_'.$extra['variable']] = $fieldValues[$courseId];

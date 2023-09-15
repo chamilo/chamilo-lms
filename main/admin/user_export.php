@@ -132,8 +132,10 @@ if ($form->validate()) {
     $data = [];
     $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
 
+    $headers = false;
     if (!empty($export['addcsvheader'])) {
         if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv' || $export['file_type'] == 'xls')) {
+            $headers = true;
             if ($_configuration['password_encryption'] != 'none') {
                 $data[] = [
                     'UserId',
@@ -146,7 +148,7 @@ if ($form->validate()) {
                     'OfficialCode',
                     'PhoneNumber',
                     'RegistrationDate',
-            'Active',
+                    'Active',
                     'ExpirationDate',
                 ];
             } else {
@@ -191,6 +193,11 @@ if ($form->validate()) {
         $default = $extraField->getDefaultValueByFieldId($fieldInfo[0]);
         $fieldValues = $extraField->getAllValuesByFieldId($fieldInfo[0]);
         foreach ($data as $userId => &$values) {
+            if ($headers === true && $userId === 0) {
+                // Avoid the header line, if any
+                continue;
+            }
+
             if (isset($fieldValues[$userId])) {
                 if (is_array($fieldValues[$userId])) {
                     $values['extra_'.$fieldInfo[1]] = $fieldValues[$userId];

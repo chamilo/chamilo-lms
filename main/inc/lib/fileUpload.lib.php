@@ -38,9 +38,14 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    $filename = strtolower($filename);
+    $filecontrol = strtolower($filename);
+    // strtolower only if the file is a .htaccess
+    if (preg_match('/\.htaccess$/', $filecontrol)) {
+        $filename = strtolower($filename);
+        $filename = str_replace('.htaccess', 'htaccess.txt', $filename);
+    }
 
-    return str_replace('.htaccess', 'htaccess.txt', $filename);
+    return $filename;
 }
 
 /**

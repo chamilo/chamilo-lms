@@ -41,8 +41,13 @@ function createDirectory($path = null)
                 mkdir($data, api_get_permissions_for_new_directories());
                 $block =
                     '<FilesMatch "\.(csv|xml)$">
-Order allow,deny
-Deny from all
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
 </FilesMatch>
 Options -Indexes';
 

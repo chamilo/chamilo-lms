@@ -173,8 +173,13 @@ class AddCourse
             "AuthName AllowLocalAccess
                        AuthType Basic
 
-                       order deny,allow
-                       deny from all
+                       <IfModule mod_authz_core.c>
+                           Require all denied
+                       </IfModule>
+                       <IfModule !mod_authz_core.c>
+                           Order deny,allow
+                           Deny from all
+                       </IfModule>
 
                        php_flag zlib.output_compression off"
         );

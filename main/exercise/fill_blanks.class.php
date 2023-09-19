@@ -1384,9 +1384,6 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
-            return '';
-        }
 
         return self::getHtmlAnswer(
             $answer,

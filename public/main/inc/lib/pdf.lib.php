@@ -899,7 +899,7 @@ class PDF
      *
      * @return string
      */
-    private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
+    private static function fixImagesPaths($documentHtml, array $courseInfo = null, $dirName = '')
     {
         $html = new HTML5();
         $doc = $html->loadHTML($documentHtml);
@@ -912,8 +912,8 @@ class PDF
 
         $protocol = api_get_protocol();
         $sysCodePath = api_get_path(SYS_CODE_PATH);
-        $sysCoursePath = api_get_path(SYS_COURSE_PATH);
-        $sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
+        $sysCoursePath = api_get_path(SYS_PATH).'../app/courses/';
+        $sysUploadPath = api_get_path(SYS_PATH).'../app/upload/';
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 

@@ -788,6 +788,7 @@ class SkillModel extends Model
             }
         }
 
+        $assetRepo = Container::getAssetRepository();
         foreach ($skills as $resultData) {
             $courseId = $resultData['course_id'];
             if (!empty($courseId)) {
@@ -800,9 +801,18 @@ class SkillModel extends Model
             } else {
                 $courseInfo = [];
             }
+            $asset = $assetRepo->find($resultData['asset_id']);
+            $image = $assetRepo->getAssetUrl($asset);
+            $badgeImage = Display::img(
+                $image,
+                '',
+                ['width' => '40'],
+                false
+            );;
             $tableRow = [
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],
+                'skill_badge' => $badgeImage,
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],

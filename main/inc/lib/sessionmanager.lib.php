@@ -2011,6 +2011,10 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
+        if (!self::isValidId($sessionId)) {
+            return false;
+        }
+
         $session = api_get_session_entity($sessionId);
 
         // from function parameter
@@ -2459,6 +2463,10 @@ class SessionManager
 
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        if (!self::isValidId($session_id)) {
+            return false;
+        }
 
         $sql = "DELETE FROM $tbl_session_rel_user
                 WHERE

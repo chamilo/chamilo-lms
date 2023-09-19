@@ -44,8 +44,8 @@ $origin = api_get_origin();
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,
-    'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
-    'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
+    'action' => $learnpath_id ? 'learnpath_id' : '',
+    'action_details' => $learnpath_id ?: '',
 ];
 Event::registerLog($logInfo);
 
@@ -62,16 +62,22 @@ if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
-$extra_params = '';
+$exerciseUrlParams = [
+    'exerciseId' => $objExercise->iid,
+    'learnpath_id' => $learnpath_id,
+    'learnpath_item_id' => $learnpath_item_id,
+    'learnpath_item_view_id' => $learnpathItemViewId
+];
 if (isset($_GET['preview'])) {
-    $extra_params = '&preview=1';
+    $exerciseUrlParams['preview'] = 1;
 }
 // It is a lti provider
 if (isset($_GET['lti_launch_id'])) {
-    $extra_params .= '&lti_launch_id='.Security::remove_XSS($_GET['lti_launch_id']);
+    $exerciseUrlParams['lti_launch_id'] = Security::remove_XSS($_GET['lti_launch_id']);
 }
+
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq().'&'.http_build_query($exerciseUrlParams);
 
 if ($time_control) {
     // Get time left for expiring time

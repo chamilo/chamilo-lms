@@ -10848,7 +10848,7 @@ class Exercise
                     }
                 }
 
-                if (!empty($option['answer'])) {
+                if (isset($option['answer'])) {
                     $exerciseResult[] = $questionId;
 
                     break;

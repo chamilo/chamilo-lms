@@ -1384,7 +1384,6 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
-
         return self::getHtmlAnswer(
             $answer,
             $correct,

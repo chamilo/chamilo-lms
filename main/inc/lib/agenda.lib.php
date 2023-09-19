@@ -1414,7 +1414,7 @@ class Agenda
                 break;
         }
     }
- 
+
     public function exportEventMembersToCsv(int $id, $type = "Invitee")
     {
         if (false === api_get_configuration_value('agenda_event_subscriptions') && false === api_get_configuration_value('agenda_collective_invitations')) {
@@ -1444,6 +1444,7 @@ class Agenda
             $data[$count][] = $user['email'];
             $count++;
         }
+
         return $data;
     }
 

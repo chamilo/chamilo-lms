@@ -719,7 +719,7 @@ class UserGroup extends Model
     /**
      * Gets a list of session ids by user group.
      *
-     * @param int $id group id
+     * @param int  $id                group id
      * @param bool $returnSessionData Whether to return an array with info (true) or just the session ID (false)
      *
      * @return array
@@ -1007,6 +1007,7 @@ class UserGroup extends Model
                 api_get_user_id()
             );
         }
+
         return $sessions;
     }
 
@@ -1042,7 +1043,6 @@ class UserGroup extends Model
         if ($delete_groups) {
             $this->unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
         }
-
 
         $courses = [];
         // Adding new relationships
@@ -1124,7 +1124,8 @@ class UserGroup extends Model
     }
 
     /**
-     * Unsubscribe a usergroup from a list of courses
+     * Unsubscribe a usergroup from a list of courses.
+     *
      * @param int   $usergroup_id
      * @param array $delete_items
      */
@@ -1173,9 +1174,11 @@ class UserGroup extends Model
     }
 
     /**
-     * Unsubscribe a usergroup from a list of sessions
+     * Unsubscribe a usergroup from a list of sessions.
+     *
      * @param int   $groupId
-     * @param array $items Session IDs to remove from the group
+     * @param array $items   Session IDs to remove from the group
+     *
      * @return array The list of session IDs that have been unsubscribed from the group
      */
     public function unsubscribeSessionsFromUserGroup($groupId, $items)
@@ -1414,7 +1417,7 @@ class UserGroup extends Model
     }
 
     /**
-     * Returns whether teachers can access the classes, as per 'allow_teachers_to_classes' setting
+     * Returns whether teachers can access the classes, as per 'allow_teachers_to_classes' setting.
      *
      * @return bool
      */
@@ -1932,6 +1935,7 @@ class UserGroup extends Model
                 api_get_user_id()
             );
         }
+
         return $res;
     }
 
@@ -2443,7 +2447,7 @@ class UserGroup extends Model
     }
 
     /**
-     * Deletes the subscription of a user to a usergroup
+     * Deletes the subscription of a user to a usergroup.
      *
      * @author Julio Montoya
      *

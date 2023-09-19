@@ -100,7 +100,7 @@ if (isset($_GET['action'])) {
                         exit;
                     }
                     break;
-	    }
+        }
             break;
         case 'export_users':
             $data = GroupManager::exportStudentsToArray($groupId, true);

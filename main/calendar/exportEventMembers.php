@@ -21,20 +21,19 @@ if (empty($id)) {
 $agenda = new Agenda($type);
 
 switch ($action) {
-    case 'export_invitees' :
+    case 'export_invitees':
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $data = $agenda->exportEventMembersToCsv($id, "Invitee");
         Export::arrayToCsv($data);
         break;
-    case 'export_subscribers' :
+    case 'export_subscribers':
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
         $data = $agenda->exportEventMembersToCsv($id, "Subscriber");
         Export::arrayToCsv($data);
-	break;
+    break;
 }
 exit;
-

@@ -2762,7 +2762,7 @@ class GroupManager
      * Export all students from a group to an array.
      * This function works only in a context of a course.
      *
-     * @param int  $groupId
+     * @param int $groupId
      *
      * @return array
      */
@@ -2788,6 +2788,7 @@ class GroupManager
             $data[$count][] = $user['email'];
             $count++;
         }
+
         return $data;
     }
 

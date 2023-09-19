@@ -2279,7 +2279,7 @@ class ExtraField extends Model
             'variable',
             [
                 get_lang('SysId'),
-                get_lang('ExtraFieldIdComment')
+                get_lang('ExtraFieldIdComment'),
             ]
         );
         $form->addElement(

@@ -135,6 +135,20 @@ class Rest extends WebService
     public const GET_TEST_UPDATES_LIST = 'get_test_updates_list';
     public const GET_TEST_AVERAGE_RESULTS_LIST = 'get_test_average_results_list';
 
+    public const GET_GROUPS = 'get_groups';
+    public const GROUP_EXISTS = 'group_exists';
+    public const ADD_GROUP = 'add_group';
+    public const DELETE_GROUP = 'delete_group';
+    public const GET_GROUP_SUB_USERS = 'get_group_sub_users';
+    public const GET_GROUP_SUB_COURSES = 'get_group_sub_courses';
+    public const GET_GROUP_SUB_SESSIONS = 'get_group_sub_sessions';
+    public const ADD_GROUP_SUB_USER = 'add_group_sub_user';
+    public const ADD_GROUP_SUB_COURSE = 'add_group_sub_course';
+    public const ADD_GROUP_SUB_SESSION = 'add_group_sub_session';
+    public const DELETE_GROUP_SUB_USER = 'delete_group_sub_user';
+    public const DELETE_GROUP_SUB_COURSE = 'delete_group_sub_course';
+    public const DELETE_GROUP_SUB_SESSION = 'delete_group_sub_session';
+
     /**
      * @var Session
      */
@@ -1689,6 +1703,46 @@ class Rest extends WebService
     }
 
     /**
+     * Returns an array of groups with id, group_type, name, description, visibility.
+     *
+     * @param array $params An array of parameters to filter the results (currently supports 'type')
+     *
+     * @throws Exception
+     */
+    public function getGroups(array $params): array
+    {
+        self::protectAdminEndpoint();
+
+        if ('*' === $params['type']) {
+            $conditions = [];
+        } else {
+            $conditions = ['where' => ['group_type = ?' => $params['type']]];
+        }
+        $userGroup = new UserGroup();
+        $groups = $userGroup->getDataToExport($conditions);
+        $list = [];
+        /** @var \Chamilo\UserBundle\Entity\Group $item */
+        foreach ($groups as $item) {
+            $listTemp = [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'visibility' => $item['visibility'],
+                'type' => $item['group_type'],
+            ];
+            if (in_array($item['group_type'], [0, 1])) {
+                $listTemp['type_name'] = ($item['group_type'] == 0) ? 'class' : 'social';
+            }
+            if (in_array($item['visibility'], [1, 2])) {
+                $listTemp['visibility_name'] = ($item['visibility'] == 1) ? 'open' : 'closed';
+            }
+            $list[] = $listTemp;
+        }
+
+        return $list;
+    }
+
+    /**
      * @throws Exception
      */
     public function addSession(array $params): array
@@ -1802,6 +1856,7 @@ class Rest extends WebService
     /**
      * @param $userParam
      *
+     * @return array
      * @throws Exception
      */
     public function addUser($userParam): array
@@ -2058,6 +2113,20 @@ class Rest extends WebService
     {
         // MESSAGE_STATUS_NEW is also used for messages that have been "read"
         MessageManager::update_message_status($this->user->getId(), $messageId, MESSAGE_STATUS_NEW);
+    }
+
+    /**
+     * Add a group
+     * @param array Params
+     */
+    public function createGroup($params)
+    {
+        self::protectAdminEndpoint();
+
+        $name = $params['name'];
+        $description = $params['description'];
+
+
     }
 
     /**
@@ -2699,6 +2768,19 @@ class Rest extends WebService
     public function usernameExist($loginname)
     {
         return false !== api_get_user_info_from_username($loginname);
+    }
+
+    /**
+     * Returns whether a user group name exists.
+     *
+     * @param string $name the group name
+     *
+     * @return bool whether the group name exists
+     */
+    public function groupExists($name)
+    {
+        $userGroup = new UserGroup();
+        return false !== $userGroup->usergroup_exists($name);
     }
 
     /**
@@ -3940,5 +4022,178 @@ class Rest extends WebService
 
         return api_get_self().'?'
             .http_build_query(array_merge($queryParams, $additionalParams));
+    }
+
+    /**
+     * Create a group/class
+     *
+     * @param $params
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function addGroup($params): array
+    {
+        self::protectAdminEndpoint();
+
+        if (!empty($params['type'])) {
+            $params['group_type'] = $params['type'];
+        }
+
+        // First check wether the login already exists.
+        $userGroup = new UserGroup();
+        if ($userGroup->usergroup_exists($params['name'])) {
+            throw new Exception($params['name'].' '.get_lang('AlreadyExists'));
+        }
+
+        $groupId = $userGroup->save($params);
+
+        if (empty($groupId)) {
+            throw new Exception(get_lang('NotRegistered'));
+        }
+
+        return [$groupId];
+    }
+
+    /**
+     * Delete a group/class
+     *
+     * @param int $id
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteGroup(int $id): array
+    {
+        self::protectAdminEndpoint();
+
+        if (empty($id)) {
+            return false;
+        }
+
+        // First check wether the login already exists.
+        $userGroup = new UserGroup();
+        if (!$userGroup->delete($id)) {
+            throw new Exception(get_lang('NotDeleted'));
+        }
+
+        return [$id];
+    }
+
+    /**
+     * Get the list of users subscribed to the given group/class
+     * @param int $groupId
+     * @return array The list of users (userID => [firstname, lastname, relation_type]
+     */
+    public function getGroupSubscribedUsers(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_all_users_by_group($groupId);
+    }
+
+    /**
+     * Get the list of courses to which the given group/class is subscribed
+     * @param int $groupId
+     * @return array The list of courses (ID => [title]
+     */
+    public function getGroupSubscribedCourses(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_courses_by_usergroup($groupId, true);
+    }
+
+        /**
+     * Get the list of sessions to which the given group/class is subscribed
+     * @param int $groupId
+     * @return array The list of courses (ID => [title]
+     */
+    public function getGroupSubscribedSessions(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_sessions_by_usergroup($groupId, true);
+    }
+
+    /**
+     * Add a new user to the given group/class
+     * @param int $groupId
+     * @param int $userId
+     * @param int $relationType (1:admin, 2:reader, etc. See GROUP_USER_PERMISSION_ constants in api.lib.php)
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function addGroupSubscribedUser(int $groupId, int $userId, int $relationType = 2): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->add_user_to_group($userId, $groupId, $relationType)];
+    }
+
+    /**
+     * Add a new course to which the given group/class is subscribed
+     * @param int $groupId
+     * @param int $courseId
+     * @return array One item array containing the ID of the course on success, nothing on failure
+     */
+    public function addGroupSubscribedCourse(int $groupId, int $courseId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->subscribe_courses_to_usergroup($groupId, [$courseId], false)];
+    }
+
+    /**
+     * Add a new session to which the given group/class is subscribed
+     * @param int $groupId
+     * @param int $sessionId
+     * @return array One item array containing the ID of the session on success, nothing on failure
+     */
+    public function addGroupSubscribedSession(int $groupId, int $sessionId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->subscribe_sessions_to_usergroup($groupId, [$sessionId] ,false)];
+    }
+
+    /**
+     * Remove a user from the given group/class
+     * @param int $groupId
+     * @param int $userId
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedUser(int $groupId, int $userId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->delete_user_rel_group($userId, $groupId)];
+    }
+
+    /**
+     * Remove a course to which the given group/class is subscribed
+     * @param int $groupId
+     * @param int $courseId
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedCourse(int $groupId, int $courseId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->unsubscribe_courses_from_usergroup($groupId, [$courseId])];
+    }
+
+    /**
+     * Remove a session to which the given group/class is subscribed
+     * @param int $groupId
+     * @param int $sessionId
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedSession(int $groupId, int $sessionId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->unsubscribeSessionsFromUserGroup($groupId, [$sessionId] ,false)];
     }
 }

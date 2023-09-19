@@ -720,21 +720,34 @@ class UserGroup extends Model
      * Gets a list of session ids by user group.
      *
      * @param int $id group id
+     * @param bool $returnSessionData Whether to return an array with info (true) or just the session ID (false)
      *
      * @return array
      */
-    public function get_sessions_by_usergroup($id)
+    public function get_sessions_by_usergroup($id, $returnSessionData = false)
     {
-        $results = Database::select(
-            'session_id',
-            $this->usergroup_rel_session_table,
-            ['where' => ['usergroup_id = ?' => $id]]
-        );
+        if ($returnSessionData) {
+            $results = Database::select(
+                'g.session_id, s.name, s.description, s.nbr_users, s.nbr_courses',
+                $this->usergroup_rel_session_table." g, ".$this->session_table." s",
+                ['where' => ['g.session_id = s.id AND g.usergroup_id = ?' => $id]]
+            );
+        } else {
+            $results = Database::select(
+                'session_id',
+                $this->usergroup_rel_session_table,
+                ['where' => ['usergroup_id = ?' => $id]]
+            );
+        }
 
         $array = [];
         if (!empty($results)) {
             foreach ($results as $row) {
-                $array[] = $row['session_id'];
+                if ($returnSessionData) {
+                    $array[$row['session_id']] = $row;
+                } else {
+                    $array[] = $row['session_id'];
+                }
             }
         }
 
@@ -912,8 +925,10 @@ class UserGroup extends Model
      * @param int   $usergroup_id          usergroup id
      * @param array $list                  list of session ids
      * @param bool  $deleteCurrentSessions Optional. Empty the session list for the usergroup (class)
+     *
+     * @return array List of IDs of the sessions added to the usergroup
      */
-    public function subscribe_sessions_to_usergroup($usergroup_id, $list, $deleteCurrentSessions = true)
+    public function subscribe_sessions_to_usergroup($usergroup_id, $list, $deleteCurrentSessions = true): array
     {
         $current_list = $this->get_sessions_by_usergroup($usergroup_id);
         $user_list = $this->get_users_by_usergroup($usergroup_id);
@@ -921,8 +936,11 @@ class UserGroup extends Model
         $delete_items = $new_items = [];
         if (!empty($list)) {
             foreach ($list as $session_id) {
-                if (!in_array($session_id, $current_list)) {
-                    $new_items[] = $session_id;
+                if (SessionManager::isValidId($session_id)) {
+                    // Only if the session IDs given are not bogus
+                    if (!in_array($session_id, $current_list)) {
+                        $new_items[] = $session_id;
+                    }
                 }
             }
         }
@@ -963,7 +981,7 @@ class UserGroup extends Model
             }
         }
 
-        $sessions = '';
+        $sessions = [];
         // Adding new relationships.
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
@@ -977,18 +995,19 @@ class UserGroup extends Model
                         null,
                         false
                     );
-                    $sessions .= $session_id.',';
+                    $sessions[] = $session_id;
                 }
             }
             // Add event to system log
             Event::addEvent(
                 LOG_GROUP_PORTAL_SESSION_SUBSCRIBED,
                 LOG_GROUP_PORTAL_ID,
-                'gid: '.$usergroup_id.' - sids: '.substr($sessions, 0, -1),
+                'gid: '.$usergroup_id.' - sids: '.implode(',', $sessions),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
+        return $sessions;
     }
 
     /**
@@ -1024,9 +1043,10 @@ class UserGroup extends Model
             $this->unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
         }
 
+
+        $courses = [];
         // Adding new relationships
         if (!empty($new_items)) {
-            $courses = '';
             foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
@@ -1088,29 +1108,32 @@ class UserGroup extends Model
                         $params
                     );
                 }
-                $courses .= $course_id.',';
+                $courses[] = $course_id;
             }
             // Add event to system log
             Event::addEvent(
                 LOG_GROUP_PORTAL_COURSE_SUBSCRIBED,
                 LOG_GROUP_PORTAL_ID,
-                'gid: '.$usergroup_id.' - cids: '.substr($courses, 0, -1),
+                'gid: '.$usergroup_id.' - cids: '.implode(',', $courses),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
+
+        return $courses;
     }
 
     /**
+     * Unsubscribe a usergroup from a list of courses
      * @param int   $usergroup_id
      * @param array $delete_items
      */
     public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
+        $courses = [];
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = $this->get_users_by_usergroup($usergroup_id);
-            $courses = '';
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
@@ -1133,18 +1156,69 @@ class UserGroup extends Model
                             ],
                         ]
                     );
-                    $courses .= $course_id.',';
+                    $courses[] = $course_id;
                 }
             }
             // Add event to system log
             Event::addEvent(
                 LOG_GROUP_PORTAL_COURSE_UNSUBSCRIBED,
                 LOG_GROUP_PORTAL_ID,
-                'gid: '.$usergroup_id.' - cids: '.substr($courses, 0, -1),
+                'gid: '.$usergroup_id.' - cids: '.implode(',', $courses),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
+
+        return $courses;
+    }
+
+    /**
+     * Unsubscribe a usergroup from a list of sessions
+     * @param int   $groupId
+     * @param array $items Session IDs to remove from the group
+     * @return array The list of session IDs that have been unsubscribed from the group
+     */
+    public function unsubscribeSessionsFromUserGroup($groupId, $items)
+    {
+        // Deleting items.
+        $sessions = [];
+        if (!empty($items)) {
+            $users = $this->get_users_by_usergroup($groupId);
+            foreach ($items as $sessionId) {
+                if (SessionManager::isValidId($sessionId)) {
+                    if (!api_get_configuration_value('usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe')) {
+                        if (!empty($users)) {
+                            foreach ($users as $userId) {
+                                SessionManager::unsubscribe_user_from_session(
+                                    $sessionId,
+                                    $userId
+                                );
+                            }
+                        }
+                    }
+                    Database::delete(
+                        $this->usergroup_rel_session_table,
+                        [
+                            'usergroup_id = ? AND session_id = ?' => [
+                                $groupId,
+                                $sessionId,
+                            ],
+                        ]
+                    );
+                    $sessions[] = $sessionId;
+                }
+            }
+            // Add event to system log
+            Event::addEvent(
+                LOG_GROUP_PORTAL_SESSION_UNSUBSCRIBED,
+                LOG_GROUP_PORTAL_ID,
+                'gid: '.$groupId.' - sids: '.implode(',', $sessions),
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
+        }
+
+        return $sessions;
     }
 
     /**
@@ -1340,6 +1414,8 @@ class UserGroup extends Model
     }
 
     /**
+     * Returns whether teachers can access the classes, as per 'allow_teachers_to_classes' setting
+     *
      * @return bool
      */
     public function allowTeachers()
@@ -1435,21 +1511,25 @@ class UserGroup extends Model
      */
     public function getDataToExport($options = [])
     {
+        $and = '';
+        if (!empty($options) && !empty($options['where'])) {
+            $and = ' AND ';
+        }
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (u.id = a.usergroup_id)";
-            $options = ['where' => ['access_url_id = ? ' => $urlId]];
+            $options['where'][$and.' access_url_id = ? '] = $urlId;
             if ($this->allowTeachers()) {
-                $options['where'] = [' author_id = ? ' => api_get_user_id()];
+                $options['where'] = [' AND author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('u.id, name, description', $from, $options);
+            $classes = Database::select('u.id, name, description, group_type, visibility', $from, $options);
         } else {
             if ($this->allowTeachers()) {
-                $options['where'] = [' author_id = ? ' => api_get_user_id()];
+                $options['where'] = [$and.' author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('id, name, description', $this->table, $options);
+            $classes = Database::select('id, name, description, group_type, visibility', $this->table, $options);
         }
 
         $result = [];
@@ -1841,15 +1921,18 @@ class UserGroup extends Model
                 WHERE usergroup_id = $id";
         Database::query($sql);
 
-        parent::delete($id);
+        $res = parent::delete($id);
         // Add event to system log
-        Event::addEvent(
-            LOG_GROUP_PORTAL_DELETED,
-            LOG_GROUP_PORTAL_ID,
-            'id: '.$id,
-            api_get_utc_datetime(),
-            api_get_user_id()
-        );
+        if ($res) {
+            Event::addEvent(
+                LOG_GROUP_PORTAL_DELETED,
+                LOG_GROUP_PORTAL_ID,
+                'id: '.$id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
+        }
+        return $res;
     }
 
     /**
@@ -2360,14 +2443,14 @@ class UserGroup extends Model
     }
 
     /**
-     * Deletes an url and session relationship.
+     * Deletes the subscription of a user to a usergroup
      *
      * @author Julio Montoya
      *
      * @param int $userId
      * @param int $groupId
      *
-     * @return bool true if success
+     * @return bool true on success
      * */
     public function delete_user_rel_group($userId, $groupId)
     {
@@ -2769,7 +2852,7 @@ class UserGroup extends Model
             return [];
         }
 
-        $sql = "SELECT u.id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT u.id, u.firstname, u.lastname, gu.relation_type
                 FROM $tbl_user u
 			    INNER JOIN $table_group_rel_user gu
 			    ON (gu.user_id = u.id)

@@ -865,6 +865,88 @@ try {
                 $restApi->getTestAverageResultsList($_POST['ids'], $fields)
             );
             break;
+        /* groups/classes */
+        case Rest::GET_GROUPS:
+            Event::addEvent(LOG_WS.$action, 'username', $username);
+            $data = $restApi->getGroups($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::GROUP_EXISTS:
+            Event::addEvent(LOG_WS.$action, 'groupname', $_POST['name']);
+            $data = $restApi->groupExists($_POST['name']);
+            $restResponse->setData([$data]);
+            break;
+        case Rest::ADD_GROUP:
+            $data = $restApi->addGroup($_POST);
+            Event::addEvent(LOG_WS.$action, 'user_id', $data);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_GROUP:
+            $data = $restApi->deleteGroup($_POST['id']);
+            Event::addEvent(LOG_WS.$action, 'group_id', $data);
+            $restResponse->setData($data);
+            break;
+        case Rest::GET_GROUP_SUB_USERS:
+            $data = $restApi->getGroupSubscribedUsers($_POST['id']);
+            Event::addEvent(LOG_WS.$action, 'group_id', $data);
+            $restResponse->setData($data);
+            break;
+        case Rest::GET_GROUP_SUB_COURSES:
+            $data = $restApi->getGroupSubscribedCourses($_POST['id']);
+            Event::addEvent(LOG_WS.$action, 'group_id', $data);
+            $restResponse->setData($data);
+            break;
+        case Rest::GET_GROUP_SUB_SESSIONS:
+            $data = $restApi->getGroupSubscribedSessions($_POST['id']);
+            Event::addEvent(LOG_WS.$action, 'group_id', $data);
+            $restResponse->setData($data);
+            break;
+        case Rest::ADD_GROUP_SUB_USER:
+            $groupId = (int) $_POST['group_id'];
+            $userId = (int) $_POST['user_id'];
+            $role = 2;
+            if (isset($_POST['role'])) {
+                $role = (int) $_POST['role'];
+            }
+            $data = $restApi->addGroupSubscribedUser($groupId, $userId, $role);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
+        case Rest::ADD_GROUP_SUB_COURSE:
+            $groupId = (int) $_POST['group_id'];
+            $courseId = (int) $_POST['course_id'];
+            $data = $restApi->addGroupSubscribedCourse($groupId, $courseId);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
+        case Rest::ADD_GROUP_SUB_SESSION:
+            $groupId = (int) $_POST['group_id'];
+            $sessionId = (int) $_POST['session_id'];
+            $data = $restApi->addGroupSubscribedSession($groupId, $sessionId);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_GROUP_SUB_USER:
+            $groupId = (int) $_POST['group_id'];
+            $userId = (int) $_POST['user_id'];
+            $data = $restApi->deleteGroupSubscribedUser($groupId, $userId);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_GROUP_SUB_COURSE:
+            $groupId = (int) $_POST['group_id'];
+            $courseId = (int) $_POST['course_id'];
+            $data = $restApi->deleteGroupSubscribedCourse($groupId, $courseId);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_GROUP_SUB_SESSION:
+            $groupId = (int) $_POST['group_id'];
+            $sessionId = (int) $_POST['session_id'];
+            $data = $restApi->deleteGroupSubscribedSession($groupId, $sessionId);
+            Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
+            $restResponse->setData($data);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

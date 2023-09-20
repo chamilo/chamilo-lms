@@ -97,8 +97,11 @@ class OralExpression extends Question
 
         $variable = 'oral_expression_asset_'.$attempt->getQuestionId();
 
+        $asset = null;
         $assetId = ChamiloSession::read($variable);
-        $asset = Container::getAssetRepository()->find(Uuid::fromRfc4122($assetId));
+        if (!empty($assetId)) {
+            $asset = Container::getAssetRepository()->find(Uuid::fromRfc4122($assetId));
+        }
 
         if (null === $asset) {
             return;

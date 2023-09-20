@@ -5169,12 +5169,14 @@ EOT;
         $additionalActions = api_get_setting('exercise.exercise_additional_teacher_modify_actions', true) ?: [];
         $actions = [];
 
-        foreach ($additionalActions as $additionalAction) {
-            $actions[] = call_user_func(
-                $additionalAction,
-                $exerciseId,
-                $iconSize
-            );
+        if (is_array($additionalActions)) {
+            foreach ($additionalActions as $additionalAction) {
+                $actions[] = call_user_func(
+                    $additionalAction,
+                    $exerciseId,
+                    $iconSize
+                );
+            }
         }
 
         return implode(PHP_EOL, $actions);

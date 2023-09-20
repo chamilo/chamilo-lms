@@ -39,6 +39,10 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             $courseId = $course->getId();
             $courseDirectory = $course->getDirectory();
 
+            if (empty($courseDirectory)) {
+                continue;
+            }
+
             // Tool intro
             $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";
             $result = $connection->executeQuery($sql);

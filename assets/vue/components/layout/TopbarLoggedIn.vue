@@ -87,8 +87,6 @@ const btnTicketsOnClick = () => {
   window.location = window.location.origin + `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`
 }
 
-const btnProfileOnClick = async () => await router.push({ name: "AccountHome" })
-
 const btnInboxOnClick = async () => await router.push({ name: "MessageList" })
 
 const elUserSubmenu = ref(null)
@@ -106,7 +104,7 @@ const userSubmenuItems = [
       },
       {
         label: t("Settings"),
-        url: "/account/home",
+        to: { name: "AccountHome" },
       },
     ],
   },

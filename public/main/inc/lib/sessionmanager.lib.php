@@ -515,7 +515,6 @@ class SessionManager
                      access_end_date,
                      s.visibility,
                      s.session_category_id,
-                     $injectExtraFields
                      s.id
              ";
 
@@ -597,7 +596,12 @@ class SessionManager
             $where .= " AND (sru.user_id = $userId AND sru.relation_type IN(".implode(',', $relationTypeList)."))";
         }
 
-        $query = "$select FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
+        $query = "$select";
+        if (!empty($injectExtraFields)) {
+            $injectExtraFields = rtrim(trim($injectExtraFields), ',');
+            $query .= ", $injectExtraFields";
+        }
+        $query .= " FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
 
         if (api_is_multiple_url_enabled()) {
             $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);

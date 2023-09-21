@@ -52,14 +52,15 @@ import BaseButton from "../basecomponents/BaseButton.vue";
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
-
+import {useNotification} from "../../composables/notification";
+import router from "../../router";
 const store = useStore();
 const {t} = useI18n();
-
+const notification = useNotification()
 const user = inject('social-user');
-
 const currentUser = store.getters['security/getUser'];
 const userIsAdmin = store.getters['security/isAdmin'];
+const $router = router;
 
 const postState = reactive({
   content: '',
@@ -76,13 +77,11 @@ const v$ = useVuelidate({
 
 watch(() => user.value, () => {
   showTextPlaceholder();
-
   showCheckboxPromoted();
 });
 
 onMounted(() => {
   showTextPlaceholder();
-
   showCheckboxPromoted();
 });
 
@@ -112,20 +111,25 @@ async function sendPost() {
     userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
   };
 
-  await store.dispatch('socialpost/create', createPostPayload);
+  await store.dispatch('socialpost/create', createPostPayload).then(() => {
 
-  if (postState.attachment) {
-    const post = store.state.socialpost.created;
-    const attachmentPayload = {
-      postId: post.id,
-      file: postState.attachment
-    };
+    if (postState.attachment) {
+      const post = store.state.socialpost.created;
+      const attachmentPayload = {
+        postId: post.id,
+        file: postState.attachment
+      };
+      store.dispatch('messageattachment/createWithFormData', attachmentPayload).catch(() => {
+        notification.showSuccessNotification(t("Error"))
+      });
 
-    await store.dispatch('messageattachment/createWithFormData', attachmentPayload);
-  }
+    } else {
+      notification.showSuccessNotification(t("Saved"))
+    }
+  }).catch(() => {
+    notification.showSuccessNotification(t("Error"))
+  })
 
-  postState.content = '';
-  postState.attachment = null;
-  postState.isPromoted = false;
+  $router.go(0);
 }
 </script>

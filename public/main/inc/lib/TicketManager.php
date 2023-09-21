@@ -2451,38 +2451,38 @@ class TicketManager
 
     public static function getAllowedRolesFromProject(int $projectId): array
     {
-        if ('' === $options = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles')) {
+        // Define a mapping from role IDs to role names
+        $roleMap = [
+            1 => 'ROLE_ADMIN',
+            17 => 'ROLE_STUDENT_BOSS',
+            4 => 'ROLE_RRHH',
+            3 => 'ROLE_SESSION_MANAGER',
+            // ... other mappings can be added as needed
+        ];
+
+        $jsonString = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles');
+
+        if (empty($jsonString)) {
             return [];
         }
 
-        if ([] === $permissionsLines = explode(PHP_EOL, $options)) {
+        $data = json_decode($jsonString, true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            // Invalid JSON
             return [];
         }
 
-        foreach ($permissionsLines as $permissionsLine) {
-
-            if (!str_contains($permissionsLine, ':')) {
-                continue;
-            }
-
-            [$id, $rolesLine] = explode(':', $permissionsLine, 2);
-
-            if (empty($rolesLine)) {
-                continue;
-            }
-
-            $roles = explode(',', $rolesLine);
-
-            if ($projectId !== (int) $id) {
-                continue;
-            }
-
-            return array_map(
-                fn($role) => (int) $role,
-                $roles
-            );
+        if (!isset($data['permissions'][$projectId])) {
+            // No permissions for the given projectId
+            return [];
         }
 
-        return [];
+        $roleIds = $data['permissions'][$projectId];
+
+        // Transform role IDs into role names using the defined mapping
+        return array_map(function ($roleId) use ($roleMap) {
+            return $roleMap[$roleId] ?? "$roleId";
+        }, $roleIds);
     }
 }

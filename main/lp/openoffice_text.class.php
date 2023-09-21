@@ -331,11 +331,10 @@ class OpenofficeText extends OpenofficeDocument
      */
     public function add_command_parameters()
     {
-        return ' -d woogie "'
+        return ' -d woogie '
             .Security::sanitizeExecParam($this->base_work_dir.'/'.$this->file_path)
-            .'"  "'
-            .Security::sanitizeExecParam($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html')
-            .'"';
+            .'  '
+            .Security::sanitizeExecParam($this->base_work_dir.$this->created_dir.'/'.$this->file_name.'.html');
     }
 
     /**

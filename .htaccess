@@ -117,6 +117,10 @@ AddType application/font-woff .woff .woff2
 #  Header always set Content-Security-Policy "upgrade-insecure-requests;"
 #</IfModule>
 
+# Disallow direct access to /main/inc/lib/javascript/bigupload/files
+RedirectMatch 403 ^/main/inc/lib/javascript/bigupload/files
+
+# Disallow MIME sniffing to prevent XSS from unknown/incorrect file extensions
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options nosniff
 </IfModule>

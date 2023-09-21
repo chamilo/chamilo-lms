@@ -358,7 +358,7 @@ class SettingsManager implements SettingsManagerInterface
         ]);
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getTitle()] = $parameter;
+            $persistedParametersMap[$parameter->getVariable()] = $parameter;
         }
 
         // @var SettingsEvent $event

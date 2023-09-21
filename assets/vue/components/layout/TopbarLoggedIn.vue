@@ -8,7 +8,7 @@
     </div>
     <div class="app-topbar__items">
       <PrimeButton
-        v-if="'true' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        v-if="'false' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
         :icon="chamiloIconToClass['ticket']"
         class="item-button"
         icon-class="item-button__icon"

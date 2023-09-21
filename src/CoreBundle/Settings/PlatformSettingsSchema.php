@@ -109,7 +109,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'webservice_enable_adminonly_api' => 'false',
                     'plugin_settings' => '',
                     'allow_working_time_edition' => 'false',
-                    'ticket_project_user_roles' => '',
                     'disable_user_conditions_sender_id' => '0',
                     'portfolio_advanced_sharing' => 'false',
                     'redirect_index_to_url_for_logged_users' => '',
@@ -349,15 +348,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_working_time_edition', YesNoType::class)
-            ->add(
-                'ticket_project_user_roles',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Allow ticket projects to be access by specific chamilo roles').
-                        $this->settingArrayHelpValue('ticket_project_user_roles'),
-                ]
-            )
             ->add('disable_user_conditions_sender_id', TextType::class)
             ->add('portfolio_advanced_sharing', TextType::class)
             ->add('redirect_index_to_url_for_logged_users', TextType::class)
@@ -434,13 +424,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                         'tool_enable' => 'true', // string value
                         'host' => 'https://www.example.com',
                         'salt' => 'abc123'
-                    ]
-                ]
-                </pre>",
-            'ticket_project_user_roles' => "<pre>
-                [
-                    'permissions' => [
-                        1 => [17] // project_id = 1, STUDENT_BOSS = 17
                     ]
                 ]
                 </pre>",

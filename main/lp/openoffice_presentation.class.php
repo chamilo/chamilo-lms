@@ -253,11 +253,10 @@ class OpenofficePresentation extends OpenofficeDocument
             $this->slide_height = (int) $h;
         }
 
-        return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie "'
+        return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie '
             .Security::sanitizeExecParam($this->base_work_dir.'/'.$this->file_path)
-            .'"  "'
-            .Security::sanitizeExecParam($this->base_work_dir.$this->created_dir.'.html')
-            .'"';
+            .'  '
+            .Security::sanitizeExecParam($this->base_work_dir.$this->created_dir.'.html');
     }
 
     public function set_slide_size($width, $height)

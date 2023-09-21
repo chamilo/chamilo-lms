@@ -470,7 +470,8 @@ class SessionManager
         $columns = [],
         $listType = 'all',
         $extraFieldsToLoad = [],
-        $formatted = false
+        $formatted = false,
+        $language = ''
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -544,6 +545,31 @@ class SessionManager
 
             if ($isMakingOrder) {
                 $order = str_replace('category_name', 'sc.name', $order);
+            }
+        }
+
+        if (!empty($language)) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $sqlInjectJoins .= " INNER JOIN $table sc ON (sc.session_id = s.id)
+                               INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
+            $language = Database::escape_string($language);
+
+            if ('true' === api_get_setting('language.allow_course_multiple_languages')) {
+                $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+                $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+                $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
+                $sql = "SELECT id FROM $tblExtraField WHERE item_type = $extraFieldType AND variable = 'multiple_language'";
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    $fieldId = Database::result($rs, 0, 0);
+                    $sqlInjectJoins .= " INNER JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
+                    $where .= " AND (c.course_language = '$language' OR cfv.field_value LIKE '%$language%')";
+                } else {
+                    $where .= " AND c.course_language = '$language' ";
+                }
+            } else {
+                $where .= " AND c.course_language = '$language' ";
             }
         }
 
@@ -681,6 +707,12 @@ class SessionManager
                         null,
                         true
                     );
+                    $usersLang = self::getCountUsersLangBySession($session['id']);
+                    $tooltipUserLangs = '';
+                    if (!empty($usersLang)) {
+                        $tooltipUserLangs = implode(' | ', $usersLang);
+                    }
+                    $session['users'] = '<a href="#" title="'.$tooltipUserLangs.'">'.$session['users'].'</a>';
                     $courses = self::getCoursesInSession($session_id);
                     $teachers = '';
                     foreach ($courses as $courseId) {
@@ -688,9 +720,6 @@ class SessionManager
 
                         // Ofaj
                         $teachers = CourseManager::get_coachs_from_course_to_string($session_id, $courseInfo['real_id']);
-                        /*$teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
-                            $courseInfo['code']
-                        );*/
                     }
                     // ofaj
                     $session['teachers'] = '';
@@ -762,6 +791,55 @@ class SessionManager
         }
 
         return $formattedSessions;
+    }
+
+    /**
+     * Get the count of users by language and session
+     *
+     * @param $sid
+     * @param int $urlId
+     * @param null $status
+     *
+     * @return array A list of ISO lang of users registered in the session , ex: FR 6
+     */
+    public static function getCountUsersLangBySession(
+        $sid,
+        $urlId = 0,
+        $status = null
+    ): array
+    {
+        $sid = (int) $sid;
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tableAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tableLanguage = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
+        $sql = "SELECT l.isocode, count(u.id) as cLang
+                FROM $tblSessionUser su
+                INNER JOIN $tblUser u ON (u.id = su.user_id)
+                INNER JOIN $tableLanguage l ON (l.english_name = u.language)
+                LEFT OUTER JOIN $tableAccessUrlUser au ON (au.user_id = u.id)
+                ";
+
+        if (is_numeric($status)) {
+            $status = (int) $status;
+            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
+        } else {
+            $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
+        }
+        $sql .= " AND su.session_id = $sid GROUP BY l.isocode";
+
+        $rs = Database::query($sql);
+        $usersLang = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_assoc($rs)) {
+                $usersLang[] = strtoupper($row['isocode'])." ".$row['cLang'];
+            }
+        }
+
+        return $usersLang;
     }
 
     /**
@@ -9645,7 +9723,7 @@ class SessionManager
         $default = 'all';
         $view = api_get_setting('session.default_session_list_view');
 
-        if (!empty($view)) {
+        if ('false' !== $view && !empty($view)) {
             $default = $view;
         }
 

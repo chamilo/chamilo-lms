@@ -49,7 +49,7 @@
     "free-jqgrid": "https://github.com/chamilo/jqGrid.git#commit=725be74a7ea9d3acc896b68b11b0fbdb36105df3",
     "full-icu": "^1.5.0",
     "glob-all": "^3.3.1",
-    "graphql": "^16.7.1",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "highlight.js": "^11.7.0",
     "hljs": "^6.2.3",

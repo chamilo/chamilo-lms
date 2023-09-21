@@ -1721,6 +1721,56 @@ class UserManager
     }
 
     /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path to a folder ending with "/"
+     * In case the first level of subdirectory of users/ does not exist, the
+     * function will attempt to create it. Probably not the right place to do it
+     * but at least it avoids headaches in many other places.
+     *
+     * @param int    $id   User ID
+     * @param string $type Type of path to return (can be 'system', 'web', 'last')
+     *
+     * @return string User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
+     */
+    public static function getUserPathById($id, $type)
+    {
+        $id = (int) $id;
+        if (!$id) {
+            return null;
+        }
+
+        $userPath = "users/$id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+            // In exceptional cases, on some portals, the intermediate base user
+            // directory might not have been created. Make sure it is before
+            // going further.
+
+            $rootPath = api_get_path(SYS_PATH).'../app/upload/users/'.substr((string) $id, 0, 1);
+            if (!is_dir($rootPath)) {
+                $perm = api_get_permissions_for_new_directories();
+                try {
+                    mkdir($rootPath, $perm);
+                } catch (Exception $e) {
+                    error_log($e->getMessage());
+                }
+            }
+        }
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'last': // Only the last part starting with users/
+                break;
+        }
+
+        return $userPath;
+    }
+
+    /**
      * Gets the current user image.
      *
      * @param string $userId

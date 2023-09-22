@@ -1,0 +1,73 @@
+{% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled %}
+    <div id="monitoring-camera"></div>
+
+    <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
+    <script>
+        $(function () {
+            var $btnQuestion = $('button[data-question]');
+            var $btnSaveNow = $('button[name="save_now"]');
+
+            Webcam.set({
+                height: 285,
+                width: 380,
+            });
+            Webcam.attach('#monitoring-camera');
+            Webcam.on('live', function () {
+                Webcam.snap(function (dataUri) {
+                    var questionId = $btnQuestion.data('question')
+
+                    sendData(questionId, dataUri);
+                });
+            });
+
+            $btnQuestion.on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $btnSaveNow.on('click', function (e) {
+                e.preventDefault();
+
+                Webcam.snap(function (dataUri) {
+                    var questionId = $btnSaveNow.data('question')
+
+                    sendData(-1, dataUri);
+                });
+            });
+
+            function sendData(questionId, imageUri) {
+                var rawImgIdDoc = imageUri.replace(/^data:image\/\w+;base64,/, '');
+                var blobImgIdDoc = new Blob( [ Webcam.base64DecToArr(rawImgIdDoc) ], {type: 'image/jpeg'} );
+
+                var formData = new FormData();
+                formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
+                formData.append('exe_id', '{{ exercisemonitoring.exe_id }}');
+                formData.append('question_id', questionId);
+                formData.append('snapshot', blobImgIdDoc, 'snapshot.jpg');
+
+                return $.ajax({
+                    url: '{{ _p.web_plugin }}exercisemonitoring/pages/exercise_submit.ajax.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                });
+            }
+        });
+    </script>
+    <style>
+        #plugin_pre_footer {
+            position: relative;
+        }
+        #monitoring-camera {
+            bottom: 0;
+            right: 0;
+            max-width: 108px;
+            max-height: 81px;
+            position: absolute;
+        }
+        #monitoring-camera video {
+            max-width: 108px;
+            max-height: 81px;
+        }
+    </style>
+{% endif %}

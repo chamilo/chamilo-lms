@@ -393,11 +393,12 @@ class LegalManager
         $link = trim(
             api_get_setting('course_validation_terms_and_conditions_url')
         );
+        $completeLink = '<a href="'.$link.'">'.$link.'</a>';
         // Note: Translated string has 3 replacement markers, not just one as the original string suggests.
         $content = sprintf(
             get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
             $studentDetails['firstname'],
-            $link,
+            $completeLink,
             $coachDetails['complete_name']
         );
         MessageManager::send_message_simple($userId, $subject, $content);

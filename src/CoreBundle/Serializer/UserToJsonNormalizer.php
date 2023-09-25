@@ -64,8 +64,9 @@ final class UserToJsonNormalizer
      * @param array $substitutionTerms Substitute terms for some elements
      *
      * @return string
+     * @throws NotSupported
      */
-    public function getPersonalDataToJson(int $userId, array $substitutionTerms)
+    public function getPersonalDataToJson(int $userId, array $substitutionTerms): string
     {
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;

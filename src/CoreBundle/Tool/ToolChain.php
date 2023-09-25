@@ -200,7 +200,7 @@ class ToolChain
         return $course;
     }
 
-    public function getTools()
+    public function getTools(): iterable
     {
         return $this->handlerCollection->getCollection();
     }

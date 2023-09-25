@@ -57,7 +57,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb;
     }
 
-    public function getStudentPublicationByUser(User $user, Course $course, Session $session = null): array
+    public function getStudentPublicationByUser(User $user, Course $course, ?Session $session = null): array
     {
         $qb = $this->findAllByCourse($course, $session);
         /** @var CStudentPublication[] $works */
@@ -73,8 +73,12 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $list;
     }
 
-    public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null): int
-    {
+    public function countUserPublications(
+        User $user,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null
+    ): int {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
@@ -93,7 +97,7 @@ final class CStudentPublicationRepository extends ResourceRepository
     /**
      * Find all the works registered by a teacher.
      */
-    public function findWorksByTeacher(User $user, Course $course, Session $session = null)
+    public function findWorksByTeacher(User $user, Course $course, Session $session = null): array
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
@@ -105,7 +109,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
     }
 
-    private function addActiveQueryBuilder(?int $active = null, QueryBuilder $qb = null): QueryBuilder
+    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -115,32 +119,26 @@ final class CStudentPublicationRepository extends ResourceRepository
                 ->setParameter('active', $active)
             ;
         }
-
-        return $qb;
     }
 
-    private function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    private function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
             ->andWhere('resource.active <> 2')
         ;
-
-        return $qb;
     }
 
-    private function addFileTypeQueryBuilder(?string $fileType, QueryBuilder $qb = null): QueryBuilder
+    private function addFileTypeQueryBuilder(?string $fileType, QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $fileType) {
-            return $qb;
+            return;
         }
 
         $qb
             ->andWhere('resource.filetype = :filetype')
             ->setParameter('filetype', $fileType)
         ;
-
-        return $qb;
     }
 }

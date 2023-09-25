@@ -20,7 +20,7 @@ final class CCourseDescriptionRepository extends ResourceRepository
         parent::__construct($registry, CCourseDescription::class);
     }
 
-    public function findByTypeInCourse(int $type, Course $course, Session $session = null, CGroup $group = null)
+    public function findByTypeInCourse(int $type, Course $course, Session $session = null, CGroup $group = null): array
     {
         $qb = $this->getResourcesByCourse($course, $session, $group)
             ->andWhere('resource.descriptionType = :description_type')

@@ -230,7 +230,7 @@ class SessionVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN') &&
+        if ($this->security->isGranted('ROLE_TEACHER') &&
             'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') &&
             !$session->hasUserAsGeneralCoach($user)
         ) {

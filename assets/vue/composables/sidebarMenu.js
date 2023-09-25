@@ -94,12 +94,12 @@ export function useSidebarMenu() {
       icon: "mdi mdi-text-box-search",
       items: [
         {
-          label: t("Management"),
+          label: t("Diagnosis Management"),
           url: "/main/search/load_search.php",
           visible: securityStore.isStudentBoss,
         },
         {
-          label: t("Search"),
+          label: t("Diagnostic Form"),
           url: "/main/search/search.php",
         },
       ],

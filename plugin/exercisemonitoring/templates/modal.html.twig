@@ -1,5 +1,5 @@
 {% if exercisemonitoring.show_overview_region and exercisemonitoring.enabled %}
-    <div id="em-modal-start" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
+    <div id="em-modal-start" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -39,9 +39,6 @@
                 </div>
 
                 <div id="em-terms-footer" class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        {{ 'Deny'|get_lang }}
-                    </button>
                     <button type="button" class="btn btn-primary" id="btn-accept">
                         <span class="fa fa-check" aria-hidden="true"></span> {{ 'Accept'|get_lang }}
                     </button>

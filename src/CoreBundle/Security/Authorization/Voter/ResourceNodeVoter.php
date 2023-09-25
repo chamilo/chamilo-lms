@@ -186,7 +186,7 @@ class ResourceNodeVoter extends Voter
             if (null === $linkUser &&
                 $linkGroup instanceof CGroup && !empty($groupId) &&
                 $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId) &&
+                $linkCourse instanceof Course &&
                 ($linkCourse->getId() === $courseId &&
                 $linkSession->getId() === $sessionId &&
                 $linkGroup->getIid() === $groupId)
@@ -200,7 +200,7 @@ class ResourceNodeVoter extends Voter
             if (null === $linkUser &&
                 empty($sessionId) &&
                 $linkGroup instanceof CGroup && !empty($groupId) &&
-                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
+                $linkCourse instanceof Course && ($linkCourse->getId() === $courseId &&
                 $linkGroup->getIid() === $groupId)
             ) {
                 $linkFound = 4;
@@ -211,7 +211,7 @@ class ResourceNodeVoter extends Voter
             // Check if resource was sent to a course inside a session.
             if (null === $linkUser &&
                 $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
+                $linkCourse instanceof Course && ($linkCourse->getId() === $courseId &&
                 $linkSession->getId() === $sessionId)
             ) {
                 $linkFound = 5;
@@ -221,7 +221,7 @@ class ResourceNodeVoter extends Voter
 
             // Check if resource was sent to a course.
             if (null === $linkUser &&
-                $linkCourse instanceof Course && !empty($courseId) && $linkCourse->getId() === $courseId
+                $linkCourse instanceof Course && $linkCourse->getId() === $courseId
             ) {
                 $linkFound = 6;
 

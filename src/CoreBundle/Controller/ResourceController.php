@@ -46,8 +46,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use ResourceControllerTrait;
     use ControllerTrait;
 
-    private string $fileContentName = 'file_content';
-
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
      */

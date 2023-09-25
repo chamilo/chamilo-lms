@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-#[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'portfolio_comment')]
 #[Gedmo\Tree(type: 'nested')]
 class PortfolioComment
@@ -72,6 +72,12 @@ class PortfolioComment
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isTemplate = false;
+
+    /**
+     * Add @ to the next line if portfolio_advanced_sharing config setting is true
+     * ORM\Column(name="visibility", type="smallint", options={"default": 1})
+     */
+    protected int $visibility = 1;
 
     public function __construct()
     {

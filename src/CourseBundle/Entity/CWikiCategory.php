@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Table(name: 'c_wiki_category')]
-#[ORM\Entity(repositoryClass: 'Chamilo\\CourseBundle\\Entity\\Repository\\CWikiCategoryRepository')]
+#[ORM\Entity]
 #[Gedmo\Tree(type: 'nested')]
 class CWikiCategory
 {

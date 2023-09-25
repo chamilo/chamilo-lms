@@ -8,8 +8,6 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -21,17 +19,9 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private EntityManagerInterface $entityManager;
-    private Security $security;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        //  CourseRepository $courseManager,
-        Security $security
+        private readonly Security $security
     ) {
-        $this->entityManager = $entityManager;
-        //$this->courseManager = $courseManager;
-        $this->security = $security;
     }
 
     protected function supports(string $attribute, $subject): bool

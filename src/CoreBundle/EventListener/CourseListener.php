@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
@@ -36,18 +35,10 @@ class CourseListener
 {
     use ContainerAwareTrait;
 
-    private Environment $twig;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private SettingsManager $settingsManager;
-
     public function __construct(
-        Environment $twig,
-        AuthorizationCheckerInterface $authorizationChecker,
-        SettingsManager $settingsManager
+        private readonly Environment $twig,
+        private readonly AuthorizationCheckerInterface $authorizationChecker
     ) {
-        $this->twig = $twig;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->settingsManager = $settingsManager;
     }
 
     /**

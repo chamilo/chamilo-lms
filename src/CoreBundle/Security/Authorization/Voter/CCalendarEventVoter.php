@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -21,15 +20,9 @@ class CCalendarEventVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private EntityManagerInterface $entityManager;
-    private Security $security;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        Security $security
+        private readonly Security $security
     ) {
-        $this->entityManager = $entityManager;
-        $this->security = $security;
     }
 
     protected function supports(string $attribute, $subject): bool

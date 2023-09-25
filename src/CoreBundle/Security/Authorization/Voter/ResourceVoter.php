@@ -23,15 +23,6 @@ class ResourceVoter extends Voter
     public const DELETE = 'DELETE';
     public const EXPORT = 'EXPORT';
 
-    private RequestStack $requestStack;
-    private Security $security;
-
-    public function __construct(Security $security, RequestStack $requestStack)
-    {
-        $this->security = $security;
-        $this->requestStack = $requestStack;
-    }
-
     public static function getReaderMask(): int
     {
         $builder = (new MaskBuilder())
@@ -66,7 +57,7 @@ class ResourceVoter extends Voter
             return false;
         }
 
-        // Course/CGroup/ are AbstractResource but it's checked with the CourseVoter
+        // Course/CGroup/ are AbstractResource, but it's checked with the CourseVoter
         if ($subject instanceof Course ||
             $subject instanceof CGroup
         ) {

@@ -11,12 +11,10 @@ use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Exception;
-use Symfony\Component\Security\Core\Security;
 
 class UserRelUserListener
 {
     public function __construct(
-        private Security $security
     ) {
     }
 

@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -31,28 +30,14 @@ class LegacyListener
 {
     use ContainerAwareTrait;
 
-    private Environment $twig;
-    private TokenStorageInterface $tokenStorage;
-    private UserRepository $userRepository;
-    private AccessUrlRepository $accessUrlRepository;
-    private RouterInterface $router;
-    private ParameterBagInterface $parameterBag;
-
     public function __construct(
-        Environment $twig,
-        TokenStorageInterface $tokenStorage,
-        UserRepository $userRepository,
-        AccessUrlRepository $accessUrlRepository,
-        RouterInterface $router,
-        ParameterBagInterface $parameterBag,
+        private readonly Environment $twig,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly AccessUrlRepository $accessUrlRepository,
+        private readonly RouterInterface $router,
+        private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager
     ) {
-        $this->twig = $twig;
-        $this->tokenStorage = $tokenStorage;
-        $this->userRepository = $userRepository;
-        $this->accessUrlRepository = $accessUrlRepository;
-        $this->router = $router;
-        $this->parameterBag = $parameterBag;
     }
 
     public function onKernelRequest(RequestEvent $event): void

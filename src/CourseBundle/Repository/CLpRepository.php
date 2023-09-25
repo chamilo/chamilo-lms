@@ -95,7 +95,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         return $router->generate('legacy_main', $params);
     }
 
-    private function addNotDeletedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    protected function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

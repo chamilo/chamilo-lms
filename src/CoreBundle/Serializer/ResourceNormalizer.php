@@ -22,21 +22,19 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
 
     private const ALREADY_CALLED = 'MEDIA_OBJECT_NORMALIZER_ALREADY_CALLED';
 
-    private ResourceNodeRepository $resourceNodeRepository;
-    private IllustrationRepository $illustrationRepository;
-    private RequestStack $requestStack;
-    private UrlGeneratorInterface $generator;
-
-    public function __construct(ResourceNodeRepository $resourceNodeRepository, IllustrationRepository $illustrationRepository, RequestStack $requestStack, UrlGeneratorInterface $generator)
-    {
-        $this->resourceNodeRepository = $resourceNodeRepository;
-        $this->requestStack = $requestStack;
-        $this->generator = $generator;
-        $this->illustrationRepository = $illustrationRepository;
+    public function __construct(
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly IllustrationRepository $illustrationRepository,
+        private readonly RequestStack $requestStack,
+        private readonly UrlGeneratorInterface $generator
+    ) {
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): float|int|bool|ArrayObject|array|string|null
-    {
+    public function normalize(
+        $object,
+        ?string $format = null,
+        array $context = []
+    ): float|int|bool|ArrayObject|array|string|null {
         $context[self::ALREADY_CALLED] = true;
 
         $request = $this->requestStack->getCurrentRequest();

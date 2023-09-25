@@ -275,7 +275,7 @@ class ChamiloApi
      */
     public static function isAjaxRequest(): bool
     {
-        $requestedWith = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
+        $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? null;
 
         return 'XMLHttpRequest' === $requestedWith;
     }
@@ -287,7 +287,7 @@ class ChamiloApi
     {
         $text = api_replace_dangerous_char($text);
         $text = str_replace(['-', ' ', '.'], '_', $text);
-        $text = preg_replace('/\_{1,}/', '_', $text);
+        $text = preg_replace('/_+/', '_', $text);
         //$text = str_replace('_', '', $text);
         $text = api_underscore_to_camel_case($text);
 
@@ -349,8 +349,8 @@ class ChamiloApi
             // (0..100) and chartjs uses percentage (0.0..1.0), we need to divide
             // the last value by 100, which is a bit overboard for just one chart
             foreach ($palette as $index => $color) {
-                $components = preg_split('/,/', trim($color));
-                $components[3] = round($components[3] / 100, 1);
+                $components = explode(',', trim($color));
+                $components[3] = round((int) $components[3] / 100, 1);
                 $palette[$index] = implode(',', $components);
             }
         }
@@ -402,7 +402,7 @@ class ChamiloApi
         return "
             var \$originalNode = $(originalNode),
                     qMarkersRolls = \$originalNode.data('q-markersrolls') || [],
-                    qMarkersColor = \$originalNode.data('q-markersrolls-color') || '{$colorPalette[0]}';
+                    qMarkersColor = \$originalNode.data('q-markersrolls-color') || '$colorPalette[0]';
 
                 if (0 == qMarkersRolls.length) {
                     return;
@@ -413,7 +413,7 @@ class ChamiloApi
                 instance.options.markersRolls = {};
 
                 qMarkersRolls.forEach(function (qMarkerRoll) {
-                    var url = '{$webCodePath}exercise/exercise_submit.php?{$cidReq}&'
+                    var url = '{$webCodePath}exercise/exercise_submit.php?$cidReq&'
                         + $.param({
                             exerciseId: qMarkerRoll[1],
                             learnpath_id: 0,

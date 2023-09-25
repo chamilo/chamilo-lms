@@ -72,7 +72,7 @@ final class CLpRelUserRepository extends ResourceRepository
             /** @var CLpRelUser $lpUser */
             foreach ($usersSubscribedToItem as $lpUser) {
                 $getToUser = $lpUser->getUser();
-                if (!empty($getToUser)) {
+                if ($getToUser) {
                     $alreadyAddedUsers[] = $lpUser->getUser()->getId();
                 }
             }

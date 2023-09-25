@@ -9,6 +9,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +20,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ImportCGlossaryAction
 {
+    /**
+     * @throws NonUniqueResultException
+     * @throws NotSupported
+     * @throws Exception
+     */
     public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): Response
     {
         $file = $request->files->get('file');

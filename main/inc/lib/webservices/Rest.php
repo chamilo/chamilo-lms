@@ -4087,6 +4087,10 @@ class Rest extends WebService
     {
         $userGroup = new UserGroup();
 
+        if (!$userGroup->groupExists($groupId) or !$userGroup->userExists($userId)) {
+            throw new Exception('user_id or group_id does not exist');
+        }
+
         return [$userGroup->add_user_to_group($userId, $groupId, $relationType)];
     }
 

@@ -914,6 +914,12 @@ try {
         case Rest::ADD_GROUP_SUB_USER:
             $groupId = (int) $_POST['group_id'];
             $userId = (int) $_POST['user_id'];
+            if (empty($userId)) {
+                throw new Exception('user_id not provided');
+            }
+            if (empty($groupId)) {
+                throw new Exception('group_id not provided');
+            }
             $role = 2;
             if (isset($_POST['role'])) {
                 $role = (int) $_POST['role'];

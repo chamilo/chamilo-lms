@@ -3395,4 +3395,33 @@ class UserGroup extends Model
 
         return Database::store_result($result, 'ASSOC');
     }
+
+    /**
+     * Check the given ID matches an existing group
+     * @param int $groupId
+     * @return bool
+     */
+    public function groupExists(int $groupId) {
+        $sql = "SELECT id FROM ".$this->table. " WHERE id = ".$groupId;
+        $result = Database::query($sql);
+        if (Database::num_rows($result) === 1) {
+            return true;
+        }
+
+        return false;
+    }
+    /**
+     * Check the given ID matches an existing user
+     * @param int $userId
+     * @return bool
+     */
+    public function userExists(int $userId) {
+        $sql = "SELECT id FROM ".$this->table_user. " WHERE id = ".$userId;
+        $result = Database::query($sql);
+        if (Database::num_rows($result) === 1) {
+            return true;
+        }
+
+        return false;
+    }
 }

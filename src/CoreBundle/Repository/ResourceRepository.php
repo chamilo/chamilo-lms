@@ -865,40 +865,37 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         if ($recursive) {
             $children = $resourceNode->getChildren();
-            if (!empty($children)) {
-                /** @var ResourceNode $child */
-                foreach ($children as $child) {
-                    $criteria = [
-                        'resourceNode' => $child,
-                    ];
-                    $childDocument = $this->findOneBy($criteria);
-                    if ($childDocument) {
-                        $this->setLinkVisibility($childDocument, $visibility);
-                    }
+            /** @var ResourceNode $child */
+            foreach ($children as $child) {
+                $criteria = [
+                    'resourceNode' => $child,
+                ];
+                $childDocument = $this->findOneBy($criteria);
+                if ($childDocument) {
+                    $this->setLinkVisibility($childDocument, $visibility);
                 }
             }
         }
 
         $links = $resourceNode->getResourceLinks();
 
-        if (!empty($links)) {
-            /** @var ResourceLink $link */
-            foreach ($links as $link) {
-                $link->setVisibility($visibility);
-                if (ResourceLink::VISIBILITY_DRAFT === $visibility) {
-                    $editorMask = ResourceNodeVoter::getEditorMask();
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($editorMask)
-                        ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ->setResourceLink($link)
-                    ;
-                    $link->addResourceRight($resourceRight);
-                } else {
-                    $link->setResourceRights(new ArrayCollection());
-                }
-                $em->persist($link);
+        /** @var ResourceLink $link */
+        foreach ($links as $link) {
+            $link->setVisibility($visibility);
+            if (ResourceLink::VISIBILITY_DRAFT === $visibility) {
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = (new ResourceRight())
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                    ->setResourceLink($link)
+                ;
+                $link->addResourceRight($resourceRight);
+            } else {
+                $link->setResourceRights(new ArrayCollection());
             }
+            $em->persist($link);
         }
+
         $em->flush();
 
         return true;

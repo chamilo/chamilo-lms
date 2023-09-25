@@ -75,7 +75,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.redirect_index_to_url_for_logged_users',
             ];
 
-            /** @var User $user */
+            /** @var User|null $user */
             $user = $this->getUser();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';

@@ -404,8 +404,8 @@ class TrackEExercise
     {
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('questionId', $questionId))->setMaxResults(1);
-        /** @var TrackEAttempt $attempt */
         $attempt = $this->attempts->matching($criteria)->first();
+
         if (!empty($attempt)) {
             return $attempt;
         }

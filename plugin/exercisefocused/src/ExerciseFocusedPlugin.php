@@ -11,8 +11,8 @@ class ExerciseFocusedPlugin extends Plugin
 {
     public const SETTING_TOOL_ENABLE = 'tool_enable';
     public const SETTING_TIME_LIMIT = 'time_limit';
-    public const SETTING_ENABLE_ABANDONMENT = 'enable_abandonment_limit';
-    public const SETTING_ABANDONMENT_LIMIT = 'abandonment_limit';
+    public const SETTING_ENABLE_OUTFOCUSED_LIMIT = 'enable_outfocused_limit';
+    public const SETTING_OUTFOCUSED_LIMIT = 'outfocused_limit';
     public const SETTING_SESSION_FIELD_FILTERS = 'session_field_filters';
 
     public const FIELD_SELECTED = 'exercisefocused_selected';
@@ -24,8 +24,8 @@ class ExerciseFocusedPlugin extends Plugin
         $settings = [
             self::SETTING_TOOL_ENABLE => 'boolean',
             self::SETTING_TIME_LIMIT => 'text',
-            self::SETTING_ENABLE_ABANDONMENT => 'boolean',
-            self::SETTING_ABANDONMENT_LIMIT => 'text',
+            self::SETTING_ENABLE_OUTFOCUSED_LIMIT => 'boolean',
+            self::SETTING_OUTFOCUSED_LIMIT => 'text',
             self::SETTING_SESSION_FIELD_FILTERS => 'text',
         ];
 
@@ -63,7 +63,7 @@ class ExerciseFocusedPlugin extends Plugin
 
         $objField = new ExtraField('exercise');
         $objField->save([
-            'variable' => ExerciseFocusedPlugin::FIELD_SELECTED,
+            'variable' => self::FIELD_SELECTED,
             'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'display_text' => $this->get_title(),
             'visible_to_self' => true,
@@ -88,7 +88,7 @@ class ExerciseFocusedPlugin extends Plugin
         );
 
         $objField = new ExtraField('exercise');
-        $extraFieldInfo = $objField->get_handler_field_info_by_field_variable(ExerciseFocusedPlugin::FIELD_SELECTED);
+        $extraFieldInfo = $objField->get_handler_field_info_by_field_variable(self::FIELD_SELECTED);
 
         if ($extraFieldInfo) {
             $objField->delete($extraFieldInfo['id']);
@@ -110,7 +110,7 @@ class ExerciseFocusedPlugin extends Plugin
                 return $this->get_lang('Outfocused');
             case Log::TYPE_RETURN:
                 return $this->get_lang('Return');
-            case Log::TYPE_ABANDONMENT_LIMIT:
+            case Log::TYPE_OUTFOCUSED_LIMIT:
                 return $this->get_lang('MaxOutfocused');
             case Log::TYPE_TIME_LIMIT:
                 return $this->get_lang('TimeLimitReached');
@@ -153,6 +153,24 @@ class ExerciseFocusedPlugin extends Plugin
         $fields = explode(',', $settingField);
 
         return array_map('trim', $fields);
+    }
+
+    public function isEnableForExercise(int $exerciseId): bool
+    {
+        $renderRegion = $this->isEnabled(true)
+            && strpos($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php') !== false;
+
+        if (!$renderRegion) {
+            return false;
+        }
+
+        $objFieldValue = new ExtraFieldValue('exercise');
+        $values = $objFieldValue->get_values_by_handler_and_field_variable(
+            $exerciseId,
+            self::FIELD_SELECTED
+        );
+
+        return $values && (bool) $values['value'];
     }
 
     protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null, $sessionId = 0, $category = 'plugin'): ?CTool

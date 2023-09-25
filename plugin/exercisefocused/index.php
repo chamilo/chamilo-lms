@@ -7,34 +7,30 @@ use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 
 $plugin = ExerciseFocusedPlugin::create();
 
-$_template['show_region'] = 'true' === $plugin->get('tool_enable')
-    && strpos($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php') !== false;
+$exerciseId = (int) ($_GET['exerciseId'] ?? 0);
 
-if ($_template['show_region']) {
-    $exerciseId = (int) $_GET['exerciseId'];
+$renderRegion = $plugin->isEnableForExercise($exerciseId);
 
-    $objFieldValue = new ExtraFieldValue('exercise');
-    $values = $objFieldValue->get_values_by_handler_and_field_variable($exerciseId, ExerciseFocusedPlugin::FIELD_SELECTED);
+if ($renderRegion) {
+    $_template['show_region'] = true;
 
-    if ($values && (bool) $values['value']) {
-        $em = Database::getManager();
-        $logRepository = $em->getRepository(Log::class);
+    $em = Database::getManager();
+    $logRepository = $em->getRepository(Log::class);
 
-        $_template['sec_token'] = Security::get_token('exercisefocused');
+    $_template['sec_token'] = Security::get_token('exercisefocused');
 
-        if ('true' === $plugin->get('enable_abandonment_limit')) {
-            $existingExeId = (int) ChamiloSession::read('exe_id');
+    if ('true' === $plugin->get(ExerciseFocusedPlugin::SETTING_ENABLE_OUTFOCUSED_LIMIT)) {
+        $existingExeId = (int) ChamiloSession::read('exe_id');
 
-            if ($existingExeId) {
-                $trackingExercise = $em->find(TrackEExercises::class, $existingExeId);
+        if ($existingExeId) {
+            $trackingExercise = $em->find(TrackEExercises::class, $existingExeId);
 
-                $countAbandonments = $logRepository->countByActionInExe($trackingExercise, Log::TYPE_OUTFOCUSED);
-            } else {
-                $countAbandonments = 0;
-            }
-
-            $_template['count_abandonments'] = $countAbandonments;
-            $_template['remaining_abandonments'] = (int) $plugin->get('abandonment_limit') - $countAbandonments;
+            $countOutfocused = $logRepository->countByActionInExe($trackingExercise, Log::TYPE_OUTFOCUSED);
+        } else {
+            $countOutfocused = 0;
         }
+
+        $_template['count_outfocused'] = $countOutfocused;
+        $_template['remaining_outfocused'] = (int) $plugin->get(ExerciseFocusedPlugin::SETTING_OUTFOCUSED_LIMIT) - $countOutfocused;
     }
 }

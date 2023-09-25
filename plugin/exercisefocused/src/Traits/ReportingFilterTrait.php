@@ -134,11 +134,11 @@ trait ReportingFilterTrait
                 'end_date' => $value['exe']->getExeDate(),
                 'count_outfocused' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_OUTFOCUSED),
                 'count_return' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_RETURN),
-                'abandonment' => $this->logRepository->countByActionInExe(
+                'max_outfocused' => $this->logRepository->countByActionInExe(
                     $value['exe'],
-                    Log::TYPE_ABANDONMENT_LIMIT
+                    Log::TYPE_OUTFOCUSED_LIMIT
                 ) > 0,
-                'time_limit' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_TIME_LIMIT) > 0,
+                'time_limit_reached' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_TIME_LIMIT) > 0,
             ];
         }
 
@@ -180,8 +180,8 @@ trait ReportingFilterTrait
             $table->setCellContents($row, 3, api_get_local_time($result['end_date'], null, null, true, true, true));
             $table->setCellContents($row, 4, $result['count_outfocused']);
             $table->setCellContents($row, 5, $result['count_return']);
-            $table->setCellContents($row, 6, $result['abandonment'] ? get_lang('Yes') : '');
-            $table->setCellContents($row, 7, $result['time_limit'] ? get_lang('Yes') : '');
+            $table->setCellContents($row, 6, $result['max_outfocused'] ? get_lang('Yes') : '');
+            $table->setCellContents($row, 7, $result['time_limit_reached'] ? get_lang('Yes') : '');
             $table->setCellContents($row, 8, $url);
 
             $row++;

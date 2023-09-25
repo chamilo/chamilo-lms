@@ -1,7 +1,7 @@
 {% if exercisefocused.show_region %}
     {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
-    {% set enable_abandonment_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_abandonment_limit') %}
-    {% set abandonment_limit = exercisefocused.plugin_info.obj.get('abandonment_limit') %}
+    {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
+    {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
 
     <div id="exercisefocused-block" style="display: none;">
         <div class="exercisefocused-block__container">
@@ -13,9 +13,9 @@
                     </p>
                 </div>
 
-                {% if enable_abandonment_limit %}
-                    <div id="abandonment-limit-block">
-                        <p class="h4">{{ 'YouHaveXAbandonmentsAllowed'|get_plugin_lang('ExerciseFocusedPlugin')|format(abandonment_limit) }}</p>
+                {% if enable_outfocused_limit %}
+                    <div id="outfocused-limit-block">
+                        <p class="h4">{{ 'YouAreAllowedXOutfocused'|get_plugin_lang('ExerciseFocusedPlugin')|format(outfocused_limit) }}</p>
                     </div>
                 {% endif %}
             </div>

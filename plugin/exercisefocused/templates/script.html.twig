@@ -1,24 +1,24 @@
 {% if exercisefocused.show_region %}
     {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
-    {% set enable_abandonment_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_abandonment_limit') %}
-    {% set abandonment_limit = exercisefocused.plugin_info.obj.get('abandonment_limit') %}
+    {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
+    {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
 
 <script>
     $(function () {
         var $exerciseFocused = $("#exercisefocused-block").appendTo('body');
         var $timeLimitBlock = $exerciseFocused.find('#time-limit-block');
         var $timeLimitTarget = $exerciseFocused.find('#time-limit-target');
-        var $abandonmentLimitBlock = $exerciseFocused.find('#abandonment-limit-block');
-        var $abandonmentLimitTarget = $exerciseFocused.find('#abandonment-limit-target');
+        var $outfocusedLimitBlock = $exerciseFocused.find('#outfocused-limit-block');
+        var $outfocusedLimitTarget = $exerciseFocused.find('#outfocused-limit-target');
 
         var secToken = "{{ exercisefocused.sec_token }}";
         var initDocumentTitle = document.title;
         var countdownInterval;
         var remainingTime;
-        var enableAbandonmentLimit = {{ enable_abandonment_limit ? 'true' : 'false' }};
+        var enableOutfocusedLimit = {{ enable_outfocused_limit ? 'true' : 'false' }};
 
-        {% if enable_abandonment_limit %}
-            var remainingAbandonments = {{ exercisefocused.remaining_abandonments }};
+        {% if enable_outfocused_limit %}
+            var remainingOutfocused = {{ exercisefocused.remaining_outfocused }};
         {% endif %}
 
 
@@ -76,21 +76,21 @@
         function onBlur() {
             $exerciseFocused.show();
 
-            if (enableAbandonmentLimit) {
-                if (remainingAbandonments <= 0) {
-                    $abandonmentLimitBlock.find('p').text("{{ 'AbandonmentLimitExceeded'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}");
+            if (enableOutfocusedLimit) {
+                if (remainingOutfocused <= 0) {
+                    $outfocusedLimitBlock.find('p').text("{{ 'OutfocusedLimitExceeded'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}");
                     $timeLimitBlock.hide();
 
-                    sendAction('abandonment_limit', function (response) {
+                    sendAction('outfocused_limit', function (response) {
                         finishExam(response.type)
                     });
 
                     return;
                 } else {
-                    $abandonmentLimitTarget.text(remainingAbandonments);
+                    $outfocusedLimitTarget.text(remainingOutfocused);
                 }
 
-                remainingAbandonments--;
+                remainingOutfocused--;
             }
 
             sendAction('outfocused');

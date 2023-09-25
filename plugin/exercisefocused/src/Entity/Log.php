@@ -22,7 +22,7 @@ class Log
 
     public const TYPE_RETURN = 'return';
     public const TYPE_OUTFOCUSED = 'outfocused';
-    public const TYPE_ABANDONMENT_LIMIT = 'abandonment_limit';
+    public const TYPE_OUTFOCUSED_LIMIT = 'outfocused_limit';
     public const TYPE_TIME_LIMIT = 'time_limit';
 
     /**
@@ -38,7 +38,7 @@ class Log
      * @var TrackEExercises
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercises")
-     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id")
+     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", onDelete="SET NULL")
      */
     private $exe;
 

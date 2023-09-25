@@ -101,6 +101,7 @@ class Rest extends WebService
     public const DELETE_USER = 'delete_user';
     public const GET_USERS_API_KEYS = 'get_users_api_keys';
     public const GET_USER_API_KEY = 'get_user_api_key';
+    public const GET_USER_SUB_GROUP = 'get_user_sub_group';
 
     public const GET_COURSES = 'get_courses';
     public const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
@@ -4076,6 +4077,8 @@ class Rest extends WebService
     /**
      * Add a new user to the given group/class.
      *
+     * @param int $groupId
+     * @param int $userId
      * @param int $relationType (1:admin, 2:reader, etc. See GROUP_USER_PERMISSION_ constants in api.lib.php)
      *
      * @return array One item array containing true on success, false otherwise
@@ -4085,6 +4088,21 @@ class Rest extends WebService
         $userGroup = new UserGroup();
 
         return [$userGroup->add_user_to_group($userId, $groupId, $relationType)];
+    }
+
+    /**
+     * Get the list of group/class IDs to which the user belongs.
+     *
+     * @param int $userId
+     *
+     * @return array Array containing the group IDs like ['groups' => [1, 2, 3]]
+     */
+    public function getUserSubGroup(int $userId): array
+    {
+        $userGroup = new UserGroup();
+
+        $res = $userGroup->get_usergroup_by_user($userId);
+        return ['groups' => $res];
     }
 
     /**

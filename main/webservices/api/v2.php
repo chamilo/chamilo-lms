@@ -627,6 +627,16 @@ try {
                 )
             );
             break;
+        case Rest::GET_USER_SUB_GROUP:
+            $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+            if (empty($userId)) {
+                throw new Exception('user_id not provided');
+            }
+
+            Event::addEvent(LOG_WS.$action, 'user_id', $userId);
+            $data = $restApi->getUserSubGroup($userId);
+            $restResponse->setData($data);
+            break;
         case Rest::GET_COURSES:
             $campusId = api_get_current_access_url_id();
             if (!empty($_POST['id_campus'])) {

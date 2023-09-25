@@ -88,10 +88,8 @@ class CQuizAnswer
 
     /**
      * Get correct.
-     *
-     * @return int
      */
-    public function getCorrect()
+    public function getCorrect(): ?int
     {
         return $this->correct;
     }
@@ -108,7 +106,7 @@ class CQuizAnswer
         return $this->comment;
     }
 
-    public function setPonderation($weight): self
+    public function setPonderation(string|float $weight): self
     {
         $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
@@ -120,7 +118,7 @@ class CQuizAnswer
      *
      * @return float
      */
-    public function getPonderation()
+    public function getPonderation(): float
     {
         return $this->ponderation;
     }
@@ -134,10 +132,8 @@ class CQuizAnswer
 
     /**
      * Get position.
-     *
-     * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -151,10 +147,8 @@ class CQuizAnswer
 
     /**
      * Get hotspotCoordinates.
-     *
-     * @return string
      */
-    public function getHotspotCoordinates()
+    public function getHotspotCoordinates(): ?string
     {
         return $this->hotspotCoordinates;
     }
@@ -168,15 +162,13 @@ class CQuizAnswer
 
     /**
      * Get hotspotType.
-     *
-     * @return string
      */
-    public function getHotspotType()
+    public function getHotspotType(): ?string
     {
         return $this->hotspotType;
     }
 
-    public function setDestination(?string $destination)
+    public function setDestination(?string $destination): self
     {
         $this->destination = empty($destination) ? null : $destination;
 

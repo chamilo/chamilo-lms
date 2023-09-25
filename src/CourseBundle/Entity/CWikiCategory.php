@@ -21,7 +21,7 @@ class CWikiCategory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id', type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string')]
     private string $name;
@@ -39,19 +39,19 @@ class CWikiCategory
 
     #[Gedmo\TreeLeft]
     #[ORM\Column(name: 'lft', type: 'integer')]
-    private int $lft;
+    private int $lft = 0;
 
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'lvl', type: 'integer')]
-    private int $lvl;
+    private int $lvl = 0;
 
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'rgt', type: 'integer')]
-    private int $rgt;
+    private int $rgt = 0;
 
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?CWikiCategory $root;
+    private ?CWikiCategory $root = null;
 
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
@@ -74,7 +74,7 @@ class CWikiCategory
         return $this->name;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -165,10 +165,5 @@ class CWikiCategory
     public function getWikiPages(): Collection
     {
         return $this->wikiPages;
-    }
-
-    public function getLvl(): ?int
-    {
-        return $this->lvl;
     }
 }

@@ -139,7 +139,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected Collection $issuedSkills;
 
     /**
-     * @var Collection<int, AccessUrlRelSession>
+     * @var Collection<int, EntityAccessUrlInterface>
      */
     #[ORM\OneToMany(
         mappedBy: 'session',
@@ -973,6 +973,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    /**
+     * @return Collection<int, EntityAccessUrlInterface>
+     */
     public function getUrls(): Collection
     {
         return $this->urls;

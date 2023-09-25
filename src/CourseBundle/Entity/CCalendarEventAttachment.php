@@ -30,7 +30,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    #[ORM\ManyToOne(targetEntity: 'CCalendarEvent', cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, cascade: ['persist'], inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'agenda_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CCalendarEvent $event;
 

@@ -123,7 +123,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     /**
      * @var Collection<int, CCalendarEventAttachment>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: 'CCalendarEventAttachment', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: CCalendarEventAttachment::class, cascade: ['persist', 'remove'])]
     protected Collection $attachments;
 
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
@@ -312,10 +312,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
 
     /**
      * @param Collection<int, CCalendarEventRepeat> $repeatEvents
-     *
-     * @return CCalendarEvent
      */
-    public function setRepeatEvents(Collection $repeatEvents): static
+    public function setRepeatEvents(Collection $repeatEvents): self
     {
         $this->repeatEvents = $repeatEvents;
 

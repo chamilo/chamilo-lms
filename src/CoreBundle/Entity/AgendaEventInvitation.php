@@ -28,7 +28,12 @@ class AgendaEventInvitation
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
 
-    #[ORM\OneToMany(targetEntity: 'AgendaEventInvitee', mappedBy: 'invitation', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'invitation',
+        targetEntity: AgendaEventInvitee::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     protected Collection $invitees;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resourceNodes')]

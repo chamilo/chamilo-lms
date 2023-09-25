@@ -26,6 +26,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
@@ -862,9 +863,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param Collection<int, ResourceNode>|ResourceNode[] $resourceNodes
+     * @param Collection<int, ResourceNode> $resourceNodes
      */
-    public function setResourceNodes(Collection|array $resourceNodes): self
+    public function setResourceNodes(Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 
@@ -898,9 +899,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param Collection<int, CourseRelUser>|CourseRelUser[] $courses
+     * @param Collection<int, CourseRelUser> $courses
      */
-    public function setCourses(Collection|array $courses): self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 
@@ -1508,9 +1509,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param Collection<int, SkillRelUser>|SkillRelUser[] $value
+     * @param Collection<int, SkillRelUser> $value
      */
-    public function setAchievedSkills(Collection|array $value): self
+    public function setAchievedSkills(Collection $value): self
     {
         $this->achievedSkills = $value;
 
@@ -1576,9 +1577,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return SessionRelUser[]|Collection
+     * @return Collection<int, SessionRelUser>
      */
-    public function getSessionsRelUser(): array|Collection
+    public function getSessionsRelUser(): Collection
     {
         return $this->sessionsRelUser;
     }
@@ -1594,9 +1595,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param Collection<int, SkillRelUserComment>|SkillRelUserComment[] $commentedUserSkills
+     * @param Collection<int, SkillRelUserComment> $commentedUserSkills
      */
-    public function setCommentedUserSkills(Collection|array $commentedUserSkills): self
+    public function setCommentedUserSkills(Collection $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
 
@@ -1891,9 +1892,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @param Collection<int, GradebookCertificate>|GradebookCertificate[] $gradeBookCertificates
+     * @param Collection<int, GradebookCertificate> $gradeBookCertificates
      */
-    public function setGradeBookCertificates(Collection|array $gradeBookCertificates): self
+    public function setGradeBookCertificates(Collection $gradeBookCertificates): self
     {
         $this->gradeBookCertificates = $gradeBookCertificates;
 
@@ -1938,113 +1939,110 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return GradebookCategory[]|Collection
+     * @return Collection<int, GradebookCategory>
      */
-    public function getGradeBookCategories(): array|Collection
+    public function getGradeBookCategories(): Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
-     * @return GradebookComment[]|Collection
+     * @return Collection<int, GradebookComment>
      */
-    public function getGradeBookComments(): array|Collection
+    public function getGradeBookComments(): Collection
     {
         return $this->gradeBookComments;
     }
 
     /**
-     * @return GradebookEvaluation[]|Collection
+     * @return Collection<int, GradebookEvaluation>
      */
-    public function getGradeBookEvaluations(): array|Collection
+    public function getGradeBookEvaluations(): Collection
     {
         return $this->gradeBookEvaluations;
     }
 
     /**
-     * @return GradebookLink[]|Collection
+     * @return Collection<int, GradebookLink>
      */
-    public function getGradeBookLinks(): array|Collection
+    public function getGradeBookLinks(): Collection
     {
         return $this->gradeBookLinks;
     }
 
     /**
-     * @return GradebookResult[]|Collection
+     * @return Collection<int, GradebookResult>
      */
-    public function getGradeBookResults(): array|Collection
+    public function getGradeBookResults(): Collection
     {
         return $this->gradeBookResults;
     }
 
     /**
-     * @return GradebookResultLog[]|Collection
+     * @return Collection<int, GradebookResultLog>
      */
-    public function getGradeBookResultLogs(): array|Collection
+    public function getGradeBookResultLogs(): Collection
     {
         return $this->gradeBookResultLogs;
     }
 
     /**
-     * @return GradebookScoreLog[]|Collection
+     * @return Collection<int, GradebookScoreLog>
      */
-    public function getGradeBookScoreLogs(): array|Collection
+    public function getGradeBookScoreLogs(): Collection
     {
         return $this->gradeBookScoreLogs;
     }
 
     /**
-     * @return GradebookLinkevalLog[]|Collection
+     * @return Collection<int, GradebookLinkevalLog>
      */
-    public function getGradeBookLinkEvalLogs(): array|Collection
+    public function getGradeBookLinkEvalLogs(): Collection
     {
         return $this->gradeBookLinkEvalLogs;
     }
 
     /**
-     * @return UserRelCourseVote[]|Collection
+     * @return Collection<int, UserRelCourseVote>
      */
-    public function getUserRelCourseVotes(): array|Collection
+    public function getUserRelCourseVotes(): Collection
     {
         return $this->userRelCourseVotes;
     }
 
     /**
-     * @return UserRelTag[]|Collection
+     * @return Collection<int, UserRelTag>
      */
-    public function getUserRelTags(): array|Collection
+    public function getUserRelTags(): Collection
     {
         return $this->userRelTags;
     }
 
     /**
-     * @return PersonalAgenda[]|Collection
+     * @return Collection<int, PersonalAgenda>
      */
-    public function getPersonalAgendas(): array|Collection
+    public function getPersonalAgendas(): Collection
     {
         return $this->personalAgendas;
     }
 
-    /**
-     * @return Collection|mixed[]
-     */
-    public function getCurriculumItems(): Collection|array
+    public function getCurriculumItems(): Collection
     {
         return $this->curriculumItems;
     }
 
     /**
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriends(): array|Collection
+    public function getFriends(): Collection
     {
         return $this->friends;
     }
 
     /**
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriendsWithMe(): array|Collection
+    public function getFriendsWithMe(): Collection
     {
         return $this->friendsWithMe;
     }
@@ -2063,9 +2061,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return Templates[]|Collection
+     * @return Collection<int, Templates>
      */
-    public function getTemplates(): array|Collection
+    public function getTemplates(): Collection
     {
         return $this->templates;
     }
@@ -2076,49 +2074,49 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return SequenceValue[]|Collection
+     * @return Collection<int, SequenceValue>
      */
-    public function getSequenceValues(): array|Collection
+    public function getSequenceValues(): Collection
     {
         return $this->sequenceValues;
     }
 
     /**
-     * @return TrackEExerciseConfirmation[]|Collection
+     * @return Collection<int, TrackEExerciseConfirmation>
      */
-    public function getTrackEExerciseConfirmations(): array|Collection
+    public function getTrackEExerciseConfirmations(): Collection
     {
         return $this->trackEExerciseConfirmations;
     }
 
     /**
-     * @return TrackEAttempt[]|Collection
+     * @return Collection<int, TrackEAttempt>
      */
-    public function getTrackEAccessCompleteList(): array|Collection
+    public function getTrackEAccessCompleteList(): Collection
     {
         return $this->trackEAccessCompleteList;
     }
 
     /**
-     * @return TrackEAttempt[]|Collection
+     * @return Collection<int, TrackEAttempt>
      */
-    public function getTrackEAttempts(): array|Collection
+    public function getTrackEAttempts(): Collection
     {
         return $this->trackEAttempts;
     }
 
     /**
-     * @return TrackECourseAccess[]|Collection
+     * @return Collection<int, TrackECourseAccess>
      */
-    public function getTrackECourseAccess(): array|Collection
+    public function getTrackECourseAccess(): Collection
     {
         return $this->trackECourseAccess;
     }
 
     /**
-     * @return UserCourseCategory[]|Collection
+     * @return Collection<int, UserCourseCategory>
      */
-    public function getUserCourseCategories(): array|Collection
+    public function getUserCourseCategories(): Collection
     {
         return $this->userCourseCategories;
     }
@@ -2237,27 +2235,30 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getSessionsByStatusInCourseSubscription(int $status): Collection
+    public function getSessionsByStatusInCourseSubscription(int $status): ReadableCollection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
 
-        return $this->getSessionRelCourseRelUsers()->matching($criteria)->map(
+        /** @var ArrayCollection $subscriptions */
+        $subscriptions = $this->getSessionRelCourseRelUsers();
+
+        return $subscriptions->matching($criteria)->map(
             fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession()
         );
     }
 
     /**
-     * @return SessionRelCourseRelUser[]|Collection
+     * @return Collection<int, SessionRelCourseRelUser>
      */
-    public function getSessionRelCourseRelUsers(): array|Collection
+    public function getSessionRelCourseRelUsers(): Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
 
     /**
-     * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
+     * @param Collection<int, SessionRelCourseRelUser> $sessionRelCourseRelUsers
      */
-    public function setSessionRelCourseRelUsers(array|Collection $sessionRelCourseRelUsers): self
+    public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
 
@@ -2277,9 +2278,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return CSurveyInvitation[]|Collection
+     * @return Collection<int, CSurveyInvitation>
      */
-    public function getSurveyInvitations(): array|Collection
+    public function getSurveyInvitations(): Collection
     {
         return $this->surveyInvitations;
     }
@@ -2292,9 +2293,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return TrackELogin[]|Collection
+     * @return Collection<int, TrackELogin>
      */
-    public function getLogins(): array|Collection
+    public function getLogins(): Collection
     {
         return $this->logins;
     }
@@ -2307,17 +2308,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return MessageTag[]|Collection
+     * @return Collection<int, MessageTag>
      */
-    public function getMessageTags(): array|Collection
+    public function getMessageTags(): Collection
     {
         return $this->messageTags;
     }
 
     /**
-     * @param MessageTag[]|Collection $messageTags
+     * @param Collection<int, MessageTag> $messageTags
      */
-    public function setMessageTags(array|Collection $messageTags): self
+    public function setMessageTags(Collection $messageTags): self
     {
         $this->messageTags = $messageTags;
 

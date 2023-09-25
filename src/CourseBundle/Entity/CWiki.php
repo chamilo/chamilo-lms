@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -117,6 +118,11 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\JoinColumn(name: 'wiki_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function __toString(): string
     {

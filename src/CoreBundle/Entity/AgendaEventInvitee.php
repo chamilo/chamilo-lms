@@ -28,7 +28,7 @@ class AgendaEventInvitee
 
     #[ORM\ManyToOne(targetEntity: AgendaEventInvitation::class, inversedBy: 'invitees')]
     #[ORM\JoinColumn(name: 'invitation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private AgendaEventInvitation $invitation;
+    private ?AgendaEventInvitation $invitation;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -39,12 +39,12 @@ class AgendaEventInvitee
         return $this->id;
     }
 
-    public function getInvitation(): AgendaEventInvitation
+    public function getInvitation(): ?AgendaEventInvitation
     {
         return $this->invitation;
     }
 
-    public function setInvitation(AgendaEventInvitation $invitation): self
+    public function setInvitation(?AgendaEventInvitation $invitation): self
     {
         $this->invitation = $invitation;
 

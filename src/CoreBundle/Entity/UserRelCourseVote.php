@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * UserRelCourseVote.
  */
 #[ORM\Table(name: 'user_rel_course_vote')]
-#[ORM\Index(name: 'idx_ucv_cid', columns: ['c_id'])]
-#[ORM\Index(name: 'idx_ucv_uid', columns: ['user_id'])]
-#[ORM\Index(name: 'idx_ucv_cuid', columns: ['user_id', 'c_id'])]
+#[ORM\Index(columns: ['c_id'], name: 'idx_ucv_cid')]
+#[ORM\Index(columns: ['user_id'], name: 'idx_ucv_uid')]
+#[ORM\Index(columns: ['user_id', 'c_id'], name: 'idx_ucv_cuid')]
 #[ORM\Entity]
 class UserRelCourseVote
 {
@@ -26,19 +26,19 @@ class UserRelCourseVote
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'userRelCourseVotes')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userRelCourseVotes')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, inversedBy: 'courses')]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, inversedBy: 'courses')]
     #[ORM\JoinColumn(name: 'url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
@@ -47,10 +47,8 @@ class UserRelCourseVote
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -64,10 +62,8 @@ class UserRelCourseVote
 
     /**
      * Get vote.
-     *
-     * @return int
      */
-    public function getVote()
+    public function getVote(): int
     {
         return $this->vote;
     }

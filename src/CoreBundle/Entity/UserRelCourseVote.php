@@ -45,9 +45,7 @@ class UserRelCourseVote
     #[ORM\Column(name: 'vote', type: 'integer', nullable: false)]
     protected int $vote;
 
-    /**
-     * Get id.
-     */
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -60,9 +58,7 @@ class UserRelCourseVote
         return $this;
     }
 
-    /**
-     * Get vote.
-     */
+    
     public function getVote(): int
     {
         return $this->vote;

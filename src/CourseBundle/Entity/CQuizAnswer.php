@@ -86,9 +86,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get correct.
-     */
+    
     public function getCorrect(): ?int
     {
         return $this->correct;
@@ -115,8 +113,6 @@ class CQuizAnswer
 
     /**
      * Get weight.
-     *
-     * @return float
      */
     public function getPonderation(): float
     {
@@ -130,9 +126,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get position.
-     */
+    
     public function getPosition(): int
     {
         return $this->position;
@@ -145,9 +139,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get hotspotCoordinates.
-     */
+    
     public function getHotspotCoordinates(): ?string
     {
         return $this->hotspotCoordinates;
@@ -160,9 +152,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get hotspotType.
-     */
+    
     public function getHotspotType(): ?string
     {
         return $this->hotspotType;

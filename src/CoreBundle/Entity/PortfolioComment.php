@@ -19,6 +19,12 @@ class PortfolioComment
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
 
+    /**
+     * Add @ to the next line if portfolio_advanced_sharing config setting is true
+     * ORM\Column(name="visibility", type="smallint", options={"default": 1}).
+     */
+    protected int $visibility = 1;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -72,12 +78,6 @@ class PortfolioComment
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isTemplate = false;
-
-    /**
-     * Add @ to the next line if portfolio_advanced_sharing config setting is true
-     * ORM\Column(name="visibility", type="smallint", options={"default": 1})
-     */
-    protected int $visibility = 1;
 
     public function __construct()
     {

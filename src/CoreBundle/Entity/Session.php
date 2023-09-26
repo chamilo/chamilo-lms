@@ -214,6 +214,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
@@ -222,6 +223,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
@@ -230,6 +232,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
@@ -238,6 +241,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
@@ -246,6 +250,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
@@ -254,6 +259,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups([
         'session:read',
+        'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]

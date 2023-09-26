@@ -53,20 +53,27 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
+$toolbar = Display::url(
+    Display::returnFontAwesomeIcon('file-excel-o').
+    get_lang('GenerateReport'),
+    api_get_path(WEB_PLUGIN_PATH).'buycourses/src/export_report.php',
+    ['class' => 'btn btn-primary']
+);
+
 if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
-    $toolbar = Display::toolbarButton(
+    $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
-
-    $template->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$toolbar])
-    );
 }
+
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 
 if ($commissionsEnable == 'true') {
     $toolbar = Display::toolbarButton(
@@ -92,4 +99,5 @@ $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMP
 $template->assign('invoicing_enable', $invoicingEnable);
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
 $template->assign('content', $content);
+$template->assign('header', $templateName);
 $template->display_one_col_template();

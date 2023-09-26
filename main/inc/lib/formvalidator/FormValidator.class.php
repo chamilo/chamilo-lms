@@ -1899,7 +1899,7 @@ EOT;
                 previewMaxWidth: 300,
                 previewMaxHeight: 169,
                 previewCrop: true,
-                dropzone: $('#dropzone'),
+                dropZone: $('#dropzone'),
                 maxChunkSize: 10000000, // 10 MB
                 sequentialUploads: true,
             }).on('fileuploadchunksend', function (e, data) {

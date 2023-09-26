@@ -47,8 +47,13 @@ if ($form->validate()) {
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $htaccess = <<<TEXT
-order deny,allow
-deny from all
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>
 # pChart generated files should be allowed
 <FilesMatch "^[0-9a-f]+$">
     order allow,deny

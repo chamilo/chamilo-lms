@@ -110,11 +110,91 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.26">
+        <a id="1.11.26"></a>
+        <h1>Chamilo 1.11.26 - Florenville, 26/09/2023</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.26 is a security fix release on top of 1.11.24.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/Florenville">Florenville (Belgium)</a> is a quiet city on the border of Belgium and France, most famous for its Orval Abbey.</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/6f32625a012d5de2dfe8edbccb4ed14a85e310d4">6f32625a</a>) System: Security: Add header rule to avoid MIME-sniffing</li>
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/3b487a55076fb06f96809b790a35dcdd42f8ec49">3b487a55</a>) Security: BigUpload: Remove unused method to upload file</li>
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/0d1ac4f93eb1aa09558a98d6ae589d8c030be0b0">0d1ac4f9</a>) Remove unused big_upload files</li>
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d74fb7d99bd2e287730552f7a66562417a55047">3d74fb7d</a>) Security: sanitize file name when uploading chunks with bigUpload</li>
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed72914608d2a07ee2eb587c1a654480d08201db">ed729146</a>) Learnpath: Security: sanitize params when executing converter</li>
+            <li>[2023-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/cccb2472650ec0e4f92010e122b8d51ffa802630">cccb2472</a> - <a href="https://task.beeznest.com/issues/20674">BT#20674</a>) System: Security: one more indication for a missing line on how to fix an apache problem present since version 2.4.38-3 with rediction of URL with spaces not working any more</li>
+            <li>[2023-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/631b957b117b123f634f5d1795e444eef8616a64">631b957b</a>) Fix "deny from all" statements in .htaccess files "Deny from all" statements do not work in Apache 2.4. They are replaced by "Require all denied". A check was added to make the .htaccess files work with both Apache 2.2 & 2.4.</li>
+            <li>[2023-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/f680d7dec1c01f1899886ec1929ba3a1b54e2d84">f680d7de</a>) Security: Rename htaccess file by replacing case-insensitively See https://github.com/chamilo/chamilo-lms/commit/dc7bfce429fbd843a95a57c184b6992c4d709549#r127629622</li>
+            <li>[2023-09-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0bd0978b240d69ac707802e1555e95fb80f0430">e0bd0978</a>) Use form element with html_filter when adding user</li>
+            <li>[2023-09-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/841a07396fed0ef27c5db13a1b700eac02754fc7">841a0739</a>) Security: Avoid wrapping commands in double quotes as escapeshellarg() does not escape them from args</li>
+            <li>[2023-09-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/e864127a440c2cab0eb62c113a04e2e904543a1f">e864127a</a>) Security: Add redirect to .htaccess to avoid direct access to bigupload temporary upload directory</li>
+            <li>[2023-09-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/f3d62b65ad60d68096c2674d5695339f04de0b8a">f3d62b65</a>) Security: Sanitize file name when uploading chunks with bigUpload (2)</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>No notable new feature in this minor version</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/a01025a51dc9b46694a07f727bc19babcfdb790e">a01025a5</a> - <a href="https://task.beeznest.com/issues/21024">BT#21024</a>) Admin: Add configuration setting 'lp_hide_copy_option' to add option to hide copy function in the LP authoring's options</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/66602e2a008c223c4d74e9aef55fadde4bf3e779">66602e2a</a>) Plugin: BuyCourses: Improve display headers in sales reports</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/3e665c5858c4e1e7f4c9ece2cc6089573a756a03">3e665c58</a>) Internal: Avoid notice by checking existence of variable in api_get_configuration_value()</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/52ae100f9952321c0516aa6674300685a59480d7">52ae100f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4863">GH#4863</a>) Internal: dropZone parameter was speficied incorrectly, assigning larger area to dropzone for multiple-upload</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/56d89725e45a442c25d2407581da99ff5af79edf">56d89725</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4864">GH#4864</a>) Dropbox: Flash messages not shown after simple upload</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/8e6fdb2aba6314b39ff35f034cc0f1159b438e4b">8e6fdb2a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4865">GH#4865</a>) Dropbox: Fix "view" parameter check</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/b102f68a1f50d3325c7df595cd9cb4f34bd3f421">b102f68a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4866">GH#4866</a>) Survey: Fix start/end dates incorrectly formatted when editing meeting</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c112932aa6da2dd6a843327f7c0b4e1102e81e7">7c112932</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4879">GH#4879</a>) Survey: Fix multiplechoiceother results export</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/015fbd04930a4ab0535b30410a30a12bb861794c">015fbd04</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4878">GH#4878</a>) Exercise: Fix missing initialization of speeds for reading comprehension test</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/73d6db7aa855436d389a53a0c5deb17248c13ca0">73d6db7a</a>) Internal: Bump PHP version to 7.4 in .scrutinizer.yml</li>
+            <li>[2023-09-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/4b1149e6ede87be463d1faca0aa4ead81a4e0752">4b1149e6</a> - <a href="https://task.beeznest.com/issues/21031">BT#21031</a>) Exercise: fix issue of wrong registered answer count du to response with value '0'</li>
+            <li>[2023-09-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/03e8c26c31e34529439355ae2f057345e7192e62">03e8c26c</a> - <a href="https://task.beeznest.com/issues/21030">BT#21030</a>) Exercise: Fix Fill in the blank answer presentation to show all the student answers every time but the response only on last attempt</li>
+            <li>[2023-09-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/f276e71f4e64aa5c8be67f5bf14954f96ce713df">f276e71f</a> - <a href="https://task.beeznest.com/issues/20460">BT#20460</a>) Session: Ensure session ID exists in subscribeUsersToSession() and unsubscribe_user_from_session()</li>
+            <li>[2023-09-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/9472790435ace36ddc313f3b74333a91190bf5ab">94727904</a> - <a href="https://task.beeznest.com/issues/21021">BT#21021</a>) Admin: Add option to export last login in user export</li>
+            <li>[2023-09-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/db00ac1e5c29ef41849a0a3c783de5bc5ff18a2f">db00ac1e</a> - <a href="https://task.beeznest.com/issues/20899">BT#20899</a>) Admin: Fix "off by one" issue with user/course export optimization</li>
+            <li>[2023-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/396a1e6535fa3a5cbde5e3b044fa5618d6b6d972">396a1e65</a> - <a href="https://task.beeznest.com/issues/21016">BT#21016</a>) Course Progress: fix error when exporting progress when no thematic where set</li>
+            <li>[2023-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/7ef4e324900ff0ec8a8ffe94100c44d36f274ca4">7ef4e324</a> - <a href="https://task.beeznest.com/issues/21009">BT#21009</a>) Catalogue: add pagination on top of course list</li>
+            <li>[2023-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/ad95b931997222b69c2d807467bd8b94b0552b64">ad95b931</a>) Plugin: BuyCourses: Set default values to avoid notices</li>
+            <li>[2023-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/408c90cb62b8738db5ed45f3f41db60e3740cfe3">408c90cb</a> - <a href="https://task.beeznest.com/issues/20901">BT#20901</a>) Exercise: Refactor exercise url params</li>
+            <li>[2023-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/c4697d9e07d7967032102b88f438a615f496ae76">c4697d9e</a>) Exercise: Fix set custom speeds</li>
+            <li>[2023-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/3aae7fa226fe627591f986e9d80a15b551f0afc8">3aae7fa2</a> - <a href="https://task.beeznest.com/issues/20879">BT#20879</a>) Learnpath: fix scorm reimport functionnality broken by commit #7ca2c5eaa795de1010b7c6913619832ce1694b0d</li>
+            <li>[2023-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/385a755ae85abee9868b116d98ec64f58a2c00be">385a755a</a> - <a href="https://task.beeznest.com/issues/20996">BT#20996</a>) Session: fix problem with names containing quotes, that break the javascript</li>
+            <li>[2023-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc432c19b497c978b6313730721e0ff1c49ba032">bc432c19</a> - <a href="https://task.beeznest.com/issues/20859">BT#20859</a>) Legal: redirect to terms and conditions after registration if enabled</li>
+            <li>[2023-09-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/59a29cbaafdf3c97f018761cd323d6534c0de29f">59a29cba</a>) Group: delete all references to a group even if the reference is with another course (which should not happen but happens sometimes)</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ee8161e1c3fcefa0cc54144d31184ca31750452">5ee8161e</a> - <a href="https://task.beeznest.com/issues/20460">BT#20460</a>) Webservice: Add error message to add_group_sub_user if user or group ID not defined</li>
+            <li>[2023-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4d8655a614d08e59eca783ce61005e5a082da73">e4d8655a</a> - <a href="https://task.beeznest.com/issues/20460">BT#20460</a>) Webservice: Add support service to get social groups/classes of a given user</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+            <li>No notable removal</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>The Zoom plugin fails on one of the endpoints for reasons that seem to be on the Zoom side.</li>
+        </ul>
+    </div>
+
+
     <div class="version" aria-label="1.11.24">
         <a id="1.11.24"></a>
         <h1>Chamilo 1.11.24 - Beersel, 31/08/2023</h1>
         <h3>Release notes - summary</h3>
-        <p>Chamilo 1.11.22 is a security fix release on top of 1.11.22.</p>
+        <p>Chamilo 1.11.24 is a security fix release on top of 1.11.22.</p>
         <h3>Release name</h3>
         <p><a href="https://en.wikipedia.org/wiki/Beersel">Beersel (Belgium)</a> is a municipality close to Brussels that is famous for being home to the Beersel Castle, a medieval fortified castle built in the 14th century AD.
         As Chamilo 1.11 goes through a maturity process, it becomes more and more secure to protect user data.</p>
@@ -133,7 +213,9 @@
         <ul aria-live="off">
             <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/e000b17b562987f608c09dda88ae1c5963013e1a">e000b17b</a> - <a href="https://task.beeznest.com/issues/20813">BT#20813</a>) Script: Add script to update course extra fields based on other extra field value</li>
             <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/29cf105944a301c1f64c8fe49020677490248646">29cf1059</a> - <a href="https://task.beeznest.com/issues/20813">BT#20813</a>) Script: Add script to update course extrafield based on specific rules</li>
-            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ef542a60d2ab697d17be0d77eed586c67011407">5ef542a6</a> - <a href="https://task.beeznest.com/issues/20836">BT#20836</a>) Forum: Add cron to send notification of updates in all the courses to the teachers or coaches during the last X days</li>        </ul>
+            <li>[2023-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ef542a60d2ab697d17be0d77eed586c67011407">5ef542a6</a> - <a href="https://task.beeznest.com/issues/20836">BT#20836</a>) Forum: Add cron to send notification of updates in all the courses to the teachers or coaches during the last X days</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
         In reverse chronological order...
         <ul aria-live="off">
             <li>[2023-08-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/b8413bd37a4e0755660ffe88ec1bbefbfab089c5">b8413bd3</a> - <a href="https://task.beeznest.com/issues/20965">BT#20965</a>) Documentation: Update suggested default for HSTS (remove preload by default) and link to hstspreload.org</li>
@@ -171,7 +253,6 @@
             <li>The Zoom plugin fails on one of the endpoints for reasons that seem to be on the Zoom side.</li>
         </ul>
     </div>
-
 
     <div class="version" aria-label="1.11.22">
         <a id="1.11.22"></a>

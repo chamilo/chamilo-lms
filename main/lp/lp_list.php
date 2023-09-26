@@ -753,10 +753,12 @@ foreach ($categories as $item) {
                 }
 
                 // Copy
-                $copy = Display::url(
-                    Display::return_icon('cd_copy.png', get_lang('Copy')),
-                    api_get_self().'?'.$cidReq."&action=copy&lp_id=$id"
-                );
+                if (!api_get_configuration_value('lp_hide_copy_option')) {
+                    $copy = Display::url(
+                        Display::return_icon('cd_copy.png', get_lang('Copy')),
+                        api_get_self().'?'.$cidReq."&action=copy&lp_id=$id"
+                    );
+                }
 
                 // Subscribe users
                 $subscribeUsers = '';

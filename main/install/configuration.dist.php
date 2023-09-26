@@ -2489,3 +2489,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Add more speed options to reading comprehension question type (type id = 21) in words per minute
 //$_configuration['exercise_question_reading_comprehension_extra_speeds'] = ['speeds' => [70, 110, 170]];
+
+//hide copy icon in LP's authoring options
+//$_configuration['lp_hide_copy_option'] = false;

@@ -9149,7 +9149,7 @@ function api_get_configuration_value($variable)
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {
-        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled() && is_int(array_keys($_configuration[$variable])[0])) {
+        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled() && isset($_configuration[$variable][0]) && is_int(array_keys($_configuration[$variable])[0])) {
             // It has been configured for at least one sub URL, so we will not return the complete variable
             /*
              * The idea is that if the first level key of the configuration variable is an int

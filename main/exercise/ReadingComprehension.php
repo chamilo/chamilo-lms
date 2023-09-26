@@ -75,8 +75,8 @@ class ReadingComprehension extends UniqueAnswer
         $this->isContent = $this->getIsContent();
         $extraSpeeds = api_get_configuration_value('exercise_question_reading_comprehension_extra_speeds');
         $customSpeeds = $extraSpeeds['speeds'] ?? [];
+        $this->allSpeeds = self::$speeds;
         if (!empty($customSpeeds) && is_array($customSpeeds)) {
-            $this->allSpeeds = self::$speeds;
             foreach ($customSpeeds as $speed) {
                 $this->allSpeeds[] = $speed;
             }

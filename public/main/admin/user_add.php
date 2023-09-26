@@ -136,7 +136,7 @@ $form->addElement(
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // e-mail
-$form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
+$form->addElement('text', 'email', get_lang('E-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
 $form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');
@@ -347,7 +347,7 @@ if ($form->validate()) {
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
-        $username = $user['username'];
+        $username = 'true' !== api_get_setting('login_is_email') ? $user['username'] : '';
         $status = (int) $user['status'];
         $language = $user['locale'];
         $picture = $_FILES['picture'];

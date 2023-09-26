@@ -77,6 +77,8 @@ if (isset($_POST['submitWork'])) {
     $check = Security::check_token();
     if ($check) {
         store_add_dropbox();
+
+        echo Display::getFlashToString();
     }
 }
 

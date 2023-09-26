@@ -9150,21 +9150,21 @@ function api_get_configuration_value($variable)
     // Check if variable exists
     if (isset($_configuration[$variable])) {
         if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled() && is_int(array_keys($_configuration[$variable])[0])) {
-            // It has been configured for at least one sub URL so we will not return the complete variable
+            // It has been configured for at least one sub URL, so we will not return the complete variable
             /*
-         * The idea is that if the first level key of the configuration variable is an int
-         * then it is a multiURL configuration and if it's a string then it's a configuration that is not multiURL.
-         * For example if in app/config/configuration.php you have set :
-         * $_configuration['ticket_project_user_roles'] = [
-         *     'permissions' => [
-         *         1 => [17] // project_id = 1, STUDENT_BOSS = 17
-         *     ]
-         * ];
-         * You do not want to enter in this bloc even if multiURL is activated because the option is configured globaly
-         * and you want to return the full array.
-         * The is_int is to consider only the option that are array and configured for multiURL
-         * which means there is an int as the first level key of the array.
-         */
+             * The idea is that if the first level key of the configuration variable is an int
+             * then it is a multiURL configuration and if it's a string then it's a configuration that is not multiURL.
+             * For example if in app/config/configuration.php you have set :
+             * $_configuration['ticket_project_user_roles'] = [
+             *     'permissions' => [
+             *         1 => [17] // project_id = 1, STUDENT_BOSS = 17
+             *     ]
+             * ];
+             * You do not want to enter this block even if multiURL is activated because the option is configured globally
+             * and you want to return the full array.
+             * The is_int is to consider only the option that are array and configured for multiURL
+             * which means there is an int as the first level key of the array.
+             */
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];

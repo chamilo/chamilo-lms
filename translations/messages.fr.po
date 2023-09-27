@@ -24126,19 +24126,19 @@ msgid "Dear"
 msgstr "Bonjour"
 
 msgid "Welcome to this platform"
-msgstr "Bienvenue sur PARKUR, la plateforme de préparation linguistique à la mobilité de l’Office franco-allemand pour la Jeunesse !"
+msgstr "Bienvenue sur cette plateforme"
 
 msgid "You are registered to"
-msgstr "Tu viens de t’inscrire sur la plateforme "
+msgstr "Vous êtes inscrit sur la plateforme "
 
 msgid "with the following settings:"
-msgstr "en choisissant les identifiants suivants :"
+msgstr "avec les identifiants suivants :"
 
 msgid "For more details visit %s"
-msgstr "Pour que nous puissions mieux te connaître et te proposer un parcours personnalisé sur la plateforme, il est important que tu remplisses le questionnaire suivant : %s\nSans cette étape, il te sera impossible d’accéder aux activités et ressources de la plateforme.\nUne fois que tu auras répondu à ce questionnaire, ton tuteur prendra contact avec toi."
+msgstr "Pour plus de détails vous pouvez vous rendre sur %s"
 
 msgid "In case of trouble, contact us."
-msgstr "Pour toute question relative à ton inscription sur la plateforme, tu peux consulter la FAQ ou nous contacter à l’adresse parkur@ofaj.org."
+msgstr "En cas de problème, vous pouvez nous contacter."
 
 msgid "Manager"
 msgstr "Responsable"

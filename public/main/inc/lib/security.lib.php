@@ -544,6 +544,7 @@ class Security
                 'uppercase' => 0,
                 'numeric' => 2,
                 'length' => 5,
+                'specials' => 1,
             ],
         ];
 

@@ -70,8 +70,6 @@
             var $footTerms = $('#em-terms-footer');
             var $footCamera = $('#em-camera-footer');
 
-            var $countdown = $('#countdown');
-
             var $btnSnap = $('#btn-snap');
             var $btnRetry = $('#btn-retry');
             var $btnNext = $('#btn-next');
@@ -110,38 +108,10 @@
                 $btnRetry.prop({disabled: true});
                 $btnNext.prop({disabled: true});
 
-                countDown()
-                    .then(function () {
-                        Webcam.snap(function (dataUri) {
-                            var $imgSnapshot = $('<img>')
-                                .prop({src: dataUri, id: 'img-iddoc'})
-                                .addClass('img-responsive');
-
-                            if (!hasIdDoc && !hasLearner) {
-                                $imgIdDoc.html($imgSnapshot);
-
-                                $bodyCamera.hide();
-                                $bodyIdDoc.show();
-
-                                hasIdDoc = true;
-                                hasLearner = false;
-
-                                imgIdDoc = dataUri;
-                            } else if (hasIdDoc && !hasLearner) {
-                                $imgLearner.html($imgSnapshot);
-
-                                $bodyCamera.hide();
-                                $bodyStudent.show();
-
-                                hasIdDoc = true;
-                                hasLearner = true;
-
-                                imgLearner = dataUri;
-                            }
-
-                            $btnRetry.prop({disabled: false});
-                            $btnNext.prop({disabled: false});
-                        });
+                snap()
+                    .done(function () {
+                        $btnRetry.prop({disabled: false});
+                        $btnNext.prop({disabled: false});
                     });
             });
 
@@ -187,21 +157,38 @@
                 }
             });
 
-            function countDown() {
-                var seconds = 5;
+            function snap() {
                 var deferred = $.Deferred();
 
-                var interval = window.setInterval(function () {
-                    if (seconds === 0) {
-                        window.clearInterval(interval);
-                        $countdown.text('');
+                Webcam.snap(function (dataUri) {
+                    var $imgSnapshot = $('<img>')
+                        .prop({src: dataUri, id: 'img-iddoc'})
+                        .addClass('img-responsive');
 
-                        deferred.resolve();
-                    } else {
-                        $countdown.text(seconds);
-                        seconds--;
+                    if (!hasIdDoc && !hasLearner) {
+                        $imgIdDoc.html($imgSnapshot);
+
+                        $bodyCamera.hide();
+                        $bodyIdDoc.show();
+
+                        hasIdDoc = true;
+                        hasLearner = false;
+
+                        imgIdDoc = dataUri;
+                    } else if (hasIdDoc && !hasLearner) {
+                        $imgLearner.html($imgSnapshot);
+
+                        $bodyCamera.hide();
+                        $bodyStudent.show();
+
+                        hasIdDoc = true;
+                        hasLearner = true;
+
+                        imgLearner = dataUri;
                     }
-                }, 1000);
+
+                    deferred.resolve();
+                });
 
                 return deferred.promise();
             }

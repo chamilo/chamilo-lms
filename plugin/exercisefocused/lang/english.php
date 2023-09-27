@@ -27,3 +27,4 @@ $strings['TimeLimitReached'] = "Time Limit reached";
 $strings['Outfocused'] = "Outfocused";
 $strings['Return'] = "Return";
 $strings['Motive'] = "Motive";
+$strings['AlertBeforeLeaving'] = "Before leaving the exercise, consider that this action will be tracked.";

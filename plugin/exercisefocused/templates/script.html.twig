@@ -11,6 +11,12 @@
         var $outfocusedLimitBlock = $exerciseFocused.find('#outfocused-limit-block');
         var $outfocusedLimitTarget = $exerciseFocused.find('#outfocused-limit-target');
 
+        var $backdrop = $('<div>')
+            .addClass('exercisefocused-backdrop text-danger')
+            .attr('data-alert', '{{ 'AlertBeforeLeaving'|get_plugin_lang('ExerciseFocusedPlugin') }}');
+
+        $backdrop.appendTo('body');
+
         var secToken = "{{ exercisefocused.sec_token }}";
         var initDocumentTitle = document.title;
         var countdownInterval;
@@ -20,7 +26,6 @@
         {% if enable_outfocused_limit %}
             var remainingOutfocused = {{ exercisefocused.remaining_outfocused }};
         {% endif %}
-
 
         function finishExam(examType) {
             $(window).off("blur", onBlur)

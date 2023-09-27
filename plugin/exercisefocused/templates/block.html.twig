@@ -36,6 +36,7 @@
             -moz-user-select: none;
             -webkit-user-select: none;
             top: 0;
+            z-index: 1010;
         }
         .exercisefocused-block__container {
             text-align: center;
@@ -50,6 +51,38 @@
         .exercisefocused-block__message p,
         .exercisefocused-block__message span {
             font-weight: bold;
+        }
+
+        .exercisefocused-backdrop {
+            background-color: rgba(0, 0, 0, 0.01);
+            cursor: not-allowed;
+            height: 100%;
+            opacity: 1;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .exercisefocused-backdrop::before {
+            background-color: #FFF;
+            content: attr(data-alert);
+            display: none;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 50px auto;
+            padding: 10px;
+            position: relative;
+            text-align: center;
+            width: 340px;
+        }
+        .exercisefocused-backdrop:hover::before {
+            display: block;
+        }
+
+        .main-question, .exercise_actions, #exercise-description {
+            background-color: #FFF;
+            position: relative;
+            z-index: 1005;
         }
     </style>
 {% endif %}

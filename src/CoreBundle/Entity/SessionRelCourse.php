@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -24,6 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)"),
     ],
     normalizationContext: [
         'groups' => ['session_rel_course:read'],

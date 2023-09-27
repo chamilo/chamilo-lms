@@ -439,7 +439,11 @@ switch ($action) {
         }
 
         $q = strtolower(trim($_GET['q']));
-
+        $options = [];
+        if ('true' === api_get_setting('session.session_model_list_field_ordered_by_id')) {
+            $orderBy = "s.id";
+            $options['order'] = $orderBy;
+        }
         $list = array_map(
             function ($session) {
                 return [
@@ -447,7 +451,7 @@ switch ($action) {
                     'text' => strip_tags($session['name']),
                 ];
             },
-            SessionManager::formatSessionsAdminForGrid()
+            SessionManager::formatSessionsAdminForGrid($options)
         );
 
         $list = array_filter(

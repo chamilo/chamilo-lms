@@ -6441,53 +6441,71 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $translations = [
-        'wordLength' => get_lang('The password is too short'),
-        'wordNotEmail' => get_lang('Your password cannot be the same as your email'),
-        'wordSimilarToUsername' => get_lang('Your password cannot contain your username'),
-        'wordTwoCharacterClasses' => get_lang('Use different character classes'),
-        'wordRepetitions' => get_lang('Too many repetitions'),
-        'wordSequences' => get_lang('Your password contains sequences'),
-        'errorList' => get_lang('errors found'),
-        'veryWeak' => get_lang('Very weak'),
-        'weak' => get_lang('Weak'),
-        'normal' => get_lang('Normal'),
-        'medium' => get_lang('Medium'),
-        'strong' => get_lang('Strong'),
-        'veryStrong' => get_lang('Very strong'),
+    $minRequirements = Security::getPasswordRequirements()['min'];
+
+    $options = [
+        'rules' => [],
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.js');
-    $js .= "<script>
-    var errorMessages = {
-        password_to_short : \"".get_lang('The password is too short')."\",
-        same_as_username : \"".get_lang('Your password cannot be the same as your username')."\"
-    };
+    if ($minRequirements['length'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['length'],
+            'pattern' => '.',
+            'helpText' => sprintf(
+                get_lang('Minimum %s characters in total'),
+                $minRequirements['length']
+            ),
+        ];
+    }
 
+    if ($minRequirements['lowercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['lowercase'],
+            'pattern' => '[a-z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s lowercase characters'),
+                $minRequirements['lowercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['uppercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['uppercase'],
+            'pattern' => '[A-Z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s uppercase characters'),
+                $minRequirements['uppercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['numeric'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['numeric'],
+            'pattern' => '[0-9]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s numerical (0-9) characters'),
+                $minRequirements['numeric']
+            ),
+        ];
+    }
+
+    if ($minRequirements['specials'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['specials'],
+            'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s special characters'),
+                $minRequirements['specials']
+            ),
+        ];
+    }
+
+    $js = api_get_js('password-checker/password-checker.js');
+    $js .= "<script>
     $(function() {
-        var lang = ".json_encode($translations).";
-        var options = {
-            onLoad : function () {
-                //$('#messages').text('Start typing password');
-            },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
-            errorMessages : errorMessages,
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };
-        options.i18n = {
-            t: function (key) {
-                var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the
-            }
-        };
-        $('".$passwordInputId."').pwstrength(options);
+        $('".$passwordInputId."').passwordChecker(".json_encode($options).");
     });
     </script>";
 

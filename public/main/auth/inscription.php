@@ -276,7 +276,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
         'password',
         'pass1',
         [get_lang('Pass'), $passDiv],
-        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
+        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off', 'show_hide' => true]
     );
 
     $checkPass = api_get_setting('allow_strength_pass_checker');

@@ -81,6 +81,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'email_template_subscription_to_session_confirmation_lost_password' => 'false',
                     'session_creation_user_course_extra_field_relation_to_prefill' => '',
                     'session_creation_form_set_extra_fields_mandatory' => '',
+                    'session_model_list_field_ordered_by_id' => 'false',
                 ]
             )
         ;
@@ -227,7 +228,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('session_creation_form_set_extra_fields_mandatory'),
                 ]
             )
-
+            ->add('session_model_list_field_ordered_by_id', YesNoType::class)
         ;
     }
 

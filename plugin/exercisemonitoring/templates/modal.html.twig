@@ -97,8 +97,9 @@
                     width: 380,
                 });
                 Webcam.attach('#monitoring-camera');
-
-                $btnSnap.prop({disabled: false});
+                Webcam.on('live', function () {
+                    $btnSnap.prop({disabled: false}).focus();
+                });
             });
 
             $btnSnap.on('click', function (e) {
@@ -118,7 +119,7 @@
             $btnRetry.on('click', function (e) {
                 e.preventDefault();
 
-                $btnSnap.prop({disabled: false});
+                $btnSnap.prop({disabled: false}).focus();
                 $btnRetry.prop({disabled: true});
                 $btnNext.prop({disabled: true});
 
@@ -137,14 +138,16 @@
                 }
             });
 
-            $btnNext.on('click', function () {
+            $btnNext.on('click', function (e) {
+                e.preventDefault();
+
                 $btnRetry.prop({disabled: true});
 
                 if (hasIdDoc && !hasLearner) {
                     $bodyIdDoc.hide();
                     $bodyCamera.show();
 
-                    $btnSnap.prop({disabled: false});
+                    $btnSnap.prop({disabled: false}).focus();
                 } else if (hasIdDoc && hasLearner) {
                     $btnNext.prop({disabled: true});
                     $btnSnap.prop({disabled: true});
@@ -154,6 +157,14 @@
                     sendData().done(function () {
                         $("#em-modal-start").modal('hide');
                     });
+                }
+            });
+
+            $(window).on('keyup', function (e) {
+                if (32 === event.which && !$btnSnap.prop('disabled')) {
+                    e.preventDefault();
+
+                    $btnSnap.trigger('click');
                 }
             });
 

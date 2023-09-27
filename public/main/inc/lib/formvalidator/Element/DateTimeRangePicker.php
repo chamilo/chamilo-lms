@@ -33,10 +33,10 @@ class DateTimeRangePicker extends DateRangePicker
                     class="form-control" type="text" value="'.$value.'" data-input>
                 <div class="ml-1" id="button-addon3">
                     <button class="btn btn--secondary-outline"  type="button" data-toggle>
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="pi pi-calendar pi-lg"></i>
                     </button>
                     <button class="btn btn--secondary-outline" type="button" data-clear>
-                        <i class="fas fa-times"></i>
+                        <i class="pi pi-times pi-lg"></i>
                     </button>
               </div>
             </div>

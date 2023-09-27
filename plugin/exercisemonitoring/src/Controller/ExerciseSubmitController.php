@@ -35,33 +35,39 @@ class ExerciseSubmitController
         $userDirName = $this->createDirectory();
 
         $existingExeId = (int) ChamiloSession::read('exe_id');
-        $imgIddoc = $this->request->files->get('snapshot');
 
+        $levelId = $this->request->request->getInt('level_id');
         $exercise = $this->em->find(
             CQuiz::class,
             $this->request->request->getInt('exercise_id')
         );
-        $question = $this->em->find(
-            CQuizQuestion::class,
-            $this->request->request->getInt('question_id')
-        );
+
         $trackingExercise = $this->em->find(TrackEExercises::class, $existingExeId);
 
-        if ($imgIddoc) {
-            $newFilename = uniqid().'_exercise.jpg';
+        $newFilename = '';
+        $level = 0;
 
-            $imgIddoc->move($userDirName, $newFilename);
+        /** @var UploadedFile $imgSubmit */
+        if ($imgSubmit = $this->request->files->get('snapshot')) {
+            $newFilename = uniqid().'_submit.jpg';
 
-            $log = new Log();
-            $log
-                ->setExercise($exercise)
-                ->setExe($trackingExercise)
-                ->setLevel($question->getIid())
-                ->setImageFilename($newFilename)
-            ;
-
-            $this->em->persist($log);
+            $imgSubmit->move($userDirName, $newFilename);
         }
+
+        if (ONE_PER_PAGE === $exercise->getType()) {
+            $question = $this->em->find(CQuizQuestion::class, $levelId);
+            $level = $question->getIid();
+        }
+
+        $log = new Log();
+        $log
+            ->setExercise($exercise)
+            ->setExe($trackingExercise)
+            ->setLevel($level)
+            ->setImageFilename($newFilename)
+        ;
+
+        $this->em->persist($log);
 
         $this->em->flush();
 

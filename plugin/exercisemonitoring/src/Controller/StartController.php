@@ -57,7 +57,7 @@ class StartController
             $log = new Log();
             $log
                 ->setExercise($exercise)
-                ->setLevel(0)
+                ->setLevel(-1)
                 ->setImageFilename($newFilename)
             ;
 

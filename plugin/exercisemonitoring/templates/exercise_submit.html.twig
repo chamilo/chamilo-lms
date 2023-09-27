@@ -1,11 +1,14 @@
 {% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled %}
+    {% set ALL_ON_ONE_PAGE = exercisemonitoring.exercise_type == 1 %}
+    {% set ONE_PER_PAGE = exercisemonitoring.exercise_type == 2 %}
+
     <div id="monitoring-camera"></div>
 
     <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
     <script>
         $(function () {
-            var $btnQuestion = $('button[data-question]');
             var $btnSaveNow = $('button[name="save_now"]');
+            var $btnEndTest = $('button[name="validate_all"]');
 
             Webcam.set({
                 height: 285,
@@ -13,26 +16,34 @@
             });
             Webcam.attach('#monitoring-camera');
             Webcam.on('live', function () {
-                Webcam.snap(function (dataUri) {
-                    var questionId = $btnQuestion.data('question')
+                {% if ALL_ON_ONE_PAGE %}
+                    snapAndSendData(0);
+                {% elseif ONE_PER_PAGE %}
+                    snapByQuestion();
+                {% endif %}
+            });
 
-                    sendData(questionId, dataUri);
+            {% if ALL_ON_ONE_PAGE %}
+                $btnEndTest.on('click', function () {
+                    snapAndSendData(0);
                 });
-            });
-
-            $btnQuestion.on('click', function (e) {
-                e.preventDefault();
-            });
-
-            $btnSaveNow.on('click', function (e) {
-                e.preventDefault();
-
-                Webcam.snap(function (dataUri) {
-                    var questionId = $btnSaveNow.data('question')
-
-                    sendData(-1, dataUri);
+            {% elseif ONE_PER_PAGE %}
+                $btnSaveNow.on('click', function () {
+                    snapByQuestion();
                 });
-            });
+            {% endif %}
+
+            function snapAndSendData(levelId) {
+                Webcam.snap(function (dataUri) {
+                    sendData(levelId, dataUri);
+                });
+            }
+
+            function snapByQuestion() {
+                var questionId = $btnSaveNow.data('question') || 0;
+
+                snapAndSendData(questionId);
+            }
 
             function sendData(questionId, imageUri) {
                 var rawImgIdDoc = imageUri.replace(/^data:image\/\w+;base64,/, '');
@@ -40,8 +51,7 @@
 
                 var formData = new FormData();
                 formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
-                formData.append('exe_id', '{{ exercisemonitoring.exe_id }}');
-                formData.append('question_id', questionId);
+                formData.append('level_id', questionId);
                 formData.append('snapshot', blobImgIdDoc, 'snapshot.jpg');
 
                 return $.ajax({

@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="modal-body text-center" id="em-camera-body" style="display: none;">
-                    <div id="monitoring-camera"></div>
+                    <div id="monitoring-camera" class="img-responsive"></div>
                     <p id="countdown"></p>
                     <button class="btn btn-default" type="button" id="btn-snap" disabled>
                         <span class="fa fa-camera" aria-hidden="true"></span>
@@ -96,12 +96,13 @@
                 $footCamera.show();
 
                 Webcam.set({
-                    height: 285,
-                    width: 380,
+                    height: 480,
+                    width: 640,
                 });
                 Webcam.attach('#monitoring-camera');
                 Webcam.on('live', function () {
                     $btnSnap.prop({disabled: false}).focus();
+                    $('#monitoring-camera video').addClass('img-responsive');
                 });
             });
 

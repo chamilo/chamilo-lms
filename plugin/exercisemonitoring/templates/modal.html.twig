@@ -62,6 +62,7 @@
         $(function () {
             $("#em-modal-start").modal("show");
 
+            var $btnStartExercise = $('.exercise_overview_options a');
             var $bodyTerms = $('#em-terms-body');
             var $bodyCamera = $('#em-camera-body');
             var $bodyIdDoc = $('#em-iddoc-body');
@@ -82,6 +83,8 @@
 
             var imgIdDoc = null;
             var imgLearner = null;
+
+            $btnStartExercise.addClass('disabled').attr('aria-disabled', 'true');
 
             $("#btn-accept").on('click', function (e) {
                 e.preventDefault();
@@ -155,6 +158,10 @@
                     Webcam.reset();
 
                     sendData().done(function () {
+                        $btnStartExercise.removeClass('disabled').removeAttr('aria-disabled');
+
+                        window.location = $btnStartExercise.prop('href');
+
                         $("#em-modal-start").modal('hide');
                     });
                 }

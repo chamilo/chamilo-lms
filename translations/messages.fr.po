@@ -24118,3 +24118,27 @@ msgstr "Nom"
 
 msgid "Official code"
 msgstr "Code officiel"
+
+msgid "Your Reg"
+msgstr "Votre inscription sur"
+
+msgid "Dear"
+msgstr "Bonjour"
+
+msgid "Welcome to this platform"
+msgstr "Bienvenue sur cette plateforme"
+
+msgid "You are registered to"
+msgstr "Vous êtes inscrit sur la plateforme "
+
+msgid "with the following settings:"
+msgstr "avec les identifiants suivants :"
+
+msgid "For more details visit %s"
+msgstr "Pour plus de détails vous pouvez vous rendre sur %s"
+
+msgid "In case of trouble, contact us."
+msgstr "En cas de problème, vous pouvez nous contacter."
+
+msgid "Manager"
+msgstr "Responsable"

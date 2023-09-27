@@ -247,6 +247,7 @@ class UserManager
             $language = 'en_US';
         }
 
+        $locale = substr($language, 0, 2);
         $now = new DateTime();
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
@@ -376,7 +377,7 @@ class UserManager
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $tpl = Container::getTwig();
-                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig');
+                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig', ['locale' => $locale]);
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),
                     api_get_setting('administratorSurname'),
@@ -404,6 +405,7 @@ class UserManager
                     'mailWebPath' => $url,
                     'new_user' => $user,
                     'search_link' => $url,
+                    'locale' => $locale,
                 ];
 
                 // ofaj

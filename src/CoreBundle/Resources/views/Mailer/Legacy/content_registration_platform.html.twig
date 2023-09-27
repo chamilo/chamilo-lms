@@ -1,11 +1,22 @@
 {% autoescape false %}
-<p>{{ 'Dear'|trans }} {{ complete_name }},</p>
-<p>{{ 'Welcome to this platform'|trans }}</p>
-<p>{{ 'You are registered to'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans }}</p>
-<p>{{ 'Username'|trans }} : {{ login_name }}<br>
-    {{ 'Pass'|trans }} : {{ original_password }}</p>
-<p>{{ 'For more details visit %s'|trans|format(search_link) }}</p>
-<p>{{ 'In case of trouble, contact us.'|trans }}</p>
+    {% set locale = locale|default('en') %}
+    <p>{{ 'Dear'|trans({}, null, locale) }} {{ complete_name }},</p>
+    <p>{{ 'Welcome to this platform'|trans({}, null, locale) }}</p>
+    <p>{{ 'You are registered to'|trans({}, null, locale) }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans({}, null, locale) }}</p>
+    <p>{{ 'Username'|trans({}, null, locale) }} : {{ login_name }}<br>
+        {{ 'Pass'|trans({}, null, locale) }} : {{ original_password }}</p>
+    <p>{{ 'For more details visit %s'|trans({}, null, locale)|format(search_link) }}</p>
+    <p>{{ 'In case of trouble, contact us.'|trans({}, null, locale) }}</p>
 
-{% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}
+    <p>{{ 'Sincerely'|trans({}, null, locale) }}</p>
+    <p>{{ 'admin.administrator_name' | api_get_setting }} {{ 'admin.administrator_surname' | api_get_setting }}<br />
+        {{ 'Manager'|trans({}, null, locale) }} {{ 'platform.site_name' | api_get_setting }}<br />
+
+        {% if 'admin.administrator_phone' | api_get_setting %}
+            {{ 'T. ' ~ 'admin.administrator_phone' | api_get_setting }}<br />
+        {% endif %}
+        {% if 'admin.administrator_email' | api_get_setting %}
+            {{ 'Email'|trans({}, null, locale) ~ ': ' ~ 'admin.administrator_email' | api_get_setting }}
+        {% endif %}
+    </p>
 {% endautoescape %}

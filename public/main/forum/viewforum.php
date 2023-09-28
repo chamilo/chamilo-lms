@@ -104,7 +104,7 @@ if (!empty($groupId)) {
     );
 
     // Course
-    if (!api_is_allowed_to_edit(false, true) && //is a student
+    if (!api_is_allowed_to_create_course() && //is a student
         (
             ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
             !$category->isVisible($courseEntity, $sessionEntity)
@@ -114,7 +114,7 @@ if (!empty($groupId)) {
     }
 } else {
     // Course
-    if (!api_is_allowed_to_edit(false, true) && //is a student
+    if (!api_is_allowed_to_create_course() && //is a student
         (
             ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
             !$category->isVisible($courseEntity, $sessionEntity)

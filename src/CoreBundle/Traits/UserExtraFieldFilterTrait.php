@@ -9,6 +9,10 @@ namespace Chamilo\CoreBundle\Traits;
 use ApiPlatform\Metadata\ApiFilter;
 use Chamilo\CoreBundle\Filter\UserExtraFieldFilter;
 
+/**
+ * Properties to use as filters. To search by a user extra field.
+ * The API Resource must have a relation with User
+ */
 trait UserExtraFieldFilterTrait
 {
     #[ApiFilter(UserExtraFieldFilter::class)]

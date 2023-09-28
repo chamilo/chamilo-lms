@@ -30,11 +30,7 @@ class UserExtraFieldFilter extends AbstractFilter
                 'property' => $property,
                 'type' => Type::BUILTIN_TYPE_STRING,
                 'required' => false,
-                'swagger' => [
-                    'description' => 'Filter using a regex. This will appear in the Swagger documentation!',
-                    'name' => 'Custom name to use in the Swagger documentation',
-                    'type' => 'Will appear below the name in the Swagger documentation',
-                ],
+                'description' => 'Properties to use as filters. To search by a user extra field',
             ];
         }
 

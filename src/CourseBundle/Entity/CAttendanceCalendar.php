@@ -67,7 +67,6 @@ class CAttendanceCalendar
         return $this;
     }
 
-    
     public function getDateTime(): DateTime
     {
         return $this->dateTime;

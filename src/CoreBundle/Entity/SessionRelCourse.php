@@ -68,9 +68,7 @@ class SessionRelCourse
         $this->position = 0;
     }
 
-    /**
-     * Get id.
-     */
+    
     public function getId(): ?int
     {
         return $this->id;

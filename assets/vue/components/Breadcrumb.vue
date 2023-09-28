@@ -38,7 +38,9 @@ const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"
 
 const home = {
   icon: "pi pi-home",
-  to: "/",
+  command: () => {
+    window.location.href = '/';
+  },
 }
 
 const foo = computed(() => {

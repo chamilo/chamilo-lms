@@ -50,7 +50,7 @@ function checkDocumentFilesOnDisk($courseCode, $removeFileNotFound)
 
                     // If document file path doesn't exist on disk
                     if (!existDocFileOnDisk($sourcePath, $doc['path'])) {
-                        // It searchs the current path
+                        // It searches the current path
                         $searchFile = basename($doc['path']);
                         $currentDocPaths = getDocFilePath($sourcePath, $searchFile);
 

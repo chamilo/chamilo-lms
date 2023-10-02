@@ -19,3 +19,5 @@ $strings['JustificationDate'] = "Date du justificatif";
 
 $strings['SubscribeToASession'] = "S'inscrire à une session d'examen";
 $strings['DocumentListForUserX'] = "Liste des documents pour %s";
+$strings['JustificationsCompleted'] = "Dossier complété";
+$strings['SendNotificationToAllAdmins'] = "Envoyer une notification à l'administrateur";

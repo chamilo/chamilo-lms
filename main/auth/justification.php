@@ -88,12 +88,12 @@ switch ($action) {
         // get_all_administrators
         $adminList = UserManager::get_all_administrators();
         $emailToAdminSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
-        $emailToAdminContent = $emailSubjectToAdmin . '<\br>' . api_get_path(WEB_PATH) . 'plugin/justification/justification_by_user.php?user_id=' . api_get_user_id();
+        $emailToAdminContent = $emailToAdminSubject . ' <br /><br />' . api_get_path(WEB_PATH) . 'plugin/justification/justification_by_user.php?user_id=' . api_get_user_id();
         foreach ($adminList as $adminId => $data) {
             MessageManager::send_message_simple(
                 $adminId, 
-                $emailSubjectToAdmin, 
-                $emailContentToAdmin,
+                $emailToAdminSubject, 
+                $emailToAdminContent,
                 api_get_user_id());
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));

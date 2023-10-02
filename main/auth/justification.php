@@ -72,8 +72,8 @@ if ($formValidator->validate() && isset($_FILES)) {
 $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
 
 if (!empty($userJustifications)) {
-    if (count($fields) <= count($userJustifications)&&$_REQUEST['a']!='notif_send'){
-        $formValidator->addHtml('<div class="alert alert-warning"><a href="'.api_get_self().'?a=notif_justification" >'.$plugin->get_lang('notificationJustifAdmin').'</a></div>');
+    if (count($fields) <= count($userJustifications) && $_REQUEST['a'] != 'notification_sent')=
+        $formValidator->addHtml('<div class="alert alert-warning"><a href="'.api_get_self().'?a=notify_justification" >'.$plugin->get_lang('SendNotificationToAllAdmins').'</a></div>');
     }
 }
 
@@ -82,21 +82,22 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 
 $justificationContent = '';
 switch ($action) {
-    case 'notif_justification':
-        //  notification to admin action
+    case 'notify_justification':
+        //  notification to all admins action
         $userInfo = api_get_user_info();
         // get_all_administrators
         $adminList = UserManager::get_all_administrators();
-        $emailSubjectToAdmin = $plugin->get_lang('JustificationsIsComplete').': '.$userInfo['complete_name'];
+        $emailToAdminSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
+        $emailToAdminContent = $emailSubjectToAdmin . '<\br>' . api_get_path(WEB_PATH) . 'plugin/justification/justification_by_user.php?user_id=' . api_get_user_id();
         foreach ($adminList as $adminId => $data) {
             MessageManager::send_message_simple(
                 $adminId, 
                 $emailSubjectToAdmin, 
-                $emailSubjectToAdmin,
+                $emailContentToAdmin,
                 api_get_user_id());
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
-        header('Location: '.api_get_self().'?a=notif_send');
+        header('Location: '.api_get_self().'?a=notification_sent');
         exit;
         break;
     case 'edit_justification':

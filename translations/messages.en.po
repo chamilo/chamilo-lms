@@ -24103,3 +24103,6 @@ msgstr "See as student"
 
 msgid "Official code"
 msgstr "Official code"
+
+msgid "Welcome, please go to diagnostic at %s."
+msgstr "Welcome, please go to diagnostic at %s."

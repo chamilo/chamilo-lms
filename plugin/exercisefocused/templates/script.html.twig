@@ -119,6 +119,14 @@
 
         $(window).on("blur", onBlur)
         $(window).on("focus", onFocus)
+
+        $('body').on('click', 'a, button', function (e) {
+            var $el = $(e.target);
+
+            if (0 === $el.parents('form#exercise_form').length) {
+                e.preventDefault();
+            }
+        });
     })
 </script>
 {% endif %}

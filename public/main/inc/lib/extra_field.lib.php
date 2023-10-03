@@ -2913,7 +2913,7 @@ JAVASCRIPT;
                                     $newCounter++;
                                 }
                                 if (!empty($whereTag)) {
-                                    $options['where'] .= ' AND  ('.implode(' AND ', $whereTag).') ';
+                                    $options['where'] .= ' AND  ('.implode(' OR ', $whereTag).') ';
                                 }
                             }
                             break;

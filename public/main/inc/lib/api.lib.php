@@ -3589,7 +3589,7 @@ function api_get_language_id($language)
 
     // We check the language by iscocode
     $langInfo = api_get_language_from_iso($language);
-    if (!empty($langInfo->getId())) {
+    if (null !== $langInfo && !empty($langInfo->getId())) {
         return $langInfo->getId();
     }
 

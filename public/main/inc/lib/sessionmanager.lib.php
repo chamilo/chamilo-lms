@@ -554,6 +554,13 @@ class SessionManager
                                INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
             $language = Database::escape_string($language);
 
+            // Get the isoCode to filter course_language
+            $isoCode = '';
+            $languageId = api_get_language_id($language);
+            if (!empty($languageId)) {
+                $languageInfo = api_get_language_info($languageId);
+                $isoCode = $languageInfo['isocode'];
+            }
             if ('true' === api_get_setting('language.allow_course_multiple_languages')) {
                 $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
                 $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -563,12 +570,12 @@ class SessionManager
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
                     $sqlInjectJoins .= " INNER JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
-                    $where .= " AND (c.course_language = '$language' OR cfv.field_value LIKE '%$language%')";
+                    $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
                 } else {
-                    $where .= " AND c.course_language = '$language' ";
+                    $where .= " AND c.course_language = '$isoCode' ";
                 }
             } else {
-                $where .= " AND c.course_language = '$language' ";
+                $where .= " AND c.course_language = '$isoCode' ";
             }
         }
 

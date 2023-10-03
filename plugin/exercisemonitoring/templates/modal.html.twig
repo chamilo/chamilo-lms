@@ -20,8 +20,14 @@
                 </div>
 
                 <div class="modal-body text-center" id="em-camera-body" style="display: none;">
+                    <p id="txt-iddoc-img-instructions" class="lead" style="display: block;">
+                        {{ 'ImageIdDocumentCameraInstructions'|get_plugin_lang('ExerciseMonitoringPlugin') }}
+                    </p>
+                    <p id="txt-learner-img-instructions" class="lead" style="display: none;">
+                        {{ 'ImageLearnerCameraInstructions'|get_plugin_lang('ExerciseMonitoringPlugin') }}
+                    </p>
                     <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
-                    <p id="countdown"></p>
+                    <br>
                     <button class="btn btn-default" type="button" id="btn-snap" disabled>
                         <span class="fa fa-camera" aria-hidden="true"></span>
                         {{ 'Snapshot'|get_lang }}
@@ -29,12 +35,12 @@
                 </div>
 
                 <div class="modal-body text-center" id="em-iddoc-body" style="display: none;">
-                    <p><b>{{ 'IdDocumentSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</b></p>
+                    <p class="lead">{{ 'IdDocumentSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</p>
                     <div id="img-iddoc"></div>
                 </div>
 
                 <div class="modal-body text-center" id="em-student-body" style="display: none;">
-                    <p><b>{{ 'LearnerSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</b></p>
+                    <p class="lead">{{ 'LearnerSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</p>
                     <div id="img-learner"></div>
                 </div>
 
@@ -76,6 +82,9 @@
             var $imgIdDoc = $('#img-iddoc');
             var $imgLearner = $('#img-learner');
 
+            var $txtIdDocInstructions = $('#txt-iddoc-img-instructions');
+            var $txtLearnerInstructions = $('#txt-learner-img-instructions');
+
             var hasIdDoc = false;
             var hasLearner = false;
 
@@ -103,6 +112,9 @@
                 });
                 Webcam.attach('#monitoring-camera');
                 Webcam.on('live', function () {
+                    $txtIdDocInstructions.show();
+                    $txtLearnerInstructions.hide();
+
                     $btnSnap.prop({disabled: false}).focus();
                     $('#monitoring-camera video').addClass('embed-responsive-item');
                 });
@@ -153,6 +165,9 @@
                     $bodyIdDoc.hide();
                     $bodyCamera.show();
 
+                    $txtIdDocInstructions.hide();
+                    $txtLearnerInstructions.show();
+
                     $btnSnap.prop({disabled: false}).focus();
                 } else if (hasIdDoc && hasLearner) {
                     $btnNext.prop({disabled: true});
@@ -183,7 +198,7 @@
 
                 Webcam.snap(function (dataUri) {
                     var $imgSnapshot = $('<img>')
-                        .prop({src: dataUri, id: 'img-iddoc'})
+                        .prop({src: dataUri, id: 'img-snapshot'})
                         .addClass('img-responsive');
 
                     if (!hasIdDoc && !hasLearner) {

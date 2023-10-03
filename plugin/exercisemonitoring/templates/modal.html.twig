@@ -60,8 +60,6 @@
     <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
     <script>
         $(function () {
-            $("#em-modal-start").modal("show");
-
             var $btnStartExercise = $('.exercise_overview_options a');
             var $bodyTerms = $('#em-terms-body');
             var $bodyCamera = $('#em-camera-body');
@@ -83,6 +81,10 @@
 
             var imgIdDoc = null;
             var imgLearner = null;
+
+            if ($btnStartExercise.length > 0) {
+                $("#em-modal-start").modal("show");
+            }
 
             $btnStartExercise.addClass('disabled').attr('aria-disabled', 'true');
 

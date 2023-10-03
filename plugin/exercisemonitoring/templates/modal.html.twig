@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="modal-body text-center" id="em-camera-body" style="display: none;">
-                    <div id="monitoring-camera" class="img-responsive"></div>
+                    <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
                     <p id="countdown"></p>
                     <button class="btn btn-default" type="button" id="btn-snap" disabled>
                         <span class="fa fa-camera" aria-hidden="true"></span>
@@ -104,7 +104,7 @@
                 Webcam.attach('#monitoring-camera');
                 Webcam.on('live', function () {
                     $btnSnap.prop({disabled: false}).focus();
-                    $('#monitoring-camera video').addClass('img-responsive');
+                    $('#monitoring-camera video').addClass('embed-responsive-item');
                 });
             });
 
@@ -238,12 +238,14 @@
     </script>
     <style>
         #monitoring-camera {
-            min-width: 100%;
+            height: auto !important;
+            max-width: 100% !important;
+            margin: 0 auto;
         }
 
         #monitoring-camera video {
-            display: block;
-            margin: 0 auto;
+            height: auto !important;
+            max-width: 100%;
         }
     </style>
 {% endif %}

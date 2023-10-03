@@ -27,12 +27,12 @@ class CategorizedExerciseResult
     /**
      * @var array<int, array<string, string>>
      */
-    public array $catories;
+    public array $categories;
 
-    public function __construct(TrackEExercise $exe, array $catories)
+    public function __construct(TrackEExercise $exe, array $categories)
     {
         $this->exe = $exe;
-        $this->catories = $catories;
+        $this->categories = $categories;
     }
 
     #[ApiProperty(readable: false, identifier: true)]

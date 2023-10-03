@@ -81,7 +81,7 @@ class CourseVoter extends Voter
                 }
 
                 // If user is logged in and is open platform, allow access.
-                if (in_array($course->getVisibility(), [Course::OPEN_PLATFORM, Course::REGISTERED])) {
+                if (Course::OPEN_PLATFORM === $course->getVisibility()) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
                     if ($course->hasUserAsTeacher($user)) {

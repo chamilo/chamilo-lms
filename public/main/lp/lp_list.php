@@ -306,7 +306,7 @@ foreach ($categories as $category) {
                 //   student view automatically. Many teachers are confused
                 //   by that, so maybe a solution can be found to avoid it
                 $maker = (empty($details['lp_maker']) ? '' : Security::remove_XSS($details['lp_maker']));
-                $url_start_lp .= '&isStudentView=true';
+                //$url_start_lp .= '&isStudentView=true';
                 $extra = $lpVisibility ? '' : get_lang('Learners cannot see this learning path');
             }
 

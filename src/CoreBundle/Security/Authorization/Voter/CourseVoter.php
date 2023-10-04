@@ -130,16 +130,9 @@ class CourseVoter extends Voter
 
                 // Validation in session
                 if ($session) {
-                    $currentCourse = $session->getCurrentCourse();
                     $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
-
-                    if (null === $currentCourse) {
-                        $userIsStudent = $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
-                        $userIsCourseCoach = false;
-                    } else {
-                        $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
-                        $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
-                    }
+                    $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
+                    $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
 
                     if ($userIsGeneralCoach) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);

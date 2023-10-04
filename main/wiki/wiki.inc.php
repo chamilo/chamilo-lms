@@ -6133,7 +6133,7 @@ class Wiki
             //show editor if edit is allowed <<<<<
             if ((!empty($row['id']) && $row['editlock'] != 1)
                 || api_is_allowed_to_edit(false, true) != false
-                && api_is_platform_admin() != false
+                || api_is_platform_admin() != false
             ) {
                 // Check tasks
                 if (!empty($row['startdate_assig']) && time() <

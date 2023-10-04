@@ -19,3 +19,5 @@ $strings['SubscribeToASession'] = "Subscribe to a session";
 $strings['JustificationName'] = "Justification name";
 $strings['JustificationDate'] = "Justification date";
 $strings['DocumentListForUserX'] = "Document list of user %s";
+$strings['JustificationsCompleted'] = "Justifications completed";
+$strings['SendNotificationToAllAdmins'] = "Send a notification to the administrator";

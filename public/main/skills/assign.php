@@ -304,10 +304,9 @@ if ($form->validate()) {
         $parentData = $skillModel->get($parentId);
 
         $data = $extraFieldValue->get_values_by_handler_and_field_variable($parentId, 'children_auto_threshold');
-        $sendEmail = true;
-        if ($sendEmail) {
-            // Search X children
-            $requiredSkills = isset($data['value']) ? (int) $data['value'] : 0;
+        // Search X children
+        $requiredSkills = isset($data['value']) ? (int) $data['value'] : 0;
+        if ($requiredSkills > 0) {
             $children = $skillRelSkill->getChildren($parentId);
             $counter = 0;
             foreach ($children as $child) {

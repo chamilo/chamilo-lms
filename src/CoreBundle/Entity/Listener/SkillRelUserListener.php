@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Component\Routing\RouterInterface;
@@ -18,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SkillRelUserListener
 {
     public function __construct(
+        protected SettingsManager $settingsManager,
         private readonly RouterInterface $router,
         private readonly TranslatorInterface $translator,
         protected Security $security

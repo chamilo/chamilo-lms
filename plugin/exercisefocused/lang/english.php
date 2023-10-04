@@ -14,7 +14,7 @@ $strings['outfocused_limit_help'] = "Number of outfocused allowed. After this li
 $strings['session_field_filters'] = "Session field as filter";
 $strings['session_field_filters_help'] = "Extra field names separeted by a comma.";
 
-$strings['ReportByAttempts'] = "Exercise focus: Report by attempts";
+$strings['ReportByAttempts'] = "Exercise focused: Report by attempts";
 $strings['YouHaveLeftTheExercise'] = "You have left the exercise";
 $strings['YouHaveXTimeToReturn'] = "You have <span class=\"h3 text-danger\" id=\"time-limit-target\">%s</span> seconds to return";
 $strings['YouAreAllowedXOutfocused'] = "You are allowed <span class=\"h3 text-danger\" id=\"outfocused-limit-target\">%d</span> outfocused";

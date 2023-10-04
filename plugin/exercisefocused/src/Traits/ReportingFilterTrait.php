@@ -4,10 +4,15 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Traits;
 
+use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
+use Chamilo\UserBundle\Entity\User;
 use Display;
+use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use ExtraField;
+use ExtraFieldValue;
 use FormValidator;
 use HTML_Table;
 
@@ -19,51 +24,64 @@ trait ReportingFilterTrait
     protected function createForm(): FormValidator
     {
         $extraFieldNameList = $this->plugin->getSessionFieldList();
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
         $form = new FormValidator('exercisefocused', 'get');
-        $form->addText('username', get_lang('Username'));
-        $form->addText('firstname', get_lang('FirstName'));
-        $form->addText('lastname', get_lang('LastName'));
+        $form->addText('username', get_lang('Username'), $cId > 0);
+        $form->addText('firstname', get_lang('FirstName'), false);
+        $form->addText('lastname', get_lang('LastName'), false);
 
-        if ($extraFieldNameList) {
-            $sId = api_get_session_id();
-
+        if ($extraFieldNameList && ($sessionId || !$cId)) {
             (new ExtraField('session'))
                 ->addElements(
                     $form,
-                    $sId,
+                    $sessionId,
                     [],
                     false,
                     false,
-                    $extraFieldNameList,
-                    [],
-                    [],
-                    false,
-                    false,
-                    [],
-                    [],
-                    [],
-                    [],
                     $extraFieldNameList
                 );
 
-            if ($sId) {
-                $extraNames = [];
+            $extraNames = [];
 
-                foreach ($extraFieldNameList as $key => $value) {
-                    $extraNames[$key] = "extra_$value";
-                }
+            foreach ($extraFieldNameList as $key => $value) {
+                $extraNames[$key] = "extra_$value";
+            }
 
+            if ($sessionId) {
                 $form->freeze($extraNames);
             }
         }
 
         $form->addDatePicker('start_date', get_lang('StartDate'));
-        $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
         $form->addButtonSearch(get_lang('Search'));
         //$form->protect();
 
         return $form;
+    }
+
+    private function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array
+    {
+        $fieldItemIdList = [];
+        $objFieldValue = new ExtraFieldValue('session');
+
+        foreach ($fieldVariableList as $fieldVariable) {
+            if (!isset($formValues["extra_$fieldVariable"])) {
+                continue;
+            }
+
+            $itemValue = $objFieldValue->get_item_id_from_field_variable_and_field_value(
+                $fieldVariable,
+                $formValues["extra_$fieldVariable"]
+            );
+
+            if ($itemValue) {
+                $fieldItemIdList[] = (int) $itemValue['item_id'];
+            }
+        }
+
+        return array_unique($fieldItemIdList);
     }
 
     /**
@@ -71,63 +89,85 @@ trait ReportingFilterTrait
      */
     protected function findResults(array $formValues = []): array
     {
-        $fieldVariableList = $this->plugin->getSessionFieldList();
+        $cId = api_get_course_int_id();
+
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username')
+            ->from(TrackEExercises::class, 'te')
+            ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
+            ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id');
 
         $params = [];
 
-        $dql = 'SELECT te AS exe, u.firstname, u.lastname, u.username
-            FROM Chamilo\CoreBundle\Entity\TrackEExercises te
-            INNER JOIN Chamilo\UserBundle\Entity\User u WITH te.exeUserId = u.id
-            INNER JOIN Chamilo\CoreBundle\Entity\Session s WITH te.sessionId = s.id';
+        if ($cId) {
+            $qb->andWhere($qb->expr()->eq('te.cId', ':cId'));
 
-        foreach ($fieldVariableList as $key => $fieldVariable) {
-            if (!isset($formValues["extra_$fieldVariable"])) {
-                continue;
-            }
-
-            $dql .= "
-                INNER JOIN Chamilo\CoreBundle\Entity\ExtraFieldValues fv$key
-                    WITH s.id = fv$key.itemId
-                INNER JOIN Chamilo\CoreBundle\Entity\ExtraField f$key
-                    WITH fv$key.field = f$key AND f$key.variable = :variable$key";
-
-            $params["variable$key"] = $fieldVariable;
+            $params['cId'] = $cId;
         }
 
-        $dql .= '
-            WHERE 1 = 1';
+        $sessionItemIdList = $this->getSessionIdFromFormValues(
+            $formValues,
+            $this->plugin->getSessionFieldList()
+        );
 
-        if (isset($formValues['username'])) {
+        if ($sessionItemIdList) {
+            $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));
+
+            $params['sessionItemIdList'] = $sessionItemIdList;
+        } else {
+            $qb->andWhere($qb->expr()->isNull('te.sessionId'));
+        }
+
+        if (!empty($formValues['username'])) {
+            $qb->andWhere($qb->expr()->eq('u.username', ':username'));
+
             $params['username'] = $formValues['username'];
-            $params['firstname'] = $formValues['firstname'];
-            $params['lastname'] = $formValues['lastname'];
-
-            $dql .= '
-                AND (u.username = :username AND u.firstname = :firstname AND u.lastname = :lastname)';
         }
 
-        if (isset($formValues['start_date'])) {
+        if (!empty($formValues['firstname'])) {
+            $qb->andWhere($qb->expr()->eq('u.firstname', ':firstname'));
+
+            $params['firstname'] = $formValues['firstname'];
+        }
+
+        if (!empty($formValues['lastname'])) {
+            $qb->andWhere($qb->expr()->eq('u.lastname', ':lastname'));
+
+            $params['lastname'] = $formValues['lastname'];
+        }
+
+        if (!empty($formValues['start_date'])) {
+            $qb->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->gte('te.startDate', ':start_date'),
+                    $qb->expr()->lte('te.exeDate', ':end_date')
+                )
+            );
+
             $params['start_date'] = api_get_utc_datetime($formValues['start_date'].' 00:00:00', false, true);
             $params['end_date'] = api_get_utc_datetime($formValues['start_date'].' 23:59:59', false, true);
-
-            $dql .= '
-                AND (te.startDate >= :start_date AND te.startDate < :end_date)';
         }
 
-        $dql .= '
-            ORDER BY te.startDate';
+        if (empty($params)) {
+            return [];
+        }
 
-        $result = $this->em
-            ->createQuery($dql)
-            ->setParameters($params)
-            ->getResult();
+        if ($cId && !empty($formValues['id'])) {
+            $qb->andWhere($qb->expr()->eq('q.iid', ':q_id'));
+
+            $params['q_id'] = $formValues['id'];
+        }
+
+        $qb->setParameters($params);
 
         $results = [];
 
-        foreach ($result as $value) {
+        foreach ($qb->getQuery()->getResult() as $value) {
             api_get_local_time();
             $results[] = [
                 'id' => $value['exe']->getExeId(),
+                'quiz_title' => $value['title'],
                 'username' => $value['username'],
                 'user_fullname' => api_get_person_name($value['firstname'], $value['lastname']),
                 'start_date' => $value['exe']->getStartDate(),
@@ -154,13 +194,14 @@ trait ReportingFilterTrait
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Username'));
         $table->setHeaderContents(0, 1, get_lang('FullUserName'));
-        $table->setHeaderContents(0, 2, get_lang('StartDate'));
-        $table->setHeaderContents(0, 3, get_lang('EndDate'));
-        $table->setHeaderContents(0, 4, $this->plugin->get_lang('Outfocused'));
-        $table->setHeaderContents(0, 5, $this->plugin->get_lang('Returns'));
-        $table->setHeaderContents(0, 6, $this->plugin->get_lang('MaxOutfocused'));
-        $table->setHeaderContents(0, 7, $this->plugin->get_lang('TimeLimitReached'));
-        $table->setHeaderContents(0, 8, get_lang('Actions'));
+        $table->setHeaderContents(0, 2, get_lang('Exercise'));
+        $table->setHeaderContents(0, 3, get_lang('StartDate'));
+        $table->setHeaderContents(0, 4, get_lang('EndDate'));
+        $table->setHeaderContents(0, 5, $this->plugin->get_lang('Outfocused'));
+        $table->setHeaderContents(0, 6, $this->plugin->get_lang('Returns'));
+        $table->setHeaderContents(0, 7, $this->plugin->get_lang('MaxOutfocused'));
+        $table->setHeaderContents(0, 8, $this->plugin->get_lang('TimeLimitReached'));
+        $table->setHeaderContents(0, 9, get_lang('Actions'));
 
         $row = 1;
 
@@ -176,24 +217,25 @@ trait ReportingFilterTrait
 
             $table->setCellContents($row, 0, $result['username']);
             $table->setCellContents($row, 1, $result['user_fullname']);
-            $table->setCellContents($row, 2, api_get_local_time($result['start_date'], null, null, true, true, true));
-            $table->setCellContents($row, 3, api_get_local_time($result['end_date'], null, null, true, true, true));
-            $table->setCellContents($row, 4, $result['count_outfocused']);
-            $table->setCellContents($row, 5, $result['count_return']);
-            $table->setCellContents($row, 6, $result['max_outfocused'] ? get_lang('Yes') : '');
-            $table->setCellContents($row, 7, $result['time_limit_reached'] ? get_lang('Yes') : '');
-            $table->setCellContents($row, 8, $url);
+            $table->setCellContents($row, 2, $result['quiz_title']);
+            $table->setCellContents($row, 3, api_get_local_time($result['start_date'], null, null, true, true, true));
+            $table->setCellContents($row, 4, api_get_local_time($result['end_date'], null, null, true, true, true));
+            $table->setCellContents($row, 5, $result['count_outfocused']);
+            $table->setCellContents($row, 6, $result['count_return']);
+            $table->setCellContents($row, 7, $result['max_outfocused'] ? get_lang('Yes') : '');
+            $table->setCellContents($row, 8, $result['time_limit_reached'] ? get_lang('Yes') : '');
+            $table->setCellContents($row, 9, $url);
 
             $row++;
         }
 
-        $table->setColAttributes(2, ['class' => 'text-center']);
         $table->setColAttributes(3, ['class' => 'text-center']);
-        $table->setColAttributes(4, ['class' => 'text-right']);
+        $table->setColAttributes(4, ['class' => 'text-center']);
         $table->setColAttributes(5, ['class' => 'text-right']);
-        $table->setColAttributes(6, ['class' => 'text-center']);
+        $table->setColAttributes(6, ['class' => 'text-right']);
         $table->setColAttributes(7, ['class' => 'text-center']);
-        $table->setColAttributes(8, ['class' => 'text-right']);
+        $table->setColAttributes(8, ['class' => 'text-center']);
+        $table->setColAttributes(9, ['class' => 'text-right']);
 
         return $table;
     }

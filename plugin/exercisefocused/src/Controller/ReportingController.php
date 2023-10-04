@@ -38,14 +38,12 @@ class ReportingController extends BaseController
         $form->addHidden('origin', api_get_origin());
         $form->addHidden('id', $exercise->getId());
 
+        $results = [];
+
         if ($form->validate()) {
             $formValues = $form->exportValues();
 
             $results = $this->findResults($formValues);
-        } else {
-            $results = $this->findResults([
-                'extra_periodo' => '202309',
-            ]);
         }
 
         $table = $this->createTable($results);

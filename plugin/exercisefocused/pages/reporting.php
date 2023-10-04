@@ -25,10 +25,10 @@ $startController = new ReportingController(
     $logRepository
 );
 
-try {
+//try {
     $response = $startController();
-} catch (Exception $e) {
-    $response = HttpResponse::create('', HttpResponse::HTTP_FORBIDDEN);
-}
+//} catch (Exception $e) {
+    //$response = HttpResponse::create('', HttpResponse::HTTP_FORBIDDEN);
+//}
 
 $response->send();

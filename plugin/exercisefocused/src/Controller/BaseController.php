@@ -61,14 +61,19 @@ abstract class BaseController
         return HttpResponse::create();
     }
 
-    protected function renderView(string $title, string $content, ?string $header = null): HttpResponse
-    {
+    protected function renderView(
+        string $title,
+        string $content,
+        ?string $header = null,
+        array $actions = []
+    ): HttpResponse {
         if (!$header) {
             $header = $title;
         }
 
         $this->template = new Template($title);
         $this->template->assign('header', $header);
+        $this->template->assign('actions', implode(PHP_EOL, $actions));
         $this->template->assign('content', $content);
 
         ob_start();

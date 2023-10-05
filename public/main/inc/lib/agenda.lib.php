@@ -124,8 +124,7 @@ class Agenda
 
         $this->setIsAllowedToEdit($isAllowToEdit);
         $this->events = [];
-        $agendaColors = array_merge(
-            [
+        $agendaColors = [
                 'platform' => 'red', //red
                 'course' => '#458B00', //green
                 'group' => '#A0522D', //siena
@@ -133,9 +132,11 @@ class Agenda
                 'other_session' => '#999', // kind of green
                 'personal' => 'steel blue', //steel blue
                 'student_publication' => '#FF8C00', //DarkOrange
-            ],
-            api_get_setting('agenda.agenda_colors', true) ?: []
-        );
+            ];
+        $settingAgendaColors = api_get_setting('agenda.agenda_colors', true);
+        if (is_array($settingAgendaColors)) {
+            $agendaColors = array_merge($agendaColors, $settingAgendaColors);
+        }
 
         // Event colors
         $this->event_platform_color = $agendaColors['platform'];

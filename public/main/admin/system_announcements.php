@@ -453,6 +453,8 @@ if ($show_announcement_list) {
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);
+    $table->per_page= 20;
+    $table->total_number_of_items = count($announcement_data);
     $table->set_header(0, '', false, 'width="20px"');
     $table->set_header(1, get_lang('active'));
     $table->set_header(2, get_lang('Title'));

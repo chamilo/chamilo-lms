@@ -475,17 +475,17 @@ class PDF
 
         if ($addDefaultCss) {
             $basicStyles = [
-                api_get_bootstrap_and_font_awesome(true, true),
-                api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
+                //api_get_bootstrap_and_font_awesome(true, true),
+                //api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
                 api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML($cssContent, 1);
+                @$this->pdf->WriteHTML($cssContent, 1);
             }
         }
 
-        $this->pdf->WriteHTML($document_html);
+        @$this->pdf->WriteHTML($document_html);
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';

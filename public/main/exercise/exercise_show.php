@@ -668,7 +668,7 @@ foreach ($questionList as $questionId) {
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
                 echo '<div class="col-sm-5">';
-                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $exercise_id);
                 echo '</div>';
             }
             echo '</div>';

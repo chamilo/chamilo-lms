@@ -5092,17 +5092,18 @@ EOT;
      *
      * @param int $attemptId
      * @param int $questionId
-     * @param int $userId
+     * @param int $exerciseId
      *
      * @return string
      */
-    public static function getOralFeedbackForm($attemptId, $questionId, $userId)
+    public static function getOralFeedbackForm($attemptId, $questionId, $exerciseId)
     {
         $view = new Template('', false, false, false, false, false, false);
         $view->assign('type', Asset::EXERCISE_FEEDBACK);
         $view->assign('question_id', $questionId);
         $view->assign('attempt', $attemptId);
-        $template = $view->get_template('exercise/oral_expression.tpl');
+        $view->assign('t_exercise_id', $exerciseId);
+        $template = $view->get_template('exercise/oral_expression.html.twig');
 
         return $view->fetch($template);
     }

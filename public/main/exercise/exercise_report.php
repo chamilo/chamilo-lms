@@ -18,6 +18,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+$htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
@@ -670,11 +671,11 @@ if ($is_allowedToEdit || $is_tutor) {
 
     // Column config
     $column_model = [
-        ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'firstname', 'index' => 'firstname', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         [
             'name' => 'lastname',
             'index' => 'lastname',
-            'width' => '50',
+            'width' => '150',
             'align' => 'left',
             'formatter' => 'action_formatter',
             'search' => 'true',
@@ -682,7 +683,7 @@ if ($is_allowedToEdit || $is_tutor) {
         [
             'name' => 'login',
             'index' => 'username',
-            'width' => '40',
+            'width' => '150',
             'align' => 'left',
             'search' => 'true',
             'hidden' => ('true' === api_get_setting('exercise.exercise_attempts_report_show_username')) ? 'false' : 'true',
@@ -690,7 +691,7 @@ if ($is_allowedToEdit || $is_tutor) {
         [
             'name' => 'group_name',
             'index' => 'group_id',
-            'width' => '40',
+            'width' => '150',
             'align' => 'left',
             'search' => 'true',
             'stype' => 'select',
@@ -702,15 +703,15 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the top bar
             'editoptions' => ['value' => $group_parameters],
         ],
-        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'score', 'width' => '50', 'align' => 'center', 'search' => 'true'],
-        ['name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'score', 'index' => 'score', 'width' => '100', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true'],
         [
             'name' => 'status',
             'index' => 'revised',
-            'width' => '40',
+            'width' => '130',
             'align' => 'left',
             'search' => 'true',
             'stype' => 'select',
@@ -726,12 +727,12 @@ if ($is_allowedToEdit || $is_tutor) {
                     ),
             ],
         ],
-        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '150', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'actions', 'index' => 'actions', 'width' => '120', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
     if ('true' === $officialCodeInList) {
-        $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
+        $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '100', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }
 

@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -19,9 +23,16 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
+    private RequestStack $requestStack;
+    private EntityManagerInterface $entityManager;
+
     public function __construct(
-        private readonly Security $security
+        private readonly Security $security,
+        RequestStack $requestStack,
+        EntityManagerInterface $entityManager
     ) {
+        $this->requestStack = $requestStack;
+        $this->entityManager = $entityManager;
     }
 
     protected function supports(string $attribute, $subject): bool
@@ -55,10 +66,20 @@ class CourseVoter extends Voter
             return true;
         }
 
+        $request = $this->requestStack->getCurrentRequest();
+        $sessionId = $request->query->get('sid');
+        $sessionRepository = $this->entityManager->getRepository(Session::class);
+
         // Course is active?
         /** @var Course $course */
         $course = $subject;
 
+        $session = null;
+        if ($sessionId) {
+            // Session is active?
+            /** @var Session $session */
+            $session = $sessionRepository->find($sessionId);
+        }
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
@@ -107,6 +128,31 @@ class CourseVoter extends Voter
                     return true;
                 }
 
+                // Validation in session
+                if ($session) {
+                    $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
+                    $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
+                    $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
+
+                    if ($userIsGeneralCoach) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+
+                        return true;
+                    }
+
+                    if ($userIsCourseCoach) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+
+                        return true;
+                    }
+
+                    if ($userIsStudent) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+
+                        return true;
+                    }
+
+                }
                 break;
             case self::EDIT:
             case self::DELETE:

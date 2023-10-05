@@ -80,7 +80,7 @@ class SessionVoter extends Voter
                 $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
                 if (null === $currentCourse) {
                     $userIsStudent = $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
-                    $userIsCourseCoach = false;
+                    $userIsCourseCoach = $session->hasCoachInCourseList($user); // The current course will be checked in CourseVoter.
                 } else {
                     $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);

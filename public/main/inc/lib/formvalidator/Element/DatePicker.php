@@ -42,8 +42,17 @@ class DatePicker extends HTML_QuickForm_text
         }
 
         $label = $this->getLabel();
+        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        if (!empty($requiredFields) && $requiredFields['options']) {
+            $requiredFields = $requiredFields['options'];
+        }
+        $variable = str_replace('extra_', '',$id);
+        $requiredSymbol = '';
+        if (in_array($variable, $requiredFields)) {
+            $requiredSymbol = '<span class="form_required">*</span>';
+        }
         return '
-            <div>'.$label.'</div>
+            <div>'.$requiredSymbol.$label.'</div>
             <div id="'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>

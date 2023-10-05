@@ -477,6 +477,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
             false,
             [],
             $requiredFields,
+            true
         );
         $extraFieldsLoaded = true;
     }

@@ -13,7 +13,7 @@ export default function makeService(endpoint) {
 
       const searchParams = new URLSearchParams(combinedParams);
 
-      return fetch(`${id}?${searchParams.toString()}`);
+      return fetch(id, { params: Object.fromEntries(searchParams) });
     },
     findAll(params) {
       console.log('api.js findAll');

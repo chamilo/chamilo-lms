@@ -49,12 +49,12 @@ export const useCidReqStore = defineStore("cidReq", () => {
     session.value = null
   }
 
-  const setCourseByIri = async (iri) => {
+  const setCourseByIri = async (iri, sid = 0) => {
     if (course.value && iri === course.value["@id"]) {
       return
     }
 
-    course.value = await courseService.find(iri).then((response) => response.json())
+    course.value = await courseService.find(iri, { sid }).then((response) => response.json())
   }
 
   const setSessionByIri = async (iri) => {
@@ -65,12 +65,14 @@ export const useCidReqStore = defineStore("cidReq", () => {
     session.value = await sessionService.find(iri).then((response) => response.json())
   }
 
-  const setCourseAndSessionByIri = async (courseIri, sessionIri = undefined) => {
+  const setCourseAndSessionByIri = async (courseIri, sId = 0) => {
     if (!courseIri) {
       return
     }
 
-    await setCourseByIri(courseIri)
+    await setCourseByIri(courseIri, sId)
+
+    let sessionIri = sId ? `/api/sessions/${sId}` : undefined
 
     if (!sessionIri) {
       return
@@ -80,10 +82,9 @@ export const useCidReqStore = defineStore("cidReq", () => {
   }
 
   const setCourseAndSessionById = async (cid, sid = undefined) => {
-    let courseIri = cid ? "/api/courses/" + cid : undefined
-    let sessionIri = sid ? "/api/sessions/" + sid : undefined
+    let courseIri = cid ? `/api/courses/${cid}` : undefined
 
-    await setCourseAndSessionByIri(courseIri, sessionIri)
+    await setCourseAndSessionByIri(courseIri, sid)
   }
 
   return {

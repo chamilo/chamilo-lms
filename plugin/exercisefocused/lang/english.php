@@ -13,6 +13,8 @@ $strings['outfocused_limit'] = "Maximum number of outfocused allowed";
 $strings['outfocused_limit_help'] = "Number of outfocused allowed. After this limit the exercise will be closed.";
 $strings['session_field_filters'] = "Session field as filter";
 $strings['session_field_filters_help'] = "Extra field names separeted by a comma.";
+$strings['percentage_sampling'] = "Percentage of sampling attempts";
+$strings['percentage_sampling_help'] = "A percentage of attempts will be selected for random review";
 
 $strings['ReportByAttempts'] = "Exercise focused: Report by attempts";
 $strings['YouHaveLeftTheExercise'] = "You have left the exercise";
@@ -28,3 +30,4 @@ $strings['Outfocused'] = "Outfocused";
 $strings['Return'] = "Return";
 $strings['Motive'] = "Motive";
 $strings['AlertBeforeLeaving'] = "Before leaving the exercise, consider that this action will be tracked.";
+$strings['RandomSampling'] = "Random sampling";

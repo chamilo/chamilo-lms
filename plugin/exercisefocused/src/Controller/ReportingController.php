@@ -19,8 +19,10 @@ class ReportingController extends BaseController
     {
         parent::__invoke();
 
-        $exerciseId = $this->request->query->getInt('id');
-        $exercise = $this->em->find(CQuiz::class, $exerciseId);
+        $exercise = $this->em->find(
+            CQuiz::class,
+            $this->request->query->getInt('id')
+        );
 
         if (!$exercise) {
             throw new Exception();
@@ -29,6 +31,36 @@ class ReportingController extends BaseController
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 
+        $tab1 = $this->generateTabSearch($exercise, $courseCode, $sessionId);
+
+        $tab2 = $this->generateTabSampling($exercise);
+
+        $content = Display::tabs(
+            [
+                $this->plugin->get_lang('ReportByAttempts'),
+                $this->plugin->get_lang('RandomSampling'),
+            ],
+            [$tab1, $tab2],
+            'exercise-focused-tabs',
+            [],
+            [],
+            1
+        );
+
+        $this->setBreadcrumb($exercise->getId());
+
+        return $this->renderView(
+            get_lang('ReportByAttempts'),
+            $content,
+            $exercise->getTitle()
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function generateTabSearch(CQuiz $exercise, string $courseCode, int $sessionId): string
+    {
         $form = $this->createForm();
         $form->updateAttributes(['action' => api_get_self().'?'.api_get_cidreq().'&id='.$exercise->getId()]);
         $form->addHidden('cidReq', $courseCode);
@@ -38,27 +70,24 @@ class ReportingController extends BaseController
         $form->addHidden('origin', api_get_origin());
         $form->addHidden('id', $exercise->getId());
 
-        $results = [];
+        $tableHtml = '';
 
         if ($form->validate()) {
             $formValues = $form->exportValues();
 
             $results = $this->findResults($formValues);
+
+            $tableHtml = $this->createTable($results)->toHtml();
         }
 
-        $table = $this->createTable($results);
+        return $form->returnForm().$tableHtml;
+    }
 
-        $this->setBreadcrumb($exercise->getId());
+    private function generateTabSampling(CQuiz $exercise): string
+    {
+        $results = $this->findRandomResults($exercise->getId());
 
-        $content = $form->returnForm()
-            .Display::page_subheader(get_lang('ReportByAttempts'))
-            .$table->toHtml();
-
-        return $this->renderView(
-            get_lang('ReportByAttempts'),
-            $content,
-            $exercise->getTitle()
-        );
+        return $this->createTable($results)->toHtml();
     }
 
     /**

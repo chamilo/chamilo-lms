@@ -14,6 +14,7 @@ class ExerciseFocusedPlugin extends Plugin
     public const SETTING_ENABLE_OUTFOCUSED_LIMIT = 'enable_outfocused_limit';
     public const SETTING_OUTFOCUSED_LIMIT = 'outfocused_limit';
     public const SETTING_SESSION_FIELD_FILTERS = 'session_field_filters';
+    public const SETTING_PERCENTAGE_SAMPLING = 'percentage_sampling';
 
     public const FIELD_SELECTED = 'exercisefocused_selected';
 
@@ -27,6 +28,7 @@ class ExerciseFocusedPlugin extends Plugin
             self::SETTING_ENABLE_OUTFOCUSED_LIMIT => 'boolean',
             self::SETTING_OUTFOCUSED_LIMIT => 'text',
             self::SETTING_SESSION_FIELD_FILTERS => 'text',
+            self::SETTING_PERCENTAGE_SAMPLING => 'text',
         ];
 
         parent::__construct(

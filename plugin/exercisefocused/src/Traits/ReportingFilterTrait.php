@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Chamilo\UserBundle\Entity\User;
+use Database;
 use Display;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
@@ -59,29 +60,6 @@ trait ReportingFilterTrait
         //$form->protect();
 
         return $form;
-    }
-
-    private function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array
-    {
-        $fieldItemIdList = [];
-        $objFieldValue = new ExtraFieldValue('session');
-
-        foreach ($fieldVariableList as $fieldVariable) {
-            if (!isset($formValues["extra_$fieldVariable"])) {
-                continue;
-            }
-
-            $itemValue = $objFieldValue->get_item_id_from_field_variable_and_field_value(
-                $fieldVariable,
-                $formValues["extra_$fieldVariable"]
-            );
-
-            if ($itemValue) {
-                $fieldItemIdList[] = (int) $itemValue['item_id'];
-            }
-        }
-
-        return array_unique($fieldItemIdList);
     }
 
     /**
@@ -161,10 +139,16 @@ trait ReportingFilterTrait
 
         $qb->setParameters($params);
 
+        return $this->formatResults(
+            $qb->getQuery()->getResult()
+        );
+    }
+
+    protected function formatResults(array $queryResults): array
+    {
         $results = [];
 
-        foreach ($qb->getQuery()->getResult() as $value) {
-            api_get_local_time();
+        foreach ($queryResults as $value) {
             $results[] = [
                 'id' => $value['exe']->getExeId(),
                 'quiz_title' => $value['title'],
@@ -238,5 +222,72 @@ trait ReportingFilterTrait
         $table->setColAttributes(9, ['class' => 'text-right']);
 
         return $table;
+    }
+
+    protected function findRandomResults(int $exerciseId): array
+    {
+        $percentage = (int) $this->plugin->get(\ExerciseFocusedPlugin::SETTING_PERCENTAGE_SAMPLING);
+
+        if (empty($percentage)) {
+            return [];
+        }
+
+        $cId = api_get_course_int_id();
+        $sId = api_get_session_id();
+
+        $tblTrackExe = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sessionCondition = api_get_session_condition($sId);
+
+        $result = Database::query(
+            "SELECT exe_id FROM $tblTrackExe
+            WHERE c_id = $cId
+                AND exe_exo_id = $exerciseId
+                $sessionCondition
+            ORDER BY RAND() LIMIT $percentage"
+        );
+
+        $exeIdList = array_column(
+            Database::store_result($result),
+            'exe_id'
+        );
+
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username')
+            ->from(TrackEExercises::class, 'te')
+            ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
+            ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id')
+            ->andWhere(
+                $qb->expr()->in('te.exeId', $exeIdList)
+            )
+            ->addOrderBy('te.startDate');
+
+        return $this->formatResults(
+            $qb->getQuery()->getResult()
+        );
+    }
+
+    private function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array
+    {
+        $fieldItemIdList = [];
+        $objFieldValue = new ExtraFieldValue('session');
+
+        foreach ($fieldVariableList as $fieldVariable) {
+            if (!isset($formValues["extra_$fieldVariable"])) {
+                continue;
+            }
+
+            $itemValue = $objFieldValue->get_item_id_from_field_variable_and_field_value(
+                $fieldVariable,
+                $formValues["extra_$fieldVariable"]
+            );
+
+            if ($itemValue) {
+                $fieldItemIdList[] = (int) $itemValue['item_id'];
+            }
+        }
+
+        return array_unique($fieldItemIdList);
     }
 }

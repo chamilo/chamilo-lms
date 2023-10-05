@@ -6312,6 +6312,21 @@ function api_get_roles()
     return $roles;
 }
 
+function api_get_user_roles(): array
+{
+    $roles = [
+        'ROLE_TEACHER',
+        'ROLE_STUDENT',
+        'ROLE_RRHH',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_STUDENT_BOSS',
+        'ROLE_INVITEE',
+        'ROLE_USER',
+    ];
+
+    return array_combine($roles, $roles);
+}
+
 /**
  * @param string $file
  *

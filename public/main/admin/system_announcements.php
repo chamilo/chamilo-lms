@@ -33,7 +33,7 @@ $interbreadcrumb[] = [
 
 $repo = Container::getSysAnnouncementRepository();
 
-$visibleList = $repo->getVisibilityList();
+$visibleList = api_get_user_roles();
 
 $tool_name = null;
 if (empty($_GET['lang'])) {

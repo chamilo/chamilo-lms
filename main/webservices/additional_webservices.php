@@ -7,6 +7,14 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$enableThis = api_get_configuration_value('webservice_remote_ppt2png_enable');
+if (!$enableThis) {
+    echo "Remote PPT2PNG service is disabled. \n";
+    echo "To enable, add \$_configuration['webservice_remote_ppt2png_enable'] = true; to your configuration.php";
+    exit;
+}
+api_protect_webservices();
+
 /**
  * Function to convert from ppt to png
  * This function is used from Chamilo Rapid Lesson.
@@ -28,17 +36,25 @@ function wsConvertPpt($pptData)
     }
     $fileData = $pptData['file_data'];
     // Clean filename to avoid hacks. Prevents "&" and ";" to be used in filename, notably
-    $sanitizedFileName = Security::sanitizeExecParam($pptData['file_name']);
+
+    if (strpos($pptData['file_name'], '..') !== false) {
+        return false;
+    }
+
+    $sanitizedFileName = $pptData['file_name'];
     $dataInfo = pathinfo($sanitizedFileName);
     $fileName = basename($sanitizedFileName, '.'.$dataInfo['extension']);
     // Add additional cleaning of .php and .htaccess files
     $fullFileName = Security::filter_filename($sanitizedFileName);
-    $size = Security::sanitizeExecParam($pptData['service_ppt2lp_size']);
+    $size = $pptData['service_ppt2lp_size'];
     $w = '800';
     $h = '600';
     if (!empty($size)) {
         list($w, $h) = explode('x', $size);
     }
+
+    $w = (int) $w;
+    $h = (int) $h;
 
     $tempArchivePath = api_get_path(SYS_ARCHIVE_PATH);
     $tempPath = $tempArchivePath.'wsConvert/'.$fileName.'/';
@@ -54,8 +70,12 @@ function wsConvertPpt($pptData)
     $file = base64_decode($fileData);
     file_put_contents($tempPath.$fullFileName, $file);
 
-    $cmd = pptConverterGetCommandBaseParams();
-    $cmd .= ' -w '.$w.' -h '.$h.' -d oogie "'.$tempPath.$fullFileName.'"  "'.$tempPathNewFiles.$fileName.'.html"';
+    $cmd = pptConverterGetCommandBaseParams(
+        $w,
+        $h,
+        $tempPath.$fullFileName,
+        $tempPathNewFiles.$fileName.'.html'
+    );
 
     //$perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles.$fileName, $perms);
@@ -135,21 +155,27 @@ function pptConverterDirectoriesCreate($tempPath, $tempPathNewFiles, $fileName, 
  *
  * @return string $cmd
  */
-function pptConverterGetCommandBaseParams()
+function pptConverterGetCommandBaseParams(int $w, int $h, string $inputPath, string $outputPath)
 {
+    $cd = '';
+
     if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
         $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
         $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
-        $cmd = 'java -Dfile.encoding=UTF-8 -cp "'.$classPath.'" DokeosConverter';
+        $cmd = 'java -Dfile.encoding=UTF-8 -cp "'.$classPath.'"';
     } else {
         $converterPath = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
         $classPath = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-        $cmd = 'cd '.$converterPath.' && java '.$classPath.' DokeosConverter';
+        $cd = 'cd '.$converterPath.' && ';
+        $cmd = 'java '.$classPath;
     }
 
+    $cmd .= ' DokeosConverter';
     $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
+    $cmd .= ' -w '.$w.' -h '.$h;
+    $cmd .= ' -d oogie '.Security::sanitizeExecParam($inputPath).' '.Security::sanitizeExecParam($outputPath);
 
-    return $cmd;
+    return $cd.escapeshellcmd($cmd);
 }
 
 $webPath = api_get_path(WEB_PATH);

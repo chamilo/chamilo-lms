@@ -60,10 +60,44 @@ switch ($action) {
         api_protect_course_script(true);
         $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
-        $workInfo = get_work_data_by_id($workId);
-        $sessionId = api_get_session_id();
-        $userId = api_get_user_id();
-        $groupId = api_get_group_id();
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            // It uploads the files in chunks
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                if (!empty($fileList)) {
+                    foreach ($fileList as $n => $file) {
+                        $tmpFile = disable_dangerous_file(
+                            api_replace_dangerous_char($file['name'])
+                        );
+
+                        file_put_contents(
+                            $tempDirectory.$tmpFile,
+                            fopen($file['tmp_name'], 'r'),
+                            FILE_APPEND
+                        );
+                    }
+                }
+            }
+            echo json_encode([
+                'files' => $_FILES,
+                'errorStatus' => 0,
+            ]);
+            exit;
+        } else {
+            $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+            $workInfo = get_work_data_by_id($workId);
+            $sessionId = api_get_session_id();
+            $userId = api_get_user_id();
+            $groupId = api_get_group_id();
 
         $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
         if ($onlyOnePublication) {

@@ -811,6 +811,194 @@ switch ($action) {
         header('Content-Type: application/json');
         echo json_encode($result);
         break;
+    case 'browser_test':
+        $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+
+        if ($quizCheckButtonEnabled) {
+            if (isset($_POST['sleep'])) {
+                sleep(2);
+            }
+
+            echo 'ok';
+        }
+
+        break;
+    case 'quiz_confirm_saved_answers':
+        if (false === api_get_configuration_value('quiz_confirm_saved_answers')) {
+            break;
+        }
+
+        $trackConfirmationId = isset($_POST['tc_id']) ? (int) $_POST['tc_id'] : 0;
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $userId = api_get_user_id();
+        $confirmed = !empty($_POST['quiz_confirm_saved_answers_check']);
+
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation');
+
+        try {
+            if (!$trackConfirmationId) {
+                throw new Exception(get_lang('ErrorOccurred'));
+            }
+
+            /** @var TrackEExerciseConfirmation $trackConfirmation */
+            $trackConfirmation = $repo->findOneBy(
+                [
+                    'id' => $trackConfirmationId,
+                    'userId' => $userId,
+                    'courseId' => $cId,
+                    'sessionId' => $sessionId,
+                ],
+                ['createdAt' => 'DESC']
+            );
+
+            if (!$trackConfirmation) {
+                throw new Exception(get_lang('NotFound'));
+            }
+
+            $trackConfirmation
+                ->setConfirmed($confirmed)
+                ->setUpdatedAt(api_get_utc_datetime(null, false, true));
+
+            $em->persist($trackConfirmation);
+            $em->flush();
+
+            http_response_code(200);
+        } catch (Exception $exception) {
+            http_response_code(500);
+
+            echo Display::return_message($exception->getMessage(), 'error');
+        }
+
+        break;
+    case 'sign_attempt':
+        api_block_anonymous_users();
+        if ('true' !== api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+            exit;
+        }
+
+        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
+        if (empty($exeId) || empty($file)) {
+            echo 0;
+            exit;
+        }
+
+        $file = str_replace(' ', '+', $file);
+        $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        if ($track) {
+            $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
+            if ($result) {
+                echo 1;
+                exit;
+            }
+        }
+        echo 0;
+        break;
+    case 'upload_answer':
+        api_block_anonymous_users();
+
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            // It uploads the files in chunks
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                if (!empty($fileList)) {
+                    foreach ($fileList as $n => $file) {
+                        $tmpFile = disable_dangerous_file(
+                            api_replace_dangerous_char($file['name'])
+                        );
+
+                        file_put_contents(
+                            $tempDirectory.$tmpFile,
+                            fopen($file['tmp_name'], 'r'),
+                            FILE_APPEND
+                        );
+                    }
+                }
+            }
+            echo json_encode([
+                'files' => $_FILES,
+                'errorStatus' => 0,
+            ]);
+            exit;
+        } else {
+            if (!empty($_FILES)) {
+                $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
+                $userId = api_get_user_id();
+
+                // Upload answer path is created inside user personal folder my_files/upload_answer/[exe_id]/[question_id]
+                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                @mkdir($syspath, api_get_permissions_for_new_directories(), true);
+                $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                $resultList = [];
+                foreach ($fileList as $file) {
+                    $json = [];
+
+                    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                        // to rename and move the finished file
+                        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
+                        $file['tmp_name'] = $chunkedFile;
+                        $file['size'] = filesize($chunkedFile);
+                        $file['copy_file'] = true;
+                    }
+
+                    $filename = api_replace_dangerous_char($file['name']);
+                    $filename = disable_dangerous_file($filename);
+
+                    if (isset($file['copy_file']) && $file['copy_file']) {
+                        $uploaded = copy($file['tmp_name'], $syspath.$filename);
+                        @unlink($file['tmp_name']);
+                    } else {
+                        $uploaded = move_uploaded_file($file['tmp_name'], $syspath.$filename);
+                    }
+
+                    if ($uploaded) {
+                        $title = $filename;
+                        $url = $webpath.$filename;
+                        $json['name'] = api_htmlentities($title);
+                        $json['link'] = Display::url(
+                            api_htmlentities($title),
+                            api_htmlentities($url),
+                            ['target' => '_blank']
+                        );
+                        $json['url'] = $url;
+                        $json['size'] = format_file_size($file['size']);
+                        $json['type'] = api_htmlentities($file['type']);
+                        $json['result'] = Display::return_icon(
+                            'accept.png',
+                            get_lang('Uploaded')
+                        );
+                    } else {
+                        $json['name'] = isset($file['name']) ? $filename : get_lang('Unknown');
+                        $json['url'] = '';
+                        $json['error'] = get_lang('Error');
+                    }
+                    $resultList[] = $json;
+                }
+                echo json_encode(['files' => $resultList]);
+                exit;
+            }
+        }
+        break;
     default:
         echo '';
 }

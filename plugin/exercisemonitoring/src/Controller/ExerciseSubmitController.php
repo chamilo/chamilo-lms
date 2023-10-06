@@ -37,10 +37,12 @@ class ExerciseSubmitController
         $existingExeId = (int) ChamiloSession::read('exe_id');
 
         $levelId = $this->request->request->getInt('level_id');
-        $exercise = $this->em->find(
-            CQuiz::class,
-            $this->request->request->getInt('exercise_id')
-        );
+        $exerciseId = $this->request->request->getInt('exercise_id');
+
+        $exercise = $this->em->find(CQuiz::class, $exerciseId);
+
+        $objExercise = new Exercise();
+        $objExercise->read($exerciseId);
 
         $trackingExercise = $this->em->find(TrackEExercises::class, $existingExeId);
 
@@ -54,7 +56,7 @@ class ExerciseSubmitController
             $imgSubmit->move($userDirName, $newFilename);
         }
 
-        if (ONE_PER_PAGE === $exercise->getType()) {
+        if (ONE_PER_PAGE == $objExercise->selectType()) {
             $question = $this->em->find(CQuizQuestion::class, $levelId);
             $level = $question->getIid();
         }

@@ -5,7 +5,6 @@
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
-use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Display;
 use Doctrine\ORM\OptimisticLockException;

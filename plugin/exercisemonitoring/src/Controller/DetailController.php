@@ -4,11 +4,9 @@
 
 namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 
-use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Chamilo\UserBundle\Entity\User;
 use Display;
 use Doctrine\ORM\EntityManager;
@@ -17,9 +15,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Exercise;
 use ExerciseMonitoringPlugin;
-use HTML_Table;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -121,12 +116,6 @@ class DetailController
             );
     }
 
-    /**
-     * @param array $logs
-     * @param int $userId
-     *
-     * @return string
-     */
     private function generateSnapshotList(array $logs, int $userId): string
     {
         $pluginDirName = api_get_path(WEB_UPLOAD_PATH).'plugins/exercisemonitoring';

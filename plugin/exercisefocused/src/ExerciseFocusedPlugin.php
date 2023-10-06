@@ -113,7 +113,7 @@ class ExerciseFocusedPlugin extends Plugin
             case Log::TYPE_RETURN:
                 return $this->get_lang('Return');
             case Log::TYPE_OUTFOCUSED_LIMIT:
-                return $this->get_lang('MaxOutfocused');
+                return $this->get_lang('MaxOutfocusedReached');
             case Log::TYPE_TIME_LIMIT:
                 return $this->get_lang('TimeLimitReached');
         }

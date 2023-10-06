@@ -149,6 +149,30 @@ trait ReportingFilterTrait
         $results = [];
 
         foreach ($queryResults as $value) {
+            $outfocusedCount = $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_OUTFOCUSED);
+            $returnCount = $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_RETURN);
+            $outfocusedLimitCount = $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_OUTFOCUSED_LIMIT);
+            $timeLimitCount = $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_TIME_LIMIT);
+
+            $class = 'success';
+            $motive = get_lang('ExerciseFinished');
+
+            if ($outfocusedCount > 0 || $returnCount > 0) {
+                $class = 'warning';
+            }
+
+            if ($outfocusedLimitCount > 0 || $timeLimitCount > 0) {
+                $class = 'danger';
+
+                if ($outfocusedLimitCount > 0) {
+                    $motive = $this->plugin->get_lang('MaxOutfocusedReached');
+                }
+
+                if ($timeLimitCount > 0) {
+                    $motive = $this->plugin->get_lang('TimeLimitReached');
+                }
+            }
+
             $results[] = [
                 'id' => $value['exe']->getExeId(),
                 'quiz_title' => $value['title'],
@@ -156,13 +180,10 @@ trait ReportingFilterTrait
                 'user_fullname' => api_get_person_name($value['firstname'], $value['lastname']),
                 'start_date' => $value['exe']->getStartDate(),
                 'end_date' => $value['exe']->getExeDate(),
-                'count_outfocused' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_OUTFOCUSED),
-                'count_return' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_RETURN),
-                'max_outfocused' => $this->logRepository->countByActionInExe(
-                    $value['exe'],
-                    Log::TYPE_OUTFOCUSED_LIMIT
-                ) > 0,
-                'time_limit_reached' => $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_TIME_LIMIT) > 0,
+                'count_outfocused' => $outfocusedCount,
+                'count_return' => $returnCount,
+                'motive' => Display::span($motive, ['class' => "text-$class"]),
+                'class' => $class,
             ];
         }
 
@@ -183,9 +204,8 @@ trait ReportingFilterTrait
         $table->setHeaderContents(0, 4, get_lang('EndDate'));
         $table->setHeaderContents(0, 5, $this->plugin->get_lang('Outfocused'));
         $table->setHeaderContents(0, 6, $this->plugin->get_lang('Returns'));
-        $table->setHeaderContents(0, 7, $this->plugin->get_lang('MaxOutfocused'));
-        $table->setHeaderContents(0, 8, $this->plugin->get_lang('TimeLimitReached'));
-        $table->setHeaderContents(0, 9, get_lang('Actions'));
+        $table->setHeaderContents(0, 7, $this->plugin->get_lang('Motive'));
+        $table->setHeaderContents(0, 8, get_lang('Actions'));
 
         $row = 1;
 
@@ -206,9 +226,10 @@ trait ReportingFilterTrait
             $table->setCellContents($row, 4, api_get_local_time($result['end_date'], null, null, true, true, true));
             $table->setCellContents($row, 5, $result['count_outfocused']);
             $table->setCellContents($row, 6, $result['count_return']);
-            $table->setCellContents($row, 7, $result['max_outfocused'] ? get_lang('Yes') : '');
-            $table->setCellContents($row, 8, $result['time_limit_reached'] ? get_lang('Yes') : '');
-            $table->setCellContents($row, 9, $url);
+            $table->setCellContents($row, 7, $result['motive']);
+            $table->setCellContents($row, 8, $url);
+
+            $table->setRowAttributes($row, ['class' => $result['class']], true);
 
             $row++;
         }
@@ -218,8 +239,7 @@ trait ReportingFilterTrait
         $table->setColAttributes(5, ['class' => 'text-right']);
         $table->setColAttributes(6, ['class' => 'text-right']);
         $table->setColAttributes(7, ['class' => 'text-center']);
-        $table->setColAttributes(8, ['class' => 'text-center']);
-        $table->setColAttributes(9, ['class' => 'text-right']);
+        $table->setColAttributes(8, ['class' => 'text-right']);
 
         return $table;
     }

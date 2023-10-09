@@ -614,7 +614,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
-            ->andWhere('u.registrationDate IS NULL OR u.registrationDate > :now')
+            ->andWhere('u.expirationDate IS NULL OR u.expirationDate > :now')
             ->setParameter('now', new Datetime(), Types::DATETIME_MUTABLE)
         ;
 

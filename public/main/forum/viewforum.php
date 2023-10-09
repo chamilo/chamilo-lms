@@ -305,8 +305,8 @@ if ('learnpath' !== $origin) {
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (api_is_allowed_to_edit(false, true) ||
-    (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
-    (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
+    (1 == $forumEntity->getAllowNewThreads() && api_get_user_id()) ||
+    (1 == $forumEntity->getAllowNewThreads() && !api_get_user_id() && 1 == $forumEntity->getAllowAnonymous())
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {

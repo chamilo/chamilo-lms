@@ -28,8 +28,8 @@ class TrackEAttemptRecording
     #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected int $questionId;
 
-    #[ORM\Column(name: 'marks', type: 'integer', nullable: false)]
-    protected int $marks;
+    #[ORM\Column(name: 'marks', type: 'float', nullable: false)]
+    protected float $marks;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'insert_date', type: 'datetime', nullable: false)]
@@ -79,12 +79,12 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    public function getMarks(): int
+    public function getMarks(): float
     {
         return $this->marks;
     }
 
-    public function setMarks(int $marks): self
+    public function setMarks(float $marks): self
     {
         $this->marks = $marks;
 

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -10,13 +10,10 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * TrackEAttemptRecording.
- */
 #[ORM\Table(name: 'track_e_attempt_recording')]
-#[ORM\Index(name: 'exe_id', columns: ['exe_id'])]
-#[ORM\Index(name: 'question_id', columns: ['question_id'])]
-#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Index(columns: ['exe_id'], name: 'exe_id')]
+#[ORM\Index(columns: ['question_id'], name: 'question_id')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id')]
 #[ORM\Entity]
 class TrackEAttemptRecording
 {
@@ -58,48 +55,33 @@ class TrackEAttemptRecording
         $this->author = 0;
     }
 
-    /**
-     * Set exeId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setExeId(int $exeId)
+    public function getExeId(): int
+    {
+        return $this->exeId;
+    }
+
+    public function setExeId(int $exeId): static
     {
         $this->exeId = $exeId;
 
         return $this;
     }
 
-    /**
-     * Get exeId.
-     *
-     * @return int
-     */
-    public function getExeId()
+    public function getQuestionId(): int
     {
-        return $this->exeId;
+        return $this->questionId;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setQuestionId(int $questionId)
+    public function setQuestionId(int $questionId): static
     {
         $this->questionId = $questionId;
 
         return $this;
     }
 
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
+    public function getMarks(): int
     {
-        return $this->questionId;
+        return $this->marks;
     }
 
     public function setMarks(int $marks): self
@@ -109,14 +91,9 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    /**
-     * Get marks.
-     *
-     * @return int
-     */
-    public function getMarks()
+    public function getInsertDate(): DateTime
     {
-        return $this->marks;
+        return $this->insertDate;
     }
 
     public function setInsertDate(DateTime $insertDate): self
@@ -126,36 +103,21 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    /**
-     * Get insertDate.
-     *
-     * @return DateTime
-     */
-    public function getInsertDate()
+    public function getAuthor(): int
     {
-        return $this->insertDate;
+        return $this->author;
     }
 
-    /**
-     * Set author.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setAuthor(int $author)
+    public function setAuthor(int $author): static
     {
         $this->author = $author;
 
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return int
-     */
-    public function getAuthor()
+    public function getTeacherComment(): string
     {
-        return $this->author;
+        return $this->teacherComment;
     }
 
     public function setTeacherComment(string $teacherComment): self
@@ -165,44 +127,19 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    /**
-     * Get teacherComment.
-     *
-     * @return string
-     */
-    public function getTeacherComment()
+    public function getSessionId(): int
     {
-        return $this->teacherComment;
+        return $this->sessionId;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): static
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

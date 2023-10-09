@@ -96,9 +96,10 @@ if ($form->validate()) {
                 u.phone		AS Phone,
                 u.registration_date AS RegistrationDate,
                 u.active    AS Active,
-                u.expiration_date,
-                u.last_login AS LastLogin
-            ";
+                u.expiration_date";
+    if ($export['addlastlogin'] == '1') {
+        $sql .= ", u.last_login AS LastLogin";
+    }
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE

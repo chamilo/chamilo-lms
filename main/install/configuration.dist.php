@@ -2236,6 +2236,14 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Overwrites the app/config/auth.conf.php settings
 //$_configuration['extldap_config'] = ['host' => '', 'port' => ''];
 
+// To use an encrypted ldap admin password in app/config/auth.conf.php
+// if set to true then you need to put in app/config/auth.conf.php the encrypted passeword in $extldap_config['admin_password']
+// To generate the encrypted password you can use the script tests/scripts/ldap_encrypt_admin_password.php
+//$_configuration['ldap_encrypt_admin_password'] = false;
+
+// Salt to use for admin ldap password decryption
+//$_configuration['ldap_admin_password_salt'] = 'salt';
+
 // Option to hide the teachers info on courses about info page.
 //$_configuration['course_about_teacher_name_hide'] = false;
 

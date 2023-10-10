@@ -10580,3 +10580,38 @@ function api_flush_settings_cache(int $url_id): bool
 
     return true;
 }
+
+/**
+ * Decrypt sent data with encoded secret defined in app/config/configuration.php
+ * in the variable $_configuration['ldap_admin_password_salt'].
+ *
+ * @param $encryptedText The text to be decrypted
+ *
+ * @return string
+ */
+function api_decrypt_ldap_password(string $encryptedText): string
+{
+    if (!empty(api_get_configuration_value('ldap_admin_password_salt'))) {
+        $secret = api_get_configuration_value('ldap_admin_password_salt');
+    } else {
+        return false;
+    }
+    $secret = hex2bin($secret);
+    $iv = base64_decode(substr($encryptedText, 0, 16), true);
+    $data = base64_decode(substr($encryptedText, 16), true);
+    $tag = substr($data, strlen($data) - 16);
+    $data = substr($data, 0, strlen($data) - 16);
+
+    try {
+      return openssl_decrypt(
+        $data,
+        'aes-256-gcm',
+        $secret,
+        OPENSSL_RAW_DATA,
+        $iv,
+        $tag
+      );
+    } catch (\Exception $e) {
+      return false;
+    }
+}

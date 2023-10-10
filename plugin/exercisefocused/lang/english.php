@@ -29,5 +29,5 @@ $strings['TimeLimitReached'] = "Time limit reached";
 $strings['Outfocused'] = "Outfocused";
 $strings['Return'] = "Return";
 $strings['Motive'] = "Motive";
-$strings['AlertBeforeLeaving'] = "Before leaving the exercise, consider that this action will be tracked.";
+$strings['AlertBeforeLeaving'] = "Careful! We detect that you have left the screen. Please stay within the exam";
 $strings['RandomSampling'] = "Random sampling";

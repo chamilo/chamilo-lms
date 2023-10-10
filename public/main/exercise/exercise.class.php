@@ -6537,7 +6537,7 @@ class Exercise
         $course = api_get_course_entity($this->course_id);
         $link = $exercise->getFirstResourceLinkFromCourseSession($course);
 
-        if ($link->isDraft()) {
+        if ($link && $link->isDraft()) {
             $this->active = 0;
         }
 

@@ -11,7 +11,7 @@ class ExerciseMonitoringPlugin extends Plugin
 {
     public const SETTING_TOOL_ENABLE = 'tool_enable';
 
-    public const FIELD_SELECTED = 'exercisefocused_selected';
+    public const FIELD_SELECTED = 'exercisemonitoring_selected';
 
     private const TABLE_LOG = 'plugin_exercisemonitoring_log';
 

@@ -546,12 +546,14 @@ if (api_is_allowed_to_edit(null, true) ||
                                             <em class="fa fa-search"></em> '.get_lang('SignView').'
                                         </a>
                                     </span>';
-                            } else {
-                                echo '<span class="list-data">
-                                        <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
-                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
-                                        </a>
-                                    </span>';
+			    } else {
+                                if ($presence['presence']) {
+                                    echo '<span class="list-data">
+                                            <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                                <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                            </a>
+                                        </span>';
+                                }
                             }
                         } ?>
 

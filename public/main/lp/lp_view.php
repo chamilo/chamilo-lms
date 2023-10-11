@@ -389,16 +389,20 @@ if ($is_allowed_to_edit) {
 $buttonHomeText = get_lang('Course home');
 $returnLink = api_get_course_setting('lp_return_link');
 switch ($returnLink) {
+    case 0: // to course home
+        $buttonHomeUrl .= '&redirectTo=course_home&lp_id='.$lp->getIid();
+        $buttonHomeText = get_lang('Course home');
+        break;
     case 1: // lp list
         $buttonHomeUrl .= '&redirectTo=lp_list';
         $buttonHomeText = get_lang('Learning path list');
         break;
-    case 2: // user portal
-        $buttonHomeUrl .= '&redirectTo=my_courses';
+    case 2: // My courses
+        $buttonHomeUrl .= '&redirectTo=my_courses&lp_id='.$lp->getIid();
         $buttonHomeText = get_lang('My courses');
         break;
     case 3: // Portal home
-        $buttonHomeUrl .= '&redirectTo=portal_home';
+        $buttonHomeUrl .= '&redirectTo=portal_home&lp_id='.$lp->getIid();
         $buttonHomeText = get_lang('Home');
         break;
 }

@@ -5245,9 +5245,12 @@ class CourseManager
      *
      * @return array
      */
-    public static function getCourseSettingVariables(AppPlugin $appPlugin)
+    public static function getCourseSettingVariables(AppPlugin $appPlugin = null)
     {
-        $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        $pluginCourseSettings = [];
+        if ($appPlugin) {
+            $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        }
         $courseSettings = [
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
@@ -5318,7 +5321,7 @@ class CourseManager
      *
      * @return bool
      */
-    public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
+    public static function saveCourseConfigurationSetting($variable, $value, $courseId, AppPlugin $appPlugin = null)
     {
         $settingList = self::getCourseSettingVariables($appPlugin);
 
@@ -5342,13 +5345,13 @@ class CourseManager
                 ['variable = ? AND c_id = ?' => [$variable, $courseId]]
             );
 
-            if ($settingFromDatabase['value'] != $value) {
+            /*if ($settingFromDatabase['value'] != $value) {
                 Event::addEvent(
                     LOG_COURSE_SETTINGS_CHANGED,
                     $variable,
                     $settingFromDatabase['value']." -> $value"
                 );
-            }
+            }*/
         } else {
             // Create
             Database::insert(
@@ -5361,11 +5364,11 @@ class CourseManager
                 ]
             );
 
-            Event::addEvent(
+            /*Event::addEvent(
                 LOG_COURSE_SETTINGS_CHANGED,
                 $variable,
                 $value
-            );
+            );*/
         }
 
         return true;

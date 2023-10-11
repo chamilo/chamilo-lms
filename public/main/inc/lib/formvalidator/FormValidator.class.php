@@ -1009,7 +1009,7 @@ EOT;
         return true;
     }
 
-    public function addStartPanel(string $id, string $title, bool $open = false)
+    public function addStartPanel(string $id, string $title, bool $open = false, $icon = null)
     {
         $parent = null;
         $javascript = '
@@ -1034,6 +1034,10 @@ EOT;
 
         $this->addHtml($javascript);
 
+        $htmlIcon = '';
+        if ($icon) {
+            $htmlIcon = Display::return_icon($icon, null, ['style' => 'float:left;'], ICON_SIZE_SMALL);
+        }
         $html = '
         <div class="mt-4 rounded-lg">
             <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
@@ -1045,7 +1049,7 @@ EOT;
                         aria-expanded="'.(($open) ? 'true' : 'false').'"
                         aria-controls="collapse_'.$id.'"
                     >
-                        '.$title.'
+                        '.$htmlIcon.' '.$title.'
                     </a>
                 </h5>
             </div>
@@ -1070,21 +1074,9 @@ EOT;
      * @param string $title     visible title
      * @param array  $groupList list of group or elements
      */
-    public function addPanelOption($name, $title, $groupList, $icon, $open, $parent)
+    public function addPanelOption($name, $title, $groupList, $icon, $open)
     {
-        $html = '<div class="card">';
-        $html .= '<div class="card-header" id="card_'.$name.'">';
-        $html .= '<h5 class="card-title">';
-        $html .= '<a role="button" class="'.(($open) ? 'collapse' : ' ').'"  data-toggle="collapse" data-target="#collapse_'.$name.'" aria-expanded="true" aria-controls="collapse_'.$name.'">';
-        if ($icon) {
-            $html .= Display::return_icon($icon, null, null, ICON_SIZE_SMALL);
-        }
-        $html .= $title;
-        $html .= '</a></h5></div>';
-        $html .= '<div id="collapse_'.$name.'" class="collapse '.(($open) ? 'show' : ' ').'" aria-labelledby="heading_'.$name.'" data-parent="#'.$parent.'">';
-        $html .= '<div class="card-body">';
-
-        $this->addHtml($html);
+        $this->addStartPanel($name, $title, $open, $icon);
 
         foreach ($groupList as $groupName => $group) {
             // Add group array
@@ -1097,7 +1089,7 @@ EOT;
             }
         }
 
-        $this->addHtml('</div></div></div>');
+        $this->addEndPanel();
     }
 
     /**

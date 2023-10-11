@@ -1004,11 +1004,14 @@ switch ($action) {
             $url = $courseInfo['course_public_url'].'?sid='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
+                case 'course_home':
+                    $url = api_get_path(WEB_PATH).'course/'.api_get_course_int_id().'/home?'.api_get_cidreq();
+                    break;
                 case 'lp_list':
                     $url = 'lp_controller.php?'.api_get_cidreq();
                     break;
                 case 'my_courses':
-                    $url = api_get_path(WEB_PATH).'user_portal.php';
+                    $url = api_get_path(WEB_PATH).'courses';
                     break;
                 case 'portal_home':
                     $url = api_get_path(WEB_PATH);

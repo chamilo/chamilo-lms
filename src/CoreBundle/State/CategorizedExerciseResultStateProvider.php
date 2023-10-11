@@ -10,8 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -20,6 +18,7 @@ use Exercise;
 use ExerciseLib;
 use Question;
 use QuestionOptionsEvaluationPlugin;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use TestCategory;
 
@@ -30,7 +29,8 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly AuthorizationCheckerInterface $security
+        private readonly AuthorizationCheckerInterface $security,
+        private readonly RequestStack $requestStack
     ) {
     }
 
@@ -48,6 +48,9 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         if (!$this->security->isGranted(TrackEExerciseVoter::VIEW, $trackExercise)) {
             throw new Exception('Not allowed');
         }
+
+        $sessionHandler = $this->requestStack->getCurrentRequest()->getSession();
+        $sessionHandler->set('_course', api_get_course_info_by_id($trackExercise->getCourse()->getId()));
 
         $objExercise = new Exercise();
         $objExercise->read($trackExercise->getQuiz()->getIid());

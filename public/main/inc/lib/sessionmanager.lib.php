@@ -715,7 +715,7 @@ class SessionManager
                 if ($showCountUsers) {
                     $session['users'] = self::get_users_by_session(
                         $session['id'],
-                        null,
+                        0,
                         true
                     );
                     $usersLang = self::getCountUsersLangBySession($session['id']);

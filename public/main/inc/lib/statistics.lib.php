@@ -1386,7 +1386,18 @@ class Statistics
 
     public static function getBossTable($bossId)
     {
-        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+        $students = UserManager::getUsersFollowedByStudentBoss(
+            $bossId,
+            0,
+            false,
+            false,
+            false,
+            null,
+            null,
+            null,
+            null,
+            1
+        );
 
         if (!empty($students)) {
             $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);

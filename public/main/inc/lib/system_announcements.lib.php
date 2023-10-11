@@ -121,10 +121,10 @@ class SystemAnnouncementManager
         if ($resultId) {
             if ($sendEmailTest) {
                 self::send_system_announcement_by_email($sysAnnouncement, true);
-            } else {
-                if (1 == $send_mail) {
-                    self::send_system_announcement_by_email($sysAnnouncement);
-                }
+            }
+
+            if (1 == (int) $send_mail) {
+                self::send_system_announcement_by_email($sysAnnouncement);
             }
 
             if ($add_to_calendar) {
@@ -184,6 +184,19 @@ class SystemAnnouncementManager
         //$sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
         $userListToFilter = [];
+        if (in_array('ROLE_TEACHER', $announcement->getRoles(), true)) {
+            $users =  UserManager::get_user_list(['status' => COURSEMANAGER]);
+            if (!empty($users)) {
+                $userListToFilter = array_merge($users, $userListToFilter);
+            }
+        }
+
+        if (in_array('ROLE_STUDENT', $announcement->getRoles(), true)) {
+            $users = UserManager::get_user_list(['status' => STUDENT]);
+            if (!empty($users)) {
+                $userListToFilter = array_merge($users, $userListToFilter);
+            }
+        }
         // @todo check if other filters will apply for the career/promotion option.
         if (null !== $announcement->getCareer()) {
             $promotion = new Promotion();

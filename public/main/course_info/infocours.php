@@ -263,11 +263,9 @@ $form->addPanelOption(
     get_lang('Course access'),
     $elements,
     'course.png',
-    false,
-    'accordionSettings'
+    false
 );
-/*
-/*
+
 // Documents
 $globalGroup = [];
 if ('true' === api_get_setting('documents_default_visibility_defined_in_course')) {
@@ -307,8 +305,7 @@ $form->addPanelOption(
     get_lang('Documents'),
     $globalGroup,
     'folder.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 $globalGroup = [];
@@ -451,8 +448,7 @@ $form->addPanelOption(
     get_lang('E-mail notifications'),
     $globalGroup,
     'mail.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 $group = [];
@@ -533,8 +529,7 @@ $form->addPanelOption(
     get_lang('User rights'),
     $globalGroup,
     'user.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 // CHAT SETTINGS
@@ -565,8 +560,7 @@ $form->addPanelOption(
     get_lang('Chat settings'),
     $globalGroup,
     'chat.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 $globalGroup = [];
@@ -687,8 +681,7 @@ $form->addPanelOption(
     get_lang('Learning path settings'),
     $globalGroup,
     'scorms.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
@@ -730,8 +723,7 @@ if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
         get_lang('Test'),
         $globalGroup,
         'quiz.png',
-        false,
-        'accordionSettings'
+        false
     );
 }
 
@@ -777,8 +769,7 @@ $form->addPanelOption(
     get_lang('Thematic advance configuration'),
     $globalGroup,
     'course_progress.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 if ('true' === api_get_setting('allow_public_certificates')) {
@@ -803,8 +794,7 @@ if ('true' === api_get_setting('allow_public_certificates')) {
         get_lang('Certificates'),
         $globalGroup,
         null,
-        false,
-        'accordionSettings'
+        false
     );
 }
 
@@ -838,8 +828,7 @@ $form->addPanelOption(
     get_lang('Forum'),
     $globalGroup,
     'forum.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 // Student publication
@@ -864,8 +853,7 @@ $form->addPanelOption(
     get_lang('Assignments'),
     $globalGroup,
     'work.png',
-    false,
-    'accordionSettings'
+    false
 );
 
 $button = Display::toolbarButton(
@@ -878,13 +866,12 @@ $html = [
     $form->createElement('html', '<p>'.get_lang('LTI intro tool').'</p>'.$button),
 ];
 
-$form->addPanelOption(
+/*$form->addPanelOption(
     'lti_tool',
     $translator->trans('External tools'),
     $html,
     'plugin.png',
-    false,
-    'accordionSettings'
+    false
 );*/
 
 // Plugin course settings
@@ -908,13 +895,13 @@ $values['legal'] = $_course['legal'];
 $values['activate_legal'] = $_course['activate_legal'];
 $values['show_score'] = $_course['show_score'];
 
-/*$courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
+$courseSettings = CourseManager::getCourseSettingVariables();
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
     if ('-1' != $result) {
         $values[$setting] = $result;
     }
-}*/
+}
 // make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
@@ -1021,15 +1008,14 @@ if ($form->validate()) {
     $em->flush();
 
     // Insert/Updates course_settings table
-    /*foreach ($courseSettings as $setting) {
+    foreach ($courseSettings as $setting) {
         $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;
         CourseManager::saveCourseConfigurationSetting(
-            $appPlugin,
             $setting,
             $value,
             api_get_course_int_id()
         );
-    }*/
+    }
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->saveFieldValues($updateValues, true);

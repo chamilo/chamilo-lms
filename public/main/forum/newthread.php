@@ -120,7 +120,7 @@ if (api_is_in_gradebook()) {
 /* Is the user allowed here? */
 // The user is not allowed here if:
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) && //is a student
+if (!api_is_allowed_to_create_course() && //is a student
     (
         ($current_forum_category && false == $current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
         false == $current_forum_category->isVisible($courseEntity, $sessionEntity)

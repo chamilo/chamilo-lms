@@ -615,11 +615,12 @@ class Event
         $em = Database::getManager();
         if (false == $updateResults) {
             $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+            $trackExercise = $em->find(TrackEExercise::class, $exe_id);
 
             if ($attempt_id) {
                 $recording = new TrackEAttemptRecording();
                 $recording
-                    ->setExeId($attempt_id)
+                    ->setTrackExercise($trackExercise)
                     ->setQuestionId($question_id)
                     ->setAnswer($answer)
                     ->setMarks((int) $score)

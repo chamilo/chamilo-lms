@@ -173,9 +173,14 @@ class TrackEExercise
     #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttempt::class, cascade: ['persist'])]
     protected Collection $attempts;
 
+    #[Groups(['track_e_exercise:read'])]
+    #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttemptRecording::class, orphanRemoval: true)]
+    private Collection $revisedAttempts;
+
     public function __construct()
     {
         $this->attempts = new ArrayCollection();
+        $this->revisedAttempts = new ArrayCollection();
         $this->questionsToCheck = '';
         $this->blockedCategories = '';
         $this->dataTracking = '';
@@ -447,5 +452,35 @@ class TrackEExercise
         }
 
         return null;
+    }
+
+    /**
+     * @return Collection<int, TrackEAttemptRecording>
+     */
+    public function getRevisedAttempts(): Collection
+    {
+        return $this->revisedAttempts;
+    }
+
+    public function addRevisedAttempt(TrackEAttemptRecording $revisedAttempt): static
+    {
+        if (!$this->revisedAttempts->contains($revisedAttempt)) {
+            $this->revisedAttempts->add($revisedAttempt);
+            $revisedAttempt->setTrackExercise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRevisedAttempt(TrackEAttemptRecording $revisedAttempt): static
+    {
+        if ($this->revisedAttempts->removeElement($revisedAttempt)) {
+            // set the owning side to null (unless already changed)
+            if ($revisedAttempt->getTrackExercise() === $this) {
+                $revisedAttempt->setTrackExercise(null);
+            }
+        }
+
+        return $this;
     }
 }

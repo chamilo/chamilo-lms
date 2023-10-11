@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -167,6 +168,10 @@ if (isset($_REQUEST['comments']) &&
         api_not_allowed();
     }
 
+    $em = Database::getManager();
+
+    $trackExercise = $em->find(TrackEExercise::class, $id);
+
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
@@ -238,16 +243,14 @@ if (isset($_REQUEST['comments']) &&
 
         $recording = new TrackEAttemptRecording();
         $recording
-            ->setExeId($id)
+            ->setTrackExercise($trackExercise)
             ->setQuestionId($questionId)
             ->setAuthor(api_get_user_id())
             ->setTeacherComment($my_comments)
-            ->setExeId($id)
             ->setMarks($marks)
             ->setSessionId(api_get_session_id())
         ;
 
-        $em = Database::getManager();
         $em->persist($recording);
         $em->flush();
     }

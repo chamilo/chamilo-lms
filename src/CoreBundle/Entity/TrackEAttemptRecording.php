@@ -22,8 +22,9 @@ class TrackEAttemptRecording
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'exe_id', type: 'integer', nullable: false)]
-    protected int $exeId;
+    #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false)]
+    private ?TrackEExercise $trackExercise = null;
 
     #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected int $questionId;
@@ -55,14 +56,14 @@ class TrackEAttemptRecording
         $this->author = 0;
     }
 
-    public function getExeId(): int
+    public function getTrackExercise(): ?TrackEExercise
     {
-        return $this->exeId;
+        return $this->trackExercise;
     }
 
-    public function setExeId(int $exeId): static
+    public function setTrackExercise(?TrackEExercise $trackExercise): static
     {
-        $this->exeId = $exeId;
+        $this->trackExercise = $trackExercise;
 
         return $this;
     }

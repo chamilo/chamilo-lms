@@ -6,10 +6,19 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+#[ApiResource(
+    operations: [
+        new Get(security: 'is_granted("VIEW", object)'),
+    ],
+    security: 'is_granted("ROLE_USER")'
+)]
 #[ORM\Table(name: 'track_e_attempt_recording')]
 #[ORM\Index(columns: ['exe_id'], name: 'exe_id')]
 #[ORM\Index(columns: ['question_id'], name: 'question_id')]

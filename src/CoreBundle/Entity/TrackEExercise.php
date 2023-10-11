@@ -70,6 +70,7 @@ class TrackEExercise
 {
     use UserExtraFieldFilterTrait;
 
+    #[Groups(['track_e_exercise:read'])]
     #[ORM\Column(name: 'exe_id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -482,5 +483,11 @@ class TrackEExercise
         }
 
         return $this;
+    }
+
+    #[Groups(['track_e_exercise:read'])]
+    public function isRevised(): bool
+    {
+        return $this->revisedAttempts->count() > 0;
     }
 }

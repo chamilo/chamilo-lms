@@ -61,7 +61,7 @@
 
       <hr class="mt-0 mb-4" />
 
-      <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
+      <div class="grid-cols-course-tools">
         <Skeleton
           v-for="v in 30"
           :key="v"
@@ -208,7 +208,7 @@
 
       <div
         id="course-tools"
-        class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools"
+        class="grid-cols-course-tools"
       >
         <CourseTool
           v-for="(tool, index) in tools"

@@ -1,8 +1,8 @@
 <template>
   <div
+    v-if="showContent"
     id="course-home"
     class="hide-content"
-    v-if="showContent"
   >
     <div
       v-if="isCourseLoading"
@@ -81,33 +81,39 @@
           <small v-if="session"> ({{ session.name }}) </small>
         </h2>
 
-        <StudentViewButton
-          v-if="course"
-          @change="onStudentViewChanged"
-        />
+        <div class="grow-0">
+          <StudentViewButton
+            v-if="course"
+            @change="onStudentViewChanged"
+          />
+        </div>
 
-        <BaseButton
-          v-if="showUpdateIntroductionButton"
-          :label="t('Edit introduction')"
-          icon="edit"
-          type="black"
-          @click="updateIntro(intro)"
-        />
+        <div class="grow-0">
+          <BaseButton
+            v-if="showUpdateIntroductionButton"
+            :label="t('Edit introduction')"
+            icon="edit"
+            type="black"
+            @click="updateIntro(intro)"
+          />
+        </div>
 
-        <BaseButton
-          v-if="isAllowedToEdit"
-          icon="cog"
-          only-icon
-          popup-identifier="course-tmenu"
-          type="black"
-          @click="toggleCourseTMenu"
-        />
+        <div class="grow-0">
+          <BaseButton
+            v-if="isAllowedToEdit"
+            icon="cog"
+            only-icon
+            popup-identifier="course-tmenu"
+            type="black"
+            @click="toggleCourseTMenu"
+          />
 
-        <BaseMenu
-          id="course-tmenu"
-          ref="courseTMenu"
-          :model="courseItems"
-        />
+          <BaseMenu
+            id="course-tmenu"
+            ref="courseTMenu"
+            :model="courseItems"
+          />
+        </div>
       </div>
 
       <hr class="mt-1 mb-1" />
@@ -477,11 +483,11 @@ onBeforeMount(async () => {
     if (response.data.redirect) {
       window.location.href = response.data.url
     } else {
-      showContent.value = true;
+      showContent.value = true
     }
   } catch (error) {
     console.error("Error checking terms and conditions:", error)
-    showContent.value = true;
+    showContent.value = true
   }
 })
 

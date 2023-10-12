@@ -2289,6 +2289,31 @@ class Display
         return "$icon ";
     }
 
+    public static function returnPrimeIcon(
+        $name,
+        $size = '',
+        $fixWidth = false,
+        $additionalClass = ''
+    ) {
+        $className = "pi pi-$name";
+
+        if ($fixWidth) {
+            $className .= ' pi-fw';
+        }
+
+        if ($size) {
+            $className .= " pi-$size";
+        }
+
+        if (!empty($additionalClass)) {
+            $className .= " $additionalClass";
+        }
+
+        $icon = self::tag('i', null, ['class' => $className]);
+
+        return "$icon ";
+    }
+
     /**
      * @param string     $title
      * @param string     $content
@@ -2313,21 +2338,50 @@ class Display
         $open = true,
         $fullClickable = false
     ) {
+        $javascript = '';
         if (!empty($idAccordion)) {
-            $headerClass = $fullClickable ? 'center-block ' : '';
-            $headerClass .= $open ? '' : 'collapsed';
-            $contentClass = 'panel-collapse collapse ';
-            $contentClass .= $open ? 'in' : '';
-            $ariaExpanded = $open ? 'true' : 'false';
+            $javascript = '
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const buttons = document.querySelectorAll("#card_'.$idAccordion.' a");
+                const menus = document.querySelectorAll("#collapse_'.$idAccordion.'");
+                buttons.forEach((button, index) => {
+                    button.addEventListener("click", function() {
+                        menus.forEach((menu, menuIndex) => {
+                            if (index === menuIndex) {
+                                menu.classList.toggle("active");
+                            } else {
+                                menu.classList.remove("active");
+                            }
+                        });
+                    });
+                });
+            });
+        </script>';
+            $html = '
+        <div class="mt-4 rounded-lg bg-gray-50 p-2">
+            <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$idAccordion.'">
+                <h5>
+                    <a role="button"
+                        class="cursor-pointer"
+                        data-toggle="collapse"
+                        data-target="#collapse_'.$idAccordion.'"
+                        aria-expanded="'.(($open) ? 'true' : 'false').'"
+                        aria-controls="collapse_'.$idAccordion.'"
+                    >
+                        '.$title.'
+                    </a>
+                </h5>
+            </div>
+            <div
+                id="collapse_'.$idAccordion.'"
+                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'show' : '').'"
+            >
+                <div id="collapse_contant_'.$idAccordion.'"  class="card-body ">';
 
-            $html = <<<HTML
-                <div class="v-card bg-white mx-2" id="$id">
-                    <div class="v-card-header text-h5 my-2">
-                        $title
-                    </div>
-                    <div class="v-card-text">$content</div>
-                </div>
-HTML;
+            $html .= $content;
+            $html .= '</div></div></div>';
+
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
@@ -2341,7 +2395,7 @@ HTML;
             $html = self::div($html, $params);
         }
 
-        return $html;
+        return $javascript.$html;
     }
 
     /**

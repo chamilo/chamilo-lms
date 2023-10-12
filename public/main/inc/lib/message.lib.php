@@ -37,23 +37,22 @@ class MessageManager
                 );
                 $sender = $message->getSender();
 
-                $deleteButton = '';
+                $deleteLink = '';
                 if (!empty($url) && $currentUserId === $sender->getId()) {
-                    $deleteButton = Display::url(
-                        get_lang('Delete'),
-                        $url.'&action=delete_message&message_id='.$messageId,
-                        ['class' => 'btn btn--danger']
-                    );
+                    $deleteLink = '<a title="'.addslashes(
+                            get_lang('DeleteMessage')
+                        ).'" href="'.$url.'&action=delete_message&message_id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
+                            api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                        )."'".')) return false;" >&nbsp;&nbsp;&nbsp;&nbsp;'.
+                        Display::returnPrimeIcon('trash', 'lg').'</a>';
                 }
 
-                $content = $message->getContent().'<br />'.$date.'<br />'.
+                $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.
                     get_lang('Author').': '.$sender->getUsername().
-                    '<br />'.
-                    $deleteButton
-                ;
+                    '<br /></div>';
 
                 $html .= Display::panelCollapse(
-                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle(),
+                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle().$deleteLink,
                     $content,
                     $tag,
                     null,

@@ -24,8 +24,6 @@ export default {
       filtration: {},
       expandedFilter: false,
       options: {
-        //sortBy: [], vuetify
-        //sortDesc: [], , vuetify
         page: 1,
         itemsPerPage: 10
       },
@@ -130,7 +128,6 @@ export default {
 
       params = { ...params, cid, sid, gid, type };
 
-      // vuetify
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
         params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
       }*/

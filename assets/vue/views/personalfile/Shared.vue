@@ -185,7 +185,6 @@ export default {
 
       params = { ...params, type }
 
-      // vuetify
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
         params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
       }*/

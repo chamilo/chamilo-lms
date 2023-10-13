@@ -101,7 +101,6 @@
     "vue-perfect-scrollbar": "^0.2.1",
     "vue-router": "4.2.4",
     "vue-toastification": "^2.0.0-rc.5",
-    "vuetify": "3.0.0-beta.0",
     "vuex": "^4.1.0",
     "vuex-map-fields": "^1.4.1"
   },
@@ -137,7 +136,6 @@
     "vue-cli-plugin-quasar": "4.0.4",
     "vue-eslint-parser": "^9.3.1",
     "vue-loader": "^17.2.2",
-    "vuetify-loader": "^2.0.0-alpha.0",
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
     "webpack-notifier": "^1.15.0"

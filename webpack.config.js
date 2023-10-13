@@ -8,7 +8,6 @@ const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const glob = require('glob-all');
 const path = require('path');
 
-// const { VuetifyLoaderPlugin } = require('vuetify-loader')
 const CopyPlugin = require('copy-webpack-plugin');
 
 Encore
@@ -156,7 +155,6 @@ Encore
 ;
 
 //Encore.addPlugin(new VueLoaderPlugin);
-// Encore.addPlugin(new VuetifyLoaderPlugin());
 Encore.addPlugin(new CopyPlugin({
         patterns: [
             {

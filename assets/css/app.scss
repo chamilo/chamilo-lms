@@ -210,6 +210,18 @@
   margin-left: 20% !important;
 }
 
+.custom-message {
+  padding: 15px;
+}
+
+.custom-message {
+  ol,
+  ul,
+  menu {
+    list-style: initial;
+  }
+}
+
 /* ****************************************************
                      CSS SKILL
  **************************************************** */

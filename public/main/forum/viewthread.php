@@ -276,7 +276,7 @@ if (!empty($groupId)) {
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) &&
+if (!api_is_allowed_to_create_course() &&
     (
         !$forumEntity->isVisible($courseEntity, $sessionEntity) ||
         !$threadEntity->isVisible($courseEntity, $sessionEntity)

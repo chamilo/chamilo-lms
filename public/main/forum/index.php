@@ -338,7 +338,7 @@ if (is_array($forumCategories)) {
 
         $tools = null;
         $forumCategoryInfo['url'] = 'index.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
-        $visibility = $forumCategory->isVisible($courseEntity, $sessionEntity);
+        $visibility = $forumCategory->isVisible($courseEntity);
 
         if (!empty($categoryId)) {
             if (api_is_allowed_to_edit(false, true) &&
@@ -454,7 +454,7 @@ if (is_array($forumCategories)) {
                         }
 
                         $groupId = $forum->getForumOfGroup();
-                        $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity, $sessionEntity);
+                        $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity);
                         /*$forumInfo['number_threads'] = isset($forum['number_of_threads'])
                             ? (int) $forum['number_of_threads']
                             : 0;*/

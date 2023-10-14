@@ -111,9 +111,9 @@ $current_forum_category = $forum->getForumCategory();
 // 3. if anonymous posts are not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
-if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && !$current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
-        !$forum->isVisible($courseEntity, $sessionEntity))
+if (!api_is_allowed_to_create_course() &&
+    (($current_forum_category && !$current_forum_category->isVisible($courseEntity)) ||
+        !$forum->isVisible($courseEntity))
 ) {
     api_not_allowed(true);
 }
@@ -259,7 +259,7 @@ echo '<h1>';
 echo Display::url(
     prepare4display($forum->getForumTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $forumId]),
-    ['class' => empty($forum->isVisible($courseEntity, $sessionEntity)) ? 'text-muted' : null]
+    ['class' => empty($forum->isVisible($courseEntity)) ? 'text-muted' : null]
 );
 echo '</h1>';
 echo '<p class="forum_description">'.prepare4display($forum->getForumComment()).'</p>';

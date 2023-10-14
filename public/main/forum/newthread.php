@@ -122,8 +122,8 @@ if (api_is_in_gradebook()) {
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 if (!api_is_allowed_to_create_course() && //is a student
     (
-        ($current_forum_category && false == $current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
-        false == $current_forum_category->isVisible($courseEntity, $sessionEntity)
+        ($current_forum_category && false == $current_forum_category->isVisible($courseEntity)) ||
+        false == $current_forum_category->isVisible($courseEntity)
     )
 ) {
     api_not_allowed(true);
@@ -131,7 +131,7 @@ if (!api_is_allowed_to_create_course() && //is a student
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category->isVisible($courseEntity, $sessionEntity) &&
+    (($current_forum_category->isVisible($courseEntity) &&
         0 != $current_forum_category->getLocked()) || 0 != $forumEntity->getLocked())
 ) {
     api_not_allowed();

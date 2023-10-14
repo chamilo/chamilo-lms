@@ -95,7 +95,7 @@ $allowToQualify = false;
 if ($allowed_to_edit) {
     $allowToQualify = true;
 } else {
-    $allowToQualify = $threadEntity->isThreadPeerQualify() && $forumEntity->isVisible($course, $session) && $userIdToQualify != $currentUserId;
+    $allowToQualify = $threadEntity->isThreadPeerQualify() && $forumEntity->isVisible($course) && $userIdToQualify != $currentUserId;
 }
 
 if (!$allowToQualify) {

@@ -122,8 +122,8 @@ $post = $postRepo->find($_GET['post']);
 $courseEntity = api_get_course_entity();
 $sessionEntity = api_get_session_entity();
 
-$forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
-$categoryIsVisible = $category->isVisible($courseEntity, $sessionEntity);
+$forumIsVisible = $forum->isVisible($courseEntity);
+$categoryIsVisible = $category->isVisible($courseEntity);
 
 if (empty($post)) {
     api_not_allowed(true);
@@ -208,7 +208,7 @@ JS;
 // 4. if editing of replies is not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
-if (!api_is_allowed_to_edit(null, true) &&
+if (!api_is_allowed_to_create_course() &&
     (
         (false === $categoryIsVisible) ||
         false === $forumIsVisible

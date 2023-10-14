@@ -461,10 +461,18 @@ abstract class AbstractResource
             $found = false;
             $link = null;
             foreach ($links as $link) {
-                if ($link->getCourse() === $course && $link->getSession() === $session) {
-                    $found = true;
+                if ($session) {
+                    if ($link->getCourse() === $course && $link->getSession() === $session) {
+                        $found = true;
 
-                    break;
+                        break;
+                    }
+                } else {
+                    if ($link->getCourse() === $course) {
+                        $found = true;
+
+                        break;
+                    }
                 }
             }
 

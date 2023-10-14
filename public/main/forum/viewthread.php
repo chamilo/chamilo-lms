@@ -278,8 +278,8 @@ if (!empty($groupId)) {
 // then the user is not allowed here.
 if (!api_is_allowed_to_create_course() &&
     (
-        !$forumEntity->isVisible($courseEntity, $sessionEntity) ||
-        !$threadEntity->isVisible($courseEntity, $sessionEntity)
+        !$forumEntity->isVisible($courseEntity) ||
+        !$threadEntity->isVisible($courseEntity)
     )
 ) {
     api_not_allowed();
@@ -712,7 +712,7 @@ $template->assign('posts', $postList);
 $formToString = '';
 $showForm = true;
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && 0 == !$current_forum_category->isVisible($courseEntity, $sessionEntity)) || !$forumEntity->isVisible($courseEntity, $sessionEntity))
+    (($current_forum_category && 0 == !$current_forum_category->isVisible($courseEntity)) || !$forumEntity->isVisible($courseEntity))
 ) {
     $showForm = false;
 }

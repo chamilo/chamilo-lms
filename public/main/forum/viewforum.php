@@ -106,8 +106,8 @@ if (!empty($groupId)) {
     // Course
     if (!api_is_allowed_to_create_course() && //is a student
         (
-            ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
-            !$category->isVisible($courseEntity, $sessionEntity)
+            ($category && false == $category->isVisible($courseEntity)) ||
+            !$category->isVisible($courseEntity)
         )
     ) {
         api_not_allowed(true);
@@ -116,8 +116,8 @@ if (!empty($groupId)) {
     // Course
     if (!api_is_allowed_to_create_course() && //is a student
         (
-            ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
-            !$category->isVisible($courseEntity, $sessionEntity)
+            ($category && false == $category->isVisible($courseEntity)) ||
+            !$category->isVisible($courseEntity)
         )
     ) {
         api_not_allowed(true);
@@ -362,7 +362,7 @@ if (is_array($threads)) {
         $threadId = $thread->getIid();
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
         if (api_is_allowed_to_edit(false, true) ||
-            !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity, $sessionEntity))
+            !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity))
         ) {
             $title = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
@@ -476,7 +476,7 @@ if (is_array($threads)) {
                     $iconsEdit .= returnVisibleInvisibleIcon(
                         'thread',
                         $thread->getIid(),
-                        $thread->isVisible($courseEntity, $sessionEntity),
+                        $thread->isVisible($courseEntity),
                         [
                             'forum' => $forumId,
                             'gid' => $groupId,

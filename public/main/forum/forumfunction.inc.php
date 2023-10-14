@@ -3291,9 +3291,9 @@ function send_notification_mails(CForum $forum, CForumThread $thread, $reply_inf
     }
 
     $send_mails = false;
-    if ($thread->isVisible($courseEntity, $sessionEntity) &&
-        $forum->isVisible($courseEntity, $sessionEntity) &&
-        ($current_forum_category && $forum->getForumCategory()->isVisible($courseEntity, $sessionEntity)) &&
+    if ($thread->isVisible($courseEntity) &&
+        $forum->isVisible($courseEntity) &&
+        ($current_forum_category && $forum->getForumCategory()->isVisible($courseEntity)) &&
         '1' != $forum->getApprovalDirectPost()
     ) {
         $send_mails = true;

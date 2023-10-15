@@ -6,6 +6,7 @@ $strings['plugin_title'] = "Exercise Focused";
 $strings['plugin_comment'] = "Show a message to return to the exercise when the user exits the Chamilo window/tab.";
 
 $strings['tool_enable'] = "Enable tool";
+$strings['enable_time_limit'] = 'Enable time limit';
 $strings['time_limit'] = "Limit time";
 $strings['time_limit_help'] = "Limit time (in seconds) to return to the exercise. After this time the exercise will be closed.";
 $strings['enable_outfocused_limit'] = "Enable maximum of outfocused";
@@ -17,7 +18,7 @@ $strings['percentage_sampling'] = "Percentage of sampling attempts";
 $strings['percentage_sampling_help'] = "A percentage of attempts will be selected for random review";
 
 $strings['ReportByAttempts'] = "Exercise focused: Report by attempts";
-$strings['YouHaveLeftTheExercise'] = "You have left the exercise";
+$strings['YouHaveLeftTheExercise'] = "Careful! We detect that you have left the screen.<br>Please stay within the exam";
 $strings['YouHaveXTimeToReturn'] = "You have <span class=\"h3 text-danger\" id=\"time-limit-target\">%s</span> seconds to return";
 $strings['YouAreAllowedXOutfocused'] = "You are allowed <span class=\"h3 text-danger\" id=\"outfocused-limit-target\">%d</span> outfocused";
 $strings['OutfocusedLimitExceeded'] = "You have exceeded the allowed limit of outfocused";
@@ -29,5 +30,6 @@ $strings['TimeLimitReached'] = "Time limit reached";
 $strings['Outfocused'] = "Outfocused";
 $strings['Return'] = "Return";
 $strings['Motive'] = "Motive";
-$strings['AlertBeforeLeaving'] = "Careful! We detect that you have left the screen. Please stay within the exam";
+$strings['AlertBeforeLeaving'] = "Please stay within the exam";
 $strings['RandomSampling'] = "Random sampling";
+$strings['WindowTitleOutfocused'] = 'Stay within the exam!';

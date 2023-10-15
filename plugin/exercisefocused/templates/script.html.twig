@@ -1,4 +1,5 @@
 {% if exercisefocused.show_region %}
+    {% set enable_time_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_time_limit') %}
     {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
     {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
     {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
@@ -21,6 +22,7 @@
         var initDocumentTitle = document.title;
         var countdownInterval;
         var remainingTime;
+        var enableTimeLimit = {{ enable_time_limit ? 'true' : 'false' }};
         var enableOutfocusedLimit = {{ enable_outfocused_limit ? 'true' : 'false' }};
 
         {% if enable_outfocused_limit %}
@@ -39,23 +41,25 @@
             }
         }
 
-        function updateCountdown() {
-            var seconds = remainingTime;
-            var strSeconds = `${seconds.toString().padStart(2, '0')}`;
+        {% if enable_time_limit %}
+            function updateCountdown() {
+                var seconds = remainingTime;
+                var strSeconds = `${seconds.toString().padStart(2, '0')}`;
 
-            $timeLimitTarget.text(strSeconds);
-            document.title = $timeLimitTarget.parent().text();
+                $timeLimitTarget.text(strSeconds);
+                document.title = $timeLimitTarget.parent().text();
 
-            remainingTime--;
+                remainingTime--;
 
-            if (remainingTime < 0) {
-                clearInterval(countdownInterval);
+                if (remainingTime < 0) {
+                    clearInterval(countdownInterval);
 
-                sendAction('time_limit', function (response) {
-                    finishExam(response.type)
-                });
+                    sendAction('time_limit', function (response) {
+                        finishExam(response.type)
+                    });
+                }
             }
-        }
+        {% endif %}
 
         function sendAction(action, callback) {
             $.ajax({
@@ -102,9 +106,13 @@
 
             remainingTime = {{ time_limit }};
 
-            updateCountdown();
+            {% if enable_time_limit %}
+                updateCountdown();
 
-            countdownInterval = window.setInterval(updateCountdown, 1000);
+                countdownInterval = window.setInterval(updateCountdown, 1000);
+            {% else %}
+                document.title = "{{ 'WindowTitleOutfocused'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}";
+            {% endif %}
         }
 
         function onFocus() {
@@ -114,7 +122,9 @@
 
             $exerciseFocused.hide();
 
-            clearInterval(countdownInterval);
+            {% if enable_time_limit %}
+                clearInterval(countdownInterval);
+            {% endif %}
         }
 
         $(window).on("blur", onBlur)

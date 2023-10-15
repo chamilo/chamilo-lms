@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\ToolsException;
 class ExerciseFocusedPlugin extends Plugin
 {
     public const SETTING_TOOL_ENABLE = 'tool_enable';
+    public const SETTING_ENABLE_TIME_LIMIT = 'enable_time_limit';
     public const SETTING_TIME_LIMIT = 'time_limit';
     public const SETTING_ENABLE_OUTFOCUSED_LIMIT = 'enable_outfocused_limit';
     public const SETTING_OUTFOCUSED_LIMIT = 'outfocused_limit';
@@ -24,6 +25,7 @@ class ExerciseFocusedPlugin extends Plugin
     {
         $settings = [
             self::SETTING_TOOL_ENABLE => 'boolean',
+            self::SETTING_ENABLE_TIME_LIMIT => 'boolean',
             self::SETTING_TIME_LIMIT => 'text',
             self::SETTING_ENABLE_OUTFOCUSED_LIMIT => 'boolean',
             self::SETTING_OUTFOCUSED_LIMIT => 'text',

@@ -1,4 +1,5 @@
 {% if exercisefocused.show_region %}
+    {% set enable_time_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_time_limit') %}
     {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
     {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
     {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
@@ -6,12 +7,15 @@
     <div id="exercisefocused-block" style="display: none;">
         <div class="exercisefocused-block__container">
             <div class="exercisefocused-block__message">
-                <div id="time-limit-block">
-                    <p class="h3 text-danger">{{ 'YouHaveLeftTheExercise'|get_plugin_lang('ExerciseFocusedPlugin') }}</p>
-                    <p class="h4">
-                        {{ 'YouHaveXTimeToReturn'|get_plugin_lang('ExerciseFocusedPlugin')|format(time_limit) }}
-                    </p>
-                </div>
+                <p class="h3 text-danger">{{ 'YouHaveLeftTheExercise'|get_plugin_lang('ExerciseFocusedPlugin') }}</p>
+
+                {% if enable_time_limit %}
+                    <div id="time-limit-block">
+                        <p class="h4">
+                            {{ 'YouHaveXTimeToReturn'|get_plugin_lang('ExerciseFocusedPlugin')|format(time_limit) }}
+                        </p>
+                    </div>
+                {% endif %}
 
                 {% if enable_outfocused_limit %}
                     <div id="outfocused-limit-block">

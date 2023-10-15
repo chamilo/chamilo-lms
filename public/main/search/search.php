@@ -37,26 +37,24 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     'diagnosis_completed'
 );
 $diagnosisComplete = false;
-if ($diagnosisComplete && isset($diagnosisComplete['value']) && 1 == $diagnosisComplete['value']) {
+if ($diagnosisComplete && isset($diagnosisComplete['field_value']) && 1 == $diagnosisComplete['field_value']) {
     if (!isset($_GET['result'])) {
         header('Location:'.api_get_self().'?result=1');
         exit;
     }
 }
 
-$hide = false;
+
 $defaultValueStatus = '';
-/*
 $hide = false;
-if (false !== $wantStage) {
-    $hide = 'yes' === $wantStage['value'];
+if ($wantStage) {
+    $hide = ('yes' === $wantStage['field_value'] || '' === $wantStage['field_value']);
 }
 
 $defaultValueStatus = 'extraFiliere.hide()';
 if (false === $hide) {
     $defaultValueStatus = '';
 }
-*/
 
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
@@ -99,16 +97,16 @@ $htmlHeadXtra[] = '
 <script>
 $(function() {
     var themeDefault = "extra_'.$theme.'";
-    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent();
+    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent();
     '.$defaultValueStatus.'
 
-    /*$("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
+    $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
         if ($(this).val() == "no") {
             extraFiliere.show();
         } else {
             extraFiliere.hide();
         }
-    });*/
+    });
 
     $("#extra_theme").parent().append(
         $("<a>", {

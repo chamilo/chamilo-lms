@@ -44,9 +44,8 @@ if ($diagnosisComplete && isset($diagnosisComplete['field_value']) && 1 == $diag
     }
 }
 
-
 $defaultValueStatus = '';
-$hide = false;
+$hide = true;
 if ($wantStage) {
     $hide = ('yes' === $wantStage['field_value'] || '' === $wantStage['field_value']);
 }

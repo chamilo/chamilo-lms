@@ -339,8 +339,8 @@ if ($action != 'add') {
                     }
 
                     // the number of topics and posts
-                    $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
-                    $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
+                    $my_number_threads = isset($forum['forum_threads']) ? $forum['forum_threads'] : 0;
+                    $my_number_posts = isset($forum['forum_posts']) ? $forum['forum_posts'] : 0;
 
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';

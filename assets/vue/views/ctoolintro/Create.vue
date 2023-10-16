@@ -49,7 +49,7 @@ export default {
     const item = ref({})
     const route = useRoute()
     const router = useRouter()
-    const { showNotification } = useNotification()
+    //const { showNotification } = useNotification()
     const { t } = useI18n()
 
     let id = route.params.id
@@ -59,19 +59,30 @@ export default {
 
     const { cid } = useCidReq()
 
-    let toolId = route.params.courseTool
-    let ctoolId = route.query.ctoolId
+    let courseId = route.query.cid
+    let sessionId = route.query.sid
+    let toolId = route.query.ctoolIntroId
+    let ctoolId = route.params.courseTool
 
-    // Get the current intro text.
-    axios
-      .get(ENTRYPOINT + "c_tool_intros/" + toolId)
-      .then((response) => {
-        let data = response.data
-        item.value["introText"] = data.introText
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    async function getIntro() {
+      axios
+        .get("/course/" + courseId + "/getToolIntro", {
+          params: {
+            cid: courseId,
+            sid: sessionId,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            if (response.data.introText) {
+              item.value["introText"] = response.data.introText
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
 
     item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId)
     item.value["courseTool"] = "/api/c_tools/" + ctoolId
@@ -84,8 +95,10 @@ export default {
       },
     ]
 
+    getIntro()
+
     function onCreated(item) {
-      showNotification(t("Updated"))
+      //showNotification(t("Updated"))
       axios
         .post("/course/" + cid + "/addToolIntro", {
           iid: item.iid,

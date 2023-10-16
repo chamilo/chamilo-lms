@@ -595,7 +595,6 @@ class CourseController extends ToolBaseController
     public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
         $sessionId = (int) $request->get('sid');
-        error_log('Session id -> '.$sessionId);
 
         //$session = $this->getSession();
         $responseData = [];
@@ -630,8 +629,6 @@ class CourseController extends ToolBaseController
         $ctool = $query->getOneOrNullResult();
 
         if ($session) {
-            error_log('Session actual -> '.$session->getId());
-            error_log('Course actual -> '.$course->getId());
             $ctoolSession = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
             if (!$ctoolSession) {
                 $createInSession = true;
@@ -646,14 +643,18 @@ class CourseController extends ToolBaseController
             /** @var CToolIntro $ctoolintro */
             $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
             if ($ctoolintro) {
+                $introText = preg_replace('/<[^>]*>(\s|&nbsp;)*<\/[^>]*>/', '', $ctoolintro->getIntroText());
                 $responseData = [
                     'iid' => $ctoolintro->getIid(),
-                    'introText' => $ctoolintro->getIntroText(),
+                    'introText' => $introText,
                     'createInSession' => $createInSession,
                     'cToolId' => $ctool->getIid(),
                 ];
             }
-            $responseData['c_tool'] = $ctool;
+            $responseData['c_tool'] = [
+                'iid' => $ctool->getIid(),
+                'name' => $ctool->getName()
+            ];
         }
 
         return new JsonResponse($responseData);
@@ -674,7 +675,7 @@ class CourseController extends ToolBaseController
         }
 
         $ctool = $em->getRepository(CTool::class);
-        $check = $ctool->findOneBy(['name' => 'course_homepage', 'session' => $session]);
+        $check = $ctool->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
         if (!$check) {
             $toolRepo = $em->getRepository(Tool::class);
             $toolEntity = $toolRepo->findOneBy(['name' => 'course_homepage']);

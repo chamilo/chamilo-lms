@@ -94,7 +94,7 @@
             :label="t('Edit introduction')"
             icon="edit"
             type="black"
-            @click="updateIntro(intro)"
+            @click="createInSession ? addIntro(course, intro) : updateIntro(intro)"
           />
         </div>
 
@@ -123,37 +123,27 @@
         class="mb-4"
       >
         <div
-          v-if="intro"
+          v-if="intro && !intro.introText"
           class="flex flex-col gap-4"
         >
-          <div v-html="intro.introText" />
-
-          <BaseButton
-            v-if="createInSession && introTool"
-            :label="t('Course introduction')"
-            class="ml-auto"
-            icon="plus"
-            type="primary"
-            @click="addIntro(course, intro)"
-          />
+          <EmptyState
+            if="!intro.introText && introTool"
+            :detail="t('Add a course introduction to display to your students.')"
+            :summary="t('You don\'t have any course content yet.')"
+            icon="courses"
+          >
+            <BaseButton
+              :label="t('Course introduction')"
+              class="mt-4"
+              icon="plus"
+              type="primary"
+              @click="addIntro(course, intro)"
+            />
+          </EmptyState>
         </div>
-        <EmptyState
-          v-else-if="introTool"
-          :detail="t('Add a course introduction to display to your students.')"
-          :summary="t('You don\'t have any course content yet.')"
-          icon="courses"
-        >
-          <BaseButton
-            :label="t('Course introduction')"
-            class="mt-4"
-            icon="plus"
-            type="primary"
-            @click="addIntro(course, intro)"
-          />
-        </EmptyState>
       </div>
       <div
-        v-else-if="intro"
+        if="intro.introText"
         class="mb-4"
         v-html="intro.introText"
       />
@@ -282,8 +272,13 @@ const isCourseLoading = ref(true)
 const showContent = ref(false)
 
 const showUpdateIntroductionButton = computed(() => {
-  return course.value && isCurrentTeacher.value && intro.value && !(createInSession.value && introTool.value)
-})
+  if (course.value && isCurrentTeacher.value && intro.value && intro.value.introText) {
+
+    return true;
+  }
+
+  return false;
+});
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const isSorting = ref(false)
@@ -345,24 +340,34 @@ async function getIntro() {
       },
     })
     .then((response) => {
-      intro.value = response.data
-      introTool.value = response.data.c_tool
-      createInSession.value = response.data.createInSession
+      if (response.data) {
+        intro.value = response.data
+        if (response.data.introText) {
+          introTool.value = response.data.c_tool
+        }
+        if (response.data.createInSession) {
+          createInSession.value = response.data.createInSession
+        }
+      }
     })
     .catch(function (error) {
       console.log(error)
     })
 }
 
-function addIntro(course, introTool) {
+function addIntro(course, intro) {
+  let params = {};
+  if (intro && intro.c_tool.iid) {
+    params = { courseTool: intro.c_tool.iid };
+  }
   return router.push({
     name: "ToolIntroCreate",
-    params: { courseTool: introTool.iid },
+    params: params,
     query: {
       cid: courseId,
       sid: sessionId,
       parentResourceNodeId: course.resourceNode.id,
-      ctoolId: introTool.cToolId,
+      ctoolIntroId: intro.iid,
     },
   })
 }

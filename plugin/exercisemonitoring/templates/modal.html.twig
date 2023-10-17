@@ -26,7 +26,11 @@
                     <p id="txt-learner-img-instructions" class="lead" style="display: none;">
                         {{ 'ImageLearnerCameraInstructions'|get_plugin_lang('ExerciseMonitoringPlugin') }}
                     </p>
-                    <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
+                    <div style="position: relative">
+                        <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
+                        <img id="img-iddoc-placeholder" style="display: block;" src="{{ _p.web_plugin }}exercisemonitoring/assets/images/idcard.png">
+                        <img id="img-learner-placeholder" style="display: none" src="{{ _p.web_plugin }}exercisemonitoring/assets/images/user.png">
+                    </div>
                     <br>
                     <button class="btn btn-default" type="button" id="btn-snap" disabled>
                         <span class="fa fa-camera" aria-hidden="true"></span>
@@ -84,6 +88,8 @@
 
             var $txtIdDocInstructions = $('#txt-iddoc-img-instructions');
             var $txtLearnerInstructions = $('#txt-learner-img-instructions');
+            var $imgIdDocPlaceholder = $('#img-iddoc-placeholder');
+            var $imgLearnerPlaceholder = $('#img-learner-placeholder');
 
             var hasIdDoc = false;
             var hasLearner = false;
@@ -113,7 +119,9 @@
                 Webcam.attach('#monitoring-camera');
                 Webcam.on('live', function () {
                     $txtIdDocInstructions.show();
+                    $imgIdDocPlaceholder.show();
                     $txtLearnerInstructions.hide();
+                    $imgLearnerPlaceholder.hide();
 
                     $btnSnap.prop({disabled: false}).focus();
                     $('#monitoring-camera video').addClass('embed-responsive-item');
@@ -166,7 +174,9 @@
                     $bodyCamera.show();
 
                     $txtIdDocInstructions.hide();
+                    $imgIdDocPlaceholder.hide();
                     $txtLearnerInstructions.show();
+                    $imgLearnerPlaceholder.show();
 
                     $btnSnap.prop({disabled: false}).focus();
                 } else if (hasIdDoc && hasLearner) {
@@ -256,6 +266,15 @@
             height: auto !important;
             max-width: 100% !important;
             margin: 0 auto;
+        }
+
+        #em-camera-body img#img-iddoc-placeholder,
+        #em-camera-body img#img-learner-placeholder {
+            height: auto;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
         }
 
         #monitoring-camera video {

@@ -106,6 +106,14 @@ const userSubmenuItems = [
         label: t("Settings"),
         to: { name: "AccountHome" },
       },
+      {
+        separator: true,
+      },
+      {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      },
     ],
   },
 ]

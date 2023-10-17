@@ -240,11 +240,7 @@ if (!api_is_allowed_to_edit(null, true) &&
     api_not_allowed(true);
 }
 
-if ('learnpath' === $origin) {
-    Display::display_reduced_header();
-} else {
-    Display::display_header();
-}
+Display::display_header();
 
 // Action links
 if ('learnpath' !== $origin) {

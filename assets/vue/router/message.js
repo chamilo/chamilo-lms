@@ -18,7 +18,7 @@ export default {
     {
       name: 'MessageReply',
       path: 'reply',
-      component: () => import('../views/message/Reply.vue')
+      component: () => import('../views/message/MessageReply.vue')
     },
     /*{
       name: 'MessageUpdate',

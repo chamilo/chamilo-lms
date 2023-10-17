@@ -66,6 +66,13 @@ class UserVoter extends Voter
             if ($user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_FRIEND)) {
                 return true;
             }
+
+            if (
+                $user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
+                || $user->isFriendWithMeByRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
+            ) {
+                return true;
+            }
         }
 
         return false;

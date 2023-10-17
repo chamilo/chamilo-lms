@@ -2357,6 +2357,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
     }
 
+    public function isFriendWithMeByRelationType(self $friend, int $relationType): bool
+    {
+        return $this
+            ->getFriendsWithMeByRelationType($relationType)
+            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend);
+    }
+
     /**
      * @param int $relationType Example: UserRelUser::USER_RELATION_TYPE_BOSS
      *
@@ -2368,6 +2375,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $criteria->where(Criteria::expr()->eq('relationType', $relationType));
 
         return $this->friends->matching($criteria);
+    }
+
+    public function getFriendsWithMeByRelationType(int $relationType): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('relationType', $relationType));
+
+        return $this->friendsWithMe->matching($criteria);
     }
 
     /**

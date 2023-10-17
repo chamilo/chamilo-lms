@@ -823,6 +823,7 @@ if ($extraConditions && $extraFieldsLoaded) {
     }
 }
 
+$tpl = new Template($toolName);
 $textAfterRegistration = '';
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
@@ -1182,7 +1183,7 @@ if ($form->validate()) {
         if (!empty($values['email'])) {
             $linkDiagnostic = api_get_path(WEB_PATH).'main/search/search.php';
             $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password').'.</p>';
-            $diagnosticPath = '<a href="'.$linkDiagnostic.'">'.$linkDiagnostic.'</a>';
+            $diagnosticPath = '<a href="'.$linkDiagnostic.'" class="custom-link">'.$linkDiagnostic.'</a>';
             $textAfterRegistration .= '<p>';
             $textAfterRegistration .= sprintf(
                             get_lang('Welcome, please go to diagnostic at %s.'),
@@ -1268,49 +1269,57 @@ if ($form->validate()) {
     Session::erase('exercise_redirect');
     Session::erase('session_redirect');
     Session::erase('only_one_course_session_redirect');
+    Session::write('textAfterRegistration', $textAfterRegistration);
 
-    $tpl = new Template($toolName);
-    $tpl->assign('inscription_header', Display::page_header($toolName));
-    $tpl->assign('inscription_content', $content);
-    $tpl->assign('form', '');
-    $tpl->assign('text_after_registration', $textAfterRegistration);
-    $tpl->assign('hide_header', $hideHeaders);
-    $inscription = $tpl->get_template('auth/inscription.tpl');
-    $tpl->display($inscription);
+    header('location: '.api_get_self());
+    exit;
+
 } else {
-    if (!api_is_anonymous()) {
-        // Saving user to course if it was set.
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
-            if (!empty($course_info)) {
-                if (in_array(
-                    $course_info['visibility'],
-                    [
-                        COURSE_VISIBILITY_OPEN_PLATFORM,
-                        COURSE_VISIBILITY_OPEN_WORLD,
-                    ]
-                )
-                ) {
-                    CourseManager::subscribeUser(
-                        api_get_user_id(),
-                        $course_info['real_id']
-                    );
+    $textAfterRegistration = Session::read('textAfterRegistration');
+    if (isset($textAfterRegistration)) {
+        $tpl->assign('inscription_header', Display::page_header($toolName));
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', '');
+        $tpl->assign('text_after_registration', $textAfterRegistration);
+        $tpl->assign('hide_header', $hideHeaders);
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
+
+        Session::erase('textAfterRegistration');
+    } else {
+        if (!api_is_anonymous()) {
+            // Saving user to course if it was set.
+            if (!empty($course_code_redirect)) {
+                $course_info = api_get_course_info($course_code_redirect);
+                if (!empty($course_info)) {
+                    if (in_array(
+                        $course_info['visibility'],
+                        [
+                            COURSE_VISIBILITY_OPEN_PLATFORM,
+                            COURSE_VISIBILITY_OPEN_WORLD,
+                        ]
+                    )
+                    ) {
+                        CourseManager::subscribeUser(
+                            api_get_user_id(),
+                            $course_info['real_id']
+                        );
+                    }
                 }
             }
+            CourseManager::redirectToCourse([]);
         }
-        CourseManager::redirectToCourse([]);
-    }
 
-    $tpl = new Template($toolName);
-    $inscriptionHeader = '';
-    if (false !== $termActivated) {
-        $inscriptionHeader = Display::page_header($toolName);
+        $inscriptionHeader = '';
+        if (false !== $termActivated) {
+            $inscriptionHeader = Display::page_header($toolName);
+        }
+        $tpl->assign('inscription_header', $inscriptionHeader);
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', $form->returnForm());
+        $tpl->assign('hide_header', $hideHeaders);
+        $tpl->assign('text_after_registration', $textAfterRegistration);
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
-    $tpl->assign('inscription_header', $inscriptionHeader);
-    $tpl->assign('inscription_content', $content);
-    $tpl->assign('form', $form->returnForm());
-    $tpl->assign('hide_header', $hideHeaders);
-    $tpl->assign('text_after_registration', $textAfterRegistration);
-    $inscription = $tpl->get_template('auth/inscription.tpl');
-    $tpl->display($inscription);
 }

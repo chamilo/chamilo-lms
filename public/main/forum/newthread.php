@@ -219,11 +219,7 @@ $form = newThread(
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 
-if ('learnpath' === $origin) {
-    Display::display_reduced_header();
-} else {
-    Display::display_header();
-}
+Display::display_header();
 
 //$actions  '<span style="float:right;">'.search_link().'</span>';
 $actions = '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.

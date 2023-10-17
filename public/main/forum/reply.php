@@ -234,12 +234,7 @@ $form = show_add_post_form(
     $my_elements
 );
 
-if ('learnpath' === $origin) {
-    Display::display_reduced_header();
-} else {
-    // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
-    Display::display_header();
-}
+Display::display_header();
 
 if ('learnpath' !== $origin) {
     //$actionsLeft = '<span style="float:right;">'.search_link().'</span>';

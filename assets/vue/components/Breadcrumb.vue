@@ -78,7 +78,7 @@ const foo = computed(() => {
     return items
   }
 
-  if (0 < props.legacy.length) {
+  if (props.legacy.length > 0) {
     const mainUrl = window.location.href
     const mainPath = mainUrl.indexOf("main/")
 
@@ -96,7 +96,7 @@ const foo = computed(() => {
 
       items.push({
         label: item["name"],
-        href: newUrl,
+        url: newUrl,
       })
     })
   }
@@ -134,7 +134,7 @@ const foo = computed(() => {
       items.push({
         label: pathItem.name,
         disabled: route.path === path || lastItem.path === route.path,
-        href: pathItem.path,
+        url: pathItem.path,
       })
     }
   })

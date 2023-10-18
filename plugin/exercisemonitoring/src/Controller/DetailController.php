@@ -122,12 +122,12 @@ class DetailController
 
         $html = '';
 
-        foreach ($logs as $log) {
+        foreach ($logs as $i => $log) {
             $userDirName = $pluginDirName.'/'.$userId;
 
             $date = api_get_local_time($log['createdAt'], null, null, true, true, true);
 
-            $html .= '<div class="col-xs-12 col-sm-6 col-md-3">';
+            $html .= '<div class="col-xs-12 col-sm-6 col-md-3" style="clear: '.($i % 4 === 0 ? 'both' : 'none').';">';
             $html .= '<div class="thumbnail">';
             $html .= Display::img(
                 $userDirName.'/'.$log['imageFilename'],

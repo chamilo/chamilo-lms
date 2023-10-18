@@ -27,6 +27,14 @@ watch(() => user.value, () => {listPosts()});
 
 onMounted(listPosts)
 
+function refreshPosts() {
+  listPosts();
+}
+
+defineExpose({
+  refreshPosts
+});
+
 function listPosts() {
   postList.splice(0, postList.length);
 

@@ -52,7 +52,9 @@ import BaseButton from "../basecomponents/BaseButton.vue";
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
+import { defineEmits } from 'vue';
 
+const emit = defineEmits(['post-created']);
 const store = useStore();
 const {t} = useI18n();
 
@@ -101,31 +103,40 @@ function showCheckboxPromoted() {
 async function sendPost() {
   v$.value.$touch();
 
-  if (v$.value.$invalid) {
+  if (!postState.content.trim()) {
     return;
   }
 
-  const createPostPayload = {
-    content: postState.content,
-    type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
-    sender: currentUser['@id'],
-    userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
-  };
-
-  await store.dispatch('socialpost/create', createPostPayload);
-
-  if (postState.attachment) {
-    const post = store.state.socialpost.created;
-    const attachmentPayload = {
-      postId: post.id,
-      file: postState.attachment
-    };
-
-    await store.dispatch('messageattachment/createWithFormData', attachmentPayload);
+  if (v$.value.$error) {
+    return;
   }
 
-  postState.content = '';
-  postState.attachment = null;
-  postState.isPromoted = false;
+  try {
+    await store.dispatch('socialpost/create', {
+      content: postState.content,
+      type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
+      sender: currentUser['@id'],
+      userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
+    });
+
+    if (postState.attachment) {
+      const formData = new FormData();
+      formData.append('file', postState.attachment);
+      const post = store.state.socialpost.created;
+      await store.dispatch('messageattachment/createWithFormData', {
+        postId: post.id,
+        file: formData
+      });
+    }
+
+    postState.content = '';
+    postState.attachment = null;
+    postState.isPromoted = false;
+    v$.value.$reset();
+
+    emit('post-created');
+  } catch (error) {
+    console.error("There was an error creating the post:", error);
+  }
 }
 </script>

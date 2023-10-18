@@ -5,6 +5,7 @@
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use ChamiloSession;
 use Exception;
@@ -37,6 +38,8 @@ class LogController extends BaseController
         }
 
         $action = $this->request->query->get('action');
+        $levelId = $this->request->query->getInt('level_id');
+
         $exeId = (int) ChamiloSession::read('exe_id');
 
         if (!in_array($action, self::VALID_ACTIONS)) {
@@ -49,10 +52,26 @@ class LogController extends BaseController
             throw new Exception('no exercise attempt');
         }
 
+        $objExercise = new Exercise($trackingExercise->getCId());
+        $objExercise->read($trackingExercise->getExeExoId());
+
+        $level = 0;
+
+        if (ONE_PER_PAGE == $objExercise->selectType()) {
+            $question = $this->em->find(CQuizQuestion::class, $levelId);
+
+            if (!$question) {
+                throw new Exception('Invalid level');
+            }
+
+            $level = $question->getIid();
+        }
+
         $log = new Log();
         $log
             ->setAction($action)
-            ->setExe($trackingExercise);
+            ->setExe($trackingExercise)
+            ->setLevel($level);
 
         $this->em->persist($log);
         $this->em->flush();

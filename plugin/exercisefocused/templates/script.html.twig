@@ -4,6 +4,9 @@
     {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
     {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
 
+    {% set ALL_ON_ONE_PAGE = exercisefocused.exercise_type == 1 %}
+    {% set ONE_PER_PAGE = exercisefocused.exercise_type == 2 %}
+
 <script>
     $(function () {
         var $exerciseFocused = $("#exercisefocused-block").appendTo('body');
@@ -15,6 +18,8 @@
         var $backdrop = $('<div>')
             .addClass('exercisefocused-backdrop text-danger')
             .attr('data-alert', '{{ 'AlertBeforeLeaving'|get_plugin_lang('ExerciseFocusedPlugin') }}');
+
+        var $btnSaveNow = $('button[name="save_now"]');
 
         $backdrop.appendTo('body');
 
@@ -62,11 +67,18 @@
         {% endif %}
 
         function sendAction(action, callback) {
+            {% if ALL_ON_ONE_PAGE %}
+                var levelId = 0;
+            {% elseif ONE_PER_PAGE %}
+                var levelId = $btnSaveNow.data('question') || -1;
+            {% endif %}
+
             $.ajax({
                 url: "{{ _p.web_plugin }}exercisefocused/pages/log.php",
                 data: {
                     action: action,
                     exercisefocused_sec_token: secToken,
+                    level_id: levelId
                 },
                 success: function (response) {
                     if (!response) {
@@ -104,9 +116,9 @@
 
             sendAction('outfocused');
 
-            remainingTime = {{ time_limit }};
-
             {% if enable_time_limit %}
+                remainingTime = {{ time_limit }};
+
                 updateCountdown();
 
                 countdownInterval = window.setInterval(updateCountdown, 1000);

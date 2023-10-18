@@ -43,6 +43,13 @@ class Log
     private $exe;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="level", type="integer")
+     */
+    private $level;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="action", type="string", nullable=false)
@@ -62,6 +69,18 @@ class Log
     public function setExe(TrackEExercises $exe): Log
     {
         $this->exe = $exe;
+
+        return $this;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

@@ -15,16 +15,20 @@ if ($renderRegion) {
     $_template['show_region'] = true;
 
     $em = Database::getManager();
-    $logRepository = $em->getRepository(Log::class);
+
+    $existingExeId = (int) ChamiloSession::read('exe_id');
+    $trackingExercise = null;
+
+    if ($existingExeId) {
+        $trackingExercise = $em->find(TrackEExercises::class, $existingExeId);
+    }
 
     $_template['sec_token'] = Security::get_token('exercisefocused');
 
     if ('true' === $plugin->get(ExerciseFocusedPlugin::SETTING_ENABLE_OUTFOCUSED_LIMIT)) {
-        $existingExeId = (int) ChamiloSession::read('exe_id');
+        $logRepository = $em->getRepository(Log::class);
 
-        if ($existingExeId) {
-            $trackingExercise = $em->find(TrackEExercises::class, $existingExeId);
-
+        if ($trackingExercise) {
             $countOutfocused = $logRepository->countByActionInExe($trackingExercise, Log::TYPE_OUTFOCUSED);
         } else {
             $countOutfocused = 0;
@@ -32,5 +36,13 @@ if ($renderRegion) {
 
         $_template['count_outfocused'] = $countOutfocused;
         $_template['remaining_outfocused'] = (int) $plugin->get(ExerciseFocusedPlugin::SETTING_OUTFOCUSED_LIMIT) - $countOutfocused;
+    }
+
+    if ($trackingExercise) {
+        $exercise = new Exercise($trackingExercise->getCId());
+
+        if ($exercise->read($trackingExercise->getExeExoId())) {
+            $_template['exercise_type'] = (int) $exercise->selectType();
+        }
     }
 }

@@ -193,13 +193,12 @@ trait ReportingFilterTrait
 
     protected function createTable(array $tableData): HTML_Table
     {
-        $monitoringPluginEnabled = ExerciseMonitoringPlugin::create()->isEnabled(true);
+        $pluginMonitoring = ExerciseMonitoringPlugin::create();
+        $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled(true);
 
         $detailIcon = Display::return_icon('forum_listview.png', get_lang('Detail'));
-        $webcamIcon = Display::return_icon('webcam.png', $this->plugin->get_lang('MonitoringDetail'));
 
         $urlDetail = api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/detail.php?'.api_get_cidreq().'&';
-        $monitoringDetail = api_get_path(WEB_PLUGIN_PATH).'exercisemonitoring/pages/detail.php?'.api_get_cidreq().'&';
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Username'));
@@ -224,16 +223,8 @@ trait ReportingFilterTrait
                 ]
             );
 
-            if ($monitoringPluginEnabled) {
-                $url .= Display::url(
-                    $webcamIcon,
-                    $monitoringDetail.http_build_query(['id' => $result['id']]),
-                    [
-                        'class' => 'ajax',
-                        'data-title' => get_lang('MonitoringDetail'),
-                        'data-size' => 'lg',
-                    ]
-                );
+            if ($isPluginMonitoringEnabled) {
+                $url .= $pluginMonitoring->generateDetailLink((int) $result['id']);
             }
 
             $table->setCellContents($row, 0, $result['username']);

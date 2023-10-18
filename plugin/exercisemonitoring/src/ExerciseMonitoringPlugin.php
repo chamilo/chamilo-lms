@@ -104,4 +104,23 @@ class ExerciseMonitoringPlugin extends Plugin
 
         return "$webPath/admin.php";
     }
+
+    public function generateDetailLink(int $id): string
+    {
+        $title = $this->get_lang('ExerciseMonitored');
+        $webcamIcon = Display::return_icon('webcam.png', $title);
+
+        $monitoringDetailUrl = api_get_path(WEB_PLUGIN_PATH).'exercisemonitoring/pages/detail.php?'.api_get_cidreq()
+            .'&'.http_build_query(['id' => $id]);
+
+        return Display::url(
+            $webcamIcon,
+            $monitoringDetailUrl,
+            [
+                'class' => 'ajax',
+                'data-title' => $title,
+                'data-size' => 'lg',
+            ]
+        );
+    }
 }

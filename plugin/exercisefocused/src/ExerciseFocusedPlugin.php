@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -175,6 +176,21 @@ class ExerciseFocusedPlugin extends Plugin
         );
 
         return $values && (bool) $values['value'];
+    }
+
+    public function calculateMotive(int $outfocusedLimitCount, int $timeLimitCount)
+    {
+        $motive = get_lang('ExerciseFinished');
+
+        if ($outfocusedLimitCount > 0) {
+            $motive = $this->plugin->get_lang('MaxOutfocusedReached');
+        }
+
+        if ($timeLimitCount > 0) {
+            $motive = $this->plugin->get_lang('TimeLimitReached');
+        }
+
+        return $motive;
     }
 
     protected function createLinkToCourseTool($name, $courseId, $iconName = null, $link = null, $sessionId = 0, $category = 'plugin'): ?CTool

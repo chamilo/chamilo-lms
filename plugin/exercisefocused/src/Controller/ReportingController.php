@@ -71,16 +71,27 @@ class ReportingController extends BaseController
         $form->addHidden('id', $exercise->getId());
 
         $tableHtml = '';
+        $actions = '';
 
         if ($form->validate()) {
             $formValues = $form->exportValues();
+
+            $action = Display::url(
+                Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/export.php?'.http_build_query($formValues)
+            );
+
+            $actions = Display::toolbarAction(
+                'em-actions',
+                [$action]
+            );
 
             $results = $this->findResults($formValues);
 
             $tableHtml = $this->createTable($results)->toHtml();
         }
 
-        return $form->returnForm().$tableHtml;
+        return $form->returnForm().$actions.$tableHtml;
     }
 
     private function generateTabSampling(CQuiz $exercise): string

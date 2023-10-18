@@ -16,4 +16,13 @@ class LogRepository extends EntityRepository
             'action' => $action,
         ]);
     }
+
+    public function countByActionAndLevel(TrackEExercises $exe, string $action, int $level): int
+    {
+        return $this->count([
+            'exe' => $exe,
+            'action' => $action,
+            'level' => $level,
+        ]);
+    }
 }

@@ -1936,7 +1936,7 @@ HOTSPOT;
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
             FROM $TBL_TRACK_EXERCICES ttte
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
-            ON (ttte.exe_id = tr.exe_id)
+            ON (ttte.exe_id = tr.exe_id) AND tr.author > 0
             WHERE
                 c_id = $courseId AND
                 exe_exo_id = $exercise_id
@@ -5092,17 +5092,15 @@ EOT;
      *
      * @param int $attemptId
      * @param int $questionId
-     * @param int $exerciseId
      *
      * @return string
      */
-    public static function getOralFeedbackForm($attemptId, $questionId, $exerciseId)
+    public static function getOralFeedbackForm($attemptId, $questionId)
     {
         $view = new Template('', false, false, false, false, false, false);
         $view->assign('type', Asset::EXERCISE_FEEDBACK);
         $view->assign('question_id', $questionId);
-        $view->assign('attempt', $attemptId);
-        $view->assign('t_exercise_id', $exerciseId);
+        $view->assign('t_exercise_id', $attemptId);
         $template = $view->get_template('exercise/oral_expression.html.twig');
 
         return $view->fetch($template);

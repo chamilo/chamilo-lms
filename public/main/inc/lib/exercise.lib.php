@@ -5137,8 +5137,12 @@ EOT;
         foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
             $html .= Display::tag(
                 'audio',
-                null,
-                ['src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset())]
+                '',
+                [
+                    'src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset()),
+                    'controls' => '',
+                ]
+
             );
         }
 

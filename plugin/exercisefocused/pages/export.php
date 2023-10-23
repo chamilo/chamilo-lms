@@ -151,7 +151,6 @@ foreach ($results as $result) {
             $data[] = $row;
         }
     } elseif (ALL_ON_ONE_PAGE === $quizType) {
-
     }
 
     $data[] = [];

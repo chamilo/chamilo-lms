@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Doctrine\ORM\Tools\SchemaTool;

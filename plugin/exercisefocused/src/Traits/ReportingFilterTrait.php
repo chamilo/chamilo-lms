@@ -280,6 +280,10 @@ trait ReportingFilterTrait
             'exe_id'
         );
 
+        if (!$exeIdList) {
+            return [];
+        }
+
         $qb = $this->em->createQueryBuilder();
         $qb
             ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username')

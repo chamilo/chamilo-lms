@@ -89,7 +89,6 @@ class LogController extends BaseController
 
         $json = [
             'sec_token' => Security::get_token('exercisefocused'),
-            'type' => (int) $exercise->selectType(),
             'remainingOutfocused' => $remainingOutfocused,
         ];
 

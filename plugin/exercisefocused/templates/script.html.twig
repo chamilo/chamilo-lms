@@ -34,16 +34,16 @@
             var remainingOutfocused = {{ exercisefocused.remaining_outfocused }};
         {% endif %}
 
-        function finishExam(examType) {
+        function finishExam() {
             $(window).off("blur", onBlur)
             $(window).off("focus", onFocus)
 
-            if (1 === examType) {
+            {% if ALL_ON_ONE_PAGE %}
                 save_now_all('validate');
-            } else if (2 === examType) {
+            {% elseif ONE_PER_PAGE %}
                 window.quizTimeEnding = true;
                 $('[name="save_now"]').trigger('click');
-            }
+            {% endif %}
         }
 
         {% if enable_time_limit %}
@@ -59,8 +59,8 @@
                 if (remainingTime < 0) {
                     clearInterval(countdownInterval);
 
-                    sendAction('time_limit', function (response) {
-                        finishExam(response.type)
+                    sendAction('time_limit', function () {
+                        finishExam()
                     });
                 }
             }
@@ -102,8 +102,8 @@
                     $outfocusedLimitBlock.find('p').text("{{ 'OutfocusedLimitExceeded'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}");
                     $timeLimitBlock.hide();
 
-                    sendAction('outfocused_limit', function (response) {
-                        finishExam(response.type)
+                    sendAction('outfocused_limit', function () {
+                        finishExam()
                     });
 
                     return;

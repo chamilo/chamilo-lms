@@ -183,11 +183,11 @@ class ExerciseFocusedPlugin extends Plugin
         $motive = get_lang('ExerciseFinished');
 
         if ($outfocusedLimitCount > 0) {
-            $motive = $this->plugin->get_lang('MaxOutfocusedReached');
+            $motive = $this->get_lang('MaxOutfocusedReached');
         }
 
         if ($timeLimitCount > 0) {
-            $motive = $this->plugin->get_lang('TimeLimitReached');
+            $motive = $this->get_lang('TimeLimitReached');
         }
 
         return $motive;

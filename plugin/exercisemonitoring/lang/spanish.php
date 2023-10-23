@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-$strings['plugin_title'] = "Exercise monitoring";
-$strings['plugin_comment'] = "Random photo taking mechanism during an exercise";
+$strings['plugin_title'] = "Monitoreo de Ejercicios";
+$strings['plugin_comment'] = "Mecanismo de toma de fotos aleatorias durante un ejercicio";
 
 $strings['tool_enable'] = "Enable tool";
 

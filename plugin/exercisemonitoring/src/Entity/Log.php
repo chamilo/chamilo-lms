@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository")
  * @ORM\Table(name="plugin_exercisemonitoring_log")
  */
 class Log

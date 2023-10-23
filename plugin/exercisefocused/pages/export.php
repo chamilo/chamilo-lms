@@ -5,7 +5,8 @@
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
+use Chamilo\PluginBundle\ExerciseFocused\Entity\Log as FocusedLog;
+use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log as MonitoringLog;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
@@ -20,10 +21,13 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $plugin = ExerciseFocusedPlugin::create();
+$monitoringPlugin = ExerciseMonitoringPlugin::create();
+$monitoringPluginIsEnabled = $monitoringPlugin->isEnabled(true);
 $request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
-$logRepository = $em->getRepository(Log::class);
+$focusedLogRepository = $em->getRepository(FocusedLog::class);
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
+$monitoringLogRepository = $em->getRepository(MonitoringLog::class);
 
 if (!$plugin->isEnabled(true)) {
     api_not_allowed(true);
@@ -41,8 +45,8 @@ foreach ($results as $result) {
     $trackExe = $result['exe'];
     $user = api_get_user_entity($trackExe->getExeUserId());
 
-    $outfocusedLimitCount = $logRepository->countByActionInExe($trackExe, Log::TYPE_OUTFOCUSED_LIMIT);
-    $timeLimitCount = $logRepository->countByActionInExe($trackExe, Log::TYPE_TIME_LIMIT);
+    $outfocusedLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_OUTFOCUSED_LIMIT);
+    $timeLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_TIME_LIMIT);
 
     $exercise = new Exercise($trackExe->getCId());
     $exercise->read($trackExe->getExeExoId());
@@ -84,7 +88,7 @@ foreach ($results as $result) {
     if (ONE_PER_PAGE === $quizType) {
         $questionList = explode(',', $trackExe->getDataTracking());
 
-        $data[] = [
+        $row = [
             get_lang('Level'),
             get_lang('DateExo'),
             get_lang('Score'),
@@ -92,11 +96,21 @@ foreach ($results as $result) {
             $plugin->get_lang('Returns'),
         ];
 
+        if ($monitoringPluginIsEnabled) {
+            $row[] = $monitoringPlugin->get_lang('Snapshots');
+        }
+
+        $data[] = $row;
+
         foreach ($questionList as $idx => $questionId) {
             $attempt = $attempsRepository->findOneBy(
                 ['exeId' => $trackExe->getExeId(), 'questionId' => $questionId],
                 ['tms' => 'DESC']
             );
+
+            if (!$attempt) {
+                continue;
+            }
 
             $result = $exercise->manage_answer(
                 $trackExe->getExeId(),
@@ -110,23 +124,41 @@ foreach ($results as $result) {
                 $exercise->selectPropagateNeg()
             );
 
-            $data[] = [
+            $row = [
                 get_lang('QuestionNumber').' '.($idx + 1),
                 api_get_local_time($attempt->getTms()),
                 $result['score'].' / '.$result['weight'],
-                $logRepository->countByActionAndLevel($trackExe, Log::TYPE_OUTFOCUSED, $questionId),
-                $logRepository->countByActionAndLevel($trackExe, Log::TYPE_RETURN, $questionId),
+                $focusedLogRepository->countByActionAndLevel($trackExe, FocusedLog::TYPE_OUTFOCUSED, $questionId),
+                $focusedLogRepository->countByActionAndLevel($trackExe, FocusedLog::TYPE_RETURN, $questionId),
             ];
+
+            if ($monitoringPluginIsEnabled) {
+                $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($questionId, $trackExe);
+                $snapshotList = [];
+
+                /** @var MonitoringLog $logByQuestion */
+                foreach ($monitoringLogsByQuestion as $logByQuestion) {
+                    $snapshotUrl = ExerciseMonitoringPlugin::generateSnapshotUrl(
+                        $user->getId(),
+                        $logByQuestion->getImageFilename()
+                    );
+                    $snapshotList[] = api_get_local_time($logByQuestion->getCreatedAt()).' '.$snapshotUrl;
+                }
+
+                $row[] = implode(PHP_EOL, $snapshotList);
+            }
+
+            $data[] = $row;
         }
     } elseif (ALL_ON_ONE_PAGE === $quizType) {
 
     }
 
     $data[] = [];
+    $data[] = [];
 }
 
 //var_dump($data);
-//Export::export_table_xls_html($data);
 Export::arrayToXls($data);
 
 function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array

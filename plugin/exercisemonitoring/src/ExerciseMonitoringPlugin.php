@@ -123,4 +123,11 @@ class ExerciseMonitoringPlugin extends Plugin
             ]
         );
     }
+
+    public static function generateSnapshotUrl(int $userId, string $imageFileName): string
+    {
+        $pluginDirName = api_get_path(WEB_UPLOAD_PATH).'plugins/exercisemonitoring';
+
+        return $pluginDirName.'/'.$userId.'/'.$imageFileName;
+    }
 }

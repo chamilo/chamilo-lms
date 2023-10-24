@@ -356,6 +356,7 @@ $tools = [
         'report=users_online' => get_lang('UsersOnline'),
         'report=invoicing' => get_lang('InvoicingByAccessUrl'),
         'report=duplicated_users' => get_lang('DuplicatedUsers'),
+        'report=duplicated_users_by_mail' => get_lang('DuplicatedUsersByMail'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -1859,7 +1860,7 @@ switch ($report) {
         $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
 
         $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
-        $table = Statistics::returnDuplicatedUsersTable($additionalExtraFieldsInfo);
+        $table = Statistics::returnDuplicatedUsersTable('name', $additionalExtraFieldsInfo);
 
         if (isset($_GET['action_table'])) {
             $data = $table->toArray(true, true);
@@ -1877,6 +1878,37 @@ switch ($report) {
 
         $content .= Display::page_subheader2(get_lang('DuplicatedUsers'));
         $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname'));
+
+        $content .= $frmFields;
+        $content .= $table->return_table();
+        break;
+    case 'duplicated_users_by_mail':
+        $interbreadcrumb[] = [
+            'name' => $tool_name,
+            'url' => 'index.php',
+        ];
+
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+        $table = Statistics::returnDuplicatedUsersTable('email', $additionalExtraFieldsInfo);
+
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+
+            exit;
+        }
+
+        $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
+
+        $content .= Display::page_subheader2(get_lang('DuplicatedUsersByMail'));
+        $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameEmail'));
 
         $content .= $frmFields;
         $content .= $table->return_table();

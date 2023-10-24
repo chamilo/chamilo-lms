@@ -1788,10 +1788,18 @@ class Statistics
 
     /**
      * Return duplicate users at a SortableTableFromArray object
+     * @param string $type The type of duplication we are checking for ('name' or 'email')
      */
-    public static function returnDuplicatedUsersTable(array $additionalExtraFieldsInfo): SortableTableFromArray
+    public static function returnDuplicatedUsersTable(
+        string $type = 'name',
+        array $additionalExtraFieldsInfo
+    ): SortableTableFromArray
     {
-        $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
+        if ($type == 'email') {
+            $usersInfo = Statistics::getDuplicatedUserMails($additionalExtraFieldsInfo);
+        } else {
+            $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
+        }
 
         $column = 0;
 
@@ -1802,6 +1810,9 @@ class Statistics
         ]);
         $table->set_header($column++, get_lang('Id'));
 
+        if ($type == 'email') {
+            $table->set_header($column++, get_lang('Email'));
+        }
         if (api_is_western_name_order()) {
             $table->set_header($column++, get_lang('FirstName'));
             $table->set_header($column++, get_lang('LastName'));
@@ -1809,8 +1820,10 @@ class Statistics
             $table->set_header($column++, get_lang('LastName'));
             $table->set_header($column++, get_lang('FirstName'));
         }
+        if ($type == 'name') {
+            $table->set_header($column++, get_lang('Email'));
+        }
 
-        $table->set_header($column++, get_lang('Email'));
         $table->set_header($column++, get_lang('RegistrationDate'));
         $table->set_column_filter(
             $column - 1,
@@ -1955,6 +1968,87 @@ class Statistics
                 }
 
                 $studentInfo[] = $rowUser['email'];
+                $studentInfo[] = $rowUser['registration_date'];
+                $studentInfo[] = Tracking::get_first_connection_date(
+                    $studentId,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = Tracking::get_last_connection_date(
+                    $studentId,
+                    true,
+                    false,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = $rowUser['status'];
+                $studentInfo[] = Tracking::count_course_per_student($studentId);
+                $studentInfo[] = Tracking::countSessionsPerStudent($studentId);
+
+                foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+                    $extraValue = $objExtraValue->get_values_by_handler_and_field_id($studentId, $fieldInfo['id'], true);
+                    $studentInfo[] = $extraValue['value'] ?? null;
+                }
+
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
+
+                $usersInfo[] = $studentInfo;
+            }
+        }
+
+        return $usersInfo;
+    }
+
+    /**
+     * Get a list of duplicated user emails
+     * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
+     * @return array
+     */
+    private static function getDuplicatedUserMails(array $additionalExtraFieldsInfo): array
+    {
+        $sql = "SELECT email, COUNT(*) as count
+            FROM user
+            GROUP BY email
+            HAVING count > 1
+            ORDER BY email"
+        ;
+
+        $result = Database::query($sql);
+
+        if (1 > Database::num_rows($result)) {
+            return [];
+        }
+
+        $usersInfo = [];
+
+        while ($rowStat = Database::fetch_assoc($result)) {
+            $email = Database::escape_string($rowStat['email']);
+            $subsql = "SELECT id, firstname, lastname, registration_date, status, active
+                FROM user WHERE email = '$email'"
+            ;
+
+            $subResult = Database::query($subsql);
+
+            if (1 > Database::num_rows($subResult)) {
+                continue;
+            }
+
+            $objExtraValue = new ExtraFieldValue('user');
+
+            while ($rowUser = Database::fetch_assoc($subResult)) {
+                $studentId = $rowUser['id'];
+
+                $studentInfo = [];
+                $studentInfo[] = $rowUser['id'];
+
+                $studentInfo[] = $rowStat['email'];
+                if (api_is_western_name_order()) {
+                    $studentInfo[] = $rowUser['firstname'];
+                    $studentInfo[] = $rowUser['lastname'];
+                } else {
+                    $studentInfo[] = $rowUser['lastname'];
+                    $studentInfo[] = $rowUser['firstname'];
+                }
+
                 $studentInfo[] = $rowUser['registration_date'];
                 $studentInfo[] = Tracking::get_first_connection_date(
                     $studentId,

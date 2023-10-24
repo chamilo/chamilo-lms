@@ -16,8 +16,12 @@ Currently, this plugin is only integrated into:
 
 ### OpenAI/ChatGPT
 
-The plugin, created in early 2023, currently only supports OpenAI's ChatGPT API. 
-Create an account at https://beta.openai.com/signup, then generate a secret key at https://beta.openai.com/account/api-keys and fill it inside the key field in the plugin configuration page.
+The plugin, created in early 2023, currently only supports OpenAI's ChatGPT API.
+Create an account at https://platform.openai.com/signup (if you already have an API account, go 
+to https://platform.openai.com/login), then generate a secret key at https://platform.openai.com/account/api-keys 
+or click on "Personal" -> "View API keys".
+Click the "Create new secret key" button, copy the key and use it to fill the "API key" field on the 
+plugin configuration page.
 
 # Changelog
 

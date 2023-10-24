@@ -822,7 +822,7 @@ if ($allowSocialTool) {
  */
 function is_platform_authentication()
 {
-    $tabUserInfo = api_get_user_info();
+    $tabUserInfo = api_get_user_info(api_get_user_id());
 
     return $tabUserInfo['auth_source'] == PLATFORM_AUTH_SOURCE;
 }

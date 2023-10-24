@@ -1917,8 +1917,10 @@ class Statistics
         $usersInfo = [];
 
         while ($rowStat = Database::fetch_assoc($result)) {
+            $firstname = Database::escape_string($rowStat['firstname']);
+            $lastname = Database::escape_string($rowStat['lastname']);
             $subsql = "SELECT id, email, registration_date, status, active
-                FROM user WHERE firstname = '{$rowStat['firstname']}' AND lastname = '{$rowStat['lastname']}'"
+                FROM user WHERE firstname = '$firstname' AND lastname = '$lastname'"
             ;
 
             $subResult = Database::query($subsql);

@@ -1822,16 +1822,24 @@ class Link extends Model
         $client = new Client(['defaults' => $defaults]);
 
         try {
-            $response = $client->get($url);
+            $responseIpv6 = $client->get($url);
 
-            if (200 !== $response->getStatusCode()) {
-                return false;
+            if (200 === $responseIpv6->getStatusCode()) {
+                return true;
             }
 
-            return true;
         } catch (Exception $e) {
-            return false;
+            try {
+                $responseIpv4 = $client->request('GET', $url, ['force_ip_resolve' => 'v4']);
+
+                if (200 === $responseIpv4->getStatusCode()) {
+                    return true;
+                }
+            } catch (Exception $e) {
+                return false;
+            }
         }
+        return false;
     }
 
     /**

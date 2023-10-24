@@ -18,7 +18,7 @@ $strings['percentage_sampling'] = "Percentage of sampling attempts";
 $strings['percentage_sampling_help'] = "A percentage of attempts will be selected for random review";
 
 $strings['ReportByAttempts'] = "Exercise focused: Report by attempts";
-$strings['YouHaveLeftTheExercise'] = "Careful! We detect that you have left the screen.<br>Please stay within the exam";
+$strings['YouHaveLeftTheExercise'] = "Careful! We detect that you have left the exam window.<br>You must return and complete it, to prevent your exam from being cancelled.";
 $strings['YouHaveXTimeToReturn'] = "You have <span class=\"h3 text-danger\" id=\"time-limit-target\">%s</span> seconds to return";
 $strings['YouAreAllowedXOutfocused'] = "You are allowed <span class=\"h3 text-danger\" id=\"outfocused-limit-target\">%d</span> outfocused";
 $strings['OutfocusedLimitExceeded'] = "You have exceeded the allowed limit of outfocused";
@@ -33,3 +33,4 @@ $strings['Motive'] = "Motive";
 $strings['AlertBeforeLeaving'] = "Please stay within the exam";
 $strings['RandomSampling'] = "Random sampling";
 $strings['WindowTitleOutfocused'] = 'Stay within the exam!';
+$strings['LevelReached'] = 'Level reached';

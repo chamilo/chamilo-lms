@@ -10,9 +10,9 @@ $strings['tool_enable'] = "Enable tool";
 $strings['ExerciseMonitored'] = "Ejercicio monitoreado";
 $strings['Retry'] = "Reintentar";
 $strings['IdDocumentSnapshot'] = "Instantánea del DNI o documento de identidad";
-$strings['LearnerSnapshot'] = "Foto del estudiante";
+$strings['LearnerSnapshot'] = "Instantánea del estudiante";
 
-$strings['ImageIdDocumentCameraInstructions'] = "Ubica tu DNI o documento de identidad frente / delante a la cámara. Una vez que veas la foto dentro del cuadro de la pantalla, presiona el botón <i>Capturar</i> o barra de espacio de tu teclado";
-$strings['ImageLearnerCameraInstructions'] = 'Ubica tu rostro delante de la cámara. Una vez que veas la foto dentro del cuadro de la pantalla, presiona el botón <i>Capturar</i> o barra de espacio de tu teclado';
+$strings['ImageIdDocumentCameraInstructions'] = "Coloca tu DNI o documento de identidad frente a la cámara y ubícalo en el recuadro marcado. Dale clic al botón <i>Capturar</i> o presiona la barra de espacio de tu teclado.";
+$strings['ImageLearnerCameraInstructions'] = "Coloca tu rostro frente a la cámara y ubícalo dentro del cículo marcado. Dale click al botón <i>Capturar</i> o presiona la barra de espacio de tu teclado";
 
 $strings['Snapshots'] = "Capturas";

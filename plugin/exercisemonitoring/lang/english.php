@@ -12,7 +12,7 @@ $strings['Retry'] = "Retry";
 $strings['IdDocumentSnapshot'] = "Snapshot of the ID or identification document";
 $strings['LearnerSnapshot'] = "Snapshot of the student";
 
-$strings['ImageIdDocumentCameraInstructions'] = "Show / Place / Situate / Put / Accommodate / Approximate your ID or identification document in front of the camera. Once you see the photo inside the screen box, press the Snapshot button or space bar on your keyboard";
-$strings['ImageLearnerCameraInstructions'] = 'Show / Place / Situate / Put / Accommodate / Approximate your face in front of the camera. Once you see the photo inside the screen box, press the Snapshot button or space bar on your keyboard';
+$strings['ImageIdDocumentCameraInstructions'] = "Place your ID or identification document in front of the camera and place it in the marked box. Click the <i>Capture</i> button or press the space bar on your keyboard.";
+$strings['ImageLearnerCameraInstructions'] = "Place your face in front of the camera and place it within the marked circle. Click the <i>Capture</i> button or press the space bar on your keyboard";
 
 $strings['Snapshots'] = "Snapshots";

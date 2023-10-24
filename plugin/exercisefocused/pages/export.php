@@ -89,7 +89,7 @@ foreach ($results as $result) {
         $questionList = explode(',', $trackExe->getDataTracking());
 
         $row = [
-            get_lang('Level'),
+            $plugin->get_lang('LevelReached'),
             get_lang('DateExo'),
             get_lang('Score'),
             $plugin->get_lang('Outfocused'),

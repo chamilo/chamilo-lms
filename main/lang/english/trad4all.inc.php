@@ -9037,4 +9037,6 @@ $EmailUsedTwiceInImportFile = "This email is already in use by another user in t
 $NotificationInYourForums = "You have new posts in the following forums of your courses.";
 $ExtraFieldIdComment = "This identifier is internal to the system and should not contain spaces nor special characters. It can be used from plugins as well, to filter the elements it is attached to.";
 $IncludeLastLogin = "Include last login";
+$DuplicatedUsersByMail = "Duplicated users by e-mail";
+$ThisReportOnlyListsUsersThatHaveTheSameEmail = "This report only lists users that have the same email.";
 ?>

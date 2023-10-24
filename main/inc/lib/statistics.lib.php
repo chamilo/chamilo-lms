@@ -1465,7 +1465,7 @@ class Statistics
     }
 
     /**
-     * It displays learnpath results from lti provider.
+     * Display learnpath results from lti provider.
      *
      * @return false|string
      */
@@ -1610,7 +1610,7 @@ class Statistics
         return $content;
     }
 
-    public static function getBossTable($bossId)
+    public static function getBossTable($bossId): string
     {
         $students = UserManager::getUsersFollowedByStudentBoss($bossId);
 
@@ -1646,12 +1646,13 @@ class Statistics
     }
 
     /**
-     * @param string $startDate
-     * @param string $endDate
+     * Return a list of logins by date
+     * @param string $startDate Start date in YYYY-MM-DD format
+     * @param string $endDate End date in YYYY-MM-DD format
      *
      * @return array
      */
-    public static function getLoginsByDate($startDate, $endDate)
+    public static function getLoginsByDate($startDate, $endDate): array
     {
         /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
@@ -1785,6 +1786,9 @@ class Statistics
         return $results;
     }
 
+    /**
+     * Return duplicate users at a SortableTableFromArray object
+     */
     public static function returnDuplicatedUsersTable(array $additionalExtraFieldsInfo): SortableTableFromArray
     {
         $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
@@ -1874,12 +1878,12 @@ class Statistics
     /**
      * It gets lti learnpath results by date.
      *
-     * @param $startDate
-     * @param $endDate
+     * @param string $startDate Start date in YYYY-MM-DD format
+     * @param string $endDate End date in YYYY-MM-DD format
      *
      * @return array
      */
-    private static function getLtiLearningPathByDate($startDate, $endDate)
+    private static function getLtiLearningPathByDate(string $startDate, string $endDate): array
     {
         /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
@@ -1899,6 +1903,11 @@ class Statistics
         return $result;
     }
 
+    /**
+     * Get a list of users duplicated (firstname and lastname are both the same)
+     * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
+     * @return array
+     */
     private static function getDuplicatedUsers(array $additionalExtraFieldsInfo): array
     {
         $sql = "SELECT firstname, lastname, COUNT(*) as count

@@ -22,6 +22,10 @@ if (!empty($_GET['error']) && !empty($_GET['state'])) {
 
 $plugin = OAuth2::create();
 
+if ('true' !== $plugin->get(OAuth2::SETTING_ENABLE)) {
+    api_not_allowed(true);
+}
+
 $provider = $plugin->getProvider();
 
 // If we don't have an authorization code then get one

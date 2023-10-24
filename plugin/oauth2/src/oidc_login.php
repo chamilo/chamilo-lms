@@ -16,8 +16,10 @@ $loginHint = $httpRequest->get('login_hint');
 $targetLinkUri = $httpRequest->get('target_link_uri');
 
 try {
-    if ('true' !== $plugin->get(OAuth2::SETTING_ALLOW_THIRD_PARTY_LOGIN)) {
-        throw new Exception();
+    if ('true' !== $plugin->get(OAuth2::SETTING_ENABLE)
+        || 'true' !== $plugin->get(OAuth2::SETTING_ALLOW_THIRD_PARTY_LOGIN)
+    ) {
+        throw new Exception(get_lang('NotAllowedHere'));
     }
 
     if (empty($iss)) {

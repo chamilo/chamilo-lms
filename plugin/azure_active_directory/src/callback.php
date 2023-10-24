@@ -23,6 +23,10 @@ if (!empty($_GET['error']) && !empty($_GET['state'])) {
 
 $plugin = AzureActiveDirectory::create();
 
+if ('true' !== $plugin->get(AzureActiveDirectory::SETTING_ENABLE)) {
+    api_not_allowed(true);
+}
+
 $provider = $plugin->getProvider();
 
 if (!isset($_GET['code'])) {

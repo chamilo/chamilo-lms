@@ -250,7 +250,7 @@ class CourseBuilder
             $this->isXapiEnabled = $xapiEnabled;
         }
 
-        $h5pEnabled = \H5pImportPlugin::create()->isEnabled();
+        $h5pEnabled = false; // \H5pImportPlugin::create()->isEnabled();
         if ($h5pEnabled) {
             $this->tools_to_build[] = 'h5p_tool';
             $this->toolToName['h5p_tool'] = RESOURCE_H5P_TOOL;

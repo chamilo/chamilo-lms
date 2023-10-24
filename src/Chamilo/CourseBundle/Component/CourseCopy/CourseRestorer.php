@@ -161,7 +161,7 @@ class CourseRestorer
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
         $this->isXapiEnabled = \XApiPlugin::create()->isEnabled();
-        $this->isH5pEnabled = \H5pImportPlugin::create()->isEnabled();
+        $this->isH5pEnabled = false; //\H5pImportPlugin::create()->isEnabled();
 
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {

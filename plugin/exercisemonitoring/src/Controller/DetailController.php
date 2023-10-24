@@ -82,7 +82,7 @@ class DetailController
 
         if (ONE_PER_PAGE == $objExercise->selectType()) {
             $qb
-                ->addSelect(['qq.question'])
+                ->addSelect(['qq.question AS log_level'])
                 ->innerJoin(CQuizQuestion::class, 'qq', Join::WITH, 'l.level = qq.iid');
         }
 
@@ -131,11 +131,7 @@ class DetailController
             );
             $html .= '<div class="caption">';
             $html .= Display::tag('p', $date, ['class' => 'text-center']);
-
-            if (!empty($log['question'])) {
-                $html .= Display::tag('div', $log['question'], ['class' => 'text-center']);
-            }
-
+            $html .= Display::tag('div', $log['log_level'], ['class' => 'text-center']);
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';

@@ -6,16 +6,19 @@ namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
-use Display;
+use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
 use Exception;
+use Exercise;
 use HTML_Table;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class DetailController extends BaseController
 {
+    use DetailControllerTrait;
+
     /**
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
@@ -33,18 +36,19 @@ class DetailController extends BaseController
             throw new Exception();
         }
 
-        $session = api_get_session_entity($exe->getSessionId());
         $user = api_get_user_entity($exe->getExeUserId());
 
-        $subHeader = Display::page_subheader($user->getCompleteNameWithUsername());
-        $subHeader2 = $session ? Display::page_subheader2($session->getName()) : '';
+        $objExercise = new Exercise();
+        $objExercise->read($exe->getExeExoId());
 
         $logs = $this->logRepository->findBy(['exe' => $exe], ['updatedAt' => 'ASC']);
         $table = $this->getTable($logs);
 
-        return HttpResponse::create(
-            $subHeader.$subHeader2.$table->toHtml()
-        );
+        $content = $this->generateHeader($objExercise, $user, $exe)
+            .'<hr>'
+            .$table->toHtml();
+
+        return HttpResponse::create($content);
     }
 
     /**

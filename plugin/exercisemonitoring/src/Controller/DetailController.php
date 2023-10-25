@@ -7,7 +7,7 @@ namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Display;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class DetailController
 {
+    use DetailControllerTrait;
+
     /**
      * @var ExerciseMonitoringPlugin
      */
@@ -99,21 +101,6 @@ class DetailController
             .$this->generateSnapshotList($logs, $trackExe->getExeUserId());
 
         return HttpResponse::create($content);
-    }
-
-    private function generateHeader(Exercise $objExercise, User $student, TrackEExercises $trackExe): string
-    {
-        $startDate = api_get_local_time($trackExe->getStartDate(), null, null, true, true, true);
-        $endDate = api_get_local_time($trackExe->getExeDate(), null, null, true, true, true);
-
-        return Display::page_subheader2($objExercise->selectTitle())
-            .Display::tag('p', $student->getCompleteNameWithUsername(), ['class' => 'lead'])
-            .Display::tag(
-                'p',
-                sprintf(get_lang('QuizRemindStartDate'), $startDate)
-                    .sprintf(get_lang('QuizRemindEndDate'), $endDate)
-                    .sprintf(get_lang('QuizRemindDuration'), api_format_time($trackExe->getExeDuration()))
-            );
     }
 
     private function generateSnapshotList(array $logs, int $userId): string

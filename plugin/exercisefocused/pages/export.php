@@ -68,7 +68,7 @@ foreach ($results as $result) {
         $exercise->getUnformattedTitle(),
     ];
     $data[] = [
-        get_lang('Learner'),
+        get_lang('Student'),
         $user->getUsername(),
         $user->getFirstname(),
         $user->getLastname(),

@@ -1257,7 +1257,7 @@ class Wiki
                 if (self::check_notify_page($page) == 1) {
                     $notify_page = Display::return_icon(
                         'messagebox_info.png',
-                        get_lang('NotifyByEmail'),
+                        get_lang('CancelNotifyByEmail'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -1265,7 +1265,7 @@ class Wiki
                 } else {
                     $notify_page = Display::return_icon(
                         'mail.png',
-                        get_lang('CancelNotifyByEmail'),
+                        get_lang('NotifyByEmail'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -4105,7 +4105,7 @@ class Wiki
                 if (self::check_notify_discuss($page) == 1) {
                     $notify_disc = Display::return_icon(
                         'messagebox_info.png',
-                        get_lang('NotifyDiscussByEmail'),
+                        get_lang('CancelNotifyDiscussByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     );
@@ -4113,7 +4113,7 @@ class Wiki
                 } else {
                     $notify_disc = Display::return_icon(
                         'mail.png',
-                        get_lang('CancelNotifyDiscussByEmail'),
+                        get_lang('NotifyDiscussByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     );
@@ -4558,7 +4558,7 @@ class Wiki
             if (self::check_notify_all() == 1) {
                 $notify_all = Display::return_icon(
                         'messagebox_info.png',
-                        get_lang('NotifyByEmail'),
+                        get_lang('CancelNotifyByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     ).' '.get_lang('NotNotifyChanges');
@@ -4566,7 +4566,7 @@ class Wiki
             } else {
                 $notify_all = Display::return_icon(
                         'mail.png',
-                        get_lang('CancelNotifyByEmail'),
+                        get_lang('NotifyByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     ).' '.get_lang('NotifyChanges');

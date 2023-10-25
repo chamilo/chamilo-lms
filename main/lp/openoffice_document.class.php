@@ -81,6 +81,8 @@ abstract class OpenofficeDocument extends learnpath
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');
 
+            $changeDirectoryCmd = '';
+
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
                 $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
                 $class_path = $converter_path.';'.$converter_path.'/jodconverter-2.2.2.jar;'.$converter_path.'/jodconverter-cli-2.2.2.jar';
@@ -90,7 +92,8 @@ abstract class OpenofficeDocument extends learnpath
                 $converter_path = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 //$class_path = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
                 $class_path = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd '.$converter_path.' && java '.$class_path.' DokeosConverter';
+                $changeDirectoryCmd = "cd $converter_path && ";
+                $cmd = 'java '.$class_path.' DokeosConverter';
             }
 
             $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
@@ -106,7 +109,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
-            $cmd = escapeshellcmd($cmd);
+            $cmd = $changeDirectoryCmd.escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
 
             if ($return != 0) { // If the java application returns an error code.
@@ -200,6 +203,8 @@ abstract class OpenofficeDocument extends learnpath
         }
 
         if ($ppt2lpHost == 'localhost') {
+            $changeDirectoryCmd = '';
+
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
                 $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
                 $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
@@ -207,7 +212,8 @@ abstract class OpenofficeDocument extends learnpath
             } else {
                 $converterPath = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 $classPath = ' -Dfile.encoding=UTF-8 -jar jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd '.$converterPath.' && java '.$classPath.' ';
+                $changeDirectoryCmd = "cd $converterPath && ";
+                $cmd = 'java '.$classPath.' ';
             }
 
             $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
@@ -224,7 +230,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
-            $cmd = escapeshellcmd($cmd);
+            $cmd = $changeDirectoryCmd.escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
             // TODO: Chown is not working, root keep user privileges, should be www-data
             @chown($this->base_work_dir.'/'.$this->created_dir, 'www-data');

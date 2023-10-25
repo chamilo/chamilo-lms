@@ -18,7 +18,7 @@ $strings['percentage_sampling'] = "Porcentaje de intentos de muestreo";
 $strings['percentage_sampling_help'] = "Se seleccionará un porcentaje de intentos para una revisión aleatoria";
 
 $strings['ReportByAttempts'] = "Enfoque en el Ejercicio: Informe por intentos";
-$strings['YouHaveLeftTheExercise'] = "¡Cuidado! Detectamos que has abandonado la ventana del examen.<br>Debes retornar y culminarlo, para evitar que tu examen sea anulado.";
+$strings['YouHaveLeftTheExercise'] = "¡Cuidado! Detectamos que has abandonado la ventana del examen.<br><br>Debes retornar y culminarlo.";
 $strings['YouHaveXTimeToReturn'] = "Tienes <span class=\"h3 text-danger\" id=\"time-limit-target\">%s</span> segundos para regresar";
 $strings['YouAreAllowedXOutfocused'] = "Se te permite <span class=\"h3 text-danger\" id=\"outfocused-limit-target\">%d</span> desenfoques";
 $strings['OutfocusedLimitExceeded'] = "Has excedido el límite permitido de desenfoques";

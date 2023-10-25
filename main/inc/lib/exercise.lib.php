@@ -7164,8 +7164,8 @@ EOT;
         int $courseId,
         int $sessionId
     ) {
-        $cinfo = api_get_course_info_by_id($courseId);
-        $courseCode = $cinfo['code'];
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
         $cidReq = 'cidReq='.$courseCode.'&id_session='.$sessionId.'&gidReq=0&gradebook=0';
 
         $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
@@ -7190,10 +7190,17 @@ EOT;
         curl_close($ch);
     }
 
+    /**
+     * Export all results of all exercises to a ZIP file (including one zip for each exercise)
+     * @param int $sessionId
+     * @param int $courseId
+     * @param array $filterDates
+     * @return false|void
+     */
     public static function exportAllExercisesResultsZip(
         int $sessionId,
         int $courseId,
-        $filterDates = []
+        array $filterDates = []
     ) {
         $exercises = self::get_all_exercises_for_course_id(
             null,
@@ -7215,7 +7222,7 @@ EOT;
 
             foreach ($exercises as $exercise) {
                 $exerciseId = $exercise['iid'];
-                self::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, [], $exportFolderPath);
+                self::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, $filterDates, $exportFolderPath);
             }
 
             // If export folder is not empty will be zipped.
@@ -7245,11 +7252,20 @@ EOT;
         return false;
     }
 
+    /**
+     * Export all results of *one* exercise to a ZIP file containing individual PDFs
+     * @param int    $sessionId
+     * @param int    $courseId
+     * @param int    $exerciseId
+     * @param array  $filterDates
+     * @param string $mainPath
+     * @return false|void
+     */
     public static function exportExerciseAllResultsZip(
         int $sessionId,
         int $courseId,
         int $exerciseId,
-        $filterDates = [],
+        array $filterDates = [],
         string $mainPath = ''
     ) {
         $objExerciseTmp = new Exercise($courseId);

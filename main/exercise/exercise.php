@@ -668,7 +668,7 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
 
     $actionsLeft .= Display::url(
         Display::return_icon('export_pdf.png', get_lang('ExportAllExercisesAllResults'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=export_all_exercises_results'
+        api_get_path(WEB_CODE_PATH).'exercise/export/export_exercise_results.php?'.api_get_cidreq()
     );
 
     if ($limitTeacherAccess) {

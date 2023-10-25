@@ -5,6 +5,7 @@
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Doctrine\ORM\OptimisticLockException;
@@ -42,7 +43,7 @@ class DetailController extends BaseController
         $objExercise->read($exe->getExeExoId());
 
         $logs = $this->logRepository->findBy(['exe' => $exe], ['updatedAt' => 'ASC']);
-        $table = $this->getTable($logs);
+        $table = $this->getTable($objExercise, $logs);
 
         $content = $this->generateHeader($objExercise, $user, $exe)
             .'<hr>'
@@ -56,15 +57,27 @@ class DetailController extends BaseController
      *
      * @return void
      */
-    private function getTable(array $logs): HTML_Table
+    private function getTable(Exercise $objExercise, array $logs): HTML_Table
     {
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Action'));
         $table->setHeaderContents(0, 1, get_lang('DateTime'));
+        $table->setHeaderContents(0, 2, $this->plugin->get_lang('LevelReached'));
 
         $row = 1;
 
         foreach ($logs as $log) {
+            $strLevel = '';
+
+            if (ONE_PER_PAGE == $objExercise->selectType()) {
+                try {
+                    $question = $this->em->find(CQuizQuestion::class, $log->getLevel());
+
+                    $strLevel = $question->getQuestion();
+                } catch (Exception $exception) {
+                }
+            }
+
             $table->setCellContents(
                 $row,
                 0,
@@ -75,6 +88,7 @@ class DetailController extends BaseController
                 1,
                 api_get_local_time($log->getCreatedAt(), null, null, true, true, true)
             );
+            $table->setCellContents($row, 2, $strLevel);
 
             $row++;
         }

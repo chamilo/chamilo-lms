@@ -538,6 +538,7 @@ if (is_array($forumCategories)) {
                         }
 
                         $iconnotify = 'notification_mail_na.png';
+                        $notifyAltText = get_lang('NotifyMe');
                         $session_forum_notification = isset($_SESSION['forum_notification']['forum'])
                             ? $_SESSION['forum_notification']['forum']
                             : false;
@@ -545,13 +546,14 @@ if (is_array($forumCategories)) {
                         if (is_array($session_forum_notification)) {
                             if (in_array($forum['forum_id'], $session_forum_notification)) {
                                 $iconnotify = 'notification_mail.png';
+                                $notifyAltText = get_lang('CancelNotifyMe');
                             }
                         }
 
                         if ($hideNotifications == false && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
-                                .Display::return_icon($iconnotify, get_lang('NotifyMe'), null, ICON_SIZE_SMALL)
+                                .Display::return_icon($iconnotify, $notifyAltText, null, ICON_SIZE_SMALL)
                                 .'</a>';
                         }
                         $forumInfo['tools'] = $toolActions;

@@ -95,9 +95,12 @@ $csv_content = [];
 $js = "<script>
     // hide column and display the button to unhide it
     function foldup(id) {
-        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggleClass('hide');
-        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggleClass('hide');
-        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        var show = function () {\$(this).css('outline', '1px solid red')};
+        var hide = function () {\$(this).css('outline', '1px solid gree')};
+      
+        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggle();
+        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggle();
+        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggle();
     }
 
     // add the red cross on top of each column
@@ -763,20 +766,20 @@ if ($nbStudents > 0) {
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
     $getLangDisplayColumn = get_lang('Show column');
-    /*foreach ($headers as $header) {
+    foreach ($headers as $header) {
         $html .= Display::toolbarButton(
             $header,
             '#',
             'arrow-right',
-            'default',
+            'plain-outline',
             [
                 'title' => htmlentities("$getLangDisplayColumn \"$header\"", ENT_QUOTES),
-                'class' => 'hide',
+                'style' => 'display: none;',
                 'onclick' => "foldup($index); return false;",
             ]
         );
         $index++;
-    }*/
+    }
     $html .= '</div>';
 
     $html .= '<div id="reporting_table">';

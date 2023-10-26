@@ -52,7 +52,6 @@ import BaseButton from "../basecomponents/BaseButton.vue";
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
-import { defineEmits } from 'vue';
 
 const emit = defineEmits(['post-created']);
 const store = useStore();

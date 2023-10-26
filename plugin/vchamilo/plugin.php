@@ -73,7 +73,7 @@ $form->addElement(
 $form->addElement(
     'text',
     'archive_real_root',
-    [$plugin->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/archive/']
+    [$plugin->get_lang('archiverealroot'), 'Example: '.api_get_path(SYS_PATH).'var/cache/']
 );
 $form->addElement(
     'text',

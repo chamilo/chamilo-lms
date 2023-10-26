@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Filter\UserExtraFieldFilter;
 
 /**
  * Properties to use as filters. To search by a user extra field.
- * The API Resource must have a relation with User
+ * The API Resource must have a relation with User.
  */
 trait UserExtraFieldFilterTrait
 {

@@ -416,10 +416,8 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                     }
                 }
             }
-
         }
     }
-
 
     private function replaceURLParametersInContent($htmlContent, $connection)
     {
@@ -432,7 +430,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 $code = $matches[3]; // The 'code' is extracted from the captured URL.
 
                 $courseId = null;
-                $sql = "SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1";
+                $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
                 $stmt = $connection->executeQuery($sql, ['code' => $code]);
                 $course = $stmt->fetch();
 
@@ -440,7 +438,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                     $courseId = $course['id'];
                 }
 
-                if ($courseId === null) {
+                if (null === $courseId) {
                     return $matches[0]; // Complete original URL.
                 }
 
@@ -448,24 +446,22 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 $remainingParams = '';
                 if (!empty($matches[8])) {
                     $remainingParams = $matches[8];
-                    if ($remainingParams[0] !== '&') {
-                        $remainingParams = '&' . $remainingParams;
+                    if ('&' !== $remainingParams[0]) {
+                        $remainingParams = '&'.$remainingParams;
                     }
                 }
 
                 // Reconstructing the URL with the new courseId and adjusted parameters.
-                $newUrl = $matches[1] . '?cid=' . $courseId . '&sid=' . $matches[5] . '&gid=' . $matches[7] . $remainingParams;
-
-                return $newUrl; // Return the new URL.
+                return $matches[1].'?cid='.$courseId.'&sid='.$matches[5].'&gid='.$matches[7].$remainingParams;
+                  // Return the new URL.
             },
             $htmlContent
         );
 
-        if (preg_last_error() !== PREG_NO_ERROR) {
-            error_log('Error encountered in preg_replace_callback: ' . preg_last_error());
+        if (PREG_NO_ERROR !== preg_last_error()) {
+            error_log('Error encountered in preg_replace_callback: '.preg_last_error());
         }
 
         return $newContent;
     }
-
 }

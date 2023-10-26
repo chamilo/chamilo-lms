@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,10 +30,6 @@ class TrackEAttemptRecording
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
-    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false)]
-    private ?TrackEExercise $trackExercise = null;
-
     #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected int $questionId;
 
@@ -56,6 +51,10 @@ class TrackEAttemptRecording
 
     #[ORM\Column(name: 'answer', type: 'text', nullable: true)]
     protected ?string $answer;
+
+    #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false)]
+    private ?TrackEExercise $trackExercise = null;
 
     public function __construct()
     {

@@ -2361,7 +2361,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         return $this
             ->getFriendsWithMeByRelationType($relationType)
-            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend);
+            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
+        ;
     }
 
     /**

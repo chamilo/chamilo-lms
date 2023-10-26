@@ -110,7 +110,6 @@ class CQuizAnswer
         return $this;
     }
 
-    
     public function getPonderation(): float
     {
         return $this->ponderation;

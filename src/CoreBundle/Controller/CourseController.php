@@ -653,7 +653,7 @@ class CourseController extends ToolBaseController
             }
             $responseData['c_tool'] = [
                 'iid' => $ctool->getIid(),
-                'name' => $ctool->getName()
+                'name' => $ctool->getName(),
             ];
         }
 

@@ -1230,7 +1230,7 @@ class Wiki
                 if (self::check_visibility_page() == 1) {
                     $visibility_page = Display::return_icon(
                         'visible.png',
-                        get_lang('ShowPageExtra'),
+                        get_lang('Hide'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -1238,7 +1238,7 @@ class Wiki
                 } else {
                     $visibility_page = Display::return_icon(
                         'invisible.png',
-                        get_lang('HidePageExtra'),
+                        get_lang('Show'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -4051,7 +4051,7 @@ class Wiki
                         /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
                         $visibility_disc = Display::return_icon(
                             'visible.png',
-                            get_lang('ShowDiscussExtra'),
+                            get_lang('Hide'),
                             '',
                             ICON_SIZE_SMALL
                         );
@@ -4059,7 +4059,7 @@ class Wiki
                     } else {
                         $visibility_disc = Display::return_icon(
                             'invisible.png',
-                            get_lang('HideDiscussExtra'),
+                            get_lang('Show'),
                             '',
                             ICON_SIZE_SMALL
                         );

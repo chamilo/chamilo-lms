@@ -1233,7 +1233,7 @@ function return_visible_invisible_icon(
             }
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('visible.png', get_lang('MakeInvisible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == 0) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -1243,7 +1243,7 @@ function return_visible_invisible_icon(
             }
         }
         $html .= 'action=visible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('invisible.png', get_lang('MakeVisible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
     }
 
     return $html;

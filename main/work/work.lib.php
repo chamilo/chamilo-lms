@@ -1739,12 +1739,12 @@ function getWorkListTeacher(
 
             if ($visibility == 1) {
                 $icon = 'visible.png';
-                $text = get_lang('Visible');
+                $text = get_lang('Hide');
                 $action = 'invisible';
                 $class = '';
             } else {
                 $icon = 'invisible.png';
-                $text = get_lang('Invisible');
+                $text = get_lang('Show');
                 $action = 'visible';
                 $class = 'muted';
             }

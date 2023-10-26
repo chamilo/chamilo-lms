@@ -469,15 +469,17 @@ if ($action != 'add') {
                     }
 
                     $iconnotify = 'notification_mail_na.png';
+                    $notifyAltText = get_lang('NotifyMe');
                     if (is_array(isset($_SESSION['forum_notification']['forum']) ? $_SESSION['forum_notification']['forum'] : null)) {
                         if (in_array($forum['forum_id'], $_SESSION['forum_notification']['forum'])) {
                             $iconnotify = 'notification_mail.png';
+                            $notifyAltText = get_lang('CancelNotifyMe');
                         }
                     }
 
                     if (!api_is_anonymous() && $hideNotifications == false) {
                         $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$forumCategoryId.'&action=notify&content=forum&id='.$forum['forum_id'].'">'.
-                            Display::return_icon($iconnotify, get_lang('NotifyMe')).
+                            Display::return_icon($iconnotify, $notifyAltText).
                         '</a>';
                     }
                     $html .= '</div>';

@@ -627,12 +627,14 @@ if (is_array($threads)) {
                 }
             }
             $iconnotify = 'notification_mail_na.png';
+            $notifyAltText = get_lang('NotifyMe');
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
                 )
             ) {
                 if (in_array($row['thread_id'], $_SESSION['forum_notification']['thread'])) {
                     $iconnotify = 'notification_mail.png';
+                    $notifyAltText = get_lang('CancelNotifyMe');
                 }
             }
             $icon_liststd = 'user.png';
@@ -643,7 +645,7 @@ if (is_array($threads)) {
                 $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     .$my_forum
                     ."&action=notify&content=thread&id={$row['thread_id']}"
-                    .'">'.Display::return_icon($iconnotify, get_lang('NotifyMe')).'</a>';
+                    .'">'.Display::return_icon($iconnotify, $notifyAltText).'</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {

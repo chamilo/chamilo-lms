@@ -1046,7 +1046,7 @@ class Link extends Model
                     switch ($myrow['visibility']) {
                         case '1':
                             $urlVisibility .= '&action=invisible';
-                            $title = get_lang('MakeInvisible');
+                            $title = get_lang('Hide');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
@@ -1059,7 +1059,7 @@ class Link extends Model
                             break;
                         case '0':
                             $urlVisibility .= '&action=visible';
-                            $title = get_lang('MakeVisible');
+                            $title = get_lang('Show');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,

@@ -1230,7 +1230,7 @@ class Wiki
                 if (self::check_visibility_page() == 1) {
                     $visibility_page = Display::return_icon(
                         'visible.png',
-                        get_lang('ShowPageExtra'),
+                        get_lang('Hide'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -1238,7 +1238,7 @@ class Wiki
                 } else {
                     $visibility_page = Display::return_icon(
                         'invisible.png',
-                        get_lang('HidePageExtra'),
+                        get_lang('Show'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -1256,16 +1256,16 @@ class Wiki
             if (api_is_allowed_to_session_edit()) {
                 if (self::check_notify_page($page) == 1) {
                     $notify_page = Display::return_icon(
-                        'messagebox_info.png',
-                        get_lang('NotifyByEmail'),
+                        'notification_mail.png',
+                        get_lang('CancelNotifyMe'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
                     $lock_unlock_notify_page = 'unlocknotify';
                 } else {
                     $notify_page = Display::return_icon(
-                        'mail.png',
-                        get_lang('CancelNotifyByEmail'),
+                        'notification_mail_na.png',
+                        get_lang('NotifyMe'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -4051,7 +4051,7 @@ class Wiki
                         /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
                         $visibility_disc = Display::return_icon(
                             'visible.png',
-                            get_lang('ShowDiscussExtra'),
+                            get_lang('Hide'),
                             '',
                             ICON_SIZE_SMALL
                         );
@@ -4059,7 +4059,7 @@ class Wiki
                     } else {
                         $visibility_disc = Display::return_icon(
                             'invisible.png',
-                            get_lang('HideDiscussExtra'),
+                            get_lang('Show'),
                             '',
                             ICON_SIZE_SMALL
                         );
@@ -4104,16 +4104,16 @@ class Wiki
                 // discussion action: email notification
                 if (self::check_notify_discuss($page) == 1) {
                     $notify_disc = Display::return_icon(
-                        'messagebox_info.png',
-                        get_lang('NotifyDiscussByEmail'),
+                        'notification_mail.png',
+                        get_lang('CancelNotifyMe'),
                         '',
                         ICON_SIZE_SMALL
                     );
                     $lock_unlock_notify_disc = 'unlocknotifydisc';
                 } else {
                     $notify_disc = Display::return_icon(
-                        'mail.png',
-                        get_lang('CancelNotifyDiscussByEmail'),
+                        'notification_mail_na.png',
+                        get_lang('NotifyMe'),
                         '',
                         ICON_SIZE_SMALL
                     );
@@ -4558,7 +4558,7 @@ class Wiki
             if (self::check_notify_all() == 1) {
                 $notify_all = Display::return_icon(
                         'messagebox_info.png',
-                        get_lang('NotifyByEmail'),
+                        get_lang('CancelNotifyByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     ).' '.get_lang('NotNotifyChanges');
@@ -4566,7 +4566,7 @@ class Wiki
             } else {
                 $notify_all = Display::return_icon(
                         'mail.png',
-                        get_lang('CancelNotifyByEmail'),
+                        get_lang('NotifyByEmail'),
                         '',
                         ICON_SIZE_SMALL
                     ).' '.get_lang('NotifyChanges');

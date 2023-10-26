@@ -23,8 +23,8 @@ define('CHAMILO_INTERNAL', true);
 global $CLI_VCHAMILO_PRECHECK;
 
 $CLI_VCHAMILO_PRECHECK = true; // force first config to be minimal
-require(dirname(dirname(dirname(__DIR__))).'/main/inc/conf/configuration.php'); // get boot config
-require_once($_configuration['root_sys'].'plugin/vchamilo/cli/clilib.php'); // cli only functions
+require __DIR__.'/../../../app/config/configuration.php'; // get boot config
+require_once $_configuration['root_sys'].'plugin/vchamilo/cli/clilib.php'; // cli only functions
 
 // Ensure errors are well explained
 
@@ -65,7 +65,7 @@ if (!empty($options['host'])) {
     define('CLI_VCHAMILO_OVERRIDE', $options['host']);
 }
 // replay full config whenever. If vchamilo switch is armed, will switch now config
-require($_configuration['root_sys'].'main/inc/conf/configuration.php'); // do REALLY force configuration to play again, or the following call will not have config twicked (require_once)
+require $_configuration['root_sys'].'app/config/configuration.php'; // do REALLY force configuration to play again, or the following call will not have config tweaked (require_once)
 echo('Config check : playing for '.$_configuration['root_web']."\n");
 
 error_log('[chamilo][cronjob] Starting cron jobs as process '.getmypid());

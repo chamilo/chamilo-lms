@@ -27,7 +27,6 @@ $request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
 $focusedLogRepository = $em->getRepository(FocusedLog::class);
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
-$monitoringLogRepository = $em->getRepository(MonitoringLog::class);
 
 if (!$plugin->isEnabled(true)) {
     api_not_allowed(true);
@@ -85,22 +84,17 @@ foreach ($results as $result) {
     ];
     $data[] = [];
 
+    $data[] = [
+        $plugin->get_lang('LevelReached'),
+        get_lang('DateExo'),
+        get_lang('Score'),
+        $plugin->get_lang('Outfocused'),
+        $plugin->get_lang('Returns'),
+        $monitoringPluginIsEnabled ? $monitoringPlugin->get_lang('Snapshots') : '',
+    ];
+
     if (ONE_PER_PAGE === $quizType) {
         $questionList = explode(',', $trackExe->getDataTracking());
-
-        $row = [
-            $plugin->get_lang('LevelReached'),
-            get_lang('DateExo'),
-            get_lang('Score'),
-            $plugin->get_lang('Outfocused'),
-            $plugin->get_lang('Returns'),
-        ];
-
-        if ($monitoringPluginIsEnabled) {
-            $row[] = $monitoringPlugin->get_lang('Snapshots');
-        }
-
-        $data[] = $row;
 
         foreach ($questionList as $idx => $questionId) {
             $attempt = $attempsRepository->findOneBy(
@@ -130,23 +124,8 @@ foreach ($results as $result) {
                 $result['score'].' / '.$result['weight'],
                 $focusedLogRepository->countByActionAndLevel($trackExe, FocusedLog::TYPE_OUTFOCUSED, $questionId),
                 $focusedLogRepository->countByActionAndLevel($trackExe, FocusedLog::TYPE_RETURN, $questionId),
+                getSnapshotListForLevel($questionId, $trackExe),
             ];
-
-            if ($monitoringPluginIsEnabled) {
-                $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($questionId, $trackExe);
-                $snapshotList = [];
-
-                /** @var MonitoringLog $logByQuestion */
-                foreach ($monitoringLogsByQuestion as $logByQuestion) {
-                    $snapshotUrl = ExerciseMonitoringPlugin::generateSnapshotUrl(
-                        $user->getId(),
-                        $logByQuestion->getImageFilename()
-                    );
-                    $snapshotList[] = api_get_local_time($logByQuestion->getCreatedAt()).' '.$snapshotUrl;
-                }
-
-                $row[] = implode(PHP_EOL, $snapshotList);
-            }
 
             $data[] = $row;
         }
@@ -260,4 +239,30 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
     $query = $qb->getQuery();
 
     return $query->getResult();
+}
+
+function getSnapshotListForLevel(int $level, TrackEExercises $trackExe): string
+{
+    $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled(true);
+
+    if (!$monitoringPluginIsEnabled) {
+        return '';
+    }
+
+    $user = api_get_user_entity($trackExe->getExeUserId());
+    $monitoringLogRepository = Database::getManager()->getRepository(MonitoringLog::class);
+
+    $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($level, $trackExe);
+    $snapshotList = [];
+
+    /** @var MonitoringLog $logByQuestion */
+    foreach ($monitoringLogsByQuestion as $logByQuestion) {
+        $snapshotUrl = ExerciseMonitoringPlugin::generateSnapshotUrl(
+            $user->getId(),
+            $logByQuestion->getImageFilename()
+        );
+        $snapshotList[] = api_get_local_time($logByQuestion->getCreatedAt()).' '.$snapshotUrl;
+    }
+
+    return implode(PHP_EOL, $snapshotList);
 }

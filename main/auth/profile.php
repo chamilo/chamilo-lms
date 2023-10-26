@@ -325,6 +325,16 @@ if (!empty($links) &&
 }
 
 //    PASSWORD, if auth_source is platform
+$allow_users_to_change_email_with_no_password = true;
+if (is_platform_authentication() &&
+    api_get_setting('allow_users_to_change_email_with_no_password') == 'false'
+) {
+    $allow_users_to_change_email_with_no_password = false;
+}
+if (!$allow_users_to_change_email_with_no_password) {
+    $passwordExtraCommentForPasswordChange = get_lang('ToChangeYourEmailMustTypeYourPassword') . ". ";
+}
+
 if ($showPassword &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') === 'true'
@@ -332,7 +342,7 @@ if ($showPassword &&
     $form->addElement(
         'password',
         'password0',
-        [get_lang('Pass'), get_lang('TypeCurrentPassword')],
+        [get_lang('Pass'), $passwordExtraCommentForPasswordChange . get_lang('TypeCurrentPassword')],
         [
             'size' => 40,
             'show_hide' => true,
@@ -362,7 +372,16 @@ if ($showPassword &&
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
     $form->addNoSamePasswordRule('password1', $currentUser);
-}
+} elseif (!$allow_users_to_change_email_with_no_password) {
+    $form->addElement(
+        'password',
+        'password0',
+        [get_lang('Pass'), $passwordExtraCommentForPasswordChange],
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
+    );
 
 $form->addHtml($extraLink);
 

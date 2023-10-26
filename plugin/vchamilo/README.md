@@ -114,16 +114,16 @@ Note that the domain of the instance, in the last part of the path, will be tran
 from dot-separated domain (beeznest.chamilo.net) to dash-separated-domain (beeznest-chamilo-net).
 
 7. Finally, go to the "Instances manager" and create new instances. Once an instance has been 
-created, make sure you edit it and set the "Archive URL", "Home URL" and "Upload URL". These should
-have the form of the "Web root" of the instance + the common directory + {archive|home|upload} + the 
+created, make sure you edit it and set the "Cache URL" (previously "Archive URL"), "Home URL" and "Upload URL". These should
+have the form of the "Web root" of the instance + the common directory + {cache|home|upload} + the 
 instance domain with dots changed to hyphens.
 
 For example, if you have used "var/" as a common directory and your instance URL (Web Root) is 
-https://chamilo1.beeznest.com/, then your "Archive URL" would look like this:
+https://chamilo1.beeznest.com/, then your "Cache URL" would look like this:
 
-  https://chamilo1.beeznest.com/var/archive/chamilo1-beeznest-com/
+  https://chamilo1.beeznest.com/var/cache/chamilo1-beeznest-com/
 
-These settings might seem complex to setup at first, but once you've created your first instance,
+These settings might be complex to setup at first, but once you've created your first instance,
 creating a hundred more should be easy.
 
 Important note about file system permissions

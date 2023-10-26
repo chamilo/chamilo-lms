@@ -1256,16 +1256,16 @@ class Wiki
             if (api_is_allowed_to_session_edit()) {
                 if (self::check_notify_page($page) == 1) {
                     $notify_page = Display::return_icon(
-                        'messagebox_info.png',
-                        get_lang('CancelNotifyByEmail'),
+                        'notification_mail.png',
+                        get_lang('CancelNotifyMe'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
                     $lock_unlock_notify_page = 'unlocknotify';
                 } else {
                     $notify_page = Display::return_icon(
-                        'mail.png',
-                        get_lang('NotifyByEmail'),
+                        'notification_mail_na.png',
+                        get_lang('NotifyMe'),
                         [],
                         ICON_SIZE_MEDIUM
                     );
@@ -4104,16 +4104,16 @@ class Wiki
                 // discussion action: email notification
                 if (self::check_notify_discuss($page) == 1) {
                     $notify_disc = Display::return_icon(
-                        'messagebox_info.png',
-                        get_lang('CancelNotifyDiscussByEmail'),
+                        'notification_mail.png',
+                        get_lang('CancelNotifyMe'),
                         '',
                         ICON_SIZE_SMALL
                     );
                     $lock_unlock_notify_disc = 'unlocknotifydisc';
                 } else {
                     $notify_disc = Display::return_icon(
-                        'mail.png',
-                        get_lang('NotifyDiscussByEmail'),
+                        'notification_mail_na.png',
+                        get_lang('NotifyMe'),
                         '',
                         ICON_SIZE_SMALL
                     );

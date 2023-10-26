@@ -19,7 +19,12 @@ global.hljs = hljs;
 var textcomplete = require('textcomplete');
 global.textcomplete = textcomplete;
 
-require('chart.js');
+//global.Chart = require("chart.js/dist/chart").Chart
+
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+global.Chart = Chart;
+
 require('./annotation.js');
 require('../editor.js');
 import translateHtml from '../translatehtml.js';

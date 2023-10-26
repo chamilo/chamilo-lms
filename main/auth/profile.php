@@ -382,7 +382,7 @@ if ($showPassword &&
             'show_hide' => true,
         ]
     );
-
+}
 $form->addHtml($extraLink);
 
 $extraField = new ExtraField('user');

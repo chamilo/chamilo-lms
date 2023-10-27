@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
+use function count;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Exception;
@@ -21,9 +22,6 @@ use QuestionOptionsEvaluationPlugin;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use TestCategory;
-
-use function count;
-use function in_array;
 
 class CategorizedExerciseResultStateProvider implements ProviderInterface
 {
@@ -98,7 +96,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         $show_results = false;
         $show_only_score = false;
 
-        if (in_array(
+        if (\in_array(
             $objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -110,7 +108,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             $show_results = true;
         }
 
-        if (in_array(
+        if (\in_array(
             $objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
@@ -133,7 +131,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         $showTotalScoreAndUserChoicesInLastAttempt = true;
         $showTotalScore = true;
 
-        if (in_array(
+        if (\in_array(
             $objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
@@ -158,7 +156,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
                 );
 
                 if ($attempts) {
-                    $numberAttempts = count($attempts);
+                    $numberAttempts = \count($attempts);
                 }
 
                 $showTotalScore = false;

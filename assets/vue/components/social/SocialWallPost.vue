@@ -122,14 +122,12 @@ const computedAttachments = computed(() => {
 
 async function loadAttachments() {
   try {
-    let idUrl = props.post["@id"];
-    let parts = idUrl.split('/');
-    let socialPostId = parts[parts.length - 1];
+    const postIri = props.post["@id"]
 
-    const response = await axios.get(`${ENTRYPOINT}social_posts/${socialPostId}/attachments`);
-    attachments.value = response.data;
+    const response = await axios.get(`${postIri}/attachments`)
+    attachments.value = response.data
   } catch (error) {
-    console.error("There was an error loading the attachments!", error);
+    console.error("There was an error loading the attachments!", error)
   }
 }
 

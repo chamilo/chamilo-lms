@@ -100,7 +100,7 @@ const props = defineProps({
 const emit = defineEmits(["post-deleted"]);
 
 const store = useStore();
-
+import { useSecurityStore } from "../../store/securityStore"
 const { relativeDatetime } = useFormatDate()
 
 let comments = reactive([]);

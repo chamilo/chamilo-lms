@@ -303,6 +303,8 @@ class OAuth2 extends Plugin
             if ('true' === $this->get(self::SETTING_UPDATE_USER_INFO)) {
                 $this->updateUser($userId, $response);
                 $this->updateUserUrls($userId, $response);
+
+                Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $userId);
             }
         }
         $userInfo = api_get_user_info($userId);

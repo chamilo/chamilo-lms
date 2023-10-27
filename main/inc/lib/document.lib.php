@@ -7309,7 +7309,7 @@ class DocumentManager
             return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
         }
 
-        if (in_array($path, self::get_system_folders())) {
+        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
             return $iconDis;
         }
 
@@ -7370,7 +7370,7 @@ class DocumentManager
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
 
-        if ($isCertificateMode || in_array($path, self::get_system_folders())) {
+        if ($isCertificateMode || in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
             return $iconDis;
         }
 
@@ -7465,7 +7465,7 @@ class DocumentManager
             return $iconDis;
         }
 
-        if (in_array($path, self::get_system_folders())) {
+        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
             return $iconDis;
         }
 

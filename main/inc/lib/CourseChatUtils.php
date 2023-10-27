@@ -503,6 +503,17 @@ class CourseChatUtils
                         null,
                         null
                     );
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'invisible',
+                        null,
+                        $group_info,
+                        null,
+                        null,
+                        null
+                    );
                 }
             }
         }

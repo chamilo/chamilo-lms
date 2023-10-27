@@ -1042,9 +1042,9 @@ class Wiki
         $page = $this->page;
 
         if ($newtitle) {
-            $pageMIX = $newtitle; //display the page after it is created
+            $pageMIX = html_entity_decode($newtitle); //display the page after it is created
         } else {
-            $pageMIX = $page; //display current page
+            $pageMIX = html_entity_decode($page); //display current page
         }
 
         $filter = null;
@@ -3937,7 +3937,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink = "'.Database::escape_string($page).'" AND
+                    reflink = "'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id DESC';
         $result = Database::query($sql);
@@ -4734,7 +4734,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string($page).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                         '.$groupfilter.$condition_session;
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -6013,7 +6013,7 @@ class Wiki
         $tbl_wiki_conf = $this->tbl_wiki_conf;
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
-        $page = $this->page;
+        $page = html_entity_decode($this->page);
         $userId = api_get_user_id();
 
         if (0 != $this->session_id &&

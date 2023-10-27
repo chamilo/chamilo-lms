@@ -7191,10 +7191,8 @@ EOT;
     }
 
     /**
-     * Export all results of all exercises to a ZIP file (including one zip for each exercise)
-     * @param int $sessionId
-     * @param int $courseId
-     * @param array $filterDates
+     * Export all results of all exercises to a ZIP file (including one zip for each exercise).
+     *
      * @return false|void
      */
     public static function exportAllExercisesResultsZip(
@@ -7253,12 +7251,8 @@ EOT;
     }
 
     /**
-     * Export all results of *one* exercise to a ZIP file containing individual PDFs
-     * @param int    $sessionId
-     * @param int    $courseId
-     * @param int    $exerciseId
-     * @param array  $filterDates
-     * @param string $mainPath
+     * Export all results of *one* exercise to a ZIP file containing individual PDFs.
+     *
      * @return false|void
      */
     public static function exportExerciseAllResultsZip(

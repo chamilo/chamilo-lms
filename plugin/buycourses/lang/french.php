@@ -248,4 +248,3 @@ $strings['Product'] = "Produit";
 $strings['SalePrice'] = "Prix";
 $strings['YouProductIsActivatedYouCanNowAccessIt'] = "Votre abonnement a été activé, vous avez maintenant accès au module choisi.";
 $strings['hide_shopping_cart_from_course_catalogue'] = "Cacher le chariot de vente dans le catalogue de cours et laisse le bouton s'inscrire";
-

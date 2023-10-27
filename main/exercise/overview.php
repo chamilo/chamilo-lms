@@ -66,7 +66,7 @@ $exerciseUrlParams = [
     'exerciseId' => $objExercise->iid,
     'learnpath_id' => $learnpath_id,
     'learnpath_item_id' => $learnpath_item_id,
-    'learnpath_item_view_id' => $learnpathItemViewId
+    'learnpath_item_view_id' => $learnpathItemViewId,
 ];
 if (isset($_GET['preview'])) {
     $exerciseUrlParams['preview'] = 1;

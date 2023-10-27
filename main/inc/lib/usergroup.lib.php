@@ -3397,12 +3397,13 @@ class UserGroup extends Model
     }
 
     /**
-     * Check the given ID matches an existing group
-     * @param int $groupId
+     * Check the given ID matches an existing group.
+     *
      * @return bool
      */
-    public function groupExists(int $groupId) {
-        $sql = "SELECT id FROM ".$this->table. " WHERE id = ".$groupId;
+    public function groupExists(int $groupId)
+    {
+        $sql = "SELECT id FROM ".$this->table." WHERE id = ".$groupId;
         $result = Database::query($sql);
         if (Database::num_rows($result) === 1) {
             return true;
@@ -3410,13 +3411,15 @@ class UserGroup extends Model
 
         return false;
     }
+
     /**
-     * Check the given ID matches an existing user
-     * @param int $userId
+     * Check the given ID matches an existing user.
+     *
      * @return bool
      */
-    public function userExists(int $userId) {
-        $sql = "SELECT id FROM ".$this->table_user. " WHERE id = ".$userId;
+    public function userExists(int $userId)
+    {
+        $sql = "SELECT id FROM ".$this->table_user." WHERE id = ".$userId;
         $result = Database::query($sql);
         if (Database::num_rows($result) === 1) {
             return true;

@@ -80,7 +80,6 @@ class ch_multiplechoiceother extends survey_question
         if (!empty($answers)) {
             $answers = self::decodeOptionValue($answers);
             if (isset($answers[1])) {
-
                 $display = '';
                 $defaultOtherData = $answers[1];
             }

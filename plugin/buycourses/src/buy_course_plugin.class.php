@@ -610,9 +610,9 @@ class BuyCoursesPlugin extends Plugin
         $buyButton = Display::returnFontAwesomeIcon('shopping-cart');
         if ($this->get('hide_shopping_cart_from_course_catalogue') === 'true') {
             $buyButton = Display::returnFontAwesomeIcon('check').PHP_EOL.get_lang('Subscribe');
-        } 
+        }
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
-            $buyButton .'</a>';
+            $buyButton.'</a>';
 
         return $html;
     }

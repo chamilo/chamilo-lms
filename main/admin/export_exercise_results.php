@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script exports the PDF reports from a test for several students at once.
- * This script has a teacher-focused version at main/exercise/export/export_exercise_result.php
+ * This script has a teacher-focused version at main/exercise/export/export_exercise_result.php.
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

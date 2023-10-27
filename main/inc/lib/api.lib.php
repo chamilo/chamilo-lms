@@ -10586,8 +10586,6 @@ function api_flush_settings_cache(int $url_id): bool
  * in the variable $_configuration['ldap_admin_password_salt'].
  *
  * @param $encryptedText The text to be decrypted
- *
- * @return string
  */
 function api_decrypt_ldap_password(string $encryptedText): string
 {
@@ -10603,7 +10601,7 @@ function api_decrypt_ldap_password(string $encryptedText): string
     $data = substr($data, 0, strlen($data) - 16);
 
     try {
-      return openssl_decrypt(
+        return openssl_decrypt(
         $data,
         'aes-256-gcm',
         $secret,
@@ -10612,6 +10610,6 @@ function api_decrypt_ldap_password(string $encryptedText): string
         $tag
       );
     } catch (\Exception $e) {
-      return false;
+        return false;
     }
 }

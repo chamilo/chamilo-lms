@@ -546,7 +546,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                             <em class="fa fa-search"></em> '.get_lang('SignView').'
                                         </a>
                                     </span>';
-			    } else {
+                            } else {
                                 if ($presence['presence']) {
                                     echo '<span class="list-data">
                                             <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script exports the PDF reports from a test for several students at once.
- * This script is the teacher view of a similar script (for admins) at main/admin/export_exercise_results.php
+ * This script is the teacher view of a similar script (for admins) at main/admin/export_exercise_results.php.
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
@@ -111,7 +111,6 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('ExportExerciseAllResults'));
-
 
 echo $form->display();
 

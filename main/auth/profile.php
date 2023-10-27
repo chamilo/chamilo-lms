@@ -332,7 +332,7 @@ if (is_platform_authentication() &&
     $allow_users_to_change_email_with_no_password = false;
 }
 if (!$allow_users_to_change_email_with_no_password) {
-    $passwordExtraCommentForPasswordChange = get_lang('ToChangeYourEmailMustTypeYourPassword') . ". ";
+    $passwordExtraCommentForPasswordChange = get_lang('ToChangeYourEmailMustTypeYourPassword').". ";
 }
 
 if ($showPassword &&
@@ -342,7 +342,7 @@ if ($showPassword &&
     $form->addElement(
         'password',
         'password0',
-        [get_lang('Pass'), $passwordExtraCommentForPasswordChange . get_lang('TypeCurrentPassword')],
+        [get_lang('Pass'), $passwordExtraCommentForPasswordChange.get_lang('TypeCurrentPassword')],
         [
             'size' => 40,
             'show_hide' => true,

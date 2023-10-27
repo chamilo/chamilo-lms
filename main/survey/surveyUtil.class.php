@@ -1745,7 +1745,9 @@ class SurveyUtil
                     .';';
                 } else {
                     $numberOfOptions = $row['number_of_options'];
-                    if ($row['type'] == 'multiplechoiceother') $numberOfOptions++;
+                    if ($row['type'] == 'multiplechoiceother') {
+                        $numberOfOptions++;
+                    }
                     for ($ii = 0; $ii < $numberOfOptions; $ii++) {
                         $return .= str_replace(
                             "\r\n",
@@ -1822,13 +1824,11 @@ class SurveyUtil
                 }
 
                 $current_question_type = $row['type'];
-                $current_question_id   = $row['question_id'];
+                $current_question_id = $row['question_id'];
 
                 $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
                 if (!$compact) {
                     $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
-
-
 
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 } else {
@@ -2028,7 +2028,7 @@ class SurveyUtil
                             if ($idAnswer == $option_id) {
                                 $return .= (
                                     strlen($other) > 0
-                                    ? 'v;"' . str_replace('"', '""', api_html_entity_decode(strip_tags($other), ENT_QUOTES)) . '";'
+                                    ? 'v;"'.str_replace('"', '""', api_html_entity_decode(strip_tags($other), ENT_QUOTES)).'";'
                                     : 'v;'
                                     );
                             } else {
@@ -2154,7 +2154,9 @@ class SurveyUtil
                     $column++;
                 } else {
                     $numberOfOptions = $row['number_of_options'];
-                    if ($row['type'] == 'multiplechoiceother') $numberOfOptions++;
+                    if ($row['type'] == 'multiplechoiceother') {
+                        $numberOfOptions++;
+                    }
                     for ($ii = 0; $ii < $numberOfOptions; $ii++) {
                         $worksheet->setCellValueByColumnAndRow(
                             $column,
@@ -2235,7 +2237,7 @@ class SurveyUtil
                 }
 
                 $current_question_type = $row['type'];
-                $current_question_id   = $row['question_id'];
+                $current_question_id = $row['question_id'];
 
                 $worksheet->setCellValueByColumnAndRow(
                     $column,

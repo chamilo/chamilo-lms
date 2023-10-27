@@ -86,14 +86,14 @@ switch ($action) {
         //  notification to all admins action
         $userInfo = api_get_user_info();
         // get_all_administrators
-	$adminList = UserManager::get_all_administrators();
-	$link = api_get_path(WEB_PATH) . 'plugin/justification/justification_by_user.php?user_id=' . api_get_user_id();
-	$emailToAdminSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
-        $emailToAdminContent = $emailToAdminSubject . ' <br /><br />' . '<a href="'. $link . '">' . $link . '</a>';
+    $adminList = UserManager::get_all_administrators();
+    $link = api_get_path(WEB_PATH).'plugin/justification/justification_by_user.php?user_id='.api_get_user_id();
+    $emailToAdminSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
+        $emailToAdminContent = $emailToAdminSubject.' <br /><br />'.'<a href="'.$link.'">'.$link.'</a>';
         foreach ($adminList as $adminId => $data) {
             MessageManager::send_message_simple(
-                $adminId, 
-                $emailToAdminSubject, 
+                $adminId,
+                $emailToAdminSubject,
                 $emailToAdminContent,
                 api_get_user_id());
         }

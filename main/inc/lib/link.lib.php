@@ -1827,7 +1827,6 @@ class Link extends Model
             if (200 === $responseIpv6->getStatusCode()) {
                 return true;
             }
-
         } catch (Exception $e) {
             try {
                 $responseIpv4 = $client->request('GET', $url, ['force_ip_resolve' => 'v4']);
@@ -1839,6 +1838,7 @@ class Link extends Model
                 return false;
             }
         }
+
         return false;
     }
 

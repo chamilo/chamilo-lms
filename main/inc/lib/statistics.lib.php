@@ -1646,11 +1646,10 @@ class Statistics
     }
 
     /**
-     * Return a list of logins by date
-     * @param string $startDate Start date in YYYY-MM-DD format
-     * @param string $endDate End date in YYYY-MM-DD format
+     * Return a list of logins by date.
      *
-     * @return array
+     * @param string $startDate Start date in YYYY-MM-DD format
+     * @param string $endDate   End date in YYYY-MM-DD format
      */
     public static function getLoginsByDate($startDate, $endDate): array
     {
@@ -1787,14 +1786,14 @@ class Statistics
     }
 
     /**
-     * Return duplicate users at a SortableTableFromArray object
+     * Return duplicate users at a SortableTableFromArray object.
+     *
      * @param string $type The type of duplication we are checking for ('name' or 'email')
      */
     public static function returnDuplicatedUsersTable(
         string $type = 'name',
         array $additionalExtraFieldsInfo
-    ): SortableTableFromArray
-    {
+    ): SortableTableFromArray {
         if ($type == 'email') {
             $usersInfo = Statistics::getDuplicatedUserMails($additionalExtraFieldsInfo);
         } else {
@@ -1892,9 +1891,7 @@ class Statistics
      * It gets lti learnpath results by date.
      *
      * @param string $startDate Start date in YYYY-MM-DD format
-     * @param string $endDate End date in YYYY-MM-DD format
-     *
-     * @return array
+     * @param string $endDate   End date in YYYY-MM-DD format
      */
     private static function getLtiLearningPathByDate(string $startDate, string $endDate): array
     {
@@ -1917,9 +1914,9 @@ class Statistics
     }
 
     /**
-     * Get a list of users duplicated (firstname and lastname are both the same)
+     * Get a list of users duplicated (firstname and lastname are both the same).
+     *
      * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
-     * @return array
      */
     private static function getDuplicatedUsers(array $additionalExtraFieldsInfo): array
     {
@@ -1999,9 +1996,9 @@ class Statistics
     }
 
     /**
-     * Get a list of duplicated user emails
+     * Get a list of duplicated user emails.
+     *
      * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
-     * @return array
      */
     private static function getDuplicatedUserMails(array $additionalExtraFieldsInfo): array
     {

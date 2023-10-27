@@ -4077,8 +4077,6 @@ class Rest extends WebService
     /**
      * Add a new user to the given group/class.
      *
-     * @param int $groupId
-     * @param int $userId
      * @param int $relationType (1:admin, 2:reader, etc. See GROUP_USER_PERMISSION_ constants in api.lib.php)
      *
      * @return array One item array containing true on success, false otherwise
@@ -4097,8 +4095,6 @@ class Rest extends WebService
     /**
      * Get the list of group/class IDs to which the user belongs.
      *
-     * @param int $userId
-     *
      * @return array Array containing the group IDs like ['groups' => [1, 2, 3]]
      */
     public function getUserSubGroup(int $userId): array
@@ -4106,6 +4102,7 @@ class Rest extends WebService
         $userGroup = new UserGroup();
 
         $res = $userGroup->get_usergroup_by_user($userId);
+
         return ['groups' => $res];
     }
 

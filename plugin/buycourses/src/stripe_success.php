@@ -26,7 +26,6 @@ $currency = $plugin->getCurrency($sale['currency_id']);
 $globalParameters = $plugin->getGlobalParameters();
 
 if (!empty($globalParameters['sale_email'])) {
-
     $messageConfirmBuyerTemplate = new Template();
     $messageConfirmBuyerTemplate->assign('user', $userInfo);
     $messageConfirmBuyerTemplate->assign(

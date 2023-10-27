@@ -2684,19 +2684,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuetify/loader-shared@npm:^1.3.0":
-  version: 1.7.1
-  resolution: "@vuetify/loader-shared@npm:1.7.1"
-  dependencies:
-    find-cache-dir: ^3.3.2
-    upath: ^2.0.1
-  peerDependencies:
-    vue: ^3.0.0
-    vuetify: ^3.0.0-beta.4
-  checksum: 5777955e593afbb947c8be28a8625021846901e16ab982edfbbb74d9beb15f95490390ab1b0c6ec47e8b05389547eb69c79173cca04389f0203795071bb04994
-  languageName: node
-  linkType: hard
-
 "@webassemblyjs/ast@npm:1.11.6, @webassemblyjs/ast@npm:^1.11.5":
   version: 1.11.6
   resolution: "@webassemblyjs/ast@npm:1.11.6"
@@ -3274,14 +3261,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "axios@npm:1.4.0"
+"axios@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "axios@npm:1.6.0"
   dependencies:
     follow-redirects: ^1.15.0
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: 7fb6a4313bae7f45e89d62c70a800913c303df653f19eafec88e56cea2e3821066b8409bc68be1930ecca80e861c52aa787659df0ffec6ad4d451c7816b9386b
+  checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
   languageName: node
   linkType: hard
 
@@ -3582,13 +3569,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"callsite@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "callsite@npm:1.0.0"
-  checksum: 569686d622a288a4f0a827466c2f967b6d7a98f2ee1e6ada9dcf5a6802267a5e2a995d40f07113b5f95c7b2b2d5cbff4fdde590195f2a8bed24b829d048688f8
-  languageName: node
-  linkType: hard
-
 "callsites@npm:^3.0.0":
   version: 3.1.0
   resolution: "callsites@npm:3.1.0"
@@ -3710,7 +3690,7 @@ __metadata:
     "@vuelidate/validators": ^2.0.3
     alpinejs: ^3.12.3
     autoprefixer: ^10.4.14
-    axios: ^1.4.0
+    axios: ^1.6.0
     blueimp-file-upload: ^10.32.0
     blueimp-load-image: ^5.16.0
     bootstrap-daterangepicker: ^3.1.0
@@ -3800,8 +3780,6 @@ __metadata:
     vue-perfect-scrollbar: ^0.2.1
     vue-router: 4.2.4
     vue-toastification: ^2.0.0-rc.5
-    vuetify: 3.0.0-beta.0
-    vuetify-loader: ^2.0.0-alpha.0
     vuex: ^4.1.0
     vuex-map-fields: ^1.4.1
     webpack: ^5.88.1
@@ -4494,15 +4472,6 @@ __metadata:
     supports-color:
       optional: true
   checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
-  languageName: node
-  linkType: hard
-
-"decache@npm:^4.6.0":
-  version: 4.6.2
-  resolution: "decache@npm:4.6.2"
-  dependencies:
-    callsite: ^1.0.0
-  checksum: e88d0c5b27266d3dcab96aed5c34c02551cea4b5ec4df452a07ea89b35426e63053ba5f07d6837ecb958f7ebfea5adaa12c353da7b2f242f89cdef1aa3ba30c2
   languageName: node
   linkType: hard
 
@@ -5321,7 +5290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir@npm:^3.3.1, find-cache-dir@npm:^3.3.2":
+"find-cache-dir@npm:^3.3.1":
   version: 3.3.2
   resolution: "find-cache-dir@npm:3.3.2"
   dependencies:
@@ -7363,18 +7332,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"null-loader@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "null-loader@npm:4.0.1"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
-  peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: eeb4c4dd2f8f41e46f5665e4500359109e95ec1028a178a60e0161984906572da7dd87644bcc3cb29f0125d77e2b2508fb4f3813cfb1c6604a15865beb4b987b
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^4.0.1, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -8790,13 +8747,6 @@ __metadata:
   version: 2.2.2
   resolution: "quasar@npm:2.2.2"
   checksum: b6b7e775e165377a65bd5983064f397c72c2fcb841fe486ca2284ee512d6f95fc123c369cc7656dbdbdfc505801a9583baa926f0b22c8378288934a3dcb2e319
-  languageName: node
-  linkType: hard
-
-"querystring@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "querystring@npm:0.2.1"
-  checksum: 7b83b45d641e75fd39cd6625ddfd44e7618e741c61e95281b57bbae8fde0afcc12cf851924559e5cc1ef9baa3b1e06e22b164ea1397d65dd94b801f678d9c8ce
   languageName: node
   linkType: hard
 
@@ -10221,13 +10171,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"upath@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "upath@npm:2.0.1"
-  checksum: 2db04f24a03ef72204c7b969d6991abec9e2cb06fb4c13a1fd1c59bc33b46526b16c3325e55930a11ff86a77a8cbbcda8f6399bf914087028c5beae21ecdb33c
-  languageName: node
-  linkType: hard
-
 "update-browserslist-db@npm:^1.0.11":
   version: 1.0.11
   resolution: "update-browserslist-db@npm:1.0.11"
@@ -10495,42 +10438,6 @@ __metadata:
     "@vue/server-renderer": 3.3.4
     "@vue/shared": 3.3.4
   checksum: 58b6c62a66a375ce5df460fcb7ba41b37c8637c635faf06ef472ae4197f412cf9ad83586cd8e3f66c486404fbe8550e694f90ff724a571d1ba78830791099c59
-  languageName: node
-  linkType: hard
-
-"vuetify-loader@npm:^2.0.0-alpha.0":
-  version: 2.0.0-alpha.9
-  resolution: "vuetify-loader@npm:2.0.0-alpha.9"
-  dependencies:
-    "@vuetify/loader-shared": ^1.3.0
-    decache: ^4.6.0
-    file-loader: ^6.2.0
-    find-cache-dir: ^3.3.2
-    loader-utils: ^2.0.0
-    null-loader: ^4.0.1
-    querystring: ^0.2.1
-    upath: ^2.0.1
-  peerDependencies:
-    "@vue/compiler-sfc": ^3.2.6
-    vuetify: ^3.0.0-alpha.11
-    webpack: ^5.0.0
-  checksum: 36e938f5f4747bb87e44e36ce54cbf7864a2cf07678bbfc4795f92fd130884724675a7aa5025b8ad666072834b00666e71d38a7f39c7714fd7f9106cbc5e2ed2
-  languageName: node
-  linkType: hard
-
-"vuetify@npm:3.0.0-beta.0":
-  version: 3.0.0-beta.0
-  resolution: "vuetify@npm:3.0.0-beta.0"
-  peerDependencies:
-    "@formatjs/intl": ^1.0.0 || ^2.0.0
-    vue: ^3.2.19
-    vue-i18n: ^9.0.0
-  peerDependenciesMeta:
-    "@formatjs/intl":
-      optional: true
-    vue-i18n:
-      optional: true
-  checksum: 8620f1f82ea0815ef06d22ad2cb22d9fae725104406956ce998874cc698dfa973478de8dcd04623eabff4091dee815a1d20c6dd42ed8caea46c26d0fb1e77566
   languageName: node
   linkType: hard
 

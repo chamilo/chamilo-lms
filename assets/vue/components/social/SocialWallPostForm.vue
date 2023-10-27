@@ -20,11 +20,11 @@
 
       <div class="flex mb-2">
         <BaseFileUpload
-          v-model="attachment"
-          :label="$t('File upload')"
+          id="post-file"
+          :label="t('File upload')"
           accept="image"
           size="small"
-          @file-selected="v$.attachment.$touch()"
+          @file-selected="selectedFile = $event"
         />
 
         <BaseButton
@@ -52,7 +52,7 @@ import BaseButton from "../basecomponents/BaseButton.vue";
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue";
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
-import { defineEmits } from 'vue';
+import axios from "axios";
 
 const emit = defineEmits(['post-created']);
 const store = useStore();
@@ -63,6 +63,7 @@ const user = inject('social-user');
 const currentUser = store.getters['security/getUser'];
 const userIsAdmin = store.getters['security/isAdmin'];
 
+const selectedFile = ref(null)
 const postState = reactive({
   content: '',
   attachment: null,
@@ -119,13 +120,21 @@ async function sendPost() {
       userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
     });
 
-    if (postState.attachment) {
+    if (selectedFile.value) {
       const formData = new FormData();
-      formData.append('file', postState.attachment);
       const post = store.state.socialpost.created;
-      await store.dispatch('messageattachment/createWithFormData', {
-        postId: post.id,
-        file: formData
+      let idUrl = post["@id"];
+      let parts = idUrl.split('/');
+      let socialPostId = parts[parts.length - 1];
+
+      formData.append('file', selectedFile.value);
+      formData.append('messageId', socialPostId);
+
+      const endpoint = '/api/social_post_attachments';
+      const fileUploadResponse = await axios.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
     }
 

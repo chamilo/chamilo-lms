@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -298,6 +299,11 @@ class Container
     public static function getTicketMessageAttachmentRepository(): TicketMessageAttachmentRepository
     {
         return self::$container->get(TicketMessageAttachmentRepository::class);
+    }
+
+    public static function getSocialPostAttachmentRepository(): SocialPostAttachmentRepository
+    {
+        return self::$container->get(SocialPostAttachmentRepository::class);
     }
 
     public static function getCourseRepository(): CourseRepository

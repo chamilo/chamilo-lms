@@ -39,22 +39,17 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <img
-          v-if="containsImage"
-          :alt="attachment.comment"
-          :src="attachment.contentUrl"
-        >
-        <video
-          v-if="containsVideo"
-          width="320"
-          height="240"
-          controls
-        >
-          <source
-            :src="attachment.contentUrl"
+        <div v-for="(attachment, index) in computedAttachments" :key="index">
+          <img
+            v-if="attachment.filename.includes('.jpg') || attachment.filename.includes('.png')"
+          :src="attachment.path"
+          :alt="attachment.filename"
           >
-          {{ attachment.comment }}
-        </video>
+
+          <video v-if="isVideoAttachment(attachment)" controls>
+            <source :src="attachment.path" :type="attachment.mimeType">
+          </video>
+        </div>
 
         <div v-html="post.content"/>
 
@@ -85,7 +80,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue";
-import {computed, onMounted, reactive} from "vue";
+import {ref, computed, onMounted, reactive} from "vue";
 import WallComment from "./SocialWallComment.vue";
 import WallActions from "./Actions";
 import axios from "axios";
@@ -108,17 +103,33 @@ const store = useStore();
 
 const { relativeDatetime } = useFormatDate()
 
-const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
 let comments = reactive([]);
-
-const containsImage = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('image/');
-const containsVideo = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
-
+const attachments = ref([]);
 const currentUser = store.getters['security/getUser'];
-
 const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
 
-onMounted(loadComments);
+onMounted(async () => {
+  loadComments();
+
+  await loadAttachments();
+});
+
+const computedAttachments = computed(() => {
+  return attachments.value;
+});
+
+async function loadAttachments() {
+  try {
+    let idUrl = props.post["@id"];
+    let parts = idUrl.split('/');
+    let socialPostId = parts[parts.length - 1];
+
+    const response = await axios.get(`${ENTRYPOINT}social_posts/${socialPostId}/attachments`);
+    attachments.value = response.data;
+  } catch (error) {
+    console.error("There was an error loading the attachments!", error);
+  }
+}
 
 function loadComments() {
   axios
@@ -148,4 +159,13 @@ function onCommentPosted(newComment) {
 function onPostDeleted(post) {
   emit('post-deleted', post);
 }
+
+const isVideoAttachment = (attachment) => {
+  if (attachment.filename) {
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
+    return ['mp4', 'webm', 'ogg'].includes(fileExtension);
+  }
+
+  return false;
+};
 </script>

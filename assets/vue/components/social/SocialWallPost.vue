@@ -105,7 +105,9 @@ const { relativeDatetime } = useFormatDate()
 
 let comments = reactive([]);
 const attachments = ref([]);
-const currentUser = store.getters['security/getUser'];
+const securityStore = useSecurityStore()
+
+const currentUser = computed(() => securityStore.user)
 const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
 
 onMounted(async () => {

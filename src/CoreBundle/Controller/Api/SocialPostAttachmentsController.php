@@ -19,18 +19,16 @@ class SocialPostAttachmentsController extends BaseResourceFileAction
     {
         $attachments = $em->getRepository(SocialPostAttachment::class)->findBy(['socialPost' => $socialPost->getId()]);
 
-        if (!$attachments) {
-            return new JsonResponse(['error' => 'No attachments found for this post'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
         $attachmentsInfo = [];
-        foreach ($attachments as $attachment) {
-            $attachmentsInfo[] = [
-                'id' => $attachment->getId(),
-                'filename' => $attachment->getFilename(),
-                'path' => $attachmentRepo->getResourceFileUrl($attachment),
-                'size' => $attachment->getSize(),
-            ];
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                $attachmentsInfo[] = [
+                    'id' => $attachment->getId(),
+                    'filename' => $attachment->getFilename(),
+                    'path' => $attachmentRepo->getResourceFileUrl($attachment),
+                    'size' => $attachment->getSize(),
+                ];
+            }
         }
 
         return new JsonResponse($attachmentsInfo, JsonResponse::HTTP_OK);

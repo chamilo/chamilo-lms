@@ -57,9 +57,10 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                 $rootDir = $rootPath.'/app/upload/users';
                 $targetFile = $attachment->getPath();
                 $foundFilePath = $this->findFileRecursively($rootDir, $targetFile);
+                $sender = $message->getSender();
 
                 if ($foundFilePath) {
-                    echo "Archivo encontrado en: " . $foundFilePath;
+                    error_log("File found in $foundFilePath");
 
                     $mimeType = mime_content_type($foundFilePath);
                     $uploadFile = new UploadedFile($foundFilePath, $filename, $mimeType, null, true);
@@ -71,11 +72,11 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                     $attachment->setPath(uniqid('social_post', true));
                     $attachment->setFilename($uploadFile->getClientOriginalName());
                     $attachment->setSize($uploadFile->getSize());
-                    $attachment->setInsertUserId($admin->getId());
+                    $attachment->setInsertUserId($sender->getId());
                     $attachment->setInsertDateTime(new \DateTime('now', new \DateTimeZone('UTC')));
-                    $attachment->setParent($admin);
-                    $attachment->addUserLink($admin);
-                    $attachment->setCreator($admin);
+                    $attachment->setParent($sender);
+                    $attachment->addUserLink($sender);
+                    $attachment->setCreator($sender);
 
                     $em->persist($attachment);
                     $em->flush();

@@ -41,9 +41,9 @@
       <div class="flex flex-col gap-2">
         <div v-for="(attachment, index) in computedAttachments" :key="index">
           <img
-            v-if="attachment.filename.includes('.jpg') || attachment.filename.includes('.png')"
-          :src="attachment.path"
-          :alt="attachment.filename"
+            v-if="isImageAttachment(attachment)"
+            :src="attachment.path"
+            :alt="attachment.filename"
           >
 
           <video v-if="isVideoAttachment(attachment)" controls>
@@ -159,6 +159,15 @@ function onCommentPosted(newComment) {
 function onPostDeleted(post) {
   emit('post-deleted', post);
 }
+
+const isImageAttachment = (attachment) => {
+  if (attachment.filename) {
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
+  }
+  
+  return false;
+};
 
 const isVideoAttachment = (attachment) => {
   if (attachment.filename) {

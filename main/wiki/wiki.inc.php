@@ -264,7 +264,7 @@ class Wiki
                 if (self::checktitle(
                     strtolower(str_replace(' ', '_', $link))
                 )) {
-                    $link = api_html_entity_decode($link);
+                    $link = urlencode($link);
                     $input_array[$key] = '<a href="'.$this->url.'&action=addnew&title='.Security::remove_XSS($link).'" class="new_wiki_link">'.$title.'</a>';
                 } else {
                     $input_array[$key] = '<a href="'.$this->url.'&action=showpage&title='.urlencode(strtolower(str_replace(' ', '_', $link))).'" class="wiki_link">'.$title.'</a>';

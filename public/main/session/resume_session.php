@@ -108,13 +108,13 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$session->getName(),
+    Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Session')).' '.$session->getName(),
     null,
     'h3'
 );
 
 $url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+    Display::getMdiIcon('pencil', 'ch-tool-icon-gradient', null, 32, get_lang('Edit')),
     "session_edit.php?page=resume_session.php&id=$sessionId"
 );
 
@@ -130,7 +130,7 @@ if ($isMultipleUrl) {
 }
 
 $url = Display::url(
-    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL),
+    Display::getMdiIcon('plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
     "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $courseListToShow = Display::page_subheader(get_lang('Course list').$url);
@@ -210,38 +210,38 @@ if (0 === $session->getNbrCourses()) {
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('none')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::return_icon('course_home.png', get_lang('Course')), $courseUrl);
+        $courseItem .= Display::url(Display::getMdiIcon('home', 'ch-tool-icon', null, 22, get_lang('Course')), $courseUrl);
 
         if ($allowSkills) {
             $courseItem .= Display::url(
-                Display::return_icon('skills.png', get_lang('Skills')),
+                Display::getMdiIcon('shield-star', 'ch-tool-icon', null, 22, get_lang('Skills')),
                 $codePath.'skills/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$courseId
             );
         }
         $courseItem .= $orderButtons;
 
         $courseItem .= Display::url(
-            Display::return_icon('new_user.png', get_lang('Add a user')),
+            Display::getMdiIcon('account-multiple-plus', 'ch-tool-icon', null, 22, get_lang('Add a user')),
             $codePath."session/add_users_to_session_course.php?id_session=$sessionId&course_id=".$courseId
         );
         $courseItem .= Display::url(
-            Display::return_icon('user.png', get_lang('Users')),
+            Display::getMdiIcon('account-multiple', 'ch-tool-icon', null, 22, get_lang('Users')),
             $codePath."session/session_course_user_list.php?id_session=$sessionId&course_code=".$courseCode
         );
         $courseItem .= Display::url(
-            Display::return_icon('import_csv.png', get_lang('Import users list')),
+            Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', null, 22, get_lang('Import users list')),
             $codePath."user/user_import.php?action=import&cid={$courseId}&sid=$sessionId"
         );
         $courseItem .= Display::url(
-            Display::return_icon('export_csv.png', get_lang('Export users of a course')),
+            Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', null, 22, get_lang('Export users of a course')),
             $codePath."user/user_export.php?file_type=csv&course_session=$courseCode:$sessionId&addcsvheader=1"
         );
         $courseItem .= Display::url(
-            Display::return_icon('statistics.gif', get_lang('Reporting')),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Reporting')),
             $codePath."tracking/courseLog.php?sid=$sessionId&cid={$courseId}$orig_param&hide_course_breadcrumb=1"
         );
         $courseItem .= Display::url(
-            Display::return_icon('teacher.png', get_lang('Edit coach')),
+            Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 22, get_lang('Edit coach')),
             $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$courseCode}$orig_param"
         );
 
@@ -256,7 +256,7 @@ if (0 === $session->getNbrCourses()) {
             ]
         );*/
         $courseItem .= Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')),
             api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$courseCode}",
             [
                 'onclick' => "javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;",
@@ -271,19 +271,19 @@ if (0 === $session->getNbrCourses()) {
 $courseListToShow .= '</table><br />';
 
 $url = '&nbsp;'.Display::url(
-    Display::return_icon('add.png', get_lang('Add')),
+        Display::getMdiIcon('plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
     $codePath."session/add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('import_csv.png', get_lang('Import users')),
+    Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon-gradient', null, 32, get_lang('Import users')),
     $codePath."session/session_user_import.php?id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('Export users list')),
+    Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon-gradient', null, 32, get_lang('Export users list')),
     $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
-$userListToShow = Display::page_subheader(get_lang('User list').Display::toolbarAction('users', [$url]));
+$userListToShow = Display::page_subheader(get_lang('User list').$url);
 $sessionRelUsers = Container::getSessionRepository()
     ->getUsersByAccessUrl($session, api_get_url_entity(), [Session::STUDENT, Session::DRH]);
 
@@ -303,19 +303,19 @@ if (!empty($sessionRelUsers)) {
             api_htmlentities(UserManager::formatUserFullName($user, true)).'</a>';
 
         $reportingLink = Display::url(
-            Display::return_icon('statistics.gif', get_lang('Reporting')),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Reporting')),
             $codePath.'my_space/myStudents.php?student='.$userId.''.$orig_param.'&id_session='
             .$sessionId
         );
 
         $courseUserLink = Display::url(
-            Display::return_icon('course.png', get_lang('Block user from courses in this session')),
+            Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 22, get_lang('Block user from courses in this session')),
             $codePath.'session/session_course_user.php?id_user='.$userId.'&id_session='
             .$sessionId
         );
 
         $removeLink = Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')),
             api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$userId,
             ['onclick' => "javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;"]
         );
@@ -344,7 +344,7 @@ if (!empty($sessionRelUsers)) {
             case Session::DRH:
                 $status = get_lang('Human Resources Manager');
                 $link = Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit')),
+                    Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')),
                     $codePath.'admin/dashboard_add_sessions_to_user.php?user='.$userId
                 );
                 break;

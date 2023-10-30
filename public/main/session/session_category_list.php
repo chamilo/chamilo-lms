@@ -100,10 +100,10 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     Display::display_header($tool_name);
 
     $actionsLeft = Display::url(
-            Display::return_icon('new_folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('file-tree-outline', 'ch-tool-icon-gradient', null, 32, get_lang('Add category')),
             api_get_path(WEB_CODE_PATH).'session/session_category_add.php'
         ).Display::url(
-            Display::return_icon('session.png', get_lang('Training sessions list'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Training sessions list')),
             api_get_path(WEB_CODE_PATH).'session/session_list.php'
         );
     $actionsRight = '<form method="POST" action="session_category_list.php" class="form--inline">
@@ -204,14 +204,14 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         </td>
                         <td>
                             <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
-                                <?php echo Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')); ?>
                             </a>
                             <a href="<?php echo api_get_self(
                             ); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>"
                                onclick="if(!confirm('<?php echo get_lang(
                                    'Please confirm your choice'
                                ); ?>')) return false;">
-                                <?php echo Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')); ?>
                             </a>
                         </td>
                     </tr>

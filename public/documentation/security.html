@@ -2,11 +2,11 @@
 <head>
     <meta charset="utf-8" />
 	<title>Chamilo Security Guide</title>
-    <link rel="stylesheet" href="../build/css/app.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/themes/chamilo/default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/print.css" type="text/css" media="print" />
-    <script src="../build/app.js"></script>
+    <link rel="stylesheet" href="../build/legacy_app.css" />
+    <link rel="stylesheet" href="../build/app.css" />
+    <link rel="stylesheet" href="../build/vue.css" />
+    <link rel="stylesheet" href="default.css" />
+    <script src="../build/legacy_app.js"></script>
 </head>
 <body>
 <div class="container">
@@ -28,7 +28,7 @@
   <li><a href="#6.HSTS">HTTP Headers Security</a></li>
 </ol>
 
-<h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
+<h2><a id="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
 <p>
 It is considered a safer behaviour not to disclose server information from your Chamilo page. In order to avoid
     both web server and PHP information disclosure, you might want to take the following actions:
@@ -40,7 +40,7 @@ It is considered a safer behaviour not to disclose server information from your 
 <li>Reload Apache</li>
 </ul>
 
-<h2><a name="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
+<h2><a id="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
 <p>
 Make sure you check <a href="http://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security
     issues page</a> from time to time.
@@ -49,7 +49,7 @@ Subscribe to our free security alerts mailing-list:
    follow our security Twitter feed: <a href="http://twitter.com/chamilosecurity">http://twitter.com/chamilosecurity</a>.
 </p>
 
-<h2><a name="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
+<h2><a id="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
 <p> Additionally to lacking the implementation of features that really improve the quality of your browsing the
     Internet, older browsers tend to have many unresolved security flaws. Using an old browser, you put in danger the
     security of your computer and the data it contains, but you can also put others in danger by letting crackers take
@@ -57,7 +57,7 @@ Subscribe to our free security alerts mailing-list:
 <p>To  avoid being a risk to yourself and others, you should download and install a recent browser. We recommend
     <a href="http://www.getfirefox.com" target="_blank">the latest stable version of Firefox</a>.</p>
 
-<h2><a name="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
+<h2><a id="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
 <p>It is considered unsafe to leave the configuration file inside the app/config/ directory, as it will be directly
     accessible for all users, which could lead crackers to download it, uninterpreted, and read through your
     configuration, which could lead to illicit
@@ -73,7 +73,7 @@ require '/etc/chamilo/configuration.php';
 This will prevent direct access to your settings and make it seem totally the same to Chamilo.
 </p>
 
-<h2><a name="5.Files-permissions"></a>5. Restricting files permissions</h2>
+<h2><a id="5.Files-permissions"></a>5. Restricting files permissions</h2>
         <p>Making all the Chamilo files world-writable will help you install quickly, and it solves many
         issues for people without much admin experience. However, it's more
         secure to make a distinct user owner of all the chamilo files and folders,
@@ -158,7 +158,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         </pre>
     <br />
 <hr />
-<h2><a name="6.HSTS">HTTP Headers Security</a></h2>
+<h2><a id="6.HSTS">HTTP Headers Security</a></h2>
     <p>A relatively recent development in web security, HTTP headers can be modified either
     from the web server or from the application (like Chamilo) to increase the security
         of your visitors.</p>

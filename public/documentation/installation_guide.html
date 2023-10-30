@@ -2,10 +2,11 @@
 <head>
     <meta charset="utf-8" />
     <title>Chamilo Installation Guide</title>
-    <link rel="stylesheet" href="../build/css/app.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/vue.css" type="text/css" media="screen,projection" />
-
-    <script src="../build/app.js"></script>
+    <link rel="stylesheet" href="../build/legacy_app.css" />
+    <link rel="stylesheet" href="../build/app.css" />
+    <link rel="stylesheet" href="../build/vue.css" />
+    <link rel="stylesheet" href="default.css" />
+    <script src="../build/legacy_app.js"></script>
 </head>
 <body>
 
@@ -61,7 +62,7 @@
 
 <br />
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="1._Pre-requisites"></a>1. Pre-requisites</h2>
+<h2><a id="1._Pre-requisites"></a>1. Pre-requisites</h2>
 
 Chamilo
 can be installed on Windows, Linux, Mac OS X and UNIX servers
@@ -138,7 +139,7 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
     Once configured (and maybe this has already been done by your hosting provider), you can simply restart the web server to enable the change.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
+<h2><a id="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 <p>
 Before you start installing Chamilo LMS, you must understand that, because we provide Chamilo as free software, many services providers
     have been able to develop extensions of Chamilo, which have made it possible to install Chamilo in many ways:<br />
@@ -295,7 +296,7 @@ date.timezone = 'America/New_York'
     <li>php-xsl</li>
 </ul>
 <hr />
-<h2><a name="3._Upgrade"></a>3. Upgrade</h2>
+<h2><a id="3._Upgrade"></a>3. Upgrade</h2>
 
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo directories and databases. If you are unsure how to achieve this
@@ -427,7 +428,7 @@ In Windows, you may need to check the properties of the folders.
 
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a name="4._Troubleshooting"></a>4. Troubleshooting</h2>
+<h2><a id="4._Troubleshooting"></a>4. Troubleshooting</h2>
 
 
 <p>If you have problems, go to the <a href="https://chamilo.org">Chamilo website</a> and ask a question on the
@@ -435,7 +436,7 @@ In Windows, you may need to check the properties of the folders.
 already an answer to your question.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="5._Administration_section"></a>5. Administration section</h2>
+<h2><a id="5._Administration_section"></a>5. Administration section</h2>
 
 <p>To access the Chamilo administration section, open browser, go to your Chamilo adress and log in with the admin user.
 Then you will see a "Administration" tab in the webpage header. You can manage users, courses, sessions, portal look
@@ -443,7 +444,7 @@ and feel, homepage content, course categories etc. there&nbsp;</p>
 
 <p></p>
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="6._LDAP"></a>6. LDAP</h2>
+<h2><a id="6._LDAP"></a>6. LDAP</h2>
 
 <p>
 <i>This part is optional, only organisations with an LDAP server will need to read this.</i><br />
@@ -555,12 +556,12 @@ that criteria</li>
 </ul>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS</h2>
+<h2><a id="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS</h2>
 <p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
 This activation will not be completed unless you have previously downloaded the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a> and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory. <br/>This is necessary because Wiris is proprietary software and its services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>
+<h2><a id="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
@@ -579,7 +580,7 @@ Note: Xapian's licensing for the PHP extension is a bit different than what is n
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
+<h2><a id="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
@@ -602,7 +603,7 @@ You can then go to your administration page -&gt; <i>Chamilo Rapid</i> and set t
 <em>Note</em>: If you use LibreOffice 4, please note that version 4.2 (available in Ubuntu 14.04) has demonstrated to be more successfull at converting documents than version 4.1, which tended to crash when sending a document for conversion.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="12._Setting_cron_up"></a>10. Setting chronological tasks</h2>
+<h2><a id="12._Setting_cron_up"></a>10. Setting chronological tasks</h2>
 <p>
 Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get
 the best out of your server resources. One of such tasks (and the only one
@@ -625,7 +626,7 @@ settings there.
 
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="13._Changing_language_names_order"></a>11. Changing the language's firstname/lastname order</h2>
+<h2><a id="13._Changing_language_names_order"></a>11. Changing the language's firstname/lastname order</h2>
 As Chamilo becomes more popular and crosses many borders now, it frequently happens that administrators want to re-order the firstname and lastname fields in tables, and also on which field it is sorted first.<br/><br />
 This can easily be modified by editing the app/config/configuration.php file, finding the following section, uncommenting the PHP lines and adapting it to your language:<br />
 <pre>// Custom name_order_conventions
@@ -644,7 +645,7 @@ for example. The effect should be immediate.
 Please note that, although Chamilo allows you to define its position, the "title" field does not exist at this time, so no need to worry about it.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="14._Improving_files_download"></a>12. Improving files download efficiency</h2>
+<h2><a id="14._Improving_files_download"></a>12. Improving files download efficiency</h2>
 File download can be very slow when passing through a PHP script to control permissions. One solution to this
     is to use the X-Sendfile header, which depends on a module on the webserver. <a href="http://stackoverflow.com/a/3731639/1406662">Check http://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
 Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but requires a specific line of configuration to be
@@ -654,7 +655,7 @@ $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see an notable difference in download time.
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="15._Videoconference"></a>13. Videoconference</h2>
+<h2><a id="15._Videoconference"></a>13. Videoconference</h2>
 <p>
   Chamilo supports the connection to two different videoconference servers: BigBlueButton (versions 0.81, 0.9 and 1.0) and OpenMeetings.<br />
   While BigBlueButton seem easier to install, more clearly documented and more
@@ -670,7 +671,7 @@ If you have issues with files taking a long time to download, make sure you reco
   This should make an additional "Videoconference" tool icon appear in every course.<br />
 </p>
 <hr style="width: 100%; height: 2px;" />
-    <h2><a name="16._Rewrite"></a>14. Rewrite</h2>
+    <h2><a id="16._Rewrite"></a>14. Rewrite</h2>
     <p>
     Chamilo LMS 1.10 is the first version to require the web server to allow redirections of requests (and so 1.11 does as well).<br />
     For Apache, this is done through enabling the Rewrite module and either allowing overrides (through .htaccess) or adding a specific configuration section to the VirtualHost defined for Apache.<br />
@@ -921,7 +922,7 @@ If you have issues with files taking a long time to download, make sure you reco
         </pre>
     </div>
 
-    <h2><a name="17._Git_Upgrade"></a>15. Upgrading from Git</h2>
+    <h2><a id="17._Git_Upgrade"></a>15. Upgrading from Git</h2>
     If you have sufficient experience with Git and have installed your initial Chamilo portal
         from the Git version, you might want to upgrade from 1.9.x to 1.11.x using Git directly.<br />
     Here are a few tips that might help you:<br />

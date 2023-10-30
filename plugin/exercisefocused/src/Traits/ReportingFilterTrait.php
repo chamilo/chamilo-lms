@@ -30,7 +30,7 @@ trait ReportingFilterTrait
         $sessionId = api_get_session_id();
 
         $form = new FormValidator('exercisefocused', 'get');
-        $form->addText('username', get_lang('Username'), $cId > 0);
+        $form->addText('username', get_lang('LoginName'), $cId > 0);
         $form->addText('firstname', get_lang('FirstName'), false);
         $form->addText('lastname', get_lang('LastName'), false);
 
@@ -201,7 +201,7 @@ trait ReportingFilterTrait
         $urlDetail = api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/detail.php?'.api_get_cidreq().'&';
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Username'));
+        $table->setHeaderContents(0, 0, get_lang('LoginName'));
         $table->setHeaderContents(0, 1, get_lang('FullUserName'));
         $table->setHeaderContents(0, 2, get_lang('Exercise'));
         $table->setHeaderContents(0, 3, get_lang('StartDate'));

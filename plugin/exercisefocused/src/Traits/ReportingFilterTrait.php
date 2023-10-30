@@ -156,7 +156,7 @@ trait ReportingFilterTrait
             $timeLimitCount = $this->logRepository->countByActionInExe($value['exe'], Log::TYPE_TIME_LIMIT);
 
             $class = 'success';
-            $motive = get_lang('ExerciseFinished');
+            $motive = $this->plugin->get_lang('MotiveExerciseFinished');
 
             if ($outfocusedCount > 0 || $returnCount > 0) {
                 $class = 'warning';
@@ -191,7 +191,7 @@ trait ReportingFilterTrait
         return $results;
     }
 
-    protected function createTable(array $tableData): HTML_Table
+    protected function createTable(array $resultData): HTML_Table
     {
         $pluginMonitoring = ExerciseMonitoringPlugin::create();
         $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled(true);
@@ -200,21 +200,21 @@ trait ReportingFilterTrait
 
         $urlDetail = api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/detail.php?'.api_get_cidreq().'&';
 
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('LoginName'));
-        $table->setHeaderContents(0, 1, get_lang('FullUserName'));
-        $table->setHeaderContents(0, 2, get_lang('Exercise'));
-        $table->setHeaderContents(0, 3, get_lang('StartDate'));
-        $table->setHeaderContents(0, 4, get_lang('EndDate'));
-        $table->setHeaderContents(0, 5, $this->plugin->get_lang('Outfocused'));
-        $table->setHeaderContents(0, 6, $this->plugin->get_lang('Returns'));
-        $table->setHeaderContents(0, 7, $this->plugin->get_lang('Motive'));
-        $table->setHeaderContents(0, 8, get_lang('Actions'));
+        $tableHeaders = [];
+        $tableHeaders[] = get_lang('LoginName');
+        $tableHeaders[] = get_lang('FullUserName');
+        $tableHeaders[] = get_lang('Exercise');
+        $tableHeaders[] = $this->plugin->get_lang('ExerciseStartDateAndTime');
+        $tableHeaders[] = $this->plugin->get_lang('ExerciseEndDateAndTime');
+        $tableHeaders[] = $this->plugin->get_lang('Outfocused');
+        $tableHeaders[] = $this->plugin->get_lang('Returns');
+        $tableHeaders[] = $this->plugin->get_lang('Motive');
+        $tableHeaders[] = get_lang('Actions');
 
-        $row = 1;
+        $tableData = [];
 
-        foreach ($tableData as $result) {
-            $url = Display::url(
+        foreach ($resultData as $result) {
+            $actionLinks = Display::url(
                 $detailIcon,
                 $urlDetail.http_build_query(['id' => $result['id']]),
                 [
@@ -224,30 +224,37 @@ trait ReportingFilterTrait
             );
 
             if ($isPluginMonitoringEnabled) {
-                $url .= $pluginMonitoring->generateDetailLink((int) $result['id']);
+                $actionLinks .= $pluginMonitoring->generateDetailLink((int) $result['id']);
             }
 
-            $table->setCellContents($row, 0, $result['username']);
-            $table->setCellContents($row, 1, $result['user_fullname']);
-            $table->setCellContents($row, 2, $result['quiz_title']);
-            $table->setCellContents($row, 3, api_get_local_time($result['start_date'], null, null, true, true, true));
-            $table->setCellContents($row, 4, api_get_local_time($result['end_date'], null, null, true, true, true));
-            $table->setCellContents($row, 5, $result['count_outfocused']);
-            $table->setCellContents($row, 6, $result['count_return']);
-            $table->setCellContents($row, 7, $result['motive']);
-            $table->setCellContents($row, 8, $url);
+            $row = [];
 
-            $table->setRowAttributes($row, ['class' => $result['class']], true);
+            $row[] = $result['username'];
+            $row[] = $result['user_fullname'];
+            $row[] = $result['quiz_title'];
+            $row[] = api_get_local_time($result['start_date'], null, null, true, true, true);
+            $row[] = api_get_local_time($result['end_date'], null, null, true, true, true);
+            $row[] = $result['count_outfocused'];
+            $row[] = $result['count_return'];
+            $row[] = $result['motive'];
+            $row[] = $actionLinks;
 
-            $row++;
+            $tableData[] = $row;
         }
 
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+        $table->setHeaders($tableHeaders);
+        $table->setData($tableData);
         $table->setColAttributes(3, ['class' => 'text-center']);
         $table->setColAttributes(4, ['class' => 'text-center']);
         $table->setColAttributes(5, ['class' => 'text-right']);
         $table->setColAttributes(6, ['class' => 'text-right']);
         $table->setColAttributes(7, ['class' => 'text-center']);
         $table->setColAttributes(8, ['class' => 'text-right']);
+
+        foreach ($resultData as $idx => $result) {
+            $table->setRowAttributes($idx + 1, ['class' => $result['class']], true);
+        }
 
         return $table;
     }

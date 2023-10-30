@@ -34,3 +34,6 @@ $strings['AlertBeforeLeaving'] = "Please stay within the exam";
 $strings['RandomSampling'] = "Random sampling";
 $strings['WindowTitleOutfocused'] = 'Stay within the exam!';
 $strings['LevelReached'] = 'Level reached';
+$strings['ExerciseStartDateAndTime'] = "Exercise start date and time";
+$strings['ExerciseEndDateAndTime'] = "Exercise end date and time";
+$strings['MotiveExerciseFinished'] = "Successfully completed the exam (by clicking the save and finish exam button)";

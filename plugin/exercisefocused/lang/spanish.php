@@ -34,3 +34,6 @@ $strings['AlertBeforeLeaving'] = "Por favor, mantente dentro del examen.";
 $strings['RandomSampling'] = "Muestreo Aleatorio";
 $strings['WindowTitleOutfocused'] = '¡Mantente dentro del examen!';
 $strings['LevelReached'] = 'Nivel alcanzado';
+$strings['ExerciseStartDateAndTime'] = "Fecha y hora de inicio del ejercicio";
+$strings['ExerciseEndDateAndTime'] = "Fecha y hora de finalización del ejercicio";
+$strings['MotiveExerciseFinished'] = "Culminó exitosamente el examen (al dar clic al botón Guardar y finalizar el examen)";

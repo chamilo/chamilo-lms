@@ -73,9 +73,9 @@ foreach ($results as $result) {
         $user->getLastname(),
     ];
     $data[] = [
-        get_lang('StartDate'),
+        $plugin->get_lang('ExerciseStartDateAndTime'),
         api_get_local_time($result['exe']->getStartDate(), null, null, true, true, true),
-        get_lang('EndDate'),
+        $plugin->get_lang('ExerciseEndDateAndTime'),
         api_get_local_time($result['exe']->getExeDate(), null, null, true, true, true),
     ];
     $data[] = [

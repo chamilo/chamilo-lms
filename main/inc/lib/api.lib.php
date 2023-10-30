@@ -9753,6 +9753,9 @@ function api_mail_html(
         }
         $mail->DKIM_private_string = api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING');
         $mail->DKIM_private = api_get_mail_configuration_value('DKIM_PRIVATE_KEY');
+        if(!empty($platform_email['DKIM_PASSPHRASE'])) {
+            $mail->DKIM_passphrase = $platform_email['DKIM_PASSPHRASE'];
+        }
     }
 
     // Send the mail message.

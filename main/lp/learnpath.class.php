@@ -2354,8 +2354,8 @@ class learnpath
             $sessionId
         );
 
-        // If the item was deleted.
-        if (isset($itemInfo['visibility']) && $itemInfo['visibility'] == 2) {
+        // If the item was deleted or is invisible.
+        if (isset($itemInfo['visibility']) && ($itemInfo['visibility'] == 2 || $itemInfo['visibility'] == 0)) {
             return false;
         }
 

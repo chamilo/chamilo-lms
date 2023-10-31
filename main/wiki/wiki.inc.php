@@ -81,7 +81,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$course_id.' AND
-                    reflink="'.Database::escape_string($link).'" AND
+                    reflink="'.Database::escape_string(htmlspecialchars_decode($link)).'" AND
                     '.$groupfilter.$condition_session.'';
         $result = Database::query($sql);
         $num = Database::num_rows($result);

@@ -6325,7 +6325,7 @@ class Wiki
                         );
                     }
                     $wikiData = self::getWikiData();
-                    $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'];
+                    $redirectUrl = $this->url.'&action=showpage&title='.urlencode($wikiData['reflink']);
                     header('Location: '.$redirectUrl);
                     exit;
                 }

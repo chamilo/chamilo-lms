@@ -2401,11 +2401,13 @@ class Display
     /**
      * Returns the string "1 day ago" with a link showing the exact date time.
      *
-     * @param string $dateTime in UTC or a DateTime in UTC
+     * @param string|DateTime $dateTime in UTC or a DateTime in UTC
+     *
+     * @throws Exception
      *
      * @return string
      */
-    public static function dateToStringAgoAndLongDate($dateTime)
+    public static function dateToStringAgoAndLongDate(string|DateTime $dateTime): string
     {
         if (empty($dateTime) || '0000-00-00 00:00:00' === $dateTime) {
             return '';

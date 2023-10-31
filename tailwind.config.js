@@ -5,7 +5,7 @@ module.exports = {
   content: [
     "./assets/**/*.{js,vue}",
     "./public/main/**/*.{php,twig}",
-    "./src/CoreBudnle/Resources/views/**/*.html.twig",
+    "./src/CoreBundle/Resources/views/**/*.html.twig",
   ],
   theme: {
     colors: {

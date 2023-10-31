@@ -48,7 +48,7 @@ class DatePicker extends HTML_QuickForm_text
         }
         $variable = str_replace('extra_', '',$id);
         $requiredSymbol = '';
-        if (in_array($variable, $requiredFields)) {
+        if (!empty($requiredFields) && in_array($variable, $requiredFields)) {
             $requiredSymbol = '<span class="form_required">*</span>';
         }
         return '

@@ -753,12 +753,6 @@ function display_requirements(
         //$perm_file = api_get_permissions_for_new_files();
         $perm_file = octdec('0666');
 
-        $checked_writable = api_get_path(SYS_PUBLIC_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
         if (!$course_test_was_created) {
             error_log('Installer: Could not create test course - Make sure permissions are fine.');
             $error = true;

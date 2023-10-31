@@ -1130,7 +1130,7 @@ class Wiki
             } else {
                 $content = Security::remove_XSS($row['content']);
             }
-            $title = Security::remove_XSS($row['title']);
+            $title = htmlspecialchars_decode(Security::remove_XSS($row['title']));
         }
 
         if (self::wiki_exist($title)) {

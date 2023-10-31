@@ -5842,6 +5842,11 @@ class DocumentManager
             $modify_icons[] = $html;
         }
 
+        // Specific case to remove action icons for students on files in the Chat conversation history inside a group -refs BT#21165
+        if (strpos($document_data['path'],'chat_files') !== false && $document_data['filetype'] === 'file' && api_is_student()) {
+            $modify_icons = [];
+        }
+
         return implode(PHP_EOL, $modify_icons);
     }
 

@@ -143,7 +143,7 @@
         </div>
       </div>
       <div
-        if="intro.introText"
+        v-if="intro && intro.introText"
         class="mb-4"
         v-html="intro.introText"
       />

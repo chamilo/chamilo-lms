@@ -971,7 +971,7 @@ class Wiki
         $form->addElement('text', 'title', get_lang('Title'));
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         self::setForm($form);
-        $title = isset($_GET['title']) ? Security::remove_XSS($_GET['title']) : '';
+        $title = isset($_GET['title']) ? htmlspecialchars_decode(Security::remove_XSS($_GET['title'])) : '';
         $form->setDefaults(['title' => $title]);
         $form->addButtonSave(get_lang('Save'), 'SaveWikiNew');
         $form->display();

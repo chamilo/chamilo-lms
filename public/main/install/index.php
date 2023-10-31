@@ -429,9 +429,9 @@ if (isset($_POST['step2'])) {
     }
 
     if ($isPendingMigration) {
-        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
         $dotenv = new Dotenv();
-        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
         $dotenv->loadEnv($envFile);
         $stepData['dbHostForm'] = $_ENV['DATABASE_HOST'];
         $stepData['dbPortForm'] = $_ENV['DATABASE_PORT'];
@@ -485,7 +485,7 @@ if (isset($_POST['step2'])) {
 
         } else {
             $dotenv = new Dotenv();
-            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
             $dotenv->loadEnv($envFile);
         }
 

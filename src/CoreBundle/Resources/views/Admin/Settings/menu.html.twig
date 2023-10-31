@@ -1,12 +1,52 @@
 <div class="list-group q-card ">
 {% set current_namespace = app.request.get('namespace') %}
+{% set array = {
+    'admin': 'star',
+    'announcement': 'bullhorn',
+    'agenda': 'calendar-text',
+    'attendance': 'inbox-full',
+    'cas': 'cloud-key',
+    'certificate': 'certificate',
+    'chat': 'chat-processing',
+    'course': 'book-open-page-variant',
+    'crons': 'clock-start',
+    'display': 'monitor-screenshot',
+    'document': 'bookshelf',
+    'dropbox': 'dropbox',
+    'editor': 'form-textarea',
+    'exercise': 'order-bool-ascending-variant',
+    'forum': 'comment-quote',
+    'glossary': 'alphabetical',
+    'gradebook': 'numeric-7-box-multiple',
+    'group': 'account-group',
+    'language': 'translate',
+    'lp': 'map-marker-path',
+    'mail': 'mailbox',
+    'message': 'message-reply-text',
+    'platform': 'cog',
+    'profile': 'account-settings',
+    'ppt_to_lp': 'map-marker-plus',
+    'registration': 'account-plus',
+    'search': 'book-search',
+    'security': 'security',
+    'session': 'google-classroom',
+    'skill': 'shield-star',
+    'social': 'linkedin',
+    'survey': 'form-dropdown',
+    'work': 'inbox-full',
+    'ticket': 'ticket-confirmation',
+    'tracking': 'chart-box',
+    'webservice': 'cloud-sync',
+}
+%}
 {% for namespace in schemas|keys %}
     {% set namespace = namespace | replace({'chamilo_core.settings.' : ''}) %}
     <a
         class = "list-group-item {% if (current_namespace ==  namespace)  %} active {% endif %} "
         href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}"
     >
-        <img src="{{ asset('img/icons/32/' ~ namespace ~'.png') }}" />
+        <i class="mdi-{{ array[namespace] }} mdi v-icon ch-tool-icon-gradient" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="{{ namespace | capitalize | trans }}"></i>
+
         {{ namespace | capitalize | trans }}
     </a>
 {% endfor %}

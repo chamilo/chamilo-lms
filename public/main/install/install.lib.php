@@ -1749,7 +1749,7 @@ function isUpdateAvailable(string $baseDir): bool
 function checkMigrationStatus(): array
 {
     $dotenv = new Dotenv();
-    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
+    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
     $dotenv->loadEnv($envFile);
 
     connectToDatabase(

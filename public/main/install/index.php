@@ -46,8 +46,8 @@ api_check_php_version();
 ob_implicit_flush();
 Debug::enable();
 
-// Create .env.local file
-/*$envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
+// Create .env file
+/*$envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
 if (file_exists($envFile)) {
     echo "Chamilo is already installed. File $envFile exists.";
     exit;
@@ -466,9 +466,9 @@ if (isset($_POST['step2'])) {
 
         if (!$isUpdateAvailable) {
             $installType = 'update';
-            // Create .env.local file
-            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env.local';
-            $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+            // Create .env file
+            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+            $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
                 '{{DATABASE_PORT}}' => $dbPortForm,
@@ -554,9 +554,9 @@ if (isset($_POST['step2'])) {
         );
 
         $manager = Database::getManager();
-        // Create .env.local file
-        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
-        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
+        // Create .env file
+        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
+        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env.dist';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,

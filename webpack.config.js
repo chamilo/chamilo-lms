@@ -104,7 +104,7 @@ Encore
     ])
     // define the environment variables
     /*.configureDefinePlugin(options => {
-        const env = dotEnv.config({ path: '.env.local' });
+        const env = dotEnv.config({ path: '.env' });
         if (env.parsed) {
             options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
         }

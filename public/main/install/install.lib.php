@@ -725,8 +725,8 @@ function display_requirements(
         'status' => is_writable($basePath.'var'),
     ];
     $pathPermissions[] = [
-        'item' => $basePath.'.env.local',
-        'status' => checkCanCreateFile($basePath.'.env.local'),
+        'item' => $basePath.'.env',
+        'status' => checkCanCreateFile($basePath.'.env'),
     ];
     $pathPermissions[] = [
         'item' => $basePath.'config/',
@@ -1386,7 +1386,7 @@ function updateEnvFile($distFile, $envFile, $params)
 
     foreach ($requirements as $requirement) {
         if (!isset($params['{{'.$requirement.'}}'])) {
-            throw new \Exception("The parameter $requirement is needed in order to edit the .env.local file");
+            throw new \Exception("The parameter $requirement is needed in order to edit the .env file");
         }
     }
 

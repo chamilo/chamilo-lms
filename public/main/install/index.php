@@ -135,6 +135,11 @@ $upgradeFromVersion = [
     '1.11.12',
     '1.11.14',
     '1.11.16',
+    '1.11.18',
+    '1.11.20',
+    '1.11.22',
+    '1.11.24',
+    '1.11.26',
 ];
 
 $my_old_version = '';
@@ -198,15 +203,6 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
     $installType = $_GET['installType'] ?? '';
     $updateFromConfigFile = $_GET['updateFromConfigFile'] ?? false;
 }
-if ('update' === $installType && in_array($my_old_version, $upgradeFromVersion)) {
-    // This is the main configuration file of the system before the upgrade.
-    // Old configuration file.
-    // Don't change to include_once
-    $oldConfigPath = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
-    if (file_exists($oldConfigPath)) {
-        include $oldConfigPath;
-    }
-}
 
 $showEmailNotCheckedToStudent = 1;
 $userMailCanBeEmpty = null;
@@ -227,7 +223,7 @@ if (!isset($_GET['running'])) {
     }
 
     $loginForm = 'admin';
-    $passForm = api_generate_password(8, false);
+    $passForm = api_generate_password(12, false);
     $institutionUrlForm = 'https://chamilo.org';
     $languageForm = api_get_language_isocode();
     $checkEmailByHashSent = 0;
@@ -272,13 +268,6 @@ if (!$_POST) {
 }
 
 error_log("Step: $current_step");
-
-// Managing the $encryptPassForm
-if ('1' == $encryptPassForm) {
-    $encryptPassForm = 'bcrypt';
-} elseif ('0' == $encryptPassForm) {
-    $encryptPassForm = 'none';
-}
 
 if (empty($installationProfile)) {
     $installationProfile = '';

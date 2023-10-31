@@ -18,8 +18,8 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn +2.x - https://yarnpkg.com/getting-started/install
-- Node >= v14+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
+- yarn +3.x - https://yarnpkg.com/getting-started/install
+- Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.1+
 
@@ -31,14 +31,18 @@ On a fresh Ubuntu 22.04, you can prepare your server by issuing an apt command l
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt -y install software-properties-common
+sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip
+sudo apt install apache2 libapache2-mod-php8.1 mariadb-client mariadb-server php-pear php8.1-{dev,gd,curl,intl,mysql,mbstring,zip,xml,cli,apcu,bcmath,soap} git unzip
 cd ~
-curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
-sudo bash nodesource_setup.sh
-sudo apt install nodejs
+# If you already have nodejs 20+ installed, check the version with `node -v`
+# Otherwise, install node 20 or above following the instructions here: https://deb.nodesource.com/node_20.x/.
+# The following lines use a static version of those instructions, so probably not very sustainable over time
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+NODE_MAJOR=20
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+apt update && apt -y install nodejs
 sudo corepack enable
 cd ~
 # follow the instructions at https://getcomposer.org/download/
@@ -57,16 +61,17 @@ git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
 # not recommended to do this as the root user!
-# when asked whether you want to execute the recipes for some of the components,
+# when asked whether you want to execute the recipes or install plugins for some of the components,
 # you can safely type 'n' (for 'no').
 
-yarn set version stable
+yarn set version 3.4.1
 # delete yarn.lock as it might contain restrictive packages from a different context
-rm yarn.lock
+yarn up
 yarn install
 yarn dev
 # you can safely ignore any "warning" mentioned by yarn dev
-sudo chmod -R 777 .
+sudo touch .env
+sudo chown -R www-data: var/ .env config/
 ~~~~
 
 In your web server configuration, ensure you allow for the interpretation of .htaccess (`AllowOverride all` and `Require all granted`), and point the `DocumentRoot` to the `public/` subdirectory.
@@ -77,8 +82,7 @@ Once the above is ready, enter the **main/install/index.php** and follow the UI 
 
 After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
-chmod -R 755 .
-chown -R www-data: public/ var/
+chown -R root .env config/
 ~~~~
 
 ## Quick update
@@ -90,6 +94,9 @@ composer update
 
 # Database update
 php bin/console doctrine:schema:update --force
+
+# Clean Symfony cache
+php bin/console cache:clear
 
 # js/css update
 yarn install
@@ -113,7 +120,7 @@ This issue rarely happens, though.
 
 If you have it installed in a dev environment and feel like you should clean it up completely (might be necessary after changes to the database), you can do so by:
 
-* Removing the `.env.local`
+* Removing the `.env` file
 * Load the {url}/main/install/index.php script again
 
 The database should be automatically destroyed, table by table. In some extreme cases (a previous version created a table that is not necessary anymore and creates issues), you might want to clean it completely by just dropping it, but this shouldn't be necessary most of the time.

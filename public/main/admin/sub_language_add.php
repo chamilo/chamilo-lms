@@ -42,8 +42,8 @@ function add_sub_language($original_name, $english_name, $isocode, $sublanguage_
     $sublanguage_available = Database::escape_string($sublanguage_available);
     $parent_id = intval($parent_id);
 
-    $sql = 'INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id)
-    	  VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
+    $sql = 'INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,available,parent_id)
+    	  VALUES ("'.$original_name.'","'.$english_name.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
     if (false === $res) {
         return false;
@@ -214,7 +214,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     $english_name = str_replace(' ', '_', $english_name);
     $isocode = str_replace(' ', '_', $isocode);
 
-    $sublanguage_available = $_POST['sub_language_is_visible'];
+    $sublanguage_available = isset($_POST['sub_language_is_visible']) ? (int) $_POST['sub_language_is_visible'] : 0;
     $check_information = [];
     $check_information = check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available);
     foreach ($check_information as $index_information => $value_information) {

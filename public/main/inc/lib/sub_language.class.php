@@ -194,12 +194,28 @@ class SubLanguageManager
         if (empty($sub_language_dir)) {
             return false;
         }
-        $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
-        if (is_dir($dir)) {
-            return true;
-        } //even if the dir already exists, we reach the objective of having the directory there
 
-        return @mkdir($dir, api_get_permissions_for_new_directories());
+        // Path for the .po file you want to create
+        $poFilePath = api_get_path(SYS_PATH) . '../translations/messages.' . $sub_language_dir . '.po';
+        $translationsDir = dirname($poFilePath);
+
+        // Check if the translations/ directory is writable
+        if (!is_writable($translationsDir)) {
+            // Attempt to set writable permissions
+            if (!@chmod($translationsDir, 0775)) { // You might adjust the permission level as needed
+                return false;  // Failed to set writable permissions
+            }
+        }
+
+        // If the .po file doesn't exist, create it
+        if (!file_exists($poFilePath)) {
+            $initialContent = "# Translation file for $sub_language_dir\nmsgid \"\"\nmsgstr \"\"\n";
+            if (false === file_put_contents($poFilePath, $initialContent)) {
+                return false;  // Failed to write the file
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -551,5 +567,190 @@ class SubLanguageManager
         }
 
         return false;
+    }
+
+    /**
+     * Convert a string to a valid PHP camelCase variable name.
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function stringToCamelCaseVariableName($string)
+    {
+        $varName = preg_replace('/[^a-z0-9_]/i', '_', $string);  // Replace invalid characters with '_'
+        $varName = trim($varName, '_');  // Trim any '_' from the beginning and end
+        $varName = ucwords(str_replace('_', ' ', $varName));  // Convert to camel case
+        $varName = lcfirst(str_replace(' ', '', $varName));  // Remove spaces and convert the first character to lowercase
+        return substr($varName, 0, 25);  // Limit to 15 characters
+    }
+
+    /**
+     * Retrieve the iso_code for a given language ID and its parent.
+     *
+     * @param int $languageId
+     * @return array [childIsoCode, parentIsoCode]
+     */
+    public static function getIsoCodes($languageId)
+    {
+        $em = Database::getManager();
+        $language = $em->getRepository('Chamilo\CoreBundle\Entity\Language')->find($languageId);
+
+        if (!$language) {
+            return [null, null];
+        }
+
+        $childIsoCode = $language->getIsoCode();
+        $parentIsoCode = null;
+
+        if ($language->getParent()) {
+            $parentLanguage = $em->getRepository('Chamilo\CoreBundle\Entity\Language')->find($language->getParent());
+            if ($parentLanguage) {
+                $parentIsoCode = $parentLanguage->getIsoCode();
+            }
+        }
+
+        return [$childIsoCode, $parentIsoCode];
+    }
+
+    /**
+     * Search for translations based on a term and language ID.
+     *
+     * @param string $term        The term to search for.
+     * @param int    $languageId  The ID of the language to search in.
+     *
+     * @return array An array of matched translations.
+     */
+    public static function searchTranslations($term, $languageId)
+    {
+        // Retrieve the ISO codes for the provided language ID.
+        list($childIsoCode, $parentIsoCode) = self::getIsoCodes($languageId);
+
+        // Define the files to search in based on the ISO codes.
+        $files = ['en' => 'messages.en.po', $parentIsoCode => "messages.$parentIsoCode.po", $childIsoCode => "messages.$childIsoCode.po"];
+
+        $results = [];
+
+        // Step 1: Search for all matches in messages.en.po.
+        $matchedMsgids = self::searchMsgidInFile($term, $files['en']);
+
+        // Step 2: For each matched msgid, search for its translation in the other files.
+        foreach ($matchedMsgids as $msgid) {
+            $entry = [
+                'file' => $files['en'],
+                'variable' => $msgid,
+                'phpVarName' => self::stringToCamelCaseVariableName($msgid),
+                'en' => self::getTranslationForVariable($msgid, $files['en'])
+            ];
+            $entry[$parentIsoCode] = self::getTranslationForVariable($msgid, $files[$parentIsoCode]);
+            $entry[$childIsoCode] = self::getTranslationForVariable($msgid, $files[$childIsoCode]);
+
+            $results[] = $entry;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Search for a specific term inside a given .po file and return the msgids that match.
+     *
+     * @param string $term      The term to search for.
+     * @param string $filename  The name of the .po file to search in.
+     *
+     * @return array An array of msgids that match the given term.
+     */
+    private static function searchMsgidInFile($term, $filename)
+    {
+        $poFilePath = api_get_path(SYS_PATH) . '../translations/' . $filename;
+        $matchedMsgids = [];
+
+        if (file_exists($poFilePath)) {
+            $lines = file($poFilePath, FILE_IGNORE_NEW_LINES);
+            $currentVariable = null;
+
+            foreach ($lines as $line) {
+                if (strpos($line, 'msgid "') === 0) {
+                    $currentVariable = str_replace('msgid "', '', $line);
+                    $currentVariable = rtrim($currentVariable, '"');
+
+                    if (stripos($currentVariable, $term) !== false) {
+                        $matchedMsgids[] = $currentVariable;
+                    }
+                }
+            }
+        }
+
+        return $matchedMsgids;
+    }
+
+    /**
+     * Retrieve the translation (msgstr) for a given variable (msgid) from a specified .po file.
+     *
+     * @param string $variable  The variable (msgid) to search for.
+     * @param string $filename  The name of the .po file to retrieve the translation from.
+     *
+     * @return string The translation (msgstr) for the provided variable, or an empty string if not found.
+     */
+    private static function getTranslationForVariable($variable, $filename)
+    {
+        $poFilePath = api_get_path(SYS_PATH) . '../translations/' . $filename;
+
+        if (file_exists($poFilePath)) {
+            $content = file_get_contents($poFilePath);
+            $pattern = '/msgid "' . preg_quote($variable, '/') . '"\nmsgstr "(.*?)"/';
+            if (preg_match($pattern, $content, $match)) {
+                return $match[1];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Updates or adds a msgid in the specified .po file.
+     *
+     * @param string $filename  Name of the .po file
+     * @param string $msgid     Message identifier to search or add
+     * @param string $content   Associated message content
+     *
+     * @return array Returns true if the operation was successful, otherwise returns false
+     */
+    public static function updateOrAddMsgid($filename, $msgid, $content)
+    {
+        $filePath = api_get_path(SYS_PATH) . '../translations/' . $filename;
+
+        if (!file_exists($filePath)) {
+            return ['success' => false, 'error' => 'File does not exist'];
+        }
+
+        if (!is_writable($filePath)) {
+            try {
+                if (!chmod($filePath, 0664)) {
+                    return ['success' => false, 'error' => 'Unable to set the file to writable'];
+                }
+            } catch (Exception $e) {
+
+                return ['success' => false, 'error' => 'Failed to change file permissions: ' . $e->getMessage()];
+            }
+        }
+
+        $fileContents = file_get_contents($filePath);
+        if ($fileContents === false) {
+            return ['success' => false, 'error' => 'Failed to read file contents'];
+        }
+
+        $pattern = '/msgid "' . preg_quote($msgid, '/') . '"' . PHP_EOL . 'msgstr "(.*?)"/';
+        if (preg_match($pattern, $fileContents)) {
+            $replacement = 'msgid "' . $msgid . '"' . PHP_EOL . 'msgstr "' . $content . '"';
+            $fileContents = preg_replace($pattern, $replacement, $fileContents);
+        } else {
+            $appendString = PHP_EOL . PHP_EOL . 'msgid "' . $msgid . '"' . PHP_EOL . 'msgstr "' . $content . '"';
+            $fileContents .= $appendString;
+        }
+
+        if (file_put_contents($filePath, $fileContents) === false) {
+            return ['success' => false, 'error' => 'Failed to write to file'];
+        }
+
+        return ['success' => true];
     }
 }

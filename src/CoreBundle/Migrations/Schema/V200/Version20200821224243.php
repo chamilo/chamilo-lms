@@ -53,6 +53,16 @@ final class Version20200821224243 extends AbstractMigrationChamilo
             }
         }
 
+        $tblMessage = $schema->getTable('message');
+
+        if ($tblMessage->hasIndex('idx_message_user_receiver')) {
+            $this->addSql('DROP INDEX idx_message_user_receiver ON message');
+        }
+
+        if ($tblMessage->hasColumn('user_receiver_id')) {
+            $this->addSql('ALTER TABLE message DROP user_receiver_id');
+        }
+
         $newTypeQueries = [];
 
         $newTypeQueries[] = sprintf(

@@ -81,6 +81,7 @@ class Message
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['message:read'])]
     protected ?int $id = null;
 
     #[Assert\NotBlank]

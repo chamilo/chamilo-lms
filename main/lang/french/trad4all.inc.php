@@ -8766,4 +8766,5 @@ $ReminderXEvent = "Rappel pour l'événement : %s";
 $AddNotification = "Ajouter un rappel";
 $NotifyBeforeTheEventStarts = "Notification de rappel de l'événement";
 $AddTags = "Ajouter les tags";
+$StudentHadEnoughSkills = "Un apprenant a obtenu le nombre de sous compétences nécessaire pour valider la compétence mère.";
 ?>

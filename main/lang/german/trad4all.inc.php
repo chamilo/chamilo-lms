@@ -7983,4 +7983,6 @@ $WhyYouWantToDeleteYourLegalAgreement = "Sie können unten einen Löschantrag st
 $ExplanationDeleteLegal = "Bitte Begünden Sie kurz, warum Sie diesen Löschantrag stellen, damit wir das Löschen bestmöglich veranlassen können.";
 $DeleteAccount = "konto löschen";
 $ExplanationDeleteAccount = "Bitte Begünden Sie kurz, warum Sie diesen Löschantrag stellen, damit wir das Löschen bestmöglich veranlassen können.";
+$StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "%s hat genügend Dimensionen validiert, um die Kompetenz %s zu bekommen. Um die Kompetenz zuzuweisen, bitten hier klicken: %s";
+$StudentHadEnoughSkills = "Ein Schüler hat die Anzahl der Teilfertigkeiten erworben, die zur Validierung der Mutterfertigkeit erforderlich sind.";
 ?>

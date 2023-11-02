@@ -256,7 +256,7 @@
                     'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
 
-                {% if ios_hide_open_in_new_window == true %}
+                {% if ios_hide_open_in_new_window == false %}
                     $('<a>')
                         .attr({
                             'id': 'btn-content-new-tab',

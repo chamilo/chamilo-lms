@@ -479,6 +479,11 @@ if ($form->validate()) {
 
     $expiration_date = null;
     if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
+        if (empty($user['expiration_date'])) {
+            Display::addFlash(Display::return_message(get_lang('EmptyExpirationDate')));
+            header('Location: '.api_get_self().'?user_id='.$user_id);
+            exit();
+        }
         $expiration_date = $user['expiration_date'];
     }
 

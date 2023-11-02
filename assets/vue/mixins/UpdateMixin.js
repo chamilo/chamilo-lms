@@ -130,7 +130,8 @@ export default {
 
     updated(val) {
       console.log('updated');
-      this.showMessage(`${val['@id']} updated.`);
+      //this.showMessage(`${val['@id']} updated.`);
+      this.$router.go(-1);
     },
 
     retrieved(val) {

@@ -77,12 +77,14 @@ export default {
   },
   methods: {
     browser(callback, value, meta) {
-      //const route = useRoute();
-      let nodeId = this.$route.params["node"];
+      let nodeId = this.$route.query.ctoolId;
+      if (!nodeId) {
+        nodeId = this.$route.params.courseTool;
+      }
       let folderParams = this.$route.query;
       let url = this.$router.resolve({
         name: "DocumentForHtmlEditor",
-        params: { id: nodeId },
+        params: { node: nodeId },
         query: folderParams,
       });
       url = url.fullPath;

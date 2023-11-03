@@ -38,7 +38,7 @@ class MessageManager
                 $sender = $message->getSender();
 
                 $deleteLink = '';
-                if (!empty($url) && $currentUserId === $sender->getId()) {
+                if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
                     $deleteLink = '<a title="'.addslashes(
                             get_lang('DeleteMessage')
                         ).'" href="'.$url.'&action=delete_message&message_id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(

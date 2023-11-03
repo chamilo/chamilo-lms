@@ -87,8 +87,8 @@ class Message
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentMessages')]
-    #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
-    protected User $sender;
+    #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?User $sender = null;
 
     /**
      * @var Collection<int, MessageRelUser>
@@ -264,12 +264,12 @@ class Message
         return $this;
     }
 
-    public function getSender(): User
+    public function getSender(): ?User
     {
         return $this->sender;
     }
 
-    public function setSender(User $sender): self
+    public function setSender(?User $sender): self
     {
         $this->sender = $sender;
 

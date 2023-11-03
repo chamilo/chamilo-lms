@@ -663,8 +663,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(
         mappedBy: 'sender',
         targetEntity: Message::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
+        cascade: ['persist']
     )]
     protected Collection $sentMessages;
 
@@ -1649,6 +1648,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->username;
     }
 
+    /**
+     * @return Collection<int, Message>
+     */
     public function getSentMessages(): Collection
     {
         return $this->sentMessages;

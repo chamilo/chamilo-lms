@@ -147,11 +147,51 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    ".$result['js']."
+    " . $result['js'] . "
+
+    // Function to store Select2 values in local storage
+    function storeSelect2Values(selectId) {
+        var selectedValues = $('#' + selectId).select2('data').map(function(item) {
+            return {id: item.id, text: item.text};
+        });
+        localStorage.setItem(selectId + 'Values', JSON.stringify(selectedValues));
+    }
+
+    // Function to retrieve and repopulate Select2 values from local storage
+    function repopulateSelect2Values(selectId) {
+        if(localStorage.getItem(selectId + 'Values')) {
+            var storedValues = JSON.parse(localStorage.getItem(selectId + 'Values'));
+            storedValues.forEach(function(item) {
+                var newOption = new Option(item.text, item.id, true, true);
+                $('#' + selectId).append(newOption);
+            });
+            $('#' + selectId).val(storedValues.map(function(item) { return item.id; })).trigger('change');
+            localStorage.removeItem(selectId + 'Values');
+        }
+    }
+
+    // When changing the value in the select, store values from both selects and redirect
     $('#system_template').on('change', function() {
+        var formValues = $('#add_session').serializeArray();
+        localStorage.setItem('formValues', JSON.stringify(formValues));
+        storeSelect2Values('coach_username');
+        storeSelect2Values('system_template');
+
         var sessionId = $(this).find('option:selected').val();
         window.location.href = '/main/session/session_add.php?fromSessionId=' + sessionId;
     });
+
+    // Repopulate values from local storage on page load
+    if(localStorage.getItem('formValues')) {
+        var storedValues = JSON.parse(localStorage.getItem('formValues'));
+        $.each(storedValues, function(i, field) {
+            $('[name=\"' + field.name + '\"]').val(field.value);
+        });
+        localStorage.removeItem('formValues');
+    }
+
+    repopulateSelect2Values('coach_username');
+    repopulateSelect2Values('system_template');
 });
 </script>";
 

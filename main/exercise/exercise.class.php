@@ -2014,6 +2014,11 @@ class Exercise
                 WHERE iid = ".$this->iid;
             Database::query($sql);
         }
+        Event::addEvent(
+            LOG_EXERCISE_DELETE,
+            LOG_EXERCISE_ID,
+            $this->iid
+        );
 
         return true;
     }

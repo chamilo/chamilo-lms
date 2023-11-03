@@ -234,6 +234,7 @@ define('LOG_CAREER_CREATE', 'career_created');
 define('LOG_CAREER_DELETE', 'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
+define('LOG_EXERCISE_DELETE', 'exe_deleted');
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 define('LOG_EXERCISE_RESULT_DELETE_INCOMPLETE', 'exe_incomplete_results_deleted');

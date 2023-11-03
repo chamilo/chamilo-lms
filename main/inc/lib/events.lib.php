@@ -1429,7 +1429,7 @@ class Event
                         status = 'incomplete' ";
             Database::query($sql);
             self::addEvent(
-                LOG_EXERCISE_RESULT_DELETE,
+                LOG_EXERCISE_RESULT_DELETE_INCOMPLETE,
                 LOG_EXERCISE_AND_USER_ID,
                 $exercise_id.'-'.$user_id,
                 null,

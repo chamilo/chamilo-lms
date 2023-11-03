@@ -104,11 +104,18 @@
         <Column selection-mode="multiple" />
         <Column :header="t('From')">
           <template #body="slotProps">
-            <div class="flex items-center gap-2">
+            <div
+              v-if="slotProps.data.sender"
+              class="flex items-center gap-2"
+            >
               <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" />
 
               {{ slotProps.data.sender.username }}
             </div>
+            <div
+              v-else
+              v-t="'No sender'"
+            />
           </template>
         </Column>
         <Column :header="t('Title')">

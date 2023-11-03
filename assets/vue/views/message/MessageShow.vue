@@ -52,7 +52,7 @@
       </div>
 
       <BaseAutocomplete
-        v-if="item.sender['@id'] !== user['@id']"
+        v-if="item.sender && item.sender['@id'] !== user['@id']"
         id="search-tags"
         v-model="foundTag"
         :label="t('Tags')"
@@ -66,9 +66,14 @@
       {{ t("From") }}
 
       <BaseChip
+        v-if="item.sender"
         :value="item.sender"
         image-field="illustrationUrl"
         label-field="username"
+      />
+      <span
+        v-else
+        v-t="'No sender'"
       />
     </div>
 

@@ -8974,4 +8974,5 @@ $IncludeLastLogin = "Inclure dernière connexion";
 $DuplicatedUsersByMail = "Utilisateurs en double (par courriel)";
 $ThisReportOnlyListsUsersThatHaveTheSameEmail = "Ce rapport ne liste que les utilisateurs qui ont le même courriel.";
 $CancelNotifyMe = "Ne plus m'alerter";
+$EmptyExpirationDate = "La date d'expiration ne peut pas être vide.";
 ?>

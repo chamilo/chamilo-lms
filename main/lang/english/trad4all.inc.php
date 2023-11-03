@@ -9040,4 +9040,5 @@ $IncludeLastLogin = "Include last login";
 $DuplicatedUsersByMail = "Duplicated users by e-mail";
 $ThisReportOnlyListsUsersThatHaveTheSameEmail = "This report only lists users that have the same email.";
 $CancelNotifyMe = "Stop notifying me";
+$EmptyExpirationDate = "Expiration date cannot be empty.";
 ?>

@@ -7907,7 +7907,7 @@ class SessionManager
     /**
      * @throws Exception
      */
-    public static function setForm(FormValidator $form, Session $session = null): array
+    public static function setForm(FormValidator $form, Session $session = null, $fromSessionId = null): array
     {
         $categoriesList = self::get_all_session_category();
 
@@ -8019,7 +8019,7 @@ class SessionManager
         $form->addHtml('<div id="ajax_list_coachs"></div>');
 
         $form->addButtonAdvancedSettings('advanced_params');
-        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addElement('html', '<div id="advanced_params_options" style="'.(isset($fromSessionId) ? 'display:block' : 'display:none').'">');
 
         if (null === $session) {
             $form->addSelectAjax(
@@ -8033,6 +8033,9 @@ class SessionManager
             );
         }
 
+        if (isset($fromSessionId)) {
+            $session = api_get_session_entity($fromSessionId);
+        }
         $form->addSelect(
             'session_category',
             get_lang('Sessions categories'),
@@ -8202,9 +8205,16 @@ class SessionManager
         $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
 
         if ($session && $session->getImage()) {
-            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-            $imageUrl = self::getSessionPictureUrl($session);
-            $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+            if (isset($fromSessionId)) {
+                $imageUrl = self::getSessionPictureUrl($session);
+                $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+                $form->addHidden('image_session_template', $imageUrl);
+
+            } else {
+                $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
+                $imageUrl = self::getSessionPictureUrl($session);
+                $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+            }
         }
 
         // Extra fields

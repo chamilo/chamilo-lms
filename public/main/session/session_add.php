@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\User;
 
 $cidReset = true;
 
@@ -129,9 +130,16 @@ function check_session_name($name)
     return empty($session) ? true : false;
 }
 
+$session = null;
+$fromSessionId = null;
+if (isset($_GET['fromSessionId'])) {
+    $fromSessionId = (int) $_GET['fromSessionId'];
+    $session = api_get_session_entity($fromSessionId);
+    $urlAction .= '?fromSessionId=' . $fromSessionId;
+}
 $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
-$result = SessionManager::setForm($form);
+$result = SessionManager::setForm($form, null, $fromSessionId);
 
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
@@ -142,214 +150,42 @@ $(function() {
     ".$result['js']."
     $('#system_template').on('change', function() {
         var sessionId = $(this).find('option:selected').val();
-
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: '".$url."',
-            data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
-            success: function(data) {
-                var categoryId  = parseInt(data.session_category_id);
-                if (isNaN(categoryId) || !categoryId) {
-                    categoryId = 0;
-                }
-                $('#session_category').val(categoryId);
-                $('#session_category').trigger('change');
-
-                setContentFromEditor('description', data.description);
-
-                if (data.duration > 0) {
-                    $('#access').val(0);
-                    $('#access').trigger('change');
-                    accessSwitcher(0);
-                    $('#duration').val(parseInt(data.duration));
-                } else {
-                    $('#access').val(1);
-                    $('#access').trigger('change');
-                    accessSwitcher(1);
-
-                    var variables = [
-                        'display_start_date',
-                        'access_start_date',
-                        'coach_access_start_date',
-                        'display_end_date',
-                        'access_end_date',
-                        'coach_access_end_date'
-                    ];
-                    variables.forEach(function(variable) {
-                        var variableName = variable + '_to_local_time';
-                        if (data[variableName]) {
-                           // console.log(data[variableName]);
-                            let parsedDate = data[variableName];
-                            if (parsedDate) {
-                                 var item = $('#'+variable);
-                                 flatpickr = item[0]._flatpickr;
-                                 flatpickr.setDate(parsedDate);
-                            }
-                        }
-                    });
-                }
-
-                $('[name=\'show_description\']').prop('checked', false);
-                if (data.show_description) {
-                    $('[name=\'show_description\']').prop('checked', true);
-                }
-
-                $('[name=\'send_subscription_notification\']').prop('checked', false);
-                if (data.send_subscription_notification) {
-                    $('[name=\'send_subscription_notification\']').prop('checked', true);
-                }
-
-                $.each(data.extra_fields, function(i, item) {
-                    var fieldName = 'extra_'+item.variable;
-                    var valueType = parseInt(item.value_type);
-                    /*
-                    const FIELD_TYPE_TEXT = 1;
-                    const FIELD_TYPE_TEXTAREA = 2;
-                    const FIELD_TYPE_RADIO = 3;
-                    const FIELD_TYPE_SELECT = 4;
-                    const FIELD_TYPE_SELECT_MULTIPLE = 5;
-                    const FIELD_TYPE_DATE = 6;
-                    const FIELD_TYPE_DATETIME = 7;
-                    const FIELD_TYPE_DOUBLE_SELECT = 8;
-                    const FIELD_TYPE_DIVIDER = 9;
-                    const FIELD_TYPE_TAG = 10;
-                    const FIELD_TYPE_TIMEZONE = 11;
-                    const FIELD_TYPE_SOCIAL_PROFILE = 12;
-                    const FIELD_TYPE_CHECKBOX = 13;
-                    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
-                    const FIELD_TYPE_INTEGER = 15;
-                    const FIELD_TYPE_FILE_IMAGE = 16;
-                    const FIELD_TYPE_FLOAT = 17;
-                    const FIELD_TYPE_FILE = 18;
-                    const FIELD_TYPE_VIDEO_URL = 19;
-                    const FIELD_TYPE_LETTERS_ONLY = 20;
-                    const FIELD_TYPE_ALPHANUMERIC = 21;
-                    const FIELD_TYPE_LETTERS_SPACE = 22;
-                    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;*/
-                    switch (valueType) {
-                        case 1: // text
-                        case 6: // date
-                        case 7: // datetime
-                        case 15: // integer
-                        case 17: // float
-                        case 20: // letters only
-                        case 21: // alphanum
-                            $('input[name='+fieldName+']').val(item.value);
-                            break;
-                        case 2: // textarea
-                            setContentFromEditor(fieldName, item.value);
-                            break;
-                        case 3: // radio
-                            var radio = fieldName+'['+fieldName+']';
-                            $('[name=\''+radio+'\']').val([item.value]);
-                            break;
-                        case 4: // simple select
-                        case 5: // multiple select
-                            var options = item.value.split(';');
-                            $('#'+fieldName+'').val(options);
-                            //$('#'+fieldName+'').selectpicker('render');
-                            break;
-                        case 8: // double
-                            var first = 'first_'+fieldName;
-                            var second = 'second_'+fieldName;
-                            // item.value has format : 85::86
-                            if (item.value) {
-                                var values = item.value.split('::');
-                                var firstFieldId = values[0];
-                                var secondFieldId = values[1];
-                                $('#'+first+'').val(firstFieldId);
-                                $('#'+first+'').selectpicker('render');
-
-                                // Remove all options
-                                 $('#'+second+'')
-                                .find('option')
-                                .remove()
-                                .end();
-
-                                // Load items for this item then update:
-                                $.ajax({
-                                    url: '".$urlAjaxExtraField."&a=get_second_select_options',
-                                    dataType: 'json',
-                                    data: 'type=session&field_id='+item.id+'&option_value_id='+firstFieldId,
-                                    success: function(data) {
-                                        $.each(data, function(index, value) {
-                                            var my_select = $('#'+second+'');
-                                            my_select.append($(\"<option/>\", {
-                                                value: index,
-                                                text: value
-                                            }));
-                                        });
-                                        $('#'+second+'').selectpicker('refresh');
-                                    }
-                                });
-
-                                $('#'+second+'').val(secondFieldId);
-                                $('#'+second+'').selectpicker('render');
-                            }
-                            break;
-                        case 10: // tags
-                            // Remove all options
-                            $('#'+fieldName+' option').each(function(i, optionItem) {
-                                $(this).remove();
-                            });
-
-                            $('#'+fieldName).next().find('.bit-box').each(function(i, optionItem) {
-                                $(this).remove();
-                            });
-
-                            // Add new options
-                            if (item.value) {
-                                $.each(item.value, function(i, tagItem) {
-                                    // Select2 changes
-                                    //console.log(tagItem.value);
-                                    //$('#'+fieldName)[0].addItem(tagItem.value, tagItem.value);
-                                    var option = new Option(tagItem.value, tagItem.value);
-                                    option.selected = true;
-                                    $('#'+fieldName).append(option);
-                                    $('#'+fieldName).trigger(\"change\");
-                                });
-                            }
-                            break;
-                        case 13: // check
-                            var check = fieldName+'['+fieldName+']';
-                            // Default is uncheck
-                            $('[name=\''+check+'\']').prop('checked', false);
-
-                            if (item.value == 1) {
-                               $('[name=\''+check+'\']').prop('checked', true);
-                            }
-                            break;
-                        case 16:
-                            if (item.url) {
-                                var url = item.url;
-                                var divFormGroup = fieldName + '-form-group';
-                                var divWrapper = fieldName + '_crop_image';
-                                var divPreview = fieldName + '_preview_image';
-                                var divCropButton = fieldName + '_crop_button';
-                                var cropResult = fieldName + '_crop_result';
-
-                                $('[name=\''+cropResult+'\']').val('import_file_from_session::' + sessionId);
-                                $('#' + divFormGroup).show();
-                                $('#' + divWrapper).show();
-                                $('#' + divCropButton).hide();
-                                $('#' + divPreview).attr('src', url);
-                                //$('[name=\''+fieldName+'\']')
-                            }
-                            break;
-                    }
-                });
-            }
-        });
-    })
-})
+        window.location.href = '/main/session/session_add.php?fromSessionId=' + sessionId;
+    });
+});
 </script>";
 
 $form->addButtonNext(get_lang('Next step'));
 
+$formDefaults = [];
 if (!$formSent) {
-    $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
-    $formDefaults['coach_username'] = [api_get_user_id()];
+    if ($session) {
+        $formDefaults = [
+            'id' => $session->getId(),
+            'session_category' => $session->getCategory()?->getId(),
+            'description' => $session->getDescription(),
+            'show_description' => $session->getShowDescription(),
+            'duration' => $session->getDuration(),
+            'session_visibility' => $session->getVisibility(),
+            'display_start_date' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
+            'display_end_date' => $session->getDisplayEndDate() ? api_get_local_time($session->getDisplayEndDate()) : null,
+            'access_start_date' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
+            'access_end_date' => $session->getAccessEndDate() ? api_get_local_time($session->getAccessEndDate()) : null,
+            'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
+            'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
+            'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+            'coach_username' => array_map(
+                function (User $user) {
+                    return $user->getId();
+                },
+                $session->getGeneralCoaches()->getValues()
+            ),
+            'session_template' => $session->getName(),
+        ];
+    } else {
+        $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
+        $formDefaults['coach_username'] = [api_get_user_id()];
+    }
 }
 
 $form->setDefaults($formDefaults);
@@ -410,15 +246,33 @@ if ($form->validate()) {
     );
 
     if ($return == strval(intval($return))) {
-
-        // Add image
-        $picture = $_FILES['picture'];
-        if (!empty($picture['name'])) {
-            SessionManager::updateSessionPicture(
-                $return,
-                $picture,
-                $params['picture_crop_result']
-            );
+        if (!empty($_FILES['picture']['tmp_name'])) {
+            // Add image
+            $picture = $_FILES['picture'];
+            if (!empty($picture['name'])) {
+                SessionManager::updateSessionPicture(
+                    $return,
+                    $picture,
+                    $params['picture_crop_result']
+                );
+            }
+        } else {
+            if (isset($_POST['image_session_template'])) {
+                $assetUrl = Security::remove_XSS($_POST['image_session_template']);
+                $path = parse_url($assetUrl, PHP_URL_PATH);
+                $filename = basename($path);
+                $tmpName = api_get_path(SYS_PATH).'../var/upload'.$path;
+                $fileArray = [
+                    'tmp_name' => $tmpName,
+                    'name' => $filename,
+                    'error' => 0,
+                    'size' => filesize($tmpName),
+                ];
+                SessionManager::updateSessionPicture(
+                    $return,
+                    $fileArray
+                );
+            }
         }
 
         // integer => no error on session creation

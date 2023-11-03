@@ -887,6 +887,11 @@ class learnpath
                     $session_id,
                     $userId
                 );
+                Event::addEvent(
+                    LOG_LP_CREATE,
+                    LOG_LP_ID,
+                    $newLp->getIid().' - '.$name
+                );
 
                 return $newLp->getIid();
         }
@@ -1139,6 +1144,11 @@ class learnpath
             $this->lp_id,
             'delete',
             api_get_user_id()
+        );
+        Event::addEvent(
+            LOG_LP_DELETE,
+            LOG_LP_ID,
+            $this->lp_id.' - '.$this->get_name()
         );
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(

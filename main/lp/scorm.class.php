@@ -432,6 +432,11 @@ class scorm extends learnpath
                 'visible',
                 $userId
             );
+            Event::addEvent(
+                LOG_LP_CREATE,
+                LOG_LP_ID,
+                $this->lp_id.' - '.$myname
+            );
 
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.

@@ -237,6 +237,9 @@ define('LOG_WIKI_ACCESS', 'wiki_page_view');
 define('LOG_EXERCISE_CREATE', 'exe_created');
 define('LOG_EXERCISE_UPDATE', 'exe_updated');
 define('LOG_EXERCISE_DELETE', 'exe_deleted');
+define('LOG_LP_CREATE', 'lp_created');
+define('LOG_LP_UPDATE', 'lp_updated');
+define('LOG_LP_DELETE', 'lp_deleted');
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 define('LOG_EXERCISE_RESULT_DELETE_INCOMPLETE', 'exe_incomplete_results_deleted');

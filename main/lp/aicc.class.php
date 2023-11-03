@@ -274,6 +274,11 @@ class aicc extends learnpath
         }
         Database::query($sql);
         $lp_id = Database::insert_id();
+        Event::addEvent(
+            LOG_LP_CREATE,
+            LOG_LP_ID,
+            $lp_id.' - '.$this->course_title
+        );
 
         if ($lp_id) {
             $sql = "UPDATE $new_lp SET id = iid  WHERE iid = $lp_id";
@@ -647,7 +652,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 
@@ -670,7 +675,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' 
+            $sql = "UPDATE $tbl_lp SET author = '$author'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 
@@ -696,7 +701,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 

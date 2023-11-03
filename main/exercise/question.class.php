@@ -1619,6 +1619,12 @@ abstract class Question
             $this->exportPicture($newQuestionId, $courseInfo);
         }
 
+        Event::addEvent(
+            LOG_QUESTION_CREATED,
+            LOG_QUESTION_ID,
+            $newQuestionId
+        );
+
         return $newQuestionId;
     }
 

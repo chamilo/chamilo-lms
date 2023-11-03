@@ -1710,6 +1710,11 @@ class Exercise
             if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit();
             }
+            Event::addEvent(
+                LOG_EXERCISE_UPDATE,
+                LOG_EXERCISE_ID,
+                $id
+            );
         } else {
             // Creates a new exercise
             // In this case of new exercise, we don't do the api_get_utc_datetime()
@@ -1816,6 +1821,11 @@ class Exercise
                 if (api_get_setting('search_enabled') === 'true' && extension_loaded('xapian')) {
                     $this->search_engine_save();
                 }
+                Event::addEvent(
+                    LOG_EXERCISE_CREATE,
+                    LOG_EXERCISE_ID,
+                    $this->iid
+                );
             }
         }
 

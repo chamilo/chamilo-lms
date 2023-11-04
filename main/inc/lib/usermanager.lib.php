@@ -1688,7 +1688,6 @@ class UserManager
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
             $sender_name = api_get_person_name(
                 api_get_setting('administratorName'),
                 api_get_setting('administratorSurname'),
@@ -1713,48 +1712,111 @@ class UserManager
                 false,
                 false
             );
-            // variables for the default template
             $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstname, $lastname)));
             $tplContent->assign('login_name', $username);
-
             $originalPassword = '';
             if ($reset_password > 0) {
                 $originalPassword = stripslashes($original_password);
             }
             $tplContent->assign('original_password', $originalPassword);
+            // variables for the default template
             $tplContent->assign('portal_url', $url);
             // Adding this variable but not used in default template, used for task BT19518 with a customized template
             $tplContent->assign('status_type', $status);
-
-            $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
-            $emailBody = $tplContent->fetch($layoutContent);
-
-            $mailTemplateManager = new MailTemplateManager();
-
-            if (!empty($emailTemplate) &&
-                isset($emailTemplate['user_edit_content.tpl']) &&
-                !empty($emailTemplate['user_edit_content.tpl'])
-            ) {
-                $userInfo = api_get_user_info($user_id);
-                $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
-            }
-
             $creatorInfo = api_get_user_info($creator_id);
             $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 
-            api_mail_html(
-                $recipient_name,
-                $email,
-                $emailsubject,
-                $emailBody,
-                $sender_name,
-                $email_admin,
-                null,
-                null,
-                null,
-                null,
-                $creatorEmail
-            );
+            if (!is_null($password) && api_get_configuration_value('send_two_inscription_confirmation_mail')) {
+                // The user has a new password *and* we need to tell him so,
+                // but the configuration is set to send 2 separate e-mails
+                // (one for username, one for password) when sending pass
+                $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_first_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailsubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+
+                $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_second_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailsubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+
+
+            } else {
+                $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['user_edit_content.tpl']) &&
+                    !empty($emailTemplate['user_edit_content.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['user_edit_content.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailsubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+            }
         }
 
         if (!empty($hook)) {

@@ -1634,6 +1634,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // LP view menu location. Options: "left" or "right"
 // $_configuration['lp_menu_location'] = 'left';
 
+// Hide the "Open in new window" button in learning paths when viewing long content (using the button disconnects SCORM tracking - more details in #4954)
+//$_configuration['lp_ios_hide_open_in_new_window_button'] = false;
+
 // Show notification events
 /*CREATE TABLE IF NOT EXISTS notification_event (
 id INT unsigned NOT NULL auto_increment PRIMARY KEY,

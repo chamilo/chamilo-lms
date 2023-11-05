@@ -852,15 +852,17 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
                         include_once $thisAuthSource['login'];
                     }
-                    if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
-                        include_once $thisAuthSource['newUser'];
-                    } else {
-                        error_log(
-                            'Chamilo Authentication external file'.
-                            ' could not be found - this might prevent your system from using'.
-                            ' the authentication process in the user creation process',
-                            0
-                        );
+                    if (isset($thisAuthSource['newUser'])) {
+                        if (file_exists($thisAuthSource['newUser'])) {
+                            include_once $thisAuthSource['newUser'];
+                        } else {
+                            error_log(
+                                'Chamilo Authentication external file'.
+                                ' could not be found - this might prevent your system from using'.
+                                ' the authentication process in the user creation process',
+                                0
+                            );
+                        }
                     }
                 }
             } //end if is_array($extAuthSource)

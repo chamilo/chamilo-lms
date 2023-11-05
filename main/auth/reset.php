@@ -25,6 +25,10 @@ if (!$user) {
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
 $form->addElement('header', get_lang('ResetPassword'));
 $form->addHidden('token', $token);
+if (!empty($_GET['rotate'])) {
+    $form->addElement('html', Display::return_message(get_lang('PasswordExpiredPleaseSetNewPassword'), 'warning'));
+}
+
 $form->addElement(
     'password',
     'pass1',
@@ -82,6 +86,25 @@ if ($form->validate()) {
             if (!empty($value) && isset($value['value']) && 1 === (int) $value['value']) {
                 $extraFieldValue->delete($value['id']);
             }
+        }
+        if (api_get_configuration_value('security_password_rotate_days') > 0) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $date = api_get_local_time(
+                null,
+                'UTC',
+                'UTC',
+                null,
+                null,
+                null,
+                'Y-m-d H:i:s'
+            );
+            $extraFieldValue->save(
+                [
+                    'item_id' => $user->getId(),
+                    'variable' => 'password_updated_at',
+                    'value' => $date
+                ]
+            );
         }
 
         Display::addFlash(Display::return_message(get_lang('Updated')));

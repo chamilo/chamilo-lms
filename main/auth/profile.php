@@ -675,6 +675,25 @@ if ($form->validate()) {
     $sql = rtrim($sql, ',');
     if ($changePassword && !empty($password)) {
         UserManager::updatePassword(api_get_user_id(), $password);
+        if (api_get_configuration_value('security_password_rotate_days') > 0) {
+            $date = api_get_local_time(
+                null,
+                'UTC',
+                'UTC',
+                null,
+                null,
+                null,
+                'Y-m-d H:i:s'
+            );
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValue->save(
+                [
+                    'item_id' => $user->getId(),
+                    'variable' => 'password_updated_at',
+                    'value' => $date
+                ]
+            );
+        }
     }
 
     if (api_get_setting('profile', 'officialcode') === 'true' &&

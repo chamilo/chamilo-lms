@@ -2503,3 +2503,11 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 //hide copy icon in LP's authoring options
 //$_configuration['lp_hide_copy_option'] = false;
+
+// Password rotation
+// Requires creating a "Date and time" extra user field with the system id "password_updated_at"
+// Note: only a password change by the user itself will be taken into account.
+// Admins editing someone else's password do not count as a password update that would avoid the rotation request.
+// If this feature is enabled on an existing portal, the registration date of users will be taken as
+// the latest password change date.
+//$_configuration['security_password_rotate_days'] = 90;

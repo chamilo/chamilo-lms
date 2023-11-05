@@ -1661,6 +1661,23 @@ class UserManager
         if (!is_null($password)) {
             $user->setPlainPassword($password);
             Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $user_id);
+            $date = api_get_local_time(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                'Y-m-d'
+            );
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValue->save(
+                [
+                    'item_id' => $user->getId(),
+                    'variable' => 'password_updated_at',
+                    'value' => $date
+                ]
+            );
         }
 
         $userManager->updateUser($user, true);
@@ -7683,29 +7700,75 @@ SQL;
 
     public static function redirectToResetPassword($userId)
     {
-        if (!api_get_configuration_value('force_renew_password_at_first_login')) {
-            return;
+        $forceRenew = api_get_configuration_value('force_renew_password_at_first_login');
+
+        if ($forceRenew) {
+            $askPassword = self::get_extra_user_data_by_field(
+                $userId,
+                'ask_new_password'
+            );
+
+            if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+                1 === (int)$askPassword['ask_new_password']
+            ) {
+                $uniqueId = api_get_unique_id();
+                $userObj = api_get_user_entity($userId);
+
+                $userObj->setConfirmationToken($uniqueId);
+                $userObj->setPasswordRequestedAt(new \DateTime());
+
+                Database::getManager()->persist($userObj);
+                Database::getManager()->flush();
+
+                $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+                api_location($url);
+            }
         }
 
-        $askPassword = self::get_extra_user_data_by_field(
-            $userId,
-            'ask_new_password'
-        );
+        $forceRotateDays = api_get_configuration_value('security_password_rotate_days');
+        $forceRotate = false;
 
-        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
-            1 === (int) $askPassword['ask_new_password']
-        ) {
-            $uniqueId = api_get_unique_id();
-            $userObj = api_get_user_entity($userId);
+        if ($forceRotateDays > 0) {
+            // get the date of the last password update recorded
+            $lastUpdate = self::get_extra_user_data_by_field(
+                $userId,
+                'password_updated_at'
+            );
 
-            $userObj->setConfirmationToken($uniqueId);
-            $userObj->setPasswordRequestedAt(new \DateTime());
+            if (empty($lastUpdate) or empty($lastUpdate['password_updated_at'])) {
+                error_log('No password_updated_at');
+                $userObj = api_get_user_entity($userId);
+                $registrationDate = $userObj->getRegistrationDate();
+                $now = new \DateTime(null, new DateTimeZone('UTC'));
+                $interval = $now->diff($registrationDate);
+                $daysSince = $interval->format('%a');
+                error_log('Days since registration: '.$daysSince);
+                if ($daysSince > $forceRotateDays) {
+                    error_log('We need to force reset');
+                    $forceRotate = true;
+                }
+            } else {
+                $now = new \DateTime(null, new DateTimeZone('UTC'));
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate['password_updated_at'], new DateTimeZone('UTC'));
+                $interval = $now->diff($date);
+                $daysSince = $interval->format('%a');
+                if ($daysSince > $forceRotateDays) {
+                    $forceRotate = true;
+                }
+            }
+            if ($forceRotate) {
+                $uniqueId = api_get_unique_id();
+                $userObj = api_get_user_entity($userId);
 
-            Database::getManager()->persist($userObj);
-            Database::getManager()->flush();
+                $userObj->setConfirmationToken($uniqueId);
+                $userObj->setPasswordRequestedAt(new \DateTime());
 
-            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-            api_location($url);
+                Database::getManager()->persist($userObj);
+                Database::getManager()->flush();
+
+                $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId.'&rotate=1';
+                api_location($url);
+            }
         }
     }
 

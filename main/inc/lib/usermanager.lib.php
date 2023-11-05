@@ -8073,4 +8073,56 @@ SQL;
 
         return $url;
     }
+
+    /**
+     * Get a list of users with the given e-mail address + their "active" field value (0 or 1)
+     *
+     * @param string $mail User id
+     *
+     * @return array List of users e-mails + active field
+     */
+    public static function getUsersByMail(string $mail): array
+    {
+        $resultData = Database::select(
+            'id, active',
+            Database::get_main_table(TABLE_MAIN_USER),
+            [
+                'where' => ['email = ?' => $mail],
+            ],
+            'all',
+            null,
+            true
+        );
+
+        if ($resultData === false) {
+            return [];
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Get whether we can send an e-mail or not.
+     * If the e-mail is not in the database, send the mail.
+     * If the e-mail is in the database but none of its occurences is active, don't send.
+     * @param string $mail The e-mail address to check
+     * @return bool Whether we can send an e-mail or not
+     */
+    public function isEmailingAllowed(string $mail): bool
+    {
+        $list = self::getUsersByMail($mail);
+        if (empty($list)) {
+            // No e-mail matches, send the mail
+            return true;
+        }
+        $send = false;
+        foreach ($list as $id => $user) {
+            if ($user['active'] == 1) {
+                // as soon as we find at least one active user, send the mail
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

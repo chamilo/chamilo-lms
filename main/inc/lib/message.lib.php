@@ -553,11 +553,6 @@ class MessageManager
                 return false;
             }
 
-            // Disabling messages for inactive users.
-            if (0 == $receiverUserInfo['active']) {
-                return false;
-            }
-
             // Disabling messages depending the pausetraining plugin.
             $allowPauseFormation =
                 'true' === api_get_plugin_setting('pausetraining', 'tool_enable') &&

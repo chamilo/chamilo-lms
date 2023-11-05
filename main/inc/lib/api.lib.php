@@ -9710,15 +9710,29 @@ function api_mail_html(
     if (is_array($recipient_email)) {
         foreach ($recipient_email as $dest) {
             if (api_valid_email($dest)) {
-                $mail->AddAddress($dest, $recipient_name);
+                if (UserManager::isEmailingAllowed($dest)) {
+                    // Do not send if user is not active = 1
+                    $mail->AddAddress($dest, $recipient_name);
+                }
+            } else {
+                // error_log('e-mail recipient '.$dest.' is not valid.');
+                return 0;
             }
         }
     } else {
         if (api_valid_email($recipient_email)) {
-            $mail->AddAddress($recipient_email, $recipient_name);
+            if (UserManager::isEmailingAllowed($recipient_email)) {
+                // Do not send if user is not active = 1
+                $mail->AddAddress($recipient_email, $recipient_name);
+            }
         } else {
+            // error_log('e-mail recipient '.$recipient_email.' is not valid.');
             return 0;
         }
+    }
+    if (empty($mail->getAllRecipientAddresses())) {
+        // error_log('No valid and active destination e-mail in api_mail_html() with address '.print_r($recipient_email, 1).'. Not sending.');
+        return 0;
     }
 
     if (is_array($extra_headers) && count($extra_headers) > 0) {

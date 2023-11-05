@@ -50,9 +50,15 @@ if ($form->validate()) {
         (!empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')) ? api_get_mail_configuration_value('SMTP_FROM_EMAIL') : $user->getEmail())
     );
 
-    Display::addFlash(
-        Display::return_message(get_lang('MailingTestSent'), 'success')
-    );
+    if ($mailIsSent) {
+        Display::addFlash(
+            Display::return_message(get_lang('MailingTestSent'), 'success')
+        );
+    } else {
+        Display::addFlash(
+            Display::return_message(get_lang('MailingTestNotSent'), 'error')
+        );
+    }
 
     header('Location: '.api_get_self());
     exit;

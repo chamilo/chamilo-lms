@@ -24106,3 +24106,15 @@ msgstr "Official code"
 
 msgid "Welcome, please go to diagnostic at %s."
 msgstr "Welcome, please go to diagnostic at %s."
+
+msgid "Your session search diagnosis is saved"
+msgstr "Your session search diagnosis is saved"
+
+msgid "End of LearnPath"
+msgstr "End of LearnPath"
+
+msgid "EndLPSubject"
+msgstr "EndLPSubject"
+
+msgid "EndLpDescription"
+msgstr "EndLpDescription"

@@ -85,11 +85,12 @@ function validate_data($users)
  * @param bool  $resetPassword Optional.
  * @param bool  $sendEmail     Optional.
  */
-function updateUsers(
+function _updateUsers(
     $users,
     $resetPassword = false,
-    $sendEmail = false)
-{
+    $sendEmail = false,
+    $askNewPassword = false
+){
     $usergroup = new UserGroup();
     $extraFieldValue = new ExtraFieldValue('user');
     if (is_array($users)) {
@@ -150,6 +151,10 @@ function updateUsers(
             if ($resetPassword && $sendEmail == false) {
                 $sendEmail = true;
             }
+            $extra = [];
+            if ($askNewPassword) {
+                $extra['ask_new_password'] = 1;
+            }
 
             UserManager::update_user(
                 $user_id,
@@ -167,7 +172,7 @@ function updateUsers(
                 $active,
                 $creatorId,
                 $hrDeptId,
-                null,
+                $extra,
                 $language,
                 '',
                 $sendEmail,
@@ -290,6 +295,14 @@ $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
+if (api_get_configuration_value('force_renew_password_at_first_login') == true) {
+    $form->addElement(
+        'checkbox',
+        'ask_new_password',
+        '',
+        get_lang('FirstLoginForceUsersToChangePassword')
+    );
+}
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
@@ -341,7 +354,9 @@ if ($form->validate()) {
         }
 
         $sendEmail = $_POST['sendMail'] ? true : false;
-        updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
+        $askNewPassword = isset($formValues['ask_new_password']);
+
+        _updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail, $askNewPassword);
 
         if (empty($errors)) {
             Display::addFlash(

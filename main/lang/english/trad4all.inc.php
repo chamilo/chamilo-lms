@@ -9041,4 +9041,5 @@ $DuplicatedUsersByMail = "Duplicated users by e-mail";
 $ThisReportOnlyListsUsersThatHaveTheSameEmail = "This report only lists users that have the same email.";
 $CancelNotifyMe = "Stop notifying me";
 $EmptyExpirationDate = "Expiration date cannot be empty.";
+$MailingTestNotSent = "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file).";
 ?>

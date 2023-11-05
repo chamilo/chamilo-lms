@@ -152,5 +152,9 @@
     "No course available": "\u6ca1\u6709\u8bfe\u7a0b",
     "There are no sessions available": "\u6ca1\u53ef\u7528\u7684\u8bb2\u4e60\u73ed",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
-    "Loading sessions. Please wait.": "Loading sessions. Please wait."
+    "Loading sessions. Please wait.": "Loading sessions. Please wait.",
+    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "End of LearnPath": "End of LearnPath",
+    "OfajEndLPSubject": "OfajEndLPSubject",
+    "OfajEndLpDescription": "OfajEndLpDescription"
 }

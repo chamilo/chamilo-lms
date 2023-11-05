@@ -9067,4 +9067,5 @@ $ThisReportOnlyListsUsersThatHaveTheSameEmail = "Este reporte solo lista usuario
 $CancelNotifyMe = "Dejar de notificarme";
 $EmptyExpirationDate = "La fecha de expiración no puede ser vacía.";
 $MailingTestNotSent = "El correo de prueba no ha podido ser enviado. Puede que la dirección introducida sea incorrecta, que pertenezca a un usuario inactivo, o que su servidor de correos no esté bien configurado (ver archivo mail.conf.php).";
+$PasswordExpiredPleaseSetNewPassword = "Su contraseña se ha vencido. Por favor, defina una nueva contraseña antes de seguir.";
 ?>

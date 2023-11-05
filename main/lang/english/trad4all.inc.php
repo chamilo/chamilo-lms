@@ -9042,4 +9042,5 @@ $ThisReportOnlyListsUsersThatHaveTheSameEmail = "This report only lists users th
 $CancelNotifyMe = "Stop notifying me";
 $EmptyExpirationDate = "Expiration date cannot be empty.";
 $MailingTestNotSent = "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file).";
+$PasswordExpiredPleaseSetNewPassword = "Your password has expired. Please set a new password before you continue.";
 ?>

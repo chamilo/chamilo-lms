@@ -1158,7 +1158,7 @@ $button = '';
 $userReportButton = '';
 if ($userToLoad) {
     $button = Display::url(
-        get_lang('Ofaj End Of LearnPath'),
+        get_lang('End Of LearnPath'),
         api_get_path(WEB_PATH).'resources/messages/new?'
             .http_build_query(['send_to_user' => $userToLoad, 'prefill' => 'ofaj']),
         ['class' => 'btn btn--plain']

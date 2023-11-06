@@ -152,5 +152,10 @@
     "No course available": "kein Kurs verf\u00fcgbar",
     "There are no sessions available": "Keine Kurs-Sessions verf\u00fcgbar",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
-    "Loading sessions. Please wait.": "Loading sessions. Please wait."
+    "Loading sessions. Please wait.": "Loading sessions. Please wait.",
+    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "End of LearnPath": "End of LearnPath",
+    "OfajEndLPSubject": "OfajEndLPSubject",
+    "OfajEndLpDescription": "OfajEndLpDescription",
+    "Contact": "Kontakt"
 }

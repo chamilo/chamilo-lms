@@ -24095,3 +24095,5 @@ msgstr "Vorname"
 msgid "Lastname"
 msgstr "Nachname"
 
+msgid "Your Reg"
+msgstr "Ihre Registrierung am"

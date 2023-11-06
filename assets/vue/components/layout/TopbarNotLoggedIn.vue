@@ -28,10 +28,16 @@ function setLanguage(event) {
 
 const menuItems = ref([
   {
-    label: 'Buy courses',
+    label: 'Register oneself',
+    url: '/main/auth/inscription.php',
   },
   {
-    label: 'Help',
+    label: 'FAQ',
+    url: '/web/faq',
+  },
+  {
+    label: 'Contact',
+    url: '/web/contact'
   },
   {
     key: 'language_selector',

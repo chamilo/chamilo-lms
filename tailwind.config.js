@@ -18,6 +18,7 @@ module.exports = {
       secondary: {
         DEFAULT: "#f37e2f",
         gradient: "#e06410",
+        hover: "#d35e0f",
         bgdisabled: '#e4e9ed',
       },
       gray: {

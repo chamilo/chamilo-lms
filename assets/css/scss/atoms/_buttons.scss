@@ -295,7 +295,7 @@ $border-color_12: #9333EA;
 
 // secondary button
 .p-button.p-button-secondary {
-  @include filled-style('secondary', 'support-5');
+  @include filled-style('secondary', 'secondary-hover');
 
   &.p-button-outlined {
     @include outlined-style('secondary');
@@ -308,7 +308,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-secondary {
   > .p-button {
-    @include filled-style('secondary', 'support-5');
+    @include filled-style('secondary', 'secondary-hover');
 
     &.p-button-outlined {
       @include outlined-style('secondary');

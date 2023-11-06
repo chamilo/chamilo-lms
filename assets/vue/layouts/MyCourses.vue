@@ -3,11 +3,6 @@
     <h2 v-t="'My Courses'" />
     <Button
       v-if="isTeacher"
-      class="p-button-secondary md:hidden"
-      icon="pi pi-plus"
-    />
-    <Button
-      v-if="isTeacher"
       :label="t('Course')"
       class="p-button-secondary hidden md:inline-flex"
       icon="pi pi-plus"

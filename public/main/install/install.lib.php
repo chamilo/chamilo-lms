@@ -363,7 +363,10 @@ function get_config_param_from_db($param = '')
  * @param string $username
  * @param string $password
  * @param string $databaseName
- * @param int    $port
+ * @param int $port
+ *
+ * @throws \Doctrine\DBAL\Exception
+ * @throws \Doctrine\ORM\ORMException
  *
  * @return void
  */
@@ -373,7 +376,8 @@ function connectToDatabase(
     $password,
     $databaseName,
     $port = 3306
-) {
+): void
+{
     Database::connect(
         [
             'driver' => 'pdo_mysql',
@@ -1742,84 +1746,89 @@ function isUpdateAvailable(string $baseDir): bool
 
 function checkMigrationStatus(): array
 {
+    $resultStatus = [
+        'status' => false,
+        'message' => 'Error executing migrations status command.',
+        'current_migration' => null,
+        'progress_percentage' => 0
+    ];
+
     $dotenv = new Dotenv();
     $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
     $dotenv->loadEnv($envFile);
 
-    connectToDatabase(
-        $_ENV['DATABASE_HOST'],
-        $_ENV['DATABASE_USER'],
-        $_ENV['DATABASE_PASSWORD'],
-        $_ENV['DATABASE_NAME'],
-        $_ENV['DATABASE_PORT']
-    );
-    $manager = Database::getManager();
+    try {
+        connectToDatabase(
+            $_ENV['DATABASE_HOST'],
+            $_ENV['DATABASE_USER'],
+            $_ENV['DATABASE_PASSWORD'],
+            $_ENV['DATABASE_NAME'],
+            $_ENV['DATABASE_PORT']
+        );
 
-    $connection = $manager->getConnection();
+        $manager = Database::getManager();
 
-    // Loading migration configuration.
-    $config = new PhpFile('./migrations.php');
-    $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+        $connection = $manager->getConnection();
 
-    // Check if old "version" table exists from 1.11.x, use new version.
-    $schema = $manager->getConnection()->getSchemaManager();
-    $hasOldVersionTable = false;
-    $anyVersionYet = !$schema->tablesExist('version');
-    $isVersionEmpty = false;
-    $executedMigrations = 0;
-    $currentMigration = '';
-    if ($schema->tablesExist('version')) {
-        $columns = $schema->listTableColumns('version');
-        if (in_array('id', array_keys($columns), true)) {
-            $hasOldVersionTable = true;
-        }
-        $query = $connection->createQueryBuilder()
-            ->select('*')
-            ->from('version');
-        $result = $query->execute();
-        $executedMigrations = $result->rowCount();
-        $isVersionEmpty = ($executedMigrations == 0);
-        if (!$isVersionEmpty) {
+        // Loading migration configuration.
+        $config = new PhpFile('./migrations.php');
+        $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+
+        // Check if old "version" table exists from 1.11.x, use new version.
+        $schema = $manager->getConnection()->createSchemaManager();
+        $hasOldVersionTable = false;
+        $anyVersionYet = !$schema->tablesExist('version');
+        $isVersionEmpty = false;
+        $executedMigrations = 0;
+        $currentMigration = '';
+        if ($schema->tablesExist('version')) {
+            $columns = $schema->listTableColumns('version');
+            if (in_array('id', array_keys($columns), true)) {
+                $hasOldVersionTable = true;
+            }
             $query = $connection->createQueryBuilder()
                 ->select('*')
-                ->from('version')
-                ->orderBy('executed_at', 'DESC')
-                ->setMaxResults(1);
-            $result = $query->execute()->fetch();
-            $currentMigration = $result['version'];
-        }
-    }
-
-    if (!$hasOldVersionTable) {
-        // Loading migrations.
-        $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
-        $result = '';
-        $input = new Symfony\Component\Console\Input\StringInput($result);
-        $planCalculator = $dependency->getMigrationPlanCalculator();
-        $migrations = $planCalculator->getMigrations();
-        $totalMigrations = $migrations->count();
-        $lastVersion = $migrations->getLast();
-
-        if ($anyVersionYet || $isVersionEmpty) {
-            $currentMigration = '';
-            $executedMigrations = 0;
+                ->from('version');
+            $result = $query->execute();
+            $executedMigrations = $result->rowCount();
+            $isVersionEmpty = ($executedMigrations == 0);
+            if (!$isVersionEmpty) {
+                $query = $connection->createQueryBuilder()
+                    ->select('*')
+                    ->from('version')
+                    ->orderBy('executed_at', 'DESC')
+                    ->setMaxResults(1);
+                $result = $query->execute()->fetch();
+                $currentMigration = $result['version'];
+            }
         }
 
-        // Calculate progress percentage
-        $progressPercentage = ceil(($executedMigrations / $totalMigrations) * 100);
-        $resultStatus = [
-            'status' => ($progressPercentage >= 100),
-            'message' => ($progressPercentage >= 100) ? 'All migrations have been executed.' : 'Migrations are pending.',
-            'current_migration' => ($progressPercentage >= 100) ? null : $currentMigration,
-            'progress_percentage' => $progressPercentage
-        ];
-    } else {
-        $resultStatus = [
-            'status' => false,
-            'message' => 'Error executing migrations status command.',
-            'current_migration' => null,
-            'progress_percentage' => 0
-        ];
+        if (!$hasOldVersionTable) {
+            // Loading migrations.
+            $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
+            $result = '';
+            $input = new Symfony\Component\Console\Input\StringInput($result);
+            $planCalculator = $dependency->getMigrationPlanCalculator();
+            $migrations = $planCalculator->getMigrations();
+            $totalMigrations = $migrations->count();
+            $lastVersion = $migrations->getLast();
+
+            if ($anyVersionYet || $isVersionEmpty) {
+                $currentMigration = '';
+                $executedMigrations = 0;
+            }
+
+            // Calculate progress percentage
+            $progressPercentage = ceil(($executedMigrations / $totalMigrations) * 100);
+            $resultStatus = [
+                'status' => ($progressPercentage >= 100),
+                'message' => ($progressPercentage >= 100) ? 'All migrations have been executed.' : 'Migrations are pending.',
+                'current_migration' => ($progressPercentage >= 100) ? null : $currentMigration,
+                'progress_percentage' => $progressPercentage
+            ];
+        }
+    } catch (Exception) {
+        return $resultStatus;
     }
 
     return $resultStatus;

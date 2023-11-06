@@ -7,6 +7,7 @@
         :model-value="modelValue"
         :name="name"
         :option-label="optionLabel"
+        :option-value="optionValue"
         :options="options"
         :placeholder="placeholder"
         @update:model-value="$emit('update:modelValue', $event)"
@@ -44,6 +45,11 @@ defineProps({
     type: String,
     required: true,
     default: "",
+  },
+  optionValue: {
+    type: String,
+    required: false,
+    default: () => null,
   },
   inputId: {
     type: String,

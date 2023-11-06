@@ -1,79 +1,43 @@
 <template>
   <div>
-    <div class="field">
-      <div class="p-float-label">
-        <InputText
-          id="item_title"
-          v-model="v$.item.title.$model"
-          :class="{ 'p-invalid': v$.item.title.$invalid }"
-          type="text"
-        />
-        <label
-          v-t="'Title'"
-          :class="{ 'p-error': v$.item.title.$invalid }"
-          for="item_title"
-        />
-      </div>
-      <small
-        v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
-        v-t="v$.item.title.required.$message"
-        class="p-error"
-      />
-    </div>
+    <BaseInputText
+      v-model="v$.item.title.$model"
+      :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.title.$error"
+      :label="t('Title')"
+      id="item_title"
+    />
 
-    <div class="field-checkbox">
-      <Checkbox
-        v-model="v$.item.enabled.$model"
-        :binary="true"
-        input-id="enabled"
-      />
-      <label
-        v-t="'Enabled'"
-        for="enabled"
-      />
-    </div>
+    <BaseCheckbox
+      id="enabled"
+      :label="t('Enabled')"
+      name="enabled"
+      v-model="v$.item.enabled.$model"
+    />
 
-    <div class="field">
-      <div class="p-float-label">
-        <Dropdown
-          v-model="v$.item.category.$model"
-          :options="categories"
-          input-id="category"
-          option-label="title"
-          option-value="@id"
-          :class="{ 'p-invalid': v$.item.category.$invalid }"
-        />
-        <label
-          v-t="'Category'"
-          for="category"
-        />
-      </div>
-      <small
-        v-if="v$.item.category.$invalid || v$.item.category.$pending.$response"
-        v-t="v$.item.category.required.$message"
-        class="p-error"
-      />
-    </div>
+    <BaseDropdown
+      v-model="v$.item.category.$model"
+      :error-text="v$.item.category.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.category.$error"
+      :label="t('Category')"
+      :options="categories"
+      input-id="category"
+      name="category"
+      option-label="title"
+      option-value="@id"
+    />
 
-    <div class="field">
-      <div class="p-float-label">
-        <Dropdown
-          v-model="v$.item.locale.$model"
-          :options="locales"
-          input-id="locale"
-          :class="{ 'p-invalid': v$.item.locale.$invalid }"
-        />
-        <label
-          v-t="'Locale'"
-          for="locale"
-        />
-      </div>
-      <small
-        v-if="v$.item.locale.$invalid || v$.item.locale.$pending.$response"
-        v-t="v$.item.locale.required.$message"
-        class="p-error"
-      />
-    </div>
+    <BaseDropdown
+      v-model="v$.item.locale.$model"
+      :error-text="v$.item.locale.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.locale.$error"
+      :label="t('Locale')"
+      :options="locales"
+      input-id="locale"
+      name="locale"
+      option-label="originalName"
+      option-value="isocode"
+    />
 
     <div class="field">
       <TinyEditor
@@ -114,10 +78,9 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { useStore } from 'vuex';
-import InputText from 'primevue/inputtext';
-import Checkbox from 'primevue/checkbox';
-import Dropdown from 'primevue/dropdown';
+import BaseInputText from "../basecomponents/BaseInputText.vue";
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
+import BaseDropdown from "../basecomponents/BaseDropdown.vue";
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import isEmpty from 'lodash/isEmpty';
@@ -136,13 +99,11 @@ const emit = defineEmits([
   'submit',
 ]);
 
-const store = useStore();
 const { t } = useI18n();
 
-let locales = ref([]);
+let locales = ref(window.languages);
 
 let categories = ref([]);
-locales.value = window.languages.map(locale => locale.isocode);
 
 const findAllPageCategories = async () => categories.value = await pageCategoryService.findAll()
 
@@ -154,12 +115,6 @@ watch(
     if (!newValue) {
       return;
     }
-
-    emit('update:modelValue', {
-      ...newValue,
-      creator: currentUser.value['@id'],
-      url: '/api/access_urls/' + window.access_url_id,
-    });
 
     if (!isEmpty(newValue.category) && !isEmpty(newValue.category['@id'])) {
       emit('update:modelValue', {

@@ -1,9 +1,8 @@
 <template>
-  <!-- Public homepage (no login required) -->
+  <!-- List of pages of category "contact" -->
   <div class="container mx-auto flex gap-8">
-    <Login class="md:w-4/12 lg:order-1" />
-    <div v-if="pages.length" class="flex-1 md:w-8/12 lg:order-0">
-      <PageCardList :pages="pages" class="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2" />
+    <div v-if="pages.length" class="flex-1">
+      <PageCardList :pages="pages" class="grid gap-4 grid-cols-1" />
     </div>
   </div>
 </template>
@@ -12,7 +11,6 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
-import Login from "../components/Login";
 import PageCardList from "../components/page/PageCardList";
 
 const store = useStore();
@@ -22,7 +20,7 @@ const pages = ref([]);
 
 store
   .dispatch("page/findAll", {
-    "category.title": "index",
+    "category.title": "contact",
     enabled: "1",
     locale: locale.value,
   })

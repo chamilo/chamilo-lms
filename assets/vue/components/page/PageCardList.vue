@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="pageList.length"
-    class="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2"
   >
     <PageCard
       v-for="page in pageList"

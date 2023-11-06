@@ -33,6 +33,8 @@ import CourseHome from "../views/course/CourseHome.vue"
 import Index from "../pages/Index.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
+import Faq from "../pages/Faq.vue"
+import Contact from "../pages/Contact.vue"
 import { useCidReqStore } from "../store/cidReq"
 
 const router = createRouter({
@@ -61,6 +63,24 @@ const router = createRouter({
       component: Login,
       meta: {
         layout: "Empty",
+        showBreadcrumb: false,
+      },
+    },
+    {
+      path: "/faq",
+      name: "Faq",
+      component: Faq,
+      meta: {
+        requiresAuth: false,
+        showBreadcrumb: false,
+      },
+    },
+    {
+      path: "/contact",
+      name: "Contact",
+      component: Contact,
+      meta: {
+        requiresAuth: false,
         showBreadcrumb: false,
       },
     },

@@ -1,10 +1,11 @@
 <template>
+  <!-- Homepage for logged-in users -->
   <div class="flex flex-col gap-4">
     <div v-if="announcements.length">
       <SystemAnnouncementCardList :announcements="announcements" />
     </div>
 
-    <PageCardList />
+    <PageCardList class="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2" />
   </div>
 </template>
 

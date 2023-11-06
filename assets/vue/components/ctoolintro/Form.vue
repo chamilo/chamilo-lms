@@ -33,6 +33,7 @@
 import useVuelidate from "@vuelidate/core";
 import { ref } from "vue";
 import { usePlatformConfig } from "../../store/platformConfig";
+import {useRoute} from "vue-router";
 export default {
   name: "ToolIntroForm",
   props: {
@@ -58,7 +59,10 @@ export default {
       extraPlugins.value = "translatehtml";
     }
 
-    return { v$: useVuelidate(), extraPlugins };
+    const route = useRoute();
+    const parentResourceNodeId = ref(route.query.parentResourceNodeId);
+
+    return { v$: useVuelidate(), extraPlugins, parentResourceNodeId};
   },
   data() {
     return {
@@ -77,12 +81,11 @@ export default {
   },
   methods: {
     browser(callback, value, meta) {
-      //const route = useRoute();
-      let nodeId = this.$route.params["node"];
+      let nodeId = this.parentResourceNodeId;
       let folderParams = this.$route.query;
       let url = this.$router.resolve({
         name: "DocumentForHtmlEditor",
-        params: { id: nodeId },
+        params: { node: nodeId },
         query: folderParams,
       });
       url = url.fullPath;

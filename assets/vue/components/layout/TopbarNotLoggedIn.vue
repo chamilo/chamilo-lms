@@ -28,31 +28,35 @@ function setLanguage(event) {
 
 const menuItems = ref([
   {
-    label: 'Register oneself',
-    url: '/main/auth/inscription.php',
+    label: "FAQ",
+    to: { name: "Faq" },
   },
   {
-    label: 'FAQ',
-    url: '/web/faq',
+    label: "Registration",
+    url: "/main/auth/inscription.php",
   },
   {
-    label: 'Contact',
-    url: '/web/contact'
+    label: "Demo",
+    to: { name: "Demo" },
   },
   {
-    key: 'language_selector',
-    label: 'English',
+    label: "Contact",
+    to: { name: "Contact" },
+  },
+  {
+    key: "language_selector",
+    label: "English",
     items: [
       {
-        label: 'English',
+        label: "English",
         command: setLanguage,
       },
       {
-        label: 'French',
+        label: "French",
         command: setLanguage,
       },
       {
-        label: 'Spanish',
+        label: "Spanish",
         command: setLanguage,
       },
     ],

@@ -643,7 +643,7 @@ class CourseController extends ToolBaseController
             /** @var CToolIntro $ctoolintro */
             $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
             if ($ctoolintro) {
-                $introText = preg_replace('/<[^>]*>(\s|&nbsp;)*<\/[^>]*>/', '', $ctoolintro->getIntroText());
+                $introText = $ctoolintro->getIntroText();
                 $responseData = [
                     'iid' => $ctoolintro->getIid(),
                     'introText' => $introText,

@@ -21,7 +21,7 @@ if (!$ds) {
     exit;
 }
 
-if (api_get_configuration_value('ldap_encrypt_admin_password') {
+if (api_get_configuration_value('ldap_encrypt_admin_password')) {
     $ldap_pass = api_decrypt_ldap_password($extldap_config['admin_password']);
 } else {
     $ldap_pass = $extldap_config['admin_password'];

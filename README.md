@@ -142,10 +142,9 @@ If the installer is pure-HTML and doesn't appear with a clean layout, that's bec
 Go back to the beginning of this section and try again.
 
 If you want hot reloading for assets use the command `yarn run encore dev-server`. This will refresh automatically
-your assets when you modify then under `assets/vue`. Access your chamilo instance as usual (this will server asset
-files from a custom server on http://localhost:8080. Do not access this url directly since
-[Encore](https://symfony.com/doc/current/frontend.html#webpack-encore) is in charge of change url assets as needed
-on chamilo).
+your assets when you modify them under `assets/vue`. Access your chamilo instance as usual. In the background, this will serve
+assets from a custom server on http://localhost:8080. Do not access this url directly since
+[Encore](https://symfony.com/doc/current/frontend.html#webpack-encore) is in charge of changing url assets as needed.
 
 ### Supporting PHP 7.4 and 8.1 in parallel
 

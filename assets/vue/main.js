@@ -23,7 +23,6 @@ import userRelUserService from "./services/userreluser"
 import calendarEventService from "./services/ccalendarevent"
 import toolIntroService from "./services/ctoolintro"
 import pageService from "./services/page"
-import pageCategoryService from "./services/pagecategory"
 import sessionService from "./services/session"
 import socialPostService from "./services/socialpost"
 
@@ -99,13 +98,6 @@ store.registerModule(
   "page",
   makeCrudModule({
     service: pageService,
-  }),
-)
-
-store.registerModule(
-  "pagecategory",
-  makeCrudModule({
-    service: pageCategoryService,
   }),
 )
 

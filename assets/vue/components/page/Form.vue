@@ -122,6 +122,7 @@ import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import isEmpty from 'lodash/isEmpty';
 import { useI18n } from 'vue-i18n';
+import pageCategoryService from "../../services/pageCategoryService"
 
 const props = defineProps({
   modelValue: {
@@ -143,12 +144,9 @@ let locales = ref([]);
 let categories = ref([]);
 locales.value = window.languages.map(locale => locale.isocode);
 
-store.dispatch('pagecategory/findAll')
-  .then((response) => {
-    categories.value = response.map(data => data);
-  });
+const findAllPageCategories = async () => categories.value = await pageCategoryService.findAll()
 
-const currentUser = computed(() => store.getters['security/getUser']);
+findAllPageCategories()
 
 watch(
   () => props.modelValue,

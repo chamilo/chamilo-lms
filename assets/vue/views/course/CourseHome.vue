@@ -94,7 +94,7 @@
             :label="t('Edit introduction')"
             icon="edit"
             type="black"
-            @click="createInSession ? addIntro(course, intro) : updateIntro(intro)"
+            @click="createInSession ? addIntro(course, intro) : updateIntro(course, intro)"
           />
         </div>
 
@@ -372,7 +372,7 @@ function addIntro(course, intro) {
   })
 }
 
-function updateIntro(intro) {
+function updateIntro(course, intro) {
   return router.push({
     name: "ToolIntroUpdate",
     params: { id: "/api/c_tool_intros/" + intro.iid },
@@ -381,6 +381,7 @@ function updateIntro(intro) {
       sid: sessionId,
       ctoolintroIid: intro.iid,
       ctoolId: intro.c_tool.iid,
+      parentResourceNodeId: course.resourceNode.id,
       id: "/api/c_tool_intros/" + intro.iid,
     },
   })

@@ -125,8 +125,8 @@
     "Videoconference": "Video-Konferenz",
     "Reporting": "Auswertung",
     "Learning paths": "Lernpfad",
-    "Diagnostic Form": "Kompetenz- und Zielabfrage",
-    "Diagnosis Management": "Management der Kompetenz- und Zielabfragen",
+    "Diagnostic Form": "Diagnostic Form",
+    "Diagnosis Management": "Diagnosis Management",
     "Edit profile": "Profil bearbeiten",
     "Update profile": "Profil aktualisieren",
     "Firstname": "Vorname",
@@ -155,6 +155,7 @@
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
     "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
     "End of LearnPath": "End of LearnPath",
-    "OfajEndLPSubject": "Ihr Lernpfad ist bereit",
-    "OfajEndLpDescription": "Hallo, %s!\nVielen Dank f\u00fcr deine Registrierung auf PARKUR!\nIch hei\u00dfe %s und werde deine Tutorin Coach\/dein Tutor Coach auf der Plattform sein. Meine Aufgabe ist es, dich w\u00e4hrend deines Lernprozesses auf der Plattform zu unterst\u00fctzen und zu begleiten. Bei Fragen oder W\u00fcnschen bez\u00fcglich PARKUR kannst du dich gerne an mich wenden.\nIch werde dir einen Lernpfad vorschlagen, der auf deinen w\u00e4hrend der Registrierung gemachten Angaben aufbaut. Um zus\u00e4tzliche Informationen zu erhalten, w\u00fcrde ich dich gerne zu einer Videokonferenz einladen, wo wir uns \u00fcber die Plattform austauschen k\u00f6nnen. An den folgenden Terminen habe ich Zeit f\u00fcr dich: \n- [possibilit\u00e9 1]\n- [possibilit\u00e9 2]\n- [possibilit\u00e9 3]\nBitte sag mir m\u00f6glichst zeitnah Bescheid, welcher dieser Termine f\u00fcr dich am besten passt.\nIch freue mich auf unser Treffen!\nBis bald!\n%s"
+    "OfajEndLPSubject": "OfajEndLPSubject",
+    "OfajEndLpDescription": "OfajEndLpDescription",
+    "Contact": "Kontakt"
 }

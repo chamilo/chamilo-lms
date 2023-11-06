@@ -28,10 +28,7 @@ function setLanguage(event) {
 
 const menuItems = ref([
   {
-    label: 'Buy courses',
-  },
-  {
-    label: 'Help',
+    label: 'FAQ',
   },
   {
     key: 'language_selector',

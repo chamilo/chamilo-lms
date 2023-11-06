@@ -147,51 +147,62 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    " . $result['js'] . "
+    var currentSessionId = new URL(window.location.href).searchParams.get('fromSessionId');
 
-    // Function to store Select2 values in local storage
+    function storeFormValues() {
+        var formValues = $('#add_session').serializeArray();
+        sessionStorage.setItem('formValues', JSON.stringify(formValues));
+    }
+
+    function repopulateFormValues() {
+        var formValues = JSON.parse(sessionStorage.getItem('formValues'));
+        $.each(formValues, function(i, field) {
+            $('[name=\"' + field.name + '\"]').val(field.value);
+        });
+    }
+
     function storeSelect2Values(selectId) {
         var selectedValues = $('#' + selectId).select2('data').map(function(item) {
             return {id: item.id, text: item.text};
         });
-        localStorage.setItem(selectId + 'Values', JSON.stringify(selectedValues));
+        sessionStorage.setItem(selectId + 'Values', JSON.stringify(selectedValues));
     }
 
-    // Function to retrieve and repopulate Select2 values from local storage
     function repopulateSelect2Values(selectId) {
-        if(localStorage.getItem(selectId + 'Values')) {
-            var storedValues = JSON.parse(localStorage.getItem(selectId + 'Values'));
+        if(sessionStorage.getItem(selectId + 'Values')) {
+            var storedValues = JSON.parse(sessionStorage.getItem(selectId + 'Values'));
+            $('#' + selectId).empty(); // Clear the select
             storedValues.forEach(function(item) {
                 var newOption = new Option(item.text, item.id, true, true);
-                $('#' + selectId).append(newOption);
+                $('#' + selectId).append(newOption).trigger('change');
             });
-            $('#' + selectId).val(storedValues.map(function(item) { return item.id; })).trigger('change');
-            localStorage.removeItem(selectId + 'Values');
         }
     }
 
-    // When changing the value in the select, store values from both selects and redirect
-    $('#system_template').on('change', function() {
-        var formValues = $('#add_session').serializeArray();
-        localStorage.setItem('formValues', JSON.stringify(formValues));
-        storeSelect2Values('coach_username');
-        storeSelect2Values('system_template');
-
-        var sessionId = $(this).find('option:selected').val();
-        window.location.href = '/main/session/session_add.php?fromSessionId=' + sessionId;
-    });
-
-    // Repopulate values from local storage on page load
-    if(localStorage.getItem('formValues')) {
-        var storedValues = JSON.parse(localStorage.getItem('formValues'));
-        $.each(storedValues, function(i, field) {
-            $('[name=\"' + field.name + '\"]').val(field.value);
-        });
-        localStorage.removeItem('formValues');
+    if(currentSessionId) {
+        if(sessionStorage.getItem('formValues')) {
+            repopulateFormValues();
+        }
+        repopulateSelect2Values('coach_username');
+        repopulateSelect2Values('system_template');
+    } else {
+        sessionStorage.clear(); // Clear session storage if no currentSessionId
     }
 
-    repopulateSelect2Values('coach_username');
-    repopulateSelect2Values('system_template');
+    $('#system_template').on('change', function() {
+        storeFormValues();
+        storeSelect2Values('coach_username');
+        storeSelect2Values('system_template');
+        var selectedSessionId = $(this).find('option:selected').val();
+        window.location.href = '/main/session/session_add.php?fromSessionId=' + selectedSessionId;
+    });
+
+    // Attach event to form submit to clear sessionStorage
+    $('#add_session').on('submit', function() {
+        sessionStorage.removeItem('coach_usernameValues');
+        sessionStorage.removeItem('system_templateValues');
+        sessionStorage.removeItem('formValues');
+    });
 });
 </script>";
 

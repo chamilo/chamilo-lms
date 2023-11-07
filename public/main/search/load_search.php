@@ -1158,9 +1158,9 @@ $button = '';
 $userReportButton = '';
 if ($userToLoad) {
     $button = Display::url(
-        get_lang('End Of LearnPath'),
+        get_lang('Send diagnostic finalization message'),
         api_get_path(WEB_PATH).'resources/messages/new?'
-            .http_build_query(['send_to_user' => $userToLoad, 'prefill' => 'ofaj']),
+            .http_build_query(['send_to_user' => $userToLoad, 'prefill' => 'diagnosticFinalizationMessage']),
         ['class' => 'btn btn--plain']
     );
     $button .= '<br /><br />';

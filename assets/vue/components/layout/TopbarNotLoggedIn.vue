@@ -28,6 +28,10 @@ function setLanguage(event) {
 
 const menuItems = ref([
   {
+    label: "Home",
+    to: { name: "Index" },
+  },
+  {
     label: "FAQ",
     to: { name: "Faq" },
   },
@@ -57,6 +61,10 @@ const menuItems = ref([
       },
       {
         label: "Spanish",
+        command: setLanguage,
+      },
+      {
+        label: "German",
         command: setLanguage,
       },
     ],

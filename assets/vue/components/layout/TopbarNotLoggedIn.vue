@@ -17,57 +17,51 @@
 import {ref} from 'vue';
 import Menubar from 'primevue/menubar';
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
+import {useI18n} from "vue-i18n";
+
+const { t, locale } = useI18n()
 
 function setLanguage(event) {
-  const {label} = event.item;
+  const {label, isoCode } = event.item;
 
   const selectorIndex = menuItems.value.findIndex(item => 'language_selector' === item.key);
 
   menuItems.value[selectorIndex] ? menuItems.value[selectorIndex].label = label : null;
+
+  locale.value = isoCode
 }
+
+const languageItems = window.languages.map((language) => ({
+  label: language.originalName,
+  isoCode: language.isocode,
+  command: setLanguage,
+}))
 
 const menuItems = ref([
   {
-    label: "Home",
+    label: t("Home"),
     to: { name: "Index" },
   },
   {
-    label: "FAQ",
+    label: t("FAQ"),
     to: { name: "Faq" },
   },
   {
-    label: "Registration",
+    label: t("Registration"),
     url: "/main/auth/inscription.php",
   },
   {
-    label: "Demo",
+    label: t("Demo"),
     to: { name: "Demo" },
   },
   {
-    label: "Contact",
+    label: t("Contact"),
     to: { name: "Contact" },
   },
   {
     key: "language_selector",
     label: "English",
-    items: [
-      {
-        label: "English",
-        command: setLanguage,
-      },
-      {
-        label: "French",
-        command: setLanguage,
-      },
-      {
-        label: "Spanish",
-        command: setLanguage,
-      },
-      {
-        label: "German",
-        command: setLanguage,
-      },
-    ],
+    items: languageItems,
   }
 ]);
 

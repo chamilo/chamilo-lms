@@ -24124,3 +24124,6 @@ msgstr "Add a forum Category"
 
 msgid "Create surveyDoodle"
 msgstr "Create Doodle survey"
+
+msgid "Sticky courses"
+msgstr "Sticky courses"

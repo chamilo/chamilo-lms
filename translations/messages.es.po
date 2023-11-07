@@ -24076,3 +24076,6 @@ msgstr "Agregar una categoria de foro"
 
 msgid "Create surveyDoodle"
 msgstr "Crear una encuesta Doodle"
+
+msgid "Sticky courses"
+msgstr "Cursos especiales"

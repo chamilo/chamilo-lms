@@ -1,16 +1,19 @@
 <template>
-  <div class="space-y-4 admin-index">
-    <div
-      v-if="isLoadingBlocks"
-      class="space-y-4"
-    >
-      <Skeleton
-        v-for="i in 9"
-        :key="`skeleton-${i}`"
-        height="10rem"
-      />
-    </div>
-
+  <div
+    v-if="isLoadingBlocks"
+    class="admin-index"
+  >
+    <Skeleton
+      v-for="i in 9"
+      :key="`skeleton-${i}`"
+      height="30rem"
+      shape="rectangle"
+    />
+  </div>
+  <div
+    v-else
+    class="admin-index"
+  >
     <AdminBlock
       v-if="blockUsers"
       :description="t('Here you can manage registered users within your platform')"
@@ -75,6 +78,70 @@
       icon="settings"
     />
 
+    <div
+      v-if="isAdmin"
+      class="admin-index__block-container block-admin-version"
+    >
+      <div class="admin-index__block">
+        <h4 v-t="'Version Check'" />
+
+        <div
+          v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"
+          class="admin-block-version"
+        >
+          <i18n-t
+            class="mb-3"
+            keypath="In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
+            tag="p"
+          >
+            <a
+              href="https://www.chamilo.org/stats/"
+              target="_blank"
+              v-text="'https://www.chamilo.org/stats/'"
+            />
+            <a
+              href="https://www.chamilo.org/community.php"
+              target="_blank"
+              v-text="'https://www.chamilo.org/community.php'"
+            />
+          </i18n-t>
+
+          <form
+            id="VersionCheck"
+            class="version-checking"
+            method="post"
+            name="VersionCheck"
+            @submit.prevent="checkVersionOnSubmit"
+          >
+            <div class="field-checkbox">
+              <Checkbox
+                v-model="doNotListCampus"
+                binary
+                input-id="checkbox"
+                name="donotlistcampus"
+              />
+              <label
+                v-t="'Hide campus from public platforms list'"
+                for="checkbox"
+              />
+            </div>
+
+            <Button
+              id="register"
+              :label="t('Enable version check')"
+              name="Register"
+              severity="secondary"
+              type="submit"
+            />
+          </form>
+        </div>
+        <div
+          ref="blockAdminVersionCheck"
+          class="block-admin-version_check"
+        />
+      </div>
+    </div>
+
     <AdminBlock
       v-if="blockPlatform"
       :description="t('Configure your platform, view reports, publish and send announcements globally')"
@@ -93,68 +160,6 @@
       icon="admin-settings"
       title="Chamilo.org"
     />
-
-    <div
-      v-if="isAdmin"
-      class="block-admin-version p-4 rounded-lg shadow-lg space-y-3"
-    >
-      <h4 v-t="'Version Check'" />
-
-      <div
-        v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"
-        class="admin-block-version"
-      >
-        <i18n-t
-          class="mb-3"
-          keypath="In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
-          tag="p"
-        >
-          <a
-            href="https://www.chamilo.org/stats/"
-            target="_blank"
-            v-text="'https://www.chamilo.org/stats/'"
-          />
-          <a
-            href="https://www.chamilo.org/community.php"
-            target="_blank"
-            v-text="'https://www.chamilo.org/community.php'"
-          />
-        </i18n-t>
-
-        <form
-          id="VersionCheck"
-          class="version-checking"
-          method="post"
-          name="VersionCheck"
-          @submit.prevent="checkVersionOnSubmit"
-        >
-          <div class="field-checkbox">
-            <Checkbox
-              v-model="doNotListCampus"
-              binary
-              input-id="checkbox"
-              name="donotlistcampus"
-            />
-            <label
-              v-t="'Hide campus from public platforms list'"
-              for="checkbox"
-            />
-          </div>
-
-          <Button
-            id="register"
-            :label="t('Enable version check')"
-            name="Register"
-            severity="secondary"
-            type="submit"
-          />
-        </form>
-      </div>
-      <div
-        ref="blockAdminVersionCheck"
-        class="block-admin-version_check"
-      />
-    </div>
   </div>
 </template>
 

@@ -183,3 +183,72 @@
     </div>
     {% endautoescape %}
 {% endmacro %}
+
+{% macro customCollapse(name, title, content, list = false, expanded = 'true', title_right = '', title_icons = '') %}
+    {% autoescape false %}
+        <style>
+            .custom-panel-heading {
+                cursor: pointer;
+            }
+
+            .custom-panel-collapse {
+                display: none;
+            }
+
+            .custom-panel-collapse.expanded {
+                display: block;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                window.customToggleCollapse = function (elementId) {
+                    var content = document.getElementById(elementId);
+                    if (content.classList.contains('expanded')) {
+                        content.classList.remove('expanded');
+                        content.setAttribute('aria-expanded', 'false');
+                    } else {
+                        content.classList.add('expanded');
+                        content.setAttribute('aria-expanded', 'true');
+                    }
+                }
+
+                var initiallyExpanded = document.querySelectorAll('.custom-panel-collapse[aria-expanded="true"]');
+                initiallyExpanded.forEach(function (element) {
+                    element.classList.add('expanded');
+                });
+            });
+        </script>
+
+        <div class="custom-panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
+            <div class="custom-panel panel-default" id="{{ name }}_block">
+                <div class="custom-panel-heading" role="tab" onclick="customToggleCollapse('{{ name }}Collapse')">
+                    {% if title_icons %}
+                        {{ title_icons }}
+                    {% endif %}
+                    <h4 class="custom-panel-title">
+                    <span>
+                        {{ title }}
+                    </span>
+                    </h4>
+
+                    {% if title_right %}
+                        <div class="pull-right">
+                            {{ title_right }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="{{ name }}Collapse" class="custom-panel-collapse {{ expanded == 'true' ? 'expanded' : '' }}" role="tabpanel" aria-expanded="{{ expanded }}">
+                    <div class="custom-panel-body">
+                        {% if list %}
+                            <ul class="nav nav-pills nav-stacked">
+                                {{ content }}
+                            </ul>
+                        {% else %}
+                            {{ content }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endautoescape %}
+{% endmacro %}

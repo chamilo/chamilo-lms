@@ -24142,3 +24142,9 @@ msgstr "En cas de problème, vous pouvez nous contacter."
 
 msgid "Manager"
 msgstr "Responsable"
+
+msgid "Add a forumCategory"
+msgstr "Ajouter une catégorie de forum"
+
+msgid "Create surveyDoodle"
+msgstr "Créer une enquête Doodle"

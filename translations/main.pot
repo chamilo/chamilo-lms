@@ -24118,3 +24118,9 @@ msgstr "Diagnostic finalization"
 
 msgid "DiagnosticfinalizationmessageContent"
 msgstr "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling."
+
+msgid "Add a forumCategory"
+msgstr "Add a forum Category"
+
+msgid "Create surveyDoodle"
+msgstr "Create Doodle survey"

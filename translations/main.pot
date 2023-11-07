@@ -24127,3 +24127,12 @@ msgstr "Create Doodle survey"
 
 msgid "Sticky courses"
 msgstr "Sticky courses"
+
+msgid "Current"
+msgstr "Current"
+
+msgid "Upcoming"
+msgstr "Upcoming"
+
+msgid "Past"
+msgstr "Past"

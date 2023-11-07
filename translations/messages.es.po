@@ -24079,3 +24079,12 @@ msgstr "Crear una encuesta Doodle"
 
 msgid "Sticky courses"
 msgstr "Cursos especiales"
+
+msgid "Current"
+msgstr "Actual"
+
+msgid "Upcoming"
+msgstr "Por venir"
+
+msgid "Past"
+msgstr "Finalizadas"

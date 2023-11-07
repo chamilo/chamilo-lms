@@ -24113,8 +24113,8 @@ msgstr "Your session search diagnosis is saved"
 msgid "Send diagnostic finalization message"
 msgstr "Send diagnostic finalization message"
 
-msgid "DiagnosticFinalizationMessageTitle"
+msgid "DiagnosticfinalizationmessageTitle"
 msgstr "Diagnostic finalization"
 
-msgid "DiagnosticFinalizationMessageContent"
+msgid "DiagnosticfinalizationmessageContent"
 msgstr "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling."

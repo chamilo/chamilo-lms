@@ -155,8 +155,8 @@
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
     "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
     "Send diagnostic finalization message": "Send diagnostic finalization message",
-    "DiagnosticFinalizationMessageTitle": "Diagnostic finalization",
-    "DiagnosticFinalizationMessageContent": "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling.",
+    "DiagnosticfinalizationmessageTitle": "Diagnostic finalization",
+    "DiagnosticfinalizationmessageContent": "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling.",
     "Contact": "Contact",
     "Registration": "Registration"
 }

@@ -70,7 +70,7 @@ class UpdateVueTranslations extends Command
             $newLanguage = [];
             foreach ($translations as $variable => $translation) {
                 $translated = $this->translator->trans($variable, [], null, $iso);
-                $newLanguage[$variable] = $translated;
+                $newLanguage[$variable] = $this->replaceMarkers($translated);
             }
             $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
             $fileToSave = $vueLocalePath.$iso.'.json';
@@ -81,5 +81,31 @@ class UpdateVueTranslations extends Command
         $output->writeln("Now you can commit the changes in $vueLocalePath ");
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Replace specifiers in a string to allow rendering them by i18n
+     *
+     * <code>
+     *     $txt = "Bonjour %s. Je m’appelle %s";
+     *     $replaced = replaceMarkers($txt); // Bonjour {0}. Je m’appelle {1}
+     * </code>
+     */
+    private function replaceMarkers(string $text): string
+    {
+        $count = 0;
+
+        $replace = function ($matches) use (&$count) {
+            $type = $matches[1];
+
+            return match ($type) {
+                "s", "d", "f" => "{".$count++."}",
+                default => $matches[0],
+            };
+        };
+
+        $pattern = "/%([sdf])/";
+
+        return preg_replace_callback($pattern, $replace, $text);
     }
 }

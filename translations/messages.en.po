@@ -24110,11 +24110,11 @@ msgstr "Welcome, please go to diagnostic at %s."
 msgid "Your session search diagnosis is saved"
 msgstr "Your session search diagnosis is saved"
 
-msgid "End of LearnPath"
-msgstr "End of LearnPath"
+msgid "Send diagnostic finalization message"
+msgstr "Send diagnostic finalization message"
 
-msgid "EndLPSubject"
-msgstr "EndLPSubject"
+msgid "DiagnosticfinalizationmessageTitle"
+msgstr "Diagnostic finalization"
 
-msgid "EndLpDescription"
-msgstr "EndLpDescription"
+msgid "DiagnosticfinalizationmessageContent"
+msgstr "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling."

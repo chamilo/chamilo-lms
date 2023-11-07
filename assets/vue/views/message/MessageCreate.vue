@@ -232,8 +232,8 @@ if (route.query.send_to_user) {
       if (route.query.prefill) {
         const prefill = capitalize(route.query.prefill)
 
-        item.value.title = t(prefill + "EndLPSubject")
-        item.value.content = t(prefill + "EndLpDescription", [user.firstname, user.lastname])
+        item.value.title = t(prefill + "Title")
+        item.value.content = t(prefill + "Content", [user.firstname, user.lastname])
       }
     })
     .catch((e) => notification.showErrorNotification(e))

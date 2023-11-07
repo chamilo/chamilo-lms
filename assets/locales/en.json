@@ -159,8 +159,8 @@
     "DiagnosticfinalizationmessageContent": "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling.",
     "Contact": "Contact",
     "Registration": "Registration",
-    "Current": "Current",
-    "Upcoming": "Upcoming",
-    "Past": "Past",
+    "Current session tab": "Current session tab",
+    "Upcoming session tab": "Upcoming session tab",
+    "Past session tab": "Past session tab",
     "Sticky courses": "Sticky courses"
 }

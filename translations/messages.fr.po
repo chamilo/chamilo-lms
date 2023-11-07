@@ -24152,11 +24152,11 @@ msgstr "Créer une enquête Doodle"
 msgid "Sticky courses"
 msgstr "Cours spéciaux"
 
-msgid "Current"
+msgid "Current session tab"
 msgstr "En cours"
 
-msgid "Upcoming"
+msgid "Upcoming session tab"
 msgstr "À venir"
 
-msgid "Past"
+msgid "Past session tab"
 msgstr "Terminées"

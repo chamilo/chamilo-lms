@@ -24128,11 +24128,11 @@ msgstr "Create Doodle survey"
 msgid "Sticky courses"
 msgstr "Sticky courses"
 
-msgid "Current"
+msgid "Current session tab"
 msgstr "Current"
 
-msgid "Upcoming"
+msgid "Upcoming session tab"
 msgstr "Upcoming"
 
-msgid "Past"
+msgid "Past session tab"
 msgstr "Past"

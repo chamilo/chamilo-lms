@@ -24080,11 +24080,11 @@ msgstr "Crear una encuesta Doodle"
 msgid "Sticky courses"
 msgstr "Cursos especiales"
 
-msgid "Current"
+msgid "Current session tab"
 msgstr "Actual"
 
-msgid "Upcoming"
+msgid "Upcoming session tab"
 msgstr "Por venir"
 
-msgid "Past"
+msgid "Past session tab"
 msgstr "Finalizadas"

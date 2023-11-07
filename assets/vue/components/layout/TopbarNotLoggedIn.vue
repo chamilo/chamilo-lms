@@ -1,32 +1,30 @@
 <template>
   <div class="app-topbar">
-    <Menubar
-      :model="menuItems"
-    >
+    <Menubar :model="menuItems">
       <template #start>
         <img
-          alt="Chamilo LMS"
           :src="headerLogo"
-        >
+          alt="Chamilo LMS"
+        />
       </template>
     </Menubar>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
-import Menubar from 'primevue/menubar';
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
-import {useI18n} from "vue-i18n";
+import { ref } from "vue"
+import Menubar from "primevue/menubar"
+import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
+import { useI18n } from "vue-i18n"
 
 const { t, locale } = useI18n()
 
 function setLanguage(event) {
-  const {label, isoCode } = event.item;
+  const { label, isoCode } = event.item
 
-  const selectorIndex = menuItems.value.findIndex(item => 'language_selector' === item.key);
+  const selectorIndex = menuItems.value.findIndex((item) => "language_selector" === item.key)
 
-  menuItems.value[selectorIndex] ? menuItems.value[selectorIndex].label = label : null;
+  menuItems.value[selectorIndex] ? (menuItems.value[selectorIndex].label = label) : null
 
   locale.value = isoCode
 }
@@ -37,7 +35,7 @@ const languageItems = window.languages.map((language) => ({
   command: setLanguage,
 }))
 
-const currentLanguage = window.languages.find(language => document.querySelector('html').lang  === language.isocode)
+const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
 
 const menuItems = ref([
   {
@@ -64,8 +62,8 @@ const menuItems = ref([
     key: "language_selector",
     label: currentLanguage ? currentLanguage.originalName : "English",
     items: languageItems,
-  }
-]);
+  },
+])
 
-const headerLogo = headerLogoPath;
+const headerLogo = headerLogoPath
 </script>

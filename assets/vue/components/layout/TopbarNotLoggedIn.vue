@@ -37,6 +37,8 @@ const languageItems = window.languages.map((language) => ({
   command: setLanguage,
 }))
 
+const currentLanguage = window.languages.find(language => document.querySelector('html').lang  === language.isocode)
+
 const menuItems = ref([
   {
     label: t("Home"),
@@ -60,7 +62,7 @@ const menuItems = ref([
   },
   {
     key: "language_selector",
-    label: "English",
+    label: currentLanguage ? currentLanguage.originalName : "English",
     items: languageItems,
   }
 ]);

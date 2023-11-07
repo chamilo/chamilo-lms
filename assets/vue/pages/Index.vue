@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import Login from "../components/Login";
@@ -20,11 +20,19 @@ const { locale } = useI18n();
 
 const pages = ref([]);
 
-store
-  .dispatch("page/findAll", {
-    "category.title": "index",
-    enabled: "1",
-    locale: locale.value,
-  })
-  .then((response) => (pages.value = response));
+const findAllPages = () => {
+  pages.value = [];
+
+  store
+    .dispatch("page/findAll", {
+      "category.title": "index",
+      enabled: "1",
+      locale: locale.value,
+    })
+    .then((response) => (pages.value = response));
+}
+
+findAllPages()
+
+watch(locale, () => findAllPages())
 </script>

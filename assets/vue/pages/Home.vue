@@ -5,7 +5,7 @@
       <SystemAnnouncementCardList :announcements="announcements" />
     </div>
 
-    <PageCardList class="grid gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2" />
+    <PageCardList class="grid gap-4 grid-cols-1" />
   </div>
 </template>
 

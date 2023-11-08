@@ -803,7 +803,7 @@ class Certificate extends Model
         $tplContent->assign(
             'certificate_generated_date_no_time',
             api_get_local_time(
-                $myCertificate['created_at'],
+                $myCertificate['created_at'] ?? null,
                 null,
                 null,
                 false,

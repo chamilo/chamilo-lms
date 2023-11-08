@@ -24076,3 +24076,15 @@ msgstr "Agregar una categoria de foro"
 
 msgid "Create surveyDoodle"
 msgstr "Crear una encuesta Doodle"
+
+msgid "Sticky courses"
+msgstr "Cursos especiales"
+
+msgid "Current session tab"
+msgstr "Actual"
+
+msgid "Upcoming session tab"
+msgstr "Por venir"
+
+msgid "Past session tab"
+msgstr "Finalizadas"

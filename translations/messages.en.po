@@ -24124,3 +24124,15 @@ msgstr "Add a forum Category"
 
 msgid "Create surveyDoodle"
 msgstr "Create Doodle survey"
+
+msgid "Sticky courses"
+msgstr "Special courses"
+
+msgid "Current session tab"
+msgstr "Current"
+
+msgid "Upcoming session tab"
+msgstr "Upcoming"
+
+msgid "Past session tab"
+msgstr "Past"

@@ -83,6 +83,10 @@ foreach ($results as $result) {
         api_get_local_time($result['exe']->getExeDate(), null, null, true, true, true),
     ];
     $data[] = [
+        get_lang('IP'),
+        $result['exe']->getUserIp(),
+    ];
+    $data[] = [
         $plugin->get_lang('Motive'),
         $plugin->calculateMotive($outfocusedLimitCount, $timeLimitCount),
     ];

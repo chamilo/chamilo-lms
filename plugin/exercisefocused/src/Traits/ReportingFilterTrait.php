@@ -214,7 +214,7 @@ trait ReportingFilterTrait
         if (!$courseId) {
             $tableHeaders[] = get_lang('SessionName');
             $tableHeaders[] = get_lang('CourseTitle');
-            $tableHeaders[] = get_lang('Exercise');
+            $tableHeaders[] = get_lang('ExerciseName');
         }
 
         $tableHeaders[] = $this->plugin->get_lang('ExerciseStartDateAndTime');

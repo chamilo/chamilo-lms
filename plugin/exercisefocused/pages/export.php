@@ -52,14 +52,22 @@ foreach ($results as $result) {
 
     $quizType = (int) $exercise->selectType();
 
+    $data[] = [
+        get_lang('Student'),
+        $user->getUsername(),
+        $user->getFirstname(),
+        $user->getLastname(),
+    ];
+
     if ($trackExe->getSessionId()) {
         $data[] = [
             get_lang('SessionName'),
             api_get_session_entity($trackExe->getSessionId())->getName(),
         ];
     }
+
     $data[] = [
-        get_lang('Course'),
+        get_lang('CourseTitle'),
         api_get_course_entity($trackExe->getCId())->getTitle(),
     ];
     $data[] = [
@@ -67,14 +75,10 @@ foreach ($results as $result) {
         $exercise->getUnformattedTitle(),
     ];
     $data[] = [
-        get_lang('Student'),
-        $user->getUsername(),
-        $user->getFirstname(),
-        $user->getLastname(),
-    ];
-    $data[] = [
         $plugin->get_lang('ExerciseStartDateAndTime'),
         api_get_local_time($result['exe']->getStartDate(), null, null, true, true, true),
+    ];
+    $data[] = [
         $plugin->get_lang('ExerciseEndDateAndTime'),
         api_get_local_time($result['exe']->getExeDate(), null, null, true, true, true),
     ];

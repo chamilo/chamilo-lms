@@ -31,16 +31,19 @@ class ReportingController extends BaseController
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 
-        $tab1 = $this->generateTabSearch($exercise, $courseCode, $sessionId);
+        $tab1 = $this->generateTabResume($exercise);
 
-        $tab2 = $this->generateTabSampling($exercise);
+        $tab2 = $this->generateTabSearch($exercise, $courseCode, $sessionId);
+
+        $tab3 = $this->generateTabSampling($exercise);
 
         $content = Display::tabs(
             [
                 $this->plugin->get_lang('ReportByAttempts'),
+                get_lang('Search'),
                 $this->plugin->get_lang('RandomSampling'),
             ],
-            [$tab1, $tab2],
+            [$tab1, $tab2, $tab3],
             'exercise-focused-tabs',
             [],
             [],
@@ -54,6 +57,13 @@ class ReportingController extends BaseController
             $content,
             $exercise->getTitle()
         );
+    }
+
+    private function generateTabResume(CQuiz $exercise): string
+    {
+        $results = $this->findResultsInCourse($exercise->getId());
+
+        return $this->createTable($results)->toHtml();
     }
 
     /**

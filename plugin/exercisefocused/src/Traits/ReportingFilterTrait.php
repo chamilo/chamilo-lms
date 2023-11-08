@@ -72,7 +72,7 @@ trait ReportingFilterTrait
 
         $qb = $this->em->createQueryBuilder();
         $qb
-            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username')
+            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username, te.sessionId, te.cId')
             ->from(TrackEExercises::class, 'te')
             ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
             ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id');
@@ -174,6 +174,9 @@ trait ReportingFilterTrait
                 }
             }
 
+            $session = api_get_session_entity($value['sessionId']);
+            $course = api_get_course_entity($value['cId']);
+
             $results[] = [
                 'id' => $value['exe']->getExeId(),
                 'quiz_title' => $value['title'],
@@ -185,6 +188,8 @@ trait ReportingFilterTrait
                 'count_return' => $returnCount,
                 'motive' => Display::span($motive, ['class' => "text-$class"]),
                 'class' => $class,
+                'session_name' => $session ? $session->getName() : null,
+                'course_title' => $course->getTitle(),
             ];
         }
 
@@ -193,6 +198,8 @@ trait ReportingFilterTrait
 
     protected function createTable(array $resultData): HTML_Table
     {
+        $courseId = api_get_course_int_id();
+
         $pluginMonitoring = ExerciseMonitoringPlugin::create();
         $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled(true);
 
@@ -203,7 +210,13 @@ trait ReportingFilterTrait
         $tableHeaders = [];
         $tableHeaders[] = get_lang('LoginName');
         $tableHeaders[] = get_lang('FullUserName');
-        $tableHeaders[] = get_lang('Exercise');
+
+        if (!$courseId) {
+            $tableHeaders[] = get_lang('SessionName');
+            $tableHeaders[] = get_lang('CourseTitle');
+            $tableHeaders[] = get_lang('Exercise');
+        }
+
         $tableHeaders[] = $this->plugin->get_lang('ExerciseStartDateAndTime');
         $tableHeaders[] = $this->plugin->get_lang('ExerciseEndDateAndTime');
         $tableHeaders[] = $this->plugin->get_lang('Outfocused');
@@ -231,7 +244,13 @@ trait ReportingFilterTrait
 
             $row[] = $result['username'];
             $row[] = $result['user_fullname'];
-            $row[] = $result['quiz_title'];
+
+            if (!$courseId) {
+                $row[] = $result['session_name'];
+                $row[] = $result['course_title'];
+                $row[] = $result['quiz_title'];
+            }
+
             $row[] = api_get_local_time($result['start_date'], null, null, true, true, true);
             $row[] = api_get_local_time($result['end_date'], null, null, true, true, true);
             $row[] = $result['count_outfocused'];
@@ -245,12 +264,12 @@ trait ReportingFilterTrait
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaders($tableHeaders);
         $table->setData($tableData);
-        $table->setColAttributes(3, ['class' => 'text-center']);
-        $table->setColAttributes(4, ['class' => 'text-center']);
-        $table->setColAttributes(5, ['class' => 'text-right']);
-        $table->setColAttributes(6, ['class' => 'text-right']);
-        $table->setColAttributes(7, ['class' => 'text-center']);
-        $table->setColAttributes(8, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 2 : 5, ['class' => 'text-center']);
+        $table->setColAttributes($courseId ? 3 : 6, ['class' => 'text-center']);
+        $table->setColAttributes($courseId ? 4 : 7, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 5 : 8, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-center']);
+        $table->setColAttributes($courseId ? 7 : 10, ['class' => 'text-right']);
 
         foreach ($resultData as $idx => $result) {
             $table->setRowAttributes($idx + 1, ['class' => $result['class']], true);
@@ -259,12 +278,18 @@ trait ReportingFilterTrait
         return $table;
     }
 
-    protected function findRandomResults(int $exerciseId): array
+    protected function findResultsInCourse(int $exerciseId, bool $randomResults = false): array
     {
-        $percentage = (int) $this->plugin->get(\ExerciseFocusedPlugin::SETTING_PERCENTAGE_SAMPLING);
+        $orderCondition = "ORDER BY exe_id";
 
-        if (empty($percentage)) {
-            return [];
+        if ($randomResults) {
+            $percentage = (int) $this->plugin->get(\ExerciseFocusedPlugin::SETTING_PERCENTAGE_SAMPLING);
+
+            if (empty($percentage)) {
+                return [];
+            }
+
+            $orderCondition = "ORDER BY RAND() LIMIT $percentage";
         }
 
         $cId = api_get_course_int_id();
@@ -279,7 +304,7 @@ trait ReportingFilterTrait
             WHERE c_id = $cId
                 AND exe_exo_id = $exerciseId
                 $sessionCondition
-            ORDER BY RAND() LIMIT $percentage"
+            $orderCondition"
         );
 
         $exeIdList = array_column(
@@ -293,7 +318,7 @@ trait ReportingFilterTrait
 
         $qb = $this->em->createQueryBuilder();
         $qb
-            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username')
+            ->select('te AS exe, q.title, te.startDate, u.firstname, u.lastname, u.username, te.sessionId, te.cId')
             ->from(TrackEExercises::class, 'te')
             ->innerJoin(CQuiz::class, 'q', Join::WITH, 'te.exeExoId = q.iid')
             ->innerJoin(User::class, 'u', Join::WITH, 'te.exeUserId = u.id')
@@ -305,6 +330,11 @@ trait ReportingFilterTrait
         return $this->formatResults(
             $qb->getQuery()->getResult()
         );
+    }
+
+    protected function findRandomResults(int $exerciseId): array
+    {
+        return $this->findResultsInCourse($exerciseId, true);
     }
 
     private function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array

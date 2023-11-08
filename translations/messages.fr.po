@@ -24160,3 +24160,6 @@ msgstr "À venir"
 
 msgid "Past session tab"
 msgstr "Terminées"
+
+msgid "User has participate dans de platforme %s the contrat date %s certificate date %s time %s"
+msgstr "a participé à une formation en ligne sur la plateforme %s de l’Office franco-allemand pour la Jeunesse. <br>Du <span style=\"color: #672290;\">%s</span> au <span style=\"color: #672290;\">%s</span>.<br><br>Cette formation avait pour objectif la préparation linguistique et interculturelle à une mobilité dans un cadre de formation professionnelle."

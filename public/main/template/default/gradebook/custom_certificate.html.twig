@@ -7,11 +7,11 @@
 <body>
 <table border="0" bgcolor="#92c647" cellpadding="0" cellspacing="0" align="center" width="80%">
     <tr>
-        <td bgcolor="#92c647"><img src="{{ _p.web_css_theme }}images/header_top.png" style="display: block;"></td>
+        <td bgcolor="#92c647"><img src="{{ url('index') ~ '/build/css/themes/chamilo/images/header_top.png' }}" style="display: block;"></td>
     </tr>
     <tr>
         <td>
-            <table border="0" cellspacing="0" cellpadding="0" width="100%"> 
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
                 <tr>
                     <td bgcolor="#92c647" width=58 height=91>
                         <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
@@ -20,7 +20,7 @@
                         {{ 'CertificateHeader' | get_lang }}
                     </td>
                     <td bgcolor="#92c647" width=58 height=91>
-                        <img src="{{ _p.web_css_theme }}images/lado-header.png" style="display:block;">
+                        <img src="{{ url('index') ~ '/build/css/themes/chamilo/images/lado-header.png' }}" style="display:block;">
                     </td>
                 </tr>
             </table>
@@ -30,13 +30,13 @@
         <td>
             <table bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="0" width="100%" height=900>
                 <tr>
-                    <td bgcolor="#92c647" height=755><img src="{{ _p.web_css_theme }}images/lado-a.png" style="display:block;"></td>
+                    <td bgcolor="#92c647" height=755><img src="{{ url('index') ~ '/build/css/themes/chamilo/images/lado-a.png' }}" style="display:block;"></td>
                     <td height=755 style="font-family:CourierSans-Light; line-height: 22px; color:#40ad49; padding: 40px; font-size: 18px;" valign="top">
                         <h3 style="color: #672290; font-size: 24px;">
                             {{ complete_name }}
                         </h3>
                         <p style="font-size: 16px;">
-                            {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
+                            {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s time %s' | trans | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
                         </p>
                         <br />
                         <p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />
@@ -63,7 +63,7 @@
                         <br />
                     </td>
                     <td height=755 bgcolor="#92c647">
-                        <img src="{{ _p.web_css_theme }}images/lado-b.png" style="display:block;">
+                        <img src="{{ url('index') ~ '/build/css/themes/chamilo/images/lado-b.png' }}" style="display:block;">
                     </td>
                 </tr>
             </table>
@@ -73,11 +73,11 @@
         <td>
             <table border="0" cellspacing="0" cellpadding="0" width="100%" height=91>
                 <tr>
-                    <td bgcolor="#92c647" width=58 height=91><img src="{{ _p.web_css_theme }}images/lado-b.png"  style="display:block;"></td>
+                    <td bgcolor="#92c647" width=58 height=91><img src="{{ url('index') ~ '/build/css/themes/chamilo/images/lado-b.png' }}"  style="display:block;"></td>
                     <td bgcolor="#92c647" width=500 height=91 style="font-family:CourierSans-Light; line-height: 18px; color:#FFF;">
                         {{ 'CertificateFooter' | get_lang }}
                     </td>
-                    <td bgcolor="#92c647" width=245 height=91><img src="{{ _p.web_css_theme }}images/lado-footer.png" style="display:block;"></td>
+                    <td bgcolor="#92c647" width=245 height=91><img src="{{ url('index') ~ '/build/css/themes/chamilo/images/lado-footer.png' }}" style="display:block;"></td>
                 </tr>
             </table>
         </td>

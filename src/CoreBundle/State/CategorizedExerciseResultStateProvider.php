@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use function count;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -55,7 +56,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
 
         ob_start();
 
-        $categoryList = self::displayQuestionListByAttempt(
+        $categoryList = $this->displayQuestionListByAttempt(
             $objExercise,
             $trackExercise
         );
@@ -70,7 +71,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    private static function displayQuestionListByAttempt(
+    private function displayQuestionListByAttempt(
         Exercise $objExercise,
         TrackEExercise $exerciseTracking
     ): array {
@@ -317,8 +318,12 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             }
         }
 
+        if ($this->isAllowedToSeeResults()) {
+            $show_results = true;
+        }
+
         if (!$show_results && !$show_only_score && RESULT_DISABLE_RADAR !== $objExercise->results_disabled) {
-            throw new Exception(get_lang('Not allowed'));
+            throw new AccessDeniedException();
         }
 
         // Adding total
@@ -332,6 +337,10 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
 
     private static function getStatsTableByAttempt(Exercise $exercise, array $category_list = []): array
     {
+        if (empty($category_list)) {
+            return [];
+        }
+
         $hide = (int) $exercise->getPageConfigurationAttribute('hide_category_table');
 
         if (1 === $hide) {
@@ -375,7 +384,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             ];
         }
 
-        if ($category_list['none']['score'] > 0) {
+        if (isset($category_list['none']) && $category_list['none']['score'] > 0) {
             $absolute = ExerciseLib::show_score(
                 $category_list['none']['score'],
                 $category_list['none']['total'],
@@ -416,5 +425,16 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         ];
 
         return $stats;
+    }
+
+    private function isAllowedToSeeResults(): bool
+    {
+        $isStudentBoss = $this->security->isGranted('ROLE_STUDENT_BOSS');
+        $isHRM = $this->security->isGranted('ROLE_RRHH');
+        $isSessionAdmin = $this->security->isGranted('ROLE_SESSION_MANAGER');
+        $isCourseTutor = $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+
+        return $isAllowedToEdit || $isCourseTutor || $isSessionAdmin || $isHRM || $isStudentBoss;
     }
 }

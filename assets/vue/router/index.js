@@ -80,10 +80,12 @@ const router = createRouter({
     {
       path: "/contact",
       name: "Contact",
-      component: Contact,
       meta: {
         requiresAuth: false,
         showBreadcrumb: false,
+      },
+      beforeEnter: (to, from, next) => {
+        window.location.href = '/contact2';
       },
     },
     {

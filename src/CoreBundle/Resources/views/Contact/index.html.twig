@@ -1,0 +1,62 @@
+{# templates/contact/index.html.twig #}
+
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <section id="contact-us" class="py-8">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-2xl font-semibold text-center mb-6">Contact Us</h2>
+
+            {{ form_start(form, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
+
+            {% for message in app.flashes('success') %}
+                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="mb-4">
+                {{ form_label(form.category) }}
+                {{ form_widget(form.category, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.firstName) }}
+                {{ form_widget(form.firstName, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.lastName) }}
+                {{ form_widget(form.lastName, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.subject) }}
+                {{ form_widget(form.subject, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="mb-6">
+                {{ form_label(form.message) }}
+                {{ form_widget(form.message, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+            </div>
+
+            <div class="flex items-center justify-center mb-6">
+                {{ form_widget(form.termsAccepted, {'attr': {'class': 'mr-2 leading-tight'}}) }}
+                {{ form_label(form.termsAccepted, 'By checking this box, I confirm that I accept the data processing by OFAJ') }}
+            </div>
+
+            <div class="flex items-center justify-center">
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="mdi mdi-send mr-2"></i> Send
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

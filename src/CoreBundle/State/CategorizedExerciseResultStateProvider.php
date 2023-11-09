@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use function count;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -22,6 +21,7 @@ use Question;
 use QuestionOptionsEvaluationPlugin;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TestCategory;
 
 class CategorizedExerciseResultStateProvider implements ProviderInterface

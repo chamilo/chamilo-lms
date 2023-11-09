@@ -147,8 +147,8 @@ class SocialPost
 
     #[ORM\OneToMany(
         targetEntity: SocialPostAttachment::class,
-        mappedBy: "socialPost",
-        cascade: ["persist", "remove"],
+        mappedBy: 'socialPost',
+        cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
     private Collection $attachments;

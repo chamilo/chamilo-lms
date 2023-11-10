@@ -5,137 +5,122 @@
 </div>
 
 <div class="page-header">
-    <h4>
+    <h4 class="text-4xl">
         {{ 'Overview' | trans  }}
     </h4>
 </div>
 
-<div class="grid grid-cols-4 gap-8 view-global-followed">
+<div class="grid grid-cols-4 gap-8 view-global-followed mt-4">
     <div class="content">
-        <div class="card-title">
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
+                {{ 'school'|mdi_icon(64) }}&nbsp;{{ students }}
+        </div>
+        <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/student.php'}) }}">
                 {{ 'Followed students' | trans }}
             </a>
         </div>
-        <div class="py-4 flex justify-center h-24 border-0 border-primary rounded-md shadow hover:shadow-lg shadow-black text-4xl">
-                {{ 'school'|mdi_icon(64) }}&nbsp;{{ students }}
-        </div>
     </div>
     <div class="content">
-        <div class="card-title">
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
+            {{ 'book-account'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
+        </div>
+        <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ studentboss }}">
                 {{ 'Followed student bosses' | trans }}
             </a>
         </div>
-        <div class="py-4 flex justify-center h-24 border-0 border-primary rounded-md shadow hover:shadow-lg shadow-black text-4xl">
-            {{ 'book-account'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
-        </div>
     </div>
     <div class="content">
-        <div class="card-title">
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
+            {{ 'text-box'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
+        </div>
+        <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/teachers.php'}) }}">
                 {{ 'Followed teachers' | trans }}
             </a>
         </div>
-        <div class="py-4 flex justify-center h-24 border-0 border-primary rounded-md shadow hover:shadow-lg shadow-black text-4xl">
-            {{ 'text-box'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
-        </div>
     </div>
     <div class="content">
-        <div class="card-title">
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
+            {{ 'account'|mdi_icon(64) }}&nbsp;{{ humanresources }}
+        </div>
+        <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ drh }}">
                 {{ 'Followed HR directors' | trans }}
             </a>
-        </div>
-        <div class="py-4 flex justify-center h-24 border-0 border-primary rounded-md shadow hover:shadow-lg shadow-black text-4xl">
-            {{ 'account'|mdi_icon(64) }}&nbsp;{{ humanresources }}
         </div>
     </div>
 </div>
 <div class="grid grid-cols-4 gap-8 my-8 view-global">
     <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black content-center">
-        <div class="easy-donut">
-            <div id="easypiechart-blue" class="easypiechart" data-percent="{{ total_user }}">
-                <span class="percent text-4xl">{{ total_user }}</span>
+        <div class="easy-donut align-content-center border-box">
+            <div id="easypiechart-blue" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ total_user }}">
+                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ total_user }}</span>
             </div>
-            <div class="easypiechart-link">
-                <a class="btn btn--plain hover:cursor-pointer"" href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}">
-                    {{ 'Followed users' | trans }}
+            <div class="">
+                <a class="hover:cursor-pointer underline" href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}">
+                   {{ 'account'|mdi_icon(16) }} {{ 'Followed users' | trans }}
                 </a>
+                {% if app.user.status == 1 %}
+                    <a
+                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
+                            class="hover:cursor-pointer"
+                    >
+                        {{ 'plus-circle-outline'|mdi_icon(16) }}
+                    </a>
+                {% endif %}
             </div>
         </div>
-
-        {% if app.user.status == 1 %}
-            <a
-               href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
-               class="btn btn--plain btn-sm hover:cursor-pointer"
-            >
-                {{ 'plus'|mdi_icon(64) }}
-            </a>
-        {% endif %}
     </div>
     <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
         <div class="easy-donut">
-            <div id="easypiechart-orange" class="easypiechart" data-percent="{{ stats.courses }}">
-                <span class="percent text-4xl">{{ stats.courses }}</span>
+            <div id="easypiechart-orange" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.courses }}">
+                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.courses }}</span>
             </div>
             <div class="easypiechart-link">
-                <a class="btn btn--plain hover:cursor-pointer""
+                <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
                 >
-                    {{ 'Assigned courses' | trans }}
+                {{ 'book-open-page-variant'|mdi_icon(16) }} {{ 'Assigned courses' | trans }}
                 </a>
             </div>
         </div>
-        {% if app.user.status == 1 %}
-            <a
-                href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
-               class="btn btn--plain btn-sm hover:cursor-pointer">
-                {{ 'plus'|mdi_icon(64) }}
-            </a>
-        {% endif %}
     </div>
     <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
         <div  class="easy-donut">
-            <div id="easypiechart-teal" class="easypiechart" data-percent="{{ stats.assigned_courses }}">
-                <span class="percent text-4xl">{{ stats.assigned_courses }}</span>
+            <div id="easypiechart-teal" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.assigned_courses }}">
+                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.assigned_courses }}</span>
             </div>
             <div class="easypiechart-link">
-                <a class="btn btn--plain hover:cursor-pointer""
+                <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
                 >
-                    {{ 'Followed courses' | trans }}
+                {{ 'book-open-page-variant'|mdi_icon(16) }} {{ 'Followed courses' | trans }}
                 </a>
             </div>
         </div>
-        {% if app.user.status == 1 %}
-            <a
-                href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
-                class="btn btn--plain btn-sm hover:cursor-pointer">
-                {{ 'plus'|mdi_icon(64) }}
-            </a>
-        {% endif %}
     </div>
     <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
         <div class="easy-donut">
-            <div id="easypiechart-red" class="easypiechart" data-percent="{{ stats.session_list |length  }}">
-                <span class="percent text-4xl">{{ stats.session_list |length }}</span>
+            <div id="easypiechart-red" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.session_list |length  }}">
+                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.session_list |length }}</span>
             </div>
             <div class="easypiechart-link">
-                <a class="btn btn--plain hover:cursor-pointer"
+                <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/session.php'}) }}"
                 >
-                    {{ 'Followed sessions' | trans }}
+                    {{ 'google-classroom'|mdi_icon(16) }} {{ 'Followed sessions' | trans }}
                 </a>
+                {% if app.user.status == 1 %}
+                    <a
+                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
+                            class="hover:cursor-pointer">
+                        {{ 'plus-circle-outline'|mdi_icon(16) }}
+                    </a>
+                {% endif %}
             </div>
         </div>
-        {% if app.user.status == 1 %}
-            <a
-                href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
-                class="btn btn--plain btn-sm hover:cursor-pointer">
-                {{ 'plus'|mdi_icon(64) }}
-            </a>
-        {% endif %}
     </div>
 </div>
 <div class="my-8 page-header">
@@ -144,47 +129,47 @@
     </h3>
 </div>
 <div class="grid grid-cols-4 gap-8 report-section">
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black item-report">
-        <div class="item-report-number text-4xl">
+    <div class="h-24 grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AverageCoursePerStudent }}
         </div>
-        <p>{{ 'Average number of courses to which my learners are subscribed' | trans }}</p>
+        <div class="text-center p-2">{{ 'Average number of courses to which my learners are subscribed' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.InactivesStudents }}
         </div>
-        <p>{{ 'Learners not connected for a week or more' | trans }}</p>
+        <div class="text-center p-2">{{ 'Learners not connected for a week or more' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AverageTimeSpentOnThePlatform }}
         </div>
-        <p>{{ 'Time spent on portal' | trans }}</p>
+        <div class="text-center p-2">{{ 'Time spent on portal' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AverageProgressInLearnpath }}
         </div>
-        <p>{{ 'Progress in courses' | trans }}</p>
+        <div class="text-center p-2">{{ 'Progress in courses' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AvgCourseScore }}
         </div>
-        <p>{{ 'Average score in learning paths' | trans }}</p>
+        <div class="text-center p-2">{{ 'Average score in learning paths' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AveragePostsInForum }}
         </div>
-        <p> {{ 'Posts in forum' | trans }}</p>
+        <div class="text-center p-2"> {{ 'Posts in forum' | trans }}</div>
     </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="item-report-number text-4xl">
+    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
+        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
             {{ report.AverageAssignments }}
         </div>
-        <p> {{ 'Average assignments per learner' | trans }}</p>
+        <div class="text-center p-2"> {{ 'Average assignments per learner' | trans }}</div>
     </div>
 </div>
 

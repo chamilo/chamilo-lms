@@ -16,16 +16,6 @@ if (('true' === api_get_setting('platform.block_my_progress_page'))) {
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Progress');
 
-$htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
-$htmlHeadXtra[] = "<script>
-$(function() {
-    $().timelinr({
-        containerDiv: '#my_timeline',
-        autoPlayPause: 2000
-    })
-});
-</script>";
-
 $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
 
 if ($pluginCalendar) {

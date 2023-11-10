@@ -4422,11 +4422,15 @@ class SessionManager
 
             if (-1 != $access_url_id) {
                 $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
-                    ON (s.id = session_rel_url.session_id)";
-                $whereConditions .= " AND session_rel_url.access_url_id = $access_url_id";
+                    ON (s.id = access_url_rel_session.session_id)";
+                $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
             }
         }
-        $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin WHERE $whereConditions ORDER BY s.name";
+        $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";
+        if (!empty($whereConditions)) {
+            $sql .= "WHERE $whereConditions ";
+        }
+        $sql .= "ORDER BY s.name";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

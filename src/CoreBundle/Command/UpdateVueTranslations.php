@@ -84,7 +84,7 @@ class UpdateVueTranslations extends Command
     }
 
     /**
-     * Replace specifiers in a string to allow rendering them by i18n
+     * Replace specifiers in a string to allow rendering them by i18n.
      *
      * <code>
      *     $txt = "Bonjour %s. Je m’appelle %s";
@@ -99,12 +99,12 @@ class UpdateVueTranslations extends Command
             $type = $matches[1];
 
             return match ($type) {
-                "s", "d", "f" => "{".$count++."}",
+                's', 'd', 'f' => '{'.$count++.'}',
                 default => $matches[0],
             };
         };
 
-        $pattern = "/%([sdf])/";
+        $pattern = '/%([sdf])/';
 
         return preg_replace_callback($pattern, $replace, $text);
     }

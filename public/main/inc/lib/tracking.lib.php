@@ -3265,13 +3265,13 @@ class Tracking
             // Compose a filter based on optional learning paths list given
             $condition_lp = '';
             if (count($lp_ids) > 0) {
-                $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
+                $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
             }
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                    WHERE $condition_lp";
+                    WHERE 1=1 $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($sessionId);
 

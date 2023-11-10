@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostAttachment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -28,12 +30,12 @@ class CreateSocialPostAttachmentAction extends BaseResourceFileAction
         $socialPostId = $request->request->get('messageId');
 
         if (!$uploadedFile instanceof UploadedFile) {
-            throw new \Exception('No file uploaded');
+            throw new Exception('No file uploaded');
         }
 
         $socialPost = $em->getRepository(SocialPost::class)->find($socialPostId);
         if (!$socialPost) {
-            throw new \Exception('No social post found');
+            throw new Exception('No social post found');
         }
 
         /** @var User $currentUser */
@@ -44,7 +46,7 @@ class CreateSocialPostAttachmentAction extends BaseResourceFileAction
         $attachment->setFilename($uploadedFile->getClientOriginalName());
         $attachment->setSize($uploadedFile->getSize());
         $attachment->setInsertUserId($currentUser->getId());
-        $attachment->setInsertDateTime(new \DateTime('now', new \DateTimeZone('UTC')));
+        $attachment->setInsertDateTime(new DateTime('now', new DateTimeZone('UTC')));
         $attachment->setParent($currentUser);
         $attachment->addUserLink($currentUser);
 

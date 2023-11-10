@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\SocialPostAttachment;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use DateTime;
+use DateTimeZone;
 use DirectoryIterator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -39,12 +41,14 @@ final class Version20231026231100 extends AbstractMigrationChamilo
 
         $sub = $em->createQueryBuilder();
         $sub->select('sp.id')
-            ->from('Chamilo\CoreBundle\Entity\SocialPost', 'sp');
+            ->from('Chamilo\CoreBundle\Entity\SocialPost', 'sp')
+        ;
 
         $qb = $em->createQueryBuilder();
         $qb->select('ma')
             ->from('Chamilo\CoreBundle\Entity\MessageAttachment', 'ma')
-            ->where($qb->expr()->in('ma.message', $sub->getDQL()));
+            ->where($qb->expr()->in('ma.message', $sub->getDQL()))
+        ;
 
         $query = $qb->getQuery();
         $messageAttachments = $query->getResult();
@@ -73,7 +77,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                     $attachment->setFilename($uploadFile->getClientOriginalName());
                     $attachment->setSize($uploadFile->getSize());
                     $attachment->setInsertUserId($sender->getId());
-                    $attachment->setInsertDateTime(new \DateTime('now', new \DateTimeZone('UTC')));
+                    $attachment->setInsertDateTime(new DateTime('now', new DateTimeZone('UTC')));
                     $attachment->setParent($sender);
                     $attachment->addUserLink($sender);
                     $attachment->setCreator($sender);
@@ -102,7 +106,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
 
             if ($fileInfo->isDir()) {
                 $result = $this->findFileRecursively($filePath, $targetFile);
-                if ($result !== null) {
+                if (null !== $result) {
                     return $result;
                 }
             } else {

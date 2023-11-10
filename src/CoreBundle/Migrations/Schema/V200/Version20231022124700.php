@@ -453,7 +453,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
                 // Reconstructing the URL with the new courseId and adjusted parameters.
                 return $matches[1].'?cid='.$courseId.'&sid='.$matches[5].'&gid='.$matches[7].$remainingParams;
-                  // Return the new URL.
+            // Return the new URL.
             },
             $htmlContent
         );

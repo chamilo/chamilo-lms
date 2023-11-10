@@ -550,12 +550,11 @@ switch ($action) {
         if ($myCertificate) {
             $certificate = new Certificate($myCertificate['id'], $studentId);
             $certificate->deleteCertificate(true);
-            // Create new one
-            $certificate = new Certificate(0, $studentId);
-            $certificate->generatePdfFromCustomCertificate();
-            exit;
         }
-        break;
+        // Create new one
+        $certificate = new Certificate(0, $studentId);
+        $certificate->generatePdfFromCustomCertificate();
+        exit;
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {

@@ -304,6 +304,8 @@ $form->setDefaults([
     'year' => $selectedYear,
 ]);
 
+$template->assign('search_form', '');
+
 if (api_is_student_boss()) {
     foreach ($userList as $studentId) {
         $students[$studentId] = api_get_user_info($studentId)['complete_name_with_username'];

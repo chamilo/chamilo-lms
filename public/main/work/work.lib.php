@@ -1538,21 +1538,22 @@ function getAllWorkListStudent(
 /**
  * @param int    $start
  * @param int    $limit
- * @param string $column
- * @param string $direction
- * @param string $where_condition
- * @param bool   $getCount
+ * @param ?string $column
+ * @param ?string $direction
+ * @param ?string $where_condition
+ * @param ?bool   $getCount
  *
  * @return array
+ * @throws Exception
  */
 function getWorkListTeacher(
-    $start,
-    $limit,
-    $column,
-    $direction,
-    $where_condition,
-    $getCount = false
-) {
+    int $start,
+    int $limit,
+    ?string $column,
+    ?string $direction,
+    ?string $where_condition,
+    ?bool $getCount = false
+): array {
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();
@@ -1562,7 +1563,7 @@ function getWorkListTeacher(
         $groupIid = $groupInfo['iid'];
     }
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
-    if (!in_array($direction, ['asc', 'desc'])) {
+    if (empty($direction) || !in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
     }
     if (!empty($where_condition)) {

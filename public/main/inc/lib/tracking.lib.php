@@ -405,9 +405,7 @@ class Tracking
                     $extend_link = '';
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
-                            Display::return_icon(
-                                'visible.png',
-                                get_lang('Hide attempt view')
+                            Display::getMdiIcon('eye', 'ch-tool-icon', null, 22, get_lang('Hide attempt view')
                             ),
                             api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix
                         );
@@ -478,13 +476,13 @@ class Tracking
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('visible.png', get_lang('Hide attempt view')),
+                                    Display::getMdiIcon('eye', 'ch-tool-icon', null, 22, get_lang('Hide attempt view')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
+                                            Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 22, get_lang('Export to PDF')),
                                             api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
                                             ['class' => 'export']
                                         );
@@ -492,13 +490,13 @@ class Tracking
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                                    Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Extend attempt view')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
+                                            Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 22, get_lang('Export to PDF')),
                                             api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
                                             ['class' => 'export']
                                         );
@@ -553,9 +551,7 @@ class Tracking
 
                         if ('dir' !== $row['item_type']) {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                $view_score = Display::return_icon(
-                                    'invisible.png',
-                                    get_lang('Results hidden by the exercise setting')
+                                $view_score = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Results hidden by the exercise setting')
                                 );
                             } else {
                                 switch ($row['item_type']) {
@@ -716,14 +712,14 @@ class Tracking
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('visible.png', get_lang('Hide attempt view')),
+                                Display::getMdiIcon('eye', 'ch-tool-icon', null, 22, get_lang('Hide attempt view')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         } else {
                             // Same case if fold_attempt_id is set, so not implemented explicitly.
-                            // The extend button for this attempt has not been clicked.
+                            // The "Extend" button for this attempt has not been clicked.
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                                Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Extend attempt view')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         }
@@ -737,7 +733,7 @@ class Tracking
                     $extend_link = '';
                     if ($inter_num > 1) {
                         $extend_link = Display::url(
-                            Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                            Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Extend attempt view')),
                             api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                         );
                     }
@@ -958,9 +954,7 @@ class Tracking
                             $scoreItem = null;
                             if ('quiz' === $row['item_type']) {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $scoreItem .= Display::return_icon(
-                                        'invisible.png',
-                                        get_lang('Results hidden by the exercise setting')
+                                    $scoreItem .= Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Results hidden by the exercise setting')
                                     );
                                 } else {
                                     $scoreItem .= ExerciseLib::show_score($score, $maxscore, false);
@@ -1247,7 +1241,7 @@ class Tracking
         $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-            $final_score = Display::return_icon('invisible.png', get_lang('Results hidden by the exercise setting'));
+            $final_score = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, 22, get_lang('Results hidden by the exercise setting'));
             $finalScoreToCsv = get_lang('Results hidden by the exercise setting');
         } else {
             if (is_numeric($total_score)) {
@@ -4647,11 +4641,12 @@ class Tracking
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
-                    Display::return_icon(
-                        'course.png',
-                        get_lang('My courses'),
-                        [],
-                        ICON_SIZE_SMALL
+                    Display::getMdiIcon(
+                        'book-open-page-variant',
+                        'ch-tool-icon',
+                        null,
+                        22,
+                        get_lang('My courses')
                     ).' '.get_lang('My courses')
                 );
 
@@ -4780,11 +4775,11 @@ class Tracking
                         empty($_GET['session_id'])
                     ) {
                         $detailsLink .= '<a href="#course_session_header">';
-                        $detailsLink .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
+                        $detailsLink .= Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details'));
                         $detailsLink .= '</a>';
                     } else {
                         $detailsLink .= '<a href="'.api_get_self().'?course='.$courseCode.$extra_params.'#course_session_header">';
-                        $detailsLink .= Display::return_icon('2rightarrow.png', get_lang('Details'));
+                        $detailsLink .= Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details'));
                         $detailsLink .= '</a>';
                     }
 
@@ -4921,12 +4916,7 @@ class Tracking
                 );
             }
 
-            $sessionIcon = Display::return_icon(
-                'session.png',
-                get_lang('Course sessions'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $sessionIcon = Display::getMdiIcon('google-classroom', 'ch-tool-icon', null, 22, get_lang('Course sessions'));
 
             $anchor = Display::url('', '', ['name' => 'course_session_header']);
             $html .= $anchor.Display::page_subheader(
@@ -5022,18 +5012,13 @@ class Tracking
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow_na.png',
-                            get_lang('Details')
+                        Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')
                         ),
                         api_get_self().'?session_id='.$my_session_id.'#course_session_list'
                     );
                 } else {
                     $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow.png',
-                            get_lang('Details')
-                        ),
+                        Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')),
                         api_get_self().'?session_id='.$my_session_id.'#course_session_list'
                     );
                 }
@@ -5251,16 +5236,14 @@ class Tracking
                         $_GET['session_id'] == $session_id_from_get
                     ) {
                         $details = Display::url(
-                            Display::return_icon('2rightarrow_na.png', get_lang('Details')),
+                            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')),
                         '#course_session_data'
                         );
                     } else {
                         $url = api_get_self().
                             '?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
                         $details = Display::url(
-                            Display::return_icon(
-                                '2rightarrow.png',
-                                get_lang('Details')
+                            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')
                             ),
                             $url
                         );
@@ -8801,7 +8784,7 @@ class TrackingCourseLog
             $url = $urlBase.'&student='.$user['user_id'];
 
             $user['link'] = '<center><a href="'.$url.'">
-                            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                            '.Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 32, get_lang('Details')).'
                              </a></center>';
 
             // store columns in array $users
@@ -9015,7 +8998,7 @@ class TrackingCourseLog
                 <center>
                  <a
                     href="../my_space/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$sessionId.'">
-                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                    '.Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')).'
                  </a>
                 </center>';
 
@@ -9047,37 +9030,37 @@ class TrackingCourseLog
     public static function actionsLeft($current, $sessionId = 0, $addWrapper = true)
     {
         $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('account', 'ch-tool-icon', null, 32, get_lang('Report on learners')),
             'courseLog.php?'.api_get_cidreq(true, false)
         );
 
         $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('account-group', 'ch-tool-icon', null, 32, get_lang('Group reporting')),
             'course_log_groups.php?'.api_get_cidreq()
         );
         $resourcesLink = '';
         /*$resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Report on resource')),
             'course_log_resources.php?'.api_get_cidreq(true, false)
         );*/
 
         $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('book-open-page-variant	', 'ch-tool-icon', null, 32, get_lang('Course report')),
             'course_log_tools.php?'.api_get_cidreq(true, false)
         );
 
         $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('security', 'ch-tool-icon', null, 32, get_lang('Audit report')),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
         $lpLink = Display::url(
-            Display::return_icon('scorms.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 32, get_lang('CourseLPsGenericStats')),
             api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
         );
 
@@ -9090,7 +9073,7 @@ class TrackingCourseLog
             $checkExport = $attendance->getAttendanceLogin($startDate, $endDate);
             if (false !== $checkExport) {
                 $attendanceLink = Display::url(
-                    Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('av-timer', 'ch-tool-icon', null, 32, get_lang('Logins')),
                     api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
                 );
             }
@@ -9099,61 +9082,51 @@ class TrackingCourseLog
         switch ($current) {
             case 'users':
                 $usersLink = Display::url(
-                        Display::return_icon(
-                        'user_na.png',
-                        get_lang('Report on learners'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
+                        Display::getMdiIcon('account', 'ch-tool-icon-disabled', null, 32, get_lang('Report on learners')),
                     '#'
                 );
                 break;
             case 'groups':
                 $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('account-group', 'ch-tool-icon-disabled', null, 32, get_lang('Group reporting')),
                     '#'
                 );
                 break;
             case 'courses':
                 $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon-disabled', null, 32, get_lang('Course report')),
                     '#'
                 );
                 break;
             case 'resources':
                 $resourcesLink = Display::url(
-                    Display::return_icon(
-                    'tools_na.png',
-                    get_lang('Report on resource'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon('package-variant-closed', 'ch-tool-icon-disabled', null, 32, get_lang('Report on resource')),
                     '#'
                 );
                 break;
             case 'exams':
                 $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-disabled', null, 32, get_lang('Exam tracking')),
                     '#'
                 );
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('security', 'ch-tool-icon-disabled', null, 32, get_lang('Audit report')),
                     '#'
                 );
                 break;
             case 'attendance':
                 if (!empty($sessionId)) {
                     $attendanceLink = Display::url(
-                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon('av-timer', 'ch-tool-icon-disabled', null, 32, get_lang('Logins')),
                         '#'
                     );
                 }
                 break;
             case 'lp':
                 $lpLink = Display::url(
-                    Display::return_icon('scorms_na.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('map-marker-path', 'ch-tool-icon-disabled', null, 32, get_lang('CourseLPsGenericStats')),
                     '#'
                 );
                 break;

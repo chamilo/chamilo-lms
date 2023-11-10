@@ -70,10 +70,7 @@ if (!empty($courses)) {
         $params = '&cid='.$course->getId().'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
-            Display::return_icon(
-                'learnpath.png',
-                get_lang('Lp')
-            ),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 22, get_lang('Lp')),
             $link
         );
 

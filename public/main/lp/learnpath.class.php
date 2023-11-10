@@ -4825,12 +4825,7 @@ class learnpath
 
         /*if ($backToBuild) {
             $back = Display::url(
-                Display::return_icon(
-                    'back.png',
-                    get_lang('GoBack'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('GoBack')),
                 "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
             );
         }*/
@@ -4847,12 +4842,7 @@ class learnpath
         );
 
         /*$actionsLeft .= Display::url(
-            Display::return_icon(
-                'upload_audio.png',
-                get_lang('Add audio'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon('music-note-plus', 'ch-tool-icon', null, 32, get_lang('Add audio')),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'admin_view',
                 'lp_id' => $lpId,
@@ -4898,18 +4888,8 @@ class learnpath
 
         if ($allowExpand) {
             /*$actionsLeft .= Display::url(
-                Display::return_icon(
-                    'expand.png',
-                    get_lang('Expand'),
-                    ['id' => 'expand'],
-                    ICON_SIZE_MEDIUM
-                ).
-                Display::return_icon(
-                    'contract.png',
-                    get_lang('Collapse'),
-                    ['id' => 'contract', 'class' => 'hide'],
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('arrow-expand-all', 'ch-tool-icon', null, 32, get_lang('Expand')).
+                Display::getMdiIcon('arrow-collapse-all', 'ch-tool-icon', null, 32, get_lang('Collapse')),
                 '#',
                 ['role' => 'button', 'id' => 'hide_bar_template']
             );*/
@@ -5865,22 +5845,12 @@ class learnpath
 
         if (TOOL_LP_FINAL_ITEM !== $itemType) {
             $return .= Display::url(
-                Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')),
                 $url.'&action=edit_item&path_item='.$path
             );
 
             /*$return .= Display::url(
-                Display::return_icon(
-                    'move.png',
-                    get_lang('Move'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon', null, 22, get_lang('Move')),
                 $url.'&action=move_item'
             );*/
         }
@@ -5888,22 +5858,12 @@ class learnpath
         // Commented for now as prerequisites cannot be added to chapters.
         if ('dir' !== $itemType) {
             $return .= Display::url(
-                Display::return_icon(
-                    'accept.png',
-                    get_lang('Prerequisites'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('graph', 'ch-tool-icon', null, 22, get_lang('Prerequisites')),
                 $url.'&action=edit_item_prereq'
             );
         }
         $return .= Display::url(
-            Display::return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                [],
-                ICON_SIZE_SMALL
-            ),
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')),
             $url.'&action=delete_item'
         );
 
@@ -6541,17 +6501,14 @@ class learnpath
 
         $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::return_icon('new_exercice.png');
+        $return .= Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('New test'));
         $return .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
             get_lang('New test').'</a>';
         $return .= '</li>';
 
-        $previewIcon = Display::return_icon(
-            'preview_view.png',
-            get_lang('Preview')
-        );
-        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
+        $previewIcon = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview'));
+        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Exercise'));
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         foreach ($exercises as $exercise) {
@@ -6652,7 +6609,7 @@ class learnpath
                 get_lang('Add a link').'
                 </a>
             </li>';
-        $linkIcon = Display::return_icon('links.png', '', [], ICON_SIZE_TINY);
+        $linkIcon = Display::getMdiIcon('file-link', 'ch-tool-icon', null, 16, get_lang('Link'));
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
             /** @var CLink $link */
@@ -6660,7 +6617,7 @@ class learnpath
                 $title = $link->getTitle();
                 $id = $link->getIid();
                 $linkUrl = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
                     ['target' => '_blank']
                 );
@@ -6721,11 +6678,11 @@ class learnpath
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
-            $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
+            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Student publication'));
             foreach ($works as $work) {
                 $workId = $work['iid'];
                 $link = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
                     ['target' => '_blank']
                 );
@@ -6803,7 +6760,7 @@ class learnpath
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::return_icon('new_forum.png');
+        $return .= Display::getMdiIcon('comment-quote	', 'ch-tool-icon', null, 32, get_lang('Create a new forum'));
         $return .= Display::url(
             get_lang('Create a new forum'),
             api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
@@ -6831,7 +6788,7 @@ class learnpath
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getForumTitle());
             $link = Display::url(
-                Display::return_icon('preview_view.png', get_lang('Preview')),
+                Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                 api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
                 ['target' => '_blank']
             );
@@ -6844,7 +6801,7 @@ class learnpath
             $return .= '<a class="moved" href="#">';
             $return .= $moveIcon;
             $return .= ' </a>';
-            $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
+            $return .= Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, 16, get_lang('Forum'));
 
             $moveLink = Display::url(
                 $title.' '.$link,
@@ -6873,7 +6830,7 @@ class learnpath
                 foreach ($threads as $thread) {
                     $threadId = $thread->getIid();
                     $link = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview')),
+                        Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                         api_get_path(WEB_CODE_PATH).
                         'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
                         ['target' => '_blank']
@@ -6887,7 +6844,7 @@ class learnpath
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= $moveIcon;
                     $return .= ' </a>';
-                    $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
+                    $return .= Display::getMdiIcon('format-quote-open', 'ch-tool-icon', null, 16, get_lang('Thread'));
                     $return .= '<a
                         class="moved link_with_id"
                         data-id="'.$threadId.'"

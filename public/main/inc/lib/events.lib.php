@@ -1787,18 +1787,15 @@ class Event
      * Get a list of all the exercises in a given learning path.
      *
      * @param int $lp_id
-     * @param int $course_id This parameter is probably deprecated as lp_id now is a global iid
      *
      * @return array
      */
-    public static function get_all_exercises_from_lp($lp_id, $course_id)
+    public static function get_all_exercises_from_lp($lp_id)
     {
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = (int) $course_id;
         $lp_id = (int) $lp_id;
         $sql = "SELECT * FROM $lp_item_table
                 WHERE
-                    c_id = $course_id AND
                     lp_id = $lp_id AND
                     item_type = 'quiz'
                 ORDER BY parent_item_id, display_order";

@@ -197,9 +197,6 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get lpType.
-     */
     public function getLpType(): int
     {
         return $this->lpType;

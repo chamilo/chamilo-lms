@@ -8,14 +8,14 @@
 {#                 data-c_id="{{ description.c_id }}" #}
                  data-type="course_description"
             >
-                <div class="panel-heading">
+                <div class="">
                     {% if is_allowed_to_edit %}
-                        <div class="pull-right">
+                        <div class="float-right">
                             {% if is_granted('EDIT', description.resourceNode) %}
                                 <a
                                     href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=edit&id={{ description.iid }}&{{ course_url_params }}"
                                     title="{{ 'Edit'|get_lang }}">
-                                    <img src="{{ 'edit.png'|icon(22) }}"/>
+                                    {{ 'pencil'|mdi_icon(22) }}
                                 </a>
                             {% endif %}
 
@@ -23,7 +23,7 @@
                                 <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=delete&id={{ description.iid }}&{{ course_url_params }}"
                                    onclick="javascript:return confirmation('{{ description.title | e('js')}}');"
                                    title="{{ 'Delete'|get_lang }}">
-                                    <img src="{{ 'delete.png'|icon(22) }}"/>
+                                    {{ 'delete'|mdi_icon(22) }}
                                 </a>
                             {% endif %}
 

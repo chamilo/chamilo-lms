@@ -58,48 +58,43 @@ $calendarMenuAdded = false;
 if ($is_platform_admin) {
     if ('admin' === $view) {
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainer View'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
             api_get_self().'?view=teacher'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('star_na.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('star-outline', 'ch-tool-icon', null, 32, get_lang('Admin view')),
             api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Current courses report')),
             api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
         );
-    /*
-    $menu_items[] = Display::url(
-        Display::return_icon('dashboard.png', get_lang('Dashboard'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'dashboard/index.php'
-    );
-    */
     } else {
         $menu_items[] = Display::url(
-            Display::return_icon(
-                'teacher_na.png',
-                get_lang('Trainer View'),
-                [],
-                ICON_SIZE_MEDIUM
+            Display::getMdiIcon(
+                'human-male-board',
+                'ch-tool-icon-disabled',
+                null,
+                32,
+                get_lang('Trainer View')
             ),
             ''
         );
         $menu_items[] = Display::url(
-            Display::return_icon('star.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('star-outline', 'ch-tool-icon', null, 32, get_lang('Admin view')),
             //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
             api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Current courses report')),
             api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
         );
         /*
@@ -111,7 +106,7 @@ if ($is_platform_admin) {
         if ($pluginCalendar) {
             $lpCalendar = LearningCalendarPlugin::create();
             $menu_items[] = Display::url(
-                Display::return_icon('agenda.png', $lpCalendar->get_lang('Learning calendar'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon('calendar-text', 'ch-tool-icon', null, 32, $lpCalendar->get_lang('Learning calendar')),
                 api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
             );
             $calendarMenuAdded = true;
@@ -122,27 +117,27 @@ if ($is_platform_admin) {
 if ($is_drh) {
     $view = 'drh';
     $menu_items[] = Display::url(
-        Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('account', 'ch-tool-icon-disabled', null, 32, get_lang('Learners')),
         '#'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Teachers')),
         'teachers.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Courses')),
         'course.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('session.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Course sessions')),
         'session.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('empty_evaluation.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Corporate report')),
         'company_reports.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('evaluation_rate.png', get_lang('Corporate reportResumed'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate reportResumed')),
         'company_reports_resumed.php'
     );
 }
@@ -151,22 +146,24 @@ $actionsRight = '';
 $actionsLeft = '';
 if ('useroverview' === $display || 'sessionoverview' === $display || 'courseoverview' === $display) {
     $actionsRight .= Display::url(
-        Display::return_icon(
-            'export_csv.png',
-            get_lang('CSV export'),
+        Display::getMdiIcon(
+            'file-delimited-outline',
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            32,
+            get_lang('CSV export')
         ),
         api_get_self().'?display='.$display.'&export=csv&view='.$view
     );
 }
 
 $actionsRight .= Display::url(
-    Display::return_icon(
-        'printer.png',
-        get_lang('Print'),
+    Display::getMdiIcon(
+        'printer',
+        'ch-tool-icon',
         null,
-        ICON_SIZE_MEDIUM
+        32,
+        get_lang('Print')
     ),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print()']
@@ -179,11 +176,12 @@ if (!empty($session_id) &&
     )
 ) {
     $actionsLeft .= Display::url(
-        Display::return_icon(
-            'back.png',
-            get_lang('Back'),
+        Display::getMdiIcon(
+            'arrow-left-bold-box',
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            32,
+            get_lang('Back')
         ),
         'index.php'
     );
@@ -191,11 +189,12 @@ if (!empty($session_id) &&
         if ('true' === api_get_setting('add_users_by_coach')) {
             if ($is_coach) {
                 $actionsLeft .= Display::url(
-                    Display::return_icon(
-                        'excel.png',
-                        get_lang('Import list of users'),
+                    Display::getMdiIcon(
+                        'archive-arrow-up',
+                        'ch-tool-icon',
                         null,
-                        ICON_SIZE_MEDIUM
+                        32,
+                        get_lang('Import list of users')
                     ),
                     'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
                 );
@@ -203,22 +202,24 @@ if (!empty($session_id) &&
         }
     } else {
         Display::url(
-            Display::return_icon(
-                'excel.png',
-                get_lang('Import list of users'),
+            Display::getMdiIcon(
+                'archive-arrow-up',
+                'ch-tool-icon',
                 null,
-                ICON_SIZE_MEDIUM
+                32,
+                get_lang('Import list of users')
             ),
             'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
         );
     }
 } else {
     $actionsLeft .= Display::url(
-        Display::return_icon(
-            'statistics.png',
-            get_lang('View my progress'),
+        Display::getMdiIcon(
+            'chart-box',
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            32,
+            get_lang('View my progress')
         ),
         api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
@@ -226,18 +227,19 @@ if (!empty($session_id) &&
     if ($pluginCalendar && api_is_teacher() && false === $calendarMenuAdded) {
         $lpCalendar = LearningCalendarPlugin::create();
         $actionsLeft .= Display::url(
-            Display::return_icon('agenda.png', $lpCalendar->get_lang('Learning calendar'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('calendar-text', 'ch-tool-icon', null, 32, $lpCalendar->get_lang('Learning calendar')),
             api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
         );
     }
 
     if (api_is_platform_admin(true) || api_is_student_boss()) {
         $actionsLeft .= Display::url(
-            Display::return_icon(
-                "certificate_list.png",
-                get_lang('GradebookSeeListOfLearnersCertificates'),
+            Display::getMdiIcon(
+                'certificate',
+                'ch-tool-icon',
                 null,
-                ICON_SIZE_MEDIUM
+                32,
+                get_lang('GradebookSeeListOfLearnersCertificates')
             ),
             api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
         );

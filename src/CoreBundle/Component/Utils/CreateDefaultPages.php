@@ -54,13 +54,6 @@ class CreateDefaultPages
         $this->pageCategoryRepository->update($indexCategory);
 
         $indexCategory = (new PageCategory())
-            ->setTitle('contact')
-            ->setType('grid')
-            ->setCreator($user)
-        ;
-        $this->pageCategoryRepository->update($indexCategory);
-
-        $indexCategory = (new PageCategory())
             ->setTitle('demo')
             ->setType('grid')
             ->setCreator($user)

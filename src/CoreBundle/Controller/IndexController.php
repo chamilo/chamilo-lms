@@ -19,7 +19,6 @@ class IndexController extends BaseController
      * @Route("/home", name="home", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/faq", name="faq", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/contact", name="contact", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/demo", name="demo", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @Route("/course/{cid}/home", name="chamilo_core_course_home")

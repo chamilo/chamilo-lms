@@ -78,15 +78,6 @@ const router = createRouter({
       },
     },
     {
-      path: "/contact",
-      name: "Contact",
-      component: Contact,
-      meta: {
-        requiresAuth: false,
-        showBreadcrumb: false,
-      },
-    },
-    {
       path: "/demo",
       name: "Demo",
       component: Demo,

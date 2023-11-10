@@ -1571,7 +1571,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
               WHERE
                 c_id = '.$this->course_id.' AND
-                reflink="'.Database::escape_string(addslashes($page)).'" AND
+                reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                 '.$groupfilter.$condition_session.'
               ORDER BY id ASC';
 
@@ -1602,7 +1602,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string(addslashes($page)).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                   ORDER BY id ASC';
             $result = Database::query($sql);
@@ -1629,7 +1629,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink="'.Database::escape_string($page).'" AND
+                    reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id';
         $result = Database::query($sql);
@@ -1661,7 +1661,7 @@ class Wiki
                     visibility = "'.Database::escape_string($status_visibility).'"
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string($page).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                         '.$groupfilter.$condition_session;
             Database::query($sql);
 
@@ -1672,7 +1672,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string(addslashes($page)).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                         '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
             $result = Database::query($sql);
@@ -1743,7 +1743,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string(addslashes($page)).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                         '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
             $result = Database::query($sql);
@@ -1770,7 +1770,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink="'.Database::escape_string(addslashes($page)).'" AND
+                    reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
         $result = Database::query($sql);
@@ -1797,7 +1797,7 @@ class Wiki
                     addlock_disc="'.Database::escape_string($status_addlock_disc).'"
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink = "'.Database::escape_string($page).'" AND
+                        reflink = "'.Database::escape_string(html_entity_decode($page)).'" AND
                          '.$groupfilter.$condition_session;
             Database::query($sql);
 
@@ -1808,7 +1808,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string(addslashes($page)).'" AND
+                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                         '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
             $result = Database::query($sql);
@@ -1903,7 +1903,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink="'.addslashes($reflink).'" AND
+                    reflink="'.html_entity_decode($reflink).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
         $result = Database::query($sql);
@@ -3949,7 +3949,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink="'.Database::escape_string(addslashes($page)).'" AND
+                    reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
         $result = Database::query($sql);

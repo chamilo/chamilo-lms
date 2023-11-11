@@ -60,6 +60,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 
         $sourceDir = $rootPath.'/app/Resources/public/css/themes';
         $destinationDir = $rootPath.'/assets/css/themes/';
+        $chamiloDefaultCssPath = $destinationDir . 'chamilo/default.css';
 
         if (!file_exists($sourceDir)) {
             return;
@@ -78,6 +79,11 @@ final class Version20231110194300 extends AbstractMigrationChamilo
                 if (!file_exists($destinationPath)) {
                     $this->copyDirectory($sourcePath, $destinationPath);
                     $newThemes[] = $folderName;
+
+                    if (file_exists($chamiloDefaultCssPath)) {
+                        $newThemeDefaultCssPath = $destinationPath . '/default.css';
+                        copy($chamiloDefaultCssPath, $newThemeDefaultCssPath);
+                    }
                 }
             }
         }

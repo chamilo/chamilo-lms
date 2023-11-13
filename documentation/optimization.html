@@ -260,6 +260,7 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         ALTER TABLE message_attachment ADD index idx_msgat_msgid (message_id);
         -- If you query audit logs from track_e_default on huge tables
         ALTER TABLE track_e_default ADD INDEX idx_ted_uid (default_user_id);
+        ALTER TABLE track_e_default ADD INDEX idx_ted_et (default_event_type);
     </pre>
 <hr />
 <h2><a id="3.Indexes-caching"></a>3. Indexes caching</h2>

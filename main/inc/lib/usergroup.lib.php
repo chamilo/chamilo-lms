@@ -2500,6 +2500,10 @@ class UserGroup extends Model
         $user_id = (int) $user_id;
         $group_id = (int) $group_id;
         $relation_type = (int) $relation_type;
+        // Temporary hack to avoid issues with roles - see #4980
+        if ($relation_type == GROUP_USER_PERMISSION_READER) {
+            $relation_type = 0;
+        }
         if (!empty($user_id) && !empty($group_id)) {
             $role = $this->get_user_group_role($user_id, $group_id);
 

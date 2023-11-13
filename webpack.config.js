@@ -8,8 +8,6 @@ const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const glob = require('glob-all');
 const path = require('path');
 
-const CopyPlugin = require('copy-webpack-plugin');
-
 Encore
     .setOutputPath('public/build/')
     .setManifestKeyPrefix('public/build/')
@@ -155,37 +153,26 @@ Encore
 ;
 
 //Encore.addPlugin(new VueLoaderPlugin);
-Encore.addPlugin(new CopyPlugin({
-        patterns: [
-            {
-                from: './node_modules/mediaelement/build',
-                to: 'libs/mediaelement'
-            },
-            {
-                from: './node_modules/mediaelement-plugins/dist',
-                to: 'libs/mediaelement/plugins'
-            },
-            {
-                from: './node_modules/mathjax/config',
-                to: 'libs/mathjax/config'
-            },
-            {
-                from: './node_modules/tinymce/skins',
-                to: 'libs/tinymce/skins'
-            },
-            {
-                context: 'node_modules/moment/locale',
-                from: '**/*',
-                to: 'libs/locale/'
-            },
-        ]
-    }
-));
-
-// Encore.addPlugin(new CopyPlugin([{
-//     from: 'assets/css/themes/' + theme + '/images',
-//     to: 'css/themes/' + theme + '/images'
-// };
+Encore.copyFiles({
+    from: "./node_modules/mediaelement/build",
+    to: 'libs/mediaelement/[path][name].[ext]'
+});
+Encore.copyFiles({
+    from: "./node_modules/mediaelement-plugins/dist",
+    to: 'libs/mediaelement/plugins/[path][name].[ext]'
+});
+Encore.copyFiles({
+    from: "./node_modules/mathjax/config",
+    to: "libs/mathjax/config/[path][name].[ext]"
+});
+Encore.copyFiles({
+    from: "./node_modules/tinymce/skins",
+    to: "libs/tinymce/skins/[path][name].[ext]"
+});
+Encore.copyFiles({
+    from: "node_modules/moment/locale",
+    to: "libs/locale/[path][name].[ext]"
+});
 
 const themes = [
     'chamilo'
@@ -195,13 +182,10 @@ const themes = [
 themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
     // Copy images from themes into public/build
-    Encore.addPlugin(new CopyPlugin({
-        patterns: [{
-            from: 'assets/css/themes/' + theme + '/images',
-            to: 'css/themes/' + theme + '/images'
-        }]
-    },
-    ));
+    Encore.copyFiles({
+        from: "assets/css/themes/" + theme + "/images",
+        to: "css/themes/" + theme + "/images/[name].[ext]",
+    });
 });
 
 // Fix free-jqgrid languages files

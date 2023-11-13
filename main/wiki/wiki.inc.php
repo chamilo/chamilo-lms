@@ -1743,7 +1743,7 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        reflink="'.Database::escape_string(html_entity_decode($page)).'" AND
+                        reflink="'.Database::escape_string(addslashes($page)).'" AND
                         '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
             $result = Database::query($sql);
@@ -1903,7 +1903,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink="'.html_entity_decode($reflink).'" AND
+                    reflink="'.addslashes(html_entity_decode($reflink)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
         $result = Database::query($sql);
@@ -3937,7 +3937,7 @@ class Wiki
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    reflink = "'.Database::escape_string(addslashes(html_entity_decode($page))).'" AND
+                    reflink = "'.Database::escape_string(html_entity_decode($page)).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id DESC';
         $result = Database::query($sql);

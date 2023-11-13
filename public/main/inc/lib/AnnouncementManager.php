@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -1409,31 +1410,80 @@ class AnnouncementManager
         $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('Announcement sent by e-mail').'"></i>';
         $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
 
-        $editIcon = Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
+        $editIcon = Display::getMdiIcon(
+            ActionIcon::EDIT,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Edit')
         );
 
-        $editIconDisable = Display::return_icon(
-            'edit_na.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
+        $editIconDisable = Display::getMdiIcon(
+            ActionIcon::EDIT,
+            'ch_tool_icon-disabled',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Edit')
         );
-        $deleteIcon = Display::return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
+        $deleteIcon = Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Delete')
         );
 
-        $deleteIconDisable = Display::return_icon(
-            'delete_na.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
+        $deleteIconDisable = Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon-disabled',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Delete')
+        );
+
+        $iconVisible = Display::getMdiIcon(
+            ActionIcon::VISIBLE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Hide')
+        );
+        $iconInvisible = Display::getMdiIcon(
+            ActionIcon::INVISIBLE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Visible')
+        );
+
+        $iconUp = Display::getMdiIcon(
+            ActionIcon::UP,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Up')
+        );
+        $iconUpDisabled = Display::getMdiIcon(
+            ActionIcon::UP,
+            'ch-tool-icon-disabled',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Up')
+        );
+
+        $iconDown = Display::getMdiIcon(
+            ActionIcon::DOWN,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Down')
+        );
+        $iconDownDisabled = Display::getMdiIcon(
+            ActionIcon::DOWN,
+            'ch-tool-icon-disabled',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Down')
         );
 
         /*$isTutor = false;
@@ -1522,41 +1572,39 @@ class AnnouncementManager
                  ) {*/
                 if ($repo->isGranted(ResourceNodeVoter::EDIT, $announcement)) {
                     if (true === $disableEdit) {
-                        $modify_icons = "<a href='#'>".$editIconDisable."</a>";
+                        $modify_icons = $editIconDisable;
                     } else {
                         $modify_icons = "<a
                             href=\"".$actionUrl."&action=modify&id=".$announcementId."\">".$editIcon."</a>";
                     }
 
-                    $image_visibility = 'invisible';
+                    $iconVisibility = $iconInvisible;
                     $setNewStatus = 'visible';
-                    $alt_visibility = get_lang('Visible');
                     if ($visibility) {
-                        $image_visibility = 'visible';
+                        $iconVisibility = $iconVisible;
                         $setNewStatus = 'invisible';
-                        $alt_visibility = get_lang('Hide');
                     }
 
                     $modify_icons .= "<a
-                        href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">".
-                        Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
+                        href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">"
+                        .$iconVisibility."</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement
                     if (1 != $iterator) {
-                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&up=".$announcementId."&sec_token=".$stok."\">".
-                            Display::return_icon('up.gif', get_lang('Up'))."</a>";
+                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&up=".$announcementId."&sec_token=".$stok."\">"
+                            .$iconUp.'</a>';
                     } else {
-                        $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
+                        $modify_icons .= $iconUpDisabled;
                     }
                     if ($iterator < $bottomAnnouncement) {
-                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$announcementId."&sec_token=".$stok."\">".
-                            Display::return_icon('down.gif', get_lang('down'))."</a>";
+                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$announcementId."&sec_token=".$stok."\">"
+                            .$iconDown.'</a>';
                     } else {
-                        $modify_icons .= Display::return_icon('down_na.gif', get_lang('down'));
+                        $modify_icons .= $iconDownDisabled;
                     }
                     if (api_is_allowed_to_edit(false, true)) {
                         if (true === $disableEdit) {
-                            $modify_icons .= Display::url($deleteIconDisable, '#');
+                            $modify_icons .= $deleteIconDisable;
                         } else {
                             $modify_icons .= "<a
                                 href=\"".$actionUrl."&action=delete&id=".$announcementId."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(

@@ -114,7 +114,6 @@
     "@tailwindcss/typography": "^0.5.10",
     "@vue/compiler-sfc": "^3.3.7",
     "autoprefixer": "^10.4.16",
-    "copy-webpack-plugin": "11.0.0",
     "core-js": "3.31.1",
     "deepmerge": "^4.2.2",
     "eslint": "^8.44.0",

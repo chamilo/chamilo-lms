@@ -15,11 +15,10 @@ use CpChart\Image as pImage;
 class MySpace
 {
     /**
-     * Get admin actions.
-     *
-     * @return string
+     * Generate the list of admin actions to be shown
+     * @return array
      */
-    public static function getAdminActions()
+    public static function generateAdminActionLinks(): array
     {
         $actions = [
             [
@@ -103,7 +102,16 @@ class MySpace
                     'content' => get_lang('LP item by author'),
                 ];
         }
-
+        return $actions;
+    }
+    /**
+     * Get admin actions.
+     *
+     * @return string
+     */
+    public static function getAdminActions(bool $display = false)
+    {
+        $actions = self::generateAdminActionLinks();
         return Display::actions($actions);
     }
 
@@ -114,40 +122,23 @@ class MySpace
     {
         $menuItems = [];
         $menuItems[] = Display::url(
-            Display::return_icon(
-                'statistics.png',
-                get_lang('View my progress'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menuItems[] = Display::url(
-            Display::return_icon(
-                'teacher.png',
-                get_lang('Trainer View'),
-                [],
-                32
-            ),
+            Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
             api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
         );
         $menuItems[] = Display::url(
-            Display::return_icon(
-                'star_na.png',
-                get_lang('Admin view'),
-                [],
-                32
-            ),
+            Display::getMdiIcon('star', 'ch-tool-icon', null, 32, get_lang('Admin view')),
             '#'
         );
         $menuItems[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], 32),
+            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
 
-        $menu = Display::toolbarAction('myspace', $menuItems);
-
-        return $menu;
+        return Display::toolbarAction('myspace', $menuItems);
     }
 
     /**
@@ -628,7 +619,7 @@ class MySpace
             $table_row[] = $nb_courses;
             $table_row[] = $nb_sessions;
             $table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'">
-                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                '.Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 22, get_lang('Details')).'
             </a>';
             $all_datas[] = $table_row;
 
@@ -1017,8 +1008,8 @@ class MySpace
                 "<tbody>";
             $index = 0;
             //icons for show and hode
-            $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-            $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
+            $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
                 $lpCount = 0;
@@ -1042,7 +1033,7 @@ class MySpace
                         "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
                         $reportLink = Display::url(
-                            Display::return_icon('statistics.png', get_lang('Stats')),
+                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Stats')),
                             api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.
                             $student['id']
                             .'&id_session='.$lpInfo['session_id']
@@ -1274,8 +1265,8 @@ class MySpace
                     "</thead>".
                     "<tbody>";
                 //Icon Constant
-                $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-                $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+                $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
+                $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
 
                 $lastAuthor = '';
                 $total = 0;
@@ -2568,7 +2559,7 @@ class MySpace
 
             //set the "from" value to know if I access the Reporting by the chamilo tab or the course link
             $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
-                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                             '.Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')).'
                              </a>
                             </center>';
 

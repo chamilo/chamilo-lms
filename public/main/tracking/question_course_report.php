@@ -93,10 +93,7 @@ if (!empty($course_info)) {
     $main_question_list = [];
 
     foreach ($lp_list as $lp_id => $lp) {
-        $exercise_list = Event::get_all_exercises_from_lp(
-            $lp_id,
-            $course_info['real_id']
-        );
+        $exercise_list = Event::get_all_exercises_from_lp($lp_id);
 
         foreach ($exercise_list as $exercise) {
             $my_exercise = new Exercise($course_info['real_id']);

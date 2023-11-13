@@ -804,18 +804,18 @@ $actionsLeft = '';
 if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || 'learnpath' !== $_GET['origin'])) {
     if (in_array($action, ['add', 'modify', 'view'])) {
         $actionsLeft .= "<a href='".api_get_self().'?'.api_get_cidreq()."'>".
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back')).
             '</a>';
     } else {
         $actionsLeft .= "<a href='".api_get_self().'?'.api_get_cidreq()."&action=add'>".
-            Display::return_icon('new_announce.png', get_lang('Add an announcement'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon('bullhorn', 'ch-tool-icon', null, 32, get_lang('Add an announcement')).
             '</a>';
     }
     $show_actions = true;
 } else {
     if (in_array($action, ['view'])) {
         $actionsLeft .= "<a href='".api_get_self().'?'.api_get_cidreq()."'>".
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back')).'</a>';
     }
 }
 
@@ -827,12 +827,7 @@ if ($allowToEdit && 0 == api_get_group_id()) {
             isset($_GET['action']) && 'list' == $_GET['action']
         ) {
             $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;\">".
-                Display::return_icon(
-                    'delete_announce.png',
-                    get_lang('Clear list of announcements'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ).'</a>';
+                Display::getMdiIcon('delete', 'ch-tool-icon', null, 32, get_lang('Clear list of announcements')).'</a>';
         }
     }
 }*/

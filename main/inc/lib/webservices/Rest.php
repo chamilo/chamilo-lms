@@ -1880,6 +1880,7 @@ class Rest extends WebService
         $hr_dept_id = 0;
         $original_user_id_name = $userParam['original_user_id_name'];
         $original_user_id_value = $userParam['original_user_id_value'];
+        $sendMail = (empty($userParam['send_mail']) ? false : true);
 
         $extra_list = isset($userParam['extra']) ? $userParam['extra'] : [];
         if (isset($userParam['language'])) {
@@ -1916,7 +1917,10 @@ class Rest extends WebService
             $auth_source,
             $expiration_date,
             $active,
-            $hr_dept_id
+            $hr_dept_id,
+            [],
+            '',
+            $sendMail
         );
 
         if (empty($userId)) {

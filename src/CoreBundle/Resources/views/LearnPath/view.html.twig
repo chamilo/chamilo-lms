@@ -113,13 +113,13 @@
                                         <div class="col-xs-6">
                                             {% if gamification_stars > 0 %}
                                                 {% for i in 1..gamification_stars %}
-                                                    <i class="level mdi-star-face mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                                    <i class="level mdi-star-face mdi" aria-hidden="true"></i>
                                                 {% endfor %}
                                             {% endif %}
 
                                             {% if gamification_stars < 4 %}
                                                 {% for i in 1..4 - gamification_stars %}
-                                                    <i class="mdi-home-outline mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                                    <i class="mdi-home-outline mdi" aria-hidden="true"></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -168,14 +168,14 @@
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                    <i class="mdi-book mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                    <i class="mdi-book mdi" aria-hidden="true"></i>
                                     <span class="sr-only">{{ 'Lesson'|trans }}</span>
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#lp-view-forum" title="{{ 'Forum'|trans }}"
                                    aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                    <i class="mdi-message-reply-text mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                                    <i class="mdi-message-reply-text mdi" aria-hidden="true"></i>
                                     <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>

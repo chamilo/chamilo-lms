@@ -2227,9 +2227,8 @@ class Display
         if (empty($style)) {
             $style = '';
         }
-        $additionalAttributes['class'] = "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass";
+        $additionalAttributes['class'] = "mdi-$name mdi $additionalClass";
         $additionalAttributes['style'] = $sizeString.$style;
-        $additionalAttributes['medium'] = '';
         $additionalAttributes['aria-hidden'] = 'true';
 
         if (!empty($title)) {

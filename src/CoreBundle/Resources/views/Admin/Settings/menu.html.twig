@@ -46,7 +46,7 @@
         class="list-group-item border-0 {% if (current_namespace ==  namespace)  %} bg-gray-25 rounded-lg {% endif %} "
         href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}"
     >
-        <i class="mdi mdi-{{ array[namespace] }} ch-tool-icon-gradient" style="font-size: 32px; width: 32px; height: 32px; line-height: 32px;" aria-hidden="true" medium="" title="{{ namespace | capitalize | trans }}"></i>
+        <i class="mdi mdi-{{ array[namespace] }} ch-tool-icon-gradient" style="font-size: 32px; width: 32px; height: 32px; line-height: 32px;" aria-hidden="true" title="{{ namespace | capitalize | trans }}"></i>
 
         {{ namespace | capitalize | trans }}
     </a>

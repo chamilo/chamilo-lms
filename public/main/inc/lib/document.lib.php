@@ -2334,7 +2334,7 @@ class DocumentManager
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
-        $icon = '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
+        $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" title="'.htmlentities(get_lang('Move')).'"></i>';
         $folderIcon = Display::return_icon('lp_folder.png');
 
         $options = [

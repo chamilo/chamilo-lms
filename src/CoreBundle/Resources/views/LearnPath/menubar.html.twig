@@ -24,7 +24,7 @@
                    role="button"
                    title="{{ label }}"
                 >
-                    <i class="mdi-{{ icon_expand }} mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                    <i class="mdi-{{ icon_expand }} mdi" aria-hidden="true"></i>
                 </a>
             {% endif %}
             <a id="home-course"
@@ -32,13 +32,13 @@
                href="{{ button_home_url }}"
                class="icon-toolbar" target="_self"
                onclick="javascript: window.parent.API.save_asset();">
-                <i class="mdi-home mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+                <i class="mdi-home mdi" aria-hidden="true"></i>
             </a>
             {{ navigation_bar }}
         </div>
         <a title="{{ 'Options'|trans }}" class="menu-button icons" href="#">
 
-            <i class="mdi-menu mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
+            <i class="mdi-menu mdi" aria-hidden="true"></i>
         </a>
     </nav>
 {% endautoescape %}

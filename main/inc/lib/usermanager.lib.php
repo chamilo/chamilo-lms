@@ -7736,19 +7736,20 @@ SQL;
             );
 
             if (empty($lastUpdate) or empty($lastUpdate['password_updated_at'])) {
-                error_log('No password_updated_at');
                 $userObj = api_get_user_entity($userId);
                 $registrationDate = $userObj->getRegistrationDate();
                 $now = new \DateTime(null, new DateTimeZone('UTC'));
                 $interval = $now->diff($registrationDate);
                 $daysSince = $interval->format('%a');
-                error_log('Days since registration: '.$daysSince);
                 if ($daysSince > $forceRotateDays) {
-                    error_log('We need to force reset');
                     $forceRotate = true;
                 }
             } else {
                 $now = new \DateTime(null, new DateTimeZone('UTC'));
+                // In some cases, old records might contain an incomplete Y-m-d H:i:s format
+                if (strlen($lastUpdate['password_updated_at']) == 16) {
+                    $lastUpdate['password_updated_at'] .= ':00';
+                }
                 $date = \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate['password_updated_at'], new DateTimeZone('UTC'));
                 $interval = $now->diff($date);
                 $daysSince = $interval->format('%a');

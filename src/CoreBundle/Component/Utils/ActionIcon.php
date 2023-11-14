@@ -120,4 +120,6 @@ enum ActionIcon: string
     case COLLAPSE = 'arrow-collapse-all';
     // Expand
     case EXPAND = 'arrow-expand-all';
+    // Give a grade to some work
+    case GRADE = 'checkbox-marked-circle-plus-outline';
 }

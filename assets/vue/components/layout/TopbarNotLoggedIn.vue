@@ -55,6 +55,10 @@ const menuItems = ref([
     to: { name: "Demo" },
   },
   {
+    label: t("Contact"),
+    url: "/contact",
+  },
+  {
     key: "language_selector",
     label: currentLanguage ? currentLanguage.originalName : "English",
     items: languageItems,

@@ -202,8 +202,6 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
         $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));
 
         $params['sessionItemIdList'] = $sessionItemIdList;
-    } else {
-        $qb->andWhere($qb->expr()->isNull('te.sessionId'));
     }
 
     if (!empty($formValues['username'])) {

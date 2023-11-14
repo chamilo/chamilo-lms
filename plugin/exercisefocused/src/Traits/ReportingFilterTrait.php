@@ -30,7 +30,7 @@ trait ReportingFilterTrait
         $sessionId = api_get_session_id();
 
         $form = new FormValidator('exercisefocused', 'get');
-        $form->addText('username', get_lang('LoginName'), $cId > 0);
+        $form->addText('username', get_lang('LoginName'), false);
         $form->addText('firstname', get_lang('FirstName'), false);
         $form->addText('lastname', get_lang('LastName'), false);
 
@@ -94,8 +94,6 @@ trait ReportingFilterTrait
             $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));
 
             $params['sessionItemIdList'] = $sessionItemIdList;
-        } else {
-            $qb->andWhere($qb->expr()->isNull('te.sessionId'));
         }
 
         if (!empty($formValues['username'])) {

@@ -1095,8 +1095,21 @@ class Statistics
             return strpos($constantName, $prefix) === 0;
         }, ARRAY_FILTER_USE_KEY);
         $constantNames = array_keys($filteredConstants);
+        $link = api_get_self().'?report=activities&activities_direction=DESC&activities_column=7&keyword=';
         foreach ($constantNames as $constantName) {
-            $content .= '- '.constant($constantName).'<br>'.PHP_EOL;
+            if ($constantName != 'LOG_WS') {
+                if (substr($constantName, -3) == '_ID') {
+                    continue;
+                }
+                $content .= '- <a href="'.$link.constant($constantName).'">'.constant($constantName).'</a><br>'.PHP_EOL;
+            } else {
+                $constantValue = constant($constantName);
+                $reflection = new ReflectionClass('Rest');
+                $constants = $reflection->getConstants();
+                foreach ($constants as $name => $value) {
+                    $content .= '- <a href="'.$link.$constantValue.$value.'">'.$constantValue.$value.'</a><br>'.PHP_EOL;
+                }
+            }
         }
         $content .= '</div>';
 

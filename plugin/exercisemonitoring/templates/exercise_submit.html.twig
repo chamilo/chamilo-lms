@@ -1,4 +1,4 @@
-{% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled %}
+{% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled and exercisemonitoring.enable_snapshots %}
     {% set ALL_ON_ONE_PAGE = exercisemonitoring.exercise_type == 1 %}
     {% set ONE_PER_PAGE = exercisemonitoring.exercise_type == 2 %}
 

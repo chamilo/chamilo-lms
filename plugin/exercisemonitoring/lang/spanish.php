@@ -6,6 +6,14 @@ $strings['plugin_title'] = "Monitoreo de Ejercicios";
 $strings['plugin_comment'] = "Mecanismo de toma de fotos aleatorias durante un ejercicio";
 
 $strings['tool_enable'] = "Enable tool";
+$strings['intructions'] = 'Intrucciones';
+$strings['age_distinction_enable'] = 'Habilitar distinción de edad';
+$strings['legal_age'] = 'Mayoría de edad';
+$strings['extrafield_birtdate'] = 'Campo extra para fecha de nacimiento';
+$strings['extrafield_birtdate_help'] = 'El nombre del campo con el cual se calculará la edad, por ejemplo <code>birthdate</code>';
+$strings['instructions_adults'] = 'Intrucciones para estudiantes adultos';
+$strings['instructions_minors'] = 'Intrucciones para estudiantes menores de edad';
+
 
 $strings['ExerciseMonitored'] = "Ejercicio monitoreado";
 $strings['Retry'] = "Reintentar";

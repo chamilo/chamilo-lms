@@ -10,6 +10,12 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExerciseMonitoringPlugin extends Plugin
 {
     public const SETTING_TOOL_ENABLE = 'tool_enable';
+    public const SETTING_INSTRUCTIONS = 'intructions';
+    public const SETTING_INSTRUCTION_AGE_DISTINCTION_ENABLE = 'age_distinction_enable';
+    public const SETTING_INSTRUCTION_LEGAL_AGE = 'legal_age';
+    public const SETTING_EXTRAFIELD_BIRTHDATE = 'extrafield_birtdate';
+    public const SETTING_INSTRUCTIONS_ADULTS = 'instructions_adults';
+    public const SETTING_INSTRUCTIONS_MINORS = 'instructions_minors';
 
     public const FIELD_SELECTED = 'exercisemonitoring_selected';
 
@@ -21,6 +27,12 @@ class ExerciseMonitoringPlugin extends Plugin
 
         $settings = [
             self::SETTING_TOOL_ENABLE => 'boolean',
+            self::SETTING_INSTRUCTIONS => 'wysiwyg',
+            self::SETTING_INSTRUCTION_AGE_DISTINCTION_ENABLE => 'boolean',
+            self::SETTING_INSTRUCTION_LEGAL_AGE => 'text',
+            self::SETTING_EXTRAFIELD_BIRTHDATE => 'text',
+            self::SETTING_INSTRUCTIONS_ADULTS => 'wysiwyg',
+            self::SETTING_INSTRUCTIONS_MINORS => 'wysiwyg',
         ];
 
         parent::__construct(
@@ -129,5 +141,31 @@ class ExerciseMonitoringPlugin extends Plugin
         $pluginDirName = api_get_path(WEB_UPLOAD_PATH).'plugins/exercisemonitoring';
 
         return $pluginDirName.'/'.$userId.'/'.$imageFileName;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function isAdult(): bool
+    {
+        $userId = api_get_user_id();
+        $fieldVariable = $this->get(self::SETTING_EXTRAFIELD_BIRTHDATE);
+        $legalAge = (int) $this->get(self::SETTING_INSTRUCTION_LEGAL_AGE);
+
+        $value = UserManager::get_extra_user_data_by_field($userId, $fieldVariable);
+
+        if (empty($value)) {
+            return false;
+        }
+
+        if (empty($value[$fieldVariable])) {
+            return false;
+        }
+
+        $birthdate = new DateTime($value[$fieldVariable]);
+        $now = new DateTime();
+        $diff = $birthdate->diff($now);
+
+        return !$diff->invert && $diff->y >= $legalAge;
     }
 }

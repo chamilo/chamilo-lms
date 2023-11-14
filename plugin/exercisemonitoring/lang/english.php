@@ -6,6 +6,13 @@ $strings['plugin_title'] = "Exercise monitoring";
 $strings['plugin_comment'] = "Random photo taking mechanism during an exercise";
 
 $strings['tool_enable'] = "Enable tool";
+$strings['intructions'] = 'Instructions';
+$strings['age_distinction_enable'] = 'Enable age distinction';
+$strings['legal_age'] = 'Legal age';
+$strings['extrafield_birtdate'] = 'Extra field for birthdate';
+$strings['extrafield_birtdate_help'] = 'The name of the field with which age will be calculated, e.g. <code>birthdate</code>';
+$strings['instructions_adults'] = 'Intructions for adults students';
+$strings['instructions_minors'] = 'Intrucctions for minors students';
 
 $strings['ExerciseMonitored'] = "Exercise monitored";
 $strings['Retry'] = "Retry";

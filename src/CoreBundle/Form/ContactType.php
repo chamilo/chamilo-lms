@@ -70,7 +70,7 @@ class ContactType extends AbstractType
             ])
             ->add('termsAccepted', CheckboxType::class, [
                 'mapped' => false,
-                'label' => $this->translator->trans('By checking this box, I confirm that I accept the data processing by OFAJ'),
+                'label' => $this->translator->trans('By checking this box, I confirm that I accept the data processing by the platform'),
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -98,7 +98,7 @@ class ContactType extends AbstractType
     {
         // You can define options here if needed
         $resolver->setDefaults([
-            'terms_content' => $this->translator->trans('OFAJ, responsable du traitement, met en œuvre un traitement de données à caractère personnel pour répondre à votre demande de création d’un compte utilisateur pour accéder à la plateforme de formation'),
+            'terms_content' => $this->translator->trans('The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request.'),
         ]);
     }
 

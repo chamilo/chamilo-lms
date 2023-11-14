@@ -122,4 +122,8 @@ enum ActionIcon: string
     case EXPAND = 'arrow-expand-all';
     // Give a grade to some work
     case GRADE = 'checkbox-marked-circle-plus-outline';
+    // Lock
+    case LOCK = 'lock';
+    // Unlock
+    case UNLOCK = 'lock-open-variant';
 }

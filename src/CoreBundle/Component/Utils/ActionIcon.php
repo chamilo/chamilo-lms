@@ -84,6 +84,12 @@ enum ActionIcon: string
     case AUTO_LAUNCH = 'rocket-launch';
     // Export to PDF
     case EXPORT_PDF = 'file-pdf-box';
+    // CSV export
+    case EXPORT_CSV = 'file-delimited-outline';
+    // Export to Excel
+    case EXPORT_SPREADSHEET = 'microsoft-excel';
+    // Export to Document
+    case EXPORT_DOC = 'microsoft-word';
     // Save the current form
     case FORM_SAVE = 'content-save';
     // Send a message
@@ -104,8 +110,6 @@ enum ActionIcon: string
     case RESTORE_BACKUP = 'cloud-upload';
     // Print
     case PRINT = 'printer';
-    // CSV export
-    case EXPORT_CSV = 'file-delimited-outline';
     // See details/View details
     case DETAILS = 'fast-forward-outline';
     // Clean/Reset

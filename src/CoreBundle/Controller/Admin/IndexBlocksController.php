@@ -446,6 +446,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('External tools'),
         ];
 
+        $items[] = [
+            'class' => 'item-contact-category-admin',
+            'url' => $this->generateUrl('chamilo_contact_category_index'),
+            'label' => $this->translator->trans('Contact categories'),
+        ];
+
         return $items;
     }
 

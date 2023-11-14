@@ -1,0 +1,41 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+{% block content %}
+    <h1>{{ "Contact categories"|trans }}</h1>
+
+    <div class="flex justify-between items-center mb-4">
+        <a href="{{ path('chamilo_contact_category_new') }}" class="btn btn--primary inline-flex items-center">
+            <i class="mdi mdi-plus-box mr-2"></i> {{ "Create new"|trans }}
+        </a>
+        <a href="/admin" class="btn btn--secondary inline-flex items-center">
+            <i class="mdi mdi-arrow-left-bold-circle-outline mr-2"></i> {{ "Back to Admin"|trans }}
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ "Name"|trans }}</th>
+            <th>{{ "Email"|trans }}</th>
+            <th>{{ "Actions"|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact_category in contact_categories %}
+            <tr>
+                <td>{{ contact_category.name }}</td>
+                <td>{{ contact_category.email }}</td>
+                <td class="flex items-center">
+                    <a href="{{ path('chamilo_contact_category_edit', {'id': contact_category.id}) }}" class="btn btn--info inline-flex items-center mr-2">
+                        <i class="mdi mdi-pencil mr-2"></i> {{ "Edit"|trans }}
+                    </a>
+                    {{ include('@ChamiloCore/ContactCategory/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ "No records found"|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

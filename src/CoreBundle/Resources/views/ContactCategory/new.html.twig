@@ -1,0 +1,13 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <h1>{{ "Create new category"|trans }}</h1>
+
+    <div class="flex justify-between items-center mb-4">
+        <a href="{{ path('chamilo_contact_category_index') }}" class="btn btn--secondary inline-flex items-center">
+            <i class="mdi mdi-arrow-left-bold-circle-outline mr-2"></i> {{ "Back to list"|trans }}
+        </a>
+    </div>
+
+    {{ include('@ChamiloCore/ContactCategory/_form.html.twig') }}
+{% endblock %}

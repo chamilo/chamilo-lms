@@ -71,6 +71,8 @@ class ExerciseSubmitController
 
         $this->em->persist($log);
 
+        $this->updateOrphanSnapshots($exercise, $trackingExercise);
+
         $this->em->flush();
 
         return HttpResponse::create();
@@ -90,5 +92,28 @@ class ExerciseSubmitController
         );
 
         return $userDirName;
+    }
+
+    private function updateOrphanSnapshots(CQuiz $exercise, TrackEExercises $trackingExe)
+    {
+        $repo = $this->em->getRepository(Log::class);
+
+        $fileNamesToUpdate = ChamiloSession::read($this->plugin->get_name().'_orphan_snapshots', []);
+
+        if (empty($fileNamesToUpdate)) {
+            return;
+        }
+
+        foreach ($fileNamesToUpdate as $filename) {
+            $log = $repo->findOneBy(['imageFilename' => $filename, 'exercise' => $exercise, 'exe' => null]);
+
+            if (!$log) {
+                continue;
+            }
+
+            $log->setExe($trackingExe);
+        }
+
+        ChamiloSession::erase($this->plugin->get_name().'_orphan_snapshots');
     }
 }

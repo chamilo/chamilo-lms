@@ -34,8 +34,11 @@ class StartController
 
         $exercise = $this->em->find(CQuiz::class, $this->request->request->getInt('exercise_id'));
 
+        $fileNamesToUpdate = [];
+
         if ($imgIddoc) {
             $newFilename = uniqid().'_iddoc.jpg';
+            $fileNamesToUpdate[] = $newFilename;
 
             $imgIddoc->move($userDirName, $newFilename);
 
@@ -51,6 +54,7 @@ class StartController
 
         if ($imgLearner) {
             $newFilename = uniqid().'_learner.jpg';
+            $fileNamesToUpdate[] = $newFilename;
 
             $imgLearner->move($userDirName, $newFilename);
 
@@ -65,6 +69,8 @@ class StartController
         }
 
         $this->em->flush();
+
+        ChamiloSession::write($this->plugin->get_name().'_orphan_snapshots', $fileNamesToUpdate);
 
         return HttpResponse::create();
     }

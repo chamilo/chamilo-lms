@@ -6,12 +6,10 @@ namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Display;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Exercise;
 use ExerciseMonitoringPlugin;
@@ -78,23 +76,7 @@ class DetailController
         $objExercise = new Exercise();
         $objExercise->read($trackExe->getExeExoId());
 
-        $qb = $this->logRepository->createQueryBuilder('l');
-        $qb
-            ->select(['l.imageFilename', 'l.createdAt']);
-
-        if (ONE_PER_PAGE == $objExercise->selectType()) {
-            $qb
-                ->addSelect(['qq.question AS log_level'])
-                ->innerJoin(CQuizQuestion::class, 'qq', Join::WITH, 'l.level = qq.iid');
-        }
-
-        $logs = $qb
-            ->andWhere(
-                $qb->expr()->eq('l.exe', $trackExe->getExeId())
-            )
-            ->addOrderBy('l.createdAt')
-            ->getQuery()
-            ->getResult();
+        $logs = $this->logRepository->findSnapshots($objExercise, $trackExe);
 
         $content = $this->generateHeader($objExercise, $user, $trackExe)
             .'<hr>'

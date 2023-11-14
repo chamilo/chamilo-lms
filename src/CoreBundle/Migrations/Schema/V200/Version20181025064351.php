@@ -118,7 +118,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
         }
 
-        $this->addSql('UPDATE gradebook_category SET grade_model_id = NULL WHERE grade_model_id = 0');
+        $this->addSql('UPDATE gradebook_category SET grade_model_id = NULL WHERE grade_model_id = 0 OR grade_model_id = -1');
 
         if (!$table->hasForeignKey('FK_96A4C705378B7921')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705378B7921 FOREIGN KEY (grade_model_id) REFERENCES grade_model (id) ON DELETE CASCADE;');

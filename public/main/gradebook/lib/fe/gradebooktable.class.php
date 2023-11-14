@@ -2,6 +2,7 @@
 
 /* For licensing terms, see license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -960,7 +961,7 @@ class GradebookTable extends SortableTable
                     $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
                     $modify_icons =
                         '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
-                        Display::return_icon('edit.png', $warning_message, [], ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'), ['alt' => $warning_message]);
                     $warning_message .= $modify_icons;
                     echo Display::return_message($warning_message, 'warning', false);
                 }

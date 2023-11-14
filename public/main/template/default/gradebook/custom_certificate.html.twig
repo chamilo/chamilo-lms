@@ -1,8 +1,8 @@
+{% autoescape false %}
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>{{ 'Certificate' | get_lang }}</title>
 </head>
 <body>
 {% set stylesheet_name = chamilo_settings_get('stylesheets.stylesheets') %}
@@ -41,7 +41,7 @@
                             {{ complete_name }}
                         </h3>
                         <p style="font-size: 16px;">
-                            {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s time %s' | trans | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
+                            {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s time %s' | get_lang | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
                         </p>
                         <br />
                         <p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />
@@ -94,4 +94,4 @@
 </table>
 </body>
 </html>
-
+{% endautoescape %}

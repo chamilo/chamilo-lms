@@ -181,7 +181,8 @@ trait ReportingFilterTrait
                 'id' => $value['exe']->getExeId(),
                 'quiz_title' => $value['title'],
                 'username' => $value['username'],
-                'user_fullname' => api_get_person_name($value['firstname'], $value['lastname']),
+                'firstname' => $value['firstname'],
+                'lastname' => $value['lastname'],
                 'start_date' => $value['exe']->getStartDate(),
                 'end_date' => $value['exe']->getExeDate(),
                 'count_outfocused' => $outfocusedCount,
@@ -209,7 +210,8 @@ trait ReportingFilterTrait
 
         $tableHeaders = [];
         $tableHeaders[] = get_lang('LoginName');
-        $tableHeaders[] = get_lang('FullUserName');
+        $tableHeaders[] = get_lang('FirstName');
+        $tableHeaders[] = get_lang('LastName');
 
         if (!$courseId) {
             $tableHeaders[] = get_lang('SessionName');
@@ -243,7 +245,8 @@ trait ReportingFilterTrait
             $row = [];
 
             $row[] = $result['username'];
-            $row[] = $result['user_fullname'];
+            $row[] = $result['firstname'];
+            $row[] = $result['lastname'];
 
             if (!$courseId) {
                 $row[] = $result['session_name'];
@@ -264,12 +267,12 @@ trait ReportingFilterTrait
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaders($tableHeaders);
         $table->setData($tableData);
-        $table->setColAttributes($courseId ? 2 : 5, ['class' => 'text-center']);
         $table->setColAttributes($courseId ? 3 : 6, ['class' => 'text-center']);
-        $table->setColAttributes($courseId ? 4 : 7, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 4 : 7, ['class' => 'text-center']);
         $table->setColAttributes($courseId ? 5 : 8, ['class' => 'text-right']);
-        $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-center']);
-        $table->setColAttributes($courseId ? 7 : 10, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 7 : 10, ['class' => 'text-center']);
+        $table->setColAttributes($courseId ? 8 : 11, ['class' => 'text-right']);
 
         foreach ($resultData as $idx => $result) {
             $table->setRowAttributes($idx + 1, ['class' => $result['class']], true);

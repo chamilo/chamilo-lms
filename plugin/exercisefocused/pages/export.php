@@ -53,8 +53,11 @@ foreach ($results as $result) {
     $quizType = (int) $exercise->selectType();
 
     $data[] = [
-        get_lang('Student'),
+        get_lang('LoginName'),
         $user->getUsername(),
+    ];
+    $data[] = [
+        get_lang('Student'),
         $user->getFirstname(),
         $user->getLastname(),
     ];
@@ -140,6 +143,7 @@ foreach ($results as $result) {
     } elseif (ALL_ON_ONE_PAGE === $quizType) {
     }
 
+    $data[] = [];
     $data[] = [];
     $data[] = [];
 }

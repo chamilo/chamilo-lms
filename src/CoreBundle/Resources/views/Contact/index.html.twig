@@ -50,6 +50,10 @@
                 {{ form_label(form.termsAccepted, 'By checking this box, I confirm that I accept the data processing by OFAJ') }}
             </div>
 
+            <div class="terms-container">
+                {{ termsContent | raw }}
+            </div>
+
             {{ form_end(form) }}
         </div>
     </section>

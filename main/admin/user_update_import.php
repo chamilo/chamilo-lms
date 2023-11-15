@@ -104,6 +104,15 @@ function _updateUsers(
             if (empty($userInfo)) {
                 continue;
             }
+            /*
+            // In specific cases, you might want to only update if the e-mail
+            // in the CSV is different from the e-mail in the database
+            if (!empty($user['Email'])) {
+                if ($user['Email'] == $userInfo['email']) {
+                    continue;
+                }
+            }
+            */
 
             $user_id = $userInfo['user_id'];
             $firstName = $user['FirstName'] ?? $userInfo['firstname'];

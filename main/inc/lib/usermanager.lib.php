@@ -8154,8 +8154,7 @@ SQL;
                 'where' => ['email = ?' => $mail],
             ],
             'all',
-            null,
-            true
+            null
         );
 
         if ($resultData === false) {

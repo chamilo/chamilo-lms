@@ -21,6 +21,7 @@ class ContactController extends AbstractController
     public function index(Request $request, MailerInterface $mailer, SettingsManager $settingsManager)
     {
         $form = $this->createForm(ContactType::class);
+        $termsContent = $form->getConfig()->getOption('terms_content');
         $form->handleRequest($request);
 
         // Check if the form is submitted and valid
@@ -55,6 +56,7 @@ class ContactController extends AbstractController
             '@ChamiloCore/Contact/index.html.twig',
             [
                 'form' => $form->createView(),
+                'termsContent' => $termsContent,
             ]
         );
     }

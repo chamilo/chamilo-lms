@@ -157,6 +157,14 @@
     font-family: monospace;
   }
 
+  .terms-container {
+    overflow-y: scroll;
+    height: 180px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
   // Pager
   .pager-bar {
   }

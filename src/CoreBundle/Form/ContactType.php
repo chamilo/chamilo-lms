@@ -75,16 +75,6 @@ class ContactType extends AbstractType
                     new NotBlank(),
                 ],
             ])
-            ->add('terms', TextareaType::class, [
-                'mapped' => false,
-                'label' => '',
-                'data' => $options['terms_content'],
-                'attr' => [
-                    'disabled' => true,
-                    'class' => 'text-gray-500',
-                    'style' => 'width: 100%;height: 180px;',
-                ],
-            ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->translator->trans('Send'),
                 'attr' => [

@@ -229,15 +229,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE message_feedback CHANGE message_id social_post_id BIGINT NOT NULL');
             $this->addSql('RENAME TABLE message_feedback TO social_post_feedback');
             $this->addSql('DELETE FROM social_post_feedback WHERE social_post_id NOT IN (SELECT id FROM social_post)');
+            $this->addSql('CREATE INDEX IDX_DB7E436DA76ED395 ON social_post_feedback (user_id)');
+            $this->addSql('CREATE INDEX IDX_DB7E436DC4F2D6B1 ON social_post_feedback (social_post_id)');
+            $this->addSql('CREATE INDEX idx_social_post_uid_spid ON social_post_feedback (social_post_id, user_id)');
         } else {
             $this->addSql("CREATE TABLE social_post_feedback (id BIGINT AUTO_INCREMENT NOT NULL, social_post_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_DB7E436DC4F2D6B1 (social_post_id), INDEX IDX_DB7E436DA76ED395 (user_id), INDEX idx_social_post_uid_spid (social_post_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
         }
 
-        $this->addSql('CREATE INDEX IDX_DB7E436DA76ED395 ON social_post_feedback (user_id)');
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
-        $this->addSql('CREATE INDEX IDX_DB7E436DC4F2D6B1 ON social_post_feedback (social_post_id)');
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DC4F2D6B1 FOREIGN KEY (social_post_id) REFERENCES social_post (id) ON DELETE CASCADE');
-        $this->addSql('CREATE INDEX idx_social_post_uid_spid ON social_post_feedback (social_post_id, user_id)');
 
         //ALTER TABLE message DROP user_receiver_id;
 

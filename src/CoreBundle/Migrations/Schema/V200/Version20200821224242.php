@@ -176,7 +176,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                m.title,
                m.content,
                CASE m.msg_type
-                   WHEN 1 THEN 3
                    WHEN 8 THEN 2
                    WHEN 9 THEN 1
                    WHEN 10 THEN 1
@@ -184,7 +183,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                    ELSE 1
                END AS type,
                CASE m.msg_type
-                   WHEN 1 THEN 1
                    WHEN 8 THEN 1
                    WHEN 10 THEN 1
                    WHEN 13 THEN 1
@@ -194,8 +192,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                m.send_date,
                m.update_date
             FROM message m
-            INNER JOIN message_feedback mf ON m.id = mf.message_id
-            WHERE m.msg_type IN (1, 8, 9, 10, 13)';
+            WHERE m.msg_type IN (8, 9, 10, 13)';
         $this->addSql($sql);
 
         $this->addSql('DELETE FROM social_post WHERE parent_id NOT IN (SELECT id FROM social_post)');

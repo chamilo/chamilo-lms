@@ -3719,7 +3719,7 @@ __metadata:
     textcomplete: ^0.18.2
     timeago: ^1.6.7
     timepicker: ^1.14.1
-    tinymce: ^5.10.8
+    tinymce: ^5.10.9
     ts-loader: ^9.5.0
     typescript: ^5.2.2
     video.js: ^7.21.5
@@ -5419,7 +5419,7 @@ __metadata:
 
 "fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.3
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=18f3a7"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -9024,7 +9024,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
   version: 1.22.8
-  resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+  resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=07638b"
   dependencies:
     is-core-module: ^2.13.0
     path-parse: ^1.0.7
@@ -9962,10 +9962,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.10.8":
-  version: 5.10.8
-  resolution: "tinymce@npm:5.10.8"
-  checksum: 702f4f576ecd64087ee588c79f66d859dac8c3d6e9f671016dc41885fcb8c30a637a169eb67195ee2bb0eb1368759801ec191b2325a3bb341d32da1a88f5b680
+"tinymce@npm:^5.10.9":
+  version: 5.10.9
+  resolution: "tinymce@npm:5.10.9"
+  checksum: 9927f3132820c183ca1a3ed19b4e650b16276385b4c253e51cf2a399a5981522d4197901b7abd8a7bf7000d783880eda9727b5eee9381b5c4c42c48c48a1d6f5
   languageName: node
   linkType: hard
 
@@ -10097,7 +10097,7 @@ __metadata:
 
 "typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>":
   version: 5.2.2
-  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=1f5320"
+  resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver

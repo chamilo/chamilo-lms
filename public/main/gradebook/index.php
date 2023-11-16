@@ -458,9 +458,9 @@ if (isset($_GET['deletelink'])) {
                         thread_qualify_max = 0,
                         thread_weight = 0,
                         thread_title_qualify = ""
-					WHERE c_id = '.$course_id.' AND iid = (
+					WHERE iid = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
-					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
+					    WHERE id = '.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
                     )';
             Database::query($sql);
             // clean attendance
@@ -469,7 +469,7 @@ if (isset($_GET['deletelink'])) {
                         attendance_qualify_title = ""
 				 	WHERE iid = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
-				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
+				 	    WHERE id = '.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
                     )';
             Database::query($sql);
             $link[0]->delete();

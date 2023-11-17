@@ -523,7 +523,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     if ($isBlocked) {
                         continue;
 		    }
-		    if (!empty($_REQUEST['filter']) && $_REQUEST['filter'] != $presence['calendar_id']) {
+		    if (!empty($_REQUEST['filter']) && is_numeric($_REQUEST['filter']) && $_REQUEST['filter'] != $presence['calendar_id']) {
                         continue;
                     }
                     $signature = $attendance->getSignature($user_id, $presence['calendar_id']);

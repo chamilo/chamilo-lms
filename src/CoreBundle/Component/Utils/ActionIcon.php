@@ -126,4 +126,6 @@ enum ActionIcon: string
     case LOCK = 'lock';
     // Unlock
     case UNLOCK = 'lock-open-variant';
+    // Refresh/reload
+    case REFRESH = 'file-document-refresh';
 }

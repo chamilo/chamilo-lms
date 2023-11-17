@@ -272,14 +272,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_set_visible_selec
 
 switch ($action) {
     case 'attendance_sheet_qrcode':
-        header("Content-Type: image/png");
-        header("Content-Disposition: attachment; filename=AttendanceSheetQRcode.png");
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
         $renderer = new \BaconQrCode\Renderer\Image\Png();
         $renderer->setHeight(256);
         $renderer->setWidth(256);
         $writer = new \BaconQrCode\Writer($renderer);
         $attendanceSheetLink = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance_id;
-        echo $writer->writeString($attendanceSheetLink);
+        $filename = "attendanceqrcode".uniqid().".png";
+        if (!is_dir(api_get_path(SYS_UPLOAD_PATH).'attendance')) {
+            @mkdir(
+                api_get_path(SYS_UPLOAD_PATH).'attendance',
+                api_get_permissions_for_new_directories(),
+                true
+            );
+        }
+        $writer->writeFile($attendanceSheetLink,api_get_path(SYS_UPLOAD_PATH).'attendance/'.$filename);
+        echo '<img src="'.api_get_path(WEB_UPLOAD_PATH).'attendance/'.$filename.'" alt="AttendanceQR">';
         exit;
     case 'attendance_list':
         $attendanceController->attendance_list();

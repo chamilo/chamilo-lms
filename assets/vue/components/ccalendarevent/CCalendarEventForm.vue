@@ -75,7 +75,10 @@
         />
       </div>
 
-      <div class="md:w-1/2 flex flex-col">
+      <div
+        v-if="agendaCollectiveInvitations"
+        class="md:w-1/2 flex flex-col"
+      >
         <div
           v-t="'Invitees'"
           class="text-h6"
@@ -112,8 +115,12 @@ import Calendar from "primevue/calendar"
 import EditLinks from "../resource_links/EditLinks.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
+const platformConfigStore = usePlatformConfig();
+
+const agendaCollectiveInvitations = 'true' === platformConfigStore.getSetting('agenda.agenda_collective_invitations')
 
 const { t } = useI18n()
 

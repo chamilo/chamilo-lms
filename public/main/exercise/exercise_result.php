@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise result
@@ -88,11 +89,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         'exercise_result_actions',
         [
             Display::url(
-                Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')),
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
+                Display::getMdiIconn('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]

@@ -29,6 +29,7 @@ if (api_get_configuration_value('ldap_encrypt_admin_password')) {
 $ldapbind = @ldap_bind($ds, $extldap_config['admin_dn'], $ldap_pass);
 if ($ldapbind === false) {
     echo 'EXTLDAP ERROR : cannot connect with admin login/password';
+
     return false;
 }
 

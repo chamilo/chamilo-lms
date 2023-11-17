@@ -1675,7 +1675,7 @@ class UserManager
                 [
                     'item_id' => $user->getId(),
                     'variable' => 'password_updated_at',
-                    'value' => $date
+                    'value' => $date,
                 ]
             );
         }
@@ -1803,8 +1803,6 @@ class UserManager
                     null,
                     $creatorEmail
                 );
-
-
             } else {
                 $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
@@ -7709,7 +7707,7 @@ SQL;
             );
 
             if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
-                1 === (int)$askPassword['ask_new_password']
+                1 === (int) $askPassword['ask_new_password']
             ) {
                 $uniqueId = api_get_unique_id();
                 $userObj = api_get_user_entity($userId);
@@ -8045,6 +8043,59 @@ SQL;
     }
 
     /**
+     * Get a list of users with the given e-mail address + their "active" field value (0 or 1).
+     *
+     * @param string $mail User id
+     *
+     * @return array List of users e-mails + active field
+     */
+    public static function getUsersByMail(string $mail): array
+    {
+        $resultData = Database::select(
+            'id, active',
+            Database::get_main_table(TABLE_MAIN_USER),
+            [
+                'where' => ['email = ?' => $mail],
+            ],
+            'all',
+            null
+        );
+
+        if ($resultData === false) {
+            return [];
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Get whether we can send an e-mail or not.
+     * If the e-mail is not in the database, send the mail.
+     * If the e-mail is in the database but none of its occurences is active, don't send.
+     *
+     * @param string $mail The e-mail address to check
+     *
+     * @return bool Whether we can send an e-mail or not
+     */
+    public function isEmailingAllowed(string $mail): bool
+    {
+        $list = self::getUsersByMail($mail);
+        if (empty($list)) {
+            // No e-mail matches, send the mail
+            return true;
+        }
+        $send = false;
+        foreach ($list as $id => $user) {
+            if ($user['active'] == 1) {
+                // as soon as we find at least one active user, send the mail
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -8136,56 +8187,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * Get a list of users with the given e-mail address + their "active" field value (0 or 1)
-     *
-     * @param string $mail User id
-     *
-     * @return array List of users e-mails + active field
-     */
-    public static function getUsersByMail(string $mail): array
-    {
-        $resultData = Database::select(
-            'id, active',
-            Database::get_main_table(TABLE_MAIN_USER),
-            [
-                'where' => ['email = ?' => $mail],
-            ],
-            'all',
-            null
-        );
-
-        if ($resultData === false) {
-            return [];
-        }
-
-        return $resultData;
-    }
-
-    /**
-     * Get whether we can send an e-mail or not.
-     * If the e-mail is not in the database, send the mail.
-     * If the e-mail is in the database but none of its occurences is active, don't send.
-     * @param string $mail The e-mail address to check
-     * @return bool Whether we can send an e-mail or not
-     */
-    public function isEmailingAllowed(string $mail): bool
-    {
-        $list = self::getUsersByMail($mail);
-        if (empty($list)) {
-            // No e-mail matches, send the mail
-            return true;
-        }
-        $send = false;
-        foreach ($list as $id => $user) {
-            if ($user['active'] == 1) {
-                // as soon as we find at least one active user, send the mail
-                return true;
-            }
-        }
-
-        return false;
     }
 }

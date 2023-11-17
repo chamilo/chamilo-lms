@@ -102,7 +102,7 @@ if ($form->validate()) {
                 [
                     'item_id' => $user->getId(),
                     'variable' => 'password_updated_at',
-                    'value' => $date
+                    'value' => $date,
                 ]
             );
         }

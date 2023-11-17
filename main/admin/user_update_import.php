@@ -90,7 +90,7 @@ function _updateUsers(
     $resetPassword = false,
     $sendEmail = false,
     $askNewPassword = false
-){
+) {
     $usergroup = new UserGroup();
     $extraFieldValue = new ExtraFieldValue('user');
     if (is_array($users)) {

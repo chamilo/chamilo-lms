@@ -5843,7 +5843,7 @@ class DocumentManager
         }
 
         // Specific case to remove action icons for students on files in the Chat conversation history inside a group -refs BT#21165
-        if (strpos($document_data['path'],'chat_files') !== false && $document_data['filetype'] === 'file' && api_is_student()) {
+        if (strpos($document_data['path'], 'chat_files') !== false && $document_data['filetype'] === 'file' && api_is_student()) {
             $modify_icons = [];
         }
 
@@ -7314,7 +7314,7 @@ class DocumentManager
             return Display::url($iconEn, "edit_document.php?$courseParams&id=$document_id");
         }
 
-        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
+        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path, 'chat_files') !== false) {
             return $iconDis;
         }
 
@@ -7375,7 +7375,7 @@ class DocumentManager
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
 
-        if ($isCertificateMode || in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
+        if ($isCertificateMode || in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path, 'chat_files') !== false) {
             return $iconDis;
         }
 
@@ -7470,7 +7470,7 @@ class DocumentManager
             return $iconDis;
         }
 
-        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path,'chat_files') !== false) {
+        if (in_array($path, self::get_system_folders()) || $documentData['filetype'] === 'folder' && strpos($path, 'chat_files') !== false) {
             return $iconDis;
         }
 

@@ -1085,13 +1085,12 @@ class Statistics
             $table->set_header(6, get_lang('IPAddress'));
             $table->set_header(7, get_lang('Date'));
             $content .= $table->return_table();
-
         }
 
         $content .= '<div class="alert alert-info">'.get_lang('ImportantActivities').' : '.'<br>';
         $prefix = 'LOG_';
         $userDefinedConstants = get_defined_constants(true)['user'];
-        $filteredConstants = array_filter($userDefinedConstants, function($constantName) use ($prefix) {
+        $filteredConstants = array_filter($userDefinedConstants, function ($constantName) use ($prefix) {
             return strpos($constantName, $prefix) === 0;
         }, ARRAY_FILTER_USE_KEY);
         $constantNames = array_keys($filteredConstants);

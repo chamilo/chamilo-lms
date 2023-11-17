@@ -1,11 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
+
 /**
  * This is used in some scripts inside tests.
  */
 class SubLanguageManager
 {
+
+    const SUBLANGUAGE_TRANS_PATH = '../var/translations/';
+    const LANGUAGE_TRANS_PATH = '../translations/';
+
     public function __construct()
     {
     }
@@ -62,32 +68,6 @@ class SubLanguageManager
         }
 
         return $content_dir;
-    }
-
-    /**
-     * Get all information of sub-language.
-     *
-     * @param int $parent_id       The parent id(Language father id)
-     * @param int $sub_language_id The sub language id
-     *
-     * @return array All information about sub-language
-     */
-    public static function get_all_information_of_sub_language($parent_id, $sub_language_id)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $parent_id = intval($parent_id);
-        $sub_language_id = intval($sub_language_id);
-        $sql = "SELECT * FROM $table
-                WHERE
-                    parent_id = $parent_id AND
-                    id = $sub_language_id";
-        $rs = Database::query($sql);
-        $all_information = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
-            $all_information = $row;
-        }
-
-        return $all_information;
     }
 
     /**
@@ -183,92 +163,39 @@ class SubLanguageManager
     }
 
     /**
-     * Add directory for sub-language.
+     * Add a .po file for a sub-language using its ISO code.
      *
-     * @param string $sub_language_dir The sub-language directory ( e.g. 'spanish_corporate' )
-     *
-     * @return bool True on success, false on failure
-     */
-    public static function add_language_directory($sub_language_dir)
-    {
-        if (empty($sub_language_dir)) {
-            return false;
-        }
-        $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
-        if (is_dir($dir)) {
-            return true;
-        } //even if the dir already exists, we reach the objective of having the directory there
-
-        return @mkdir($dir, api_get_permissions_for_new_directories());
-    }
-
-    /**
-     * Delete sub-language.
-     * In order to avoid deletion of main laguages, we check the existence of a parent.
-     *
-     * @deprecated
-     *
-     * @param int  $parent_id       The parent id
-     * @param bool $sub_language_id
-     *
-     * @return mixed True on success, false on error
-     */
-    public static function remove_sub_language($parent_id, $sub_language_id)
-    {
-        if (empty($parent_id) ||
-            (intval($parent_id) != $parent_id) ||
-            empty($sub_language_id) ||
-            (intval($sub_language_id) != $sub_language_id)
-        ) {
-            return false;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT dokeos_folder FROM '.$table.'
-                WHERE parent_id = '.$parent_id.' and id = '.$sub_language_id;
-        $res = Database::query($sql);
-        if (false === $res or Database::num_rows($res) < 1) {
-            return false;
-        }
-        $row = Database::fetch_assoc($res);
-        $res = self::remove_language_directory($row['dokeos_folder']);
-        if (false === $res) {
-            return false;
-        } //can't delete dir, so do not delete language record
-        $sql = 'DELETE FROM '.$table.'
-                WHERE id= '.intval($sub_language_id);
-        $res = Database::query($sql);
-
-        return $res;
-    }
-
-    /**
-     * Remove directory for sub-language.
-     *
-     * @param string $sub_language_dir The sub-language path directory ( e.g. 'spanish_corporate'' )
+     * @param string $subLanguageIsoCode The ISO code of the sub-language (e.g., 'es_CO')
      *
      * @return bool True on success, false on failure
      */
-    public static function remove_language_directory($sub_language_dir)
+    public static function addPoFileForSubLanguage($subLanguageIsoCode)
     {
-        if (empty($sub_language_dir)) {
+        if (empty($subLanguageIsoCode)) {
             return false;
         }
-        $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
-        if (!is_dir($dir)) {
-            return true;
-        } //even if the dir does not exist, we reach the objective of not having the directory there
-        $content = self::get_lang_folder_files_list($dir);
 
-        if (count($content) > 0) {
-            foreach ($content as $value_content) {
-                $path_file = $dir.'/'.$value_content;
-                unlink($path_file);
+        // Path for the .po file you want to create
+        $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH . 'messages.' . $subLanguageIsoCode . '.po';
+        $translationsDir = dirname($poFilePath);
+
+        // Check if the translations directory is writable
+        if (!is_writable($translationsDir)) {
+            // Attempt to set writable permissions
+            if (!@chmod($translationsDir, 0775)) { // You might adjust the permission level as needed
+                return false;  // Failed to set writable permissions
             }
-
-            return @rmdir($dir);
-        } else {
-            return @rmdir($dir);
         }
+
+        // If the .po file doesn't exist, create it
+        if (!file_exists($poFilePath)) {
+            $initialContent = "# Translation file for $subLanguageIsoCode\nmsgid \"\"\nmsgstr \"\"\n";
+            if (false === file_put_contents($poFilePath, $initialContent)) {
+                return false;  // Failed to write the file
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -551,5 +478,387 @@ class SubLanguageManager
         }
 
         return false;
+    }
+
+    /**
+     * Convert a string to a valid PHP camelCase variable name.
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function stringToCamelCaseVariableName($string)
+    {
+        $varName = preg_replace('/[^a-z0-9_]/i', '_', $string);  // Replace invalid characters with '_'
+        $varName = trim($varName, '_');  // Trim any '_' from the beginning and end
+        $varName = ucwords(str_replace('_', ' ', $varName));  // Convert to camel case
+        $varName = lcfirst(str_replace(' ', '', $varName));  // Remove spaces and convert the first character to lowercase
+        return substr($varName, 0, 25);  // Limit to 15 characters
+    }
+
+    /**
+     * Retrieve the iso_code for a given language ID and its parent.
+     *
+     * @param int $languageId
+     * @return array [childIsoCode, parentIsoCode]
+     */
+    public static function getIsoCodes($languageId)
+    {
+        $em = Database::getManager();
+        $language = $em->getRepository('Chamilo\CoreBundle\Entity\Language')->find($languageId);
+
+        if (!$language) {
+            return [null, null];
+        }
+
+        $childIsoCode = $language->getIsoCode();
+        $parentIsoCode = null;
+
+        if ($language->getParent()) {
+            $parentLanguage = $em->getRepository('Chamilo\CoreBundle\Entity\Language')->find($language->getParent());
+            if ($parentLanguage) {
+                $parentIsoCode = $parentLanguage->getIsoCode();
+            }
+        }
+
+        return [$childIsoCode, $parentIsoCode];
+    }
+
+    /**
+     * Search for translations based on a term and language ID.
+     *
+     * @param string $term        The term to search for.
+     * @param int    $languageId  The ID of the language to search in.
+     *
+     * @return array An array of matched translations.
+     */
+    public static function searchTranslations($term, $languageId): array
+    {
+        // Retrieve the ISO codes for the provided language ID.
+        list($childIsoCode, $parentIsoCode) = self::getIsoCodes($languageId);
+
+        // Define the files to search in based on the ISO codes.
+        $files = ['en' => 'messages.en.po', $parentIsoCode => "messages.$parentIsoCode.po", $childIsoCode => "messages.$childIsoCode.po"];
+
+        $results = [];
+
+        // Step 1: Search for all matches in messages.en.po.
+        $matchedMsgids = self::searchMsgidInFile($term, $files['en']);
+
+        // Step 2: For each matched msgid, search for its translation in the other files.
+        foreach ($matchedMsgids as $msgid) {
+            $entry = [
+                'file' => $files['en'],
+                'variable' => $msgid,
+                'phpVarName' => self::stringToCamelCaseVariableName($msgid),
+                'en' => self::getTranslationForVariable($msgid, $files['en'])
+            ];
+            $entry[$parentIsoCode] = self::getTranslationForVariable($msgid, $files[$parentIsoCode]);
+            $entry[$childIsoCode] = self::getTranslationForVariable($msgid, $files[$childIsoCode], true);
+
+            $results[] = $entry;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Search for a specific term inside a given .po file and return the msgids that match.
+     *
+     * @param string $term      The term to search for.
+     * @param string $filename  The name of the .po file to search in.
+     *
+     * @return array An array of msgids that match the given term.
+     */
+    private static function searchMsgidInFile($term, $filename)
+    {
+        $poFilePath = api_get_path(SYS_PATH) . self::LANGUAGE_TRANS_PATH . $filename;
+        $matchedMsgids = [];
+
+        if (file_exists($poFilePath)) {
+            $lines = file($poFilePath, FILE_IGNORE_NEW_LINES);
+            $currentVariable = null;
+
+            foreach ($lines as $line) {
+                if (strpos($line, 'msgid "') === 0) {
+                    $currentVariable = str_replace('msgid "', '', $line);
+                    $currentVariable = rtrim($currentVariable, '"');
+
+                    if (stripos($currentVariable, $term) !== false) {
+                        $matchedMsgids[] = $currentVariable;
+                    }
+                }
+            }
+        }
+
+        return $matchedMsgids;
+    }
+
+    /**
+     * Retrieve the translation (msgstr) for a given variable (msgid) from a specified .po file.
+     *
+     * @param string $variable  The variable (msgid) to search for.
+     * @param string $filename  The name of the .po file to retrieve the translation from.
+     *
+     * @return string The translation (msgstr) for the provided variable, or an empty string if not found.
+     */
+    private static function getTranslationForVariable(string $variable, string $filename, $checkSubLanguagePath = false): string
+    {
+
+        $poFilePath = api_get_path(SYS_PATH) . self::LANGUAGE_TRANS_PATH .  $filename;
+        if ($checkSubLanguagePath) {
+            $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  $filename;
+        }
+
+        if (file_exists($poFilePath)) {
+            $content = file_get_contents($poFilePath);
+            $pattern = '/msgid "' . preg_quote($variable, '/') . '"\nmsgstr "(.*?)"/';
+            if (preg_match($pattern, $content, $match)) {
+                return $match[1];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Updates or adds a msgid in the specified .po file.
+     *
+     * @param string $filename  Name of the .po file
+     * @param string $msgid     Message identifier to search or add
+     * @param string $content   Associated message content
+     *
+     * @return array Returns true if the operation was successful, otherwise returns false
+     */
+    public static function updateOrAddMsgid($filename, $msgid, $content): array
+    {
+        $filePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  $filename;
+
+        if (!file_exists($filePath)) {
+            return ['success' => false, 'error' => 'File does not exist'];
+        }
+
+        if (!is_writable($filePath)) {
+            try {
+                if (!chmod($filePath, 0664)) {
+                    return ['success' => false, 'error' => 'Unable to set the file to writable'];
+                }
+            } catch (Exception $e) {
+
+                return ['success' => false, 'error' => 'Failed to change file permissions: ' . $e->getMessage()];
+            }
+        }
+
+        $fileContents = file_get_contents($filePath);
+        if ($fileContents === false) {
+            return ['success' => false, 'error' => 'Failed to read file contents'];
+        }
+
+        $pattern = '/msgid "' . preg_quote($msgid, '/') . '"' . PHP_EOL . 'msgstr "(.*?)"/';
+        if (preg_match($pattern, $fileContents)) {
+            $replacement = 'msgid "' . $msgid . '"' . PHP_EOL . 'msgstr "' . $content . '"';
+            $fileContents = preg_replace($pattern, $replacement, $fileContents);
+        } else {
+            $appendString = PHP_EOL . PHP_EOL . 'msgid "' . $msgid . '"' . PHP_EOL . 'msgstr "' . $content . '"';
+            $fileContents .= $appendString;
+        }
+
+        if (file_put_contents($filePath, $fileContents) === false) {
+            return ['success' => false, 'error' => 'Failed to write to file'];
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * Delete sub-language.
+     * In order to avoid deletion of main languages, we check the existence of a parent.
+     */
+    public static function removeSubLanguage(int $parentId, int $subLanguageId): bool
+    {
+        $entityManager = Database::getManager();
+        $subLanguage = $entityManager->getRepository(Language::class)->find($subLanguageId);
+        $parentLanguage = $subLanguage ? $subLanguage->getParent() : null;
+
+        if (!$subLanguage || !$parentLanguage || $parentLanguage->getId() != $parentId) {
+            return false;
+        }
+
+        // Locate and delete the .po file of the sub-language
+        $subLanguageIsoCode = $subLanguage->getIsocode();
+        $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  "messages.$subLanguageIsoCode.po";
+        if (file_exists($poFilePath)) {
+             unlink($poFilePath);
+        }
+
+        $entityManager->remove($subLanguage);
+        $entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * Add a sub-language.
+     */
+    public static function addSubLanguage(string $originalName, string $englishName, bool $isAvailable, int $parentId): bool|int
+    {
+        $entityManager = Database::getManager();
+        $parentLanguage = $entityManager->getRepository(Language::class)->find($parentId);
+        if (!$parentLanguage) {
+            return false;
+        }
+
+        $subLanguage = new Language();
+        $subLanguage->setOriginalName($originalName)
+            ->setEnglishName($englishName)
+            ->setIsocode($englishName)
+            ->setAvailable($isAvailable)
+            ->setParent($parentLanguage);
+
+        try {
+            $entityManager->persist($subLanguage);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            // Handle exception if needed
+            return false;
+        }
+
+        return $subLanguage->getId();
+    }
+
+    /**
+     * Remove a .po file for a sub-language.
+     *
+     * @param string $isoCode The ISO code of the sub-language (e.g., 'es_CO')
+     *
+     * @return bool True on success, false on failure
+     */
+    public static function removePoFileForSubLanguage(string $isoCode): bool
+    {
+        if (empty($isoCode)) {
+            return false;
+        }
+
+        // Path for the .po file you want to remove
+        $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH . "messages.$isoCode.po";
+
+        if (file_exists($poFilePath)) {
+            return unlink($poFilePath);
+        }
+
+        // File does not exist, consider it a successful removal
+        return true;
+    }
+
+    /**
+     * Check if a language exists by its ID.
+     */
+    public static function languageExistsById(int $languageId): bool
+    {
+        $entityManager = Database::getManager();
+        $language = $entityManager->getRepository(Language::class)->find($languageId);
+
+        return $language !== null;
+    }
+
+    /**
+     * Check if the given language is a parent of any sub-language.
+     */
+    public static function isParentOfSubLanguage(int $parentId): bool
+    {
+        $entityManager = Database::getManager();
+        $languageRepository = $entityManager->getRepository(Language::class);
+
+        $childrenCount = $languageRepository->count(['parent' => $parentId]);
+
+        return $childrenCount > 0;
+    }
+
+    /**
+     * Get all information of a sub-language.
+     */
+    public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): array
+    {
+        $entityManager = Database::getManager();
+        $languageRepository = $entityManager->getRepository(Language::class);
+
+        $subLanguage = $languageRepository->findOneBy([
+            'parent' => $parentId,
+            'id' => $subLanguageId
+        ]);
+
+        return $subLanguage ? self::convertLanguageToArray($subLanguage) : [];
+    }
+
+    /**
+     * Convert a Language entity to an array.
+     */
+    private static function convertLanguageToArray(Language $language): array
+    {
+        return [
+            'id' => $language->getId(),
+            'original_name' => $language->getOriginalName(),
+            'english_name' => $language->getEnglishName(),
+            'isocode' => $language->getIsocode(),
+            'available' => $language->getAvailable(),
+            // Add other fields as needed
+        ];
+    }
+
+    /**
+     * Check if a language exists.
+     */
+    public static function checkIfLanguageExists(string $originalName, string $englishName, string $isoCode): array
+    {
+        $entityManager = Database::getManager();
+        $languageRepository = $entityManager->getRepository(Language::class);
+
+        $messageInformation = [
+            'original_name' => false,
+            'english_name' => false,
+            'isocode' => false,
+            'execute_add' => true
+        ];
+
+        if ($languageRepository->count(['originalName' => $originalName]) > 0) {
+            $messageInformation['original_name'] = true;
+            $messageInformation['execute_add'] = false;
+        }
+
+        if ($languageRepository->count(['englishName' => $englishName]) > 0) {
+            $messageInformation['english_name'] = true;
+            $messageInformation['execute_add'] = false;
+        }
+
+        $isoList = api_get_platform_isocodes(); // Assuming this is an existing function
+        if (!in_array($isoCode, array_values($isoList))) {
+            $messageInformation['isocode'] = true;
+            $messageInformation['execute_add'] = false;
+        }
+
+        return $messageInformation;
+    }
+
+    /**
+     * Gets the ISO code of the parent language for a given language.
+     */
+    public static function getParentLocale(string $childIsoCode): ?string
+    {
+        $em = Database::getManager();
+        $languageRepository = $em->getRepository('Chamilo\CoreBundle\Entity\Language');
+
+        // Find the language by its ISO code
+        $language = $languageRepository->findOneBy(['isocode' => $childIsoCode]);
+
+        if (!$language) {
+            return null; // Language not found
+        }
+
+        // Get the parent language if it exists
+        $parentLanguage = $language->getParent();
+        if ($parentLanguage) {
+            return $parentLanguage->getIsocode();
+        }
+
+        return null; // No parent language
     }
 }

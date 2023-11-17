@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
@@ -8955,14 +8956,11 @@ class Exercise
                         href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'"
                         style = "'.$style.'"
                         >
-                         '.Display::return_icon('quiz.png', $title).$title.
+                         '.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, $title).$title.
                         '</a>';
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
-                        $embeddableIcon = Display::return_icon(
-                            'om_integration.png',
-                            get_lang('ThisQuizCanBeEmbeddable')
-                        );
+                        $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ThisQuizCanBeEmbeddable'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
@@ -8972,13 +8970,13 @@ class Exercise
                     if ($repo->isGranted('EDIT', $exerciseEntity) && $allowToEditBaseCourse) {
                         // Questions list
                         $actions = Display::url(
-                            Display::return_icon('edit.png', get_lang('Edit')),
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                             'admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         // Test settings
                         $settings = Display::url(
-                            Display::return_icon('settings.png', get_lang('Configure')),
+                            Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Configure')),
                             'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
@@ -8989,7 +8987,7 @@ class Exercise
 
                         // Exercise results
                         $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
+                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
 
                         if ($limitTeacherAccess) {
                             if (api_is_platform_admin()) {
@@ -9005,19 +9003,13 @@ class Exercise
                             $autoLaunch = $exercise->getAutoLaunch();
                             if (empty($autoLaunch)) {
                                 $actions .= Display::url(
-                                    Display::return_icon(
-                                        'launch_na.png',
-                                        get_lang('Enable')
-                                    ),
+                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Enable')),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 $actions .= Display::url(
-                                    Display::return_icon(
-                                        'launch.png',
-                                        get_lang('Disable')
-                                    ),
+                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Disable')),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
@@ -9026,7 +9018,7 @@ class Exercise
 
                         // Export
                         $actions .= Display::url(
-                            Display::return_icon('cd.png', get_lang('Copy this exercise as a new one')),
+                            Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy this exercise as a new one')),
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
@@ -9042,9 +9034,7 @@ class Exercise
                         if (true === $allowClean) {
                             if (!$locked) {
                                 $clean = Display::url(
-                                    Display::return_icon(
-                                        'clean.png',
-                                        get_lang('CleanStudentResults')
+                                    Display::getMdiIcon('broom', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CleanStudentResults')
                                     ),
                                     '',
                                     [
@@ -9060,9 +9050,7 @@ class Exercise
                                     ]
                                 );
                             } else {
-                                $clean = Display::return_icon(
-                                    'clean_na.png',
-                                    get_lang('ResourceLockedByGradebook')
+                                $clean = Display::getMdiIcon('broom', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ResourceLockedByGradebook')
                                 );
                             }
                         }
@@ -9071,16 +9059,12 @@ class Exercise
                         // Visible / invisible
                         // Check if this exercise was added in a LP
                         if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::return_icon(
-                                'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed')
+                            $visibility = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive()) {
                                 $visibility = Display::url(
-                                    Display::return_icon(
-                                        'invisible.png',
-                                        get_lang('Activate')
+                                    Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9088,9 +9072,7 @@ class Exercise
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
-                                    Display::return_icon(
-                                        'visible.png',
-                                        get_lang('Deactivate')
+                                    Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9106,8 +9088,11 @@ class Exercise
 
                         // Export qti ...
                         $export = Display::url(
-                            Display::return_icon(
-                                'export_qti2.png',
+                            Display::getMdiIcon(
+                                'database',
+                                'ch-tool-icon',
+                                null,
+                                ICON_SIZE_SMALL,
                                 'IMS/QTI'
                             ),
                             'exercise.php?action=exportqti2&exerciseId='.$exerciseId.'&'.api_get_cidreq()
@@ -9120,23 +9105,17 @@ class Exercise
                         $actions .= $export;
                     } else {
                         // not session
-                        $actions = Display::return_icon(
-                            'edit_na.png',
-                            get_lang('ExerciseEditionNotAvailableInSession')
+                        $actions = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ExerciseEditionNotAvailableInSession')
                         );
 
                         // Check if this exercise was added in a LP
                         if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::return_icon(
-                                'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed')
+                            $visibility = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
-                                    Display::return_icon(
-                                        'invisible.png',
-                                        get_lang('Activate')
+                                    Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9144,9 +9123,7 @@ class Exercise
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
-                                    Display::return_icon(
-                                        'visible.png',
-                                        get_lang('Deactivate')
+                                    Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9160,9 +9137,9 @@ class Exercise
 
                         $actions .= $visibility;
                         $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
+                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
                         $actions .= Display::url(
-                            Display::return_icon('cd.gif', get_lang('Copy this exercise as a new one')),
+                            Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy this exercise as a new one')),
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
@@ -9180,10 +9157,7 @@ class Exercise
                         if (!$locked) {
                             $deleteUrl = 'exercise.php?'.api_get_cidreq().'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId;
                             $delete = Display::url(
-                                Display::return_icon(
-                                    'delete.png',
-                                    get_lang('Delete')
-                                ),
+                                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".
@@ -9415,7 +9389,7 @@ class Exercise
                     if ($isDrhOfCourse) {
                         $currentRow[] = '<a
                             href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results')).
+                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).
                             '</a>';
                     }
                     if ($returnData) {

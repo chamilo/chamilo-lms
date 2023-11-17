@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Component\Utils;
 
 enum ActionIcon: string
 {
+    // Add
+    case ADD = 'plus-box';
     // Edit
     case EDIT = 'pencil';
     // Delete

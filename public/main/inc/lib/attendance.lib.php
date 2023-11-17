@@ -776,7 +776,8 @@ class Attendance
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
                         user_id = '$uid',
                         attendance_calendar_id = '$calendar_id',
-                        presence = 1";
+                        presence = 1,
+                        signature = ''";
                 $result = Database::query($sql);
 
                 $affected_rows += Database::affected_rows($result);
@@ -803,7 +804,8 @@ class Attendance
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
                         user_id ='$uid',
                         attendance_calendar_id = '$calendar_id',
-                        presence = 0";
+                        presence = 0,
+                        signature = ''";
                 $result = Database::query($sql);
                 $affected_rows += Database::affected_rows($result);
             } else {
@@ -1633,7 +1635,8 @@ class Attendance
         $calendar
             ->setAttendance($attendance)
             ->setDateTime(new Datetime($this->date_time))
-            ->setDoneAttendance(false);
+            ->setDoneAttendance(false)
+            ->setBlocked(false);
 
         $em = Database::getManager();
         $em->persist($calendar);

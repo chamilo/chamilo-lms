@@ -522,6 +522,9 @@ if (api_is_allowed_to_edit(null, true) ||
                     // if calendar is blocked by admin is it not displayed here.
                     if ($isBlocked) {
                         continue;
+		    }
+		    if (!empty($_REQUEST['filter']) && $_REQUEST['filter'] != $presence['calendar_id']) {
+                        continue;
                     }
                     $signature = $attendance->getSignature($user_id, $presence['calendar_id']);
                     $signed = !empty($signature);

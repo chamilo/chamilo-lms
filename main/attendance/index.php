@@ -279,7 +279,11 @@ switch ($action) {
         $renderer->setHeight(256);
         $renderer->setWidth(256);
         $writer = new \BaconQrCode\Writer($renderer);
-        $attendanceSheetLink = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance_id;
+        $filter="";
+        if (!empty($_REQUEST['filter'])) {
+            $filter='&filter='.$_REQUEST['filter'];
+        }
+        $attendanceSheetLink = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance_id.$filter;
         $filename = "attendanceqrcode".uniqid().".png";
         if (!is_dir(api_get_path(SYS_UPLOAD_PATH).'attendance')) {
             @mkdir(

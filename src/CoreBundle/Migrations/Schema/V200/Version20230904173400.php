@@ -31,6 +31,9 @@ class Version20230904173400 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema): void
     {
+        $collectiveInvitationsEnabled = $this->getConfigurationValue('agenda_collective_invitations');
+        $subscriptionsEnabled = $this->getConfigurationValue('agenda_event_subscriptions');
+
         $this->addSql("UPDATE personal_agenda SET parent_event_id = NULL WHERE parent_event_id = 0 OR parent_event_id = ''");
         $this->addSql('UPDATE personal_agenda SET parent_event_id = NULL WHERE parent_event_id NOT IN (SELECT id FROM personal_agenda)');
         $this->addSql('DELETE FROM personal_agenda WHERE user NOT IN (SELECT id FROM user)');
@@ -39,10 +42,9 @@ class Version20230904173400 extends AbstractMigrationChamilo
         $map = [];
 
         $em = $this->getEntityManager();
-        $connection = $em->getConnection();
         $userRepo = $em->getRepository(User::class);
 
-        $personalAgendas = $this->getPersonalEvents($connection);
+        $personalAgendas = $this->getPersonalEvents();
 
         $utc = new DateTimeZone('UTC');
 
@@ -71,15 +73,23 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $map[$personalAgenda['id']] = $calendarEvent;
 
             $em->persist($calendarEvent);
+
+            if ($collectiveInvitationsEnabled) {
+                $this->processInvitees(
+                    $subscriptionsEnabled,
+                    (int) $personalAgenda['id'],
+                    $calendarEvent
+                );
+            }
         }
 
         $em->flush();
     }
 
-    private function getPersonalEvents(Connection $connection): array
+    private function getPersonalEvents(): array
     {
         $sql = 'SELECT * FROM personal_agenda ORDER BY id';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
 
         return $result->fetchAllAssociative();
     }
@@ -117,5 +127,70 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
 
         return $calendarEvent;
+    }
+
+    private function getInvitations(bool $subscriptionsEnabled, int $personalAgendaId): array
+    {
+        $sql = "SELECT i.id, i.creator_id, i.created_at, i.updated_at
+            FROM agenda_event_invitation i
+            INNER JOIN personal_agenda pa ON i.id = pa.agenda_event_invitation_id
+            WHERE pa.id = $personalAgendaId";
+
+        if ($subscriptionsEnabled) {
+            $sql .= " AND i.type = 'invitation'";
+        }
+
+        try {
+            $result = $this->connection->executeQuery($sql);
+
+            return $result->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception) {
+            return [];
+        }
+    }
+
+    private function getInvitees(bool $subscriptionEnabled, int $invitationId): array
+    {
+        $sql = "SELECT id, user_id, created_at, updated_at
+            FROM agenda_event_invitee
+            WHERE invitation_id = $invitationId";
+
+        if ($subscriptionEnabled) {
+            $sql .= " AND type = 'invitee'";
+        }
+
+        $sql .= ' ORDER BY created_at ASC';
+
+        try {
+            $result = $this->connection->executeQuery($sql);
+
+            return $result->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception) {
+            return [];
+        }
+    }
+
+    private function processInvitees(
+        bool $subscriptionsEnabled,
+        int $personalAgendaId,
+        CCalendarEvent $cCalendarEvent
+    ): void {
+        $em = $this->getEntityManager();
+
+        $invitationsInfo = $this->getInvitations($subscriptionsEnabled, $personalAgendaId);
+
+        foreach ($invitationsInfo as $invitationInfo) {
+            $inviteesInfo = $this->getInvitees($subscriptionsEnabled, $invitationInfo['id']);
+
+            foreach ($inviteesInfo as $inviteeInfo) {
+                $user = $em->find(User::class, $inviteeInfo['user_id']);
+
+                if (!$user) {
+                    continue;
+                }
+
+                $cCalendarEvent->addUserLink($user);
+            }
+        }
     }
 }

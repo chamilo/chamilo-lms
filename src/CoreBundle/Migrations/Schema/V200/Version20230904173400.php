@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
@@ -38,11 +39,10 @@ class Version20230904173400 extends AbstractMigrationChamilo
         $map = [];
 
         $em = $this->getEntityManager();
+        $connection = $em->getConnection();
         $userRepo = $em->getRepository(User::class);
 
-        $sql = 'SELECT * FROM personal_agenda ORDER BY id';
-        $result = $em->getConnection()->executeQuery($sql);
-        $personalAgendas = $result->fetchAllAssociative();
+        $personalAgendas = $this->getPersonalEvents($connection);
 
         $utc = new DateTimeZone('UTC');
 
@@ -50,33 +50,23 @@ class Version20230904173400 extends AbstractMigrationChamilo
         foreach ($personalAgendas as $personalAgenda) {
             $oldParentId = (int) $personalAgenda['parent_event_id'];
             $user = $userRepo->find($personalAgenda['user']);
-            $title = $personalAgenda['title'] ?: '-';
-            $startDate = $personalAgenda['date'] ? new DateTime($personalAgenda['date'], $utc) : null;
-            $endDate = $personalAgenda['enddate'] ? new DateTime($personalAgenda['enddate'], $utc) : null;
-            $allDay = (bool) $personalAgenda['all_day'];
 
-            $calendarEvent = new CCalendarEvent();
-            $calendarEvent
-                ->setTitle($title)
-                ->setContent($personalAgenda['text'])
-                ->setStartDate($startDate)
-                ->setEndDate($endDate)
-                ->setAllDay($allDay)
-                ->setColor($personalAgenda['color'])
-                ->setCreator($user)
-                ->setResourceName($title)
-            ;
+            $newParent = null;
 
             if ($oldParentId && isset($map[$oldParentId])) {
                 $newParent = $map[$oldParentId];
-
-                $calendarEvent
-                    ->setParentEvent($newParent)
-                    ->setParentResourceNode($newParent->getResourceNode()->getId())
-                ;
-            } else {
-                $calendarEvent->setParentResourceNode($user->getResourceNode()->getId());
             }
+
+            $calendarEvent = $this->createCCalendarEvent(
+                $personalAgenda['title'] ?: '-',
+                $personalAgenda['text'],
+                $personalAgenda['date'] ? new DateTime($personalAgenda['date'], $utc) : null,
+                $personalAgenda['enddate'] ? new DateTime($personalAgenda['enddate'], $utc) : null,
+                (bool) $personalAgenda['all_day'],
+                $personalAgenda['color'],
+                $user,
+                $newParent
+            );
 
             $map[$personalAgenda['id']] = $calendarEvent;
 
@@ -84,5 +74,48 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
 
         $em->flush();
+    }
+
+    private function getPersonalEvents(Connection $connection): array
+    {
+        $sql = 'SELECT * FROM personal_agenda ORDER BY id';
+        $result = $connection->executeQuery($sql);
+
+        return $result->fetchAllAssociative();
+    }
+
+    private function createCCalendarEvent(
+        string $title,
+        string $content,
+        ?DateTime $startDate,
+        ?DateTime $endDate,
+        bool $allDay,
+        string $color,
+        User $creator,
+        ?CCalendarEvent $parentEvent = null,
+    ): CCalendarEvent {
+        $calendarEvent = new CCalendarEvent();
+
+        $calendarEvent
+            ->setTitle($title)
+            ->setContent($content)
+            ->setStartDate($startDate)
+            ->setEndDate($endDate)
+            ->setAllDay($allDay)
+            ->setColor($color)
+            ->setCreator($creator)
+            ->setResourceName($title)
+        ;
+
+        if ($parentEvent) {
+            $calendarEvent
+                ->setParentEvent($parentEvent)
+                ->setParentResourceNode($parentEvent->getResourceNode()->getId())
+            ;
+        } else {
+            $calendarEvent->setParentResourceNode($creator->getResourceNode()->getId());
+        }
+
+        return $calendarEvent;
     }
 }

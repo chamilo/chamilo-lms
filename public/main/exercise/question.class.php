@@ -1505,26 +1505,16 @@ abstract class Question
         }
 
         echo '<li>';
-        echo '<div class="icon_image_content">';
+        echo '<div class="icon_image">';
         if (true == $objExercise->exercise_was_added_in_lp) {
-            echo Display::return_icon(
-                'database_na.png',
-                get_lang('Recycle existing questions'),
-                null,
-                ICON_SIZE_BIG
-            );
+            echo Display::getMdiIcon('database', 'ch-tool-icon-disabled mt-4', null, ICON_SIZE_BIG, get_lang('Recycle existing questions'));
         } else {
             if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
             } else {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
-            echo Display::return_icon(
-                'database.png',
-                get_lang('Recycle existing questions'),
-                null,
-                ICON_SIZE_BIG
-            );
+            echo Display::getMdiIcon('database', 'ch-tool-icon mt-4', 'display: block; height: auto;', ICON_SIZE_BIG, get_lang('Recycle existing questions'));
         }
         echo '</a>';
         echo '</div></li>';

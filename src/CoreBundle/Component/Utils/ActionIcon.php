@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Component\Utils;
 
 enum ActionIcon: string
 {
+    // Add
+    case ADD = 'plus-box';
     // Edit
     case EDIT = 'pencil';
     // Delete
@@ -126,4 +128,6 @@ enum ActionIcon: string
     case LOCK = 'lock';
     // Unlock
     case UNLOCK = 'lock-open-variant';
+    // Refresh/reload
+    case REFRESH = 'file-document-refresh';
 }

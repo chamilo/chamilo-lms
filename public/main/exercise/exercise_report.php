@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
@@ -423,27 +424,22 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('activity_monitor.png', get_lang('Live results'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('monitor-screenshot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Live results')).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('statistics.png', get_lang('Report by question'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Report by question')).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
-        Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('content-save', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         $actions .= Display::url(
-            Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('RecalculateResults')),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
         );
 
         // clean result before a selected date icon
         if ($allowClean) {
             $actions .= Display::url(
-                Display::return_icon(
-                    'clean_before_date.png',
-                    get_lang('Clean all results before a selected date'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('delete-clock', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Clean all results before a selected date')),
                 '#',
                 ['onclick' => 'javascript:display_date_picker()']
             );
@@ -473,12 +469,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
     }
 } else {
     $actions .= '<a href="exercise.php">'.
-        Display::return_icon(
-            'back.png',
-            get_lang('Go back to the questions list'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).
     '</a>';
 }
 

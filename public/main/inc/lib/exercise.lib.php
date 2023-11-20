@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
@@ -1653,7 +1654,7 @@ HOTSPOT;
                 $tmp[2] = $row['quiz_title'];
                 // Send do other test with r=1 to reset current test session variables
                 $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
-                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
+                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 if (0 == (int) $row['session_id']) {
                     $tmp[1] = '-';
                 }
@@ -2272,16 +2273,14 @@ HOTSPOT;
                                 $results[$i]['exe_user_id'],
                                 $teacher_id_list
                             )) {
-                                $actions .= Display::return_icon('teacher.png', get_lang('Trainer'));
+                                $actions .= Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Trainer'));
                             }
                         }
                         $revisedLabel = '';
                         switch ($revised) {
                             case 0:
                                 $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
-                                    Display:: return_icon(
-                                        'quiz.png',
-                                        get_lang('Grade activity')
+                                    Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity')
                                     );
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
@@ -2291,12 +2290,7 @@ HOTSPOT;
                                 break;
                             case 1:
                                 $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
-                                    Display:: return_icon(
-                                        'edit.png',
-                                        get_lang('Edit'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
                                     get_lang('Validated'),
@@ -2311,12 +2305,7 @@ HOTSPOT;
                                     .'&a=close&id='
                                     .$id
                                     .'">'.
-                                    Display:: return_icon(
-                                        'lock.png',
-                                        get_lang('Mark attempt as closed'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Mark attempt as closed'));
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
                                     get_lang('Unclosed'),
@@ -2324,12 +2313,7 @@ HOTSPOT;
                                 );
                                 break;
                             case 3: //still ongoing
-                                $actions .= Display:: return_icon(
-                                    'clock.png',
-                                    get_lang('Attempt still going on. Please wait.'),
-                                    [],
-                                    ICON_SIZE_SMALL
-                                );
+                                $actions .= Display::getMdiIcon('clock', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Attempt still going on. Please wait.'));
                                 $actions .= '';
                                 $revisedLabel = Display::label(
                                     get_lang('Ongoing'),
@@ -2340,9 +2324,7 @@ HOTSPOT;
 
                         if (2 == $filter) {
                             $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
-                                Display:: return_icon(
-                                    'history.png',
-                                    get_lang('View changes history')
+                                Display::getMdiIcon('clipboard-text-clock', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View changes history')
                                 ).'</a>';
                         }
 
@@ -2354,7 +2336,7 @@ HOTSPOT;
                                 false
                             );
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                .Display::return_icon('info.png', $ip)
+                                .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
                                 .'</a>';
 
                             $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
@@ -2365,7 +2347,7 @@ HOTSPOT;
                                     'user' => $results[$i]['exe_user_id'],
                                 ]);
                             $actions .= Display::url(
-                                Display::return_icon('reload.png', get_lang('Recalculate results')),
+                                Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Recalculate results')),
                                 $recalculateUrl,
                                 [
                                     'data-exercise' => $exercise_id,
@@ -2381,7 +2363,7 @@ HOTSPOT;
                                 onclick=
                                 "javascript:if(!confirm(\''.sprintf(addslashes(get_lang('Delete attempt?')), $results[$i]['username'], $dt).'\')) return false;"
                                 >';
-                            $delete_link .= Display::return_icon('delete.png', addslashes(get_lang('Delete'))).'</a>';
+                            $delete_link .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes(get_lang('Delete'))).'</a>';
 
                             if (api_is_drh() && !api_is_platform_admin()) {
                                 $delete_link = null;
@@ -2932,20 +2914,10 @@ EOT;
 
             if ($isSuccess) {
                 $html = get_lang('Congratulations you passed the test!');
-                $icon = Display::return_icon(
-                    'completed.png',
-                    get_lang('Correct'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = Display::getMdiIcon('check-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correct'));
             } else {
                 $html = get_lang('You didn\'t reach the minimum score');
-                $icon = Display::return_icon(
-                    'warning.png',
-                    get_lang('Wrong'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Wrong'));
             }
             $html = Display::tag('h4', $html);
             $html .= Display::tag(

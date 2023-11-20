@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Exercise preview.
  *
@@ -87,7 +89,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
 if ('mobileapp' === $origin) {
     $actions = '<a href="javascript:window.history.go(-1);">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 
@@ -99,18 +101,18 @@ $editLink = '';
 if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
             api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
         );
     }
     $editLink .= Display::url(
-        Display::return_icon('test_results.png', get_lang('Results and feedback and feedback'), [], ICON_SIZE_SMALL),
+        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results and feedback and feedback')),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
         ['title' => get_lang('Results and feedback and feedback')]
     );
 }
 
-$iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
+$iconExercise = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', null, ICON_SIZE_MEDIUM, get_lang('Exercise'));
 
 // Exercise name.
 if ('true' === api_get_setting('editor.save_titles_as_html')) {

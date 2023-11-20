@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise submission
@@ -1049,7 +1050,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 if ('mobileapp' == $origin) {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
     echo '</div>';
 }
 
@@ -1060,10 +1061,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     $actions = '';
     if (false == $show_quiz_edition) {
         $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-            Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).'</a>';
     } else {
         $actions .= '<a href="#">'.
-            Display::return_icon('settings_na.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('cog', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).
+            '</a>';
     }
     echo Display::toolbarAction('toolbar', [$actions]);
 }
@@ -1298,7 +1300,7 @@ if ($allowBlockCategory &&
 }
     $saveIcon = Display::return_icon(
         'save.png',
-        get_lang('Saved...'),
+        '',
         [],
         ICON_SIZE_SMALL,
         false,
@@ -1492,10 +1494,10 @@ if ($allowBlockCategory &&
                 success: function(return_value) {
                     if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        Display::getMdiIcon(ActionIcon::FORM_SAVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\');
                 } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                            Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
                 } else if (return_value.type == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
@@ -1518,7 +1520,7 @@ if ($allowBlockCategory &&
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\' + return_value.savedAnswerMessage);
+                        Display::getMdiIcon(ActionIcon::FORM_SAVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\' + return_value.savedAnswerMessage);
 
                     // Show popup
                     if ("check_answers" === url_extra) {
@@ -1569,7 +1571,7 @@ if ($allowBlockCategory &&
                 },
                 error: function() {
                     $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                        Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
                 }
             });
         }

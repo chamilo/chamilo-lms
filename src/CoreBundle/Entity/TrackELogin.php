@@ -23,7 +23,7 @@ class TrackELogin
     #[ORM\GeneratedValue]
     protected int $loginId;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'logins')]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'logins', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'login_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

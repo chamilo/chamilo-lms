@@ -123,6 +123,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
 $allowLpItemTip = ('false' === api_get_setting('lp.hide_accessibility_label_on_lp_item'));
 
 if ($allowLpItemTip) {
+    $htmlHeadXtra[] = api_get_asset('qtip2/dist/jquery.qtip.js');
     $htmlHeadXtra[] = '<script>
     $(function() {
          $(".scorm_item_normal").qtip({

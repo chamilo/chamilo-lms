@@ -128,7 +128,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setPlainPassword('anon')
             ->setEmail('anon_' . $uniqueId . '@localhost.local')
             ->setOfficialCode('anonymous')
-            ->setCreatorId(1);
+            ->setCreatorId(1)
+            ->addRole('ROLE_ANONYMOUS');
 
         $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();

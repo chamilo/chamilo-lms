@@ -49,7 +49,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('collective')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) NOT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) DEFAULT 0 NOT NULL');
         }
 
         $table = $schema->getTable('c_calendar_event_attachment');

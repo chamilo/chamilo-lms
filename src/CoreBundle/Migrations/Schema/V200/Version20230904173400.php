@@ -67,7 +67,8 @@ class Version20230904173400 extends AbstractMigrationChamilo
                 (bool) $personalAgenda['all_day'],
                 $personalAgenda['color'],
                 $user,
-                $newParent
+                $newParent,
+                $collectiveInvitationsEnabled ? $personalAgenda['collective'] : false
             );
 
             $map[$personalAgenda['id']] = $calendarEvent;
@@ -103,6 +104,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         string $color,
         User $creator,
         ?CCalendarEvent $parentEvent = null,
+        bool $collective = false
     ): CCalendarEvent {
         $calendarEvent = new CCalendarEvent();
 
@@ -115,6 +117,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
             ->setColor($color)
             ->setCreator($creator)
             ->setResourceName($title)
+            ->setCollective($collective)
         ;
 
         if ($parentEvent) {

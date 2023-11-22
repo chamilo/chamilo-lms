@@ -128,7 +128,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
 
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
-    #[ORM\Column(name: 'collective', type: 'boolean', nullable: false)]
+    #[ORM\Column(name: 'collective', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $collective = false;
 
     public function __construct()

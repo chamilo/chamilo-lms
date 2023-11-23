@@ -39,7 +39,7 @@ class DetailController extends BaseController
 
         $user = api_get_user_entity($exe->getExeUserId());
 
-        $objExercise = new Exercise();
+        $objExercise = new Exercise($exe->getCId());
         $objExercise->read($exe->getExeExoId());
 
         $logs = $this->logRepository->findBy(['exe' => $exe], ['updatedAt' => 'ASC']);

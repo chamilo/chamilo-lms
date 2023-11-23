@@ -73,7 +73,7 @@ class DetailController
         $exercise = $this->em->find(CQuiz::class, $trackExe->getExeExoId());
         $user = api_get_user_entity($trackExe->getExeUserId());
 
-        $objExercise = new Exercise();
+        $objExercise = new Exercise($trackExe->getCId());
         $objExercise->read($trackExe->getExeExoId());
 
         $logs = $this->logRepository->findSnapshots($objExercise, $trackExe);

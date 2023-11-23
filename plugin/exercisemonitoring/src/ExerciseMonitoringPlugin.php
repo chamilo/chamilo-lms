@@ -117,15 +117,16 @@ class ExerciseMonitoringPlugin extends Plugin
         return "$webPath/admin.php";
     }
 
-    public function generateDetailLink(int $id): string
+    public function generateDetailLink(int $exeId, int $userId): string
     {
         $title = $this->get_lang('ExerciseMonitored');
         $webcamIcon = Display::return_icon('webcam.png', $title);
+        $webcamNaIcon = Display::return_icon('webcam_na.png', $this->get_lang('ExerciseUnmonitored'));
 
         $monitoringDetailUrl = api_get_path(WEB_PLUGIN_PATH).'exercisemonitoring/pages/detail.php?'.api_get_cidreq()
-            .'&'.http_build_query(['id' => $id]);
+            .'&'.http_build_query(['id' => $exeId]);
 
-        return Display::url(
+        $url =  Display::url(
             $webcamIcon,
             $monitoringDetailUrl,
             [
@@ -134,6 +135,14 @@ class ExerciseMonitoringPlugin extends Plugin
                 'data-size' => 'lg',
             ]
         );
+
+        $showLink = true;
+
+        if ('true' === $this->get(self::SETTING_INSTRUCTION_AGE_DISTINCTION_ENABLE) && !$this->isAdult($userId)) {
+            $showLink = false;
+        }
+
+        return $showLink ? $url : $webcamNaIcon;
     }
 
     public static function generateSnapshotUrl(int $userId, string $imageFileName): string
@@ -146,9 +155,9 @@ class ExerciseMonitoringPlugin extends Plugin
     /**
      * @throws Exception
      */
-    public function isAdult(): bool
+    public function isAdult(int $userId = 0): bool
     {
-        $userId = api_get_user_id();
+        $userId = $userId ?: api_get_user_id();
         $fieldVariable = $this->get(self::SETTING_EXTRAFIELD_BIRTHDATE);
         $legalAge = (int) $this->get(self::SETTING_INSTRUCTION_LEGAL_AGE);
 

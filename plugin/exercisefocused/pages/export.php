@@ -62,6 +62,21 @@ foreach ($results as $result) {
         $user->getLastname(),
     ];
 
+    if ($monitoringPluginIsEnabled
+        && 'true' === $monitoringPlugin->get(ExerciseMonitoringPlugin::SETTING_INSTRUCTION_AGE_DISTINCTION_ENABLE)
+    ) {
+        $fieldVariable = $monitoringPlugin->get(ExerciseMonitoringPlugin::SETTING_EXTRAFIELD_BIRTHDATE);
+        $birthdateValue = UserManager::get_extra_user_data_by_field($user->getId(), $fieldVariable);
+
+        $data[] = [
+            $monitoringPlugin->get_lang('Birthdate'),
+            $birthdateValue ? $birthdateValue[$fieldVariable] : '----',
+            $monitoringPlugin->isAdult($user->getId())
+                ? $monitoringPlugin->get_lang('AdultStudent')
+                : $monitoringPlugin->get_lang('MinorStudent'),
+        ];
+    }
+
     if ($trackExe->getSessionId()) {
         $data[] = [
             get_lang('SessionName'),
@@ -148,7 +163,6 @@ foreach ($results as $result) {
     $data[] = [];
 }
 
-//var_dump($data);
 Export::arrayToXls($data);
 
 function getSessionIdFromFormValues(array $formValues, array $fieldVariableList): array

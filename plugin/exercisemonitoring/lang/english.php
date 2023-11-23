@@ -23,3 +23,8 @@ $strings['ImageIdDocumentCameraInstructions'] = "Place your ID document in front
 $strings['ImageStudentCameraInstructions'] = "Place your face in front of the camera and place it within the marked circle. Click the <i>Capture</i> button or press the space bar on your keyboard";
 
 $strings['Snapshots'] = "Snapshots";
+
+$strings['ExerciseUnmonitored'] = "Exercise unmonitored";
+$strings['Birthdate'] = "Birthdate";
+$strings['AdultStudent'] = "Adult student";
+$strings['MinorStudent'] = "Minor student";

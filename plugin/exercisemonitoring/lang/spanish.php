@@ -24,3 +24,8 @@ $strings['ImageIdDocumentCameraInstructions'] = "Coloca tu DNI o documento de id
 $strings['ImageStudentCameraInstructions'] = "Coloca tu rostro frente a la cámara y ubícalo dentro del círculo marcado. Dale click al botón <i>Capturar</i> o presiona la barra de espacio de tu teclado";
 
 $strings['Snapshots'] = "Fotos tomadas";
+
+$strings['ExerciseUnmonitored'] = "Ejercicio no monitoreado";
+$strings['Birthdate'] = "Fecha de nacimiento";
+$strings['AdultStudent'] = "Estudiante adulto";
+$strings['MinorStudent'] = "Estudiante menor de edad";

@@ -59,6 +59,13 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
 {
     public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
 
+    public const TYPE_INVITATION = 'invitation';
+    public const TYPE_SUBSCRIPTION = 'subscription';
+
+    public const SUBSCRIPTION_VISIBILITY_NO = 0;
+    public const SUBSCRIPTION_VISIBILITY_ALL = 1;
+    public const SUBSCRIPTION_VISIBILITY_CLASS = 2;
+
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -130,6 +137,18 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $collective = false;
+
+    #[ORM\Column(name: 'invitaion_type', type: 'string', options: ['default' => self::TYPE_INVITATION])]
+    protected string $invitaionType = self::TYPE_INVITATION;
+
+    #[ORM\Column(name: 'subscription_visibility', type: 'integer', options: ['default' => self::SUBSCRIPTION_VISIBILITY_NO])]
+    protected int $subscriptionVisibility = self::SUBSCRIPTION_VISIBILITY_NO;
+
+    #[ORM\Column(name: 'subscription_item_id', type: 'integer', nullable: true)]
+    protected ?int $subscriptionItemId = null;
+
+    #[ORM\Column(name: 'max_attendees', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $maxAttendees = 0;
 
     public function __construct()
     {
@@ -348,6 +367,54 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     public function setCollective(bool $collective): self
     {
         $this->collective = $collective;
+
+        return $this;
+    }
+
+    public function getInvitaionType(): string
+    {
+        return $this->invitaionType;
+    }
+
+    public function setInvitaionType(string $invitaionType): CCalendarEvent
+    {
+        $this->invitaionType = $invitaionType;
+
+        return $this;
+    }
+
+    public function getSubscriptionVisibility(): int
+    {
+        return $this->subscriptionVisibility;
+    }
+
+    public function setSubscriptionVisibility(int $subscriptionVisibility): CCalendarEvent
+    {
+        $this->subscriptionVisibility = $subscriptionVisibility;
+
+        return $this;
+    }
+
+    public function getSubscriptionItemId(): ?int
+    {
+        return $this->subscriptionItemId;
+    }
+
+    public function setSubscriptionItemId(?int $subscriptionItemId): CCalendarEvent
+    {
+        $this->subscriptionItemId = $subscriptionItemId;
+
+        return $this;
+    }
+
+    public function getMaxAttendees(): int
+    {
+        return $this->maxAttendees;
+    }
+
+    public function setMaxAttendees(int $maxAttendees): CCalendarEvent
+    {
+        $this->maxAttendees = $maxAttendees;
 
         return $this;
     }

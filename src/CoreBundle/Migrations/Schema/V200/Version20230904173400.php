@@ -67,8 +67,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                 (bool) $personalAgenda['all_day'],
                 $personalAgenda['color'],
                 $user,
-                $newParent,
-                $collectiveInvitationsEnabled ? $personalAgenda['collective'] : false
+                $newParent
             );
 
             $map[$personalAgenda['id']] = $calendarEvent;
@@ -76,11 +75,44 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $em->persist($calendarEvent);
 
             if ($collectiveInvitationsEnabled) {
-                $this->processInvitees(
-                    $subscriptionsEnabled,
-                    (int) $personalAgenda['id'],
+                $calendarEvent->setCollective($personalAgenda['collective']);
+
+                $hasSubscriptions = false;
+                $invitationsOrSubscriptionsInfo = [];
+
+                if ($subscriptionsEnabled) {
+                    $subscriptionsInfo = $this->getSubscriptions((int) $personalAgenda['id']);
+
+                    if (count($subscriptionsInfo) > 0) {
+                        $hasSubscriptions = true;
+
+                        $invitationsOrSubscriptionsInfo = $subscriptionsInfo;
+                    }
+                }
+
+                if ($hasSubscriptions) {
                     $calendarEvent
-                );
+                        ->setInvitaionType(CCalendarEvent::TYPE_SUBSCRIPTION)
+                        ->setSubscriptionVisibility($personalAgenda['subscription_visibility'])
+                        ->setSubscriptionItemId($personalAgenda['subscription_item_id'])
+                    ;
+                } else {
+                    $calendarEvent->setInvitaionType(CCalendarEvent::TYPE_INVITATION);
+
+                    $invitationsOrSubscriptionsInfo = $this->getInvitations($subscriptionsEnabled, (int) $personalAgenda['id']);
+                }
+
+                foreach ($invitationsOrSubscriptionsInfo as $invitationOrSubscriptionInfo) {
+                    $inviteesOrSubscribersInfo = $this->getInviteesOrSubscribers($invitationOrSubscriptionInfo['id']);
+
+                    foreach ($inviteesOrSubscribersInfo as $oldInviteeOrSubscriberInfo) {
+                        $user = $em->find(User::class, $oldInviteeOrSubscriberInfo['user_id']);
+
+                        if ($user) {
+                            $calendarEvent->addUserLink($user);
+                        }
+                    }
+                }
             }
         }
 
@@ -103,8 +135,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         bool $allDay,
         string $color,
         User $creator,
-        ?CCalendarEvent $parentEvent = null,
-        bool $collective = false
+        ?CCalendarEvent $parentEvent = null
     ): CCalendarEvent {
         $calendarEvent = new CCalendarEvent();
 
@@ -117,7 +148,6 @@ class Version20230904173400 extends AbstractMigrationChamilo
             ->setColor($color)
             ->setCreator($creator)
             ->setResourceName($title)
-            ->setCollective($collective)
         ;
 
         if ($parentEvent) {
@@ -152,17 +182,12 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
     }
 
-    private function getInvitees(bool $subscriptionEnabled, int $invitationId): array
+    private function getInviteesOrSubscribers(int $invitationId): array
     {
         $sql = "SELECT id, user_id, created_at, updated_at
             FROM agenda_event_invitee
-            WHERE invitation_id = $invitationId";
-
-        if ($subscriptionEnabled) {
-            $sql .= " AND type = 'invitee'";
-        }
-
-        $sql .= ' ORDER BY created_at ASC';
+            WHERE invitation_id = $invitationId
+            ORDER BY created_at ASC";
 
         try {
             $result = $this->connection->executeQuery($sql);
@@ -173,27 +198,20 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
     }
 
-    private function processInvitees(
-        bool $subscriptionsEnabled,
-        int $personalAgendaId,
-        CCalendarEvent $cCalendarEvent
-    ): void {
-        $em = $this->getEntityManager();
+    private function getSubscriptions(int $personalAgendaId): array
+    {
+        $sql = "SELECT i.id, i.creator_id, i.created_at, i.updated_at
+            FROM agenda_event_invitation i
+            INNER JOIN personal_agenda pa ON i.id = pa.agenda_event_invitation_id
+            WHERE pa.id = $personalAgendaId
+                AND i.type = 'subscription'";
 
-        $invitationsInfo = $this->getInvitations($subscriptionsEnabled, $personalAgendaId);
+        try {
+            $result = $this->connection->executeQuery($sql);
 
-        foreach ($invitationsInfo as $invitationInfo) {
-            $inviteesInfo = $this->getInvitees($subscriptionsEnabled, $invitationInfo['id']);
-
-            foreach ($inviteesInfo as $inviteeInfo) {
-                $user = $em->find(User::class, $inviteeInfo['user_id']);
-
-                if (!$user) {
-                    continue;
-                }
-
-                $cCalendarEvent->addUserLink($user);
-            }
+            return $result->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception) {
+            return [];
         }
     }
 }

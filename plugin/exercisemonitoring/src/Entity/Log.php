@@ -56,6 +56,18 @@ class Log
      */
     private $imageFilename;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="removed", type="boolean", nullable=false, options={"default": false})
+     */
+    private $removed;
+
+    public function __construct()
+    {
+        $this->removed = false;
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -107,5 +119,15 @@ class Log
         $this->imageFilename = $imageFilename;
 
         return $this;
+    }
+
+    public function isRemoved(): bool
+    {
+        return $this->removed;
+    }
+
+    public function setRemoved(bool $removed): void
+    {
+        $this->removed = $removed;
     }
 }

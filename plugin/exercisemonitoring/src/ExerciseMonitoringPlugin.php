@@ -16,6 +16,7 @@ class ExerciseMonitoringPlugin extends Plugin
     public const SETTING_EXTRAFIELD_BIRTHDATE = 'extrafield_birtdate';
     public const SETTING_INSTRUCTIONS_ADULTS = 'instructions_adults';
     public const SETTING_INSTRUCTIONS_MINORS = 'instructions_minors';
+    public const SETTING_SNAPSHOTS_LIFETIME = 'snapshots_lifetime';
 
     public const FIELD_SELECTED = 'exercisemonitoring_selected';
 
@@ -33,6 +34,7 @@ class ExerciseMonitoringPlugin extends Plugin
             self::SETTING_EXTRAFIELD_BIRTHDATE => 'text',
             self::SETTING_INSTRUCTIONS_ADULTS => 'wysiwyg',
             self::SETTING_INSTRUCTIONS_MINORS => 'wysiwyg',
+            self::SETTING_SNAPSHOTS_LIFETIME => 'text',
         ];
 
         parent::__construct(
@@ -145,9 +147,12 @@ class ExerciseMonitoringPlugin extends Plugin
         return $showLink ? $url : $webcamNaIcon;
     }
 
-    public static function generateSnapshotUrl(int $userId, string $imageFileName): string
-    {
-        $pluginDirName = api_get_path(WEB_UPLOAD_PATH).'plugins/exercisemonitoring';
+    public static function generateSnapshotUrl(
+        int $userId,
+        string $imageFileName,
+        string $path = WEB_UPLOAD_PATH
+    ): string {
+        $pluginDirName = api_get_path($path).'plugins/exercisemonitoring';
 
         return $pluginDirName.'/'.$userId.'/'.$imageFileName;
     }

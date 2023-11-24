@@ -13,6 +13,8 @@ $strings['extrafield_birtdate'] = 'Extra field for birthdate';
 $strings['extrafield_birtdate_help'] = 'The name of the field with which age will be calculated, e.g. <code>birthdate</code>';
 $strings['instructions_adults'] = 'Intructions for adults students';
 $strings['instructions_minors'] = 'Intrucctions for minors students';
+$strings['snapshots_lifetime'] = 'Life time of photos taken';
+$strings['snapshots_lifetime_help'] = 'Number of days that taken photos can remain stored on the server.<br>The cleanup script is located in <code>plugin/exercisemonitoring/cron/cleanup.php</code>';
 
 $strings['ExerciseMonitored'] = "Exercise monitored";
 $strings['Retry'] = "Retry";

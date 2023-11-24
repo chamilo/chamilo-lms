@@ -13,7 +13,8 @@ $strings['extrafield_birtdate'] = 'Campo extra para fecha de nacimiento';
 $strings['extrafield_birtdate_help'] = 'El nombre del campo con el cual se calculará la edad, por ejemplo <code>birthdate</code>';
 $strings['instructions_adults'] = 'Intrucciones para estudiantes adultos';
 $strings['instructions_minors'] = 'Intrucciones para estudiantes menores de edad';
-
+$strings['snapshots_lifetime'] = 'Tiempo de vida de las fotos tomadas';
+$strings['snapshots_lifetime_help'] = 'Cantidad de días que las fotos tomadas pueden permanecer almacenadas en el servidor.<br>El script de limpieza está ubicado en <code>plugin/exercisemonitoring/cron/cleanup.php</code>';
 
 $strings['ExerciseMonitored'] = "Ejercicio monitoreado";
 $strings['Retry'] = "Reintentar";

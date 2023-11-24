@@ -70,17 +70,19 @@
         .exercisefocused-backdrop::before {
             background-color: #FFF;
             content: attr(data-alert);
-            display: none;
+            display: block;
             font-size: 18px;
             font-weight: 700;
             margin: 50px auto;
+            opacity: 0;
             padding: 10px;
             position: relative;
             text-align: center;
+            transition: opacity 3s ease;
             width: 340px;
         }
         .exercisefocused-backdrop:hover::before {
-            display: block;
+            opacity: 1;
         }
 
         form#exercise_form {

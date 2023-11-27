@@ -352,12 +352,15 @@ trait ReportingFilterTrait
                 continue;
             }
 
-            $itemValue = $objFieldValue->get_item_id_from_field_variable_and_field_value(
+            $itemValues = $objFieldValue->get_item_id_from_field_variable_and_field_value(
                 $fieldVariable,
-                $formValues["extra_$fieldVariable"]
+                $formValues["extra_$fieldVariable"],
+                false,
+                false,
+                true
             );
 
-            if ($itemValue) {
+            foreach ($itemValues as $itemValue) {
                 $fieldItemIdList[] = (int) $itemValue['item_id'];
             }
         }

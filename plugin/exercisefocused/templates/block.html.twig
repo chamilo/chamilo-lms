@@ -58,10 +58,9 @@
         }
 
         .exercisefocused-backdrop {
-            background-color: rgba(0, 0, 0, 0.01);
+            background-color: rgba(0, 0, 0, 0.02);
             cursor: not-allowed;
             height: 100%;
-            opacity: 1;
             position: fixed;
             top: 0;
             width: 100%;
@@ -78,11 +77,18 @@
             padding: 10px;
             position: relative;
             text-align: center;
-            transition: opacity 3s ease;
             width: 340px;
+            transition: opacity 0.2s ease-in-out;
         }
         .exercisefocused-backdrop:hover::before {
             opacity: 1;
+        }
+
+        .exercisefocused-backdrop.inmediate::before {
+            transition-delay: 3s !important;
+        }
+        .exercisefocused-backdrop.out::before {
+            transition-delay: 0s !important;
         }
 
         form#exercise_form {

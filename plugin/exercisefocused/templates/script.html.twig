@@ -17,7 +17,11 @@
 
         var $backdrop = $('<div>')
             .addClass('exercisefocused-backdrop text-danger')
-            .attr('data-alert', '{{ 'AlertBeforeLeaving'|get_plugin_lang('ExerciseFocusedPlugin') }}');
+            .attr('data-alert', '{{ 'AlertBeforeLeaving'|get_plugin_lang('ExerciseFocusedPlugin') }}')
+            .hover(
+                function () {$backdrop.removeClass('out').addClass('inmediate'); },
+                function () { $backdrop.addClass('out').removeClass('inmediate'); }
+            );
 
         var $btnSaveNow = $('button[name="save_now"]');
 
@@ -132,7 +136,12 @@
 
             document.title = initDocumentTitle;
 
-            $exerciseFocused.hide();
+            window.setTimeout(
+                function () {
+                    $exerciseFocused.hide();
+                },
+                1500
+            );
 
             {% if enable_time_limit %}
                 clearInterval(countdownInterval);

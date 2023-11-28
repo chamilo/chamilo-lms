@@ -36,6 +36,7 @@ import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
 //import Contact from "../pages/Contact.vue"
 import Demo from "../pages/Demo.vue"
+import personalDataRoutes from "./personaldata"
 
 import { useCidReqStore } from "../store/cidReq"
 
@@ -162,6 +163,7 @@ const router = createRouter({
     calendarEventRoutes,
     toolIntroRoutes,
     pageRoutes,
+    personalDataRoutes,
   ],
 })
 

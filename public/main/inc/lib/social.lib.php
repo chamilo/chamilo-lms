@@ -1068,15 +1068,17 @@ class SocialManager extends UserManager
         }
 
         $userInfo['is_admin'] = UserManager::is_admin($userId);
-        $languageId = api_get_language_from_iso($userInfo['language']);
-        $languageInfo = api_get_language_info($languageId);
-        if ($languageInfo) {
+        $language = api_get_language_from_iso($userInfo['language']);
+
+        if ($language) {
             $userInfo['language'] = [
-                'label' => $languageInfo['original_name'],
-                'value' => $languageInfo['english_name'],
-                'code' => $languageInfo['isocode'],
+                'label' => $language->getOriginalName(),
+                'value' => $language->getEnglishName(),
+                'code' => $language->getIsocode(),
             ];
         }
+
+        error_log('$userInfo ->'.print_r($userInfo['language'], true));
 
         if (isset($options['language']) && false === $options['language']) {
             $userInfo['language'] = '';

@@ -569,7 +569,7 @@ class SessionManager
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
-                    $sqlInjectJoins .= " INNER JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
+                    $sqlInjectJoins .= " LEFT JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
                     $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
                 } else {
                     $where .= " AND c.course_language = '$isoCode' ";

@@ -901,7 +901,7 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
-    public function checkEnrollments(EntityManagerInterface $em): JsonResponse
+    public function checkEnrollments(EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
     {
         /** @var User|null $user */
         $user = $this->getUser();
@@ -911,8 +911,13 @@ class CourseController extends ToolBaseController
         }
 
         $isEnrolledInCourses = $this->isUserEnrolledInAnyCourse($user, $em);
-
         $isEnrolledInSessions = $this->isUserEnrolledInAnySession($user, $em);
+
+        if (!$isEnrolledInCourses && !$isEnrolledInSessions) {
+            $defaultMenuEntry = $settingsManager->getSetting('platform.default_menu_entry_for_course_or_session');
+            $isEnrolledInCourses = 'my_courses' === $defaultMenuEntry;
+            $isEnrolledInSessions = 'my_sessions' === $defaultMenuEntry;
+        }
 
         return new JsonResponse([
             'isEnrolledInCourses' => $isEnrolledInCourses,
@@ -923,19 +928,20 @@ class CourseController extends ToolBaseController
     // Implement the real logic to check course enrollment
     private function isUserEnrolledInAnyCourse(User $user, EntityManagerInterface $em): bool
     {
-        $enrollment = $em
+        $enrollmentCount = $em
             ->getRepository(CourseRelUser::class)
-            ->findOneBy(['user' => $user]);
+            ->count(['user' => $user]);
 
-        return null !== $enrollment;
+        return $enrollmentCount > 0;
     }
 
     // Implement the real logic to check session enrollment
     private function isUserEnrolledInAnySession(User $user, EntityManagerInterface $em): bool
     {
-        $enrollment = $em->getRepository(SessionRelUser::class)
-            ->findOneBy(['user' => $user]);
+        $enrollmentCount = $em->getRepository(SessionRelUser::class)
+            ->count(['user' => $user]);
 
-        return null !== $enrollment;
+        return $enrollmentCount > 0;
     }
+
 }

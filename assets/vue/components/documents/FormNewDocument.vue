@@ -1,14 +1,17 @@
 <template>
   <q-form>
-    <q-input
-      id="item_title"
-      v-model="item.title"
-      :error="v$.item.title.$error"
-      :error-message="titleErrors"
-      :placeholder="$t('Title')"
-      @blur="v$.item.title.$touch()"
-      @input="v$.item.title.$touch()"
-    />
+
+    <div class="p-field">
+      <InputText
+        id="item_title"
+        v-model.trim="item.title"
+        :error="v$.item.title.$error"
+        :error-message="titleErrors"
+        :placeholder="$t('Title')"
+        @blur="v$.item.title.$touch()"
+        @input="v$.item.title.$touch()"
+      />
+    </div>
 
     <TinyEditor
       v-if="

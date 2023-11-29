@@ -164,7 +164,9 @@ $(function() {
     function repopulateFormValues() {
         var formValues = JSON.parse(sessionStorage.getItem('formValues'));
         $.each(formValues, function(i, field) {
-            $('[name=\"' + field.name + '\"]').val(field.value);
+            if (field.name === 'coach_username' || field.name === 'name' || field.name === 'system_template') {
+                $('[name=\"' + field.name + '\"]').val(field.value);
+            }
         });
     }
 
@@ -225,9 +227,9 @@ if (!$formSent) {
             'show_description' => $session->getShowDescription(),
             'duration' => $session->getDuration(),
             'session_visibility' => $session->getVisibility(),
-            'display_start_date2' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
+            'display_start_date' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
             'display_end_date' => $session->getDisplayEndDate() ? api_get_local_time($session->getDisplayEndDate()) : null,
-            'access_start_date2' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
+            'access_start_date' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
             'access_end_date' => $session->getAccessEndDate() ? api_get_local_time($session->getAccessEndDate()) : null,
             'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
             'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
@@ -241,7 +243,7 @@ if (!$formSent) {
             'session_template' => $session->getName(),
         ];
     } else {
-        $formDefaults['access_start_date2'] = $formDefaults['display_start_date2'] = api_get_local_time();
+        $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
         $formDefaults['coach_username'] = [api_get_user_id()];
     }
 }

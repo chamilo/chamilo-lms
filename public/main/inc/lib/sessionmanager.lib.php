@@ -8121,9 +8121,9 @@ class SessionManager
 
         // Dates
         $form->addDateTimePicker(
-            'access_start_date2',
+            'access_start_date',
             [get_lang('Access start'), get_lang('Date on which the session is made available to all')],
-            ['id' => 'access_start_date2']
+            ['id' => 'access_start_date']
         );
 
         $form->addDateTimePicker(
@@ -8133,19 +8133,19 @@ class SessionManager
         );
 
         $form->addRule(
-            ['access_start_date2', 'access_end_date'],
+            ['access_start_date', 'access_end_date'],
             get_lang('Start date must be before the end date'),
             'compare_datetime_text',
             '< allow_empty'
         );
 
         $form->addDateTimePicker(
-            'display_start_date2',
+            'display_start_date',
             [
                 get_lang('Start date to display'),
                 get_lang('Date that will be shown in the session information as the date on which the session starts'),
             ],
-            ['id' => 'display_start_date2']
+            ['id' => 'display_start_date']
         );
 
         $form->addDateTimePicker(
@@ -8158,7 +8158,7 @@ class SessionManager
         );
 
         $form->addRule(
-            ['display_start_date2', 'display_end_date'],
+            ['display_start_date', 'display_end_date'],
             get_lang('Start date must be before the end date'),
             'compare_datetime_text',
             '< allow_empty'

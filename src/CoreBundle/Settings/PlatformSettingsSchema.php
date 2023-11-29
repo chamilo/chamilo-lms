@@ -39,10 +39,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'institution_url' => 'http://www.chamilo.org',
                     'institution_address' => '',
                     'site_name' => 'Chamilo site',
-                    //                    'administrator_email' => 'admin@example.org',
-                    //                    'administrator_name' => 'Jane',
-                    //                    'administrator_surname' => 'Doe',
-                    //                    'administrator_phone' => '123456',
                     'timezone' => 'Europe/Paris',
                     'theme' => 'chamilo',
                     'gravatar_enabled' => 'false',
@@ -60,13 +56,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'prod',
-                    // Chamilo mode
                     'show_tabs' => array_values(self::$tabs),
                     'chamilo_database_version' => '2.0.0',
-                    //
-                    //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
-                    //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
-                    //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
                     'theme_fallback' => 'chamilo',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'packager' => 'chamilo',
@@ -112,6 +103,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'disable_user_conditions_sender_id' => '0',
                     'portfolio_advanced_sharing' => 'false',
                     'redirect_index_to_url_for_logged_users' => '',
+                    'default_menu_entry_for_course_or_session' => 'my_courses',
                 ]
             )
             ->setTransformer(
@@ -123,15 +115,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'institution' => ['string'],
             'institution_url' => ['string'],
             'site_name' => ['string'],
-            //                    'administrator_email' => array('string'),
-            //                    'administrator_name' => array('string'),
-            //                    'administrator_surname' => array('string'),
-            //                    'administrator_phone' => array('string'),
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
             'show_tabs' => ['array', 'null'],
-            //'gamification_mode' => array('string'),
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -144,10 +131,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('institution_url', UrlType::class)
             ->add('institution_address')
             ->add('site_name')
-//            ->add('administrator_email', 'email')
-//            ->add('administrator_name')
-//            ->add('administrator_surname')
-//            ->add('administrator_phone')
             ->add('timezone', TimezoneType::class)
             ->add('theme')
             ->add('gravatar_enabled', YesNoType::class)
@@ -351,6 +334,16 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('disable_user_conditions_sender_id', TextType::class)
             ->add('portfolio_advanced_sharing', TextType::class)
             ->add('redirect_index_to_url_for_logged_users', TextType::class)
+            ->add(
+                'default_menu_entry_for_course_or_session',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'My Courses' => 'my_courses',
+                        'My Sessions' => 'my_sessions',
+                    ],
+                ]
+            )
         ;
     }
 

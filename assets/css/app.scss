@@ -451,6 +451,17 @@ table#skill_holder {
   padding: 20px 0px;
 }
 
+#date_fields label {
+  top: 0px;
+  left: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(46 117 163 / var(--tw-text-opacity));
+}
+
 /* ****************************************************
                      END SKILL
  **************************************************** */

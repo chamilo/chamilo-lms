@@ -86,48 +86,6 @@ class DateTimePicker extends HTML_QuickForm_text
                     }
                 };
                 $('#{$id}').flatpickr(config);
-
-                /*
-
-                var txtDateTime = $('#$id'),
-                    inputGroup = txtDateTime.parents('.input-group'),
-                    txtDateTimeAlt = $('#{$id}_alt'),
-                    txtDateTimeAltText = $('#{$id}_alt_text');
-                txtDateTime
-                    .hide()
-                    .datetimepicker({
-                        defaultDate: '".$this->getValue()."',
-                        dateFormat: 'yy-mm-dd',
-                        timeFormat: 'HH:mm',
-                        altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('MM dd, yy')."\",
-                        altTimeFormat: \"".get_lang('HH:mm')."\",
-                        altSeparator: \" ".get_lang(' at')." \",
-                        altFieldTimeOnly: false,
-                        showOn: 'both',
-                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
-                        buttonImageOnly: true,
-                        buttonText: '".get_lang('Select date')."',
-                        changeMonth: true,
-                        changeYear: true
-                    })
-                    .on('change', function (e) {
-                        txtDateTimeAltText.text(txtDateTimeAlt.val());
-                    });
-
-                txtDateTimeAltText.on('click', function () {
-                    txtDateTime.datepicker('show');
-                });
-
-                inputGroup
-                    .find('button')
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        $('#$id, #{$id}_alt').val('');
-                        $('#{$id}_alt_text').html('');
-                    });
-                */
             });
         </script>";
 

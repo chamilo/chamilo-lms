@@ -78,12 +78,28 @@ function search_coachs($needle)
     return $xajax_response;
 }
 
+$urlAction = api_get_self();
+$session = null;
+$fromSessionId = null;
+$accessSelected = 0;
+if (isset($_GET['fromSessionId'])) {
+    $fromSessionId = (int) $_GET['fromSessionId'];
+    $session = api_get_session_entity($fromSessionId);
+    if ($session && 0 === (int) $session->getDuration()) {
+        $accessSelected = 1;
+    }
+    $urlAction .= '?fromSessionId=' . $fromSessionId;
+}
+
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    accessSwitcher(0);
+   setTimeout(function() {
+        $('#access').val('".$accessSelected."').trigger('change');
+        accessSwitcher('".$accessSelected."');
+    }, 1000);
 });
 
 function fill_coach_field (username) {
@@ -121,8 +137,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 $tool_name = get_lang('Add a training session');
 
-$urlAction = api_get_self();
-
 function check_session_name($name)
 {
     $session = SessionManager::get_session_by_name($name);
@@ -130,13 +144,6 @@ function check_session_name($name)
     return empty($session) ? true : false;
 }
 
-$session = null;
-$fromSessionId = null;
-if (isset($_GET['fromSessionId'])) {
-    $fromSessionId = (int) $_GET['fromSessionId'];
-    $session = api_get_session_entity($fromSessionId);
-    $urlAction .= '?fromSessionId=' . $fromSessionId;
-}
 $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form, null, $fromSessionId);
@@ -218,9 +225,9 @@ if (!$formSent) {
             'show_description' => $session->getShowDescription(),
             'duration' => $session->getDuration(),
             'session_visibility' => $session->getVisibility(),
-            'display_start_date' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
+            'display_start_date2' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
             'display_end_date' => $session->getDisplayEndDate() ? api_get_local_time($session->getDisplayEndDate()) : null,
-            'access_start_date' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
+            'access_start_date2' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
             'access_end_date' => $session->getAccessEndDate() ? api_get_local_time($session->getAccessEndDate()) : null,
             'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
             'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
@@ -234,7 +241,7 @@ if (!$formSent) {
             'session_template' => $session->getName(),
         ];
     } else {
-        $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
+        $formDefaults['access_start_date2'] = $formDefaults['display_start_date2'] = api_get_local_time();
         $formDefaults['coach_username'] = [api_get_user_id()];
     }
 }
@@ -244,9 +251,9 @@ $form->setDefaults($formDefaults);
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     $name = $params['name'];
-    $startDate = $params['access_start_date'];
+    $startDate = $params['access_start_date2'];
     $endDate = $params['access_end_date'];
-    $displayStartDate = $params['display_start_date'];
+    $displayStartDate = $params['display_start_date2'];
     $displayEndDate = $params['display_end_date'];
     $coachStartDate = $params['coach_access_start_date'];
     if (empty($coachStartDate)) {

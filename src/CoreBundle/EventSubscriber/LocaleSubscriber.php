@@ -51,25 +51,11 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $loadFromDb = $request->getSession()->get('check_locale_from_db', true);
-
-        if (false === $loadFromDb &&
-            $request->getSession()->has('_locale') &&
-            !empty($request->getSession()->get('_locale'))
-        ) {
-            $locale = $request->getSession()->get('_locale');
-            $request->setLocale($locale);
-
-            return;
-        }
-
-        if ($loadFromDb) {
-            $locale = $this->getCurrentLanguage($request);
-            // if no explicit locale has been set on this request, use one from the session
-            $request->setLocale($locale);
-            $request->getSession()->set('_locale', $locale);
-            $request->getSession()->set('check_locale_from_db', false);
-        }
+        // Set the locale for the current request.
+        $locale = $this->getCurrentLanguage($request);
+        $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
+        $request->getSession()->set('check_locale_from_db', false);
     }
 
     public function getCurrentLanguage(Request $request): string

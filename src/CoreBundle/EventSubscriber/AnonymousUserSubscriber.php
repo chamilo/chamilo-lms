@@ -5,11 +5,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -38,8 +40,13 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $userIp = $request->getClientIp();
 
+        // Set the platform locale
+        $locale = $this->getCurrentLanguage($request, $this->settingsManager);
+        $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
+
+        $userIp = $request->getClientIp();
         $anonymousUserId = $this->getOrCreateAnonymousUserId($userIp);
         if ($anonymousUserId !== null) {
             $trackLoginRepository = $this->entityManager->getRepository(TrackELogin::class);
@@ -136,6 +143,85 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
         error_log('New anonymous user created: ' . $anonymousUser->getId());
         return $anonymousUser->getId();
+    }
+
+    public function getCurrentLanguage(Request $request, SettingsManager $settingsManager): string
+    {
+        $localeList = [];
+
+        // 1. Check platform locale
+        $platformLocale = $settingsManager->getSetting('language.platform_language');
+
+        if (!empty($platformLocale)) {
+            $localeList['platform_lang'] = $platformLocale;
+        }
+
+        // 2. Check user locale
+        // _locale_user is set when user logins the system check UserLocaleListener
+        $userLocale = $request->getSession()->get('_locale_user');
+
+        if (!empty($userLocale)) {
+            $localeList['user_profil_lang'] = $userLocale;
+        }
+
+        // 3. Check course locale
+        $courseId = $request->get('cid');
+
+        if (!empty($courseId)) {
+            /** @var Course|null $course */
+            $course = $request->getSession()->get('course');
+            // 3. Check course locale
+            if (!empty($course)) {
+                $courseLocale = $course->getCourseLanguage();
+                if (!empty($courseLocale)) {
+                    $localeList['course_lang'] = $platformLocale;
+                }
+            }
+        }
+
+        // 4. force locale if it was selected from the URL
+        $localeFromUrl = $request->get('_locale');
+        if (!empty($localeFromUrl)) {
+            $localeList['user_selected_lang'] = $platformLocale;
+        }
+
+        $priorityList = [
+            'language_priority_1',
+            'language_priority_2',
+            'language_priority_3',
+            'language_priority_4',
+        ];
+
+        $locale = '';
+        foreach ($priorityList as $setting) {
+            $priority = $settingsManager->getSetting(sprintf('language.%s', $setting));
+            if (!empty($priority) && isset($localeList[$priority]) && !empty($localeList[$priority])) {
+                $locale = $localeList[$priority];
+
+                break;
+            }
+        }
+
+        if (empty($locale)) {
+            // Use default order
+            $priorityList = [
+                'platform_lang',
+                'user_profil_lang',
+                'course_lang',
+                'user_selected_lang',
+            ];
+            foreach ($priorityList as $setting) {
+                if (isset($localeList[$setting]) && !empty($localeList[$setting])) {
+                    $locale = $localeList[$setting];
+                }
+            }
+        }
+
+        if (empty($locale)) {
+            $locale = 'en';
+        }
+
+        return $locale;
     }
 
     public static function getSubscribedEvents()

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
@@ -714,6 +714,31 @@ class CourseController extends ToolBaseController
         return new JsonResponse($responseData);
     }
 
+    #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
+    public function checkEnrollments(EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
+    {
+        /** @var User|null $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $isEnrolledInCourses = $this->isUserEnrolledInAnyCourse($user, $em);
+        $isEnrolledInSessions = $this->isUserEnrolledInAnySession($user, $em);
+
+        if (!$isEnrolledInCourses && !$isEnrolledInSessions) {
+            $defaultMenuEntry = $settingsManager->getSetting('platform.default_menu_entry_for_course_or_session');
+            $isEnrolledInCourses = 'my_courses' === $defaultMenuEntry;
+            $isEnrolledInSessions = 'my_sessions' === $defaultMenuEntry;
+        }
+
+        return new JsonResponse([
+            'isEnrolledInCourses' => $isEnrolledInCourses,
+            'isEnrolledInSessions' => $isEnrolledInSessions,
+        ]);
+    }
+
     private function autoLaunch(): void
     {
         $autoLaunchWarning = '';
@@ -900,37 +925,13 @@ class CourseController extends ToolBaseController
         return $link.'?'.$this->getCourseUrlQuery();
     }
 
-    #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
-    public function checkEnrollments(EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
-    {
-        /** @var User|null $user */
-        $user = $this->getUser();
-
-        if (!$user) {
-            return new JsonResponse(['error' => 'User not found'], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $isEnrolledInCourses = $this->isUserEnrolledInAnyCourse($user, $em);
-        $isEnrolledInSessions = $this->isUserEnrolledInAnySession($user, $em);
-
-        if (!$isEnrolledInCourses && !$isEnrolledInSessions) {
-            $defaultMenuEntry = $settingsManager->getSetting('platform.default_menu_entry_for_course_or_session');
-            $isEnrolledInCourses = 'my_courses' === $defaultMenuEntry;
-            $isEnrolledInSessions = 'my_sessions' === $defaultMenuEntry;
-        }
-
-        return new JsonResponse([
-            'isEnrolledInCourses' => $isEnrolledInCourses,
-            'isEnrolledInSessions' => $isEnrolledInSessions,
-        ]);
-    }
-
     // Implement the real logic to check course enrollment
     private function isUserEnrolledInAnyCourse(User $user, EntityManagerInterface $em): bool
     {
         $enrollmentCount = $em
             ->getRepository(CourseRelUser::class)
-            ->count(['user' => $user]);
+            ->count(['user' => $user])
+        ;
 
         return $enrollmentCount > 0;
     }
@@ -939,9 +940,9 @@ class CourseController extends ToolBaseController
     private function isUserEnrolledInAnySession(User $user, EntityManagerInterface $em): bool
     {
         $enrollmentCount = $em->getRepository(SessionRelUser::class)
-            ->count(['user' => $user]);
+            ->count(['user' => $user])
+        ;
 
         return $enrollmentCount > 0;
     }
-
 }

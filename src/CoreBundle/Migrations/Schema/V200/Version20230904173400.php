@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
@@ -83,7 +82,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                 if ($subscriptionsEnabled) {
                     $subscriptionsInfo = $this->getSubscriptions((int) $personalAgenda['id']);
 
-                    if (count($subscriptionsInfo) > 0) {
+                    if (\count($subscriptionsInfo) > 0) {
                         $hasSubscriptions = true;
 
                         $invitationsOrSubscriptionsInfo = $subscriptionsInfo;

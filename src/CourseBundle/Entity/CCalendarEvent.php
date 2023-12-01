@@ -376,7 +376,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this->invitaionType;
     }
 
-    public function setInvitaionType(string $invitaionType): CCalendarEvent
+    public function setInvitaionType(string $invitaionType): self
     {
         $this->invitaionType = $invitaionType;
 
@@ -388,7 +388,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this->subscriptionVisibility;
     }
 
-    public function setSubscriptionVisibility(int $subscriptionVisibility): CCalendarEvent
+    public function setSubscriptionVisibility(int $subscriptionVisibility): self
     {
         $this->subscriptionVisibility = $subscriptionVisibility;
 
@@ -400,7 +400,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this->subscriptionItemId;
     }
 
-    public function setSubscriptionItemId(?int $subscriptionItemId): CCalendarEvent
+    public function setSubscriptionItemId(?int $subscriptionItemId): self
     {
         $this->subscriptionItemId = $subscriptionItemId;
 
@@ -412,7 +412,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this->maxAttendees;
     }
 
-    public function setMaxAttendees(int $maxAttendees): CCalendarEvent
+    public function setMaxAttendees(int $maxAttendees): self
     {
         $this->maxAttendees = $maxAttendees;
 

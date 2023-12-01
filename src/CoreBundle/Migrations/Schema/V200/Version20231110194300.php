@@ -14,7 +14,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Copy custom theme folder to assets and update webpack.config";
+        return 'Copy custom theme folder to assets and update webpack.config';
     }
 
     public function up(Schema $schema): void
@@ -54,13 +54,12 @@ final class Version20231110194300 extends AbstractMigrationChamilo
             'fruity_orange',
             'medical',
             'simplex',
-            'tasty_olive'
+            'tasty_olive',
         ];
-
 
         $sourceDir = $rootPath.'/app/Resources/public/css/themes';
         $destinationDir = $rootPath.'/assets/css/themes/';
-        $chamiloDefaultCssPath = $destinationDir . 'chamilo/default.css';
+        $chamiloDefaultCssPath = $destinationDir.'chamilo/default.css';
 
         if (!file_exists($sourceDir)) {
             return;
@@ -72,16 +71,16 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         foreach ($finder as $folder) {
             $folderName = $folder->getRelativePathname();
 
-            if (!in_array($folderName, $customThemesFolders, true)) {
+            if (!\in_array($folderName, $customThemesFolders, true)) {
                 $sourcePath = $folder->getRealPath();
-                $destinationPath = $destinationDir . $folderName;
+                $destinationPath = $destinationDir.$folderName;
 
                 if (!file_exists($destinationPath)) {
                     $this->copyDirectory($sourcePath, $destinationPath);
                     $newThemes[] = $folderName;
 
                     if (file_exists($chamiloDefaultCssPath)) {
-                        $newThemeDefaultCssPath = $destinationPath . '/default.css';
+                        $newThemeDefaultCssPath = $destinationPath.'/default.css';
                         copy($chamiloDefaultCssPath, $newThemeDefaultCssPath);
                     }
                 }
@@ -96,11 +95,11 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         $dir = opendir($src);
         @mkdir($dst);
         while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->copyDirectory($src . '/' . $file, $dst . '/' . $file);
+            if (('.' !== $file) && ('..' !== $file)) {
+                if (is_dir($src.'/'.$file)) {
+                    $this->copyDirectory($src.'/'.$file, $dst.'/'.$file);
                 } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
+                    copy($src.'/'.$file, $dst.'/'.$file);
                 }
             }
         }
@@ -109,7 +108,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 
     private function updateWebpackConfig(string $rootPath, array $newThemes): void
     {
-        $webpackConfigPath = $rootPath . '/webpack.config.js';
+        $webpackConfigPath = $rootPath.'/webpack.config.js';
 
         if (!file_exists($webpackConfigPath)) {
             return;
@@ -117,13 +116,14 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 
         $content = file_get_contents($webpackConfigPath);
 
-        $pattern = "/(const themes = \[\n\s*)([^\]]*?)(\s*\];)/s";
-        $replacement = function($matches) use ($newThemes) {
+        $pattern = "/(const themes = \\[\n\\s*)([^\\]]*?)(\\s*\\];)/s";
+        $replacement = function ($matches) use ($newThemes) {
             $existingThemesString = rtrim($matches[2], ", \n");
             $newThemesString = implode("',\n    '", $newThemes);
-            $formattedNewThemesString = $existingThemesString .
-                (empty($existingThemesString) ? '' : ",\n    '") . $newThemesString . "'";
-            return $matches[1] . $formattedNewThemesString . $matches[3];
+            $formattedNewThemesString = $existingThemesString.
+                (empty($existingThemesString) ? '' : ",\n    '").$newThemesString."'";
+
+            return $matches[1].$formattedNewThemesString.$matches[3];
         };
 
         $newContent = preg_replace_callback($pattern, $replacement, $content);

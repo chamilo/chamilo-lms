@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
@@ -39,7 +40,8 @@ class ContactController extends AbstractController
                 ->text(
                     "Sender: {$contactData['email']}\n".
                     "Message: {$contactData['message']}"
-                );
+                )
+            ;
 
             // Send the email
             $mailer->send($email);

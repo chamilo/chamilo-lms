@@ -65,6 +65,7 @@
             height: 100%;
             position: fixed;
             top: 0;
+            user-select: none;
             width: 100%;
             z-index: 1000;
         }
@@ -82,14 +83,14 @@
             position: relative;
             text-align: center;
             width: 340px;
-            transition: opacity 0.2s ease-in-out;
+            transition: opacity 0s ease-in-out;
         }
         .exercisefocused-backdrop:hover::before {
             opacity: 1;
         }
 
         .exercisefocused-backdrop.inmediate::before {
-            transition-delay: 3s !important;
+            transition-delay: 3.5s !important;
         }
         .exercisefocused-backdrop.out::before {
             transition-delay: 0s !important;

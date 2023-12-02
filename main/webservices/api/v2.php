@@ -963,6 +963,26 @@ try {
             Event::addEvent(LOG_WS.$action, 'group_id', $groupId);
             $restResponse->setData($data);
             break;
+        case Rest::GET_AUDIT_ITEMS:
+            $defaultEventType = $httpRequest->request->get('default_event_type');
+
+            $cId = $httpRequest->request->has('c_id') ? $httpRequest->request->getInt('c_id') : null;
+            $sessionId = $httpRequest->request->has('session_id') ? $httpRequest->request->getInt('session_id') : null;
+            $userId = $httpRequest->request->has('user_id') ? $httpRequest->request->getInt('user_id') : null;
+
+            $afterDate = $httpRequest->request->get('after_date');
+            $beforeDate = $httpRequest->request->get('before_date');
+            $offset = $httpRequest->request->getInt('offset', 0);
+            $limit = $httpRequest->request->getInt('limit', 100);
+
+            if (empty($defaultEventType)) {
+                throw new Exception('default_event_type is required');
+            }
+
+            $data = $restApi->getAuditItems($defaultEventType, $cId, $sessionId, $afterDate, $beforeDate, $userId, $offset, $limit);
+            Event::addEvent(LOG_WS.$action, 'success', 'true');
+            $restResponse->setData($data);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

@@ -149,6 +149,7 @@ class Rest extends WebService
     public const DELETE_GROUP_SUB_USER = 'delete_group_sub_user';
     public const DELETE_GROUP_SUB_COURSE = 'delete_group_sub_course';
     public const DELETE_GROUP_SUB_SESSION = 'delete_group_sub_session';
+    public const GET_AUDIT_ITEMS = 'get_audit_items';
 
     /**
      * @var Session
@@ -4208,5 +4209,34 @@ class Rest extends WebService
 
         return api_get_self().'?'
             .http_build_query(array_merge($queryParams, $additionalParams));
+    }
+
+    /**
+     * Get audit items from track_e_default.
+     */
+    public function getAuditItems(
+        string $defaultEventType,
+        ?int $cId = null,
+        ?int $sessionId = null,
+        ?string $afterDate = null,
+        ?string $beforeDate = null,
+        ?int $userId = null,
+        int $offset = 0,
+        int $limit = 100
+    ): array {
+        self::protectAdminEndpoint();
+
+        $auditItems = Event::getAuditItems(
+            $defaultEventType,
+            $cId,
+            $sessionId,
+            $afterDate,
+            $beforeDate,
+            $userId,
+            $offset,
+            $limit
+        );
+
+        return $auditItems;
     }
 }

@@ -227,9 +227,6 @@ foreach ($filters as $param) {
 $searchForm->addButtonSearch();
 
 $data = $usergroup->get($id);
-$list_in = $usergroup->getUsersByUsergroupAndRelation($id, $relation);
-$list_all = $usergroup->get_users_by_usergroup();
-
 $order = ['lastname'];
 if (api_is_western_name_order()) {
     $order = ['firstname'];
@@ -239,6 +236,8 @@ $orderListByOfficialCode = 'true' === api_get_setting('order_user_list_by_offici
 if ($orderListByOfficialCode) {
     $order = ['official_code', 'lastname'];
 }
+$list_in = $usergroup->getUsersByUsergroupAndRelation($id, $relation, $order);
+$list_all = $usergroup->get_users_by_usergroup();
 
 $conditions = [];
 if (!empty($first_letter_user) && strlen($first_letter_user) >= 3) {
@@ -246,6 +245,9 @@ if (!empty($first_letter_user) && strlen($first_letter_user) >= 3) {
         $conditions[$filter['name']] = $first_letter_user;
     }
 }
+
+$activeUser = isset($_REQUEST['active_users']) ? (int) $_REQUEST['active_users'] : null;
+$conditions['active'] = $activeUser;
 
 $filterData = [];
 if ($searchForm->validate()) {
@@ -262,9 +264,14 @@ if ($searchForm->validate()) {
 }
 
 $elements_not_in = $elements_in = [];
-
+$hideElementsIn = [];
 foreach ($list_in as $listedUserId) {
     $userInfo = api_get_user_info($listedUserId);
+
+    if (isset($activeUser) && ((int) $activeUser != $userInfo['active'])) {
+        $hideElementsIn[] = $listedUserId;
+        continue;
+    }
 
     $elements_in[$listedUserId] = formatCompleteName($userInfo, $orderListByOfficialCode);
 }
@@ -296,6 +303,10 @@ if (!empty($user_list)) {
 
         // Avoid anonymous users
         if ($item['status'] == ANONYMOUS) {
+            continue;
+        }
+
+        if (isset($activeUser) && ((int) $activeUser != $item['active'])) {
             continue;
         }
 
@@ -350,6 +361,15 @@ echo '<a href="usergroup_user_import.php">'.
 
 echo '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
     Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM).'</a>';
+
+$newUrl = api_get_self().'?id='.$id.'&active_users=1';
+$buttonLabel = get_lang('OnlyShowActiveUsers');
+if ($activeUser) {
+    $buttonLabel = get_lang('ShowAllUsers') ;
+    $newUrl = api_get_self().'?id='.$id;
+}
+echo '<a href="' . htmlspecialchars($newUrl) . '" class="btn btn-default">' . $buttonLabel . '</a>';
+
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';
@@ -486,9 +506,17 @@ echo '</div>';
                     false
                 );
                 unset($sessionUsersList);
+                if (!empty($hideElementsIn)) {
+                    foreach ($hideElementsIn as $hideElementId) {
+                        echo '<input type="hidden" name="elements_in_name[]" value="'.$hideElementId.'">';
+                    }
+                }
                 ?>
             </div>
         </div>
+        <?php if (isset($activeUser)) { ?>
+            <input type="hidden" name="active_users" value="<?php echo $activeUser; ?>" >;
+        <?php } ?>
         <?php
         echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
             get_lang('SubscribeUsersToClass').'</button>';

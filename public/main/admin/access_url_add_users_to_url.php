@@ -44,12 +44,9 @@ Display::page_subheader2($tool_name);
 
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : [];
+    $users = is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_user = $_POST['first_letter_user'];
-    foreach ($users as $key => $value) {
-        $users[$key] = (int) $value;
-    }
 
     if (1 == $form_sent) {
         if (0 == count($users) || 0 == count($url_list)) {

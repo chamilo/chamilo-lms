@@ -8977,4 +8977,5 @@ $CancelNotifyMe = "Ne plus m'alerter";
 $EmptyExpirationDate = "La date d'expiration ne peut pas être vide.";
 $MailingTestNotSent = "Le courriel n'a pas été envoyé. Il se peut que l'adresse de courriel soit incorrecte, qu'elle référence un utilisateur inactif, ou que la configuration du serveur de courriels soit incorrecte (voir le fichier mail.conf.php).";
 $PasswordExpiredPleaseSetNewPassword = "Votre mot de passe a expiré. Merci de définir un nouveau mot de passe avant de continuer.";
+$CopyIframeCodeToIncludeExercise = "Copiez le code de l'iframe ci-dessous pour inclure l'exercice :";
 ?>

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -194,7 +195,7 @@ $htmlHeadXtra[] = <<<JS
                 name: 'user_upload[]'
             });
             $('[name="user_upload[]"]').parent().append(newInputFile);
-        });
+        })
     });
     </script>
 JS;
@@ -248,30 +249,15 @@ if ('learnpath' !== $origin) {
     //$actions .= '<span style="float:right;">'.search_link().'</span>';
     if ('group' === $origin) {
         $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back to').' '.get_lang('Groups'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Groups')).
             '</a>';
     } else {
         $actions .= '<a href="index.php?'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back toForumOverview'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForumOverview')).
             '</a>';
     }
     $actions .= '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
-        Display::return_icon(
-            'forum.png',
-            get_lang('Back toForum'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
+        Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForum')).
         '</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }

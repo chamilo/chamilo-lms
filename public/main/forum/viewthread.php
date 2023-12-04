@@ -7,6 +7,8 @@ use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -295,7 +297,7 @@ if ('learnpath' === $origin) {
 $actions = '<span style="float:right;">'.search_link().'</span>';
 if ('learnpath' != $origin) {
     $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
-        .Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
+        .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
 }
 
 // The reply to thread link should only appear when the forum_category is
@@ -313,14 +315,14 @@ if (($current_forum_category &&
         // back link inside lp
         if ('learnpath' == $origin && !empty($threadId)) {
             $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
-                .Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
         }
 
         // reply link
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
             $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
                 .$threadId.'&action=replythread">'
-                .Display::return_icon('reply_thread.png', get_lang('Reply to this thread'), '', ICON_SIZE_MEDIUM)
+                .Display::getMdiIcon('reply', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this thread'))
                 .'</a>';
         }
         // new thread link
@@ -437,7 +439,7 @@ foreach ($posts as $post) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
             $editUrl .= "&forum=$forumId&thread=$threadId&post={$post['post_id']}&id_attach=$id_attach";
             $iconEdit .= "<a href='".$editUrl."'>"
-                .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
+                .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                 .'</a>';
 
             $editButton = Display::toolbarButton(
@@ -464,7 +466,7 @@ foreach ($posts as $post) {
                 ]
             );
             $iconEdit .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $deleteUrl,
                 [
                     'onclick' => "javascript:if(!confirm('"
@@ -501,7 +503,7 @@ foreach ($posts as $post) {
         if ($count > 0) {
             $iconEdit .= '<a href="viewthread.php?'.api_get_cidreq()
                 ."&forum=$forumId&thread=$threadId&action=move&post={$post['post_id']}"
-                .'">'.Display::return_icon('move.png', get_lang('Move post'), [], ICON_SIZE_SMALL).'</a>';
+                .'">'.Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move post')).'</a>';
         }
     }
 
@@ -563,7 +565,7 @@ foreach ($posts as $post) {
                     ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
                     ."&user={$userId}&user_id={$userId}"
                     ."&idtextqualify=$current_qualify_thread"
-                    .'" >'.Display::return_icon('quiz.png', get_lang('Grade activity')).'</a>';
+                    .'" >'.Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity')).'</a>';
             }
         }
     }
@@ -666,7 +668,7 @@ foreach ($posts as $post) {
         'AW:',
         'Aw:',
     ];
-    $replace = '<span>'.Display::getMdiIcon('reply').'</span>';
+    $replace = '<span>'.Display::getMdiIcon('reply', 'ch-tool-icon', '', ICON_SIZE_SMALL).'</span>';
     $post['post_title'] = str_replace($search, $replace, Security::remove_XSS($post['post_title']));
 
     // The post title
@@ -685,7 +687,7 @@ foreach ($posts as $post) {
         $repo = Container::getForumAttachmentRepository();
         /** @var CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
-            $post['post_attachments'] .= Display::getMdiIcon('paperclip');
+            $post['post_attachments'] .= Display::getMdiIcon('paperclip', 'ch-tool-icon', '', ICON_SIZE_SMALL);
             $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
@@ -697,7 +699,7 @@ foreach ($posts as $post) {
                     .$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id']
                     .'" onclick="javascript:if(!confirm(\''
                     .addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\')) return false;">'
-                    .Display::return_icon('delete.png', get_lang('Delete')).'</a><br />';
+                    .Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a><br />';
             }
         }
     }

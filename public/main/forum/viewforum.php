@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -240,7 +242,7 @@ if ('liststd' === $my_action &&
         $qualificationBlock .= '</tr>';
         $max_qualify = showQualify('2', $userId, $_GET['id']);
         $counter = 0;
-        $icon = Display::return_icon('quiz.png', get_lang('Grade activity'));
+        $icon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity'));
         if (Database::num_rows($student_list) > 0) {
             while ($row_student_list = Database::fetch_array($student_list)) {
                 $userInfo = api_get_user_info($row_student_list['id']);
@@ -290,12 +292,12 @@ $actions = '';
 if ('learnpath' !== $origin) {
     if (!empty($groupId)) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
-            .Display::return_icon('back.png', get_lang('Back to')
+            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back to')
             .' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actions .= '<span style="float:right;">'.search_link().'</span>';
         $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
-            .Display::return_icon('back.png', get_lang('Back toForumOverview'), '', ICON_SIZE_MEDIUM)
+            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForumOverview'))
             .'</a>';
     }
 }
@@ -312,7 +314,7 @@ if (api_is_allowed_to_edit(false, true) ||
         if (!api_is_anonymous() && !api_is_invitee()) {
             $actions .= '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
                 .$forumId.'">'
-                .Display::return_icon('new_thread.png', get_lang('Create thread'), '', ICON_SIZE_MEDIUM)
+                .Display::getMdiIcon('format-quote-open', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create thread'))
                 .'</a>';
         }
     } else {
@@ -321,12 +323,7 @@ if (api_is_allowed_to_edit(false, true) ||
 }
 
 $descriptionForum = $forumEntity->getForumComment();
-$iconForum = Display::return_icon(
-    'forum_yellow.png',
-    get_lang('Forum'),
-    null,
-    ICON_SIZE_MEDIUM
-);
+$iconForum = Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Forum'));
 
 $header = '';
 // The current forum
@@ -426,14 +423,9 @@ if (is_array($threads)) {
             }
 
             $html .= '<div class="col-md-4">'
-                .Display::return_icon('post-forum.png', null, null, ICON_SIZE_SMALL)
+                .Display::getMdiIcon('format-quote-open', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Replies'))
                 ." {$thread->getThreadReplies()} ".get_lang('Replies').'<br>';
-            $html .= Display::return_icon(
-                'post-forum.png',
-                null,
-                null,
-                ICON_SIZE_SMALL
-            ).' '.$thread->getThreadReplies().' '.get_lang('Views').'<br>';
+            $html .= Display::getMdiIcon('format-quote-open', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Views')).' '.$thread->getThreadReplies().' '.get_lang('Views').'<br>';
             $html .= '</div>';
             $last_post = null;
             if ($thread->getThreadLastPost()) {
@@ -457,20 +449,15 @@ if (is_array($threads)) {
                         .'&forum='.$forumId.'&thread='
                         .$thread->getIid()
                         .'&id_attach='.$id_attach.'">'
-                        .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                        .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                     if (api_resource_is_locked_by_gradebook($thread->getIid(), LINK_FORUM_THREAD)) {
-                        $iconsEdit .= Display::return_icon(
-                            'delete_na.png',
-                            get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'),
-                            [],
-                            ICON_SIZE_SMALL
-                        );
+                        $iconsEdit .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This option is not available because this activity is contained by an assessment'));
                     } else {
                         $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
                             .addslashes(api_htmlentities(get_lang('Delete complete thread?'), ENT_QUOTES))
                             ."')) return false;\">"
-                            .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+                            .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
 
                     $iconsEdit .= returnVisibleInvisibleIcon(
@@ -492,29 +479,28 @@ if (is_array($threads)) {
                         ]
                     );
                     $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId.'&action=move_thread&thread='.$threadId.'">'
-                        .Display::return_icon('move.png', get_lang('Move Thread'), [], ICON_SIZE_SMALL)
+                        .Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move Thread'))
                         .'</a>';
                 }
             }
 
-            $iconnotify = 'notification_mail_na.png';
+            $disable = true;
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
                 )
             ) {
                 if (in_array($threadId, $_SESSION['forum_notification']['thread'])) {
-                    $iconnotify = 'notification_mail.png';
+                    $disable = false;
                 }
             }
-            $icon_liststd = 'user.png';
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="'.$url.'&forum='.$forumId."&action=notify&content=thread&id={$threadId}".'">'.
-                    Display::return_icon($iconnotify, get_lang('Notify me')).'</a>';
+                    Display::getMdiIcon('email-alert', ($disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {
                 $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=liststd&content=thread&id={$threadId}".'">'.
-                    Display::return_icon($icon_liststd, get_lang('Learners list'), [], ICON_SIZE_SMALL)
+                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Learners list'))
                     .'</a>';
             }
             $html .= $iconsEdit;

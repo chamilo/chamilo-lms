@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 
 /**
  * Edit a Forum Thread.
@@ -200,7 +202,7 @@ $htmlHeadXtra[] = <<<JS
                 $("[name='weight_calification']").val(0);
                 $("[name='thread_peer_qualify'][value='0']").prop('checked', true);
             }
-        });
+        })
     });
     </script>
 JS;
@@ -208,7 +210,7 @@ JS;
 // Action links
 $actions = [
     Display::url(
-        Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')),
         'viewforum.php?forum='.$forumId.'&'.$cidreq
     ),
     search_link(),

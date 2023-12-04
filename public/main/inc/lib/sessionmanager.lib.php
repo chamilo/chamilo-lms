@@ -569,7 +569,7 @@ class SessionManager
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
-                    $sqlInjectJoins .= " INNER JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
+                    $sqlInjectJoins .= " LEFT JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
                     $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
                 } else {
                     $where .= " AND c.course_language = '$isoCode' ";
@@ -8099,7 +8099,7 @@ class SessionManager
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, [
-            'onchange' => 'accessSwitcher()',
+            'onchange' => 'accessSwitcher(this.value)',
             'id' => 'access',
         ]);
 
@@ -8122,7 +8122,7 @@ class SessionManager
         // Dates
         $form->addDateTimePicker(
             'access_start_date',
-            [get_lang('Access start date'), get_lang('Date on which the session is made available to all')],
+            [get_lang('Access start'), get_lang('Date on which the session is made available to all')],
             ['id' => 'access_start_date']
         );
 
@@ -8193,9 +8193,6 @@ class SessionManager
 
         $form->addCheckBox(
             'send_subscription_notification',
-            [
-                //get_lang('Send mail notification to students to inform of subscription'),
-            ],
             get_lang('Send an email when a user being subscribed to session'),
         );
 

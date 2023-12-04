@@ -953,14 +953,15 @@ if (!empty($filterToSend)) {
                         }
                     }
                     break;
+                case 'extra_filiere':
+                    $filterItem['data'] = $filterItem['data']['extra_filiere'];
+                    break;
             }
         }
 
         if ($deleteFiliere) {
-            foreach ($filterToSend['rules'] as &$filterItem) {
-                if (isset($filterItem['field']) && 'extra_filiere' == $filterItem['field']) {
-                    $filterItem = [];
-                }
+            if (isset($filterItem['field']) && 'extra_filiere' == $filterItem['field']) {
+                $filterItem = [];
             }
         }
     }

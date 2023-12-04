@@ -236,6 +236,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 if (null === $parent) {
                     $parent = $course;
                 }
+                if (null === $parent->getResourceNode()) {
+                    continue;
+                }
                 $admin = $this->getAdmin();
                 $result = $this->fixItemProperty('document', $documentRepo, $course, $admin, $document, $parent);
 

@@ -87,6 +87,10 @@ final class Version20201212114910 extends AbstractMigrationChamilo
                 $userEntity->addRole('ROLE_ADMIN');
             }
 
+            if ($userEntity::ANONYMOUS === $userEntity->getStatus()) {
+                $userEntity->addRole('ROLE_ANONYMOUS');
+            }
+
             $creatorId = $userEntity->getCreatorId();
             $creator = null;
             if (isset($userList[$adminId])) {

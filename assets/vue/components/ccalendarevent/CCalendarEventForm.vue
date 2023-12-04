@@ -1,14 +1,14 @@
 <template>
   <form>
-    <BaseInputText
-      v-model="v$.item.title.$model"
-      :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
-      :is-invalid="v$.item.title.$error"
-      :label="t('Title')"
-    />
+    <div class="grid lg:grid-cols-2 md:gap-4">
+      <BaseInputText
+        v-model="v$.item.title.$model"
+        :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
+        :is-invalid="v$.item.title.$error"
+        :label="t('Title')"
+      />
 
-    <div class="flex flex-col md:flex-row gap-x-5">
-      <div class="md:w-1/2 flex flex-col">
+      <div class="grid md:grid-cols-2 md:gap-4">
         <div class="field">
           <div class="p-float-label">
             <Calendar
@@ -51,31 +51,36 @@
             class="p-error"
           />
         </div>
-
-        <tiny-editor
-          v-model="v$.item.content.$model"
-          :init="{
-            skin_url: '/build/libs/tinymce/skins/ui/oxide',
-            content_css: '/build/libs/tinymce/skins/content/default/content.css',
-            branding: false,
-            relative_urls: false,
-            height: 250,
-            toolbar_mode: 'sliding',
-            file_picker_callback: browser,
-            autosave_ask_before_unload: true,
-            plugins: [
-              'advlist autolink lists link image charmap print preview anchor',
-              'searchreplace visualblocks code fullscreen',
-              'insertdatetime media table paste wordcount emoticons',
-            ],
-            toolbar:
-              'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-          }"
-          required
-        />
       </div>
+    </div>
 
-      <div class="md:w-1/2 flex flex-col">
+    <div class="grid md:grid-cols-2 md:gap-4">
+      <tiny-editor
+        v-model="v$.item.content.$model"
+        :init="{
+          skin_url: '/build/libs/tinymce/skins/ui/oxide',
+          content_css: '/build/libs/tinymce/skins/content/default/content.css',
+          branding: false,
+          relative_urls: false,
+          height: 250,
+          toolbar_mode: 'sliding',
+          file_picker_callback: browser,
+          autosave_ask_before_unload: true,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste wordcount emoticons',
+          ],
+          toolbar:
+            'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+          }"
+        required
+      />
+
+      <div
+        v-if="agendaCollectiveInvitations"
+        class="flex flex-col"
+      >
         <div
           v-t="'Invitees'"
           class="text-h6"
@@ -112,8 +117,12 @@ import Calendar from "primevue/calendar"
 import EditLinks from "../resource_links/EditLinks.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
+const platformConfigStore = usePlatformConfig();
+
+const agendaCollectiveInvitations = 'true' === platformConfigStore.getSetting('agenda.agenda_collective_invitations')
 
 const { t } = useI18n()
 

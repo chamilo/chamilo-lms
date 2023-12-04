@@ -78,12 +78,28 @@ function search_coachs($needle)
     return $xajax_response;
 }
 
+$urlAction = api_get_self();
+$session = null;
+$fromSessionId = null;
+$accessSelected = 0;
+if (isset($_GET['fromSessionId'])) {
+    $fromSessionId = (int) $_GET['fromSessionId'];
+    $session = api_get_session_entity($fromSessionId);
+    if ($session && 0 === (int) $session->getDuration()) {
+        $accessSelected = 1;
+    }
+    $urlAction .= '?fromSessionId=' . $fromSessionId;
+}
+
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    accessSwitcher(0);
+   setTimeout(function() {
+        $('#access').val('".$accessSelected."').trigger('change');
+        accessSwitcher('".$accessSelected."');
+    }, 1000);
 });
 
 function fill_coach_field (username) {
@@ -121,8 +137,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 $tool_name = get_lang('Add a training session');
 
-$urlAction = api_get_self();
-
 function check_session_name($name)
 {
     $session = SessionManager::get_session_by_name($name);
@@ -130,13 +144,6 @@ function check_session_name($name)
     return empty($session) ? true : false;
 }
 
-$session = null;
-$fromSessionId = null;
-if (isset($_GET['fromSessionId'])) {
-    $fromSessionId = (int) $_GET['fromSessionId'];
-    $session = api_get_session_entity($fromSessionId);
-    $urlAction .= '?fromSessionId=' . $fromSessionId;
-}
 $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form, null, $fromSessionId);
@@ -157,7 +164,9 @@ $(function() {
     function repopulateFormValues() {
         var formValues = JSON.parse(sessionStorage.getItem('formValues'));
         $.each(formValues, function(i, field) {
-            $('[name=\"' + field.name + '\"]').val(field.value);
+            if (field.name === 'coach_username' || field.name === 'name' || field.name === 'system_template') {
+                $('[name=\"' + field.name + '\"]').val(field.value);
+            }
         });
     }
 
@@ -244,9 +253,9 @@ $form->setDefaults($formDefaults);
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     $name = $params['name'];
-    $startDate = $params['access_start_date'];
+    $startDate = $params['access_start_date2'];
     $endDate = $params['access_end_date'];
-    $displayStartDate = $params['display_start_date'];
+    $displayStartDate = $params['display_start_date2'];
     $displayEndDate = $params['display_end_date'];
     $coachStartDate = $params['coach_access_start_date'];
     if (empty($coachStartDate)) {

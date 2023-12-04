@@ -8,12 +8,18 @@ export default {
   methods: {
     formatDateTime,
     onCreated(item) {
+      let message;
       if (item['resourceNode']) {
-        this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
+        message = this.$i18n && this.$i18n.t
+          ? this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title})
+          : `${item['resourceNode'].title} created`;
       } else {
-        this.showMessage(this.$i18n.t('{resource} created', {'resource': item.title}));
+        message = this.$i18n && this.$i18n.t
+          ? this.$i18n.t('{resource} created', {'resource': item.title})
+          : `${item.title} created`;
       }
 
+      this.showMessage(message);
       let folderParams = this.$route.query;
 
       this.$router.push({

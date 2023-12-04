@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
@@ -23,7 +24,8 @@ class ContactCategoryController extends AbstractController
 
         $contactCategories = $entityManager
             ->getRepository(ContactCategory::class)
-            ->findAll();
+            ->findAll()
+        ;
 
         return $this->render('@ChamiloCore/ContactCategory/index.html.twig', [
             'contact_categories' => $contactCategories,

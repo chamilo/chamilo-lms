@@ -93,7 +93,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::getMdiIconn('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')),
+                Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]

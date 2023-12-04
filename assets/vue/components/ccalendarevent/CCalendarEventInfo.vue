@@ -13,12 +13,16 @@
 
     <div v-html="event.content" />
 
-    <h6 v-t="'Invitees'" />
+    <div
+      v-if="event.resourceLinkListFromEntity && event.resourceLinkListFromEntity.length"
+    >
+      <h6 v-t="'Invitees'" />
 
-    <ShowLinks
-      :item="event"
-      :show-status="false"
-    />
+      <ShowLinks
+        :item="event"
+        :show-status="false"
+      />
+    </div>
   </div>
 </template>
 

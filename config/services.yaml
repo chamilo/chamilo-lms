@@ -67,6 +67,14 @@ services:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
+    Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
+      tags:
+        - name: kernel.event_subscriber
+
+    Chamilo\CoreBundle\Security\Authorization\Voter\AnonymousVoter:
+      tags:
+        - name: security.voter
+
 cocur_slugify:
     lowercase: true
 

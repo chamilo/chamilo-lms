@@ -9795,7 +9795,7 @@ class Exercise
                                     'class' => 'ajax',
                                     'data-title' => get_lang('EmbedExerciseLink'),
                                     'title' => get_lang('EmbedExerciseLink'),
-                                    'data-content' => get_lang('CopyUrlToIncludeInIframe').'<br>'.$urlEmbed,
+                                    'data-content' => get_lang('CopyUrlToIncludeInIframe').'<br>'.$urlEmbed.'<br><br>'.get_lang('CopyIframCodeToIncludeExercise').'<br><textarea rows=&quot;5&quot; cols=&quot;70&quot;>&lt;iframe width=&quot;840&quot; height=&quot;472&quot; src=&quot;'.$urlEmbed.'&quot; title=&quot;Chamilo exercise&quot;&gt;&lt;/iframe&gt;</textarea>',
                                     'href' => 'javascript:void(0);',
                                 ]
                             );

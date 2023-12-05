@@ -641,6 +641,20 @@ try {
                 )
             );
             break;
+        case Rest::GET_USER_TOTAL_CONNEXION_TIME:
+            $username = (string) $httpRequest->query->get('user');
+
+            if (empty($username)) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            Event::addEvent(LOG_WS.$action, 'username', $username);
+            $restResponse->setData(
+                $restApi->getUserTotalConnexionTime(
+                    $username,
+                )
+            );
+            break;
         case Rest::GET_USER_SUB_GROUP:
             $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
             if (empty($userId)) {

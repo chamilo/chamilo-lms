@@ -25,7 +25,7 @@ class WSReport extends WS
         if ($user_id instanceof WSError) {
             return $user_id;
         } else {
-            return Tracking::get_time_spent_on_the_platform($user_id);
+            return Tracking::get_time_spent_on_the_platform($user_id, 'ever');
         }
     }
 

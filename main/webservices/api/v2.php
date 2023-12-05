@@ -964,16 +964,16 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_AUDIT_ITEMS:
-            $defaultEventType = $httpRequest->request->get('default_event_type');
+            $defaultEventType = $httpRequest->query->get('default_event_type');
 
-            $cId = $httpRequest->request->has('c_id') ? $httpRequest->request->getInt('c_id') : null;
-            $sessionId = $httpRequest->request->has('session_id') ? $httpRequest->request->getInt('session_id') : null;
-            $userId = $httpRequest->request->has('user_id') ? $httpRequest->request->getInt('user_id') : null;
+            $cId = $httpRequest->query->has('c_id') ? $httpRequest->query->getInt('c_id') : null;
+            $sessionId = $httpRequest->query->has('session_id') ? $httpRequest->query->getInt('session_id') : null;
+            $userId = $httpRequest->query->has('user_id') ? $httpRequest->query->getInt('user_id') : null;
 
-            $afterDate = $httpRequest->request->get('after_date');
-            $beforeDate = $httpRequest->request->get('before_date');
-            $offset = $httpRequest->request->getInt('offset', 0);
-            $limit = $httpRequest->request->getInt('limit', 100);
+            $afterDate = $httpRequest->query->get('after_date');
+            $beforeDate = $httpRequest->query->get('before_date');
+            $offset = $httpRequest->query->getInt('offset', 0);
+            $limit = $httpRequest->query->getInt('limit', 100);
 
             if (empty($defaultEventType)) {
                 throw new Exception('default_event_type is required');

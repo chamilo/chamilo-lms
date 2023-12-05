@@ -2835,8 +2835,7 @@ class Event
         ?int $userId = null,
         int $offset = 0,
         int $limit = 100
-    ): array
-    {
+    ): array {
         $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
         $whereConditions = ['default_event_type = ? ' => $defaultEventType];
@@ -2866,10 +2865,7 @@ class Event
         $results = Database::select(
             'default_user_id, c_id, default_date, default_event_type, default_value_type, default_value, session_id',
             $tblTrackEDefault,
-            $conditions,
-            'all',
-            'ASSOC',
-            true
+            $conditions
         );
 
         $formattedResults = [];

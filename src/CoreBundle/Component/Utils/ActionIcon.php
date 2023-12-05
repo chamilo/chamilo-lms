@@ -97,7 +97,7 @@ enum ActionIcon: string
     // Send a message
     case MESSAGE_SEND = 'send';
     // Add an attachment
-    case ATTACHMENT_ADD = 'file-plus';
+    case ATTACHMENT_ADD = 'paperclip-plus';
     // ?
     //case CLOUD_UPLOAD = 'cloud-upload';
     // Three vertical dots to indicate the possibility to extend a menu/set of options

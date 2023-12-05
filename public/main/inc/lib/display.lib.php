@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
@@ -2219,7 +2220,7 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string|ActionIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
+    public static function getMdiIcon(string|ActionIcon|ToolIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';
         if (!empty($pixelSize)) {
@@ -2231,7 +2232,7 @@ class Display
 
         $additionalAttributes['class'] = 'mdi mdi-';
 
-        if ($name instanceof ActionIcon) {
+        if ($name instanceof ActionIcon or $name instanceof ToolIcon) {
             $additionalAttributes['class'] .= $name->value;
         } else {
             $additionalAttributes['class'] .= $name;

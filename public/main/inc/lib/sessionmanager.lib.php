@@ -8099,7 +8099,7 @@ class SessionManager
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, [
-            'onchange' => 'accessSwitcher()',
+            'onchange' => 'accessSwitcher(this.value)',
             'id' => 'access',
         ]);
 
@@ -8122,7 +8122,7 @@ class SessionManager
         // Dates
         $form->addDateTimePicker(
             'access_start_date',
-            [get_lang('Access start date'), get_lang('Date on which the session is made available to all')],
+            [get_lang('Access start'), get_lang('Date on which the session is made available to all')],
             ['id' => 'access_start_date']
         );
 
@@ -8193,9 +8193,6 @@ class SessionManager
 
         $form->addCheckBox(
             'send_subscription_notification',
-            [
-                //get_lang('Send mail notification to students to inform of subscription'),
-            ],
             get_lang('Send an email when a user being subscribed to session'),
         );
 

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -204,7 +205,7 @@ $htmlHeadXtra[] = <<<JS
             });
 
             $('[name="user_upload[]"]').parent().append(newInputFile);
-        });
+        })
     });
     </script>
 JS;
@@ -239,12 +240,7 @@ Display::display_header();
 if ('learnpath' !== $origin) {
     //$actionsLeft = '<span style="float:right;">'.search_link().'</span>';
     $actionsLeft = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
-    $actionsLeft .= Display::return_icon(
-        'back.png',
-        get_lang('Back to thread'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).'</a>';
+    $actionsLeft .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to thread')).'</a>';
 
     echo Display::toolbarAction('toolbar', [$actionsLeft]);
 }

@@ -19,6 +19,8 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 
 /**
  * @todo convert this library into a class
@@ -918,7 +920,7 @@ function returnVisibleInvisibleIcon(
             }
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('visible.png', get_lang('MakeInvisible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeInvisible')).'</a>';
     }
     if (0 == $current_visibility_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -928,7 +930,7 @@ function returnVisibleInvisibleIcon(
             }
         }
         $html .= 'action=visible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('invisible.png', get_lang('Make Visible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make Visible')).'</a>';
     }
 
     return $html;
@@ -952,13 +954,14 @@ function returnLockUnlockIcon(
     //check if the forum is blocked due
     if ('thread' === $content) {
         if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
-            return $html.Display::return_icon(
-                    'lock_na.png',
+            return $html.Display::getMdiIcon(
+                    ActionIcon::LOCK,
+                    'ch-tool-icon-disabled',
+                    '',
+                    ICON_SIZE_SMALL,
                     get_lang(
                         'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
-                    ),
-                    [],
-                    ICON_SIZE_SMALL
+                    )
                 );
         }
     }
@@ -970,7 +973,7 @@ function returnLockUnlockIcon(
             }
         }
         $html .= 'action=unlock&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('lock.png', get_lang('Unlock'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Unlock')).'</a>';
     }
     if ('0' == $current_lock_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -980,7 +983,7 @@ function returnLockUnlockIcon(
             }
         }
         $html .= 'action=lock&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('unlock.png', get_lang('Lock'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Lock')).'</a>';
     }
 
     return $html;
@@ -1017,10 +1020,10 @@ function returnUpDownIcon(string $content, int $id, array $list): string
         $return_value = '<a
                 href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
                 title="'.get_lang('Move up').'">'.
-            Display::return_icon('up.png', get_lang('Move up'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up')).'</a>';
     } else {
         $return_value = Display::url(
-            Display::return_icon('up_na.png', '-', [], ICON_SIZE_SMALL),
+            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, ''),
             'javascript:void(0)'
         );
     }
@@ -1029,10 +1032,10 @@ function returnUpDownIcon(string $content, int $id, array $list): string
         $return_value .= '<a
             href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
             title="'.get_lang('Move down').'" >'.
-            Display::return_icon('down.png', get_lang('Move down'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down')).'</a>';
     } else {
         $return_value = Display::url(
-            Display::return_icon('down_na.png', '-', [], ICON_SIZE_SMALL),
+            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, ''),
             'javascript:void(0)'
         );
     }
@@ -1483,7 +1486,6 @@ function get_thread_users_details(int $thread_id)
                     AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     AND p.thread_id = $thread_id
                     AND course_user.status != '1' AND
-                    p.c_id = $course_id AND
                     course_user.c_id = $course_id $orderby";
     }
 
@@ -3381,7 +3383,6 @@ function handle_mail_cue($content, $id)
         $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email, posts.forum_id
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
                 WHERE
-                    posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
                     posts.thread_id = $id AND
                     posts.post_notification = '1' AND
@@ -4000,7 +4001,7 @@ function search_link()
     $origin = api_get_origin();
     if ('learnpath' != $origin) {
         $return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> ';
-        $return .= Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
+        $return .= Display::getMdiIcon('magnify-plus-outline	', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search')).'</a>';
 
         if (!empty($_GET['search'])) {
             $return .= ': '.Security::remove_XSS($_GET['search']).' ';
@@ -4012,7 +4013,7 @@ function search_link()
                 }
             }
             $url .= implode('&', $url_parameter);
-            $return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('Clean search results')).'</a>';
+            $return .= '<a href="'.$url.'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', '', ICON_SIZE_SMALL,  get_lang('Clean search results')).'</a>';
         }
     }
 
@@ -4638,20 +4639,20 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
 /**
  * This function get the name of an thread by id.
  *
- * @param int $thread_id
+ * @param int $threadId
  *
  * @return string
  *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Adding security
  */
-function get_name_thread_by_id($thread_id)
+function get_name_thread_by_id(int $threadId): string
 {
-    $t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
+    $tForumThread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
     $sql = "SELECT thread_title
-            FROM $t_forum_thread
-            WHERE c_id = $course_id AND iid = '".(int) $thread_id."' ";
+            FROM $tForumThread
+            WHERE iid = $threadId";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -4700,12 +4701,7 @@ function get_all_post_from_user(int $user_id, int $courseId): string
                         $post_counter = count($post_list);
                         if (is_array($post_list) && count($post_list) > 0) {
                             $hand_forums .= '<div id="social-thread">';
-                            $hand_forums .= Display::return_icon(
-                                'thread.png',
-                                get_lang('Thread'),
-                                '',
-                                ICON_SIZE_MEDIUM
-                            );
+                            $hand_forums .= Display::getMdiIcon('format-quote-open', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thread'));
                             $hand_forums .= '&nbsp;'.Security::remove_XSS($thread->getThreadTitle(), STUDENT);
                             $hand_forums .= '</div>';
 
@@ -4724,7 +4720,7 @@ function get_all_post_from_user(int $user_id, int $courseId): string
                 $forum_results .= '<div id="social-forum">';
                 $forum_results .= '<div class="clear"></div><br />';
                 $forum_results .= '<div id="social-forum-title">'.
-                    Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getForumTitle(), STUDENT).
+                    Display::getMdiIcon('comment-quote', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getForumTitle(), STUDENT).
                     '<div style="float:right;margin-top:-35px">
                         <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum->getIid().' " >'.
                     get_lang('See forum').'
@@ -5061,16 +5057,16 @@ function getAttachedFiles(
             // Check if $row is consistent
             if ($attachment) {
                 // Set result as success and bring delete URL
-                $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded.'));
+                $json['result'] = Display::getMdiIcon('check-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Uploaded.'));
                 $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&action=delete_attach&forum='.$forumId.'&thread='.$threadId.'&id_attach='.$row['iid'];
                 $json['delete'] = Display::url(
-                    Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                     $url,
                     ['class' => 'deleteLink']
                 );
             } else {
                 // If not, set an exclamation result
-                $json['result'] = Display::return_icon('exclamation.png', get_lang('Error'));
+                $json['result'] = Display::getMdiIcon('close-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error'));
             }
             // Store array data into $_SESSION
             $_SESSION['forum']['upload_file'][$courseId][$json['id']] = $json;

@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 
 /**
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
@@ -339,7 +341,7 @@ if (isset($rows)) {
             echo '<tr ><td height="50%">';
             $realname = $attachment_list['path'];
             $user_filename = $attachment_list['filename'];
-            echo Display::return_icon('attachment.gif', get_lang('Attachment'));
+            echo Display::getMdiIcon('paperclip', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Attachment'));
             echo '<a href="download.php?file=';
             echo $realname;
             echo ' "> '.$user_filename.' </a>';

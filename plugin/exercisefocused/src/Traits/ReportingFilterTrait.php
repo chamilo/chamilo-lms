@@ -107,15 +107,15 @@ trait ReportingFilterTrait
         }
 
         if (!empty($formValues['firstname'])) {
-            $qb->andWhere($qb->expr()->eq('u.firstname', ':firstname'));
+            $qb->andWhere($qb->expr()->like('u.firstname', ':firstname'));
 
-            $params['firstname'] = $formValues['firstname'];
+            $params['firstname'] = $formValues['firstname'].'%';
         }
 
         if (!empty($formValues['lastname'])) {
-            $qb->andWhere($qb->expr()->eq('u.lastname', ':lastname'));
+            $qb->andWhere($qb->expr()->like('u.lastname', ':lastname'));
 
-            $params['lastname'] = $formValues['lastname'];
+            $params['lastname'] = $formValues['lastname'].'%';
         }
 
         if (!empty($formValues['start_date'])) {

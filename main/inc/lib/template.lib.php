@@ -455,7 +455,7 @@ class Template
         $origin = api_get_origin();
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if ($origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
+            if ($origin !== 'iframe' && $origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }

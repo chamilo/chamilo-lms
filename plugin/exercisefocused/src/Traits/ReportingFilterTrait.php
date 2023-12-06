@@ -12,6 +12,7 @@ use Database;
 use Display;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
+use ExerciseFocusedPlugin;
 use ExerciseMonitoringPlugin;
 use ExtraField;
 use ExtraFieldValue;
@@ -285,39 +286,13 @@ trait ReportingFilterTrait
 
     protected function findResultsInCourse(int $exerciseId, bool $randomResults = false): array
     {
-        $orderCondition = "ORDER BY exe_id";
+        $exeIdList = $this->getAttemptsIdForExercise($exerciseId);
 
         if ($randomResults) {
-            $percentage = (int) $this->plugin->get(\ExerciseFocusedPlugin::SETTING_PERCENTAGE_SAMPLING);
-
-            if (empty($percentage)) {
-                return [];
-            }
-
-            $orderCondition = "ORDER BY RAND() LIMIT $percentage";
+            $exeIdList = $this->pickRandomAttempts($exeIdList) ?: $exeIdList;
         }
 
-        $cId = api_get_course_int_id();
-        $sId = api_get_session_id();
-
-        $tblTrackExe = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $sessionCondition = api_get_session_condition($sId);
-
-        $result = Database::query(
-            "SELECT exe_id FROM $tblTrackExe
-            WHERE c_id = $cId
-                AND exe_exo_id = $exerciseId
-                $sessionCondition
-            $orderCondition"
-        );
-
-        $exeIdList = array_column(
-            Database::store_result($result),
-            'exe_id'
-        );
-
-        if (!$exeIdList) {
+        if (empty($exeIdList)) {
             return [];
         }
 
@@ -366,5 +341,49 @@ trait ReportingFilterTrait
         }
 
         return array_unique($fieldItemIdList);
+    }
+
+    private function getAttemptsIdForExercise(int $exerciseId): array
+    {
+        $cId = api_get_course_int_id();
+        $sId = api_get_session_id();
+
+        $tblTrackExe = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sessionCondition = api_get_session_condition($sId);
+
+        $result = Database::query(
+            "SELECT exe_id FROM $tblTrackExe
+            WHERE c_id = $cId
+                AND exe_exo_id = $exerciseId
+                $sessionCondition
+            ORDER BY exe_id"
+        );
+
+        return array_column(
+            Database::store_result($result),
+            'exe_id'
+        );
+    }
+
+    private function pickRandomAttempts(array $attemptIdList): array
+    {
+        $settingPercentage = (int) $this->plugin->get(ExerciseFocusedPlugin::SETTING_PERCENTAGE_SAMPLING);
+
+        if (!$settingPercentage) {
+            return [];
+        }
+
+        $percentage = count($attemptIdList) * ($settingPercentage / 100);
+
+        $random = (array) array_rand($attemptIdList, ceil($percentage));
+
+        $selection = [];
+
+        foreach ($random as $rand) {
+            $selection[] = $attemptIdList[$rand];
+        }
+
+        return $selection;
     }
 }

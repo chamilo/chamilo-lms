@@ -8,6 +8,9 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -20,6 +23,8 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
+$httpRequest = HttpRequest::createFromGlobals();
+
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $tool_name = get_lang('Multiple access URL / Branding');
 Display :: display_header($tool_name);
@@ -29,10 +34,10 @@ $current_access_url_id = api_get_current_access_url_id();
 $url_list = UrlManager::get_url_data();
 
 // Actions
-if (isset($_GET['action'])) {
-    $url_id = empty($_GET['url_id']) ? 0 : (int) $_GET['url_id'];
+if ($httpRequest->query->has('action')) {
+    $url_id = $httpRequest->query->getInt('url_id');
 
-    switch ($_GET['action']) {
+    switch ($httpRequest->query->get('action')) {
         case 'delete_url':
             $result = UrlManager::delete($url_id);
             if ($result) {

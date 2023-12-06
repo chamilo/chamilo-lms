@@ -93,7 +93,7 @@ git pull
 composer update
 
 # Database update
-php bin/console doctrine:schema:update --force
+php bin/console doctrine:schema:update --force --complete
 
 # Clean Symfony cache
 php bin/console cache:clear

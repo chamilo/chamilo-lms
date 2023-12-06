@@ -4,6 +4,9 @@
 /**
  * Reporting page on the user's own progress.
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -12,6 +15,8 @@ api_block_anonymous_users();
 if (('true' === api_get_setting('platform.block_my_progress_page'))) {
     api_not_allowed(true);
 }
+
+$httpRequest = HttpRequest::createFromGlobals();
 
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Progress');
@@ -26,8 +31,8 @@ if ($pluginCalendar) {
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
-$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$sessionId = $httpRequest->query->getInt('sid');
+$courseId = $httpRequest->query->get('cid');
 
 /*
 if (!empty($courseUserList)) {

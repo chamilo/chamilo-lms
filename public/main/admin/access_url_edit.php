@@ -5,6 +5,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -15,6 +18,8 @@ if (!api_get_multiple_access_url()) {
     header('Location: index.php');
     exit;
 }
+
+$httpRequest = HttpRequest::createFromGlobals();
 
 $form = new FormValidator('add_url');
 
@@ -32,8 +37,8 @@ $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
 
 $submit_name = get_lang('Add URL');
-if (isset($_GET['url_id'])) {
-    $url_id = (int) $_GET['url_id'];
+if ($httpRequest->query->has('url_id')) {
+    $url_id = $httpRequest->query->getInt('url_id');
     $num_url_id = UrlManager::url_id_exist($url_id);
     if (1 != $num_url_id) {
         header('Location: access_urls.php');
@@ -55,7 +60,7 @@ if (isset($_GET['url_id'])) {
 $form->addButtonCreate($submit_name);
 
 //the first url with id = 1 will be always active
-if (isset($_GET['url_id']) && 1 != $_GET['url_id']) {
+if ($httpRequest->query->has('url_id') && 1 !== $httpRequest->query->getInt('url_id')) {
     $form->addElement('checkbox', 'active', null, get_lang('active'));
 }
 

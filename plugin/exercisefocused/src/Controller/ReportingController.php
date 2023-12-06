@@ -47,7 +47,7 @@ class ReportingController extends BaseController
             'exercise-focused-tabs',
             [],
             [],
-            1
+            isset($_GET['submit']) ? 2 : 1
         );
 
         $this->setBreadcrumb($exercise->getId());
@@ -86,14 +86,21 @@ class ReportingController extends BaseController
         if ($form->validate()) {
             $formValues = $form->exportValues();
 
-            $action = Display::url(
+            $actionLeft = Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_PLUGIN_PATH).'exercisefocused/pages/export.php?'.http_build_query($formValues)
+            );
+            $actionRight = Display::toolbarButton(
+                get_lang('Clean'),
+                api_get_path(WEB_PLUGIN_PATH)
+                .'exercisefocused/pages/reporting.php?'
+                .api_get_cidreq().'&'.http_build_query(['id' => $exercise->getId(), 'submit' => '']),
+                'search'
             );
 
             $actions = Display::toolbarAction(
                 'em-actions',
-                [$action]
+                [$actionLeft, $actionRight]
             );
 
             $results = $this->findResults($formValues);

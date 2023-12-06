@@ -378,8 +378,9 @@ trait ReportingFilterTrait
         }
 
         $percentage = count($attemptIdList) * ($settingPercentage / 100);
+        $round = round($percentage) ?: 1;
 
-        $random = (array) array_rand($attemptIdList, ceil($percentage));
+        $random = (array) array_rand($attemptIdList, $round);
 
         $selection = [];
 

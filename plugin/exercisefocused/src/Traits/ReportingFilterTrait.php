@@ -70,6 +70,7 @@ trait ReportingFilterTrait
     protected function findResults(array $formValues = []): array
     {
         $cId = api_get_course_int_id();
+        $sId = api_get_session_id();
 
         $qb = $this->em->createQueryBuilder();
         $qb
@@ -84,12 +85,14 @@ trait ReportingFilterTrait
             $qb->andWhere($qb->expr()->eq('te.cId', ':cId'));
 
             $params['cId'] = $cId;
-        }
 
-        $sessionItemIdList = $this->getSessionIdFromFormValues(
-            $formValues,
-            $this->plugin->getSessionFieldList()
-        );
+            $sessionItemIdList = $sId ? [$sId] : [];
+        } else {
+            $sessionItemIdList = $this->getSessionIdFromFormValues(
+                $formValues,
+                $this->plugin->getSessionFieldList()
+            );
+        }
 
         if ($sessionItemIdList) {
             $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));

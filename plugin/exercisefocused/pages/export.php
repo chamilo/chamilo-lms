@@ -194,6 +194,7 @@ function getSessionIdFromFormValues(array $formValues, array $fieldVariableList)
 function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocusedPlugin $plugin)
 {
     $cId = api_get_course_int_id();
+    $sId = api_get_session_id();
 
     $qb = $em->createQueryBuilder();
     $qb
@@ -208,12 +209,14 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
         $qb->andWhere($qb->expr()->eq('te.cId', ':cId'));
 
         $params['cId'] = $cId;
-    }
 
-    $sessionItemIdList = getSessionIdFromFormValues(
-        $formValues,
-        $plugin->getSessionFieldList()
-    );
+        $sessionItemIdList = $sId ? [$sId] : [];
+    } else {
+        $sessionItemIdList = getSessionIdFromFormValues(
+            $formValues,
+            $plugin->getSessionFieldList()
+        );
+    }
 
     if ($sessionItemIdList) {
         $qb->andWhere($qb->expr()->in('te.sessionId', ':sessionItemIdList'));

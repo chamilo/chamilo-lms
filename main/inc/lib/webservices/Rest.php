@@ -3964,12 +3964,6 @@ class Rest extends WebService
      */
     public function getUserLastConnexion(string $username): array
     {
-        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
-            || !UserManager::is_admin($this->user->getId())
-        ) {
-            self::throwNotAllowedException();
-        }
-
         $userInfo = api_get_user_info_from_username($username);
 
         if (empty($userInfo)) {
@@ -3990,12 +3984,6 @@ class Rest extends WebService
      */
     public function getUserTotalConnexionTime(string $username): array
     {
-        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
-            || !UserManager::is_admin($this->user->getId())
-        ) {
-            self::throwNotAllowedException();
-        }
-
         $userInfo = api_get_user_info_from_username($username);
 
         if (empty($userInfo)) {

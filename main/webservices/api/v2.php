@@ -628,7 +628,7 @@ try {
             );
             break;
         case Rest::GET_USER_LAST_CONNEXION:
-            $username = (string) $httpRequest->query->get('user');
+            $username = (string) $_REQUEST['user'];
 
             if (empty($username)) {
                 throw new Exception(get_lang('NoData'));
@@ -642,7 +642,7 @@ try {
             );
             break;
         case Rest::GET_USER_TOTAL_CONNEXION_TIME:
-            $username = (string) $httpRequest->query->get('user');
+            $username = (string) $_REQUEST['user'];
 
             if (empty($username)) {
                 throw new Exception(get_lang('NoData'));

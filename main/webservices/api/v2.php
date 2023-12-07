@@ -637,7 +637,7 @@ try {
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData(
                 $restApi->getUserLastConnexion(
-                    $username,
+                    $username
                 )
             );
             break;
@@ -651,7 +651,7 @@ try {
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData(
                 $restApi->getUserTotalConnexionTime(
-                    $username,
+                    $username
                 )
             );
             break;

@@ -113,7 +113,6 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         foreach ($anonymousUsers as $user) {
             $loginRecord = $trackLoginRepository->findOneBy(['userIp' => $userIp, 'user' => $user]);
             if ($loginRecord) {
-                error_log('Existing login found for user ID: '.$user->getId());
 
                 return $user->getId();
             }
@@ -146,8 +145,6 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
         $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();
-
-        error_log('New anonymous user created: '.$anonymousUser->getId());
 
         return $anonymousUser->getId();
     }

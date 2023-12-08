@@ -227,10 +227,11 @@ class Login
         Database::getManager()->flush();
 
         $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+        $link = "<a href=\"$url\">$url</a>";
         $mailSubject = get_lang('ResetPasswordInstructions');
         $mailBody = sprintf(
             get_lang('ResetPasswordCommentWithUrl'),
-            $url
+            $link
         );
 
         api_mail_html(

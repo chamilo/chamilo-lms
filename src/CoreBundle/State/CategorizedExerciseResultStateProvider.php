@@ -302,7 +302,10 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         }
 
         if (($show_results || $show_only_score) && $showTotalScore) {
-            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY !== $result['answer_type']) {
+            if ($result
+                && isset($result['answer_type'])
+                && MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY !== $result['answer_type']
+            ) {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
                     $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());

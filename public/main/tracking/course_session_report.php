@@ -157,7 +157,13 @@ if (!empty($users) && is_array($users)) {
                     );
                     $total_course += $result;
                     $total_result_by_user += $result;
+                    if (!isset($course_average[$current_course['code']])) {
+                        $course_average[$current_course['code']] = 0;
+                    }
                     $course_average[$current_course['code']] += $total_course;
+                    if (!isset($course_average_counter[$current_course['code']])) {
+                        $course_average_counter[$current_course['code']] = 0;
+                    }
                     $course_average_counter[$current_course['code']]++;
                     $result = $result.' ('.$user_info_stat['attempts'].' '.get_lang('Attempts').')';
                     $counter++;

@@ -930,7 +930,10 @@ class IndexManager
                 $this->load_directories_preview,
                 $useUserLanguageFilterIfAvailable
             );*/
-            $courses = [];
+            $courses = [
+                'in_category' => [],
+                'not_category' => [],
+            ];
 
             // Course option (show student progress)
             // This code will add new variables (Progress, Score, Certificate)
@@ -981,7 +984,6 @@ class IndexManager
                     }
                 }
 
-                if (isset($courses['in_category'])) {
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
@@ -1043,9 +1045,7 @@ class IndexManager
                             }
                         }
                     }
-                }
 
-                if (isset($courses['not_category'])) {
                     foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
                         $courseCode = $courseNotInCatInfo['course_code'];
                         if ($studentInfoProgress) {
@@ -1100,7 +1100,6 @@ class IndexManager
                             }
                         }
                     }
-                }
             }
 
             if ($viewGridCourses) {

@@ -25,7 +25,7 @@ $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enable
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
-    $plugin->setJavaScript($htmlHeadXtra);
+    $plugin->setJavaScript();
 }
 
 $user_id = api_get_user_id();

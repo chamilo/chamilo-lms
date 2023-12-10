@@ -711,7 +711,7 @@ $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enable
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
-    $plugin->setJavaScript($htmlHeadXtra);
+    $plugin->setJavaScript();
 }
 
 Display::display_header($nameTools);

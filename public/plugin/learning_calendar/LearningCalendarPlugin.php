@@ -798,11 +798,10 @@ class LearningCalendarPlugin extends Plugin
         return 0;
     }
 
-    /**
-     * @param array $htmlHeadXtra
-     */
-    public function setJavaScript(&$htmlHeadXtra)
+    public function setJavaScript()
     {
+        global $htmlHeadXtra;
+
         $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.canvasOverlay.js');

@@ -302,10 +302,10 @@ class GradebookUtils
                     ).'</a>';
 
                 if ($cat->is_locked() && !api_is_platform_admin()) {
-                    $modify_icons .= Display::getMdiIcon(ActionIcons::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete all'));
+                    $modify_icons .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete all'));
                 } else {
                     $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'" onclick="return confirmation();">'.
-                        Display::getMdiIcon(ActionItems::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete all')).
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete all')).
                         '</a>';
                 }
             }

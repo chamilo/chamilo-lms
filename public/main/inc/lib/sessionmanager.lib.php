@@ -2448,7 +2448,7 @@ class SessionManager
             return false;
         }
 
-        is_array($courseInfo) ? $courseId = $courseInfo['real_id'] : $courseId = $courseInfo;
+        $courseId = is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo;
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {

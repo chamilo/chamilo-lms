@@ -1400,7 +1400,7 @@ if ('0' == $survey->getSurveyType()) {
             $paged_questions_sec = [];
         }
 
-        if (0 == $personality) {
+        if (0 === $personality) {
             if (($show <= $numberOfPages) || !$_GET['show']) {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 if (0 == $survey->getOneQuestionPerPage()) {
@@ -1419,7 +1419,7 @@ if ('0' == $survey->getSurveyType()) {
             }
         }
 
-        if ($show > $numberOfPages && $_GET['show'] && 0 == $personality) {
+        if ($show > $numberOfPages && $_GET['show'] && 0 === $personality) {
             $form->addHidden('personality', $personality);
         } elseif ($personality > 0) {
             if (1 == $survey->getOneQuestionPerPage()) {

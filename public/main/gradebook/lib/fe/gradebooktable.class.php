@@ -37,27 +37,17 @@ class GradebookTable extends SortableTable
 
     /**
      * GradebookTable constructor.
-     *
-     * @param Category $currentcat
-     * @param array    $cats
-     * @param array    $evals
-     * @param array    $links
-     * @param null     $addparams
-     * @param bool     $exportToPdf
-     * @param null     $showTeacherView
-     * @param int      $userId
-     * @param array    $studentList
      */
     public function __construct(
-        $currentcat,
-        $cats = [],
-        $evals = [],
-        $links = [],
-        $addparams = null,
-        $exportToPdf = false,
-        $showTeacherView = null,
-        $userId = null,
-        $studentList = [],
+        Category $currentcat,
+        array $cats = [],
+        array $evals = [],
+        array $links = [],
+        array $addparams = [],
+        bool $exportToPdf = false,
+        ?bool $showTeacherView = null,
+        ?int $userId = null,
+        array $studentList = [],
         array $loadStats = []
     ) {
         $this->teacherView = is_null($showTeacherView) ? api_is_allowed_to_edit(null, true) : $showTeacherView;
@@ -88,7 +78,7 @@ class GradebookTable extends SortableTable
             $this->datagen->userId = $userId;
         }
 
-        if (isset($addparams)) {
+        if (!empty($addparams)) {
             $this->set_additional_parameters($addparams);
         }
 

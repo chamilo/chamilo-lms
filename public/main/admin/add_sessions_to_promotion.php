@@ -64,7 +64,6 @@ function validate_filter() {
 </script>';
 
 $form_sent = 0;
-$errorMsg = '';
 $users = $sessions = [];
 $promotion = new Promotion();
 $id = (int) ($_GET['id']);
@@ -161,9 +160,6 @@ if ('multiple' == $add_type) {
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
-if (!empty($errorMsg)) {
-    echo Display::return_message($errorMsg, 'normal'); //main API
-}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

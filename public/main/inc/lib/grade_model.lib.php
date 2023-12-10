@@ -259,11 +259,11 @@ class GradeModel extends Model
     /**
      * @param $form
      * @param string $name
-     * @param null   $default_value
+     * @param int|null   $default_value
      *
      * @return bool
      */
-    public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
+    public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', ?int $default_value = null)
     {
         if ('false' === api_get_setting('gradebook_enable_grade_model')) {
             return false;

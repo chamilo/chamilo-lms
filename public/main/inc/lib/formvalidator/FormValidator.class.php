@@ -334,7 +334,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|mixed $value
      * @param array  $attributes
      */
     public function addHidden($name, $value, $attributes = [])

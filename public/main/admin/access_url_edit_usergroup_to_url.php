@@ -69,7 +69,6 @@ function remove_item(origin) {
 }
 </script>';
 
-$errorMsg = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $course_list = $_POST['course_list'];
@@ -200,11 +199,6 @@ $url_list = UrlManager::get_url_data();
         </div>
         <input type="hidden" name="form_sent" value="1"/>
         <input type="hidden" name="add_type" value="<?php echo $add_type; ?>"/>
-        <?php
-        if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal'); //main API
-        }
-        ?>
         <div class="row">
             <div class="col-sm-5">
                 <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users'; ?>"><?php echo get_lang('Platform groups list'); ?></label>

@@ -329,7 +329,7 @@ function change_select(val) {
 </script>';
 
 $form_sent = 0;
-$errorMsg = $firstLetterUser = $firstLetterSession = '';
+$firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = [];
 $sessions = [];
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -701,11 +701,6 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
     <input type="hidden" name="form_sent" value="1"/>
     <input type="hidden" name="add_type"/>
 
-    <?php
-    if (!empty($errorMsg)) {
-        echo Display::return_message($errorMsg); //main API
-    }
-    ?>
     <div id="multiple-add-session" class="grid grid-cols-3">
         <div class="col-md-4">
             <div class="form-group">

@@ -3217,7 +3217,7 @@ JAVASCRIPT;
                 } else {
                     if ($optionsExists) {
                         // Adding always the default value
-                        if ($option_details['id'] == $defaultValueId) {
+                        /*if ($option_details['id'] == $defaultValueId) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         } else {
                             if (isset($addOptions) && !empty($addOptions)) {
@@ -3226,7 +3226,7 @@ JAVASCRIPT;
                                     $options[$option_details['option_value']] = $option_details['display_text'];
                                 }
                             }
-                        }
+                        }*/
                     } else {
                         // Normal behaviour
                         $options[$option_details['option_value']] = $option_details['display_text'];

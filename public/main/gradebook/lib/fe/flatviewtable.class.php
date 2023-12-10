@@ -23,25 +23,15 @@ class FlatViewTable extends SortableTable
     private $offset;
     private $mainCourseCategory;
 
-    /**
-     * @param Category $selectcat
-     * @param array    $users
-     * @param array    $evals
-     * @param array    $links
-     * @param bool     $limit_enabled
-     * @param int      $offset
-     * @param null     $addparams
-     * @param Category $mainCourseCategory
-     */
     public function __construct(
-        $selectcat,
-        $users = [],
-        $evals = [],
-        $links = [],
-        $limit_enabled = false,
-        $offset = 0,
-        $addparams = null,
-        $mainCourseCategory = null
+        Category $selectcat,
+        array $users = [],
+        array $evals = [],
+        array $links = [],
+        bool $limit_enabled = false,
+        int $offset = 0,
+        array $addparams = [],
+        ?Category $mainCourseCategory = null
     ) {
         parent:: __construct(
             'flatviewlist',
@@ -61,7 +51,7 @@ class FlatViewTable extends SortableTable
 
         $this->limit_enabled = $limit_enabled;
         $this->offset = $offset;
-        if (isset($addparams)) {
+        if (!empty($addparams)) {
             $this->set_additional_parameters($addparams);
         }
 

@@ -44,7 +44,6 @@ function remove_item(origin) {
 
 </script>';
 
-$errorMsg = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
@@ -199,9 +198,6 @@ echo '</div>';
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
-if (!empty($errorMsg)) {
-    echo Display::return_message($errorMsg, 'normal'); //main API
-}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

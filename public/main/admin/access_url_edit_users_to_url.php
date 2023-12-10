@@ -68,7 +68,6 @@ function remove_item(origin) {
 }
 </script>';
 
-$errorMsg = '';
 $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -216,11 +215,6 @@ $url_list = UrlManager::get_url_data();
 <input type="hidden" name="form_sent" value="1" />
 <input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 
-<?php
-if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal'); //main API
-        }
-?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>

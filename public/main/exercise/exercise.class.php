@@ -1822,7 +1822,7 @@ class Exercise
      * Creates the form to create / edit an exercise.
      *
      * @param FormValidator $form
-     * @param string        $type
+     * @param string|array        $type
      */
     public function createForm($form, $type = 'full')
     {

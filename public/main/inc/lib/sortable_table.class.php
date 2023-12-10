@@ -1011,7 +1011,7 @@ class SortableTable extends HTML_Table
      *
      * @param array $parameters
      */
-    public function set_additional_parameters($parameters)
+    public function set_additional_parameters(array $parameters)
     {
         $this->additional_parameters = $parameters;
     }

@@ -550,10 +550,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function getTeachersSubscriptions(): Collection
     {
-        $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER));
+        $teacherSubscriptions = new ArrayCollection();
 
-        return $this->users->matching($criteria);
+        foreach ($this->users as $subscription) {
+            if ($subscription->getStatus() === CourseRelUser::TEACHER) {
+                $teacherSubscriptions->add($subscription);
+            }
+        }
+
+        return $teacherSubscriptions;
     }
 
     public function addUserAsTeacher(User $user): self

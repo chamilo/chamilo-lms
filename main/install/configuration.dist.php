@@ -2355,6 +2355,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php add the @ symbol for attribute $blocked into ORM\Column() line.
 //$_configuration['enable_sign_attendance_sheet'] = false;
 
+// Shows a link to the "my missing signatures" page in the /index.php and /user_portal.php page.
+// It will only appears if enable_sign_attendance_sheet is alos true.
+//$_configuration['show_missing_signatures_page'] = false;
+
 // Make sessions by duration always accessible to coaches (otherwise
 // they are only accessible during the active duration).
 //$_configuration['session_coach_access_after_duration_end'] = false;

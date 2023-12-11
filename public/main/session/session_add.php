@@ -253,9 +253,9 @@ $form->setDefaults($formDefaults);
 if ($form->validate()) {
     $params = $form->getSubmitValues();
     $name = $params['name'];
-    $startDate = $params['access_start_date2'];
+    $startDate = $params['access_start_date'];
     $endDate = $params['access_end_date'];
-    $displayStartDate = $params['display_start_date2'];
+    $displayStartDate = $params['display_start_date'];
     $displayEndDate = $params['display_end_date'];
     $coachStartDate = $params['coach_access_start_date'];
     if (empty($coachStartDate)) {

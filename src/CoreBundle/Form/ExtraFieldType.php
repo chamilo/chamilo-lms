@@ -30,6 +30,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * @template-extends AbstractType<ExtraField>
+ */
 class ExtraFieldType extends AbstractType
 {
     private ExtraFieldValuesRepository $extraFieldValuesRepository;

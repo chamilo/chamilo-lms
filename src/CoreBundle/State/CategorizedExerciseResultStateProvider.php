@@ -24,6 +24,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TestCategory;
 
+/**
+ * @template-implements ProviderInterface<CategorizedExerciseResult>
+ */
 class CategorizedExerciseResultStateProvider implements ProviderInterface
 {
     public function __construct(

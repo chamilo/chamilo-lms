@@ -17,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<Course>
+ */
 class CourseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

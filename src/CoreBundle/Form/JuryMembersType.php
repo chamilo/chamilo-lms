@@ -16,6 +16,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<object>
+ */
 class JuryMembersType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

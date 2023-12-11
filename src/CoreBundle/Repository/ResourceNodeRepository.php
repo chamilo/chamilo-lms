@@ -21,6 +21,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
+/**
+ * @template-extends MaterializedPathRepository<ResourceNode>
+ */
 class ResourceNodeRepository extends MaterializedPathRepository
 {
     protected FlysystemStorage $storage;

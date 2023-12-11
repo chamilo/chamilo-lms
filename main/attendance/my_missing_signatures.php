@@ -24,6 +24,26 @@ $htmlHeadXtra[] = '<style>
       border: 1px solid #ddd;
       margin: 12px 0px;
     }
+    #main_content ul {
+        list-style-type: none;
+    }
+    #main_content li {
+        float : left;
+        position : relative;
+        width : 190px;
+        height : 150px;
+        border-radius : 10px;
+        border : 1px solid gray;
+        background-color : #F9E79F;
+        margin : 10px;
+        padding : 10px;
+    }
+    #main_content li a{
+        position : absolute;
+        bottom : 10px;
+        left : 10%;
+        width : 80%;
+    }
 </style>';
 
 $userId = api_get_user_id();

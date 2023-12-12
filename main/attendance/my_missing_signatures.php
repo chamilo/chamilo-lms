@@ -26,6 +26,7 @@ $htmlHeadXtra[] = '<style>
     }
     #main_content ul {
         list-style-type: none;
+        height : 180px;
     }
     #main_content li {
         float : left;

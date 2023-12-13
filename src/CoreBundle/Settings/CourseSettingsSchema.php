@@ -119,6 +119,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_form_set_extra_fields_mandatory' => '',
                     'course_configuration_tool_extra_fields_to_show_and_edit' => '',
                     'course_creation_user_course_extra_field_relation_to_prefill' => '',
+                    'allow_edit_tool_visibility_in_session' => 'true',
                 ]
             )
             ->setTransformer(
@@ -388,7 +389,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
                 ]
             )
-
+            ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
         ;
     }
 

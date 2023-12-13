@@ -47,7 +47,7 @@
 
     <div class="course-tool__options">
       <button
-        v-if="isCurrentTeacher && !isSorting && !isCustomizing"
+        v-if="isCurrentTeacher && !isSorting && !isCustomizing && (props.tool.isInASession ? props.tool.allowEditToolVisibilityInSession : true)"
         @click="changeVisibility(course, tool)"
       >
         <BaseIcon

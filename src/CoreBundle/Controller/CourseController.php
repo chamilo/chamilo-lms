@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -146,7 +147,8 @@ class CourseController extends ToolBaseController
         CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        SettingsManager $settingsManager
     ): Response {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
@@ -167,6 +169,7 @@ class CourseController extends ToolBaseController
 
         $course = $this->getCourse();
         $sessionId = $this->getSessionId();
+        $isInASession = $sessionId > 0;
 
         if (null === $course) {
             throw $this->createAccessDeniedException();
@@ -189,7 +192,6 @@ class CourseController extends ToolBaseController
         $courseId = $course->getId();
 
         if ($user && $user->hasRole('ROLE_INVITEE')) {
-            $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
                 $courseCode,
@@ -227,7 +229,10 @@ class CourseController extends ToolBaseController
 
         $result = $qb->getQuery()->getResult();
         $tools = [];
+        $toolsToDisplay = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $currentSessionId = (int) $sessionId;
+        $allowEditToolVisibilityInSession = ('true' === $settingsManager->getSetting('course.allow_edit_tool_visibility_in_session'));
 
         /** @var CTool $item */
         foreach ($result as $item) {
@@ -237,12 +242,39 @@ class CourseController extends ToolBaseController
                 continue;
             }
 
-            $tools[] = [
-                'ctool' => $item,
-                'tool' => $toolModel,
-                'url' => $this->generateToolUrl($toolModel),
-                'category' => $toolModel->getCategory(),
-            ];
+            $resourceNodeId = $item->getResourceNode()->getId();
+            $selectedLink = null;
+            $linkSessionId = null;
+            foreach ($item->getResourceNode()->getResourceLinks() as $link) {
+                $linkSessionId = $link->getSession() ? $link->getSession()->getId() : null;
+
+                if ($linkSessionId === $currentSessionId) {
+                    $selectedLink = $link;
+                    break;
+                } elseif ($linkSessionId === null && !$selectedLink) {
+                    $selectedLink = $link;
+                }
+            }
+
+            if ($isInASession &&  (null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility())) {
+                continue;
+            }
+
+            if ($selectedLink) {
+                $item->getResourceNode()->getResourceLinks()->first()->setVisibility($selectedLink->getVisibility());
+                $toolsToDisplay[$resourceNodeId] = [
+                    'ctool' => $item,
+                    'tool' => $toolModel,
+                    'url' => $this->generateToolUrl($toolModel),
+                    'category' => $toolModel->getCategory(),
+                    'allowEditToolVisibilityInSession' => $allowEditToolVisibilityInSession,
+                    'isInASession' => $isInASession,
+                ];
+            }
+        }
+
+        foreach ($toolsToDisplay as $toolData) {
+            $tools[] = $toolData;
         }
 
         // Deleting the objects

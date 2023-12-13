@@ -156,7 +156,7 @@
 
         <div class="ml-auto">
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing"
+            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
@@ -168,7 +168,7 @@
             @click="onClickShowAll"
           />
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing"
+            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Hide all')"
             :on-label="t('Hide all')"
@@ -406,7 +406,7 @@ const setToolVisibility = (tool, visibility) => {
 
 function changeVisibility(course, tool) {
   axios
-    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility")
+    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility?cid=" + courseId + "&sid=" + sessionId)
     .then((response) => setToolVisibility(tool, response.data.visibility))
     .catch((error) => console.log(error))
 }
@@ -507,4 +507,14 @@ onMounted(async () => {
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
 }
+
+const allowEditToolVisibilityInSession = computed(() => {
+  const isInASession = tools.value.some(tool => tool.isInASession);
+
+  if (!isInASession) {
+    return true;
+  }
+
+  return tools.value.some(tool => tool.isInASession && tool.allowEditToolVisibilityInSession);
+});
 </script>

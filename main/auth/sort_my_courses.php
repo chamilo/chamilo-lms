@@ -12,7 +12,7 @@ $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
 $courses_in_category = $auth->getCoursesInCategory(false);
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 $currentUrl = api_get_self();
 
 $interbreadcrumb[] = [
@@ -22,7 +22,9 @@ $interbreadcrumb[] = [
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
-    $result = $auth->updateCourseCategory($_POST['course_2_edit_category'], $_POST['course_categories']);
+    $course2EditCategory = Security::remove_XSS($_POST['course_2_edit_category']);
+    $courseCategories = Security::remove_XSS($_POST['course_categories']);
+    $result = $auth->updateCourseCategory($course2EditCategory, $courseCategories);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('EditCourseCategorySucces'))
@@ -36,7 +38,9 @@ if (isset($_POST['submit_change_course_category'])) {
 if (isset($_POST['submit_edit_course_category']) &&
     isset($_POST['title_course_category'])
 ) {
-    $result = $auth->store_edit_course_category($_POST['title_course_category'], $_POST['category_id']);
+    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
+    $categoryId = Security::remove_XSS($_POST['category_id']);
+    $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('CourseCategoryEditStored'))
@@ -52,7 +56,8 @@ if (isset($_POST['create_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
-    $result = $auth->store_course_category($_POST['title_course_category']);
+    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
+    $result = $auth->store_course_category($titleCourseCategory);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('CourseCategoryStored'))
@@ -71,16 +76,19 @@ if (isset($_POST['create_course_category']) &&
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {
-    if (isset($_GET['course'])) {
-        $result = $auth->move_course($_GET['move'], $_GET['course'], $_GET['category']);
+    $getCourse = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
+    $getMove = Security::remove_XSS($_GET['move']);
+    $getCategory = isset($_GET['category']) ? Security::remove_XSS($_GET['category']) : '';
+    if (!empty($getCourse)) {
+        $result = $auth->move_course($getMove, $getCourse, $getCategory);
         if ($result) {
             Display::addFlash(
                 Display::return_message(get_lang('CourseSortingDone'))
             );
         }
     }
-    if (isset($_GET['category']) && !isset($_GET['course'])) {
-        $result = $auth->move_category($_GET['move'], $_GET['category']);
+    if (!empty($getCategory) && empty($getCourse)) {
+        $result = $auth->move_category($getMove, $getCategory);
         if ($result) {
             Display::addFlash(
                 Display::return_message(get_lang('CategorySortingDone'))
@@ -152,7 +160,8 @@ switch ($action) {
         // we are deleting a course category
         if (isset($_GET['id'])) {
             if (Security::check_token('get')) {
-                $result = $auth->delete_course_category($_GET['id']);
+                $getId = Security::remove_XSS($_GET['id']);
+                $result = $auth->delete_course_category($getId);
                 if ($result) {
                     Display::addFlash(
                         Display::return_message(get_lang('CourseCategoryDeleted'))
@@ -182,7 +191,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
         $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
-        $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
+        $redirect = isset($_REQUEST['redirect']) ? Security::remove_XSS($_REQUEST['redirect']) : 0;
 
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);

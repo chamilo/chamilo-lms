@@ -148,7 +148,6 @@ function formExportSubmit(formId) {
 }
 async function exportToPdf() {
     window.scrollTo(0, 0);
-
     $("#dialog-confirm").dialog({
         autoOpen: false,
         show: "blind",

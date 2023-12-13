@@ -148,6 +148,7 @@ function formExportSubmit(formId) {
 }
 async function exportToPdf() {
     window.scrollTo(0, 0);
+
     $("#dialog-confirm").dialog({
         autoOpen: false,
         show: "blind",
@@ -231,7 +232,7 @@ async function exportToPdf() {
             var canvasHeight = canvas.height;
             var imgWidth = 515;
             var imgHeight = canvasHeight;
-            var y = currentHeight;
+            var y = j === 0 ? currentHeight + 60 : currentHeight;
             var renderedHeight = 0;
 
             while (renderedHeight < imgHeight) {

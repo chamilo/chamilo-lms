@@ -10859,11 +10859,14 @@ class Exercise
                         case FILL_IN_BLANKS:
                         case FILL_IN_BLANKS_COMBINATION:
                             $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                            if ($option['answer'] === "0") {
+                                $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
+                            }
                             break;
                     }
                 }
 
-                if (isset($option['answer'])) {
+                if (!empty($option['answer'])) {
                     $exerciseResult[] = $questionId;
 
                     break;

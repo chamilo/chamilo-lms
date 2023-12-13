@@ -9045,4 +9045,5 @@ $MailingTestNotSent = "E-mail not sent. You might have introduced an incorrect a
 $PasswordExpiredPleaseSetNewPassword = "Your password has expired. Please set a new password before you continue.";
 $CopyIframeCodeToIncludeExercise = "Copy iframe code below to include the exercise :";
 $MyMissingSignatures = "My missing signatures";
+$OnlyShowActiveUsers = "Only show active users";
 ?>

@@ -9070,4 +9070,5 @@ $MailingTestNotSent = "El correo de prueba no ha podido ser enviado. Puede que l
 $PasswordExpiredPleaseSetNewPassword = "Su contraseña se ha vencido. Por favor, defina una nueva contraseña antes de seguir.";
 $CopyIframeCodeToIncludeExercise = "Copie el código del iframe a continuación para incluir el ejercicio:";
 $MyMissingSignatures = "Mis firmas faltantes";
+$OnlyShowActiveUsers = "Mostrar solo usuarios activos";
 ?>

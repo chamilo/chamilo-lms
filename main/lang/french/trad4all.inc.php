@@ -8979,4 +8979,5 @@ $MailingTestNotSent = "Le courriel n'a pas été envoyé. Il se peut que l'adres
 $PasswordExpiredPleaseSetNewPassword = "Votre mot de passe a expiré. Merci de définir un nouveau mot de passe avant de continuer.";
 $CopyIframeCodeToIncludeExercise = "Copiez le code de l'iframe ci-dessous pour inclure l'exercice :";
 $MyMissingSignatures = "Mes signatures manquantes";
+$OnlyShowActiveUsers = "Ne montrer que les utilisateurs actifs";
 ?>

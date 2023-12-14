@@ -126,15 +126,13 @@ $announcements_block = '';
 $useCookieValidation = api_get_setting('cookie_warning');
 
 if ($useCookieValidation === 'true') {
-    if (isset($_POST['acceptCookies'])) {
-        api_set_site_use_cookie_warning_cookie();
-    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
+    if (!api_site_use_cookie_warning_cookie_exist()) {
         if (Template::isToolBarDisplayedForUser()) {
             $controller->tpl->assign('toolBarDisplayed', true);
         } else {
             $controller->tpl->assign('toolBarDisplayed', false);
         }
-        $controller->tpl->assign('displayCookieUsageWarning', true);
+        $controller->tpl->enableCookieUsageWarning();
     }
 }
 // When loading a chamilo page do not include the hot courses and news

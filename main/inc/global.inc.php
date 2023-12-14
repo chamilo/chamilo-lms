@@ -627,6 +627,7 @@ if (!empty($language_interface)) {
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
     $template->assign('quiz_markers_rolls_js', ChamiloApi::getQuizMarkersRollsJS());
+    $template->assign('is_vrview_enabled', Display::isVrViewEnabled());
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);

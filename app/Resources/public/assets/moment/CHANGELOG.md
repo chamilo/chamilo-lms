@@ -1,6 +1,46 @@
 Changelog
 =========
 
+### 2.29.4
+
+* Release Jul 6, 2022
+  * [#6015](https://github.com/moment/moment/pull/6015) [bugfix] Fix ReDoS in preprocessRFC2822 regex
+
+### 2.29.3 [Full changelog](https://gist.github.com/ichernev/edebd440f49adcaec72e5e77b791d8be)
+
+* Release Apr 17, 2022
+  * [#5995](https://github.com/moment/moment/pull/5995) [bugfix] Remove const usage
+  * [#5990](https://github.com/moment/moment/pull/5990) misc: fix advisory link
+
+
+### 2.29.2 [See full changelog](https://gist.github.com/ichernev/1904b564f6679d9aac1ae08ce13bc45c)
+
+* Release Apr 3 2022
+
+Address https://github.com/moment/moment/security/advisories/GHSA-8hfj-j24r-96c4
+
+### 2.29.1 [See full changelog](https://gist.github.com/marwahaha/cc478ba01a1292ab4bd4e861d164d99b)
+
+* Release Oct 6, 2020
+
+Updated deprecation message, bugfix in hi locale
+
+### 2.29.0 [See full changelog](https://gist.github.com/marwahaha/b0111718641a6461800066549957ec14)
+
+* Release Sept 22, 2020
+
+New locales (es-mx, bn-bd).
+Minor bugfixes and locale improvements.
+More tests.
+Moment is in maintenance mode. Read more at this link:
+https://momentjs.com/docs/#/-project-status/
+
+### 2.28.0 [See full changelog](https://gist.github.com/marwahaha/028fd6c2b2470b2804857cfd63c0e94f)
+
+* Release Sept 13, 2020
+
+Fix bug where .format() modifies original instance, and locale updates
+
 ### 2.27.0 [See full changelog](https://gist.github.com/marwahaha/5100c9c2f42019067b1f6cefc333daa7)
 
 * Release June 18, 2020

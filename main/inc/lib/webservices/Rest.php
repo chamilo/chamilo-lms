@@ -101,6 +101,8 @@ class Rest extends WebService
     public const DELETE_USER = 'delete_user';
     public const GET_USERS_API_KEYS = 'get_users_api_keys';
     public const GET_USER_API_KEY = 'get_user_api_key';
+    public const GET_USER_LAST_CONNEXION = 'get_user_last_connexion';
+    public const GET_USER_TOTAL_CONNEXION_TIME = 'get_user_total_connexion_time';
     public const GET_USER_SUB_GROUP = 'get_user_sub_group';
 
     public const GET_COURSES = 'get_courses';
@@ -3954,6 +3956,47 @@ class Rest extends WebService
             'id' => $userInfo['id'],
             'username' => $userInfo['username'],
             'api_key' => $apiKey,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserLastConnexion(string $username): array
+    {
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $lastConnexionDate = Tracking::get_last_connection_date($userInfo['id']);
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'last_connexion_date' => $lastConnexionDate,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserTotalConnexionTime(string $username): array
+    {
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $totalConnexionTimeInSecond = Tracking::get_time_spent_on_the_platform($userInfo['id'], 'ever');
+        $totalConnexionTime = api_time_to_hms($totalConnexionTimeInSecond);
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'total_connexion_time' => $totalConnexionTime,
         ];
     }
 

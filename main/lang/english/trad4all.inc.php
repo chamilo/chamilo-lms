@@ -9044,4 +9044,6 @@ $EmptyExpirationDate = "Expiration date cannot be empty.";
 $MailingTestNotSent = "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file).";
 $PasswordExpiredPleaseSetNewPassword = "Your password has expired. Please set a new password before you continue.";
 $CopyIframeCodeToIncludeExercise = "Copy iframe code below to include the exercise :";
+$MyMissingSignatures = "My missing signatures";
+$OnlyShowActiveUsers = "Only show active users";
 ?>

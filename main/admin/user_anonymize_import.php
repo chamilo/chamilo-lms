@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -40,7 +41,9 @@ $anonymizedSessions = $step2Form->addCheckBox('anonymize_sessions', null, get_la
 $step2Form->addButtonUpdate(get_lang('Anonymize'));
 
 if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
-    $filePath = $usernameListFile->getValue()['tmp_name'];
+    $usernameListFileUploaded = $usernameListFile->getValue();
+    $usernameListFileUploaded['name'] = api_htmlentities($usernameListFileUploaded['name']);
+    $filePath = $usernameListFileUploaded['tmp_name'];
     if (!file_exists($filePath)) {
         throw new Exception(get_lang('CouldNotReadFile').' '.$filePath);
     }
@@ -48,15 +51,19 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     if (false === $submittedUsernames) {
         throw new Exception(get_lang('CouldNotReadFileLines').' '.$filePath);
     }
+
+    $submittedUsernames = array_map('api_htmlentities', $submittedUsernames);
+    $submittedUsernames = array_filter($submittedUsernames);
+
     if (empty($submittedUsernames)) {
         printf(
             '<p>'.get_lang('FileXHasNoData').'</p>',
-            '<em>'.$usernameListFile->getValue()['name'].'</em>'
+            '<em>'.$usernameListFileUploaded['name'].'</em>'
         );
     } else {
         printf(
             '<p>'.get_lang('FileXHasYNonEmptyLines').'</p>',
-            '<em>'.$usernameListFile->getValue()['name'].'</em>',
+            '<em>'.$usernameListFileUploaded['name'].'</em>',
             count($submittedUsernames)
         );
         $uniqueSubmittedUsernames = array_values(array_unique($submittedUsernames));
@@ -116,6 +123,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         $anonymized = [];
         $errors = [];
         $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        /** @var User $user */
         foreach ($users as $user) {
             $username = $user->getUsername();
             $userId = $user->getId();

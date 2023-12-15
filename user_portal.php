@@ -295,17 +295,13 @@ $controller->tpl->assign('content', $courseAndSessions['html']);
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {
-    if (isset($_POST['acceptCookies'])) {
-        api_set_site_use_cookie_warning_cookie();
-    } else {
-        if (!api_site_use_cookie_warning_cookie_exist()) {
-            if (Template::isToolBarDisplayedForUser()) {
-                $controller->tpl->assign('toolBarDisplayed', true);
-            } else {
-                $controller->tpl->assign('toolBarDisplayed', false);
-            }
-            $controller->tpl->assign('displayCookieUsageWarning', true);
+    if (!api_site_use_cookie_warning_cookie_exist()) {
+        if (Template::isToolBarDisplayedForUser()) {
+            $controller->tpl->assign('toolBarDisplayed', true);
+        } else {
+            $controller->tpl->assign('toolBarDisplayed', false);
         }
+        $controller->tpl->enableCookieUsageWarning();
     }
 }
 

@@ -82,9 +82,9 @@ switch ($action) {
         $file = str_replace(' ', '+', $file);
         $attendanceId = $_REQUEST['attendance_id'];
         if (!empty($selected)) {
-            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            list($prefix, $userId, $attendanceCalendarId, $courseId) = explode('-', $selected);
             $attendance = new Attendance();
-            $attendance->saveSignature($userId, $attendanceCalendarId, $file, $attendanceId);
+            $attendance->saveSignature($userId, $attendanceCalendarId, $file, $attendanceId, $courseId);
             echo 1;
             exit;
         }

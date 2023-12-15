@@ -9786,7 +9786,7 @@ class SessionManager
 
                 Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
                 if ($subscribeToForums) {
-                    $userInfo = api_get_user_info($studentID);
+                    $userInfo = api_get_user_info($studentId);
                     if (!empty($forums)) {
                         foreach ($forums as $forum) {
                             $forumId = $forum['iid'];

@@ -2915,14 +2915,16 @@ class Attendance
         $userId,
         $attendanceCalendarId,
         $file,
-        $attendanceId
+        $attendanceId,
+        $courseId = NULL
     ) {
         $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
         if (!$allowSignature) {
             return false;
         }
-
-        $courseId = api_get_course_int_id();
+        if (!isset($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
         $em = Database::getManager();
         $criteria = [
             'userId' => $userId,

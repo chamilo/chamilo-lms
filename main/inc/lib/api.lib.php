@@ -10528,7 +10528,7 @@ function api_protect_webservices()
 {
     if (api_get_configuration_value('disable_webservices')) {
         echo "Webservices are disabled. \n";
-        echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
+        echo "To enable, add \$_configuration['disable_webservices'] = false; in configuration.php";
         exit;
     }
 }

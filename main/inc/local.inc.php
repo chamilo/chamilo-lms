@@ -741,7 +741,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 // update user expiration date when the login is the first time
                 if (isset($_user['status']) && STUDENT == $_user['status']) {
                     $userExpirationXDate = api_get_configuration_value('update_student_expiration_x_date');
-                    $userSpentTime = Tracking::get_time_spent_on_the_platform($_user['user_id']);
+                    $userSpentTime = Tracking::get_time_spent_on_the_platform($_user['user_id'], 'ever');
                     if (false !== $userExpirationXDate && empty($userSpentTime)) {
                         $expDays = (int) $userExpirationXDate['days'];
                         $expMonths = (int) $userExpirationXDate['months'];

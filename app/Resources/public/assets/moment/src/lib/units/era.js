@@ -24,19 +24,17 @@ addRegexToken('NNN', matchEraAbbr);
 addRegexToken('NNNN', matchEraName);
 addRegexToken('NNNNN', matchEraNarrow);
 
-addParseToken(['N', 'NN', 'NNN', 'NNNN', 'NNNNN'], function (
-    input,
-    array,
-    config,
-    token
-) {
-    var era = config._locale.erasParse(input, token, config._strict);
-    if (era) {
-        getParsingFlags(config).era = era;
-    } else {
-        getParsingFlags(config).invalidEra = input;
+addParseToken(
+    ['N', 'NN', 'NNN', 'NNNN', 'NNNNN'],
+    function (input, array, config, token) {
+        var era = config._locale.erasParse(input, token, config._strict);
+        if (era) {
+            getParsingFlags(config).era = era;
+        } else {
+            getParsingFlags(config).invalidEra = input;
+        }
     }
-});
+);
 
 addRegexToken('y', matchUnsigned);
 addRegexToken('yy', matchUnsigned);
@@ -144,7 +142,7 @@ export function getEraName() {
         eras = this.localeData().eras();
     for (i = 0, l = eras.length; i < l; ++i) {
         // truncate time
-        val = this.startOf('day').valueOf();
+        val = this.clone().startOf('day').valueOf();
 
         if (eras[i].since <= val && val <= eras[i].until) {
             return eras[i].name;
@@ -164,7 +162,7 @@ export function getEraNarrow() {
         eras = this.localeData().eras();
     for (i = 0, l = eras.length; i < l; ++i) {
         // truncate time
-        val = this.startOf('day').valueOf();
+        val = this.clone().startOf('day').valueOf();
 
         if (eras[i].since <= val && val <= eras[i].until) {
             return eras[i].narrow;
@@ -184,7 +182,7 @@ export function getEraAbbr() {
         eras = this.localeData().eras();
     for (i = 0, l = eras.length; i < l; ++i) {
         // truncate time
-        val = this.startOf('day').valueOf();
+        val = this.clone().startOf('day').valueOf();
 
         if (eras[i].since <= val && val <= eras[i].until) {
             return eras[i].abbr;
@@ -207,7 +205,7 @@ export function getEraYear() {
         dir = eras[i].since <= eras[i].until ? +1 : -1;
 
         // truncate time
-        val = this.startOf('day').valueOf();
+        val = this.clone().startOf('day').valueOf();
 
         if (
             (eras[i].since <= val && val <= eras[i].until) ||

@@ -948,6 +948,14 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('show_missing_signatures_page') && api_get_configuration_value('enable_sign_attendance_sheet')) {
+            $items[] = [
+                'icon' => Display::return_icon('attendance.png', get_lang('MyMissingSignatures')),
+                'link' => api_get_path(WEB_CODE_PATH).'attendance/my_missing_signatures.php',
+                'title' => get_lang('MyMissingSignatures'),
+            ];
+        }
+
         if (bbb::showGlobalConferenceLink($userInfo)) {
             $bbb = new bbb('', '', true, api_get_user_id());
             $url = $bbb->getListingUrl();

@@ -803,25 +803,40 @@ class UserGroup extends Model
     }
 
     /**
-     * Gets a list of user ids by user group.
+     * Retrieves a list of user IDs belonging to a user group based on a specific type of relation.
      *
-     * @param int $id       user group id
-     * @param int $relation
+     * @param int   $id       The ID of the user group.
+     * @param int   $relation The type of relation to consider. Defaults to 0, which implies any type of relation.
+     * @param array $order    Optional. An array of columns to sort the results by.
+     *                        Each element of the array should be a column name, and the sorting is ascending by default.
+     *                        Example: ['firstname', 'lastname'] translates to 'ORDER BY firstname ASC, lastname ASC'.
      *
-     * @return array with a list of user ids
+     * @return array A list of user IDs that meet the specified criteria.
+     *               If no users are found, an empty array is returned.
      */
-    public function getUsersByUsergroupAndRelation($id, $relation = 0)
+    public function getUsersByUsergroupAndRelation($id, $relation = 0, $order = [])
     {
         $relation = (int) $relation;
+        $conditions = [];
         if (empty($relation)) {
-            $conditions = ['where' => ['usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]]];
+            $conditions['where'] = [
+                'usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "")' => [$id],
+            ];
         } else {
-            $conditions = ['where' => ['usergroup_id = ? AND relation_type = ?' => [$id, $relation]]];
+            $conditions['where'] = [
+                'usergroup_id = ? AND relation_type = ?' => [$id, $relation],
+            ];
+        }
+
+        if (!empty($order)) {
+            $conditions['order'] = implode(', ', array_map(function($item) {
+                return $item . ' ASC';
+            }, $order));
         }
 
         $results = Database::select(
-            'user_id',
-            $this->usergroup_rel_user_table,
+            'ug.user_id',
+            "{$this->usergroup_rel_user_table} ug INNER JOIN {$this->table_user} u ON ug.user_id = u.id",
             $conditions
         );
 

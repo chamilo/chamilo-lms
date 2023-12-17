@@ -219,7 +219,7 @@ class CourseController extends ToolBaseController
         ];
         Event::registerLog($logInfo);
 
-        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
+        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession(), null, null, false);
 
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
@@ -230,7 +230,7 @@ class CourseController extends ToolBaseController
         $result = $qb->getQuery()->getResult();
         $tools = [];
         $toolsToDisplay = [];
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
         $currentSessionId = (int) $sessionId;
         $allowEditToolVisibilityInSession = ('true' === $settingsManager->getSetting('course.allow_edit_tool_visibility_in_session'));
 
@@ -261,6 +261,9 @@ class CourseController extends ToolBaseController
             }
 
             if ($selectedLink) {
+                if (!$isCourseTeacher && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()) {
+                    continue;
+                }
                 $item->getResourceNode()->getResourceLinks()->first()->setVisibility($selectedLink->getVisibility());
                 $toolsToDisplay[$resourceNodeId] = [
                     'ctool' => $item,

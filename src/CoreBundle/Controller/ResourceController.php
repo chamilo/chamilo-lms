@@ -34,6 +34,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -253,9 +254,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function changeVisibility(
         Request $request,
         EntityManagerInterface $entityManager,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Security $security,
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
         if (!$isCourseTeacher) {
             throw new AccessDeniedHttpException();
@@ -321,9 +324,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Security $security
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
         if (!$isCourseTeacher) {
             throw new AccessDeniedHttpException();

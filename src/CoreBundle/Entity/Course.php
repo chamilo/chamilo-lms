@@ -452,7 +452,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         if (0 === $this->users->count()) {
             return false;
         }
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('user.id', $user->getId()));
 
         return $this->users->matching($criteria)->count() > 0;
     }

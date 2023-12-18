@@ -266,7 +266,7 @@ $(function() {
                 'view': view.name,
                 'start': view.intervalStart.format("YYYY-MM-DD")
             };
-            Cookies.set('agenda_cookies', data, 1); // Expires 1 day
+            Cookies.set('agenda_cookies', data, { expires: 1{% if is_https %}, secure: true{% endif %} }); // Expires 1 day
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {

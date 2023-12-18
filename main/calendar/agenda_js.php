@@ -396,6 +396,12 @@ $tpl->assign('fullcalendar_settings', $extraSettings);
 
 $tpl->assign('group_id', (!empty($group_id) ? $group_id : 0));
 
+if (api_is_https()) {
+    $tpl->assign('is_https', 1);
+} else {
+    $tpl->assign('is_https', 0);
+}
+
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

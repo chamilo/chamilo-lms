@@ -63,6 +63,10 @@
     @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3 items-center;
   }
 
+  #lp_item_list .list-group-item {
+    align-items: normal !important;
+  }
+
   // Alerts
 
   .alert {

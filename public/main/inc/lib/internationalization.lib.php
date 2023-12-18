@@ -66,6 +66,8 @@ function get_lang($variable)
         return $variable;
     }
 
+    $defaultLocale = 'en';
+
     $locale = api_get_language_isocode();
     $userInfo = api_get_user_info();
     if (is_array($userInfo) && !empty($userInfo['language'])) {
@@ -79,12 +81,36 @@ function get_lang($variable)
 
     // Using symfony
     $defaultDomain = 'messages';
-    return $translator->trans(
+    $translated = $translator->trans(
         $variable,
         [],
         $defaultDomain,
         $locale
     );
+
+    if ('true' === api_get_setting('language.allow_use_sub_language')) {
+        $parentLocale = null;
+        if ($translated === $variable && $locale !== $defaultLocale) {
+            $parentLocale = SubLanguageManager::getParentLocale($locale);
+            $translated = $translator->trans(
+                $variable,
+                [],
+                $defaultDomain,
+                $parentLocale
+            );
+        }
+
+        if ($translated === $variable && $parentLocale !== $defaultLocale) {
+            $translated = $translator->trans(
+                $variable,
+                [],
+                $defaultDomain,
+                $defaultLocale
+            );
+        }
+    }
+
+    return $translated;
 }
 
 /**

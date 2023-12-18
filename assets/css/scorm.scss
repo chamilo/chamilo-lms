@@ -600,11 +600,11 @@ body {
     border-bottom: none;
 }
 
-.scorm_item_normal.scorm_completed {
+.scorm_item_normal.scorm_completed:not(.scorm_item_section) {
     background: url(../../public/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
 }
 
-.scorm_item_normal.scorm_not_attempted {
+.scorm_item_normal.scorm_not_attempted:not(.scorm_item_section) {
     background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
 
@@ -703,12 +703,13 @@ body {
 .scorm_item_normal.scorm_highlight {
 }
 .scorm_item_normal.scorm_highlight.scorm_not_attempted {
-  background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+  background: url(../../public/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
 }
 .scorm_item_normal.scorm_highlight.scorm_completed {
-  background: url(../../public/img/icons/svg/check-highlight.svg) right center no-repeat;
+  background: url(../../public/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
 }
 .scorm_item_normal.scorm_highlight a {
+  color: #FFF;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
 }

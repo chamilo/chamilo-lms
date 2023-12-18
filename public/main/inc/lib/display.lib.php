@@ -2385,7 +2385,7 @@ class Display
             </div>
             <div
                 id="collapse_'.$idAccordion.'"
-                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'show' : '').'"
+                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'active' : '').'"
             >
                 <div id="collapse_contant_'.$idAccordion.'"  class="card-body ">';
 

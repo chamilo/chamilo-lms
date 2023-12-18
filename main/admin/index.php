@@ -718,7 +718,7 @@ if (api_is_platform_admin()) {
         $databaseName = $_configuration['main_database'];
 
         $items[] = [
-            'url' => "db.php?username=$username&db=$databaseName&server=$host",
+            'url' => "db.php",
             'label' => get_lang('DatabaseManager'),
         ];
     }

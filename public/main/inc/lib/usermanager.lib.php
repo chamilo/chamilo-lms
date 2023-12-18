@@ -56,11 +56,12 @@ class UserManager
 
     /**
      * Validates the password.
-     *
-     * @return bool
      */
-    public static function isPasswordValid(User $user, $plainPassword)
+    public static function isPasswordValid(User $user, string $plainPassword): bool
     {
+        /**
+         * @psalm-suppress PrivateService
+         */
         $hasher = Container::$container->get('security.user_password_hasher');
 
         return $hasher->isPasswordValid($user, $plainPassword);

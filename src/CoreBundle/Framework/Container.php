@@ -160,6 +160,9 @@ class Container
 
     public static function getMessengerBus()
     {
+        /**
+         * @psalm-suppress PrivateService
+         */
         return self::$container->get('messenger.bus.default');
     }
 

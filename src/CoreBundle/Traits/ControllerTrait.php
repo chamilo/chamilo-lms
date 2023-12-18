@@ -130,6 +130,9 @@ trait ControllerTrait
 
     protected function getSettingsFormFactory()
     {
+        /**
+         * @psalm-suppress PrivateService
+         */
         return $this->container->get(SettingsFormFactory::class);
     }
 }

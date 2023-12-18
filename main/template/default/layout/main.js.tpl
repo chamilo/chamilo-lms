@@ -301,8 +301,10 @@ $(function() {
                 {% endif %}
 
                 {{ quiz_markers_rolls_js }}
-            },
-            vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
+            }
+            {% if is_vrview_enabled %}
+                , vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
+            {% endif %}
         });
     }
     {% if video_context_menu_hidden %}

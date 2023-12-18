@@ -2867,6 +2867,21 @@ HTML;
         return $content;
     }
 
+    public static function isVrViewEnabled(): bool
+    {
+        $featuresConf = api_get_configuration_value('video_features');
+
+        if (!isset($featuresConf['features'])) {
+            return false;
+        }
+
+        if (in_array('vrview', $featuresConf['features'])) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function getFrameReadyBlock(
         string $frameName,
         string $itemType = '',
@@ -2874,6 +2889,8 @@ HTML;
     ): string {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
         $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
+
+        $isVrViewEnabled = self::isVrViewEnabled();
 
         $videoFeatures = [
             'playpause',
@@ -2883,9 +2900,13 @@ HTML;
             'tracks',
             'volume',
             'fullscreen',
-            'vrview',
             'markersrolls',
         ];
+
+        if ($isVrViewEnabled) {
+            $videoFeatures[] = 'vrview';
+        }
+
         $features = api_get_configuration_value('video_features');
         $videoPluginsJS = [];
         $videoPluginCSS = [];
@@ -2944,6 +2965,16 @@ HTML;
             });';
         }
 
+        $strMediaElementAdditionalConf = '';
+        $strMediaElementJsDeps = '';
+        $strMediaElementCssDeps = '';
+
+        if ($isVrViewEnabled) {
+            $strMediaElementAdditionalConf = ', vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"';
+            $strMediaElementJsDeps = '{type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},';
+            $strMediaElementCssDeps = '{type:"stylesheet", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.css"},';
+        }
+
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2955,8 +2986,8 @@ HTML;
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                         '.$videoContextMenyHiddenMejs.PHP_EOL.ChamiloApi::getQuizMarkersRollsJS().'
-                    },
-                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
+                    }
+                    '.$strMediaElementAdditionalConf.'
                 });
             });
         },
@@ -2970,7 +3001,7 @@ HTML;
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
                     deps: [
-                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    '.$strMediaElementJsDeps.'
                     {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
                     '.$videoPluginFiles.'
                 ]},
@@ -2985,7 +3016,7 @@ HTML;
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
                 {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
                     deps: [
-                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    '.$strMediaElementJsDeps.'
                     {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
                     '.$videoPluginFiles.'
                 ]},
@@ -3002,7 +3033,7 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
-            {type:"stylesheet", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.css"},
+            '.$strMediaElementCssDeps.'
         ], '.$jsConditionalFunction.');';
 
         return $frameReady;

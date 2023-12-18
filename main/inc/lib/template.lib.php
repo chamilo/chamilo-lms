@@ -632,7 +632,11 @@ class Template
             $css[] = api_get_cdn_path($webPublicPath.'assets/'.$file);
         }
 
-        $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
+        $isVrViewEnabled = Display::isVrViewEnabled();
+
+        if ($isVrViewEnabled) {
+            $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
+        }
 
         $features = api_get_configuration_value('video_features');
         $defaultFeatures = [
@@ -643,9 +647,12 @@ class Template
             'tracks',
             'volume',
             'fullscreen',
-            'vrview',
             'markersrolls',
         ];
+
+        if ($isVrViewEnabled) {
+            $defaultFeatures[] = 'vrview';
+        }
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -754,17 +761,21 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $isoCode = api_get_language_isocode();
+        $isVrViewEnabled = Display::isVrViewEnabled();
         $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_'.strtoupper($isoCode).'.min.js';
 
         if ($isoCode == 'en') {
             $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
-        $js_files = [
-            'chosen/chosen.jquery.min.js',
-            'mediaelement/plugins/vrview/vrview.js',
-            'mediaelement/plugins/markersrolls/markersrolls.min.js',
-        ];
+        $js_files = [];
+        $js_files[] = 'chosen/chosen.jquery.min.js';
+
+        if ($isVrViewEnabled) {
+            $js_files[] = 'mediaelement/plugins/vrview/vrview.js';
+        }
+
+        $js_files[] = 'mediaelement/plugins/markersrolls/markersrolls.min.js';
 
         if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';

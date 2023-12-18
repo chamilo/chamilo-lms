@@ -1002,16 +1002,19 @@ class Agenda
 
                     /** @var AgendaEventSubscription $subscription */
                     $subscription = $personalEvent->getInvitation();
-                    $subscription->setMaxAttendees($subscriptionVisibility > 0 ? $maxSubscriptions : 0);
 
-                    if ($personalEvent->getSubscriptionItemId() != $subscriptionItemId) {
-                        $personalEvent->setSubscriptionItemId($subscriptionItemId ?: null);
-                        $subscription->removeInvitees();
-                    } else {
-                        $subscription->removeInviteesNotInIdList($subscribers);
+                    if ($subscription) {
+                        $subscription->setMaxAttendees($subscriptionVisibility > 0 ? $maxSubscriptions : 0);
+
+                        if ($personalEvent->getSubscriptionItemId() != $subscriptionItemId) {
+                            $personalEvent->setSubscriptionItemId($subscriptionItemId ?: null);
+                            $subscription->removeInvitees();
+                        } else {
+                            $subscription->removeInviteesNotInIdList($subscribers);
+                        }
+
+                        $em->flush();
                     }
-
-                    $em->flush();
                 }
                 break;
             case 'course':
@@ -5017,7 +5020,7 @@ class Agenda
 
         if ($personalEvent) {
             $eventInvitation = $personalEvent->getInvitation();
-            $withInvitation = !($eventInvitation instanceof AgendaEventSubscription);
+            $withInvitation = $eventInvitation && !($eventInvitation instanceof AgendaEventSubscription);
 
             if ($withInvitation) {
                 foreach ($eventInvitation->getInvitees() as $invitee) {

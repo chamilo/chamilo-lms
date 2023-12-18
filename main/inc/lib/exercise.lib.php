@@ -7204,7 +7204,7 @@ EOT;
             null,
             $sessionId,
             $courseId,
-            true
+            false
         );
 
         $exportOk = false;

@@ -39,7 +39,7 @@ class MessageRelUserExtension implements QueryCollectionExtensionInterface
 
         $queryBuilder
             ->andWhere("$alias.receiver = :current")
-            ->setParameter('current', $user)
+            ->setParameter('current', $user->getId())
         ;
     }
 }

@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\QueryBuilder;
@@ -81,11 +82,12 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
             return;
         }
 
+        /** @var User|null $user */
         if (null === $user = $this->security->getUser()) {
             throw new AccessDeniedException('Access Denied SessionRelUser');
         }
 
         $qb->andWhere(sprintf('%s.user = :current_user', $alias));
-        $qb->setParameter('current_user', $user);
+        $qb->setParameter('current_user', $user->getId());
     }
 }

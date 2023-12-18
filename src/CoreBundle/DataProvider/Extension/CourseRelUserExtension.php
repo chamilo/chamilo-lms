@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
@@ -37,13 +38,14 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
         if (CourseRelUser::class === $resourceClass) {
             // Blocks a ROLE_USER to access CourseRelUsers from another User.
             if ('collection_query' === $operation->getName()) {
+                /** @var User|null $user */
                 if (null === $user = $this->security->getUser()) {
                     throw new AccessDeniedException('Access Denied.');
                 }
 
                 $rootAlias = $queryBuilder->getRootAliases()[0];
                 $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-                $queryBuilder->setParameter('current_user', $user);
+                $queryBuilder->setParameter('current_user', $user->getId());
             }
         }
 

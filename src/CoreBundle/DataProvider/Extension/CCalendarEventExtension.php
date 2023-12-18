@@ -93,7 +93,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             $qb->andWhere(
                 "
                 $alias.startDate BETWEEN :start AND :end OR
-                $alias.endDate BETWEEN :start AND :end 
+                $alias.endDate BETWEEN :start AND :end
             "
             );
             $qb
@@ -105,7 +105,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         if (empty($courseId)) {
             $qb
                 ->andWhere('links.user = :user OR node.creator = :user')
-                ->setParameter('user', $user)
+                ->setParameter('user', $user->getId())
             ;
         } else {
             $this->addCourseLinkCondition($qb, $courseId, $sessionId, $groupId);

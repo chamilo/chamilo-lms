@@ -1433,7 +1433,9 @@ class Agenda
         $start = (int) $start;
         $end = (int) $end;
 
+        /** @var string|null $start */
         $start = !empty($start) ? api_get_utc_datetime($start) : null;
+        /** @var string|null $end */
         $end = !empty($end) ? api_get_utc_datetime($end) : null;
 
         if (null === $course) {

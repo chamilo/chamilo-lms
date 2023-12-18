@@ -55,7 +55,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
                 $queryBuilder->expr()->eq("$alias.user", ':user')
             );
 
-            $queryBuilder->setParameter('user', $user);
+            $queryBuilder->setParameter('user', $user->getId());
         }
     }
 }

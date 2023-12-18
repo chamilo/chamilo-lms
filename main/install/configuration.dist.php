@@ -2515,3 +2515,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // If this feature is enabled on an existing portal, the registration date of users will be taken as
 // the latest password change date.
 //$_configuration['security_password_rotate_days'] = 90;
+
+// Prevent login/pass cache by browser
+// If enabled, users' browsers will not be able to re-use previous
+// login/passwords in the main login form. Browsers might choose not to
+// support this feature.
+//$_configuration['security_login_autocomplete_disable'] = false;

@@ -1226,6 +1226,9 @@ class Template
             'icon' => 'user fa-fw',
             'placeholder' => get_lang('UserName'),
         ];
+        if (api_get_configuration_value('security_login_autocomplete_disable') === true) {
+            $params['autocomplete'] = 'new-password';
+        }
         $browserAutoCapitalize = false;
         // Avoid showing the autocapitalize option if the browser doesn't
         // support it: this attribute is against the HTML5 standard
@@ -1244,6 +1247,9 @@ class Template
             'icon' => 'lock fa-fw',
             'placeholder' => get_lang('Pass'),
         ];
+        if (api_get_configuration_value('security_login_autocomplete_disable') === true) {
+            $params['autocomplete'] = 'new-password';
+        }
         if ($browserAutoCapitalize) {
             $params['autocapitalize'] = 'none';
         }

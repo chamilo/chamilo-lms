@@ -29,7 +29,9 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,10 +111,14 @@ trait ControllerTrait
     }
 
     /**
-     * @return Glide
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function getGlide()
+    public function getGlide(): Glide
     {
+        /**
+         * @psalm-suppress ServiceNotFound
+         */
         return $this->container->get('glide');
     }
 

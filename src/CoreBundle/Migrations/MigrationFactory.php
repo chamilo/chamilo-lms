@@ -13,6 +13,9 @@ class MigrationFactory implements \Doctrine\Migrations\Version\MigrationFactory
     private \Doctrine\Migrations\Version\MigrationFactory $migrationFactory;
     private ContainerInterface $container;
 
+    /**
+     * @psalm-suppress ContainerDependency
+     */
     public function __construct(\Doctrine\Migrations\Version\MigrationFactory $migrationFactory, ContainerInterface $container)
     {
         $this->migrationFactory = $migrationFactory;

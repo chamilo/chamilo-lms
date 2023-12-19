@@ -2818,4 +2818,65 @@ class Event
             $sessionId
         );
     }
+
+    /**
+     * Retrieves audit items from the track_e_default table.
+     *
+     * This function fetches audit data based on various optional criteria and
+     * formats the result to remove the "default_" prefix from each field.
+     */
+    public static function getAuditItems(
+        string $defaultEventType,
+        ?int $cId = null,
+        ?int $sessionId = null,
+        ?string $afterDate = null,
+        ?string $beforeDate = null,
+        ?int $userId = null,
+        int $offset = 0,
+        int $limit = 100
+    ): array {
+        $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+
+        $whereConditions = ['default_event_type = ? ' => $defaultEventType];
+
+        if ($cId !== null) {
+            $whereConditions[' AND c_id = ? '] = $cId;
+        }
+        if ($sessionId !== null) {
+            $whereConditions[' AND session_id = ? '] = $sessionId;
+        }
+        if ($afterDate !== null) {
+            $whereConditions[' AND default_date >= ? '] = $afterDate;
+        }
+        if ($beforeDate !== null) {
+            $whereConditions[' AND default_date <= ? '] = $beforeDate;
+        }
+        if ($userId !== null) {
+            $whereConditions[' AND default_user_id = ? '] = $userId;
+        }
+
+        $conditions = [
+            'where' => $whereConditions,
+            'order' => 'default_date DESC',
+            'limit' => "$offset, $limit",
+        ];
+
+        $results = Database::select(
+            'default_user_id, c_id, default_date, default_event_type, default_value_type, default_value, session_id',
+            $tblTrackEDefault,
+            $conditions
+        );
+
+        $formattedResults = [];
+        foreach ($results as $result) {
+            $formattedResult = [];
+            foreach ($result as $key => $value) {
+                $newKey = str_replace('default_', '', $key);
+                $formattedResult[$newKey] = $value;
+            }
+            $formattedResults[] = $formattedResult;
+        }
+
+        return $formattedResults;
+    }
 }

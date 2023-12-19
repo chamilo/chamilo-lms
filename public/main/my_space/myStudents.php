@@ -1932,6 +1932,7 @@ if (empty($details)) {
 
         if ($exerciseList) {
             /** @var CQuiz $exercise */
+            $i = 0;
             foreach ($exerciseList as $exercise) {
                 $exercise_id = (int) $exercise->getIid();
                 $count_attempts = Tracking::count_student_exercise_attempts(

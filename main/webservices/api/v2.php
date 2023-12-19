@@ -992,19 +992,19 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_AUDIT_ITEMS:
-            $defaultEventType = $httpRequest->query->get('default_event_type');
+            $defaultEventType = $_POST['event_type'];
 
-            $cId = $httpRequest->query->has('c_id') ? $httpRequest->query->getInt('c_id') : null;
-            $sessionId = $httpRequest->query->has('session_id') ? $httpRequest->query->getInt('session_id') : null;
-            $userId = $httpRequest->query->has('user_id') ? $httpRequest->query->getInt('user_id') : null;
+            $cId = ($_POST['c_id'] ? (int) $_POST['c_id'] : null);
+            $sessionId = ($_POST['session_id'] ? (int) $_POST['session_id'] : null);
+            $userId = ($_POST['user_id'] ? (int) $_POST['user_id'] : null);
 
-            $afterDate = $httpRequest->query->get('after_date');
-            $beforeDate = $httpRequest->query->get('before_date');
-            $offset = $httpRequest->query->getInt('offset', 0);
-            $limit = $httpRequest->query->getInt('limit', 100);
+            $afterDate = ($_POST['after_date'] ?? null);
+            $beforeDate = ($_POST['before_date'] ?? null);
+            $offset = ($_POST['offset'] ? (int) $_POST['offset'] : 0);
+            $limit = ($_POST['limit'] ? (int) $_POST['limit'] : 100);
 
             if (empty($defaultEventType)) {
-                throw new Exception('default_event_type is required');
+                throw new Exception('event_type is required');
             }
 
             $data = $restApi->getAuditItems($defaultEventType, $cId, $sessionId, $afterDate, $beforeDate, $userId, $offset, $limit);

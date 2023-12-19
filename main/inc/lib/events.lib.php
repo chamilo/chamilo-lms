@@ -2824,7 +2824,6 @@ class Event
      *
      * This function fetches audit data based on various optional criteria and
      * formats the result to remove the "default_" prefix from each field.
-     *
      */
     public static function getAuditItems(
         string $defaultEventType,
@@ -2880,5 +2879,4 @@ class Event
 
         return $formattedResults;
     }
-
 }

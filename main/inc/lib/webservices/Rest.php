@@ -4214,16 +4214,8 @@ class Rest extends WebService
         return [$userGroup->unsubscribeSessionsFromUserGroup($groupId, [$sessionId], false)];
     }
 
-    protected static function generateApiKeyForUser(int $userId): string
-    {
-        UserManager::add_api_key($userId, self::SERVICE_NAME);
-
-        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
-
-        return current($apiKeys);
-    }
-
     /**
+     * Encode the given parameters (structured array) in JSON format
      * @param array $additionalParams Optional
      *
      * @return string
@@ -4241,21 +4233,9 @@ class Rest extends WebService
         return json_encode($params);
     }
 
-    private function generateUrl(array $additionalParams = []): string
-    {
-        $queryParams = [
-            'course' => $this->course ? $this->course->getId() : null,
-            'session' => $this->session ? $this->session->getId() : null,
-            'api_key' => $this->apiKey,
-            'username' => $this->user->getUsername(),
-        ];
-
-        return api_get_self().'?'
-            .http_build_query(array_merge($queryParams, $additionalParams));
-    }
-
     /**
      * Get audit items from track_e_default.
+     * @throws Exception
      */
     public function getAuditItems(
         string $defaultEventType,
@@ -4269,7 +4249,7 @@ class Rest extends WebService
     ): array {
         self::protectAdminEndpoint();
 
-        $auditItems = Event::getAuditItems(
+        return Event::getAuditItems(
             $defaultEventType,
             $cId,
             $sessionId,
@@ -4279,7 +4259,34 @@ class Rest extends WebService
             $offset,
             $limit
         );
+    }
 
-        return $auditItems;
+    /**
+     * Generate an API key for webservices access for the given user ID
+     */
+    protected static function generateApiKeyForUser(int $userId): string
+    {
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return current($apiKeys);
+    }
+
+    /**
+     * Helper generating a query URL (to the current script) from an array of parameters
+     * (course, session, api_key and username) commonly used in webservice calls
+     */
+    private function generateUrl(array $additionalParams = []): string
+    {
+        $queryParams = [
+            'course' => $this->course ? $this->course->getId() : null,
+            'session' => $this->session ? $this->session->getId() : null,
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ];
+
+        return api_get_self().'?'
+            .http_build_query(array_merge($queryParams, $additionalParams));
     }
 }

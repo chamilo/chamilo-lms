@@ -8,6 +8,8 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=master)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/166/badge)](https://bestpractices.coreinfrastructure.org/projects/166)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/88e934aab2f34bb7a0397a6f62b078b2)](https://www.codacy.com/app/chamilo/chamilo-lms?utm_source=github.com&utm_medium=referral&utm_content=chamilo/chamilo-lms&utm_campaign=badger)
+[![type-coverage](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)
+[![psalm level](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)
 
 Chamilo is an e-learning platform, also called "LMS", published under the GNU/GPLv3+ license. It has been used by more than 30M people worldwide since its inception in 2010. This is a development version. For the current stable branch, please select the 1.11.x branch in the Code tab.
 

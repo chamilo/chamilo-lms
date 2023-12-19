@@ -148,7 +148,7 @@ function formExportSubmit(formId) {
 }
 async function exportToPdf() {
     window.scrollTo(0, 0);
-    
+
     $("#dialog-confirm").dialog({
         autoOpen: false,
         show: "blind",
@@ -179,6 +179,8 @@ async function exportToPdf() {
     pdf.addImage(pageData, "JPEG", 35, 60, 515, headerY);
 
     var divs = doc.getElementsByClassName("question-item");
+    var currentHeight = 60 + headerY;
+    var maxHeightPerPage = 842;
     var pages = [];
     var page = 1;
     for (var i = 0; i < divs.length; i += 1) {
@@ -225,10 +227,45 @@ async function exportToPdf() {
 
         var tables = divs[i].getElementsByClassName("open-question");
         for (var j = 0; j < tables.length; j += 1) {
-            var canvas = await html2canvas(tables[j], config);
-            var pageData = canvas.toDataURL("image/jpeg", 0.7);
-            if (pageData) {
-                pdf.addImage(pageData, "JPEG", 40, positionY + (10 * lines.length), 500, 500 / canvas.width * canvas.height);
+            const canvas = await html2canvas(tables[j]);
+            var canvasWidth = canvas.width;
+            var canvasHeight = canvas.height;
+            var imgWidth = 515;
+            var imgHeight = canvasHeight;
+            var y = j === 0 ? currentHeight + 60 : currentHeight;
+            var renderedHeight = 0;
+
+            while (renderedHeight < imgHeight) {
+                var remainingHeight = imgHeight - renderedHeight;
+                var heightToDraw = Math.min(remainingHeight, maxHeightPerPage - y);
+                var sourceHeight = heightToDraw * (canvasWidth / imgWidth);
+
+                // New canvas for cropping image
+                var sectionCanvas = document.createElement("canvas");
+                sectionCanvas.width = canvasWidth;
+                sectionCanvas.height = sourceHeight;
+                var ctx = sectionCanvas.getContext("2d");
+
+                // Draw the image section on new canvas
+                ctx.drawImage(canvas, 0, renderedHeight, canvasWidth, sourceHeight, 0, 0, canvasWidth, sourceHeight);
+
+                var sectionImgData = sectionCanvas.toDataURL("image/jpeg", 0.7);
+
+                pdf.addImage(sectionImgData, "JPEG", 40, y, imgWidth, heightToDraw);
+
+                renderedHeight += sourceHeight;
+                y = heightToDraw + y;
+
+                if (renderedHeight < imgHeight && remainingHeight > maxHeightPerPage - y) {
+                    pdf.addPage();
+                    page++;
+                    y = 40;
+                    currentHeight = 40;
+                }
+            }
+
+            if (renderedHeight >= imgHeight) {
+                currentHeight = y;
             }
         }
 

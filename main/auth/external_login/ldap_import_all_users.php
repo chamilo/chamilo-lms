@@ -15,7 +15,7 @@ if (PHP_SAPI != 'cli') {
 
 require __DIR__.'/../../inc/global.inc.php';
 require __DIR__.'/ldap.inc.php';
-require __DIR__.'/../../inc/conf/auth.conf.php';
+require __DIR__.'/../../../app/config/auth.conf.php';
 /**
  * Code execution.
  */

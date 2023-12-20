@@ -632,6 +632,7 @@ class ExerciseLib
                             $s .= Display::tag('td', $answer);
 
                             if (!empty($quizQuestionOptions)) {
+                                $j = 1;
                                 foreach ($quizQuestionOptions as $id => $item) {
                                     if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
                                         $attributes = [
@@ -643,7 +644,7 @@ class ExerciseLib
                                     }
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($j == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -658,6 +659,7 @@ class ExerciseLib
                                         ),
                                         ['style' => '']
                                     );
+                                    $j++;
                                 }
                             }
 
@@ -686,6 +688,7 @@ class ExerciseLib
                             $s .= Display::tag('td', $answer);
 
                             if (!empty($quizQuestionOptions)) {
+                                $j = 1;
                                 foreach ($quizQuestionOptions as $id => $item) {
                                     if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
                                         $attributes = ['checked' => 1, 'selected' => 1];
@@ -706,7 +709,7 @@ class ExerciseLib
                                     $attributes1['onChange'] = 'RadioValidator('.$questionId.', '.$numAnswer.')';
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($j == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -739,6 +742,7 @@ class ExerciseLib
                                             ]
                                         );
                                     }
+                                    $j++;
                                 }
                             }
 

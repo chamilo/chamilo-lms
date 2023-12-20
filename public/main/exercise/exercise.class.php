@@ -3763,7 +3763,7 @@ class Exercise
                             }
                         } else {
                             // false answer and student is Unsure or PrettySur
-                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                            if (isset($quiz_question_options[$studentChoiceDegree]) && $quiz_question_options[$studentChoiceDegree]['position'] >= 3
                                 && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
                                 $questionScore += $false_score;
                             } else {

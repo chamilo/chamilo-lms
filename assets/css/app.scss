@@ -466,6 +466,35 @@ table#skill_holder {
   color: rgb(46 117 163 / var(--tw-text-opacity));
 }
 
+.question_description img, .question_options img {
+  display: inherit !important;
+}
+
+.question_options .droppable {
+  padding: 5px;
+  text-align: center;
+  background-color: #ECF0F1;
+  border: dotted #dddddd 2px;
+  border-radius: 4px;
+  color: #666666;
+  display: inline-block;
+  width: 85%;
+  margin-bottom: 0;
+}
+
+.question_options .droppable-item {
+  background-color: #84bd00;
+  color: #FFF;
+  padding: 3px 0 3px 5px;
+  width: 20%;
+}
+
+.question_options .droppable-item .number {
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+}
+
 /* ****************************************************
                      END SKILL
  **************************************************** */

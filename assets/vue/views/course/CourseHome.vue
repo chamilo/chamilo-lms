@@ -297,7 +297,7 @@ axios
     course.value = data.course
     session.value = data.session
 
-    cidReqStore.course = data.course
+    cidReqStore.course.resourceNode = data.course.resourceNode
     cidReqStore.session = data.session
 
     tools.value = data.tools.map((element) => {

@@ -18,6 +18,10 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+if (api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) {
+    api_not_allowed(true);
+}
+
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 
 if (empty($courseId)) {

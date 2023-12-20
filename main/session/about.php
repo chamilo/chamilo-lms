@@ -20,6 +20,10 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+if (api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) {
+    api_not_allowed(true);
+}
+
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();

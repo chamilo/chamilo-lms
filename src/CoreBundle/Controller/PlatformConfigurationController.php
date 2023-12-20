@@ -74,6 +74,12 @@ class PlatformConfigurationController extends AbstractController
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
                 'platform.redirect_index_to_url_for_logged_users',
+
+                'language.platform_language',
+                'language.language_priority_1',
+                'language.language_priority_2',
+                'language.language_priority_3',
+                'language.language_priority_4',
             ];
 
             /** @var User|null $user */

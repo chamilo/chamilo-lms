@@ -1901,7 +1901,7 @@ class Rest extends WebService
             $language = api_get_setting('platformLanguage');
         }
 
-        // First check wether the login already exists.
+        // First check whether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
             throw new Exception(get_lang('UserNameNotAvailable'));
         }

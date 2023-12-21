@@ -2579,6 +2579,7 @@ class Rest extends WebService
      * Updates a user identified by its login name.
      *
      * @throws Exception on failure
+     * @todo make a safe version for use by the final user on its account
      */
     public function updateUserFromUserName(array $parameters): bool
     {

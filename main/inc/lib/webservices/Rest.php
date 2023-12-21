@@ -1896,6 +1896,16 @@ class Rest extends WebService
             $expiration_date = $userParam['expiration_date'];
         }
 
+        // If check_email_duplicates was set, trigger exception (i.e. do not create) if the e-mail is already used
+        if ($userParam['check_email_duplicates']) {
+            if (!empty($email)) {
+                $userFromEmail = api_get_user_info_from_email($email);
+                if (!empty($userFromEmail)) {
+                    throw new Exception(get_lang('EmailUsedTwice'));
+                }
+            }
+        }
+
         // Default language.
         if (empty($language)) {
             $language = api_get_setting('platformLanguage');

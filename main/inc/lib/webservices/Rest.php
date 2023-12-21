@@ -2604,6 +2604,13 @@ class Rest extends WebService
             self::throwNotAllowedException();
         }
 
+        if (!empty($parameters['new_login_name'])) {
+            // Make sure the new username, if set, is available
+            if (!UserManager::is_username_available($parameters['new_login_name'])) {
+                throw new Exception(get_lang('LoginAlreadyTaken'));
+            }
+        }
+
         /** @var User $user */
         $user = UserManager::getRepository()->find($userId);
         if (empty($user)) {
@@ -2630,6 +2637,9 @@ class Rest extends WebService
                     break;
                 case 'firstname':
                     $user->setFirstname($value);
+                    break;
+                case 'new_login_name':
+                    $user->setUsername($value);
                     break;
                 case 'phone':
                     $user->setPhone($value);

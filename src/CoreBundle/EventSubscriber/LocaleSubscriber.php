@@ -51,49 +51,47 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $sessionHandler = $request->getSession();
+
+        if ($attrLocale = $request->query->get('_locale')) {
+            $sessionHandler->set('_locale', $attrLocale);
+        }
+
         $locale = $this->getCurrentLanguage($request);
         // if no explicit locale has been set on this request, use one from the session
         $request->setLocale($locale);
-        $request->getSession()->set('_locale', $locale);
+        $sessionHandler->set('_locale', $locale);
     }
 
     public function getCurrentLanguage(Request $request): string
     {
+        $sessionHandler = $request->getSession();
         $localeList = [];
 
-        // 1. Check platform locale
-        $platformLocale = $this->settingsManager->getSetting('language.platform_language');
-
-        if (!empty($platformLocale)) {
+        // 1. Check platform locale;
+        if ($platformLocale = $this->settingsManager->getSetting('language.platform_language')) {
             $localeList['platform_lang'] = $platformLocale;
         }
 
         // 2. Check user locale
         // _locale_user is set when user logins the system check UserLocaleListener
-        $userLocale = $request->getSession()->get('_locale_user');
-
-        if (!empty($userLocale)) {
+        if ($userLocale = $sessionHandler->get('_locale_user')) {
             $localeList['user_profil_lang'] = $userLocale;
         }
 
         // 3. Check course locale
-        $courseId = $request->get('cid');
-
-        if (!empty($courseId)) {
+        if ($courseId = $request->query->get('cid') ?: $request->request->get('cid')) {
             /** @var Course|null $course */
-            $course = $request->getSession()->get('course');
             // 3. Check course locale
-            if (!empty($course)) {
-                $courseLocale = $course->getCourseLanguage();
-                if (!empty($courseLocale)) {
+            if ($course = $sessionHandler->get('course')) {
+                if ($courseLocale = $course->getCourseLanguage()) {
                     $localeList['course_lang'] = $courseLocale;
                 }
             }
         }
 
         // 4. force locale if it was selected from the URL
-        $localeFromUrl = $request->get('_locale');
-        if (!empty($localeFromUrl)) {
+        if ($localeFromUrl = $sessionHandler->get('_locale')) {
             $localeList['user_selected_lang'] = $localeFromUrl;
         }
 

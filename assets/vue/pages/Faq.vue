@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { ref } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import PageCardList from "../components/page/PageCardList"
@@ -37,6 +37,4 @@ const findAllPages = () => {
 }
 
 findAllPages()
-
-watch(locale, () => findAllPages())
 </script>

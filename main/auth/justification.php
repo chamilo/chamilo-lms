@@ -177,11 +177,24 @@ if (!empty($userJustifications)) {
         }
         $actions .= '&nbsp;'.Display::url(get_lang('Delete'), api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-danger']);
         $table->setCellContents($row, $col++, $actions);
+        $code = $justification['code'];
+        $htmlHeadXtra[] = '<script type="text/javascript" >$(function(){$("#file_'.$code.'_file label").css("color","green");});</script>';
         $row++;
     }
 
     $userJustificationList .= $justificationContent.$table->toHtml();
 }
+
+$htmlHeadXtra[] = '<script type="text/javascript" >
+$(function(){
+    $("#justification label").each(function(){
+        var colorG = $(this).css("color");
+        var lgtxt = $(this).text().replace(/ /g,"").length;
+        if (colorG!="green"&&colorG!="rgb(0, 128, 0)"&&lgtxt>3) {
+            $(this).append("<img src=\"'.api_get_path(WEB_PATH).'main/img/icons/22/warning.png\" />");
+        }
+    });
+});</script>';
 
 $tabs = SocialManager::getHomeProfileTabs('justification');
 $justification = $tabs.$formValidator->returnForm().$userJustificationList;

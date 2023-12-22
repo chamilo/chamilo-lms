@@ -191,7 +191,6 @@ $(function(){
         var colorG = $(this).css("color");
         var lgtxt = $(this).text().replace(/ /g,"").length;
         if (colorG!="green"&&colorG!="rgb(0, 128, 0)"&&lgtxt>3) {
-            alert(lgtxt);
             $(this).append("<img src=\"'.api_get_path(WEB_PATH).'main/img/icons/22/warning.png\" />");
         }
     });

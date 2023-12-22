@@ -45,7 +45,7 @@ enum ActionIcon: string
     // Create a category
     case CREATE_CATEGORY = 'folder-multiple-plus';
     // Create a folder
-    case FOLDER_CREATE = 'folder-plus';
+    case CREATE_FOLDER = 'folder-plus';
     // Alert the user of something important/unexpected/undesired
     case ALERT = 'alert';
     // Inform of something completed

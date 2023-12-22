@@ -68,6 +68,9 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'document_access', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $documentAccess;
 
+    #[ORM\Column(name: 'display_order', type: 'integer', nullable: true)]
+    protected ?int $displayOrder = null;
+
     public function __construct()
     {
         $this->maxStudent = 0;
@@ -316,6 +319,18 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
         $this->documentAccess = $documentAccess;
 
         return $this;
+    }
+
+    public function setDisplayOrder(int $displayOrder): self
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
+    }
+
+    public function getDisplayOrder(): ?int
+    {
+        return $this->displayOrder;
     }
 
     public function getResourceIdentifier(): int

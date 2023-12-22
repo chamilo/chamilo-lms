@@ -132,4 +132,6 @@ enum ActionIcon: string
     case REFRESH = 'file-document-refresh';
     // Add user
     case ADD_USER = 'account-plus';
+    // Fill something
+    case FILL = 'format-color-fill';
 }

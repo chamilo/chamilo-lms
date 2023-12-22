@@ -39,7 +39,7 @@ enum ActionIcon: string
     // Move something (from one folder to another) or unfold some interface component
     case MOVE = 'arrow-right-bold';
     // Preview some content
-    case CONTENT_PREVIEW = 'magnify-plus-outline';
+    case PREVIEW_CONTENT = 'magnify-plus-outline';
     // Import some kind of archive/packaged
     case IMPORT_ARCHIVE = 'archive-arrow-up';
     // Create a category

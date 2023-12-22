@@ -302,7 +302,7 @@ if ($inATest) {
     }
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
-        Display::getMdiIcon(ActionIcon::CONTENT_PREVIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Preview')).'</a>';
+        Display::getMdiIcon(ActionIcon::PREVIEW_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Preview')).'</a>';
 
     $actions .= Display::url(
         Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Results and feedback')),

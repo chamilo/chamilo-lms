@@ -32,7 +32,7 @@ class DisplayGradebook
 
                     if (api_is_platform_admin() || false == $evalobj->is_locked()) {
                         $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&import=">'.
-                            Display::getMdiIcon(ActionIcon::ARCHIVE_IMPORT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import marks')).'</a>';
+                            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import marks')).'</a>';
                     }
 
                     if ($evalobj->has_results()) {
@@ -395,7 +395,7 @@ class DisplayGradebook
             }
             if ((empty($grade_model_id) || -1 == $grade_model_id) && $accessToEdit) {
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
-                    Display::getMdiIcon(ActionIcon::FOLDER_CREATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add assessment')).'</a></td>';
+                    Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add assessment')).'</a></td>';
             }
 
             if ('0' != $selectcat && $accessToRead) {

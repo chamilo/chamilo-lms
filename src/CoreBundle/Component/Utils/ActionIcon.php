@@ -25,13 +25,13 @@ enum ActionIcon: string
     // Go back one page
     case BACK = 'arrow-left-bold-box';
     // Assign groups of users to some resource
-    case ASSIGN_GROUP_USERS_TO_RESOURCE = 'account-multiple-plus';
+    case SUBSCRIBE_GROUP_USERS_TO_RESOURCE = 'account-multiple-plus';
     // Handle to move an element by drag & drop
     case MOVE_DRAG_DROP = 'cursor-move';
     // Move backward one page (learning paths)
-    case LP_MOVE_BACKWARD = 'chevron-left';
+    case MOVE_LP_BACKWARD = 'chevron-left';
     // Move forward one page (learning paths)
-    case LP_MOVE_FORWARD = 'chevron-right';
+    case MOVE_LP_FORWARD = 'chevron-right';
     // Move something up
     case UP = 'arrow-up-bold';
     // Move something down or show some unfolded interface component
@@ -41,9 +41,9 @@ enum ActionIcon: string
     // Preview some content
     case CONTENT_PREVIEW = 'magnify-plus-outline';
     // Import some kind of archive/packaged
-    case ARCHIVE_IMPORT = 'archive-arrow-up';
+    case IMPORT_ARCHIVE = 'archive-arrow-up';
     // Create a category
-    case CATEGORY_CREATE = 'folder-multiple-plus';
+    case CREATE_CATEGORY = 'folder-multiple-plus';
     // Create a folder
     case FOLDER_CREATE = 'folder-plus';
     // Alert the user of something important/unexpected/undesired
@@ -57,13 +57,13 @@ enum ActionIcon: string
     // Invisible state
     case INVISIBLE = 'eye-off';
     // Hide from course homepage (unpublish)
-    case COURSE_TOOL_UNPUBLISHED = 'checkbox-multiple-blank';
+    case UNPUBLISH_COURSE_TOOL = 'checkbox-multiple-blank';
     // Show on course homepage
-    case COURSE_TOOL_PUBLISHED = 'checkbox-multiple-blank-outline';
+    case PUBLISH_COURSE_TOOL = 'checkbox-multiple-blank-outline';
     // Disable multiple attempts (or show multiple attempts are currently enabled)
-    case MULTIPLE_ATTEMPTS_DISABLE = 'sync';
+    case DISABLE_MULTIPLE_ATTEMPTS = 'sync';
     // Enable multiple attempts (or show multiple attempts are currently disabled)
-    case MULTIPLE_ATTEMPTS_ENABLE = 'sync-circle';
+    case ENABLE_MULTIPLE_ATTEMPTS = 'sync-circle';
     // Display mode 1
     case DISPLAY_MODE_1 = 'fullscreen';
     // Display mode 2
@@ -71,17 +71,17 @@ enum ActionIcon: string
     // Display mode 3
     case LP_DISPLAY_MODE_3 = 'overscan';
     // Display mode 4
-    case LP_DISPLAY_4 = 'play-box-outline';
+    case LP_DISPLAY_MODE_4 = 'play-box-outline';
     // Equivalent to fullscreen-exit?
-    case LP_FULLSCREEN_EXIT = 'fit-to-screen';
+    case EXIT_LP_FULLSCREEN = 'fit-to-screen';
     // Enable debug
-    case DEBUG_ENABLE = 'bug-check';
+    case ENABLE_DEBUG = 'bug-check';
     // Disable debug
-    case DEBUG_DISABLE = 'bug-outline';
+    case DISABLE_DEBUG = 'bug-outline';
     // Export in some type of archive/package
-    case ARCHIVE_EXPORT = 'archive-arrow-down';
+    case EXPORT_ARCHIVE = 'archive-arrow-down';
     // Copy content
-    case CONTENT_COPY = 'text-box-plus';
+    case COPY_CONTENT = 'text-box-plus';
     // Enable/Disable auto-launch of some content
     case AUTO_LAUNCH = 'rocket-launch';
     // Export to PDF
@@ -95,9 +95,9 @@ enum ActionIcon: string
     // Save the current form
     case FORM_SAVE = 'content-save';
     // Send a message
-    case MESSAGE_SEND = 'send';
+    case SEND_MESSAGE = 'send';
     // Add an attachment
-    case ATTACHMENT_ADD = 'paperclip-plus';
+    case ADD_ATTACHMENT = 'paperclip-plus';
     // ?
     //case CLOUD_UPLOAD = 'cloud-upload';
     // Three vertical dots to indicate the possibility to extend a menu/set of options
@@ -113,11 +113,11 @@ enum ActionIcon: string
     // Print
     case PRINT = 'printer';
     // See details/View details
-    case DETAILS = 'fast-forward-outline';
+    case VIEW_DETAILS = 'fast-forward-outline';
     // Clean/Reset
     case RESET = 'broom';
     // Add audio
-    case AUDIO_ADD = 'music-note-plus';
+    case ADD_AUDIO = 'music-note-plus';
     // Collapse/Contract
     case COLLAPSE = 'arrow-collapse-all';
     // Expand
@@ -130,4 +130,6 @@ enum ActionIcon: string
     case UNLOCK = 'lock-open-variant';
     // Refresh/reload
     case REFRESH = 'file-document-refresh';
+    // Add user
+    case ADD_USER = 'account-plus';
 }

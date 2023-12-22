@@ -146,7 +146,7 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 
     $actionLeft .= Display::url(
-        Display::getMdiIcon(ActionIcon::FOLDER_CREATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forumCategory')),
+        Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forumCategory')),
         api_get_self().'?'.api_get_cidreq().'&action=add_category&lp_id='.$lp_id
     );
 }

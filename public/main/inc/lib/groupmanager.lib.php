@@ -1090,18 +1090,18 @@ class GroupManager
         $id2 = intval($id2);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id, display_order FROM $table
-                WHERE id IN ($id1,$id2) AND c_id = $course_id ";
+        $sql = "SELECT iid, display_order FROM $table
+                WHERE iid IN ($id1,$id2) AND c_id = $course_id ";
         $res = Database::query($sql);
         $cat1 = Database::fetch_object($res);
         $cat2 = Database::fetch_object($res);
         if ($cat1 && $cat2) {
             $sql = "UPDATE $table SET display_order=$cat2->display_order
-                    WHERE id = $cat1->id AND c_id = $course_id ";
+                    WHERE iid = $cat1->id AND c_id = $course_id ";
             Database::query($sql);
 
             $sql = "UPDATE $table SET display_order=$cat1->display_order
-                    WHERE id = $cat2->id AND c_id = $course_id ";
+                    WHERE iid = $cat2->id AND c_id = $course_id ";
             Database::query($sql);
         }
     }
@@ -1692,7 +1692,7 @@ class GroupManager
      * Subscribe tutor(s) to a specified group in current course.
      *
      * @param mixed $userList  Can be an array with user-id's or a single user-id
-     * @param array $groupInfo
+     * @param CGroup $group
      * @param int   $course_id
      */
     public static function subscribeTutors($userList, CGroup $group = null, $course_id = 0)
@@ -1702,7 +1702,7 @@ class GroupManager
         }
         $userList = is_array($userList) ? $userList : [$userList];
         $result = true;
-        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
+        $course_id = !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $groupId = (int) $group->getIid();
 

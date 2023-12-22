@@ -65,15 +65,15 @@ enum ActionIcon: string
     // Enable multiple attempts (or show multiple attempts are currently disabled)
     case ENABLE_MULTIPLE_ATTEMPTS = 'sync-circle';
     // Display mode 1
-    case DISPLAY_MODE_1 = 'fullscreen';
+    case SET_DISPLAY_MODE_1 = 'fullscreen';
     // Display mode 2
-    case LP_DISPLAY_MODE_2 = 'fullscreen-exit';
+    case SET_DISPLAY_MODE_2 = 'fullscreen-exit';
     // Display mode 3
-    case LP_DISPLAY_MODE_3 = 'overscan';
+    case SET_DISPLAY_MODE_3 = 'overscan';
     // Display mode 4
-    case LP_DISPLAY_MODE_4 = 'play-box-outline';
+    case SET_DISPLAY_MODE_4 = 'play-box-outline';
     // Equivalent to fullscreen-exit?
-    case EXIT_LP_FULLSCREEN = 'fit-to-screen';
+    case EXIT_FULLSCREEN = 'fit-to-screen';
     // Enable debug
     case ENABLE_DEBUG = 'bug-check';
     // Disable debug
@@ -83,7 +83,7 @@ enum ActionIcon: string
     // Copy content
     case COPY_CONTENT = 'text-box-plus';
     // Enable/Disable auto-launch of some content
-    case AUTO_LAUNCH = 'rocket-launch';
+    case AUTOLAUNCH = 'rocket-launch';
     // Export to PDF
     case EXPORT_PDF = 'file-pdf-box';
     // CSV export
@@ -93,13 +93,13 @@ enum ActionIcon: string
     // Export to Document
     case EXPORT_DOC = 'microsoft-word';
     // Save the current form
-    case FORM_SAVE = 'content-save';
+    case SAVE_FORM = 'content-save';
     // Send a message
     case SEND_MESSAGE = 'send';
     // Add an attachment
     case ADD_ATTACHMENT = 'paperclip-plus';
-    // ?
-    //case CLOUD_UPLOAD = 'cloud-upload';
+    // ? See RESTORE_BACKUP
+    // case UPLOAD_CLOUD = 'cloud-upload';
     // Three vertical dots to indicate the possibility to extend a menu/set of options
     case VERTICAL_DOTS = 'dots-vertical';
     // Information icon - Get more info

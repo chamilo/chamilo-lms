@@ -9,6 +9,8 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This library contains some functions for group-management.
@@ -2256,46 +2258,46 @@ class GroupManager
                 $edit_actions = '<a
                     href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
                     title="'.get_lang('Edit').'">'.
-                    Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this group')).
                     '</a>&nbsp;';
 
                 if (1 == $group->getStatus()) {
                     $edit_actions .= '<a
                         href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&group_id='.$groupId.'"
                         title="'.get_lang('Hide').'">'.
-                        Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide')).'</a>&nbsp;';
                 } else {
                     $edit_actions .= '<a
                         href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_visible&group_id='.$groupId.'"
                         title="'.get_lang('Show').'">'.
-                        Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon('eye-closed', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Show')).'</a>&nbsp;';
                 }
 
                 $edit_actions .= '<a
                     href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
                     title="'.get_lang('Group members').'">'.
-                    Display::return_icon('user.png', get_lang('Group members'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Group members')).'</a>&nbsp;';
 
                 $edit_actions .= '<a
                     href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$groupId.'"
                     title="'.get_lang('Export users list').'">'.
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export')).'</a>&nbsp;';
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
-                        Display::return_icon('survey.png', get_lang('ExportSurveyResults'), '', ICON_SIZE_SMALL),
+                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportSurveyResults')),
                         $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
                     ).'&nbsp;';
                 }
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&group_id='.$groupId.'"
                     onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('FillGroup').'">'.
-                    Display::return_icon('fill.png', get_lang('FillGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::FILL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('FillGroup')).'</a>&nbsp;';
 
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&group_id='.$groupId.'"
                     onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('Delete').'">'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>&nbsp;';
 
                 $row[] = $edit_actions;
             }

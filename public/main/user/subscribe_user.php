@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ExtraField as ExtraFieldModel;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This script allows teachers to subscribe existing users
@@ -185,7 +186,7 @@ $actionsLeft = Display::url(
 
 if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
     $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
-        Display::return_icon('clean_group.gif').' '.get_lang('Clear filter results').'</a>';
+        Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clear filter results')).' '.get_lang('Clear filter results').'</a>';
 }
 $extraForm = '';
 if ('true' === api_get_setting('ProfilingFilterAddingUsers')) {

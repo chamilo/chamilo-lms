@@ -73,7 +73,7 @@ $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
 
 if (!empty($userJustifications)) {
     if (count($fields) <= count($userJustifications) && $_REQUEST['a'] != 'notification_sent') {
-        $formValidator->addHtml('<div class="alert alert-warning"><a href="'.api_get_self().'?a=notify_justification" >'.$plugin->get_lang('SendNotificationToAllAdmins').'</a></div>');
+        $formValidator->addHtml('<label class="col-sm-2 control-label"></label><a class="btn btn-primary" href="'.api_get_self().'?a=notify_justification" >'.$plugin->get_lang('SendNotificationToAllAdmins').'</a>');
     }
 }
 

@@ -43,6 +43,7 @@ class LogoutListener
         $request = $event->getRequest();
 
         // Chamilo logout
+        $request->getSession()->remove('_selected_locale');
         $request->getSession()->remove('_locale');
         $request->getSession()->remove('_locale_user');
 

@@ -90,6 +90,7 @@ try {
 
     // Symfony uses request_stack now
     $container->get('request_stack')->push($request);
+    $container->get('translator')->setLocale($request->getLocale());
 
     if (!empty($saveFlashBag)) {
         foreach ($saveFlashBag as $typeMessage => $messageList) {

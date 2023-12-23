@@ -66,13 +66,11 @@ function get_lang(string $variable): string
 
     // Using symfony
     $defaultDomain = 'messages';
-    $locale = api_get_language_isocode();
 
     return $translator->trans(
         $variable,
         [],
-        $defaultDomain,
-        $locale
+        $defaultDomain
     );
 }
 

@@ -1,2 +1,1 @@
-{% set locale = locale|default('en') %}
-{{ '['~ 'platform.site_name' | api_get_setting ~ '] ' ~ 'Your Reg'|trans({}, null, locale) ~ ' ' ~ 'platform.site_name' | api_get_setting }}
+{{ '['~ 'platform.site_name' | api_get_setting ~ '] ' ~ 'Your Reg'|trans ~ ' ' ~ 'platform.site_name' | api_get_setting }}

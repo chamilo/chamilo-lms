@@ -88,7 +88,7 @@ class ExerciseCategoryManager extends Model
         $parameters
     ) {
         $repo = Container::getExerciseCategoryRepository();
-        $translator = Container::getTranslator();
+        $translator = Container::$container->get('translator');
         foreach ($primaryKeys as $id) {
             $category = $repo->find($id);
             $repo->hardDelete($category);

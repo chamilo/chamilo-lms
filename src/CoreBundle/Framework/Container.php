@@ -91,7 +91,7 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 
 /**
@@ -101,7 +101,8 @@ class Container
 {
     public static ?ContainerInterface $container = null;
     public static ?Request $request = null;
-    public static ?TranslatorInterface $translator = null;
+    // For legacy, to get the translator service is necessary get it by Container::$container->get('translator')
+    public static ?Translator $translator = null;
     public static Environment $twig;
     public static ?Session $session = null;
     public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
@@ -229,20 +230,6 @@ class Container
     public static function getTokenStorage()
     {
         return self::$container->get('security.token_storage');
-    }
-
-    /**
-     * @return TranslatorInterface
-     */
-    public static function getTranslator()
-    {
-        if (null !== self::$translator) {
-            return self::$translator;
-        }
-
-        // if (self::$container->has('translator')) {
-        return self::$container->get('translator');
-        // }
     }
 
     public static function getMailer(): Mailer

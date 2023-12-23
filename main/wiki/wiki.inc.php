@@ -374,7 +374,6 @@ class Wiki
             ->setVisibilityDisc(1)
             ->setAddlockDisc(1)
             ->setRatinglockDisc(1)
-            ->setPageId($pageId)
             ->setReflink(trim($values['reflink']))
             ->setTitle(trim($values['title']))
             ->setContent($values['content'])
@@ -388,7 +387,7 @@ class Wiki
             ->setLinksto($linkTo)
             ->setUserIp(api_get_real_ip())
             ->setSessionId($this->session_id)
-            ->setPageId($values['page_id'])
+            ->setPageId(intval($values['page_id']))
             ->setEditlock(0)
             ->setIsEditing(0)
             ->setTimeEdit($time)
@@ -713,6 +712,8 @@ class Wiki
                 $em = Database::getManager();
                 $dtime = api_get_utc_datetime(null, false, true);
 
+                $_clean['page_id'] = $values['page_id'] ?? 0;
+
                 $newWiki = (new CWiki())
                     ->setCId($this->course_id)
                     ->setReflink($_clean['reflink'])
@@ -736,6 +737,7 @@ class Wiki
                     ->setEditlock(0)
                     ->setIsEditing(0)
                     ->setTag('')
+                    ->setPageId(intval($_clean['page_id']))
                 ;
 
                 $em->persist($newWiki);

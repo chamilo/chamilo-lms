@@ -2745,16 +2745,31 @@ class GroupManager
         $items = [
             '<a class="nav-link '.$activeSettings.'"
                 id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
-                '.Display::return_icon('settings.png').' '.get_lang('Settings').'
-            </a>'.
+                '.Display::getMdiIcon(
+                    ToolIcon::SETTINGS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Settings')
+                ).'</a>'.
             '<a class="nav-link '.$activeMember.'"
-                    id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('Group members').
-            '</a>'.
+                id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                '.Display::getMdiIcon(
+                ToolIcon::MEMBER,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Group members')
+            ).'</a>'.
             '<a class="nav-link  '.$activeTutor.'"
-                    id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
-                    '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
-            </a>',
+                id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+                '.Display::getMdiIcon(
+                'human-male-board',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Group tutors')
+            ).'</a>',
         ];
 
         echo Display::toolbarAction('group', $items);

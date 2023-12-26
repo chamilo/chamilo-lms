@@ -203,10 +203,12 @@ class survey_question
             $allowParent = false;
         }
 
-        $icon = Display::return_icon(
+        $icon = Display::getMdiIcon(
                 SurveyManager::icon_question($type),
-                $toolName,
-                ['align' => 'middle', 'height' => '22px']
+                'ch-tool-icon',
+                ['align' => 'middle'],
+                ICON_SIZE_SMALL,
+                $toolName
             ).' ';
 
         $toolName = $icon.$actionHeader.$toolName;

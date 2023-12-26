@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -176,8 +178,8 @@ foreach ($questions as $item) {
 
 $row = 2;
 $column = 0;
-$availableIcon = Display::return_icon('bullet_green.png', get_lang('Available'));
-$notAvailableIcon = Display::return_icon('bullet_red.png', get_lang('Not available'));
+$availableIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Available'));
+$notAvailableIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Not available'));
 
 foreach ($students as $studentId) {
     $userInfo = api_get_user_info($studentId);
@@ -185,7 +187,7 @@ foreach ($students as $studentId) {
     if ($userId == $studentId) {
         if ('edit' !== $action) {
             $name .= Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                 $urlEdit
             );
         }
@@ -263,16 +265,16 @@ if ('edit' === $action) {
 $actions = '';
 if (api_is_allowed_to_edit()) {
     $actions .= Display::url(
-        Display::return_icon('edit.png', get_lang('Edit survey'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit survey')),
         api_get_path(WEB_CODE_PATH).'survey/edit_meeting.php?'.api_get_cidreq().'&action=edit&survey_id='.$surveyId
     );
     $actions .= Display::url(
-        Display::return_icon('delete.png', get_lang('Delete survey'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete survey')),
         api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$surveyId,
         ['onclick' => 'javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;']
     );
     $actions .= Display::url(
-        Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(StateIcon::MAIL_NOTIFICATION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Publish')),
         api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&survey_id='.$surveyId
     );
 }

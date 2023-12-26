@@ -832,16 +832,16 @@ class SurveyManager
 
         // the images array
         $icon_question = [
-            'yesno' => 'yesno.png',
-            'personality' => 'yesno.png',
-            'multiplechoice' => 'mcua.png',
-            'multipleresponse' => 'mcma.png',
-            'open' => 'open_answer.png',
-            'dropdown' => 'dropdown.png',
-            'percentage' => 'percentagequestion.png',
-            'score' => 'scorequestion.png',
-            'comment' => 'commentquestion.png',
-            'pagebreak' => 'page_end.png',
+            'yesno' => 'thumbs-up-down',
+            'personality' => 'thumbs-up-down',
+            'multiplechoice' => 'format-list-bulleted',
+            'multipleresponse' => 'format-list-bulleted-square',
+            'open' => 'form-textarea',
+            'dropdown' => 'form-dropdown',
+            'percentage' => 'percent-box-outline',
+            'score' => 'format-annotation-plus',
+            'comment' => 'format-align-top',
+            'pagebreak' => 'format-page-break',
         ];
 
         if (in_array($type, $possible_types)) {

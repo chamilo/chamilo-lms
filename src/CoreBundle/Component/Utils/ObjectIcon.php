@@ -72,6 +72,8 @@ enum ObjectIcon: string
     case TEACHER = 'human-male-board';
     // Survey
     case SURVEY = 'form-dropdown';
+    // Doodle-type survey
+    case SURVEY_DOODLE = 'calendar-multiselect';
     // Anonymous user
     case ANONYMOUS = 'incognito';
     // Videoconference

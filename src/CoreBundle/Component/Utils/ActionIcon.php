@@ -134,4 +134,6 @@ enum ActionIcon: string
     case ADD_USER = 'account-plus';
     // Fill something
     case FILL = 'format-color-fill';
+    // Search / find
+    case SEARCH = 'magnify';
 }

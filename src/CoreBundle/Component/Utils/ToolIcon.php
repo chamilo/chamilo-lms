@@ -16,6 +16,8 @@ enum ToolIcon: string
     case ASSIGNMENT = 'inbox-full';
     // Attendance
     case ATTENDANCE = 'av-timer';
+    // Blog
+    case BLOG = 'post-outline';
     // Chat
     case CHAT = 'chat-processing';
     // Course description

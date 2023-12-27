@@ -4,6 +4,9 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Learning paths reporting.
@@ -169,9 +172,9 @@ switch ($action) {
                 }
                 $table->setCellContents($row, 0, 'Q'.$choiceCounter);
                 $table->setCellContents($row, 1, $option['student_response_formatted']);
-                $result = Display::return_icon('icon_check.png', null, [], ICON_SIZE_SMALL);
+                $result = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
                 if ('wrong' === $option['result']) {
-                    $result = Display::return_icon('icon_error.png', null, [], ICON_SIZE_SMALL);
+                    $result = Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
                 }
 
                 $table->setCellContents($row, 2, $result);
@@ -278,29 +281,29 @@ $output = require_once api_get_path(SYS_CODE_PATH).'lp/lp_stats.php';
 
 $actions = [];
 $actions[] = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     'javascript:history.back();'
 );
 $actions[] = Display::url(
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
     'javascript:window.print();'
 );
 $actions[] = Display::url(
-    Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
     api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING'])
 );
 
 Display::display_header($nameTools);
 echo Display::toolbarAction('actions', [implode(PHP_EOL, $actions)]);
 $table_title = $session_id
-    ? Display::return_icon('session.png', get_lang('Session')).PHP_EOL.api_get_session_name($session_id).PHP_EOL
+    ? Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).PHP_EOL.api_get_session_name($session_id).PHP_EOL
     : PHP_EOL;
-$table_title .= Display::return_icon('course.png', get_lang('Course')).PHP_EOL.$courseInfo['name'].PHP_EOL
-    .Display::return_icon('user.png', get_lang('User')).' '.$name;
+$table_title .= Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).PHP_EOL.$courseInfo['name'].PHP_EOL
+    .Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('User')).' '.$name;
 
 echo Display::page_header($table_title);
 echo Display::page_subheader(
-    Display::return_icon('learnpath.png', get_lang('Learning path')).PHP_EOL.$lp_title
+    Display::getMdiIcon(ObjectIcon::LP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learning path')).PHP_EOL.$lp_title
 );
 echo $output;
 Display::display_footer();

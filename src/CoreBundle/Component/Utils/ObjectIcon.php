@@ -94,4 +94,6 @@ enum ObjectIcon: string
     case SINGLE_ELEMENT = 'note-outline';
     // Multiple element (two squared white sheets as opposed to single one)
     case MULTI_ELEMENT = 'note-multiple-outline';
+    // Tracking time, specifically
+    case TIME_REPORT = 'timetable';
 }

@@ -3,6 +3,10 @@
 /**
  * Special report for corporate users.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -85,24 +89,19 @@ $actions = null;
 
 if (api_is_student_boss()) {
     $actions .= Display::url(
-        Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
         api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
     $actions .= Display::url(
-        Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
         api_get_path(WEB_CODE_PATH).'my_space/student.php'
     );
     $actions .= Display::url(
-        Display::return_icon('statistics.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Corporate report')),
         api_get_path(WEB_CODE_PATH).'my_space/company_reports.php'
     );
     $actions .= Display::url(
-        Display::return_icon(
-            'certificate_list.png',
-            get_lang('GradebookSeeListOfLearnersCertificates'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GradebookSeeListOfLearnersCertificates')),
         api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
 }

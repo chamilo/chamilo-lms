@@ -1036,7 +1036,7 @@ EOT;
 
         $htmlIcon = '';
         if ($icon) {
-            $htmlIcon = Display::return_icon($icon, null, ['style' => 'float:left;'], ICON_SIZE_SMALL);
+            $htmlIcon = Display::getMdiIcon($icon, 'ch-tool-icon', 'float:left;', ICON_SIZE_SMALL);
         }
         $html = '
         <div class="mt-4 rounded-lg">
@@ -1049,7 +1049,7 @@ EOT;
                         aria-expanded="'.(($open) ? 'true' : 'false').'"
                         aria-controls="collapse_'.$id.'"
                     >
-                        '.$htmlIcon.' '.$title.'
+                        '.$htmlIcon.'&nbsp;'.$title.'
                     </a>
                 </h5>
             </div>

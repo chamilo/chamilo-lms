@@ -43,10 +43,10 @@ class BranchSync
     protected ?string $branchIp = null;
 
     #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
-    protected ?float $latitude = null;
+    protected ?string $latitude = null;
 
     #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
-    protected ?float $longitude = null;
+    protected ?string $longitude = null;
 
     #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $dwnSpeed = null;
@@ -162,7 +162,7 @@ class BranchSync
         return $this->branchIp;
     }
 
-    public function setLatitude(float $latitude): self
+    public function setLatitude(?string $latitude): self
     {
         $this->latitude = $latitude;
 
@@ -174,12 +174,12 @@ class BranchSync
      *
      * @return float
      */
-    public function getLatitude()
+    public function getLatitude(): ?string
     {
         return $this->latitude;
     }
 
-    public function setLongitude(float $longitude): self
+    public function setLongitude(?string $longitude): self
     {
         $this->longitude = $longitude;
 

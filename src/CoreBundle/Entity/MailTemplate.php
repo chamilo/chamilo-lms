@@ -39,5 +39,5 @@ class MailTemplate
     protected bool $defaultTemplate;
 
     #[ORM\Column(name: '`system`', type: 'integer', nullable: false, options: ['default' => 0])]
-    protected bool $system;
+    protected int $system;
 }

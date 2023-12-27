@@ -47,7 +47,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[ORM\Column(name: 'visibility', type: 'string', length: 255, nullable: false)]
     protected string $visibility;
     #[ORM\Column(name: 'author_id', type: 'integer', nullable: true)]
-    protected ?string $authorId = null;
+    protected ?int $authorId = null;
     #[Assert\NotBlank]
     #[ORM\Column(name: 'allow_members_leave_group', type: 'integer')]
     protected int $allowMembersToLeaveGroup;
@@ -205,11 +205,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
-    public function getAuthorId(): string
+    public function getAuthorId(): ?int
     {
         return $this->authorId;
     }
-    public function setAuthorId(string $authorId): self
+    public function setAuthorId(?int $authorId): self
     {
         $this->authorId = $authorId;
 

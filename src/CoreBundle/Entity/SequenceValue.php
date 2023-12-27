@@ -30,7 +30,7 @@ class SequenceValue
     protected ?SequenceRowEntity $entity = null;
 
     #[ORM\Column(name: 'advance', type: 'float')]
-    protected int $advance;
+    protected float $advance;
 
     #[ORM\Column(name: 'complete_items', type: 'integer')]
     protected int $completeItems;
@@ -39,13 +39,13 @@ class SequenceValue
     protected int $totalItems;
 
     #[ORM\Column(name: 'success', type: 'boolean')]
-    protected int $success;
+    protected bool $success;
 
     #[ORM\Column(name: 'success_date', type: 'datetime', nullable: true)]
     protected ?DateTime $successDate = null;
 
     #[ORM\Column(name: 'available', type: 'boolean')]
-    protected int $available;
+    protected bool $available;
 
     #[ORM\Column(name: 'available_start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableStartDate = null;
@@ -78,7 +78,7 @@ class SequenceValue
     /**
      * @return int
      */
-    public function getAdvance()
+    public function getAdvance(): float
     {
         return $this->advance;
     }
@@ -86,7 +86,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setAdvance(int $advance)
+    public function setAdvance(float $advance): static
     {
         $this->advance = $advance;
 
@@ -126,12 +126,12 @@ class SequenceValue
     /**
      * @return int
      */
-    public function getSuccess()
+    public function getSuccess(): bool
     {
         return $this->success;
     }
 
-    public function setSuccess(int $success): self
+    public function setSuccess(bool $success): self
     {
         $this->success = $success;
 
@@ -156,12 +156,12 @@ class SequenceValue
     /**
      * @return int
      */
-    public function getAvailable()
+    public function getAvailable(): bool
     {
         return $this->available;
     }
 
-    public function setAvailable(int $available): self
+    public function setAvailable(bool $available): self
     {
         $this->available = $available;
 

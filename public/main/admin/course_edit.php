@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 $cidReset = true;
 
@@ -441,16 +443,16 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/course_list.php'
 );
 $actions .= Display::url(
-    Display::return_icon('course_home.png', get_lang('Course homepage')),
+    Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage')),
     $courseInfo['course_public_url'],
     ['target' => '_blank']
 );
 $actions .= Display::url(
-    Display::return_icon('info2.png', get_lang('Information')),
+    Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Information')),
     api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
 );
 

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 $cidReset = true;
 
@@ -57,10 +59,10 @@ function remove_item(origin) {
 function display_advanced_search () {
     if ($("#advancedSearch").css("display") == "none") {
         $("#advancedSearch").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', 'vertical-align:middle;', ICON_SIZE_SMALL, get_lang('Hide')).'&nbsp;'.get_lang('Advanced search').'\');
     } else {
         $("#advancedSearch").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', 'vertical-align:middle;', ICON_SIZE_SMALL, get_lang('Show')).'&nbsp;'.get_lang('Advanced search').'\');
     }
 }
 
@@ -150,16 +152,16 @@ Display::display_header($tool_name);
 $add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
 if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
+        Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
+    $link_add_type_unique = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+        Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
 }
 
 $actions = '<a href="usergroups.php">'.
-    Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
 
 $actions .= '<a href="javascript://" class="advanced_parameters btn"  onclick="display_advanced_search();">
                 '.get_lang('Advanced search').'

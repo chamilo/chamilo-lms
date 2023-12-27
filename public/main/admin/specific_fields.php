@@ -3,6 +3,9 @@
 /**
  * Manage specific fields.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // Resetting the course id.
 $cidReset = true;
 

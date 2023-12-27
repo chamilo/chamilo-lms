@@ -12,6 +12,8 @@
  * @author Roan EMbrechts, code cleaning
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // we are in the admin area so we do not need a course id
 $cidReset = true;
 

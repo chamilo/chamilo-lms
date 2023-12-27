@@ -7,6 +7,9 @@
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

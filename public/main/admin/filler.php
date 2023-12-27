@@ -5,6 +5,8 @@
  * Index of the admin tools.
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 $cidReset = true;
 

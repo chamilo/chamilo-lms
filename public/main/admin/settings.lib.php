@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Library of the settings.php file.

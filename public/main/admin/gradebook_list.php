@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This page allows the administrator to manage the system announcements.

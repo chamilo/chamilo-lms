@@ -2234,7 +2234,11 @@ class Display
 
         $additionalAttributes['class'] = 'mdi mdi-';
 
-        if ($name instanceof ActionIcon or $name instanceof ToolIcon) {
+        if ($name instanceof ActionIcon
+            || $name instanceof ToolIcon
+            || $name instanceof ObjectIcon
+            || $name instanceof StateIcon
+        ) {
             $additionalAttributes['class'] .= $name->value;
         } else {
             $additionalAttributes['class'] .= $name;

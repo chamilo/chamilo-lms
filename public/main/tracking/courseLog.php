@@ -245,7 +245,7 @@ if ($sessionId) {
     $titleSession = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' '.api_get_session_name($sessionId);
     $titleCourse = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course_name;
 } else {
-    $titleSession = Display::getMdiIcon(ObjectAction::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course->getTitle();
+    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course->getTitle();
 }
 
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(

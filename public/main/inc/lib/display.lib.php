@@ -2220,7 +2220,7 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string|ActionIcon|ToolIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
+    public static function getMdiIcon(string|ActionIcon|ToolIcon|ObjectIcon|StateIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';
         if (!empty($pixelSize)) {

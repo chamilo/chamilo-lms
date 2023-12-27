@@ -3217,14 +3217,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "axios@npm:1.6.0"
+"axios@npm:^1.6.3":
+  version: 1.6.3
+  resolution: "axios@npm:1.6.3"
   dependencies:
     follow-redirects: ^1.15.0
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
+  checksum: 07ef3bb83fc2dacc1ae2c97f2bbd04ef7701f5655f9037789d79ee78b698ffa50eaa8465c2017d4d3e9ce7d94cb779f730acaab32ce9036d0a4933c1e89df4da
   languageName: node
   linkType: hard
 
@@ -3644,7 +3644,7 @@ __metadata:
     "@vuelidate/validators": ^2.0.4
     alpinejs: ^3.12.3
     autoprefixer: ^10.4.16
-    axios: ^1.6.0
+    axios: ^1.6.3
     blueimp-file-upload: ^10.32.0
     blueimp-load-image: ^5.16.0
     bootstrap-daterangepicker: ^3.1.0

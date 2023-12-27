@@ -861,7 +861,7 @@ if (!empty($groupList)) {
                         if (!empty($results)) {
                             foreach ($results as $result) {
                                 if (!empty($result['max_score'])) {
-                                    $score = $result['score'] / $result['max_score  '];
+                                    $score = $result['score'] / $result['max_score'];
                                     if ($score > $best) {
                                         $best = $score;
                                     }

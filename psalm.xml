@@ -202,4 +202,17 @@
             </extraFiles>
         </pluginClass>
     </plugins>
+
+    <issueHandlers>
+        <PluginIssue name="PrivateService" errorLevel="suppress">
+            <errorLevel type="suppress">
+                <file name="src/CoreBundle/Framework/Container.php"/>
+            </errorLevel>
+        </PluginIssue>
+        <PluginIssue name="ServiceNotFound">
+            <errorLevel type="suppress">
+                <file name="src/CoreBundle/Traits/ControllerTrait.php"/>
+            </errorLevel>
+        </PluginIssue>
+    </issueHandlers>
 </psalm>

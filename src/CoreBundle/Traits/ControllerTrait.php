@@ -116,9 +116,6 @@ trait ControllerTrait
      */
     public function getGlide(): Glide
     {
-        /**
-         * @psalm-suppress ServiceNotFound
-         */
         return $this->container->get('glide');
     }
 
@@ -136,9 +133,6 @@ trait ControllerTrait
 
     protected function getSettingsFormFactory()
     {
-        /**
-         * @psalm-suppress PrivateService
-         */
         return $this->container->get(SettingsFormFactory::class);
     }
 }

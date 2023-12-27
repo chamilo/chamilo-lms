@@ -271,7 +271,7 @@ switch ($action) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $numberVisits += $row['count'];
-            $courseProgress = Tracking::get_avg_student_progress($studentId, $course['code'], [], $sessionToExport);
+            $courseProgress = Tracking::get_avg_student_progress($studentId, $course['code'], [], api_get_session_entity($sessionToExport));
             $progressPerCourse[$courseId] = $courseProgress;
             $progress += $courseProgress;
         }

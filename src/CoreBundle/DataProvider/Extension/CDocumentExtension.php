@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -19,15 +19,14 @@ use Symfony\Component\Security\Core\Security;
 /**
  * Extension is called when loading api/documents.json.
  */
-final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class CDocumentExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     use CourseLinkExtensionTrait;
 
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -80,7 +79,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')
         ;*/
-        //$queryBuilder->andWhere(sprintf('%s.node.creator = :current_user', $rootAlias));
-        //$queryBuilder->setParameter('current_user', $user->getId());
+        // $queryBuilder->andWhere(sprintf('%s.node.creator = :current_user', $rootAlias));
+        // $queryBuilder->setParameter('current_user', $user->getId());
     }
 }

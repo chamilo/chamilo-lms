@@ -226,8 +226,6 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -243,8 +241,6 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get displayOrder.
-     *
-     * @return int
      */
     public function getDisplayOrder(): ?int
     {

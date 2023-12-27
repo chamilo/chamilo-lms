@@ -38,15 +38,15 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     protected int $position;
 
     /**
-     * @var Collection|CLpCategoryRelUser[]
+     * @var Collection<int, CLpCategoryRelUser>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategoryRelUser::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLpCategoryRelUser::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
-     * @var Collection|CLp[]
+     * @var Collection<int, CLp>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, mappedBy: 'category', cascade: ['detach'])]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, cascade: ['detach'])]
     protected Collection $lps;
 
     public function __construct()
@@ -87,26 +87,23 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     /**
-     * @return Collection|CLp[]
+     * @return ArrayCollection<int, CLp>
      */
-    public function getLps(): Collection|array
+    public function getLps(): ArrayCollection
     {
         return $this->lps;
     }
 
     /**
-     * @return Collection
+     * @return ArrayCollection<int, CLpCategoryRelUser>
      */
-    public function getUsers()
+    public function getUsers(): ArrayCollection
     {
         return $this->users;
     }

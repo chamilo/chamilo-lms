@@ -29,8 +29,7 @@ class SessionVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -130,6 +129,7 @@ class SessionVoter extends Voter
                 }
 
                 return false;
+
             case self::EDIT:
             case self::DELETE:
                 $canEdit = $this->canEditSession($user, $session, false);
@@ -223,16 +223,16 @@ class SessionVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
-            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') &&
-            !$session->hasUserAsSessionAdmin($user)
+        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
+            && 'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
+            && !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_TEACHER') &&
-            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') &&
-            !$session->hasUserAsGeneralCoach($user)
+        if ($this->security->isGranted('ROLE_TEACHER')
+            && 'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions')
+            && !$session->hasUserAsGeneralCoach($user)
         ) {
             return false;
         }

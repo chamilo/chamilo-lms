@@ -30,7 +30,7 @@ class Asset implements Stringable
 
     public const SCORM = 'scorm';
     public const WATERMARK = 'watermark';
-    //public const CSS = 'css';
+    // public const CSS = 'css';
     public const EXTRA_FIELD = 'ef';
     public const COURSE_CATEGORY = 'course_category';
     public const SKILL = 'skill';
@@ -201,7 +201,7 @@ class Asset implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            //$data = explode(',', $data);
+            // $data = explode(',', $data);
 
             return (int) $data[0];
         }
@@ -226,7 +226,7 @@ class Asset implements Stringable
         $data = $this->getDimensions();
 
         if ([] !== $data) {
-            //$data = explode(',', $data);
+            // $data = explode(',', $data);
 
             return (int) $data[1];
         }

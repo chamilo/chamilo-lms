@@ -92,7 +92,7 @@ class CkEditor extends Editor
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            // api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
         ];
 

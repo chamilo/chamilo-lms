@@ -110,7 +110,6 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('video_player_renderers'),
                 ]
             )
-
         ;
     }
 

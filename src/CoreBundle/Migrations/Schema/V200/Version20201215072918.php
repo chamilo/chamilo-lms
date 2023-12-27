@@ -29,6 +29,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -42,6 +43,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -53,6 +55,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             $events = $result->fetchAllAssociative();
             foreach ($events as $eventData) {
                 $id = $eventData['iid'];
+
                 /** @var CCalendarEvent $event */
                 $event = $eventRepo->find($id);
                 if ($event->hasResourceNode()) {
@@ -107,6 +110,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $id = $attachmentData['iid'];
                 $attachmentPath = $attachmentData['path'];
                 $fileName = $attachmentData['filename'];
+
                 /** @var CCalendarEventAttachment $attachment */
                 $attachment = $eventAttachmentRepo->find($id);
                 if ($attachment->hasResourceNode()) {
@@ -135,7 +139,5 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

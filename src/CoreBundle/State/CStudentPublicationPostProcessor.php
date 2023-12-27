@@ -32,8 +32,7 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
         private readonly RouterInterface $router,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
-    ) {
-    }
+    ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
@@ -46,6 +45,7 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
         $course = $courseLink->getCourse();
         $session = $courseLink->getSession();
         $group = $courseLink->getGroup();
+
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
@@ -196,7 +196,8 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
                     $course->getId(),
                     $session?->getId()
                 );
-            //no break
+
+                // no break
             case 2:
                 sendEmailToDrhOnHomeworkCreation(
                     $publication->getIid(),

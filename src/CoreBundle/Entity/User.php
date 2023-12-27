@@ -275,7 +275,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
      */
-    //protected $jurySubscriptions;
+    // protected $jurySubscriptions;
 
     /**
      * @var Collection<int, Group>
@@ -768,7 +768,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->receivedMessages = new ArrayCollection();
         $this->surveyInvitations = new ArrayCollection();
         $this->logins = new ArrayCollection();
-        //$this->extraFields = new ArrayCollection();
+        // $this->extraFields = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
         $this->registrationDate = new DateTime();
@@ -806,9 +806,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('email', new Assert\Email());
+        // $metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        // $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        // $metadata->addPropertyConstraint('email', new Assert\Email());
         /*
                 $metadata->addPropertyConstraint('password',
                     new Assert\Collection(self::getPasswordConstraints())
@@ -950,6 +950,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $classSubscription = $this->getClasses();
         $classList = [];
+
         /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
             $class = $subscription->getUsergroup();
@@ -1430,7 +1431,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isAccountNonLocked(): bool
     {
         return true;
-        //return !$this->locked;
+        // return !$this->locked;
     }
 
     public function isCredentialsNonExpired(): bool
@@ -2203,9 +2204,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->setUsername($name);
     }
 
-    public function setParent(AbstractResource $parent): void
-    {
-    }
+    public function setParent(AbstractResource $parent): void {}
 
     public function getDefaultIllustration(int $size): string
     {
@@ -2339,7 +2338,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Used to be implemented in global function \api_max_sort_value.
      * Reimplemented using the ORM cache.
      */
-    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
+    public function getMaxSortValue(UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(
             Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))->andWhere(

@@ -16,18 +16,17 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 /**
  * Extension is called when loading api/personal_files.json.
  */
-final class PersonalFileExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class PersonalFileExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

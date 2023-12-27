@@ -31,6 +31,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
+use const JSON_THROW_ON_ERROR;
+use const PATHINFO_EXTENSION;
+
 class ResourceListener
 {
     use AccessUrlListenerTrait;
@@ -40,8 +43,7 @@ class ResourceListener
         protected ToolChain $toolChain,
         protected RequestStack $request,
         protected Security $security
-    ) {
-    }
+    ) {}
 
     /**
      * Only in creation.
@@ -132,7 +134,7 @@ class ResourceListener
             }
 
             if (null === $parentUrl) {
-                throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
+                throw new InvalidArgumentException('The resource needs an AccessUrl: use $resource->addAccessUrl()');
             }
             $parentNode = $parentUrl;
         }
@@ -184,8 +186,8 @@ class ResourceListener
             if (null === $currentUser) {
                 $currentUser = $parentNode->getCreator();
             }
-            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername() ||
-                     $parentNode->getId() === $currentUser->getResourceNode()->getId();
+            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
+                     || $parentNode->getId() === $currentUser->getResourceNode()->getId();
 
             if (!$valid) {
                 $msg = sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
@@ -269,15 +271,15 @@ class ResourceListener
             $resourceNode->setParent($parentResourceNode);
         }
 
-        //error_log('Resource listener preUpdate');
-        //$this->setLinks($resource, $eventArgs->getEntityManager());
+        // error_log('Resource listener preUpdate');
+        // $this->setLinks($resource, $eventArgs->getEntityManager());
     }
 
     public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $eventArgs): void
     {
-        //error_log('resource listener postUpdate');
-        //$em = $eventArgs->getEntityManager();
-        //$this->updateResourceName($resource, $resource->getResourceName(), $em);
+        // error_log('resource listener postUpdate');
+        // $em = $eventArgs->getEntityManager();
+        // $this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
     public function updateResourceName(AbstractResource $resource): void
@@ -290,7 +292,7 @@ class ResourceListener
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
-            //$slug = $this->slugify->slugify($resourceName);
+            // $slug = $this->slugify->slugify($resourceName);
         }
         /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
         $originalBasename = \basename($resourceName, $originalExtension);

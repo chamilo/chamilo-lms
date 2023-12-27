@@ -6,6 +6,4 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-abstract class AbstractResourceController extends BaseController
-{
-}
+abstract class AbstractResourceController extends BaseController {}

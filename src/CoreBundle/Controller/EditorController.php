@@ -19,8 +19,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class EditorController extends BaseController
 {
     use ControllerTrait;
-    use ResourceControllerTrait;
     use CourseControllerTrait;
+    use ResourceControllerTrait;
 
     /**
      * Get templates (left column when creating a document).

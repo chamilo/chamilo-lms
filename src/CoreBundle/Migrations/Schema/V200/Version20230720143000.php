@@ -30,6 +30,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
         $rootPath = $kernel->getProjectDir();
 
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+
         /** @var User $userEntity */
         foreach ($q->toIterable() as $userEntity) {
             $id = $userEntity->getId();

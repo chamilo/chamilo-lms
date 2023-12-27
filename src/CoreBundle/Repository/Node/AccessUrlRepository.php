@@ -32,7 +32,7 @@ class AccessUrlRepository extends ResourceRepository
 
         try {
             return (int) $q->getSingleScalarResult();
-        } catch (NoResultException|NonUniqueResultException $e) {
+        } catch (NonUniqueResultException|NoResultException $e) {
             return 0;
         }
     }

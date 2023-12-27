@@ -28,6 +28,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -38,6 +39,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;
@@ -50,6 +52,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CLinkCategory $event */
                 $resource = $linkCategoryRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -78,6 +81,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 $categoryId = $itemData['category_id'];
+
                 /** @var CLink $event */
                 $resource = $linkRepo->find($id);
                 if ($resource->hasResourceNode()) {

@@ -35,7 +35,7 @@ class CForumThreadRepository extends ResourceRepository
     public function findAllByCourse(
         Course $course,
         Session $session = null,
-        ?string $title = null
+        string $title = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 

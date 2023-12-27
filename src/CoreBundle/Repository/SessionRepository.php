@@ -104,6 +104,7 @@ class SessionRepository extends ServiceEntityRepository
                 }
 
                 break;
+
             case Session::STUDENT:
                 $session
                     ->addUserInSession(Session::STUDENT, $user)
@@ -111,6 +112,7 @@ class SessionRepository extends ServiceEntityRepository
                 ;
 
                 break;
+
             case Session::COURSE_COACH:
                 if ($user->hasRole('ROLE_TEACHER')) {
                     $session

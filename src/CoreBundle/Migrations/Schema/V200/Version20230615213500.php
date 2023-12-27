@@ -27,6 +27,7 @@ final class Version20230615213500 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -34,6 +35,7 @@ final class Version20230615213500 extends AbstractMigrationChamilo
         $courseRepo = $container->get(CourseRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();

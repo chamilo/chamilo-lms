@@ -8,6 +8,4 @@ namespace Chamilo\CoreBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ChamiloCoreBundle extends Bundle
-{
-}
+class ChamiloCoreBundle extends Bundle {}

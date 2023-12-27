@@ -32,26 +32,31 @@ class Skill implements Stringable
     #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
+
     /**
      * @var SkillRelUser[]|Collection
      */
     #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
+
     /**
      * @var Collection|SkillRelItem[]
      */
     #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
+
     /**
      * @var Collection|SkillRelSkill[]
      */
     #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
+
     /**
      * @var Collection|SkillRelCourse[]
      */
     #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
+
     /**
      * @var Collection|SkillRelGradebook[]
      */
@@ -128,6 +133,7 @@ class Skill implements Stringable
     {
         return $this->description;
     }
+
     /**
      * Set accessUrlId.
      *
@@ -139,6 +145,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get accessUrlId.
      *
@@ -154,6 +161,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get icon.
      *
@@ -169,6 +177,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get criteria.
      *
@@ -184,6 +193,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get status.
      *
@@ -193,6 +203,7 @@ class Skill implements Stringable
     {
         return $this->status;
     }
+
     /**
      * Set updatedAt.
      *
@@ -206,6 +217,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get updatedAt.
      *
@@ -215,6 +227,7 @@ class Skill implements Stringable
     {
         return $this->updatedAt;
     }
+
     /**
      * Get id.
      *
@@ -224,6 +237,7 @@ class Skill implements Stringable
     {
         return $this->id;
     }
+
     /**
      * @return Profile
      */
@@ -237,6 +251,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get issuedSkills.
      *
@@ -246,6 +261,7 @@ class Skill implements Stringable
     {
         return $this->issuedSkills;
     }
+
     /**
      * @return Collection
      */
@@ -263,6 +279,7 @@ class Skill implements Stringable
     {
         if (0 !== $this->getItems()->count()) {
             $found = false;
+
             /** @var SkillRelItem $item */
             foreach ($this->getItems() as $item) {
                 if ($item->getItemId() === $itemId && $item->getItemType() === $typeId) {
@@ -282,6 +299,7 @@ class Skill implements Stringable
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
     }
+
     /**
      * @return Collection
      */
@@ -295,6 +313,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * @return SkillRelSkill[]|Collection
      */
@@ -302,6 +321,7 @@ class Skill implements Stringable
     {
         return $this->skills;
     }
+
     /**
      * @param SkillRelSkill[]|Collection $skills
      */
@@ -311,6 +331,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * @return SkillRelGradebook[]|Collection
      */
@@ -318,6 +339,7 @@ class Skill implements Stringable
     {
         return $this->gradeBookCategories;
     }
+
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
      */
@@ -345,6 +367,7 @@ class Skill implements Stringable
     {
         if (0 !== $this->getCourses()->count()) {
             $found = false;
+
             /** @var SkillRelCourse $item */
             foreach ($this->getCourses() as $item) {
                 $sessionPassFilter = false;

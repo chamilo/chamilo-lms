@@ -72,7 +72,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_answer CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM c_survey_answer WHERE question_id NOT IN (select iid from c_survey_question)');
 
-        //$this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
+        // $this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_8A897DDB3FE509D')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
@@ -295,7 +295,5 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

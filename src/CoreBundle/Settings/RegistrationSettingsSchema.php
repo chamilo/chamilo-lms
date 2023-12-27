@@ -141,7 +141,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('sessionadmin_page_after_login')
             ->add('student_autosubscribe')// ?
             ->add('teacher_autosubscribe')// ?
-            ->add('drh_autosubscribe')//?
+            ->add('drh_autosubscribe')// ?
             ->add('sessionadmin_autosubscribe')// ?
             ->add('platform_unsubscribe_allowed', YesNoType::class)
             ->add(

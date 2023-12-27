@@ -39,7 +39,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_document DROP id');
-            //$this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
+            // $this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
         }
 
         $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
@@ -93,7 +93,5 @@ class Version20170625122900 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

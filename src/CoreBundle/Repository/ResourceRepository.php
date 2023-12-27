@@ -34,6 +34,8 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
+use const PATHINFO_EXTENSION;
+
 /**
  * Extends Resource EntityRepository.
  */
@@ -68,7 +70,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function update(AbstractResource | User $resource, bool $andFlush = true): void
+    public function update(AbstractResource|User $resource, bool $andFlush = true): void
     {
         if (!$resource->hasResourceNode()) {
             throw new Exception('Resource needs a resource node');
@@ -98,7 +100,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $originalName = $resourceFile->getOriginalName();
                 $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
 
-                //$originalBasename = \basename($resourceName, $originalExtension);
+                // $originalBasename = \basename($resourceName, $originalExtension);
                 /*$slug = sprintf(
                     '%s.%s',
                     $this->slugify->slugify($originalBasename),
@@ -111,10 +113,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $em->persist($resourceFile);
             }
         }
-        //$slug = $this->slugify->slugify($resourceName);
+        // $slug = $this->slugify->slugify($resourceName);
 
         $resourceNode->setTitle($resourceName);
-        //$resourceNode->setSlug($slug);
+        // $resourceNode->setSlug($slug);
 
         $em->persist($resourceNode);
         $em->persist($resource);
@@ -274,8 +276,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $checker = $this->getAuthorizationChecker();
         $isAdminOrTeacher =
-            $checker->isGranted('ROLE_ADMIN') ||
-            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+            $checker->isGranted('ROLE_ADMIN')
+            || $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
         // Do not show deleted resources.
         $qb
@@ -542,14 +544,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
-    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
 
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
     {
         return $this->getResourceNodeRepository()->getResourceFileUrl(
             $resource->getResourceNode(),
@@ -579,10 +581,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $resourceNode->setTitle($title);
         }
 
-        //if ($resourceNode->hasResourceFile()) {
-        //$resourceNode->getResourceFile()->getFile()->
-        //$resourceNode->getResourceFile()->setName($title);
-        //$resourceFile->setName($title);
+        // if ($resourceNode->hasResourceFile()) {
+        // $resourceNode->getResourceFile()->getFile()->
+        // $resourceNode->getResourceFile()->setName($title);
+        // $resourceFile->setName($title);
 
         /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
         error_log('$fileName');
@@ -591,7 +593,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
         $resourceFile->setName($title);
         $resourceFile->setOriginalName($title);*/
-        //}
+        // }
     }
 
     /**
@@ -792,10 +794,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
             $links = $child->getResourceLinks();
             foreach ($links as $linkItem) {
-                if ($linkItem->getUser() === $link->getUser() &&
-                    $linkItem->getSession() === $link->getSession() &&
-                    $linkItem->getCourse() === $link->getCourse() &&
-                    $linkItem->getUserGroup() === $link->getUserGroup()
+                if ($linkItem->getUser() === $link->getUser()
+                    && $linkItem->getSession() === $link->getSession()
+                    && $linkItem->getCourse() === $link->getCourse()
+                    && $linkItem->getUserGroup() === $link->getUserGroup()
                 ) {
                     $linkItem->setVisibility($link->getVisibility());
                     $em->persist($linkItem);
@@ -865,6 +867,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         if ($recursive) {
             $children = $resourceNode->getChildren();
+
             /** @var ResourceNode $child */
             foreach ($children as $child) {
                 $criteria = [

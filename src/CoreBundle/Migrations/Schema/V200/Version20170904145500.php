@@ -304,7 +304,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_A468585C12469DE2 ON c_quiz_question_rel_category (category_id)');
         }
 
-        //$this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
+        // $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
         /*if ($table->hasIndex('idx_qqrc_qid')) {
             $this->addSql('DROP INDEX idx_qqrc_qid ON c_quiz_question_rel_category');
         }*/
@@ -313,7 +313,5 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

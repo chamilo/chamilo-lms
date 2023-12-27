@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\User;
@@ -17,15 +17,14 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-final class CCalendarEventExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class CCalendarEventExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     use CourseLinkExtensionTrait;
 
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -59,7 +58,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         string $operationName = null,
         array $context = []
     ): void {
-        //$this->addWhere($queryBuilder, $resourceClass);
+        // $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -111,9 +110,9 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             $this->addCourseLinkCondition($qb, $courseId, $sessionId, $groupId);
         }
 
-        //$qb->leftJoin("$alias.receivers", 'r');
-        //$qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
-        //$qb->leftJoin("$alias.receivers", 'r');
+        // $qb->leftJoin("$alias.receivers", 'r');
+        // $qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
+        // $qb->leftJoin("$alias.receivers", 'r');
         /*$qb->andWhere(
             $qb->expr()->orX(
                 $qb->andWhere(

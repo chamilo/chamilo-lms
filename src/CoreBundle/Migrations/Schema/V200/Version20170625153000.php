@@ -119,8 +119,8 @@ class Version20170625153000 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_5DA7884C1BAD783F ON c_forum_thread (resource_node_id)');
         }
-        //$this->addSql('ALTER TABLE c_forum_thread_qualify DROP id');
-        //$this->addSql('ALTER TABLE c_forum_thread_qualify_log DROP id');
+        // $this->addSql('ALTER TABLE c_forum_thread_qualify DROP id');
+        // $this->addSql('ALTER TABLE c_forum_thread_qualify_log DROP id');
         $table = $schema->getTable('c_forum_thread_qualify');
 
         $this->addSql('DELETE FROM c_forum_thread_qualify WHERE user_id = 0');

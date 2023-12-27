@@ -99,7 +99,7 @@ class SettingsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        //$settingsManager = $this->getContainer()->get(SettingsManager::class);
+        // $settingsManager = $this->getContainer()->get(SettingsManager::class);
 
         // retrieve the admin
         $admin = $this->getUser('admin');

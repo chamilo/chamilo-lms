@@ -16,9 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class IllustrationType extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-    }
+    public function configureOptions(OptionsResolver $resolver): void {}
 
     public function getParent(): string
     {

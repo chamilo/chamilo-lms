@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -38,9 +38,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     protected int $locked;
 
     /**
-     * @var Collection|CForum[]
+     * @var Collection<int, CForum>
      */
-    #[ORM\OneToMany(targetEntity: CForum::class, mappedBy: 'forumCategory')]
+    #[ORM\OneToMany(mappedBy: 'forumCategory', targetEntity: CForum::class)]
     protected Collection $forums;
 
     public function __construct()
@@ -56,12 +56,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this->getCatTitle();
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
@@ -73,12 +68,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get catTitle.
-     *
-     * @return string
-     */
-    public function getCatTitle()
+    public function getCatTitle(): string
     {
         return $this->catTitle;
     }
@@ -102,12 +92,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get catOrder.
-     *
-     * @return int
-     */
-    public function getCatOrder()
+    public function getCatOrder(): int
     {
         return $this->catOrder;
     }
@@ -119,22 +104,15 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get locked.
-     *
-     * @return int
-     */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
 
     /**
-     * Get forums.
-     *
-     * @return Collection|CForum[]
+     * @return ArrayCollection<int, CForum>
      */
-    public function getForums(): Collection|array
+    public function getForums(): ArrayCollection
     {
         return $this->forums;
     }

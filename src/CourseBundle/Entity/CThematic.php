@@ -15,7 +15,7 @@ use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic')]
-#[ORM\Index(name: 'active', columns: ['active'])]
+#[ORM\Index(columns: ['active'], name: 'active')]
 #[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CThematicRepository::class)]
 class CThematic extends AbstractResource implements ResourceInterface, Stringable
 {
@@ -38,16 +38,16 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     protected bool $active;
 
     /**
-     * @var Collection|CThematicPlan[]
+     * @var Collection<int, CThematicPlan>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicPlan::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: \Chamilo\CourseBundle\Entity\CThematicPlan::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $plans;
 
     /**
-     * @var Collection|CThematicAdvance[]
+     * @var Collection<int, CThematicAdvance>
      */
     #[ORM\OrderBy(['startDate' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $advances;
 
     public function __construct()
@@ -72,10 +72,8 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -101,10 +99,8 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get displayOrder.
-     *
-     * @return int
      */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
     }
@@ -118,10 +114,8 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get active.
-     *
-     * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
@@ -132,17 +126,17 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return Collection|CThematicPlan[]
+     * @return ArrayCollection<int, CThematicPlan>
      */
-    public function getPlans(): Collection|array
+    public function getPlans(): ArrayCollection
     {
         return $this->plans;
     }
 
     /**
-     * @return Collection|CThematicAdvance[]
+     * @return ArrayCollection<int, CThematicAdvance>
      */
-    public function getAdvances(): Collection|array
+    public function getAdvances(): ArrayCollection
     {
         return $this->advances;
     }

@@ -136,6 +136,7 @@ abstract class AbstractResource
                     $sendTo['groups'][] = (int) $id;
 
                     break;
+
                 case 'USER':
                     $sendTo['users'][] = (int) $id;
 
@@ -176,6 +177,7 @@ abstract class AbstractResource
         ;
 
         $rights = [];
+
         switch ($visibility) {
             case ResourceLink::VISIBILITY_PENDING:
             case ResourceLink::VISIBILITY_DRAFT:
@@ -198,9 +200,9 @@ abstract class AbstractResource
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
-                fn ($key, $element) => $course === $element->getCourse() &&
-                    $session === $element->getSession() &&
-                    $group === $element->getGroup()
+                fn ($key, $element) => $course === $element->getCourse()
+                    && $session === $element->getSession()
+                    && $group === $element->getGroup()
             );
 
             if ($exists) {

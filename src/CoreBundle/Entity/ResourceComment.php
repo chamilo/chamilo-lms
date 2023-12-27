@@ -30,9 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: NestedTreeRepository::class)]
 class ResourceComment
 {
-    use TimestampableTypedEntity;
-    use TimestampableAgoTrait;
     use NestedSetEntity;
+    use TimestampableAgoTrait;
+    use TimestampableTypedEntity;
 
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]

@@ -28,6 +28,8 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
+use const MB_CASE_LOWER;
+
 class UserRepository extends ResourceRepository implements PasswordUpgraderInterface
 {
     protected ?UserPasswordHasherInterface $hasher = null;
@@ -130,6 +132,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         // User children will be set to the root user.
         $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
         $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+
         /** @var ResourceNode $userCreated */
         foreach ($userNodeCreatedList as $userCreated) {
             $userCreated->setCreator($rootUser);
@@ -155,7 +158,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->setTitle($user->getUsername())
             ->setCreator($creator)
             ->setResourceType($this->getResourceType())
-            //->setParent($resourceNode)
+            // ->setParent($resourceNode)
         ;
 
         $user->setResourceNode($resourceNode);
@@ -236,7 +239,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb = $this->createQueryBuilder('u');
 
         $qb
-            //->select('DISTINCT course')
+            // ->select('DISTINCT course')
             ->innerJoin('u.courses', 'courseRelUser')
             ->innerJoin('courseRelUser.course', 'course')
             ->innerJoin('course.urls', 'accessUrlRelCourse')

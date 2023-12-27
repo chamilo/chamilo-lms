@@ -124,8 +124,8 @@ class ToolChain
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        //$tool->addToolResourceRight($toolResourceRight);
-        //$tool->addToolResourceRight($toolResourceRightReader);
+        // $tool->addToolResourceRight($toolResourceRight);
+        // $tool->addToolResourceRight($toolResourceRightReader);
     }
 
     public function addToolsInCourse(Course $course): Course
@@ -153,9 +153,9 @@ class ToolChain
             'chat',
             'student_publication',
             'survey',
-            //'wiki',
+            // 'wiki',
             'notebook',
-            //'blog',
+            // 'blog',
             'course_tool',
             'course_homepage',
             'tracking',

@@ -34,9 +34,7 @@ class CourseRelUserCatalogue implements Stringable
     #[ORM\Column(name: 'visible', type: 'integer')]
     protected int $visible;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function __toString(): string
     {

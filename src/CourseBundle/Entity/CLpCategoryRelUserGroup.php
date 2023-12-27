@@ -46,9 +46,7 @@ class CLpCategoryRelUserGroup
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function getLpCategory(): CLpCategory
     {

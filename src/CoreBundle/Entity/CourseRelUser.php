@@ -50,8 +50,8 @@ class CourseRelUser implements Stringable
     use UserTrait;
 
     public const TEACHER = 1;
-    //public const SESSION_ADMIN = 3;
-    //public const DRH = 4;
+    // public const SESSION_ADMIN = 3;
+    // public const DRH = 4;
     public const STUDENT = 5;
 
     #[ORM\Column(name: 'id', type: 'integer')]

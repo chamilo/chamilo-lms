@@ -10,9 +10,5 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Each entity controller must extend this class.
- *
- * @abstract
  */
-abstract class BaseController extends AbstractController
-{
-}
+abstract class BaseController extends AbstractController {}

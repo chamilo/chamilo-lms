@@ -59,8 +59,7 @@ class CourseController extends ToolBaseController
 {
     public function __construct(
         private readonly SerializerInterface $serializer
-    ) {
-    }
+    ) {}
 
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(
@@ -78,9 +77,9 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        if ($user && $user->hasRole('ROLE_STUDENT') &&
-            'true' === $settingsManager->getSetting('allow_terms_conditions') &&
-            'course' === $settingsManager->getSetting('load_term_conditions_section')
+        if ($user && $user->hasRole('ROLE_STUDENT')
+            && 'true' === $settingsManager->getSetting('allow_terms_conditions')
+            && 'course' === $settingsManager->getSetting('load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -106,9 +105,9 @@ class CourseController extends ToolBaseController
                     ->getSetting('course.allow_public_course_with_no_terms_conditions')
                 ;
 
-                if (true === $allow &&
-                    null !== $course->getVisibility() &&
-                    Course::OPEN_WORLD === $course->getVisibility()
+                if (true === $allow
+                    && null !== $course->getVisibility()
+                    && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }
@@ -179,6 +178,7 @@ class CourseController extends ToolBaseController
         $session = $request->getSession();
 
         $userId = 0;
+
         /** @var ?User $user */
         $user = $this->getUser();
         if (null !== $user) {
@@ -206,8 +206,8 @@ class CourseController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
-            CourseManager::subscribeUser($userId, $courseId, STUDENT)
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])
+            && CourseManager::subscribeUser($userId, $courseId, STUDENT)
         ) {
             $session->set('is_allowed_in_course', true);
         }
@@ -404,10 +404,12 @@ class CourseController extends ToolBaseController
         EntityManagerInterface $em
     ): Response {
         $courseId = $course->getId();
+
         /** @var ?User $user */
         $user = $this->getUser();
 
         $fieldsRepo = $em->getRepository(ExtraField::class);
+
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
@@ -430,6 +432,7 @@ class CourseController extends ToolBaseController
 
             $teachersData[] = $userData;
         }
+
         /** @var ExtraField $tagField */
         $tagField = $fieldsRepo->findOneBy([
             'itemType' => ExtraField::COURSE_FIELD_TYPE,
@@ -450,30 +453,37 @@ class CourseController extends ToolBaseController
                     $courseDescription = $descriptionTool->getContent();
 
                     break;
+
                 case CCourseDescription::TYPE_OBJECTIVES:
                     $courseObjectives = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_TOPICS:
                     $courseTopics = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_METHODOLOGY:
                     $courseMethodology = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_COURSE_MATERIAL:
                     $courseMaterial = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_RESOURCES:
                     $courseResources = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_ASSESSMENT:
                     $courseAssessment = $descriptionTool;
 
                     break;
+
                 case CCourseDescription::TYPE_CUSTOM:
                     $courseCustom[] = $descriptionTool;
 
@@ -556,7 +566,7 @@ class CourseController extends ToolBaseController
     {
         $sessionId = (int) $request->get('sid');
 
-        //$session = $this->getSession();
+        // $session = $this->getSession();
         $responseData = [];
         $ctoolRepo = $em->getRepository(CTool::class);
         $sessionRepo = $em->getRepository(Session::class);
@@ -600,6 +610,7 @@ class CourseController extends ToolBaseController
 
         if ($ctool) {
             $ctoolintroRepo = $em->getRepository(CToolIntro::class);
+
             /** @var CToolIntro $ctoolintro */
             $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
             if ($ctoolintro) {
@@ -654,6 +665,7 @@ class CourseController extends ToolBaseController
             $em->flush();
             if ($courseTool && !empty($ctoolintroId)) {
                 $ctoolintroRepo = Container::getToolIntroRepository();
+
                 /** @var CToolIntro $ctoolintro */
                 $ctoolintro = $ctoolintroRepo->find($ctoolintroId);
                 $ctoolintro->setCourseTool($courseTool);
@@ -705,9 +717,9 @@ class CourseController extends ToolBaseController
         $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
         $session_id = api_get_session_id();
         $allowAutoLaunchForCourseAdmins =
-            api_is_platform_admin() ||
-            api_is_allowed_to_edit(true, true) ||
-            api_is_coach();
+            api_is_platform_admin()
+            || api_is_allowed_to_edit(true, true)
+            || api_is_coach();
 
         if (!empty($lpAutoLaunch)) {
             if (2 === $lpAutoLaunch) {
@@ -721,6 +733,7 @@ class CourseController extends ToolBaseController
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
                         header(sprintf('Location: %s', $url));
+
                         exit;
                     }
                 }
@@ -757,6 +770,7 @@ class CourseController extends ToolBaseController
 
                                 $_SESSION[$session_key] = true;
                                 header(sprintf('Location: %s', $url));
+
                                 exit;
                             }
                         }
@@ -782,11 +796,12 @@ class CourseController extends ToolBaseController
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
                 header(sprintf('Location: %s', $url));
+
                 exit;
             }
         }
 
-        if (('true' === api_get_setting('exercise.allow_exercise_auto_launch'))) {
+        if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
             $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
             if (2 === $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {
@@ -799,6 +814,7 @@ class CourseController extends ToolBaseController
                     // Redirecting to the document
                     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
                     header(sprintf('Location: %s', $url));
+
                     exit;
                 }
             } elseif (1 === $exerciseAutoLaunch) {
@@ -834,6 +850,7 @@ class CourseController extends ToolBaseController
                         $url = api_get_path(WEB_CODE_PATH).
                             'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
                         header(sprintf('Location: %s', $url));
+
                         exit;
                     }
                 }
@@ -852,6 +869,7 @@ class CourseController extends ToolBaseController
                 // Redirecting to the document
                 $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
                 header("Location: $url");
+
                 exit;
             }
         }

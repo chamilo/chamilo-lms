@@ -26,9 +26,7 @@ class CPlagiarismCompilatioDocs
     #[ORM\Column(name: 'compilatio_id', type: 'string', length: 32, nullable: true)]
     protected ?string $compilatioId = null;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function getId(): int
     {

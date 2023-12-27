@@ -214,7 +214,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     public function toggleVisibility(): void
     {
-        $this->linkCategoryVisible = !($this->getFirstResourceLink()->getVisibility());
+        $this->linkCategoryVisible = !$this->getFirstResourceLink()->getVisibility();
     }
 
     public function getLinkCategoryVisible(): bool

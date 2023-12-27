@@ -22,8 +22,7 @@ class UserRelUserVoter extends Voter
 
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -67,20 +66,23 @@ class UserRelUserVoter extends Voter
                 }
 
                 break;
+
             case self::EDIT:
                 if ($userRelUser->getUser() === $user) {
                     return true;
                 }
 
-                if ($userRelUser->getFriend() === $user &&
-                    UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST === $userRelUser->getRelationType()
+                if ($userRelUser->getFriend() === $user
+                    && UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST === $userRelUser->getRelationType()
                 ) {
                     return true;
                 }
 
                 break;
+
             case self::VIEW:
                 return true;
+
             case self::DELETE:
                 if ($userRelUser->getUser() === $user) {
                     return true;

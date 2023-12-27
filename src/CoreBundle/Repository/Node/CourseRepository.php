@@ -35,9 +35,9 @@ class CourseRepository extends ResourceRepository
         $em = $this->getEntityManager();
 
         // Deleting all nodes connected to the course:
-        //$node = $course->getResourceNode();
-        //$children = $node->getChildren();
-        ///* var ResourceNode $child
+        // $node = $course->getResourceNode();
+        // $children = $node->getChildren();
+        // /* var ResourceNode $child
         /*foreach ($children as $child) {
             var_dump($child->getId().'-'.$child->getTitle().'<br />');
             var_dump(get_class($child));
@@ -69,7 +69,7 @@ class CourseRepository extends ResourceRepository
             ->select('courseRelUser')
             ->from(Course::class, 'c')
             ->innerJoin(CourseRelUser::class, 'courseRelUser')
-            //->innerJoin('c.users', 'courseRelUser')
+            // ->innerJoin('c.users', 'courseRelUser')
             ->innerJoin('c.urls', 'accessUrlRelCourse')
             ->where('courseRelUser.user = :user')
             ->andWhere('accessUrlRelCourse.url = :url')

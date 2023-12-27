@@ -72,6 +72,7 @@ class UserExtraFieldFilter extends AbstractFilter
                 ;
 
                 break;
+
             case 'userExtraFieldValue':
                 $queryBuilder->andWhere('efv.field_value = :value');
 

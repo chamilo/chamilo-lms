@@ -19,8 +19,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

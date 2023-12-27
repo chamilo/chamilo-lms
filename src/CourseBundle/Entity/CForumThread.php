@@ -50,15 +50,15 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     protected ?CLpItem $item = null;
 
     /**
-     * @var Collection|CForumPost[]
+     * @var Collection<int, CForumPost>
      */
-    #[ORM\OneToMany(targetEntity: CForumPost::class, mappedBy: 'thread', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thread', targetEntity: CForumPost::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $posts;
 
     /**
-     * @var Collection|CForumThreadQualify[]
+     * @var Collection<int, CForumThreadQualify>
      */
-    #[ORM\OneToMany(targetEntity: CForumThreadQualify::class, mappedBy: 'thread', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'thread', targetEntity: CForumThreadQualify::class, cascade: ['persist', 'remove'])]
     protected Collection $qualifications;
 
     #[Assert\NotBlank]
@@ -185,12 +185,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadDate.
-     *
-     * @return DateTime
-     */
-    public function getThreadDate()
+    public function getThreadDate(): DateTime
     {
         return $this->threadDate;
     }
@@ -202,12 +197,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadSticky.
-     *
-     * @return bool
-     */
-    public function getThreadSticky()
+    public function getThreadSticky(): bool
     {
         return $this->threadSticky;
     }
@@ -219,12 +209,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get locked.
-     *
-     * @return int
-     */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
@@ -236,12 +221,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadTitleQualify.
-     *
-     * @return string
-     */
-    public function getThreadTitleQualify()
+    public function getThreadTitleQualify(): ?string
     {
         return $this->threadTitleQualify;
     }
@@ -253,12 +233,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadQualifyMax.
-     *
-     * @return float
-     */
-    public function getThreadQualifyMax()
+    public function getThreadQualifyMax(): float
     {
         return $this->threadQualifyMax;
     }
@@ -270,12 +245,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadCloseDate.
-     *
-     * @return DateTime
-     */
-    public function getThreadCloseDate()
+    public function getThreadCloseDate(): ?DateTime
     {
         return $this->threadCloseDate;
     }
@@ -287,22 +257,12 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    /**
-     * Get threadWeight.
-     *
-     * @return float
-     */
-    public function getThreadWeight()
+    public function getThreadWeight(): float
     {
         return $this->threadWeight;
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
@@ -320,9 +280,9 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     }
 
     /**
-     * @return Collection|CForumPost[]
+     * @return ArrayCollection<int, CForumPost>
      */
-    public function getPosts(): Collection|array
+    public function getPosts(): ArrayCollection
     {
         return $this->posts;
     }
@@ -340,17 +300,14 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     }
 
     /**
-     * @return CForumThreadQualify[]|Collection
+     * @return ArrayCollection<int, CForumThreadQualify>
      */
-    public function getQualifications(): array|Collection
+    public function getQualifications(): ArrayCollection
     {
         return $this->qualifications;
     }
 
-    /**
-     * @param CForumThreadQualify[]|Collection $qualifications
-     */
-    public function setQualifications(array|Collection $qualifications): self
+    public function setQualifications(Collection $qualifications): self
     {
         $this->qualifications = $qualifications;
 

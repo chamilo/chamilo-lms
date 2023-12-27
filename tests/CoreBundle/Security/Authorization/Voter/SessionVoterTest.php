@@ -56,9 +56,13 @@ class SessionVoterTest extends WebTestCase
         $granted = VoterInterface::ACCESS_GRANTED;
 
         yield 'admin access to course' => [$granted, $admin, $session];
+
         yield 'student access to course' => [$denied, $student, $session];
+
         yield 'studentWithAccess access to course' => [$denied, $studentWithAccess, $session];
+
         yield 'teacher no access to course' => [$denied, $teacher, $session];
+
         yield 'teacher with access to course' => [$denied, $teacherWithAccess, $session];
 
         $session->addUserInCourse(Session::STUDENT, $studentWithAccess, $publicCourse);
@@ -67,9 +71,12 @@ class SessionVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to course in session' => [$granted, $admin, $session];
+
         yield 'student access to course in session' => [$denied, $student, $session];
+
         yield 'studentWithAccess access to course in session' => [$granted, $studentWithAccess, $session];
+
         yield 'teacher no access to course in session' => [$denied, $teacher, $session];
-        //yield 'teacher with access to course in session' => [$granted, $teacherWithAccess, $session];
+        // yield 'teacher with access to course in session' => [$granted, $teacherWithAccess, $session];
     }
 }

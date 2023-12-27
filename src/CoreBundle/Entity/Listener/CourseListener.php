@@ -22,12 +22,11 @@ class CourseListener
     public function __construct(
         protected ToolChain $toolChain,
         protected SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     public function prePersist(Course $course, PrePersistEventArgs $args): void
     {
-        ///$this->checkLimit($repo, $course, $url);
+        // /$this->checkLimit($repo, $course, $url);
         $this->toolChain->addToolsInCourse($course);
     }
 

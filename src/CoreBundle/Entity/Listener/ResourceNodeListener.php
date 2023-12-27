@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Security;
 
 class ResourceNodeListener
 {
-    //protected $accessUrl;
+    // protected $accessUrl;
 
     public function __construct(
         protected SlugifyInterface $slugify,
@@ -24,8 +24,7 @@ class ResourceNodeListener
         protected RequestStack $request,
         protected Security $security,
         protected ResourceNodeRepository $resourceNodeRepository
-    ) {
-    }
+    ) {}
 
     /*public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
     {

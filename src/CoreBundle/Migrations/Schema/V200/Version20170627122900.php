@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const PHP_EOL;
+
 class Version20170627122900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -22,7 +24,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
 
         // Use .env APP_ENV setting to change server type
-        //$this->addSql("DELETE FROM settings_current WHERE variable = 'server_type'");
+        // $this->addSql("DELETE FROM settings_current WHERE variable = 'server_type'");
 
         $table = $schema->getTable('settings_current');
         if (false === $table->hasForeignKey('FK_62F79C3B9436187B')) {
@@ -195,7 +197,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'pdf_logo_header' => 'platform',
             'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
-            //'show_toolshortcuts' => '',
+            // 'show_toolshortcuts' => '',
             'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
@@ -362,7 +364,5 @@ class Version20170627122900 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

@@ -87,12 +87,14 @@ class ExtraField
     protected ?bool $changeable = null;
     #[ORM\Column(name: 'filter', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $filter = null;
+
     /**
      * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
     #[ORM\OneToMany(targetEntity: ExtraFieldOptions::class, mappedBy: 'field')]
     protected Collection $options;
+
     /**
      * @var Tag[]|Collection
      */
@@ -111,6 +113,7 @@ class ExtraField
         $this->changeable = false;
         $this->filter = false;
     }
+
     /**
      * Get id.
      *
@@ -140,6 +143,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return string
      */
@@ -153,6 +157,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return string
      */
@@ -166,6 +171,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return string
      */
@@ -179,6 +185,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return int
      */
@@ -192,6 +199,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return bool
      */
@@ -245,6 +253,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return Collection<int, ExtraFieldOptions>
      */
@@ -258,6 +267,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return Tag[]|Collection
      */

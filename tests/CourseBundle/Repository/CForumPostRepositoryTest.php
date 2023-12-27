@@ -107,6 +107,7 @@ class CForumPostRepositoryTest extends AbstractApiTest
 
         /** @var CForumThread $thread */
         $thread = $threadRepo->find($thread->getIid());
+
         /** @var CForum $forum */
         $forum = $forumRepo->find($forum->getIid());
 

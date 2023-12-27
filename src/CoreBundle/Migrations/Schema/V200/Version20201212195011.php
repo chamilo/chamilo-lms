@@ -48,9 +48,11 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             $counter = 1;
+
             /** @var AccessUrl $urlEntity */
             $urlEntity = $urlRepo->find($url->getId());
             $accessUrlRelCourses = $urlEntity->getCourses();
+
             /** @var AccessUrlRelCourse $accessUrlRelCourse */
             foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
                 $course = $accessUrlRelCourse->getCourse();
@@ -64,7 +66,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $em->persist($course);
 
                 // Add groups.
-                //$course = $course->getGroups();
+                // $course = $course->getGroups();
                 if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
@@ -98,6 +100,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
 
         // Migrating c_tool.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;

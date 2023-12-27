@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['usergroup:read']])]
 #[ORM\Table(name: 'usergroup')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\UsergroupRepository::class)]
+#[ORM\Entity(repositoryClass: UsergroupRepository::class)]
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface, Stringable
 {
     use TimestampableEntity;
@@ -50,30 +51,35 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[Assert\NotBlank]
     #[ORM\Column(name: 'allow_members_leave_group', type: 'integer')]
     protected int $allowMembersToLeaveGroup;
+
     /**
-     * @var Collection|UsergroupRelUser[]
+     * @var Collection<int, UsergroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelUser::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelUser::class, cascade: ['persist'])]
     protected Collection $users;
+
     /**
-     * @var Collection|UsergroupRelCourse[]
+     * @var Collection<int, UsergroupRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelCourse::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelCourse::class, cascade: ['persist'])]
     protected Collection $courses;
+
     /**
-     * @var Collection|UsergroupRelSession[]
+     * @var Collection<int, UsergroupRelSession>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelSession::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelSession::class, cascade: ['persist'])]
     protected Collection $sessions;
+
     /**
-     * @var Collection|UsergroupRelQuestion[]
+     * @var Collection<int, UsergroupRelQuestion>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelQuestion::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelQuestion::class, cascade: ['persist'])]
     protected Collection $questions;
+
     /**
-     * @var AccessUrlRelUserGroup[]|Collection
+     * @var Collection<int, AccessUrlRelUserGroup>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup::class, mappedBy: 'userGroup', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: AccessUrlRelUserGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
     public function __construct()
     {
@@ -90,10 +96,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->getName();
     }
+
     /**
-     * @return UsergroupRelUser[]|Collection
+     * @return ArrayCollection<int, UsergroupRelUser>
      */
-    public function getUsers(): array|Collection
+    public function getUsers(): ArrayCollection
     {
         return $this->users;
     }
@@ -139,12 +146,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
             }
         }
     }
+
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -168,10 +174,8 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->description;
     }
-    /**
-     * @return int
-     */
-    public function getGroupType()
+
+    public function getGroupType(): int
     {
         return $this->groupType;
     }
@@ -221,10 +225,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelCourse[]|Collection
+     * @return ArrayCollection<int, UsergroupRelCourse>
      */
-    public function getCourses(): array|Collection
+    public function getCourses(): ArrayCollection
     {
         return $this->courses;
     }
@@ -234,10 +239,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelSession[]|Collection
+     * @return ArrayCollection<int, UsergroupRelSession>
      */
-    public function getSessions(): array|Collection
+    public function getSessions(): ArrayCollection
     {
         return $this->sessions;
     }
@@ -247,10 +253,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelQuestion[]|Collection
+     * @return ArrayCollection<int, UsergroupRelQuestion>
      */
-    public function getQuestions(): array|Collection
+    public function getQuestions(): ArrayCollection
     {
         return $this->questions;
     }

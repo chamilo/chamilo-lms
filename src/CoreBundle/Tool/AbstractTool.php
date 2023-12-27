@@ -115,7 +115,7 @@ abstract class AbstractTool
 
     public function getNameToShow(): string
     {
-        //return $this->getName();
+        // return $this->getName();
         return ucfirst(str_replace('_', ' ', $this->getName()));
     }
 

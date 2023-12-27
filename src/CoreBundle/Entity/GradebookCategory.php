@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 class GradebookCategory
 {
-    use UserTrait;
     use CourseTrait;
+    use UserTrait;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

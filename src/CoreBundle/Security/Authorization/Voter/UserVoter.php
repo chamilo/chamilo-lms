@@ -22,8 +22,7 @@ class UserVoter extends Voter
 
     public function __construct(
         private Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {

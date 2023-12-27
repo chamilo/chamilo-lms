@@ -578,7 +578,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return false;
     }
 
-    public function getSessionRelCourseByUser(User $user, ?int $status = null): Collection
+    public function getSessionRelCourseByUser(User $user, int $status = null): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
         if (null !== $status) {
@@ -1124,7 +1124,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $relation->count() > 0;
     }
 
-    public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
+    public function getUserInCourse(User $user, Course $course, int $status = null): Collection
     {
         $criteria = Criteria::create()
             ->where(
@@ -1161,7 +1161,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
 
-    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
+    protected function compareDates(?DateTime $start, DateTime $end = null): bool
     {
         $now = new Datetime('now');
 

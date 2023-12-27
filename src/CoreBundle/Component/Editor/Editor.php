@@ -46,7 +46,7 @@ class Editor
         $this->setConfigAttribute('fullPage', false);
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
-        //$this->course = $course;
+        // $this->course = $course;
     }
 
     /**
@@ -87,6 +87,7 @@ class Editor
 
     /**
      * @param string $key
+     * @param mixed  $value
      */
     public function setConfigAttribute($key, $value): void
     {
@@ -113,25 +114,30 @@ class Editor
                         $this->toolbarSet = $value;
 
                         break;
+
                     case 'Config':
                         $this->processConfig($value);
 
                         break;
+
                     case 'width':
                     case 'Width':
                         $this->setConfigAttribute('width', $value);
 
                         break;
+
                     case 'height':
                     case 'Height':
                         $this->setConfigAttribute('height', $value);
 
                         break;
+
                     case 'FullPage':
                     case 'fullPage':
                         $this->setConfigAttribute('fullPage', $value);
 
                         break;
+
                     default:
                         $this->setConfigAttribute($key, $value);
 
@@ -158,9 +164,11 @@ class Editor
         switch (\gettype($var)) {
             case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
+
             case 'integer':
             case 'double':
                 return (string) $var;
+
             case 'resource':
             case 'string':
                 return '"'.str_replace(
@@ -170,6 +178,7 @@ class Editor
                 ).'"';
 
                 break;
+
             case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
@@ -182,7 +191,8 @@ class Editor
 
                     return '[ '.implode(', ', $output).' ]';
                 }
-                //no break
+
+                // no break
             case 'object':
                 // Otherwise, fall through to convert the array as an object.
                 $output = [];
@@ -193,6 +203,7 @@ class Editor
                 return '{ '.implode(', '."\n", $output).' } '."\n";
 
                 break;
+
             default:
                 return 'null';
         }

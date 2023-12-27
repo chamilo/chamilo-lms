@@ -66,7 +66,7 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'breton' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'breton' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'bg' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -111,7 +111,7 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //basque
+            // basque
             'fi' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -120,7 +120,7 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'fur_IT' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -141,7 +141,7 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'hawaiian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'hawaiian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'he' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -155,12 +155,12 @@ class NameConvention
                 'sort_by' => 'last_name',
             ],
             // Eastern order
-            //'icelandic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'icelandic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'id' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'irish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'irish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'it' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -175,7 +175,7 @@ class NameConvention
                 'sort_by' => 'last_name',
             ],
             // Eastern order
-            //'latin' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'latin' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'lv' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -193,11 +193,11 @@ class NameConvention
                 'sort_by' => 'last_name',
             ],
             // Eastern order
-            //'manx' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
-            //'marathi' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
-            //'middle_frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
-            //'mingo' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
-            //'nepali' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'manx' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'marathi' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'middle_frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'mingo' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'nepali' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'nn' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -230,17 +230,17 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'rumantsch' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'rumantsch' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'ru' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'sanskrit' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'sanskrit' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'sr' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'serbian_cyrillic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'serbian_cyrillic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'zh_CN' => [
                 'format' => 'title last_name first_name',
                 'sort_by' => 'last_name',
@@ -270,7 +270,7 @@ class NameConvention
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
-            //'tamil' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'tamil' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'th' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
@@ -293,8 +293,8 @@ class NameConvention
                 'sort_by' => 'last_name',
             ],
             // Eastern order
-            //'welsh' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
-            //'yiddish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'welsh' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+            // 'yiddish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
             'yo' => [
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',

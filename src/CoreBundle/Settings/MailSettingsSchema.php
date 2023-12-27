@@ -37,7 +37,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-        //$this->setMultipleAllowedTypes($allowedTypes, $builder);
+        // $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
@@ -81,7 +81,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('notifications_extended_footer_message'),
                 ]
             )
-
         ;
     }
 

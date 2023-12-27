@@ -75,6 +75,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                 $dataResponse['categories'][$categoryId]['info'] = $categoryInfo;
                 if ($links) {
                     $items = [];
+
                     /** @var CLink $link */
                     foreach ($links as $link) {
                         $items[] = [

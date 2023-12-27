@@ -424,7 +424,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $this->assertSame(3, $session->getUsers()->count());
 
-        //general coach
+        // general coach
         $sessionRelUser1 = $session->getUsers()[0];
         $admin = $this->getUser('admin');
 
@@ -432,7 +432,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $sessionRelUser1->getCourses()->count());
         $this->assertSame($admin, $sessionRelUser1->getUser());
 
-        //session admin
+        // session admin
         $sessionRelUser2 = $session->getUsers()[1];
         $this->assertSame($session, $sessionRelUser2->getSession());
         $this->assertSame(0, $sessionRelUser2->getCourses()->count());
@@ -500,7 +500,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertNotNull($category->getDateEnd());
         $this->assertNotNull($category->getUrl());
 
-        $session = ($sessionRepo->create())
+        $session = $sessionRepo->create()
             ->setName('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)
@@ -549,7 +549,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $coach = $this->createUser('coach');
         $course = $this->createCourse('new');
 
-        $session = ($sessionRepo->create())
+        $session = $sessionRepo->create()
             ->setName('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)

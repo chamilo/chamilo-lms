@@ -27,7 +27,7 @@ class CourseType extends AbstractType
         // @todo as a service to load the preferred_choices
         $builder
             ->add('title', TextType::class)
-            //->add('code', 'text')
+            // ->add('code', 'text')
             ->add(
                 'course_language',
                 LocaleType::class,
@@ -48,7 +48,7 @@ class CourseType extends AbstractType
             ->add('department_url', UrlType::class, [
                 'required' => false,
             ])
-            //->add('disk_quota', 'text')
+            // ->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
                 DateType::class,

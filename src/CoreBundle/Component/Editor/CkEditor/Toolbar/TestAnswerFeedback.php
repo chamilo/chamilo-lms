@@ -54,8 +54,8 @@ class TestAnswerFeedback extends Basic
 
         $config['toolbarCanCollapse'] = true;
         $config['toolbarStartupExpanded'] = false;
-        //$config['width'] = '100';
-        //$config['height'] = '200';
+        // $config['width'] = '100';
+        // $config['height'] = '200';
 
         if ('true' !== api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();

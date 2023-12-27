@@ -30,7 +30,7 @@ class CreateCCalendarEventAction extends BaseResourceFileAction
             ->setColor($result['color'] ?? '')
             ->setStartDate(new DateTime($result['startDate'] ?? ''))
             ->setEndDate(new DateTime($result['endDate'] ?? ''))
-            //->setAllDay($result['allDay'] ?? false)
+            // ->setAllDay($result['allDay'] ?? false)
             ->setCollective($result['collective'] ?? false)
             ->setCreator($currentUser)
         ;

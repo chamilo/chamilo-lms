@@ -268,24 +268,22 @@ class SkillRelItem
     public function getItemResultUrl(string $cidReq): string
     {
         $url = '';
-        $url = match ($this->getItemType()) {
+
+        return match ($this->getItemType()) {
             ITEM_TYPE_EXERCISE => 'exercise/exercise_show.php?action=qualify&'.$cidReq,
             ITEM_TYPE_STUDENT_PUBLICATION => 'work/view.php?'.$cidReq,
             default => $url,
         };
-
-        return $url;
     }
 
     public function getItemResultList(string $cidReq): string
     {
         $url = '';
-        $url = match ($this->getItemType()) {
+
+        return match ($this->getItemType()) {
             ITEM_TYPE_EXERCISE => 'exercise/exercise_report.php?'.$cidReq.'&id='.$this->getItemId(),
             ITEM_TYPE_STUDENT_PUBLICATION => 'work/work_list_all.php?'.$cidReq.'&id='.$this->getItemId(),
             default => $url,
         };
-
-        return $url;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -93,26 +93,21 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @return Collection|CQuizQuestion[]
+     * @return ArrayCollection<int, CQuizQuestion>
      */
-    public function getQuestions(): Collection|array
+    public function getQuestions(): ArrayCollection
     {
         return $this->questions;
     }
 
-    /**
-     * @param Collection|CQuizQuestion[] $questions
-     */
-    public function setQuestions(Collection|array $questions): self
+    public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
 

@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 /**
  * Extension is called when loading api/courses.json.
@@ -23,8 +23,7 @@ final class CourseExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

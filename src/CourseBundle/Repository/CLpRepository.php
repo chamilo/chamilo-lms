@@ -63,19 +63,19 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
     public function findAllByCourse(
         Course $course,
         Session $session = null,
-        ?string $title = null,
-        ?int $active = null,
+        string $title = null,
+        int $active = null,
         bool $onlyPublished = true,
-        ?int $categoryId = null
+        int $categoryId = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
         /*if ($onlyPublished) {
             $this->addDateFilterQueryBuilder(new DateTime(), $qb);
         }*/
-        //$this->addCategoryQueryBuilder($categoryId, $qb);
-        //$this->addActiveQueryBuilder($active, $qb);
-        //$this->addNotDeletedQueryBuilder($qb);
+        // $this->addCategoryQueryBuilder($categoryId, $qb);
+        // $this->addActiveQueryBuilder($active, $qb);
+        // $this->addNotDeletedQueryBuilder($qb);
         $this->addTitleQueryBuilder($title, $qb);
 
         return $qb;
@@ -95,7 +95,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         return $router->generate('legacy_main', $params);
     }
 
-    protected function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
+    protected function addNotDeletedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

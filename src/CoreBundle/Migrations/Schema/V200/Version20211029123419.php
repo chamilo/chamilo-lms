@@ -25,13 +25,12 @@ final class Version20211029123419 extends AbstractMigrationChamilo
 
             $urlRepo = $container->get(AccessUrlRepository::class);
             $urlList = $urlRepo->findAll();
+
             /** @var AccessUrl $url */
             $url = $urlList[0];
             $createDefaultPages->createDefaultPages($this->getAdmin(), $url, 'en_US');
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

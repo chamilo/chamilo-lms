@@ -143,6 +143,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         /** @var User $testUser */
         $testUser = $userRepo->find($testUser->getId());
+
         /** @var MessageRelUser $receivedMessage */
         $receivedMessage = $testUser->getReceivedMessages()->first();
 
@@ -344,6 +345,7 @@ class MessageRepositoryTest extends AbstractApiTest
         // Create tag.
         /** @var User $testUser */
         $testUser = $userRepo->find($testUser->getId());
+
         /** @var MessageRelUser $receivedMessage */
         $receivedMessage = $testUser->getReceivedMessages()->first();
 
@@ -408,6 +410,7 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $transport->getSent());
 
         $em->clear();
+
         /** @var Message $message */
         $message = $messageRepo->find($message->getId());
 
@@ -487,6 +490,7 @@ class MessageRepositoryTest extends AbstractApiTest
         // Receiver adds tags + starred
 
         $messageId = $response->toArray()['id'];
+
         /** @var Message $message */
         $message = $messageRepo->find($messageId);
 
@@ -520,7 +524,7 @@ class MessageRepositoryTest extends AbstractApiTest
                 '@type' => 'MessageRelUser',
                 'read' => true,
                 'starred' => true,
-                //'tags' => []
+                // 'tags' => []
             ]
         );
     }

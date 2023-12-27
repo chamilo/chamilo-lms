@@ -113,7 +113,6 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         foreach ($anonymousUsers as $user) {
             $loginRecord = $trackLoginRepository->findOneBy(['userIp' => $userIp, 'user' => $user]);
             if ($loginRecord) {
-
                 return $user->getId();
             }
         }

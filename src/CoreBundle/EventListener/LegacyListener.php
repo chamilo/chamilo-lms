@@ -37,8 +37,7 @@ class LegacyListener
         private readonly RouterInterface $router,
         private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -111,7 +110,7 @@ class LegacyListener
         }
 
         // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
-        //$theme = api_get_visual_theme();
+        // $theme = api_get_visual_theme();
         /*$languages = api_get_languages();
         $languageList = [];
         foreach ($languages as $isoCode => $language) {
@@ -131,9 +130,9 @@ class LegacyListener
                 'text' => $languageList[$isoFixed] ?? 'English',
             ]
         );*/
-        //$twig->addGlobal('current_locale', $request->getLocale());
-        //$twig->addGlobal('available_locales', $languages);
-        //$twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
+        // $twig->addGlobal('current_locale', $request->getLocale());
+        // $twig->addGlobal('available_locales', $languages);
+        // $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 
         // Extra content
         $extraHeader = '';
@@ -163,11 +162,7 @@ class LegacyListener
         $session->set('access_url_id', $urlId);
     }
 
-    public function onKernelResponse(ResponseEvent $event): void
-    {
-    }
+    public function onKernelResponse(ResponseEvent $event): void {}
 
-    public function onKernelController(ControllerEvent $event): void
-    {
-    }
+    public function onKernelController(ControllerEvent $event): void {}
 }

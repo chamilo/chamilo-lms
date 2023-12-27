@@ -27,6 +27,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $em = $this->getEntityManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -84,6 +85,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
         $userGroupRepo = $container->get(UsergroupRepository::class);
         $urlRepo = $container->get(AccessUrlRepository::class);
         $urlList = $urlRepo->findAll();
+
         /** @var AccessUrl $url */
         $url = $urlList[0];
 
@@ -110,6 +112,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
 
         // Migrate Usergroup images.
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
+
         /** @var Usergroup $userGroup */
         foreach ($q->toIterable() as $userGroup) {
             if (!$userGroup->hasResourceNode()) {

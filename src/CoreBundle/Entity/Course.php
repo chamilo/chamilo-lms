@@ -230,12 +230,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course").
      */
-    //protected $specificFieldValues;
+    // protected $specificFieldValues;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course").
      */
-    //protected $sharedSurveys;
+    // protected $sharedSurveys;
 
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
@@ -334,7 +334,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
      */
-    //protected $curriculumCategories;
+    // protected $curriculumCategories;
 
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
@@ -374,8 +374,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->subscribe = true;
         $this->unsubscribe = false;
         $this->sticky = false;
-        //$this->specificFieldValues = new ArrayCollection();
-        //$this->sharedSurveys = new ArrayCollection();
+        // $this->specificFieldValues = new ArrayCollection();
+        // $this->sharedSurveys = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -553,7 +553,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $teacherSubscriptions = new ArrayCollection();
 
         foreach ($this->users as $subscription) {
-            if ($subscription->getStatus() === CourseRelUser::TEACHER) {
+            if (CourseRelUser::TEACHER === $subscription->getStatus()) {
                 $teacherSubscriptions->add($subscription);
             }
         }
@@ -573,7 +573,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         /*$criteria = Criteria::create()->where(
               Criteria::expr()->eq('groups', $group)
           );*/
-        //return $this->getGroups()->contains($group);
+        // return $this->getGroups()->contains($group);
     }
 
     public function getId(): ?int
@@ -923,6 +923,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
               $this->currentSession = $session;
           }*/
         $list = $this->getSessions();
+
         /** @var SessionRelCourse $item */
         foreach ($list as $item) {
             if ($item->getSession()->getId() === $session->getId()) {
@@ -951,6 +952,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getUrls();
+
         /** @var AccessUrlRelCourse $item */
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() === $url->getId()) {

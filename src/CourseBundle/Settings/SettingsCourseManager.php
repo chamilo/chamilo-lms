@@ -94,6 +94,7 @@ class SettingsCourseManager extends SettingsManager
         }
 
         $repo = $this->manager->getRepository(SettingsCurrent::class);
+
         /** @var CCourseSetting[] $persistedParameters */
         $persistedParameters = $repo->findBy([
             'category' => $namespace,

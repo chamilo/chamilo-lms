@@ -42,9 +42,9 @@ use ZipStream\ZipStream;
 #[Route('/r')]
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
+    use ControllerTrait;
     use CourseControllerTrait;
     use ResourceControllerTrait;
-    use ControllerTrait;
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -192,7 +192,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
-        //$rootNodePath = $resourceNode->getPathForDisplay();
+        // $rootNodePath = $resourceNode->getPathForDisplay();
         $resourceNodeRepo = $repo->getResourceNodeRepository();
         $type = $repo->getResourceType();
 
@@ -221,16 +221,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');
-                //initialise zipstream with output zip filename and options.
+                // initialise zipstream with output zip filename and options.
                 $zip = new ZipStream($zipName, $options);
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
                     $stream = $repo->getResourceNodeFileStream($node);
                     $fileName = $node->getResourceFile()->getOriginalName();
-                    //$fileToDisplay = basename($node->getPathForDisplay());
-                    //$fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                    //error_log($fileToDisplay);
+                    // $fileToDisplay = basename($node->getPathForDisplay());
+                    // $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
+                    // error_log($fileToDisplay);
                     $zip->addFileFromStream($fileName, $stream);
                 }
                 $zip->finish();
@@ -239,7 +239,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $zipName //Transliterator::transliterate($zipName)
+            $zipName // Transliterator::transliterate($zipName)
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', 'application/octet-stream');
@@ -372,6 +372,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $forceDownload = true;
 
                 break;
+
             case 'show':
             default:
                 $forceDownload = false;
@@ -458,7 +459,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        //Transliterator::transliterate($fileName)
+        // Transliterator::transliterate($fileName)
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName

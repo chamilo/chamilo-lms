@@ -18,15 +18,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
-final class SessionRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class SessionRelUserExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

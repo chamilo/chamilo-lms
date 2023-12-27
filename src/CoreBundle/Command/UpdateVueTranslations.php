@@ -14,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const JSON_PRETTY_PRINT;
+
 class UpdateVueTranslations extends Command
 {
     /**
@@ -70,7 +72,7 @@ class UpdateVueTranslations extends Command
 
             $newLanguage = [];
             foreach ($translations as $variable => $translation) {
-                //$translated = $this->translator->trans($variable, [], null, $iso);
+                // $translated = $this->translator->trans($variable, [], null, $iso);
                 $translated = $this->getTranslationWithFallback($variable, $language);
                 $newLanguage[$variable] = $this->replaceMarkers($translated);
             }
@@ -88,12 +90,13 @@ class UpdateVueTranslations extends Command
     /**
      * Gets the translation for a given variable with fallbacks to parent language and base language.
      *
-     * @param string $variable The variable to be translated.
-     * @param Language $language The Language entity for the current language.
+     * @param string   $variable the variable to be translated
+     * @param Language $language the Language entity for the current language
      *
-     * @return string The translated string.
+     * @return string the translated string
      */
-    private function getTranslationWithFallback(string $variable, Language $language): string {
+    private function getTranslationWithFallback(string $variable, Language $language): string
+    {
         // Get the ISO code of the current language
         $iso = $language->getIsocode();
         // Try to translate the variable in the current language

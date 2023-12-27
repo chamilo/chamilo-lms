@@ -62,10 +62,13 @@ class ExportCGlossaryAction
         switch ($format) {
             case 'csv':
                 return $this->generateCsvFile($glossaryItems, $exportPath);
+
             case 'xls':
                 return $this->generateExcelFile($glossaryItems, $exportPath);
+
             case 'pdf':
                 return $this->generatePdfFile($glossaryItems, $exportPath, $translator);
+
             default:
                 throw new NotSupported('Export format not supported');
         }
@@ -75,6 +78,7 @@ class ExportCGlossaryAction
     {
         $csvFilePath = $exportPath.'/glossary.csv';
         $csvContent = '';
+
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $csvContent .= $item->getName().','.$item->getDescription()."\n";
@@ -89,6 +93,7 @@ class ExportCGlossaryAction
         $excelFilePath = $exportPath.'/glossary.xlsx';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+
         /** @var CGlossary $item */
         foreach ($glossaryItems as $index => $item) {
             $row = $index + 1;
@@ -111,6 +116,7 @@ class ExportCGlossaryAction
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table>';
         $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Definition').'</th></tr>';
+
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';

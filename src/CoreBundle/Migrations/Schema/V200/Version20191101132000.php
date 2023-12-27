@@ -81,7 +81,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
 
         if ($schema->getTable('course')->hasColumn('category_id')) {
-            //$this->addSql('ALTER TABLE course DROP category_id');
+            // $this->addSql('ALTER TABLE course DROP category_id');
         }
 
         $table = $schema->getTable('course_rel_user');
@@ -99,7 +99,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('course_category');
 
-        //$this->addSql('ALTER TABLE course DROP category_code');
+        // $this->addSql('ALTER TABLE course DROP category_code');
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $sql = 'SELECT * FROM course_category';
@@ -184,7 +184,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_tool');
 
         if ($table->hasIndex('course')) {
-            //$this->addSql('DROP INDEX course ON c_tool');
+            // $this->addSql('DROP INDEX course ON c_tool');
         }
 
         $table = $schema->getTable('c_tool_intro');
@@ -207,7 +207,5 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

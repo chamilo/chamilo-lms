@@ -120,6 +120,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
         ]);
         $em = $this->getEntityManager();
         $result = [];
+
         /** @var SequenceResource $sequenceResource */
         foreach ($sequencesResource as $sequenceResource) {
             if (!$sequenceResource->hasGraph()) {
@@ -139,12 +140,14 @@ class SequenceResourceRepository extends ServiceEntityRepository
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $resource = null;
+
                 switch ($type) {
                     case SequenceResource::SESSION_TYPE:
                         $repo = $em->getRepository(Session::class);
                         $resource = $repo->find($vertexId);
 
                         break;
+
                     case SequenceResource::COURSE_TYPE:
                         $repo = $em->getRepository(Course::class);
                         $resource = $repo->find($vertexId);
@@ -273,6 +276,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                         }
 
                         break;
+
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
                         $status = $this->checkCourseRequirements($userId, $resource, 0);
@@ -388,11 +392,13 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
         foreach ($verticesEdges as $supVertex) {
             $vertexId = $supVertex->getId();
+
             switch ($type) {
                 case SequenceResource::SESSION_TYPE:
                     $resource = $em->getRepository(Session::class)->find($vertexId);
 
                     break;
+
                 case SequenceResource::COURSE_TYPE:
                     $resource = $em->getRepository(Course::class)->find($vertexId);
 

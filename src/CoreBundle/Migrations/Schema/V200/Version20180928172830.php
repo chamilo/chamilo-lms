@@ -30,9 +30,9 @@ class Version20180928172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET name = "member" WHERE link = "user/user.php" ');
         $this->addSql('UPDATE c_tool SET name = "course_description/index.php" WHERE link = "course_description/" ');
 
-        //$this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
-        //$this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
-        //$this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
+        // $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
+        // $this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
+        // $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
 
         if (!$table->hasColumn('tool_id')) {
             $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
@@ -102,7 +102,5 @@ class Version20180928172830 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

@@ -26,7 +26,7 @@ class AccountController extends BaseController
 {
     use ControllerTrait;
 
-    #[Route('/edit', name: 'chamilo_core_account_edit', methods:['GET', 'POST'])]
+    #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
     {
         $user = $this->getUser();

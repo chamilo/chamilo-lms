@@ -54,19 +54,19 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             }
         }
 
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
         $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET group_id = NULL WHERE group_id = 0');
 
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
 
         // Replace user_sender_id = 0 with the admin.
         $adminId = $this->getAdmin()->getId();
         $this->addSql("UPDATE message SET user_sender_id = $adminId WHERE user_sender_id IS NOT NULL AND user_sender_id NOT IN (SELECT id FROM user) ");
 
-        //$this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        // $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
         if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
@@ -103,7 +103,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             );
         }
 
-        //$this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
+        // $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
         /*$connection = $this->getEntityManager()->getConnection();
@@ -163,7 +163,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_message_type ON message (msg_type)');
         }
 
-        //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
+        // $this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
 
         $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, subject LONGTEXT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
 
@@ -236,7 +236,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DC4F2D6B1 FOREIGN KEY (social_post_id) REFERENCES social_post (id) ON DELETE CASCADE');
 
-        //ALTER TABLE message DROP user_receiver_id;
+        // ALTER TABLE message DROP user_receiver_id;
 
         $this->addSql('DELETE FROM message_attachment WHERE message_id NOT IN (SELECT id FROM message)');
 
@@ -278,7 +278,5 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

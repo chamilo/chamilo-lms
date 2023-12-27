@@ -65,7 +65,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->add('announcements_hide_send_to_hrm_users', YesNoType::class)
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
             ->add('course_announcement_scheduled_by_date', YesNoType::class)
-
         ;
     }
 

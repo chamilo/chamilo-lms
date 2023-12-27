@@ -24,8 +24,6 @@ final class CLpRelUserRepository extends ResourceRepository
     /**
      * Get users subscribed to a item LP.
      *
-     * @param Session $session
-     *
      * @return array
      */
     public function getUsersSubscribedToItem(
@@ -45,10 +43,9 @@ final class CLpRelUserRepository extends ResourceRepository
     /**
      * Subscribe users to a LP.
      *
-     * @param User    $currentUser
-     * @param Session $session
-     * @param array   $newUserList
-     * @param bool    $deleteUsers
+     * @param User  $currentUser
+     * @param array $newUserList
+     * @param bool  $deleteUsers
      */
     public function subscribeUsersToItem(
         $currentUser,
@@ -110,7 +107,7 @@ final class CLpRelUserRepository extends ResourceRepository
                     if (!empty($session)) {
                         $item->setSession($session);
                     }
-                    $em->persist($item); //$em is an instance of EntityManager
+                    $em->persist($item); // $em is an instance of EntityManager
                 }
             }
         }
@@ -121,8 +118,7 @@ final class CLpRelUserRepository extends ResourceRepository
     /**
      * Unsubscribe users to Lp.
      *
-     * @param Session $session
-     * @param array   $usersToDelete
+     * @param array $usersToDelete
      */
     public function unsubcribeUsersToItem(
         Course $course,

@@ -71,6 +71,7 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
+
         /** @var CLpCategory $category */
         $category = $repo->find($category->getIid());
 

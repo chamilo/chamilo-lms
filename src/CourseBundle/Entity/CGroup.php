@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
@@ -22,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Course groups.
  */
-#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['group:read']])]
+#[ApiResource(normalizationContext: ['groups' => ['group:read']], security: "is_granted('ROLE_ADMIN')")]
 #[ORM\Table(name: 'c_group_info')]
 #[ORM\Entity(repositoryClass: CGroupRepository::class)]
 class CGroup extends AbstractResource implements ResourceInterface, Stringable
@@ -71,15 +70,17 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     protected bool $selfUnregistrationAllowed;
     #[ORM\Column(name: 'document_access', type: 'integer', options: ['default' => 0])]
     protected int $documentAccess;
+
     /**
-     * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
+     * @var Collection<int, CGroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: CGroupRelUser::class, mappedBy: 'group')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CGroupRelUser::class)]
     protected Collection $members;
+
     /**
-     * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
+     * @var Collection<int, CGroupRelTutor>
      */
-    #[ORM\OneToMany(targetEntity: CGroupRelTutor::class, mappedBy: 'group')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CGroupRelTutor::class)]
     protected Collection $tutors;
     public function __construct()
     {
@@ -103,12 +104,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     {
         return $this->getName();
     }
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+
+    public function getIid(): int
     {
         return $this->iid;
     }
@@ -158,12 +155,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get docState.
-     *
-     * @return int
-     */
-    public function getDocState()
+
+    public function getDocState(): int
     {
         return $this->docState;
     }
@@ -173,12 +166,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get calendarState.
-     *
-     * @return int
-     */
-    public function getCalendarState()
+
+    public function getCalendarState(): int
     {
         return $this->calendarState;
     }
@@ -188,12 +177,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get workState.
-     *
-     * @return int
-     */
-    public function getWorkState()
+
+    public function getWorkState(): int
     {
         return $this->workState;
     }
@@ -203,12 +188,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get announcementsState.
-     *
-     * @return int
-     */
-    public function getAnnouncementsState()
+
+    public function getAnnouncementsState(): int
     {
         return $this->announcementsState;
     }
@@ -228,12 +209,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get wikiState.
-     *
-     * @return int
-     */
-    public function getWikiState()
+
+    public function getWikiState(): int
     {
         return $this->wikiState;
     }
@@ -243,12 +220,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get chatState.
-     *
-     * @return int
-     */
-    public function getChatState()
+
+    public function getChatState(): int
     {
         return $this->chatState;
     }
@@ -258,12 +231,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get selfRegistrationAllowed.
-     *
-     * @return bool
-     */
-    public function getSelfRegistrationAllowed()
+
+    public function getSelfRegistrationAllowed(): bool
     {
         return $this->selfRegistrationAllowed;
     }
@@ -273,12 +242,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get selfUnregistrationAllowed.
-     *
-     * @return bool
-     */
-    public function getSelfUnregistrationAllowed()
+
+    public function getSelfUnregistrationAllowed(): bool
     {
         return $this->selfUnregistrationAllowed;
     }
@@ -292,17 +257,16 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
+
     /**
-     * @return CGroupRelUser[]|Collection
+     * @return ArrayCollection<int, CGroupRelUser>
      */
-    public function getMembers(): array|Collection
+    public function getMembers(): ArrayCollection
     {
         return $this->members;
     }
-    /**
-     * @param CGroupRelUser[]|Collection<int, CGroupRelUser> $members
-     */
-    public function setMembers(array|Collection $members): self
+
+    public function setMembers(Collection $members): self
     {
         $this->members = $members;
 
@@ -330,17 +294,16 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $list->count() > 0;
     }
+
     /**
-     * @return CGroupRelTutor[]|Collection
+     * @return ArrayCollection<int, CGroupRelTutor>
      */
-    public function getTutors(): array|Collection
+    public function getTutors(): ArrayCollection
     {
         return $this->tutors;
     }
-    /**
-     * @param CGroupRelTutor[]|Collection<int, CGroupRelTutor> $tutors
-     */
-    public function setTutors(array|Collection $tutors): self
+
+    public function setTutors(Collection $tutors): self
     {
         $this->tutors = $tutors;
 

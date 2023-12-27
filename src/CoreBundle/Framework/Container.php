@@ -166,9 +166,6 @@ class Container
         return self::$container->get('messenger.bus.default');
     }
 
-    /**
-     * @return Environment
-     */
     public static function getTwig()
     {
         return self::$twig;
@@ -203,7 +200,7 @@ class Container
         self::$request = $request;
     }
 
-    public static function getSession(): Session|HttpSessionInterface|bool|null
+    public static function getSession(): null|bool|HttpSessionInterface|Session
     {
         if (null !== self::$session) {
             return self::$session;
@@ -246,9 +243,9 @@ class Container
             return self::$translator;
         }
 
-        //if (self::$container->has('translator')) {
+        // if (self::$container->has('translator')) {
         return self::$container->get('translator');
-        //}
+        // }
     }
 
     public static function getMailer(): Mailer
@@ -640,6 +637,7 @@ class Container
     {
         $doctrine = $container->get('doctrine');
         Database::setConnection($doctrine->getConnection());
+
         /** @var EntityManager $em */
         $em = $doctrine->getManager();
         Database::setManager($em);

@@ -39,7 +39,8 @@ class TestFreeAnswerStrict extends Basic
         ];
 
         $config['removePlugins'] = 'elementspath';
-        //$config['height'] = '200';
+
+        // $config['height'] = '200';
         return $config;
     }
 

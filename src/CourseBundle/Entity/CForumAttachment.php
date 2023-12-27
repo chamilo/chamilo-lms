@@ -41,9 +41,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface, St
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function __toString(): string
     {

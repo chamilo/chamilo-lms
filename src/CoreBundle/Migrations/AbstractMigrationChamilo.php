@@ -188,7 +188,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
      */
     public function removeSettingCurrent($variable): void
     {
-        //to be implemented
+        // to be implemented
     }
 
     public function addLegacyFileToResource(
@@ -199,7 +199,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $fileName = '',
         $description = ''
     ): bool {
-        $class = \get_class($resource);
+        $class = $resource::class;
         $documentPath = basename($filePath);
 
         if (is_dir($filePath) || (!is_dir($filePath) && !file_exists($filePath))) {
@@ -262,16 +262,19 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $groupId = $item['to_group_id'] ?? 0;
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
+
             // Old 1.11.x visibility (item property) is based in this switch:
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
                     break;
+
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
 
                     break;
+
                 case 2:
                     $newVisibility = ResourceLink::VISIBILITY_DELETED;
 

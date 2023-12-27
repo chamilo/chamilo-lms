@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
-use function count;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Exception;
@@ -24,6 +23,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TestCategory;
 
+use function count;
+
 /**
  * @template-implements ProviderInterface<CategorizedExerciseResult>
  */
@@ -33,13 +34,12 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly AuthorizationCheckerInterface $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): null|array|object
     {
         $trackExercise = $this->entityManager->find(TrackEExercise::class, $uriVariables['exeId']);
 
@@ -125,8 +125,8 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         }
 
         // Not display expected answer, but score, and feedback
-        if (RESULT_DISABLE_SHOW_SCORE_ONLY === $objExercise->results_disabled &&
-            EXERCISE_FEEDBACK_TYPE_END === $objExercise->getFeedbackType()
+        if (RESULT_DISABLE_SHOW_SCORE_ONLY === $objExercise->results_disabled
+            && EXERCISE_FEEDBACK_TYPE_END === $objExercise->getFeedbackType()
         ) {
             $show_results = true;
             $show_only_score = false;

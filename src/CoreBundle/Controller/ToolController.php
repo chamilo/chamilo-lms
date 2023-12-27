@@ -19,6 +19,7 @@ class ToolController extends AbstractController
      * Updates the table tool and resource_type with the content of tools.yml.
      *
      * @Security("is_granted('ROLE_ADMIN')")
+     *
      * @Route("/update", methods={"GET"})
      */
     public function profileAction(ToolChain $toolChain): Response

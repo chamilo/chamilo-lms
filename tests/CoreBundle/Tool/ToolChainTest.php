@@ -96,9 +96,9 @@ class ToolChainTest extends AbstractApiTest
             $this->assertNotEmpty($link, sprintf('Link for tool %s is empty', $name));
 
             $types = $tool->getResourceTypes();
-            //$icon = $tool->getIcon();
-            //$this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
-            //$em = $this->getEntityManager();
+            // $icon = $tool->getIcon();
+            // $this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
+            // $em = $this->getEntityManager();
             /*if (!empty($types)) {
                 foreach ($types as $entityName) {
                     $repo = $em->getRepository($entityName);

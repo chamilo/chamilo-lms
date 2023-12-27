@@ -22,8 +22,7 @@ class CCalendarEventVoter extends Voter
 
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -64,6 +63,7 @@ class CCalendarEventVoter extends Voter
         switch ($attribute) {
             case self::CREATE:
                 return true;
+
             case self::VIEW:
             case self::EDIT:
                 if ($event->getCreator() === $user) {
@@ -73,6 +73,7 @@ class CCalendarEventVoter extends Voter
                 if ($event->isCollective() && $event->isUserSubscribedToResource($user)) {
                     return true;
                 }
+
                 // no break
             case self::DELETE:
                 if ($event->getCreator() === $user) {

@@ -23,8 +23,7 @@ class SkillRelUserListener
         private readonly RouterInterface $router,
         private readonly TranslatorInterface $translator,
         protected Security $security
-    ) {
-    }
+    ) {}
 
     public function postPersist(SkillRelUser $skillRelUser, PostPersistEventArgs $event): void
     {

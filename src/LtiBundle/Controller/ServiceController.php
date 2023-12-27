@@ -115,14 +115,17 @@ class ServiceController extends BaseController
                 $serviceRequest = new OutcomeReplaceRequest($xml);
 
                 break;
+
             case 'readResultRequest':
                 $serviceRequest = new OutcomeReadRequest($xml);
 
                 break;
+
             case 'deleteResultRequest':
                 $serviceRequest = new OutcomeDeleteRequest($xml);
 
                 break;
+
             default:
                 $name = str_replace(['ResultRequest', 'Request'], '', $name);
 

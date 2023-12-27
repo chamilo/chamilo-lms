@@ -14,8 +14,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 #[ORM\Entity]
 class GradebookComment
 {
-    use UserTrait;
     use TimestampableEntity;
+    use UserTrait;
 
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]

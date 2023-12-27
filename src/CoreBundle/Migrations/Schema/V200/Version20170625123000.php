@@ -68,7 +68,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_attendance_sheet SET attendance_calendar_id = NULL WHERE attendance_calendar_id = 0;');
         $this->addSql('ALTER TABLE c_attendance_sheet CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_calendar_id attendance_calendar_id INT DEFAULT NULL');
 
-        //ALTER TABLE c_attendance_sheet DROP c_id
+        // ALTER TABLE c_attendance_sheet DROP c_id
 
         $this->addSql('DELETE FROM c_attendance_sheet WHERE user_id NOT IN (SELECT id FROM user)');
         if (false === $table->hasForeignKey('FK_AD1394FAA76ED395')) {
@@ -139,10 +139,10 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
         $this->addSql('DELETE FROM c_attendance_result WHERE user_id NOT IN (SELECT id FROM user)');
 
-        //ALTER TABLE c_attendance_result DROP c_id, ;
+        // ALTER TABLE c_attendance_result DROP c_id, ;
         $this->addSql('ALTER TABLE c_attendance_result CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL ');
 
-        //ALTER TABLE c_attendance_sheet DROP c_id
+        // ALTER TABLE c_attendance_sheet DROP c_id
 
         if (false === $table->hasForeignKey('FK_2C7640A76ED395')) {
             $this->addSql('ALTER TABLE c_attendance_result ADD CONSTRAINT FK_2C7640A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
@@ -164,7 +164,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_attendance_calendar_rel_group');
         }
 
-        //ALTER TABLE c_attendance_calendar_rel_group DROP c_id,
+        // ALTER TABLE c_attendance_calendar_rel_group DROP c_id,
         $this->addSql('UPDATE c_attendance_calendar_rel_group SET group_id = NULL WHERE group_id = 0');
         $this->addSql('UPDATE c_attendance_calendar_rel_group SET calendar_id = NULL WHERE calendar_id = 0');
         $this->addSql('ALTER TABLE c_attendance_calendar_rel_group CHANGE group_id group_id INT DEFAULT NULL, CHANGE calendar_id calendar_id INT DEFAULT NULL;');
@@ -189,7 +189,5 @@ class Version20170625123000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

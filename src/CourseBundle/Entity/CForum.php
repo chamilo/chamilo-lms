@@ -1,13 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CForumRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course forums.
  */
 #[ORM\Table(name: 'c_forum_forum')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CForumRepository::class)]
+#[ORM\Entity(repositoryClass: CForumRepository::class)]
 class CForum extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -41,12 +42,12 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'forum_posts', type: 'integer', nullable: true)]
     protected ?int $forumPosts;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CForumPost::class)]
+    #[ORM\ManyToOne(targetEntity: CForumPost::class)]
     #[ORM\JoinColumn(name: 'forum_last_post', referencedColumnName: 'iid')]
     protected ?CForumPost $forumLastPost = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CForumCategory::class, inversedBy: 'forums')]
+    #[ORM\ManyToOne(targetEntity: CForumCategory::class, inversedBy: 'forums')]
     #[ORM\JoinColumn(name: 'forum_category', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumCategory $forumCategory = null;
 
@@ -90,7 +91,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'end_time', type: 'datetime', nullable: true)]
     protected ?DateTime $endTime = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, inversedBy: 'forums', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: CLp::class, cascade: ['remove'], inversedBy: 'forums')]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CLp $lp = null;
 
@@ -98,15 +99,15 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     protected ?bool $moderated = null;
 
     /**
-     * @var Collection|CForumThread[]
+     * @var Collection<int, CForumThread>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CForumThread::class, mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'forum', targetEntity: CForumThread::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $threads;
 
     /**
-     * @var Collection|CForumPost[]
+     * @var Collection<int, CForumPost>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CForumPost::class, mappedBy: 'forum', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'forum', targetEntity: CForumPost::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $posts;
 
     public function __construct()
@@ -174,21 +175,14 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get forumPosts.
-     *
-     * @return int
-     */
-    public function getForumPosts()
+    public function getForumPosts(): ?int
     {
         return $this->forumPosts;
     }
 
     public function setForumCategory(CForumCategory $forumCategory = null): self
     {
-        if (null !== $forumCategory) {
-            $forumCategory->getForums()->add($this);
-        }
+        $forumCategory?->getForums()->add($this);
         $this->forumCategory = $forumCategory;
 
         return $this;
@@ -206,12 +200,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get allowAnonymous.
-     *
-     * @return int
-     */
-    public function getAllowAnonymous()
+    public function getAllowAnonymous(): ?int
     {
         return $this->allowAnonymous;
     }
@@ -223,12 +212,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get allowEdit.
-     *
-     * @return int
-     */
-    public function getAllowEdit()
+    public function getAllowEdit(): ?int
     {
         return $this->allowEdit;
     }
@@ -240,12 +224,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get approvalDirectPost.
-     *
-     * @return string
-     */
-    public function getApprovalDirectPost()
+    public function getApprovalDirectPost(): ?string
     {
         return $this->approvalDirectPost;
     }
@@ -257,12 +236,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get allowAttachments.
-     *
-     * @return int
-     */
-    public function getAllowAttachments()
+    public function getAllowAttachments(): ?int
     {
         return $this->allowAttachments;
     }
@@ -274,12 +248,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get allowNewThreads.
-     *
-     * @return int
-     */
-    public function getAllowNewThreads()
+    public function getAllowNewThreads(): ?int
     {
         return $this->allowNewThreads;
     }
@@ -291,12 +260,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get defaultView.
-     *
-     * @return string
-     */
-    public function getDefaultView()
+    public function getDefaultView(): ?string
     {
         return $this->defaultView;
     }
@@ -308,12 +272,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get forumOfGroup.
-     *
-     * @return string
-     */
-    public function getForumOfGroup()
+    public function getForumOfGroup(): ?string
     {
         return $this->forumOfGroup;
     }
@@ -323,10 +282,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this->forumGroupPublicPrivate;
     }
 
-    /**
-     * @return $this
-     */
-    public function setForumGroupPublicPrivate(string $forumGroupPublicPrivate)
+    public function setForumGroupPublicPrivate(string $forumGroupPublicPrivate): static
     {
         $this->forumGroupPublicPrivate = $forumGroupPublicPrivate;
 
@@ -340,12 +296,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get forumOrder.
-     *
-     * @return int
-     */
-    public function getForumOrder()
+    public function getForumOrder(): ?int
     {
         return $this->forumOrder;
     }
@@ -357,12 +308,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get locked.
-     *
-     * @return int
-     */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
@@ -374,12 +320,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get forumImage.
-     *
-     * @return string
-     */
-    public function getForumImage()
+    public function getForumImage(): string
     {
         return $this->forumImage;
     }
@@ -391,12 +332,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get startTime.
-     *
-     * @return DateTime
-     */
-    public function getStartTime()
+    public function getStartTime(): ?DateTime
     {
         return $this->startTime;
     }
@@ -408,12 +344,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get endTime.
-     *
-     * @return DateTime
-     */
-    public function getEndTime()
+    public function getEndTime(): ?DateTime
     {
         return $this->endTime;
     }
@@ -430,22 +361,12 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * Get threads.
-     *
-     * @return Collection|CForumThread[]
-     */
-    public function getThreads(): Collection|array
+    public function getThreads(): ArrayCollection
     {
         return $this->threads;
     }
@@ -475,9 +396,9 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return Collection|CForumPost[]
+     * @return ArrayCollection<int, CForumPost>
      */
-    public function getPosts(): Collection|array
+    public function getPosts(): ArrayCollection
     {
         return $this->posts;
     }

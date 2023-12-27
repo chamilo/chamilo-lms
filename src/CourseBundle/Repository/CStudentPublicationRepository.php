@@ -26,9 +26,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function findAllByCourse(
         Course $course,
         Session $session = null,
-        ?string $title = null,
-        ?int $active = null,
-        ?string $fileType = null
+        string $title = null,
+        int $active = null,
+        string $fileType = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -42,9 +42,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function getStudentAssignments(
         CStudentPublication $publication,
         Course $course,
-        ?Session $session = null,
-        ?CGroup $group = null,
-        ?User $user = null
+        Session $session = null,
+        CGroup $group = null,
+        User $user = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
@@ -57,9 +57,10 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb;
     }
 
-    public function getStudentPublicationByUser(User $user, Course $course, ?Session $session = null): array
+    public function getStudentPublicationByUser(User $user, Course $course, Session $session = null): array
     {
         $qb = $this->findAllByCourse($course, $session);
+
         /** @var CStudentPublication[] $works */
         $works = $qb->getQuery()->getResult();
         $list = [];
@@ -76,8 +77,8 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function countUserPublications(
         User $user,
         Course $course,
-        ?Session $session = null,
-        ?CGroup $group = null
+        Session $session = null,
+        CGroup $group = null
     ): int {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
@@ -109,7 +110,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
     }
 
-    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): void
+    private function addActiveQueryBuilder(int $active = null, QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

@@ -41,8 +41,7 @@ class CourseListener
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
@@ -129,10 +128,10 @@ class CourseListener
                 $sessionHandler->remove('sid');
                 $sessionHandler->remove('session');
             } else {
-                //dump("Load chamilo session from DB");
+                // dump("Load chamilo session from DB");
                 $session = $this->entityManager->find(Session::class, $sessionId);
                 if (null !== $session) {
-                    //$course->setCurrentSession($session);
+                    // $course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
@@ -155,7 +154,7 @@ class CourseListener
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
             } else {
-                //dump('Load chamilo group from DB');
+                // dump('Load chamilo group from DB');
                 $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
 
                 if (null === $group) {
@@ -193,9 +192,7 @@ class CourseListener
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event): void
-    {
-    }
+    public function onKernelResponse(ResponseEvent $event): void {}
 
     /**
      * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
@@ -210,7 +207,7 @@ class CourseListener
 
         $request = $event->getRequest();
         $sessionHandler = $request->getSession();
-        //$container = $this->container;
+        // $container = $this->container;
 
         /*if ($course) {
             $courseLanguage = $course->getCourseLanguage();
@@ -223,20 +220,20 @@ class CourseListener
         }*/
 
         $courseId = (int) $request->get('cid');
-        //$groupId = (int) $request->get('gid');
-        //$sessionId = (int) $request->get('sid');
+        // $groupId = (int) $request->get('gid');
+        // $sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
-        //global $cidReset;
-        //$cidReset = $sessionHandler->get('cid_reset', false);
+        // global $cidReset;
+        // $cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
-        if (\is_array($controllerList) &&
-            (
-                $controllerList[0] instanceof CourseControllerInterface ||
-                $controllerList[0] instanceof EditorController
-                //$controllerList[0] instanceof ResourceController
-                //|| $controllerList[0] instanceof LegacyController
+        if (\is_array($controllerList)
+            && (
+                $controllerList[0] instanceof CourseControllerInterface
+                || $controllerList[0] instanceof EditorController
+                // $controllerList[0] instanceof ResourceController
+                // || $controllerList[0] instanceof LegacyController
             )
         ) {
             if (!empty($courseId)) {
@@ -249,12 +246,12 @@ class CourseListener
                 if ($course) {
                     $controller->setCourse($course);
                     // Legacy code
-                    //$courseCode = $course->getCode();
-                    //$courseInfo = api_get_course_info($courseCode);
-                    //$container->get('twig')->addGlobal('course', $course);
-                    //$sessionHandler->set('_real_cid', $course->getId());
-                    //$sessionHandler->set('_cid', $course->getCode());
-                    //$sessionHandler->set('_course', $courseInfo);
+                    // $courseCode = $course->getCode();
+                    // $courseInfo = api_get_course_info($courseCode);
+                    // $container->get('twig')->addGlobal('course', $course);
+                    // $sessionHandler->set('_real_cid', $course->getId());
+                    // $sessionHandler->set('_cid', $course->getCode());
+                    // $sessionHandler->set('_course', $courseInfo);
                 }
 
                 if ($session) {
@@ -263,10 +260,10 @@ class CourseListener
             }
 
             // Example 'chamilo_notebook.controller.notebook:indexAction'
-            //$controllerAction = $request->get('_controller');
-            //$controllerActionParts = explode(':', $controllerAction);
-            //$controllerNameParts = explode('.', $controllerActionParts[0]);
-            //$controllerName = $controllerActionParts[0];
+            // $controllerAction = $request->get('_controller');
+            // $controllerActionParts = explode(':', $controllerAction);
+            // $controllerNameParts = explode('.', $controllerActionParts[0]);
+            // $controllerName = $controllerActionParts[0];
         }
     }
 
@@ -308,7 +305,7 @@ class CourseListener
             }
         }
 
-        //$request->setLocale($request->getPreferredLanguage());
+        // $request->setLocale($request->getPreferredLanguage());
     }
 
     private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string

@@ -65,7 +65,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasIndex('session')) {
-            //$this->addSql('DROP INDEX session ON c_lp');
+            // $this->addSql('DROP INDEX session ON c_lp');
         }
 
         $this->addSql('UPDATE c_lp SET category_id = NULL WHERE category_id = 0');
@@ -205,7 +205,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasIndex('IDX_2D2F4F7DFE54D947')) {
-            //$this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
+            // $this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
         }
 
         $table = $schema->getTable('c_lp_item_view');

@@ -45,6 +45,7 @@ class ExtraFieldValues
     #[ORM\ManyToOne(targetEntity: Asset::class)]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Asset $asset = null;
+
     /**
      * Item id can be: userId, courseId, sessionId, etc.
      */
@@ -89,6 +90,7 @@ class ExtraFieldValues
     {
         return $this->comment;
     }
+
     /**
      * Get id.
      *

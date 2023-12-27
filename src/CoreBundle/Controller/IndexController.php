@@ -20,16 +20,12 @@ class IndexController extends BaseController
      * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/faq", name="faq", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/demo", name="demo", methods={"GET", "POST"}, options={"expose"=true})
-     *
      * @Route("/course/{cid}/home", name="chamilo_core_course_home")
      * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
-     *
      * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
      * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
-     *
      * @Route("/social", name="social", options={"expose"=true}, name="chamilo_core_socialnetwork")
-     *
      * @Route("/admin", name="admin", options={"expose"=true})
      */
     #[Route('/sessions', name: 'sessions')]
@@ -41,6 +37,8 @@ class IndexController extends BaseController
 
     /**
      * Use only in PHPUnit tests.
+     *
+     * @param mixed $name
      */
     public function classic($name): Response
     {
@@ -54,6 +52,7 @@ class IndexController extends BaseController
         $fileToLoad = $mainPath.$name;
 
         ob_start();
+
         require_once $fileToLoad;
         $content = ob_get_contents();
         ob_end_clean();

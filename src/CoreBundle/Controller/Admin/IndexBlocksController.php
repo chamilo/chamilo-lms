@@ -19,7 +19,7 @@ class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
     private bool $isSessionAdmin = false;
-    private $extAuthSource = [];
+    private array $extAuthSource = [];
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -271,10 +271,10 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_user_import.php']),
             'label' => $this->translator->trans('Import users list'),
         ];
-        //$items[] = [
+        // $items[] = [
         //    'url'=>'course_intro_pdf_import.php',
         //    'label' => $this->translator->$this->trans('ImportPDFIntroToCourses'),
-        //];
+        // ];
 
         if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_enable_grade_model')) {
             $items[] = [

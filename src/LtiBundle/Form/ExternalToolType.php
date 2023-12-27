@@ -19,6 +19,14 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use const CURLOPT_CUSTOMREQUEST;
+use const CURLOPT_ENCODING;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HEADER;
+use const CURLOPT_POST;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_SSL_VERIFYPEER;
+
 class ExternalToolType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -55,8 +63,8 @@ class ExternalToolType extends AbstractType
             ]
         );
 
-        if (null === $parent ||
-            ($parent && !$parent->isActiveDeepLinking())
+        if (null === $parent
+            || ($parent && !$parent->isActiveDeepLinking())
         ) {
             $builder->add(
                 'activeDeepLinking',

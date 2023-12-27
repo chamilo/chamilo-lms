@@ -62,6 +62,7 @@ class SessionCategory implements Stringable
     {
         return $this->url;
     }
+
     /**
      * Get id.
      *
@@ -87,6 +88,7 @@ class SessionCategory implements Stringable
 
         return $this;
     }
+
     /**
      * Get dateStart.
      *
@@ -102,6 +104,7 @@ class SessionCategory implements Stringable
 
         return $this;
     }
+
     /**
      * Get dateEnd.
      *

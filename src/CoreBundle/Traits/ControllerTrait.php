@@ -50,7 +50,7 @@ trait ControllerTrait
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
         $services['glide'] = Glide::class;
-        //$services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+        // $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         $services[] = SettingsManager::class;
         $services[] = MessageAttachmentRepository::class;

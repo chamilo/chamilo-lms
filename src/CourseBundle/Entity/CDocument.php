@@ -232,6 +232,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     {
         return $this->readonly;
     }
+
     /**
      * @return int
      */

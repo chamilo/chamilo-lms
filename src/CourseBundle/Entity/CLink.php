@@ -134,7 +134,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['link:write'],
     ],
 )]
-
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['resourceNode.displayOrder'])]
 #[ORM\Table(name: 'c_link')]
@@ -279,7 +278,7 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
 
     public function toggleVisibility(): void
     {
-        $this->linkVisible = !($this->getFirstResourceLink()->getVisibility());
+        $this->linkVisible = !$this->getFirstResourceLink()->getVisibility();
     }
 
     public function getLinkVisible(): bool

@@ -180,7 +180,8 @@ class Message
         return $this->receivers
             ->filter(
                 fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
-            )->getValues();
+            )->getValues()
+        ;
     }
 
     #[Groups(['message:read'])]

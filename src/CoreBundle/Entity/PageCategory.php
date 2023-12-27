@@ -21,11 +21,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: 'is_granted(\'ROLE_USER\')'),
-        new Put(security: 'is_granted(\'ROLE_ADMIN\')'),
-        new Delete(security: 'is_granted(\'ROLE_ADMIN\')'),
-        new GetCollection(security: 'is_granted(\'ROLE_USER\')'),
-        new Post(security: 'is_granted(\'ROLE_ADMIN\')'),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: [
         'groups' => ['page_category:read'],
@@ -56,8 +56,9 @@ class PageCategory
     #[Assert\NotBlank]
     #[ORM\Column(name: 'type', type: 'string')]
     protected string $type;
+
     /**
-     * @var Collection|Page[]
+     * @var Collection<int, Page>
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Page::class, cascade: ['persist'])]
     protected Collection $pages;
@@ -99,7 +100,11 @@ class PageCategory
 
         return $this;
     }
-    public function getPages()
+
+    /**
+     * @return ArrayCollection<int, Page>
+     */
+    public function getPages(): ArrayCollection
     {
         return $this->pages;
     }

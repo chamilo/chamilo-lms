@@ -22,8 +22,7 @@ class MessageTagVoter extends Voter
 
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {

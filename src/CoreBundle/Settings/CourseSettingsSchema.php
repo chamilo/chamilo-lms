@@ -27,6 +27,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     public function getProcessedToolChain(): array
     {
         $tools = [];
+
         /** @var AbstractTool $tool */
         foreach ($this->toolChain->getTools() as $tool) {
             $name = $tool->getName();
@@ -70,7 +71,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_hide_tools' => [],
                     'scorm_cumulative_session_time' => 'true',
                     'courses_default_creation_visibility' => '2',
-                    //COURSE_VISIBILITY_OPEN_PLATFORM
+                    // COURSE_VISIBILITY_OPEN_PLATFORM
                     'allow_public_certificates' => 'false',
                     'allow_lp_return_link' => 'true',
                     'course_creation_use_template' => null,
@@ -157,10 +158,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        //'HomepageView2column' => '2column',
-                        //'HomepageView3column' => '3column',
-                        //'HomepageViewVerticalActivity' => 'vertical_activity',
-                        //'HomepageViewActivity' => 'activity',
+                        // 'HomepageView2column' => '2column',
+                        // 'HomepageView3column' => '3column',
+                        // 'HomepageViewVerticalActivity' => 'vertical_activity',
+                        // 'HomepageViewActivity' => 'activity',
                         'HomepageViewActivityBig' => 'activity_big',
                     ],
                 ]
@@ -388,7 +389,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
                 ]
             )
-
         ;
     }
 

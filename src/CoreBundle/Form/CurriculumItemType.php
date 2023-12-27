@@ -21,7 +21,7 @@ class CurriculumItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        //$builderData = $builder->getData();
+        // $builderData = $builder->getData();
         /*$parentIdDisabled = false;
         if (!empty($builderData)) {
             $parentIdDisabled = true;

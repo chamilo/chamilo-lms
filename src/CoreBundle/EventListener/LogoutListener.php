@@ -95,6 +95,6 @@ class LogoutListener
         $login = $this->router->generate('index');
 
         return new RedirectResponse($login);
-        //return new JsonResponse('logout out', 200);
+        // return new JsonResponse('logout out', 200);
     }
 }

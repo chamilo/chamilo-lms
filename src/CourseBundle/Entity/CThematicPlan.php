@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_thematic_plan')]
 #[ORM\Index(name: 'thematic_id', columns: ['thematic_id', 'description_type'])]
 #[ORM\Entity]
-class CThematicPlan implements Stringable //extends AbstractResource implements ResourceInterface
+class CThematicPlan implements Stringable // extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

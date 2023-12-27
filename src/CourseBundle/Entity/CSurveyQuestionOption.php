@@ -35,9 +35,7 @@ class CSurveyQuestionOption
     #[ORM\Column(name: 'value', type: 'integer', nullable: false)]
     protected int $value;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function getIid(): int
     {

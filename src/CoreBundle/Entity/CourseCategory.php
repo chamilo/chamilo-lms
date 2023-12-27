@@ -63,6 +63,7 @@ class CourseCategory implements Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     /**
      * @var Collection|CourseCategory[]
      */
@@ -93,6 +94,7 @@ class CourseCategory implements Stringable
     #[Groups(['course_category:read', 'course_category:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
+
     /**
      * @var Collection<int, AccessUrlRelCourseCategory>
      */
@@ -103,6 +105,7 @@ class CourseCategory implements Stringable
         orphanRemoval: true
     )]
     protected Collection $urls;
+
     /**
      * @var Collection<int, Course>
      */

@@ -27,6 +27,7 @@ class AccessUserUrlFixtures extends Fixture implements ContainerAwareInterface
     public function load(ObjectManager $manager): void
     {
         $container = $this->container;
+
         /** @var User $admin */
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
         $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE);

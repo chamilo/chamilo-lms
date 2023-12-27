@@ -98,7 +98,7 @@ class Career
         return $this->status;
     }
 
-    public function getPromotions(): array | ArrayCollection | Collection
+    public function getPromotions(): array|ArrayCollection|Collection
     {
         return $this->promotions;
     }

@@ -91,9 +91,9 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                         'Password' => 'password',
                         'Language' => 'language',
                         'Phone' => 'phone',
-                        //'openid' => 'openid',
+                        // 'openid' => 'openid',
                         'Theme' => 'theme',
-                        //'apikeys' => 'apikeys',
+                        // 'apikeys' => 'apikeys',
                     ],
                 ]
             )
@@ -215,7 +215,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('career_diagram_legend', YesNoType::class)
             ->add('career_diagram_disclaimer', YesNoType::class)
             ->add('linkedin_organization_id', YesNoType::class)
-
         ;
     }
 

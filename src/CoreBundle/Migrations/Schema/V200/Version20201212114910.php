@@ -45,6 +45,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 
         // Adding portals (AccessUrl) to the resource node tree.
         $urls = $urlRepo->findAll();
+
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             if (false === $url->hasResourceNode()) {
@@ -68,6 +69,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
 
         $this->write('Migrating users');
+
         /** @var User $userEntity */
         foreach ($q->toIterable() as $userEntity) {
             if ($userEntity->hasResourceNode()) {

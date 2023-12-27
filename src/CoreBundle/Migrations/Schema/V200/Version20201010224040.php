@@ -24,6 +24,7 @@ final class Version20201010224040 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -35,6 +36,7 @@ final class Version20201010224040 extends AbstractMigrationChamilo
 
         foreach ($items as $itemData) {
             $id = $itemData['id'];
+
             /** @var SysAnnouncement $announcement */
             $announcement = $repo->find($id);
 
@@ -57,7 +59,5 @@ final class Version20201010224040 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

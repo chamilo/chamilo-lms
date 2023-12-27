@@ -42,9 +42,7 @@ class SkillRelItemRelUser
     #[ORM\Column(name: 'updated_by', type: 'integer', nullable: false)]
     protected int $updatedBy;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * @return int

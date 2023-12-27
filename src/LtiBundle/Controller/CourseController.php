@@ -53,6 +53,7 @@ class CourseController extends ToolBaseController
     public function editAction($id, Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $id);
 
@@ -130,6 +131,7 @@ class CourseController extends ToolBaseController
     public function launchAction(int $id, Utils $ltiUtil): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var null|ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $id);
 
@@ -467,6 +469,7 @@ class CourseController extends ToolBaseController
         $em->flush();
 
         $this->addFlash('success', $this->trans('External tool added'));
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -503,6 +506,7 @@ class CourseController extends ToolBaseController
         $em = $this->getDoctrine()->getManager();
         $toolRepo = $em->getRepository(ExternalTool::class);
         $course = $this->getCourse();
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -538,6 +542,7 @@ class CourseController extends ToolBaseController
         );
         $form->removeElement('name');
         $form->removeElement('addresult');
+
         /** @var HTML_QuickForm_select $slcLtiTools */
         $slcLtiTools = $form->createElement('select', 'name', $this->trans('External tool'));
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
@@ -603,7 +608,7 @@ class CourseController extends ToolBaseController
 
     private function variableSubstitution(
         array $params,
-        array & $customParams,
+        array &$customParams,
         User $user,
         Course $course,
         Session $session = null
@@ -665,7 +670,7 @@ class CourseController extends ToolBaseController
             '$Person.address.country' => false,
             '$Person.address.postcode' => false,
             '$Person.address.timezone' => false,
-            //$user->getTimezone(),
+            // $user->getTimezone(),
             '$Person.phone.mobile' => false,
             '$Person.phone.primary' => $user->getPhone(),
             '$Person.phone.home' => false,
@@ -673,7 +678,7 @@ class CourseController extends ToolBaseController
             '$Person.email.primary' => $user->getEmail(),
             '$Person.email.personal' => false,
             '$Person.webaddress' => false,
-            //$user->getWebsite(),
+            // $user->getWebsite(),
             '$Person.sms' => false,
 
             '$CourseTemplate.sourcedId' => false,
@@ -757,7 +762,7 @@ class CourseController extends ToolBaseController
         ];
     }
 
-    private function createLtiLink(array & $contentItem, ExternalTool $baseTool): ExternalTool
+    private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
         $newTool->setToolParent($baseTool);

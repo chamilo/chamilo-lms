@@ -22,8 +22,7 @@ class CStudentPublicationExtension implements QueryCollectionExtensionInterface
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

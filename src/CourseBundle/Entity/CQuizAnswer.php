@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizAnswer.
  */
 #[ORM\Table(name: 'c_quiz_answer')]
-#[ORM\Index(name: 'idx_cqa_q', columns: ['question_id'])]
+#[ORM\Index(columns: ['question_id'], name: 'idx_cqa_q')]
 #[ORM\Entity]
 class CQuizAnswer
 {
@@ -23,7 +23,7 @@ class CQuizAnswer
     protected int $iid;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, inversedBy: 'answers', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, cascade: ['persist'], inversedBy: 'answers')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
@@ -103,7 +103,7 @@ class CQuizAnswer
         return $this->comment;
     }
 
-    public function setPonderation(string|float $weight): self
+    public function setPonderation(float|string $weight): self
     {
         $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
@@ -172,20 +172,16 @@ class CQuizAnswer
 
     /**
      * Get answerCode.
-     *
-     * @return string
      */
-    public function getAnswerCode()
+    public function getAnswerCode(): ?string
     {
         return $this->answerCode;
     }
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }

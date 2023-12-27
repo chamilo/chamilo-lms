@@ -148,7 +148,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
                 'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE INDEX IDX_DDDED80491D79BD3 ON gradebook_evaluation (c_id)');
-            //$this->addSql('ALTER TABLE gradebook_evaluation RENAME INDEX fk_ddded80491d79bd3 TO IDX_DDDED80491D79BD3;');
+            // $this->addSql('ALTER TABLE gradebook_evaluation RENAME INDEX fk_ddded80491d79bd3 TO IDX_DDDED80491D79BD3;');
         }
         if (false === $table->hasIndex('idx_ge_cat')) {
             $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
@@ -391,7 +391,5 @@ class Version20181025064351 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

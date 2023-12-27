@@ -27,14 +27,13 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         private readonly IllustrationRepository $illustrationRepository,
         private readonly RequestStack $requestStack,
         private readonly UrlGeneratorInterface $generator
-    ) {
-    }
+    ) {}
 
     public function normalize(
         $object,
-        ?string $format = null,
+        string $format = null,
         array $context = []
-    ): float|int|bool|ArrayObject|array|string|null {
+    ): null|array|ArrayObject|bool|float|int|string {
         $context[self::ALREADY_CALLED] = true;
 
         $request = $this->requestStack->getCurrentRequest();
@@ -74,12 +73,12 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
                 'type' => $resourceNode->getResourceType()->getName(),
             ];
 
-            //if ($getFile) {
+            // if ($getFile) {
             // Get all links from resource.
             if ($object instanceof AbstractResource) {
                 $object->setResourceLinkListFromEntity();
             }
-            //}
+            // }
 
             $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
             $object->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
@@ -90,9 +89,9 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
             }
 
             // This gets the file contents, usually use to get HTML/Text data to be edited.
-            if ($getFile &&
-                $resourceNode->hasResourceFile() &&
-                $resourceNode->hasEditableTextContent()
+            if ($getFile
+                && $resourceNode->hasResourceFile()
+                && $resourceNode->hasEditableTextContent()
             ) {
                 $object->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent(
                     $resourceNode
@@ -103,7 +102,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;

@@ -35,11 +35,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic DROP c_id');
+            // $this->addSql('ALTER TABLE c_thematic DROP c_id');
         }
 
         if ($table->hasColumn('session_id')) {
-            //$this->addSql('ALTER TABLE c_thematic DROP session_id');
+            // $this->addSql('ALTER TABLE c_thematic DROP session_id');
         }
 
         if ($table->hasIndex('active')) {
@@ -52,7 +52,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
+            // $this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
         }
 
         if ($table->hasIndex('thematic_id')) {
@@ -97,7 +97,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
+            // $this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
         }
         if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
             $this->addSql(
@@ -179,7 +179,5 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

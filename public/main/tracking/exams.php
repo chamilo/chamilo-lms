@@ -4,6 +4,9 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -99,30 +102,30 @@ if (!$exportToXLS) {
     $actionsLeft = $actionsRight = '';
     if ($global) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM);
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress'));
         $actionsLeft .= '</a>';
 
         $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'">'.
-            Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
         $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
-            Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
 
         $menuItems[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainer View'), [], 32),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Trainer View')),
             api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
         );
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
-                Display::return_icon('star.png', get_lang('Admin view'), [], 32),
+                Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Admin view')),
                 api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
             );
         } else {
             $menuItems[] = Display::url(
-                Display::return_icon('star.png', get_lang('Coach interface'), [], 32),
+                Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Coach interface')),
                 api_get_path(WEB_CODE_PATH).'my_space/index.php?view=coach'
             );
         }
-        $menuItems[] = '<a href="#">'.Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], 32).'</a>';
+        $menuItems[] = '<a href="#">'.Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Exam tracking')).'</a>';
 
         $nb_menu_items = count($menuItems);
         if ($nb_menu_items > 1) {
@@ -134,7 +137,7 @@ if (!$exportToXLS) {
     } else {
         $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id(), false);
         $actionsRight .= Display::url(
-            Display::return_icon('export_excel.png', get_lang('Excel export'), [], 32),
+            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
     }
@@ -529,7 +532,7 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
 
     if ($global && !empty($sessionId)) {
         $sessionName = isset($newSessionList[$sessionId]) ? $newSessionList[$sessionId] : null;
-        $html .= Display::return_icon('star.png', get_lang('Session')).' ('.$sessionName.')';
+        $html .= Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' ('.$sessionName.')';
     }
 
     $html .= '</td>';

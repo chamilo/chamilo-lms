@@ -5,6 +5,9 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
@@ -103,10 +106,10 @@ $studentCount = count($student_ids);
 $left = TrackingCourseLog::actionsLeft('courses', api_get_session_id(), false);
 
 $right = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
 
 $right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+	'.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
 $right .= '</span>';
 
 echo Display::toolbarAction('tools', [$left, $right]);
@@ -122,9 +125,7 @@ if ($lpReporting) {
         // learning path tracking
         echo '<div class="report_section">';
         echo Display::page_subheader(
-            Display::return_icon(
-                'scorms.gif',
-                get_lang('Progress in courses')
+            Display::getMdiIcon(ObjectIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Progress in courses')
             ).' '.get_lang('Progress in courses')
         );
         echo '<table class="data_table">';
@@ -176,9 +177,7 @@ if ($exerciseReporting) {
     // Exercises tracking.
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon(
-            'quiz.png',
-            get_lang('Tests score')
+        Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tests score')
         ).' '.get_lang('Tests score')
     );
     echo '<table class="data_table">';
@@ -275,7 +274,7 @@ if ($export_csv) {
 // Forums tracking.
 echo '<div class="report_section">';
 echo Display::page_subheader(
-    Display::return_icon('forum.gif', get_lang('Forum')).' '.
+    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Forum')).' '.
     get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
     get_lang('See detail').'</a>'
 );
@@ -290,7 +289,7 @@ echo '<div class="clear"></div>';
 if ($showChatReporting) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon('chat.gif', get_lang('Chat')).' '.get_lang('Chat')
+        Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Chat')).' '.get_lang('Chat')
     );
 
     echo '<table class="data_table">';
@@ -324,9 +323,7 @@ if ($showChatReporting) {
 if ($showTrackingReporting) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon(
-            'acces_tool.gif',
-            get_lang('Tools most used')
+        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Tools most used')
         ).' '.get_lang('Tools most used')
     );
     echo '<table class="table table-hover table-striped data_table">';
@@ -373,9 +370,7 @@ if ($documentReporting) {
 
     echo '<a name="documents_tracking" id="a"></a><div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon(
-            'documents.gif',
-            get_lang('Documents most downloaded')
+        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Documents most downloaded')
         ).'&nbsp;'.get_lang('Documents most downloaded').$link
     );
 
@@ -428,9 +423,7 @@ if ($linkReporting) {
     // links tracking
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::return_icon(
-            'link.gif',
-            get_lang('Links most visited')
+        Display::getMdiIcon(ToolIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Links most visited')
         ).'&nbsp;'.get_lang('Links most visited')
     );
     echo '<table class="table table-hover table-striped data_table">';

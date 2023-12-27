@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -95,7 +97,7 @@ Display::display_header($nametools, 'Reporting');
 
 $left = TrackingCourseLog::actionsLeft('resources', api_get_session_id(), false);
 $right = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).
 '</a>';
 
 $addional_param = '';
@@ -109,9 +111,9 @@ if (isset($_GET['users_tracking_per_page'])) {
 }
 
 $right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-'.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
 $right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=xls&'.$addional_param.$users_tracking_per_page.'">
-'.Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
 
 echo Display::toolbarAction('log_resource', [$left, $right]);
 

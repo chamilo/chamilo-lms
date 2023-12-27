@@ -70,4 +70,6 @@ enum ToolIcon: string
     case WIKI = 'view-dashboard-edit';
     // Security
     case SECURITY = 'security';
+    // Plugin(s)
+    case PLUGIN = 'puzzle';
 }

@@ -27,7 +27,7 @@ class CAttendanceResultComment
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'attendance_sheet_id', type: 'integer', nullable: false)]
     protected int $attendanceSheetId;

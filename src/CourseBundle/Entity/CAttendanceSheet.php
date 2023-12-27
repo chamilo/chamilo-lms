@@ -18,7 +18,7 @@ class CAttendanceSheet
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotNull]
     #[ORM\Column(name: 'presence', type: 'boolean', nullable: false)]

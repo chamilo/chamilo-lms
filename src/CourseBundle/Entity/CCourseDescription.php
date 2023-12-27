@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_course_description')]
@@ -30,7 +31,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: true)]
@@ -140,15 +141,12 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
         return $this->progress;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -34,7 +35,7 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['group:read', 'group:write'])]
-    protected int $iid;
+    protected ?int $iid = null;
     #[Assert\NotBlank]
     #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
     #[Groups(['group:read', 'group:write'])]
@@ -105,7 +106,7 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
         return $this->getName();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -323,7 +324,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    public function getResourceIdentifier(): int
+
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->iid;
     }

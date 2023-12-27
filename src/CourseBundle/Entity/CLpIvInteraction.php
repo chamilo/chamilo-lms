@@ -20,7 +20,7 @@ class CLpIvInteraction
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;

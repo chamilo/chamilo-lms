@@ -21,7 +21,7 @@ class CQuizRelQuestion
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'question_order', type: 'integer', nullable: false)]
     protected int $questionOrder;

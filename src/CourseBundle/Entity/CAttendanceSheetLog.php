@@ -18,7 +18,7 @@ class CAttendanceSheetLog
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendance::class, inversedBy: 'logs')]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]

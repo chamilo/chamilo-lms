@@ -19,7 +19,7 @@ class CSurveyQuestion
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
@@ -95,7 +95,7 @@ class CSurveyQuestion
         $this->surveyGroupSec2 = 0;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

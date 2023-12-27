@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_quiz_question_category')]
@@ -22,7 +23,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
@@ -67,7 +68,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         $question->removeCategory($this);
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -114,7 +115,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -34,7 +35,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'post_title', type: 'string', length: 250, nullable: false)]
@@ -206,10 +207,8 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -280,7 +279,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

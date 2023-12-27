@@ -22,7 +22,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'name', type: 'text', nullable: false)]
@@ -183,7 +183,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
         return $this->locked;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

@@ -23,7 +23,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
@@ -141,7 +141,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
         return $this->emailSent;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

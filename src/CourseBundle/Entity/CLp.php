@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -33,7 +34,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'lp_type', type: 'integer', nullable: false)]
@@ -568,7 +569,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this->items;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -617,7 +618,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

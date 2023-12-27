@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -155,7 +156,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
     #[Groups(['document:read', 'document:write', 'document:browse'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
@@ -233,14 +234,11 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
         return $this->readonly;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

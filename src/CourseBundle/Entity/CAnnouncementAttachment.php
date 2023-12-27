@@ -21,7 +21,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
@@ -100,7 +100,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->size;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

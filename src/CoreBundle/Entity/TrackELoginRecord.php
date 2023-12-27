@@ -19,7 +19,7 @@ class TrackELoginRecord
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'username', type: 'string', length: 100, nullable: false)]
     protected string $username;

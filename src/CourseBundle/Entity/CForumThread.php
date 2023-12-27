@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,7 +28,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'thread_title', type: 'string', length: 255, nullable: false)]
@@ -262,7 +263,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this->threadWeight;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -326,7 +327,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

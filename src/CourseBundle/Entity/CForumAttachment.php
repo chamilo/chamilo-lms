@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'c_forum_attachment')]
 #[ORM\Index(name: 'course', columns: ['c_id'])]
@@ -20,7 +21,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface, St
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
@@ -50,10 +51,8 @@ class CForumAttachment extends AbstractResource implements ResourceInterface, St
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -160,7 +159,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface, St
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

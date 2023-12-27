@@ -15,7 +15,7 @@ class CSurveyAnswer
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CSurvey::class)]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -45,7 +45,7 @@ class CSurveyAnswer
         $this->lpItemId = 0;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

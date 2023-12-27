@@ -19,7 +19,7 @@ class CQuizQuestionOption
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;

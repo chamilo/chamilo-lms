@@ -20,7 +20,7 @@ class CThematicAdvance implements Stringable // extends AbstractResource impleme
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CThematic::class, inversedBy: 'advances')]
     #[ORM\JoinColumn(name: 'thematic_id', referencedColumnName: 'iid')]
@@ -161,10 +161,7 @@ class CThematicAdvance implements Stringable // extends AbstractResource impleme
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

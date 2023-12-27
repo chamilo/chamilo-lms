@@ -20,7 +20,7 @@ class CQuizAnswer
     #[ORM\Column(name: 'iid', type: 'integer', options: ['unsigned' => true])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, cascade: ['persist'], inversedBy: 'answers')]
@@ -181,7 +181,7 @@ class CQuizAnswer
     /**
      * Get iid.
      */
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

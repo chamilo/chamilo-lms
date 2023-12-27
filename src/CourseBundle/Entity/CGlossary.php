@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -185,7 +186,7 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Groups(['glossary:read', 'glossary:write'])]
     #[Assert\NotBlank]
@@ -247,12 +248,12 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
         return $this->displayOrder;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

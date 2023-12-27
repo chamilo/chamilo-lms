@@ -26,7 +26,7 @@ class CLpRelUser
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CLp::class)]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid')]
@@ -52,7 +52,7 @@ class CLpRelUser
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id')]
     protected ?User $creatorUser;
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

@@ -27,7 +27,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'forum_title', type: 'string', length: 255, nullable: false)]
@@ -361,7 +361,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

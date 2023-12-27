@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * CCalendarEventAttachment.
@@ -22,7 +23,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
@@ -63,7 +64,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->filename;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -80,7 +81,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

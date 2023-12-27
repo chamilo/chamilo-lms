@@ -190,7 +190,7 @@
         "symfony/stopwatch": "5.4.*",
         "symfony/var-dumper": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*",
-        "symplify/easy-coding-standard": "^9.3",
+        "symplify/easy-coding-standard": "^12.0",
         "vimeo/psalm": "^5.17",
         "weirdan/doctrine-psalm-plugin": "^2.9"
     },

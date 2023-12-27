@@ -558,7 +558,7 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
                 WHERE
                     c_id = $courseId AND
                     exe_exo_id = $exerciseId AND
-                    exe_user_id= $studentId AND
+                    exe_user_id= $studentId
                     $sessionCondition
                 ";
         $result = Database::query($sql);

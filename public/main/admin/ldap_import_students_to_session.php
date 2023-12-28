@@ -4,6 +4,8 @@
  * Edition script for sessions categories.
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 $cidReset = true;
 require_once '../inc/global.inc.php';

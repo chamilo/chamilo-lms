@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

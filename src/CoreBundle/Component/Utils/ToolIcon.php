@@ -72,4 +72,8 @@ enum ToolIcon: string
     case SECURITY = 'security';
     // Plugin(s)
     case PLUGIN = 'puzzle';
+    // Career
+    case CAREER = 'library-shelves';
+    // Promotion
+    case PROMOTION = 'school-outline';
 }

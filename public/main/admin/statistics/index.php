@@ -3,12 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * This tool show global Statistics on general platform events.
  */
-
-use Chamilo\CoreBundle\Framework\Container;
-
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';

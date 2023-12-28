@@ -6,6 +6,9 @@
  * This script shows a list of courses and allows searching for courses codes
  * and names.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -169,27 +172,27 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('info2.png', get_lang('Info')),
+            Display::getMdiIcon('info2', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Info')),
             "course_information.php?id=$courseId"
         );
         /*$actions[] = Display::url(
-            Display::return_icon('course_home.png', get_lang('CourseHomepage')),
+            Display::getMdiIcon('course_home', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CourseHomepage')),
             $coursePath.$course['directory'].'/index.php'
         );*/
         $actions[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('Tracking')),
+            Display::getMdiIcon('statistics', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Tracking')),
             $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
-            Display::return_icon('edit.png', get_lang('Edit')),
+            Display::getMdiIcon('edit', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
             $path.'admin/course_edit.php?id='.$courseId
         );
         $actions[] = Display::url(
-            Display::return_icon('backup.png', get_lang('Create a backup')),
+            Display::getMdiIcon('backup', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create a backup')),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
             $path.'admin/course_list_admin.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"

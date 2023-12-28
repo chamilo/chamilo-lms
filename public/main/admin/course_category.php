@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -119,7 +120,7 @@ Display::display_header($tool_name);
 
 if ('add' === $action || 'edit' === $action) {
     $actions = Display::url(
-        Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
         api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId
     );
     echo Display::toolbarAction('categories', [$actions]);
@@ -204,14 +205,14 @@ if ('add' === $action || 'edit' === $action) {
         $realParentInfo = $parentInfo['parent_id'] ? CourseCategory::getCategoryById($parentInfo['parent_id']) : [];
         $realParentCode = $realParentInfo ? $realParentInfo['id'] : 0;
         $actions .= Display::url(
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$realParentCode
         );
     }
 
     if (empty($parentInfo) || 'TRUE' === $parentInfo['auth_cat_child']) {
         $newCategoryLink = Display::url(
-            Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&id='.$categoryId
         );
 

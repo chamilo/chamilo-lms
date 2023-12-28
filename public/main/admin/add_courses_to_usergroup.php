@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -168,16 +171,16 @@ Display::display_header($tool_name);
 
 if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
+        Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
+    $link_add_type_unique = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+        Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
 }
 
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     'usergroups.php'
 );
 $actions .= Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options btn', 'id' => 'advanced_search']);

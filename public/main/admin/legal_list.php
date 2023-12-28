@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Sessions list script.

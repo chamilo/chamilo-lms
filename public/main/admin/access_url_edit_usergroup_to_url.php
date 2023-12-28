@@ -4,6 +4,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 $cidReset = true;
 
@@ -96,7 +99,7 @@ echo Display::toolbarAction(
     'url',
     [
         Display::url(
-            Display::return_icon('view_more_stats.gif', get_lang('Add group to URL'), ''),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add group to URL')),
             api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
         ),
     ]

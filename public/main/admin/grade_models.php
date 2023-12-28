@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -199,9 +201,9 @@ switch ($action) {
         $obj->display();
         break;
 }
-echo '<script> 
-$(function () { 
-    $("input").removeClass("form-control"); 
-}); 
+echo '<script>
+$(function () {
+    $("input").removeClass("form-control");
+});
 </script>';
 Display::display_footer();

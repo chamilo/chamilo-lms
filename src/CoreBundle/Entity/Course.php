@@ -449,12 +449,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasSubscriptionByUser(User $user): bool
     {
-        if (0 === $this->users->count()) {
+        $users = $this->getUsers();
+
+        if (0 === $users->count()) {
             return false;
         }
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
 
-        return $this->users->matching($criteria)->count() > 0;
+        $matching = $users->filter(
+            fn(CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
+        );
+
+        return $matching->count() > 0;
     }
 
     /**

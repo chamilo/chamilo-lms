@@ -69,12 +69,10 @@ class FillBlanks extends Question
             var blankSeparatorEndRegexp = getBlankSeparatorRegexp(blankSeparatorEnd);
             var blanksRegexp = "/"+blankSeparatorStartRegexp+"[^"+blankSeparatorStartRegexp+"]*"+blankSeparatorEndRegexp+"/g";
 
-            CKEDITOR.on("instanceCreated", function(e) {
-                if (e.editor.name === "answer") {
-                    //e.editor.on("change", updateBlanks);
-                    e.editor.on("change", function(){
-                        updateBlanks();
-                    });
+            document.addEventListener("DOMContentLoaded", function() {
+                var editor = tinymce.get("answer");
+                if (editor) {
+                    editor.on("change", updateBlanks);
                 }
             });
 
@@ -85,7 +83,7 @@ class FillBlanks extends Question
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = getContentFromEditor("answer");
+                    answer = tinymce.get("answer").getContent();
                 }
 
                 // disable the save button, if not blanks have been created

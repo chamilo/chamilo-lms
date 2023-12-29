@@ -456,7 +456,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         }
 
         $matching = $users->filter(
-            fn(CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
+            fn (CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
         );
 
         return $matching->count() > 0;

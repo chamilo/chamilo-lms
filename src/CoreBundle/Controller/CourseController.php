@@ -106,7 +106,6 @@ class CourseController extends ToolBaseController
                 ;
 
                 if (true === $allow
-                    && null !== $course->getVisibility()
                     && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
@@ -114,28 +113,14 @@ class CourseController extends ToolBaseController
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
                     $url = '/main/auth/inscription.php';
                     $responseData = [
-                        'redirect' => $redirect,
+                        'redirect' => true,
                         'url' => $url,
                     ];
                 }
             }
         }
 
-        $json = $this->serializer->serialize(
-            $responseData,
-            'json',
-            [
-                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
-            ]
-        );
-
-        return new Response(
-            $json,
-            Response::HTTP_OK,
-            [
-                'Content-type' => 'application/json',
-            ]
-        );
+        return new JsonResponse($responseData);
     }
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]

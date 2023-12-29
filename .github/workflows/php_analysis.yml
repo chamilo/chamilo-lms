@@ -47,7 +47,7 @@ jobs:
               run: vendor/bin/requirements-checker
 
             - name: The PHP Security Checker
-              uses: symfonycorp/security-checker-action@v4
+              uses: symfonycorp/security-checker-action@v5
 
             - name: Psalm
               id: psalm

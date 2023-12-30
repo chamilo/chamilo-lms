@@ -102,4 +102,6 @@ enum ObjectIcon: string
     case VCARD = 'card-account-details-outline';
     // Skills wheel
     case WHEEL = 'tire';
+    // List (of anything)
+    case LIST = 'list-box-outline';
 }

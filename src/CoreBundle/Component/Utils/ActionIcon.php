@@ -14,6 +14,8 @@ enum ActionIcon: string
     case EDIT = 'pencil';
     // Delete
     case DELETE = 'delete';
+    // Reject (not same as delete)
+    case REJECT = 'close-octagon-outline';
     // Configure
     case CONFIGURE = 'hammer-wrench';
     // Download

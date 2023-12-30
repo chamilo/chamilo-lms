@@ -154,9 +154,13 @@
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
     "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
-    "End of LearnPath": "End of LearnPath",
-    "OfajEndLPSubject": "OfajEndLPSubject",
-    "OfajEndLpDescription": "OfajEndLpDescription",
+    "Send diagnostic finalization message": "Send diagnostic finalization message",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
     "Contact": "Contact",
-    "Registration": "Inscription"
+    "Registration": "Inscription",
+    "Current session tab": "En cours",
+    "Upcoming session tab": "\u00c0 venir",
+    "Past session tab": "Termin\u00e9es",
+    "Sticky courses": "Cours sp\u00e9ciaux"
 }

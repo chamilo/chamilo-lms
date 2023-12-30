@@ -96,4 +96,6 @@ enum ObjectIcon: string
     case MULTI_ELEMENT = 'note-multiple-outline';
     // Tracking time, specifically
     case TIME_REPORT = 'timetable';
+    // Template document
+    case TEMPLATE = 'file-cad-box';
 }

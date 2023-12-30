@@ -98,4 +98,6 @@ enum ObjectIcon: string
     case TIME_REPORT = 'timetable';
     // Template document
     case TEMPLATE = 'file-cad-box';
+    // Vcard
+    case VCARD = 'card-account-details-outline';
 }

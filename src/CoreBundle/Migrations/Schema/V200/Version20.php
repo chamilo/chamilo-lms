@@ -174,6 +174,7 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
         $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+        $this->addSql("UPDATE language SET isocode = 'qu_PE' WHERE isocode = 'qu'");
 
         $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
         $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");

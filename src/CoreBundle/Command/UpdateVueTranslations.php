@@ -76,6 +76,7 @@ class UpdateVueTranslations extends Command
                 $translated = $this->getTranslationWithFallback($variable, $language);
                 $newLanguage[$variable] = $this->replaceMarkers($translated);
             }
+            $newLanguage = array_filter($newLanguage);
             $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
             $fileToSave = $vueLocalePath.$iso.'.json';
             file_put_contents($fileToSave, $newLanguageToString);

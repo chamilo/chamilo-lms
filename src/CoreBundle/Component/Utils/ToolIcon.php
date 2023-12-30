@@ -76,4 +76,6 @@ enum ToolIcon: string
     case CAREER = 'library-shelves';
     // Promotion
     case PROMOTION = 'school-outline';
+    // Translation
+    case TRANSLATION = 'translate';
 }

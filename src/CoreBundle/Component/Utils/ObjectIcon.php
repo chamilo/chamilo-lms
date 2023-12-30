@@ -100,4 +100,6 @@ enum ObjectIcon: string
     case TEMPLATE = 'file-cad-box';
     // Vcard
     case VCARD = 'card-account-details-outline';
+    // Skills wheel
+    case WHEEL = 'tire';
 }

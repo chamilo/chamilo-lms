@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -92,9 +94,12 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 
-$iconAdd = Display::return_icon('add.png', addslashes(get_lang('Add skill')));
-$iconAddNa = Display::return_icon(
-    'add_na.png',
+$iconAdd = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes(get_lang('Add skill')));
+$iconAddNa = Display::getMdiIcon(
+    ActionIcon::ADD,
+    'ch-tool-icon-disabled',
+    null,
+    ICON_SIZE_SMALL,
     addslashes(get_lang('Your gradebook first needs a certificate in order to be linked to a skill'))
 );
 

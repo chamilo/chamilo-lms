@@ -3,7 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Profile;
-
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 /**
  * Add a skill Level.
  */
@@ -82,12 +83,7 @@ switch ($action) {
             exit;
         }
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -95,12 +91,7 @@ switch ($action) {
     case 'edit':
         $formToDisplay = $form->returnForm();
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -123,12 +114,7 @@ switch ($action) {
         break;
     case 'delete':
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -143,12 +129,7 @@ switch ($action) {
         break;
     default:
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'add.png',
-                get_lang('Add'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
             api_get_self().'?action=add',
             ['title' => get_lang('Add')]
         );

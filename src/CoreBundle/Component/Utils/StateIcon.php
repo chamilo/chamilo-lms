@@ -34,4 +34,6 @@ enum StateIcon: string
     case INCOMPLETE = 'close-circle';
     // Notification/Alert by mail
     case MAIL_NOTIFICATION = 'email-alert';
+    // Shared setting (for multi-url) (previously an eye in a window)
+    case SHARED_VISIBILITY = 'briefcase-eye';
 }

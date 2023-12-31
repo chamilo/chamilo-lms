@@ -3,16 +3,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @deprecated This file is very likely completely deprecated. Adding 'exit;' command before deletion once sure - 20231231
+ * @deprecated This file is very likely completely deprecated
  */
-exit;
 
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
- * With this tool you can easily adjust non critical configuration settings.
- * Non critical means that changing them will not result in a broken campus.
+ * With this tool you can easily adjust non-critical configuration settings.
+ * Non-critical means that changing them will not result in a broken campus.
  *
  * @author Patrick Cool
  * @author Julio Montoya - Multiple URL site

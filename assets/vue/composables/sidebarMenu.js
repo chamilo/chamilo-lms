@@ -1,5 +1,5 @@
 import { useI18n } from "vue-i18n"
-import { ref, onMounted, watch } from "vue"
+import { computed, onMounted } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
@@ -11,14 +11,11 @@ export function useSidebarMenu() {
   const enrolledStore = useEnrolledStore()
   const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
 
-  const items = ref([])
-  const coursesItems = ref([])
-
-  const updateItems = () => {
-    items.value = []
+  const menuItems = computed(() => {
+    const items = []
 
     if (showTabsSetting.indexOf("campus_homepage") > -1) {
-      items.value.push({
+      items.push({
         icon: "mdi mdi-home",
         label: t("Home"),
         to: { name: "Home" },
@@ -26,18 +23,33 @@ export function useSidebarMenu() {
     }
 
     if (securityStore.isAuthenticated) {
-      if (coursesItems.value.length > 0) {
-        const coursesMenu = {
+      const courseItems = []
+
+      if (enrolledStore.isEnrolledInCourses) {
+        courseItems.push({
+          label: t("My courses"),
+          to: { name: "MyCourses" },
+        })
+      }
+
+      if (enrolledStore.isEnrolledInSessions) {
+        courseItems.push({
+          label: t("My sessions"),
+          to: { name: "MySessions" },
+        })
+      }
+
+      if (courseItems.length > 0) {
+        items.push({
           icon: "mdi mdi-book-open-page-variant",
-          label: coursesItems.value.length > 1 ? t("Courses") : coursesItems.value[0].label,
-          items: coursesItems.value.length > 1 ? coursesItems.value : undefined,
-          to: coursesItems.value.length === 1 ? coursesItems.value[0].to : undefined,
-        }
-        items.value.push(coursesMenu)
+          label: courseItems.length > 1 ? t("Course") : courseItems[0].label,
+          items: courseItems.length > 1 ? courseItems : undefined,
+          to: 1 === courseItems.length ? courseItems[0].to : undefined,
+        })
       }
 
       if (showTabsSetting.indexOf("my_agenda") > -1) {
-        items.value.push({
+        items.push({
           icon: "mdi mdi-calendar-text",
           label: t("Events"),
           to: { name: "CCalendarEventList" },
@@ -64,7 +76,7 @@ export function useSidebarMenu() {
           })
         }
 
-        items.value.push({
+        items.push({
           icon: "mdi mdi-chart-box",
           label: t("Reporting"),
           items: subItems,
@@ -72,7 +84,7 @@ export function useSidebarMenu() {
       }
 
       if (showTabsSetting.indexOf("social") > -1) {
-        items.value.push({
+        items.push({
           icon: "mdi mdi-sitemap-outline",
           label: t("Social network"),
           to: { name: "SocialWall" },
@@ -80,7 +92,7 @@ export function useSidebarMenu() {
       }
 
       if (platformConfigStore.plugins?.bbb?.show_global_conference_link) {
-        items.value.push({
+        items.push({
           icon: "mdi mdi-video",
           label: t("Videoconference"),
           url: platformConfigStore.plugins.bbb.listingURL,
@@ -89,7 +101,7 @@ export function useSidebarMenu() {
     }
 
     if (securityStore.isStudentBoss || securityStore.isStudent) {
-      items.value.push({
+      items.push({
         icon: "mdi mdi-text-box-search",
         items: [
           {
@@ -114,7 +126,10 @@ export function useSidebarMenu() {
         },
       ]
 
-      if (securityStore.isSessionAdmin && 'true' === platformConfigStore.getSetting('session.limit_session_admin_list_users')) {
+      if (
+        securityStore.isSessionAdmin &&
+        "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
+      ) {
         adminItems.push({
           label: t("Add user"),
           url: "/main/admin/user_add.php",
@@ -138,41 +153,21 @@ export function useSidebarMenu() {
         url: "/main/session/session_list.php",
       })
 
-      items.value.push({
+      items.push({
         icon: "mdi mdi-cog",
         items: adminItems,
         label: t("Administration"),
       })
     }
-  }
 
-  const updateCoursesItems = () => {
-    coursesItems.value = [];
-
-    if (enrolledStore.isEnrolledInCourses) {
-      coursesItems.value.push({
-        label: t("My courses"),
-        to: { name: "MyCourses" },
-      })
-    }
-
-    if (enrolledStore.isEnrolledInSessions) {
-      coursesItems.value.push({
-        label: t("My sessions"),
-        to: { name: "MySessions" },
-      })
-    }
-
-    updateItems();
-  }
-
-  onMounted(async () => {
-    await enrolledStore.initialize();
-    updateCoursesItems();
+    return items
   })
 
-  watch(() => enrolledStore.isEnrolledInCourses, updateCoursesItems)
-  watch(() => enrolledStore.isEnrolledInSessions, updateCoursesItems)
+  onMounted(async () => {
+    await enrolledStore.initialize()
+  })
 
-  return items
+  return {
+    menuItems,
+  }
 }

@@ -78,7 +78,10 @@ class ZoomPlugin extends Plugin
         );
 
         $this->isAdminPlugin = true;
-        $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+
+        if ($this->isEnabled(true)) {
+            $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+        }
     }
 
     /**

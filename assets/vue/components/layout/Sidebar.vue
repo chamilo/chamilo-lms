@@ -5,7 +5,7 @@
         {{ t("Menu") }}
       </h3>
       <div class="app-sidebar__panel">
-        <PanelMenu :model="items" />
+        <PanelMenu :model="menuItems" />
       </div>
       <div class="app-sidebar__bottom">
         <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
@@ -49,7 +49,7 @@ import { useSidebarMenu } from "../../composables/sidebarMenu"
 const { t } = useI18n()
 const securityStore = useSecurityStore()
 
-const items = useSidebarMenu()
+const { menuItems } = useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 

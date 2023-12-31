@@ -205,7 +205,7 @@ function sendlang() {
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.
-    Display::return_icon('search.gif', get_lang('Edit terms and conditions'), '').
+    Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit terms and conditions')).
     get_lang('All versions').'</a>';
 echo '</div>';
 

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -204,11 +205,11 @@ $extraParams['sortname'] = 'name';
 $extraParams['sortorder'] = 'desc';
 $extraParams['multiselect'] = $allowEdit;
 
-$deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL);
+$deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
 $urlStats = api_get_path(WEB_CODE_PATH);
 
-$reportingIcon = Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL);
-$controlPoint = Display::return_icon('add.png', get_lang('Control point'), '', ICON_SIZE_SMALL);
+$reportingIcon = Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting'));
+$controlPoint = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Control point'));
 
 $link = '';
 
@@ -220,7 +221,7 @@ $deleteButton = '';
 if ($allowEdit) {
     $deleteButton = '<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;" href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>';
 }
-//return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+//return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
 // With this function we can add actions to the jgrid
 $action_links = '
 function action_formatter(cellvalue, options, rowObject) {
@@ -246,7 +247,7 @@ function extra_formatter(cellvalue, options, rowObject) {
     return calendarName;
 
     return \''.
-    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')).'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }';
 

@@ -4,7 +4,7 @@
  * Edition script for sessions categories.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;
@@ -51,7 +51,7 @@ $id_session = $_POST['id_session'];
 if (empty($annee) && empty($id_session)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    echo Display::return_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute')).' '.get_lang('Select a filter to find a matching string at the end of the OU attribute');
+    echo Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Select a filter to find a matching string at the end of the OU attribute')).' '.get_lang('Select a filter to find a matching string at the end of the OU attribute');
     echo '<form method="get" action="'.api_get_self().'"><br />';
     echo '<em>'.get_lang('The OU attribute filter').' :</em> ';
     echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"> ';
@@ -61,10 +61,13 @@ if (empty($annee) && empty($id_session)) {
 } elseif (!empty($annee) && empty($id_session)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    echo Display::return_icon(
-            'course.png',
-            get_lang('Select the session in which you want to import these users')
-        ).' '.get_lang('Select the session in which you want to import these users').'<br />';
+    echo Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Select the session in which you want to import these users')
+    ).' '.get_lang('Select the session in which you want to import these users').'<br />';
     echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
     echo '<select name="id_session">';
 
@@ -91,7 +94,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
     echo '<div style="align: center;">';
     echo '<br />';
     echo '<br />';
-    echo '<h3>'.Display::return_icon('group.gif', get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
+    echo '<h3>'.Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
     //echo "Connection ...";
     $ds = ldap_connect($ldap_host, $ldap_port) or exit(get_lang('LDAP Connection Error'));
     ldap_set_version($ds);

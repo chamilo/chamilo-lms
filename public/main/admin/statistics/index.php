@@ -586,7 +586,7 @@ switch ($report) {
                 }
             }
             $link = Display::url(
-                Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('ExportAsXLS'),
                 $url,
                 ['class' => 'btn btn--plain']
             );
@@ -769,7 +769,7 @@ switch ($report) {
             $table->actionButtons = [
                 'export' => [
                     'label' => get_lang('ExportAsXLS'),
-                    'icon' => Display::return_icon('excel.png'),
+                    'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET,'ch-tool-icon'),
                 ],
             ];
 

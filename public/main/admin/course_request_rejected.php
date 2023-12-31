@@ -12,6 +12,7 @@
  */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 $cidReset = true;
 
@@ -160,37 +161,34 @@ function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=2">'.
-        Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align: middle;']).'</a>'.
-        '&nbsp;<a href="?accept_course_request='.$id.'">'.
-        Display::return_icon(
-            'accept.png',
-            get_lang('Accept this course'),
-            [
-                'style' => 'vertical-align: middle;',
-                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('A new course %s is going to be created. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;',
-            ]
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
+        '&nbsp;<a href="?accept_course_request='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('A new course %s is going to be created. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        Display::getMdiIcon(
+            ActionIcon::ACCEPT,
+            'ch-tool-icon',
+            'vertical-align: middle;',
+            ICON_SIZE_SMALL,
+            get_lang('Accept this course')
         ).
         '</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
-        $result .= '&nbsp;<a href="?request_info='.$id.'">'.
-            Display::return_icon(
-                'request_info.gif',
-                get_lang('Ask for additional information'),
-                [
-                    'style' => 'vertical-align: middle;',
-                    'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;',
-                ]
+        $result .= '&nbsp;<a href="?request_info='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'vertical-align: middle;',
+                ICON_SIZE_SMALL,
+                get_lang('Ask for additional information')
             ).
             '</a>';
     }
-    $result .= '&nbsp;<a href="?delete_course_request='.$id.'">'.
-        Display::return_icon(
-            'delete.png',
-            get_lang('Delete this course request'),
-            [
-                'style' => 'vertical-align: middle;',
-                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;',
-            ]
+    $result .= '&nbsp;<a href="?delete_course_request='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon',
+            'vertical-align: middle;',
+            ICON_SIZE_SMALL,
+            get_lang('Delete this course request')
         ).
         '</a>';
 
@@ -228,10 +226,22 @@ $form->addButtonSearch(get_lang('Search'));
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
 echo ' <a href="course_request_review.php">'.
-    Display::return_icon('course_request_pending.png', get_lang('Review incoming course requests')).get_lang('Review incoming course requests').
+    Display::getMdiIcon(
+        'notebook-heart-outline',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Review incoming course requests')
+    ).get_lang('Review incoming course requests').
     '</a>';
 echo ' <a href="course_request_accepted.php">'.
-    Display::return_icon('course_request_accepted.gif', get_lang('Accepted course requests')).get_lang('Accepted course requests').
+    Display::getMdiIcon(
+        StateIcon::COMPLETE,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Accepted course requests')
+    ).get_lang('Accepted course requests').
     '</a>';
 echo '</div>';
 echo '<div class="actions">';

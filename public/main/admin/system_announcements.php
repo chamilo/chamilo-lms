@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This page allows the administrator to manage the system announcements.
@@ -90,7 +91,7 @@ function showCareer() {
 Display::display_header($tool_name);
 if ('add' !== $action && 'edit' !== $action) {
     $actions = '<a href="?action=add">'.
-        Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add an announcement')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 
@@ -428,28 +429,23 @@ if ($show_announcement_list) {
     foreach ($announcements as $announcement) {
         $row = [];
         $row[] = $announcement->getId();
-        $row[] = Display::return_icon(
-            ($announcement->isVisible() ? 'accept.png' : 'exclamation.png'),
-            ($announcement->isVisible() ? get_lang('The announcement is available') : get_lang(
-                'The announcement is not available'
-            ))
-        );
+        if ($announcement->isVisible()) {
+            $row[] =Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is available'));
+        } else {
+            $row[] =Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is not available'));
+        }
         $row[] = $announcement->getTitle();
         $row[] = api_convert_and_format_date($announcement->getDateStart());
         $row[] = api_convert_and_format_date($announcement->getDateEnd());
         $row[] = implode(', ', $announcement->getRoles());
 
-        /*$row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_TEACHER."&action=".($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
-        $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_STUDENT."&action=".($announcement->visible_student ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
-        $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_GUEST."&action=".($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";*/
-
         $row[] = $announcement->getLang();
         $row[] = "<a href=\"?action=edit&id=".$announcement->getId()."\">".
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a>
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
             <a
                 href=\"?action=delete&id=".$announcement->getId()."\"
                 title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".
-            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).
+            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
             "</a>";
         $announcement_data[] = $row;
     }

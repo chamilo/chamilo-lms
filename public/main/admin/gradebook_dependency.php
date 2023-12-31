@@ -41,7 +41,7 @@ $interbreadcrumb[] = [
 
 $tpl = new Template(get_lang('Course list'));
 $toolbar = Display::url(
-    Display::return_icon('back.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
     api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php'
 );
 

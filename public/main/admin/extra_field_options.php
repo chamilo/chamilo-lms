@@ -118,8 +118,8 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("Please confirm your choice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("Please confirm your choice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
     '\';
  }';
 

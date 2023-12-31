@@ -11,7 +11,7 @@
  * 	@todo use formvalidator for the form
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -43,7 +43,7 @@ function validate_filter() {
 Display :: display_header($tool_name);
 
 $link_add_group = '<a href="usergroups.php">'.
-    Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>';
+    Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>';
 echo Display::toolbarAction('subscribe', [$link_add_group]);
 
 $form = new FormValidator('subscribe_user2course');

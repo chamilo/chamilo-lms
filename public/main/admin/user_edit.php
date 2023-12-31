@@ -517,21 +517,11 @@ if ($error_drh) {
 
 $actions = [
     Display::url(
-        Display::return_icon(
-            'info.png',
-            get_lang('Information'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Information')),
         api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user_id
     ),
     Display::url(
-        Display::return_icon(
-            'login_as.png',
-            get_lang('Login as'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')),
         api_get_path(WEB_CODE_PATH).
         'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
     ),

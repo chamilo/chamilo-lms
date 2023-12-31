@@ -158,7 +158,7 @@ if ($formSent) {
                     $exercise->read($exerciseId);
                     $exerciseData .= $exercise->title.'&nbsp;';
                     $exerciseData .= Display::url(
-                        Display::return_icon('edit.png', get_lang('Edit')),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                         $urlExercise.http_build_query(
                             [
                             'cidReq' => $courseCode,
@@ -194,7 +194,7 @@ if ($formSent) {
                     $question->questionData .= '&nbsp;'.get_lang('Orphan question');
                 }
                 $question->questionData .= Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit')),
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                     $urlExercise.http_build_query(
                         [
                             'cidReq' => $courseCode,

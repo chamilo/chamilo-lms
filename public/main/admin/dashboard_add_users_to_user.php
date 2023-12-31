@@ -5,7 +5,7 @@
  *  Interface for assigning users to Human Resources Manager.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;
@@ -320,12 +320,12 @@ Display::display_header($tool_name);
 $actionsLeft = '';
 if (STUDENT_BOSS != $userStatus) {
     $actionsLeft = Display::url(
-        Display::return_icon('course-add.png', get_lang('Assign courses'), null, ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign courses')),
         "dashboard_add_courses_to_user.php?user=$user_id"
     );
 
     $actionsLeft .= Display::url(
-        Display::return_icon('session-add.png', get_lang('Assign sessions'), null, ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign sessions')),
         "dashboard_add_sessions_to_user.php?user=$user_id"
     );
 }

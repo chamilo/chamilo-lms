@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+/**
+ * @deprecated This file is very likely completely deprecated. Adding 'exit;' command before deletion once sure - 20231231
+ */
+exit;
+
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 

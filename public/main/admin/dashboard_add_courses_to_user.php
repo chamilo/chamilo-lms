@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;
@@ -174,9 +175,9 @@ Display::display_header($tool_name);
 
 // actions
 $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign users')).'</a>';
 $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('session-add.png', get_lang('Assign sessions'), null, ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign sessions')).'</a>';
 
 echo $html = Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 

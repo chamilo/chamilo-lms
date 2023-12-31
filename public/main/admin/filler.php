@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;
@@ -65,7 +66,7 @@ if (count($output) > 0) {
 <div id="datafiller" class="card">
     <div class="card-body">
     <h4><?php
-        echo Display::return_icon('bug.png', get_lang('Data filler'), null, ICON_SIZE_MEDIUM).' '.get_lang('Data filler');
+        echo Display::getMdiIcon(ActionIcon::FILL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Data filler')).' '.get_lang('Data filler');
         ?>
     </h4>
     <div class="description"><?php echo get_lang('This section is only visible on installations from source code, not in packaged versions of the platform. It will allow you to quickly populate your platform with test data. Use with care (data is really inserted) and only on development or testing installations.'); ?></div>
@@ -73,14 +74,14 @@ if (count($output) > 0) {
       <li>
           <a href="filler.php?fill=users">
             <?php
-            echo Display::return_icon('user.png', get_lang('Fill users'), null, ICON_SIZE_SMALL).
+            echo Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Fill users')).
                 ' '.get_lang('Fill users');
             ?>
           </a></li>
       <li>
           <a href="filler.php?fill=courses">
           <?php
-          echo Display::return_icon('new-course.png', get_lang('Fill courses'), null, ICON_SIZE_SMALL).
+          echo Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Fill courses')).
               ' '.get_lang('Fill courses');
             ?>
         </a>

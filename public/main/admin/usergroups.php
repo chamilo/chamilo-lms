@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 
@@ -61,11 +62,11 @@ $extra_params['sortorder'] = 'desc';
 // With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
-    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('user_to_class.png', get_lang('Subscribe users to class'), null, ICON_SIZE_MEDIUM).'</a>'
-    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('course_to_class.png', get_lang('Subscribe class to courses'), null, ICON_SIZE_MEDIUM).'</a>'
-    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToCourse sessions'), null, ICON_SIZE_MEDIUM).'</a>'
-    .' <a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_SMALL).'</a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL).'</a>\';
+    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe users to class')).'</a>'
+    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe class to courses')).'</a>'
+    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('SubscribeClassToCourse sessions')).'</a>'
+    .' <a href="?action=edit&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>\';
 }';
 
 $usergroup->showGroupTypeSetting = true;
@@ -107,7 +108,7 @@ switch ($action) {
             exit;
         } else {
             $actions = '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
             $content .= Display::toolbarAction('toolbar', [$actions]);
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
@@ -157,11 +158,12 @@ switch ($action) {
             header('Location: '.api_get_self());
             exit;
         } else {
-            $actions = '<a href="'.api_get_self().'">'.Display::return_icon(
-                'back.png',
-                get_lang('Back'),
-                '',
-                ICON_SIZE_MEDIUM
+            $actions = '<a href="'.api_get_self().'">'.Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Back')
             ).'</a>';
             $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $form->returnForm();

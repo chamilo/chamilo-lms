@@ -140,4 +140,6 @@ enum ActionIcon: string
     case FILL = 'format-color-fill';
     // Search / find
     case SEARCH = 'magnify';
+    // Comment
+    case COMMENT = 'comment-arrow-right-outline';
 }

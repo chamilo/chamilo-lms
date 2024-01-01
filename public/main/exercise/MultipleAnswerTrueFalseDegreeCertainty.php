@@ -141,8 +141,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     foreach ($optionData as $id => $data) {
                         $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
 
-                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
+                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $j == $_POST['correct'][$i]) {
                             $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
+                        } else {
+                            $rdoCorrect->setValue($j);
                         }
                         $j++;
                         if (3 == $j) {
@@ -246,9 +248,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $question = $repo->find($this->id);
         $options = $question->getOptions();
 
-        if (!empty($options)) {
+        if (!$options->isEmpty()) {
             foreach ($options as $optionData) {
-                $optionData->setName($optionData);
+                $optionData->setName($optionData->getName());
             }
         } else {
             for ($i = 1; $i <= 8; $i++) {

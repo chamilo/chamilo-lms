@@ -3763,7 +3763,7 @@ class Exercise
                             }
                         } else {
                             // false answer and student is Unsure or PrettySur
-                            if ($quiz_question_options[$studentChoiceDegree]['position'] >= 3
+                            if (isset($quiz_question_options[$studentChoiceDegree]) && $quiz_question_options[$studentChoiceDegree]['position'] >= 3
                                 && $quiz_question_options[$studentChoiceDegree]['position'] < 9) {
                                 $questionScore += $false_score;
                             } else {
@@ -8447,7 +8447,7 @@ class Exercise
                 for ($i = 1; $i <= $answerMissing; $i++) {
                     $html .= Display::return_icon('attempt-nocheck.png');
                 }
-                $ribbon = '<div class="question-answer-result__header-ribbon-title">'
+                $ribbon = '<div class="question-answer-result__header-ribbon-title hide-label-title">'
                     .get_lang('Correct answers').': '.$result.'</div>'
                     .'<div class="question-answer-result__header-ribbon-detail">'.$html.'</div>';
             }

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Shows the exercise results.
@@ -84,7 +85,7 @@ if ($show_headers) {
 
     if ('mobileapp' === $origin) {
         $actions = '<a href="javascript:window.history.go(-1);">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
         echo Display::toolbarAction('toolbar', [$actions]);
     }
 }

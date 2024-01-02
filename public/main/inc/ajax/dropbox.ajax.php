@@ -4,6 +4,8 @@
 /**
  * Responses to AJAX calls for the document upload.
  */
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'dropbox/dropbox_functions.inc.php';
 
@@ -61,13 +63,19 @@ switch ($action) {
                     $json['url'] = api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq();
                     $json['size'] = format_file_size($result->filesize);
                     $json['type'] = api_htmlentities($file['type']);
-                    $json['result'] = Display::return_icon(
-                        'accept.png',
+                    $json['result'] = Display::getMdiIcon(
+                        StateIcon::COMPLETE,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
                         get_lang('Uploaded.')
                     );
                 } else {
-                    $json['result'] = Display::return_icon(
-                        'exclamation.png',
+                    $json['result'] = Display::getMdiIcon(
+                        StateIcon::WARNING,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
                         get_lang('Error')
                     );
                 }

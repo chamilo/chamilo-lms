@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
@@ -13,6 +12,9 @@ use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 
 /**
  * @author Olivier Brouckaert
@@ -7245,7 +7247,7 @@ class Exercise
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
         $html .= '</div>';
-        $icon = Display::getMdiIcon('clock-outline');
+        $icon = Display::getMdiIcon('clock-outline', 'ch-tool-icon');
         $html .= '<div class="count_down">
                     '.get_lang('RemainingTimeToFinishExercise').'
                     '.$icon.'<span id="exercise_clock_warning"></span>
@@ -8976,7 +8978,7 @@ class Exercise
 
                         // Test settings
                         $settings = Display::url(
-                            Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Configure')),
+                            Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Configure')),
                             'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
@@ -8987,7 +8989,7 @@ class Exercise
 
                         // Exercise results
                         $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
+                            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
 
                         if ($limitTeacherAccess) {
                             if (api_is_platform_admin()) {
@@ -9034,7 +9036,7 @@ class Exercise
                         if (true === $allowClean) {
                             if (!$locked) {
                                 $clean = Display::url(
-                                    Display::getMdiIcon('broom', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CleanStudentResults')
+                                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CleanStudentResults')
                                     ),
                                     '',
                                     [
@@ -9050,7 +9052,7 @@ class Exercise
                                     ]
                                 );
                             } else {
-                                $clean = Display::getMdiIcon('broom', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ResourceLockedByGradebook')
+                                $clean = Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ResourceLockedByGradebook')
                                 );
                             }
                         }
@@ -9059,12 +9061,12 @@ class Exercise
                         // Visible / invisible
                         // Check if this exercise was added in a LP
                         if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
+                            $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive()) {
                                 $visibility = Display::url(
-                                    Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
+                                    Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9072,7 +9074,7 @@ class Exercise
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
-                                    Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
+                                    Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9110,12 +9112,12 @@ class Exercise
 
                         // Check if this exercise was added in a LP
                         if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
+                            $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
-                                    Display::getMdiIcon('eye-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
+                                    Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9123,7 +9125,7 @@ class Exercise
                             } else {
                                 // else if not active
                                 $visibility = Display::url(
-                                    Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
+                                    Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9137,7 +9139,7 @@ class Exercise
 
                         $actions .= $visibility;
                         $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
+                            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).'</a>';
                         $actions .= Display::url(
                             Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy this exercise as a new one')),
                             '',
@@ -9167,8 +9169,11 @@ class Exercise
                                 ]
                             );
                         } else {
-                            $delete = Display::return_icon(
-                                'delete_na.png',
+                            $delete = Display::getMdiIcon(
+                                ActionIcon::DELETE,
+                                'ch-tool-icon-disabled',
+                                null,
+                                ICON_SIZE_SMALL,
                                 get_lang(
                                     'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
                                 )
@@ -9389,7 +9394,7 @@ class Exercise
                     if ($isDrhOfCourse) {
                         $currentRow[] = '<a
                             href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).
+                            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results')).
                             '</a>';
                     }
                     if ($returnData) {
@@ -9408,7 +9413,7 @@ class Exercise
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
                 $content .= Display::noDataView(
                     get_lang('Quiz'),
-                    Display::return_icon('quiz.png', '', [], 64),
+                    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_BIG),
                     get_lang('Create a new test'),
                     'exercise_admin.php?'.api_get_cidreq()
                 );

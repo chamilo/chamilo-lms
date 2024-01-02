@@ -5,6 +5,8 @@
 /**
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GRADEBOOK;
@@ -280,11 +282,12 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
 }
 
 $actions = '<a href="'.Category::getUrl().'&selectcat='.$my_selectcat.'">
-            '.Display::return_icon(
-        'back.png',
-        get_lang('Assessment home'),
-        '',
-        ICON_SIZE_MEDIUM
+            '.Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Assessment home')
     ).'
     </a>';
 

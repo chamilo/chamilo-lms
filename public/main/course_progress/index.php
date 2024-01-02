@@ -3,11 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -655,7 +656,7 @@ switch ($action) {
             if (api_is_allowed_to_edit(null, true)) {
                 $noData = Display::noDataView(
                     get_lang('Educational programming'),
-                    Display::return_icon('course_progress.png', '', [], 64),
+                    Display::getMdiIcon(ToolIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_BIG),
                     get_lang('Add thematic'),
                     api_get_path(WEB_CODE_PATH).'course_progress/index.php?'.api_get_cidreq().'&action=thematic_add'
                 );

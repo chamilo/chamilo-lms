@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This file displays the user's profile,
@@ -668,10 +669,10 @@ if ($allowSocialTool) {
 
         if (isset($_GET['type']) && 'extended' === $_GET['type']) {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('Edit normal profile'), '', 16).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit normal profile')).'</a>';
         } else {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('Edit extended profile'), '', 16).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit extended profile')).'</a>';
         }
     }
 }

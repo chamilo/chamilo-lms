@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Responses to AJAX calls.
@@ -329,12 +330,12 @@ switch ($action) {
                         ."</small></div>";
 
                     $row[] = Display::url(
-                            Display::return_icon('save.png', get_lang('Download')),
+                            Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
                             $downloadUrl
                         )
                         .PHP_EOL
                         .Display::url(
-                            Display::return_icon('delete.png', get_lang('Delete')),
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                             $deleteUrl,
                             [
                                 'class' => 'delete_document',

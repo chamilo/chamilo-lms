@@ -6,6 +6,7 @@ set_time_limit(0);
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class FlatViewTable
@@ -349,19 +350,21 @@ class FlatViewTable extends SortableTable
                     .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     .'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    .Display::return_icon(
-                        'action_prev.png',
-                        get_lang('Previous page'),
-                        [],
-                        ICON_SIZE_MEDIUM
+                    .Display::getMdiIcon(
+                        ActionIcon::PREVIOUS,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_MEDIUM,
+                        get_lang('Previous page')
                     )
                     .'</a>';
             } else {
-                $header .= Display::return_icon(
-                    'action_prev_na.png',
-                    get_lang('Previous page'),
-                    [],
-                    ICON_SIZE_MEDIUM
+                $header .= Display::getMdiIcon(
+                    ActionIcon::PREVIOUS,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Previous page')
                 );
             }
             $header .= ' ';
@@ -374,14 +377,15 @@ class FlatViewTable extends SortableTable
                     .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     .'&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    .Display::return_icon('action_next.png', get_lang('Next page'), [], ICON_SIZE_MEDIUM)
+                    .Display::getMdiIcon(ActionIcon::NEXT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Next page'))
                     .'</a>';
             } else {
-                $header .= Display::return_icon(
-                    'action_next_na.png',
-                    get_lang('Next page'),
-                    [],
-                    ICON_SIZE_MEDIUM
+                $header .= Display::getMdiIcon(
+                    ActionIcon::NEXT,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Next page')
                 );
             }
             $header .= '</td>';

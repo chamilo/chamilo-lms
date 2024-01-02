@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -254,18 +256,18 @@ function add_category_form($action)
 function displayActionBar()
 {
     $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
 
     $actions .= '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
-        Display::return_icon('new_folder.png', get_lang('Add category'), null, ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')).'</a>';
 
     $actions .= Display::url(
-        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
         api_get_self().'?action=export_category&'.api_get_cidreq()
     );
 
     $actions .= Display::url(
-        Display::return_icon('import_csv.png', get_lang('Import from a CSV'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import from a CSV')),
         api_get_self().'?action=import_category&'.api_get_cidreq()
     );
 

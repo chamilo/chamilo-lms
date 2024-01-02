@@ -3,6 +3,7 @@
 /* For licensing terms, see license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -694,8 +695,11 @@ class GradebookTable extends SortableTable
                                         ]
                                     );
                                 } else {
-                                    $label = Display::return_icon(
-                                        'warning.png',
+                                    $label = Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
                                         sprintf(get_lang('The sum of all weights of activities must be %s'), $categoryWeight)
                                     );
                                     $total = Display::label($totalWeight.' / '.$categoryWeight, 'warning');

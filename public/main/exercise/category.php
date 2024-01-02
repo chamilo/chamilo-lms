@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
@@ -98,7 +100,7 @@ switch ($action) {
             exit;
         } else {
             $actions = '<a href="'.$url.'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
             $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
@@ -122,7 +124,7 @@ switch ($action) {
             exit;
         } else {
             $actions = '<a href="'.$url.'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
             $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);

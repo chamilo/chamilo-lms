@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -291,7 +292,7 @@ switch ($action) {
             ) {
                 $html .= Display::noDataView(
                     get_lang('Announcements'),
-                    Display::return_icon('valves.png', '', [], 64),
+                    Display::getMdiIcon(ObjectIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_BIG, get_lang('Add an announcement')),
                     get_lang('Add an announcement'),
                     api_get_self().'?'.api_get_cidreq().'&action=add'
                 );

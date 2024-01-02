@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class Category
@@ -2143,12 +2144,7 @@ class Category implements GradebookItem
                 );
 
                 $exportToPDF = Display::url(
-                    Display::return_icon(
-                        'pdf.png',
-                        get_lang('Export to PDF'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                     "$url&action=export"
                 );
 

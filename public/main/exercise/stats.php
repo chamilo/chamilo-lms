@@ -2,6 +2,8 @@
 
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -332,15 +334,10 @@ $interbreadcrumb[] = [
 
 $tpl = new Template(get_lang('Report by question'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-    Display:: return_icon(
-        'back.png',
-        get_lang('Go back to the questions list'),
-        '',
-        ICON_SIZE_MEDIUM
-    )
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list'))
     .'</a>';
 $actions .= Display::url(
-    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
     'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
 );
 $actions = Display::toolbarAction('exercise_report', [$actions]);

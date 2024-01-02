@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * @author Christian Fasanando, initial version
@@ -127,7 +128,7 @@ switch ($action) {
                 'add_glossary',
                 [
                     Display::url(
-                        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                         api_get_self().'?'.api_get_cidreq()
                     ),
                 ]
@@ -225,7 +226,7 @@ switch ($action) {
                     'edit_glossary',
                     [
                         Display::url(
-                            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                             api_get_self().'?'.api_get_cidreq()
                         ),
                     ]

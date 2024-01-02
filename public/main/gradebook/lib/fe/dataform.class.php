@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Extends FormValidator with import and export forms.
  *
@@ -90,7 +92,7 @@ class DataForm extends FormValidator
         $this->addElement(
             'radio',
             'file_type',
-            Display::return_icon('info3.gif', get_lang('To export, you must lock the evaluation.')),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('To export, you must lock the evaluation.')),
             'PDF (Portable Document Format)',
             'pdf',
             ['disabled']

@@ -4,6 +4,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Exercise submission
@@ -1618,10 +1619,10 @@ if ($allowBlockCategory &&
                             $("#save_all_response").html(return_value.savedAnswerMessage);
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
-                            $("#save_all_response").html(\''.Display::return_icon('accept.png').'\');
+                            $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon').'\');
                         }
                     } else {
-                        $("#save_all_response").html(\''.Display::return_icon('wrong.gif').'\');
+                        $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon').'\');
                     }
                 }
             });

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Upload quiz: This script shows the upload quiz feature.
@@ -45,12 +46,7 @@ lp_upload_quiz_main();
 function lp_upload_quiz_actions()
 {
     return '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon(
-            'back.png',
-            get_lang('BackToTestsList'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('BackToTestsList')).'</a>';
 }
 
 function lp_upload_quiz_main()
@@ -67,7 +63,7 @@ function lp_upload_quiz_main()
     $form->addElement('header', get_lang('Import quiz from Excel'));
     $form->addElement('file', 'user_upload_quiz', get_lang('File upload'));
 
-    $label = Display::return_icon('export_excel.png', get_lang('Download the Excel Template')).
+    $label = Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download the Excel Template')).
         get_lang('Download the Excel Template');
     $link = '<a href="../exercise/quiz_template.xls">'.$label.'</a>';
     $form->addElement('label', '', $link);

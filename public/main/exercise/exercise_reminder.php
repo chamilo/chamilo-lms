@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise reminder overview
@@ -95,9 +96,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     $actions = '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
-        Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->getId().'">'.
-        Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyTest')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 echo Display::page_header(get_lang('Questions to be reviewed'));

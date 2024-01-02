@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Responses to AJAX calls.
@@ -125,8 +126,11 @@ switch ($action) {
                     $json['url'] = $url;
                     $json['size'] = '';
                     //$json['type'] = api_htmlentities($result['filetype']);
-                    $json['result'] = Display::return_icon(
-                        'accept.png',
+                    $json['result'] = Display::getMdiIcon(
+                        StateIcon::COMPLETE,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
                         get_lang('Uploaded..')
                     );
                 } else {
@@ -200,18 +204,20 @@ switch ($action) {
             }
 
             if (isset($result['url'])) {
-                $json['result'] = Display::return_icon(
-                    'accept.png',
-                    get_lang('Uploaded..'),
-                    [],
-                    ICON_SIZE_TINY
+                $json['result'] = Display::getMdiIcon(
+                    StateIcon::COMPLETE,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_TINY,
+                    get_lang('Uploaded..')
                 );
             } else {
-                $json['result'] = Display::return_icon(
-                    'exclamation.png',
-                    get_lang('Error'),
-                    [],
-                    ICON_SIZE_TINY
+                $json['result'] = Display::getMdiIcon(
+                    StateIcon::WARNING,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_TINY,
+                    get_lang('Error')
                 );
             }
 

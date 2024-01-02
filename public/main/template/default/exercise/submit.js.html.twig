@@ -126,6 +126,12 @@ var MatchingDraggable = {
             dropOptions: exampleDropOptions,
             scope: scope,
             beforeDrop: function (params) {
+                instance.selectEndpoints().each(function (endpoint) {
+                    var sourceId = endpoint.elementId;
+                    if (originalColors[sourceId]) {
+                        endpoint.setPaintStyle({fill: originalColors[sourceId]});
+                    }
+                });
                 instance.select({source: params.sourceId}).each(function (connection) {
                     instance.detach(connection);
                 });
@@ -167,6 +173,7 @@ var MatchingDraggable = {
             scope: scope
         };
 
+        var originalColors = {};
         $(windowQuestionSelector).each(function (index) {
             var windowId = $(this).attr("id");
             sourceEndPoint.paintStyle.fill = colorArray[index].getHex();
@@ -178,6 +185,8 @@ var MatchingDraggable = {
                 },
                 sourceEndPoint
             );
+
+            originalColors[windowId] = colorArray[index].getHex();
         });
 
         $(windowQuestionSelector).each(function (index) {

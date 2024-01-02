@@ -44,7 +44,7 @@ if (!$isAllowToEdit) {
 }
 
 $router = Container::getRouter();
-$translator = Container::getTranslator();
+$translator = Container::$container->get('translator');
 
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {

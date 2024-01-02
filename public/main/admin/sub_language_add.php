@@ -106,6 +106,9 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             //Fixes BT#1636
             $english_name = api_strtolower($english_name);
 
+            $firstIso = substr($language_details['isocode'], 0, 2);
+            $english_name = str_starts_with($english_name, $firstIso.'_') ? $english_name : $firstIso.'_'.$english_name;
+
             $isocode = str_replace(' ', '_', $isocode);
             $str_info = '<br/>'.get_lang('Original name').' : '.$original_name.'<br/>'.get_lang('English name').' : '.$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
 

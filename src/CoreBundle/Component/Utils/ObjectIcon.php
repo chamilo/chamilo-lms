@@ -10,6 +10,8 @@ enum ObjectIcon: string
 {
     // Document
     case DOCUMENT = 'bookshelf';
+    // Folder (documents)
+    case FOLDER = 'folder';
     // Test/Exercise/Exam
     case TEST = 'order-bool-ascending-variant';
     // Link

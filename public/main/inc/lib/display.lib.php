@@ -653,13 +653,13 @@ class Display
      * @version Feb 2011
      */
     public static function return_icon(
-        $image,
-        $alt_text = '',
-        $additional_attributes = [],
-        $size = ICON_SIZE_SMALL,
-        $show_text = true,
-        $return_only_path = false,
-        $loadThemeIcon = true
+        string $image,
+        ?string $alt_text = '',
+        ?array $additional_attributes = [],
+        ?int $size = ICON_SIZE_SMALL,
+        ?bool $show_text = true,
+        ?bool $return_only_path = false,
+        ?bool $loadThemeIcon = true
     ) {
         $code_path = api_get_path(SYS_PUBLIC_PATH);
         $w_code_path = api_get_path(WEB_PUBLIC_PATH);

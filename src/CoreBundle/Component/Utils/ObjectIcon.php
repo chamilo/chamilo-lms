@@ -106,4 +106,6 @@ enum ObjectIcon: string
     case WHEEL = 'tire';
     // List (of anything)
     case LIST = 'list-box-outline';
+    // Default document (replaces default.png)
+    case DEFAULT = 'text-box-outline';
 }

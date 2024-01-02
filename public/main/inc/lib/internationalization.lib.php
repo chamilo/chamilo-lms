@@ -53,14 +53,10 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
  * Returns a translated (localized) string.
- *
- * @param string $variable
- *
- * @return string
  */
-function get_lang($variable)
+function get_lang(string $variable): string
 {
-    $translator = Container::getTranslator();
+    $translator = Container::$translator ?: Container::$container->get('translator');
 
     if (!$translator) {
         return $variable;
@@ -70,38 +66,12 @@ function get_lang($variable)
 
     // Using symfony
     $defaultDomain = 'messages';
-    $locale = api_get_language_isocode();
 
-    $translated = $translator->trans(
+    return $translator->trans(
         $variable,
         [],
-        $defaultDomain,
-        $locale
+        $defaultDomain
     );
-
-    if ('true' === api_get_setting('language.allow_use_sub_language')) {
-        $parentLocale = null;
-        if ($translated === $variable && $locale !== $defaultLocale) {
-            $parentLocale = SubLanguageManager::getParentLocale($locale);
-            $translated = $translator->trans(
-                $variable,
-                [],
-                $defaultDomain,
-                $parentLocale
-            );
-        }
-
-        if ($translated === $variable && $parentLocale !== $defaultLocale) {
-            $translated = $translator->trans(
-                $variable,
-                [],
-                $defaultDomain,
-                $defaultLocale
-            );
-        }
-    }
-
-    return $translated;
 }
 
 /**

@@ -54,7 +54,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         $sessionHandler = $request->getSession();
 
         if ($attrLocale = $request->query->get('_locale')) {
-            $sessionHandler->set('_locale', $attrLocale);
+            $sessionHandler->set('_selected_locale', $attrLocale);
         }
 
         $locale = $this->getCurrentLanguage($request);
@@ -91,7 +91,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         // 4. force locale if it was selected from the URL
-        if ($localeFromUrl = $sessionHandler->get('_locale')) {
+        if ($localeFromUrl = $sessionHandler->get('_selected_locale')) {
             $localeList['user_selected_lang'] = $localeFromUrl;
         }
 

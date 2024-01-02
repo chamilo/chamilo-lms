@@ -38,6 +38,8 @@ enum ObjectIcon: string
     case PDF = 'arrow-down-bold';
     // Indicator of session or admin resource
     case STAR = 'star';
+    // Indicator of something new
+    case STAR_EMPTY = 'star-outline';
     // Homepage
     case HOME = 'home';
     // Courses

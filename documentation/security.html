@@ -197,7 +197,27 @@ This will prevent direct access to your settings and make it seem totally the sa
     this way (there is an exception for that). We believe that these resources
     do not contain confidential information. If you *DO* have confidential
     information in images, CSS or JavaScript files, you will need to update
-    these rules to suit your needs.
+    these rules to suit your needs.<br />
+    <br />
+    <h3>Access to "personal" files</h3>
+    In Chamilo 1.*, it is possible to upload files to one's "personal" folder
+    through the social network page, or through any upload popup that allows
+    you to choose the file destination (and you select your personal folder).<br />
+    <br />
+    Due to the development background in Chamilo, these files are then directly
+    accessible by anonymous users, which can lead to personal data leaks. This
+    has been left in this mode by default because many teacher users had used
+    this option to share common images between different courses and blocking
+    the feature would have meant public courses would not have shown the given
+    images.<br />
+    <br />
+    To avoid this issue and make files accessible *only* to authenticated users,
+    please set the following option to 'true' in configuration.php:<br />
+    <br />
+    <pre>
+    $_configuration['block_my_files_access'] = true;</pre>
+    This will prevent anonymous access, but will not prevent access from other
+    authenticated users.
     </p>
 
 <h2><a id="8.Disable-webservices">Disable webservices</a></h2>

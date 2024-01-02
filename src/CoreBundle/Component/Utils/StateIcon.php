@@ -36,4 +36,14 @@ enum StateIcon: string
     case MAIL_NOTIFICATION = 'email-alert';
     // Shared setting (for multi-url) (previously an eye in a window)
     case SHARED_VISIBILITY = 'briefcase-eye';
+    // Checkbox marked
+    case CHECKBOX_MARKED = 'checkbox-marked-outline';
+    // Checkbox empty
+    case CHECKBOX_BLANK = 'checkbox-blank-outline';
+    // Checkbox intermediate 1
+    case CHECKBOX_INTERMEDIATE1 = 'checkbox-intermediate';
+    // Checkbox intermediate 2
+    case CHECKBOX_INTERMEDIATE2 = 'checkbox-intermediate-variant';
+    // Checkbox intermediate 3
+    case CHECKBOX_INTERMEDIATE3 = 'checkbox-blank-off-outline';
 }

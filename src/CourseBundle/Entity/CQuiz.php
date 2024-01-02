@@ -185,7 +185,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @return ArrayCollection<int, CQuizRelQuestion>
      */
-    public function getQuestions(): ArrayCollection
+    public function getQuestions(): Collection
     {
         return $this->questions instanceof ArrayCollection ?
             $this->questions :
@@ -616,9 +616,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     }
 
     /**
-     * @return ArrayCollection<int, CQuizRelQuestionCategory>
+     * @return Collection<int, CQuizRelQuestionCategory>
      */
-    public function getQuestionsCategories(): ArrayCollection
+    public function getQuestionsCategories(): Collection
     {
         return $this->questionsCategories instanceof ArrayCollection ?
             $this->questionsCategories :

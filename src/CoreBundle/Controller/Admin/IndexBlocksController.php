@@ -673,7 +673,7 @@ class IndexBlocksController extends BaseController
 
     private function getItemsChamilo(): array
     {
-        $languageInterface = 'english';
+        $languageInterface = api_get_language_isocode();
 
         $items = [];
         $items[] = [

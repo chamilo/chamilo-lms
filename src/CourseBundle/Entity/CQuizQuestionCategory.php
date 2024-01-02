@@ -101,9 +101,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * @return ArrayCollection<int, CQuizQuestion>
+     * @return Collection<int, CQuizQuestion>
      */
-    public function getQuestions(): ArrayCollection
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }

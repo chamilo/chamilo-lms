@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
@@ -121,6 +122,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $options = []
     ): void {
         $em = $this->getEntityManager();
+
+        $accessUrl = $em->find(AccessUrl::class, $accessUrl);
+
         $setting = new SettingsCurrent();
         $setting
             ->setVariable($variable)
@@ -133,8 +137,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             ->setScope($scope)
             ->setSubkeytext($subKeyText)
             ->setUrl($accessUrl)
-            ->setAccessUrlChangeable($accessUrlChangeable)
-            ->setAccessUrlLocked($accessUrlLocked)
+            ->setAccessUrlChangeable((int) $accessUrlChangeable)
+            ->setAccessUrlLocked((int) $accessUrlLocked)
         ;
 
         $em->persist($setting);

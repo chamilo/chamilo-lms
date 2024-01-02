@@ -111,9 +111,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     }
 
     /**
-     * @return ArrayCollection<int, CForum>
+     * @return Collection<int, CForum>
      */
-    public function getForums(): ArrayCollection
+    public function getForums(): Collection
     {
         return $this->forums;
     }

@@ -93,17 +93,17 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     }
 
     /**
-     * @return ArrayCollection<int, CLp>
+     * @return Collection<int, CLp>
      */
-    public function getLps(): ArrayCollection
+    public function getLps(): Collection
     {
         return $this->lps;
     }
 
     /**
-     * @return ArrayCollection<int, CLpCategoryRelUser>
+     * @return Collection<int, CLpCategoryRelUser>
      */
-    public function getUsers(): ArrayCollection
+    public function getUsers(): Collection
     {
         return $this->users;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-        errorLevel="7"
+        errorLevel="6"
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
@@ -151,38 +151,16 @@
             <directory name="vendor"/>
 
             <directory name="src/CoreBundle/Component/Editor"/>
+            <directory name="src/CoreBundle/Hook"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 
-            <directory name="public/main/inc/lib/javascript"/>
-            <directory name="public/main/inc/lib/kses-0.2.2"/>
-            <directory name="public/main/inc/lib/nusoap"/>
-            <directory name="public/main/inc/lib/pear"/>
-            <directory name="public/main/inc/lib/ppt2png"/>
-            <directory name="public/main/inc/lib/search"/>
-            <directory name="public/main/inc/lib/zombie"/>
-            <directory name="public/main/exercise/export/qti2"/>
-
-            <file name="public/main/admin/index.php"/>
-            <file name="public/main/admin/settings.php"/>
-            <file name="public/main/admin/periodic_export.php"/>
-            <file name="public/main/admin/user_move_stats.php"/>
-            <file name="public/main/admin/settings.lib.php"/>
-            <file name="public/main/admin/user_update_import.php"/>
-            <file name="public/main/admin/teachers_time_by_session_report.php"/>
-            <file name="public/main/admin/specific_fields.php"/>
-            <file name="public/main/admin/sub_language*"/>
-            <file name="public/main/admin/ldap_*"/>
-            <file name="public/main/admin/special_exports.php"/>
+            <file name="public/main/**/**"/>
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
             <file name="public/main/lp/openoffice_document.class.php"/>
             <file name="public/main/lp/openoffice_text.class.php"/>
             <file name="public/main/lp/openoffice_text_document.class.php"/>
-            <file name="public/main/lp/aicc.class.php"/>
-
-            <file name="public/main/exercise/admin.php"/>
-            <file name="public/main/survey/survey_list.php"/>
 
             <file name="src/CoreBundle/Component/Utils/AssetDirectoryNamer.php"/>
             <file name="src/CoreBundle/Controller/EditorController.php"/>

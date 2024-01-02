@@ -2072,7 +2072,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->templates;
     }
 
-    public function getDropBoxReceivedFiles(): ArrayCollection|Collection
+    public function getDropBoxReceivedFiles(): Collection
     {
         return $this->dropBoxReceivedFiles;
     }

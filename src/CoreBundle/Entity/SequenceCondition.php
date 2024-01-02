@@ -72,9 +72,6 @@ class SequenceCondition
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getParam(): float
     {
         return $this->param;
@@ -87,9 +84,6 @@ class SequenceCondition
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getActTrue(): int
     {
         return $this->actTrue;
@@ -102,10 +96,7 @@ class SequenceCondition
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActFalse()
+    public function getActFalse(): string
     {
         return $this->actFalse;
     }

@@ -281,9 +281,9 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     }
 
     /**
-     * @return ArrayCollection<int, CForumPost>
+     * @return Collection<int, CForumPost>
      */
-    public function getPosts(): ArrayCollection
+    public function getPosts(): Collection
     {
         return $this->posts;
     }
@@ -301,9 +301,9 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     }
 
     /**
-     * @return ArrayCollection<int, CForumThreadQualify>
+     * @return Collection<int, CForumThreadQualify>
      */
-    public function getQualifications(): ArrayCollection
+    public function getQualifications(): Collection
     {
         return $this->qualifications;
     }

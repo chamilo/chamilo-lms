@@ -171,8 +171,6 @@ class BranchSync
 
     /**
      * Get latitude.
-     *
-     * @return float
      */
     public function getLatitude(): ?string
     {
@@ -188,10 +186,8 @@ class BranchSync
 
     /**
      * Get longitude.
-     *
-     * @return float
      */
-    public function getLongitude()
+    public function getLongitude(): ?string
     {
         return $this->longitude;
     }

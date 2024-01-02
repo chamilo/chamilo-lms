@@ -72,9 +72,6 @@ class SequenceMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getAssign(): int
     {
         return $this->assign;
@@ -87,10 +84,7 @@ class SequenceMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetType()
+    public function getMetType(): string
     {
         return $this->metType;
     }

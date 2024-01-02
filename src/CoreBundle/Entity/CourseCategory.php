@@ -65,7 +65,7 @@ class CourseCategory implements Stringable
     protected ?int $id = null;
 
     /**
-     * @var Collection|CourseCategory[]
+     * @var Collection<int, CourseCategory>
      */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
@@ -152,9 +152,9 @@ class CourseCategory implements Stringable
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, CourseCategory>
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }

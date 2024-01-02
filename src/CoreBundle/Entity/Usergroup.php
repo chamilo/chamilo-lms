@@ -98,12 +98,16 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
 
     /**
-     * @return ArrayCollection<int, UsergroupRelUser>
+     * @return Collection<int, UsergroupRelUser>
      */
-    public function getUsers(): ArrayCollection
+    public function getUsers(): Collection
     {
         return $this->users;
     }
+
+    /**
+     * @return Collection<int, AccessUrlRelUserGroup>
+     */
     public function getUrls(): Collection
     {
         return $this->urls;
@@ -227,9 +231,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
 
     /**
-     * @return ArrayCollection<int, UsergroupRelCourse>
+     * @return Collection<int, UsergroupRelCourse>
      */
-    public function getCourses(): ArrayCollection
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
@@ -241,9 +245,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
 
     /**
-     * @return ArrayCollection<int, UsergroupRelSession>
+     * @return Collection<int, UsergroupRelSession>
      */
-    public function getSessions(): ArrayCollection
+    public function getSessions(): Collection
     {
         return $this->sessions;
     }
@@ -255,9 +259,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
 
     /**
-     * @return ArrayCollection<int, UsergroupRelQuestion>
+     * @return Collection<int, UsergroupRelQuestion>
      */
-    public function getQuestions(): ArrayCollection
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }

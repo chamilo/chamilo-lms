@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -71,7 +72,7 @@ class PortfolioComment
 
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'DESC'])]
-    private ArrayCollection $children;
+    private Collection $children;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $score;
@@ -151,7 +152,7 @@ class PortfolioComment
         return $this;
     }
 
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }

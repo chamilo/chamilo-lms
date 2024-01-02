@@ -93,6 +93,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
+use UnitEnum;
 
 /**
  * Symfony services for the legacy Chamilo code.
@@ -112,10 +113,7 @@ class Container
         self::$container = $container;
     }
 
-    /**
-     * @return array|bool|float|int|string|null
-     */
-    public static function getParameter(string $parameter)
+    public static function getParameter(string $parameter): UnitEnum|float|array|bool|int|string|null
     {
         if (self::$container->hasParameter($parameter)) {
             return self::$container->getParameter($parameter);

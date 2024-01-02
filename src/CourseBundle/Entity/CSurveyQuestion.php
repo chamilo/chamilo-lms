@@ -287,9 +287,9 @@ class CSurveyQuestion
     }
 
     /**
-     * @return ArrayCollection<int, CSurveyQuestion>
+     * @return Collection<int, CSurveyQuestion>
      */
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
@@ -326,17 +326,17 @@ class CSurveyQuestion
     }
 
     /**
-     * @return ArrayCollection<int, CSurveyAnswer>
+     * @return Collection<int, CSurveyAnswer>
      */
-    public function getAnswers(): ArrayCollection
+    public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
     /**
-     * @return ArrayCollection<int, CSurveyQuestionOption>
+     * @return Collection<int, CSurveyQuestionOption>
      */
-    public function getOptions(): ArrayCollection
+    public function getOptions(): Collection
     {
         return $this->options;
     }

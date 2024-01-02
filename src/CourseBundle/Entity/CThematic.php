@@ -127,17 +127,17 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * @return ArrayCollection<int, CThematicPlan>
+     * @return Collection<int, CThematicPlan>
      */
-    public function getPlans(): ArrayCollection
+    public function getPlans(): Collection
     {
         return $this->plans;
     }
 
     /**
-     * @return ArrayCollection<int, CThematicAdvance>
+     * @return Collection<int, CThematicAdvance>
      */
-    public function getAdvances(): ArrayCollection
+    public function getAdvances(): Collection
     {
         return $this->advances;
     }

@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @template-extends AbstractType<object>
+ * @template-extends AbstractType<array>
  */
 class ContactType extends AbstractType
 {

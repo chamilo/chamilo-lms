@@ -46,7 +46,7 @@ class SkillRelUser
     protected ?Session $session = null;
 
     /**
-     * @var Collection|SkillRelUserComment[]
+     * @var Collection<int, SkillRelUserComment>
      */
     #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelUserComment::class, mappedBy: 'skillRelUser', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $comments;

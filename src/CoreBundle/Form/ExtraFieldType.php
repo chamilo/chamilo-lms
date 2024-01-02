@@ -31,7 +31,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * @template-extends AbstractType<ExtraField>
+ * @template-extends AbstractType<array>
  */
 class ExtraFieldType extends AbstractType
 {

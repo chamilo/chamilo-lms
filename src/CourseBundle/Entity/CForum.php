@@ -366,7 +366,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this->iid;
     }
 
-    public function getThreads(): ArrayCollection
+    public function getThreads(): Collection
     {
         return $this->threads;
     }
@@ -396,9 +396,9 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return ArrayCollection<int, CForumPost>
+     * @return Collection<int, CForumPost>
      */
-    public function getPosts(): ArrayCollection
+    public function getPosts(): Collection
     {
         return $this->posts;
     }

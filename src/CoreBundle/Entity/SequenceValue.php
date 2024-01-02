@@ -53,12 +53,7 @@ class SequenceValue
     #[ORM\Column(name: 'available_end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableEndDate = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -75,17 +70,11 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAdvance(): float
     {
         return $this->advance;
     }
 
-    /**
-     * @return SequenceValue
-     */
     public function setAdvance(float $advance): static
     {
         $this->advance = $advance;
@@ -93,10 +82,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getCompleteItems()
+    public function getCompleteItems(): int
     {
         return $this->completeItems;
     }
@@ -108,10 +94,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalItems()
+    public function getTotalItems(): int
     {
         return $this->totalItems;
     }
@@ -123,9 +106,6 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSuccess(): bool
     {
         return $this->success;
@@ -138,10 +118,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getSuccessDate()
+    public function getSuccessDate(): ?DateTime
     {
         return $this->successDate;
     }
@@ -153,9 +130,6 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAvailable(): bool
     {
         return $this->available;
@@ -168,10 +142,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getAvailableStartDate()
+    public function getAvailableStartDate(): ?DateTime
     {
         return $this->availableStartDate;
     }
@@ -183,10 +154,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getAvailableEndDate()
+    public function getAvailableEndDate(): ?DateTime
     {
         return $this->availableEndDate;
     }

@@ -22,9 +22,9 @@ class NameConvention
     {
         $format = $this->getFormat()['format'];
 
-        $personName = str_replace(
+        $personName = (string) str_replace(
             ['title ', 'first_name', 'last_name'],
-            ['', $user->getFirstname(), $user->getLastname()],
+            ['', (string) $user->getFirstname(), (string) $user->getLastname()],
             $format
         );
 

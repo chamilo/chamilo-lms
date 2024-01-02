@@ -260,9 +260,9 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return ArrayCollection<int, CGroupRelUser>
+     * @return Collection<int, CGroupRelUser>
      */
-    public function getMembers(): ArrayCollection
+    public function getMembers(): Collection
     {
         return $this->members;
     }
@@ -297,9 +297,9 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return ArrayCollection<int, CGroupRelTutor>
+     * @return Collection<int, CGroupRelTutor>
      */
-    public function getTutors(): ArrayCollection
+    public function getTutors(): Collection
     {
         return $this->tutors;
     }

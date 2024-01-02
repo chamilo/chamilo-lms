@@ -102,9 +102,9 @@ class PageCategory
     }
 
     /**
-     * @return ArrayCollection<int, Page>
+     * @return Collection<int, Page>
      */
-    public function getPages(): ArrayCollection
+    public function getPages(): Collection
     {
         return $this->pages;
     }

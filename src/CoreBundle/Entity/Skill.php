@@ -34,31 +34,31 @@ class Skill implements Stringable
     protected ?Profile $profile = null;
 
     /**
-     * @var SkillRelUser[]|Collection
+     * @var Collection<int, SkillRelUser>
      */
     #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
-     * @var Collection|SkillRelItem[]
+     * @var Collection<int, SkillRelItem>
      */
     #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
 
     /**
-     * @var Collection|SkillRelSkill[]
+     * @var Collection<int, SkillRelSkill>
      */
     #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     * @var Collection|SkillRelCourse[]
+     * @var Collection<int, SkillRelCourse>
      */
     #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
 
     /**
-     * @var Collection|SkillRelGradebook[]
+     * @var Collection<int, SkillRelGradebook>
      */
     #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
@@ -253,19 +253,17 @@ class Skill implements Stringable
     }
 
     /**
-     * Get issuedSkills.
-     *
-     * @return Collection
+     * @return Collection<int, SkillRelUser>
      */
-    public function getIssuedSkills()
+    public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, SkillRelItem>
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }

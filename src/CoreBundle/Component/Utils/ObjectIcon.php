@@ -116,4 +116,6 @@ enum ObjectIcon: string
     case LIST = 'list-box-outline';
     // Default document (replaces default.png)
     case DEFAULT = 'text-box-outline';
+    // Pin (drawing-pin)
+    case PIN = 'pin';
 }

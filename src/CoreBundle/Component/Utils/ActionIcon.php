@@ -42,6 +42,10 @@ enum ActionIcon: string
     case DOWN = 'arrow-down-bold';
     // Move something (from one folder to another) or unfold some interface component
     case MOVE = 'arrow-right-bold';
+    // Previous step
+    case PREVIOUS = 'arrow-left-bold-circle-outline';
+    // Next step
+    case NEXT = 'arrow-right-bold-circle-outline';
     // Preview some content
     case PREVIEW_CONTENT = 'magnify-plus-outline';
     // Import some kind of archive/packaged

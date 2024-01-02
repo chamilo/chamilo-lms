@@ -18,9 +18,9 @@ enum StateIcon: string
     case CLOSED_VISIBILITY = 'eye-off-outline';
     // Hidden
     case HIDDEN_VISIBILITY = 'eye-closed';
-    // Active
+    // Active / Visible
     case ACTIVE = 'toggle-switch';
-    // Inactive
+    // Inactive / Invisible
     case INACTIVE = 'toggle-switch-off';
     // Expired
     case EXPIRED = 'timer-alert-outline';

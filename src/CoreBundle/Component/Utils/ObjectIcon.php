@@ -52,6 +52,10 @@ enum ObjectIcon: string
     case AGENDA_EVENT = 'calendar-month';
     // Platform event
     case AGENDA_PLATFORM_EVENT = 'calendar-star-outline';
+    // Calendar events for my users
+    case AGENDA_USER_EVENT = 'calendar-filter';
+    // Calendar for sessions plan
+    case AGENDA_PLAN = 'calendar-end';
     // Weekly agenda view
     case AGENDA_WEEK = 'calendar-week';
     // List of users

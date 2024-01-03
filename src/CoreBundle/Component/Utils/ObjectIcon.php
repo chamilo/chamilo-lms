@@ -120,4 +120,10 @@ enum ObjectIcon: string
     case DEFAULT = 'text-box-outline';
     // Pin (drawing-pin)
     case PIN = 'pin';
+    // Support ticket / help ticket
+    case TICKET = 'ticket-confirmation';
+    // Email (as a source of info)
+    case EMAIL = 'email';
+    // Phone (as a source of info)
+    case PHONE = 'cellphone';
 }

@@ -80,7 +80,10 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         // 3. Check course locale
-        if ($courseId = $request->query->get('cid') ?: $request->request->get('cid')) {
+        if ($request->query->getInt('cid')
+            || $request->request->getInt('cid')
+            || $request->attributes->getInt('cid')
+        ) {
             /** @var Course|null $course */
             // 3. Check course locale
             if ($course = $sessionHandler->get('course')) {

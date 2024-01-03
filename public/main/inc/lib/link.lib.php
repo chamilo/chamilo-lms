@@ -884,7 +884,7 @@ class Link extends Model
             $user = api_get_user_entity();
             $i = 1;
             $linksAdded = [];
-            $iconLink = Display::getMdiIcon(ActionIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Link'));
+            $iconLink = Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Link'));
             foreach ($links as $link) {
                 $linkId = $link->getIid();
                 $resourceLink = $link->getFirstResourceLink();

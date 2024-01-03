@@ -2,8 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class GradebookUtils.
@@ -229,21 +230,28 @@ class GradebookUtils
         $modify_icons = null;
 
         if (false === $show_message) {
-            $visibility_icon = (0 == $cat->is_visible()) ? 'invisible' : 'visible';
+            $visibility_icon = (0 == $cat->is_visible()) ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = (0 == $cat->is_visible()) ? 'set_visible' : 'set_invisible';
 
             $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.
-                Display::return_icon(
-                    'view_more_stats.gif',
-                    get_lang('Show'),
+                Display::getMdiIcon(
+                    ActionIcon::VIEW_MORE,
+                    'ch-tool-icon',
                     '',
-                    ICON_SIZE_SMALL
+                    ICON_SIZE_SMALL,
+                    get_lang('Show')
                 ).
                 '</a>';
 
             if (!api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= Display::url(
-                    Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('List View')),
+                    Display::getMdiIcon(
+                        StateIcon::LIST_VIEW,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('List View')
+                    ),
                     'personal_stats.php?'.http_build_query([
                         'selectcat' => $cat->get_id(),
                     ]).'&'.api_get_cidreq(),
@@ -294,11 +302,12 @@ class GradebookUtils
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::getMdiIcon('format-list-text', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('List View')).'</a>';
                 $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visiblecat='.$cat->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.'">'.
-                    Display::return_icon(
-                        $visibility_icon.'.png',
-                        get_lang('Visible'),
-                        '',
-                        ICON_SIZE_SMALL
+                    Display::getMdiIcon(
+                        $visibility_icon,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('Visible')
                     ).'</a>';
 
                 if ($cat->is_locked() && !api_is_platform_admin()) {
@@ -329,7 +338,7 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($eval->getCourseId(), $eval->getSessionId());
 
         if (false === $message_eval && api_is_allowed_to_edit(null, true)) {
-            $visibility_icon = 0 == $eval->is_visible() ? 'invisible' : 'visible';
+            $visibility_icon = 0 == $eval->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = 0 == $eval->is_visible() ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
@@ -340,28 +349,24 @@ class GradebookUtils
             }
 
             $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visibleeval='.$eval->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.' ">'.
-                Display::return_icon(
-                    $visibility_icon.'.png',
-                    get_lang('Visible'),
-                    '',
-                    ICON_SIZE_SMALL
+                Display::getMdiIcon(
+                    $visibility_icon,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Visible')
                 ).
                 '</a>';
 
             if (api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'">'.
-                    Display::return_icon(
-                        'history.png',
-                        get_lang('Assessment history'),
-                        '',
-                        ICON_SIZE_SMALL
-                    ).
+                    Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assessment history')).
                     '</a>';
 
                 $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
                 if ($allowStats) {
                     $modify_icons .= Display::url(
-                        Display::return_icon('reload.png', get_lang('Generate statistics')),
+                        Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Generate statistics')),
                         api_get_self().'?itemId='.$eval->get_id().'&action=generate_eval_stats&selectcat='.$selectcat.'&'.$courseParams
                     );
                 }
@@ -401,7 +406,7 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($link->getCourseId(), $link->get_session_id());
 
         if (false === $message_link) {
-            $visibility_icon = 0 == $link->is_visible() ? 'invisible' : 'visible';
+            $visibility_icon = 0 == $link->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = 0 == $link->is_visible() ? 'set_visible' : 'set_invisible';
 
             if ($is_locked && !api_is_platform_admin()) {
@@ -412,27 +417,29 @@ class GradebookUtils
                     '</a>';
             }
             $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visiblelink='.$link->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.' ">'.
-                Display::return_icon(
-                    $visibility_icon.'.png',
+                Display::getMdiIcon(
+                    $visibility_icon,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
                     get_lang('Visible'),
-                    '',
-                    ICON_SIZE_SMALL
                 ).
                 '</a>';
 
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink='.$link->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'">'.
-                Display::return_icon(
-                    'history.png',
-                    get_lang('Assessment history'),
-                    '',
-                    ICON_SIZE_SMALL
+                Display::getMdiIcon(
+                    ActionIcon::VIEW_DETAILS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Assessment history')
                 ).
                 '</a>';
 
             $allowStats = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
             if ($allowStats && LINK_EXERCISE == $link->get_type()) {
                 $modify_icons .= Display::url(
-                    Display::return_icon('reload.png', get_lang('Generate statistics')),
+                    Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Generate statistics')),
                     api_get_self().'?itemId='.$link->get_id().'&action=generate_link_stats&selectcat='.$selectcat.'&'.$courseParams
                 );
             }
@@ -772,7 +779,7 @@ class GradebookUtils
 
             $print .= Display::div(
                 Display::url(
-                    Display::return_icon('printmgr.gif', get_lang('Print')),
+                    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Print')),
                     'javascript:void()',
                     ['onclick' => 'window.print();']
                 ),

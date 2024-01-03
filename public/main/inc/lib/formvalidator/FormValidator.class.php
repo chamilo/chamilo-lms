@@ -1800,7 +1800,7 @@ EOT;
         if (!empty($urlToRedirect)) {
             $redirectCondition = "window.location.replace('$urlToRedirect'); ";
         }
-        $icon = Display::return_icon('file_txt.gif');
+        $icon = Display::getMdiIcon('text-box-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL);
         $this->addHtml("
         <script>
         $(function () {

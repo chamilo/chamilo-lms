@@ -1299,13 +1299,11 @@ if ($allowBlockCategory &&
         }
     }
 }
-    $saveIcon = Display::return_icon(
-        'save.png',
-        '',
-        [],
-        ICON_SIZE_SMALL,
-        false,
-        true
+    $saveIcon = Display::getMdiIcon(
+        ActionIcon::SAVE_FORM,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL
     );
     $loading = Display::getMdiIcon('loading', 'animate-spin');
 

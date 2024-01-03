@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This file displays the user's profile,
@@ -661,9 +662,9 @@ if ($allowSocialTool) {
     if ('true' === api_get_setting('extended_profile')) {
         if ('true' === api_get_setting('allow_message_tool')) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-                Display::return_icon('shared_profile.png', get_lang('View shared profile')).'</a>';
+                Display::getMdiIcon(ToolIcon::SHARED_PROFILE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View shared profile')).'</a>';
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-                Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
+                Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages')).'</a>';
         }
         $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 

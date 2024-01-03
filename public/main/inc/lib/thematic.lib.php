@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Provides functions for thematic option inside attendance tool.
@@ -110,61 +111,46 @@ class Thematic
                 if (api_get_session_id()) {
                     if (api_get_session_id() == $thematic[3]) {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('lesson_plan.png', get_lang('Thematic plan'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('lesson_plan_calendar.png', get_lang('Thematic advance'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
 
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     } else {
-                        $actions .= Display::return_icon(
-                            'lesson_plan_na.png',
-                            get_lang('Thematic plan'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
-                        $actions .= Display::return_icon(
-                            'lesson_plan_calendar_na.png',
-                            get_lang('Thematic advance'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
-                        $actions .= Display::return_icon('edit_na.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-                        $actions .= Display::return_icon(
-                            'delete_na.png',
-                            get_lang('Delete'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
+                        $actions .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete')).'&nbsp;';
                         $actions .= Display::url(
-                            Display::return_icon('cd.gif', get_lang('Copy')),
+                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')),
                             'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0]
                         );
                     }
                 } else {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('lesson_plan.png', get_lang('Thematic plan'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('lesson_plan_calendar.png', get_lang('Thematic advance'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
 
                     if ($thematic[2] > 1) {
                         $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Up')).'</a>';
                     } else {
-                        $actions .= Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+                        $actions .= Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
                     }
                     /*if ($thematic[2] < self::get_max_thematic_item()) {
                         $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('down')).'</a>';
                     } else {
-                        $actions .= Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+                        $actions .= Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
                     }
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                     $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
                 $thematics[] = [$thematic[0], $thematic[1], $actions];
             }

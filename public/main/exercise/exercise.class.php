@@ -8445,10 +8445,10 @@ class Exercise
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
                 for ($i = 1; $i <= $answerUsed; $i++) {
-                    $html .= Display::return_icon('attempt-check.png');
+                    $html .= Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
                 }
                 for ($i = 1; $i <= $answerMissing; $i++) {
-                    $html .= Display::return_icon('attempt-nocheck.png');
+                    $html .= Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
                 }
                 $ribbon = '<div class="question-answer-result__header-ribbon-title hide-label-title">'
                     .get_lang('Correct answers').': '.$result.'</div>'

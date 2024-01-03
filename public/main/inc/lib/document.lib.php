@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  *  Class DocumentManager
@@ -2335,7 +2336,7 @@ class DocumentManager
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
         $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" title="'.htmlentities(get_lang('Move')).'"></i>';
-        $folderIcon = Display::return_icon('lp_folder.png');
+        $folderIcon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
         $options = [
             'decorate' => true,

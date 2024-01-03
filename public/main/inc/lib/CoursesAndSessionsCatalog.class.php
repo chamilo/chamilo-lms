@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @todo change class name
@@ -1335,11 +1336,12 @@ class CoursesAndSessionsCatalog
      */
     public static function getSessionIcon($sessionName)
     {
-        return Display::return_icon(
-            'window_list.png',
-            $sessionName,
+        return Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            ICON_SIZE_MEDIUM,
+            $sessionName
         );
     }
 

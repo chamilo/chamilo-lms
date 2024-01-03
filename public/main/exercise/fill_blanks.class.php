@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  *  Class FillBlanks.
  *
@@ -1221,10 +1223,10 @@ class FillBlanks extends Question
         }
 
         $style = 'feedback-green';
-        $iconAnswer = Display::return_icon('attempt-check.png', get_lang('Correct'), null, ICON_SIZE_SMALL);
+        $iconAnswer = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correct'));
         if (!$right) {
             $style = 'feedback-red';
-            $iconAnswer = Display::return_icon('attempt-nocheck.png', get_lang('Incorrect'), null, ICON_SIZE_SMALL);
+            $iconAnswer = Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Incorrect'));
         }
 
         $correctAnswerHtml = '';

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * @todo lib not use. Only the class variables not the functions
  */
@@ -60,11 +62,11 @@ class SkillVisualizer
         $this->html .= $content;
 
         if ('edit' == $this->type && 0 != $skill['parent_id']) {
-            //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
-            //$this->html .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
-            //$this->html .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));
-            //$this->html .= Display::url(Display::return_icon('up.png', get_lang('Close'), array(), ICON_SIZE_SMALL), '#', array('id'=>'close_block_'.$block_id,'class'=>'close_block'));
-            //$this->html .= Display::url(Display::return_icon('down.png', get_lang('Open'), array(), ICON_SIZE_SMALL), '#', array('id'=>'open_block_'.$block_id,'class'=>'open_block'));
+            //$this->html .= Display::url(Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
+            //$this->html .= Display::url(Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
+            //$this->html .= Display::url(Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));
+            //$this->html .= Display::url(Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Close')), '#', array('id'=>'close_block_'.$block_id,'class'=>'close_block'));
+            //$this->html .= Display::url(Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Open')), '#', array('id'=>'open_block_'.$block_id,'class'=>'open_block'));
         }
         $this->html .= '</div>';
     }

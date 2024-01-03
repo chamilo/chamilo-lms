@@ -2521,3 +2521,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // login/passwords in the main login form. Browsers might choose not to
 // support this feature.
 //$_configuration['security_login_autocomplete_disable'] = false;
+
+// Block session about page access for all users
+// $_configuration['session_about_block_all_access'] = false;

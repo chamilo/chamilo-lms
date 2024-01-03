@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Provides functions for thematic option inside attendance tool.
@@ -516,11 +517,11 @@ class Thematic
                 $actions = '';
                 $actions .= '<a
                         href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 $actions .= '<a
                     onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
                     href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a></center>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a></center>';
                 $data[] = [$i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions];
                 $i++;
                 // }

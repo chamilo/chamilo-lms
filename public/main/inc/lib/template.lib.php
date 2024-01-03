@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class Template.
@@ -183,7 +184,7 @@ class Template
                 $help = Security::remove_XSS($help);
                 $content = '<div class="help">';
                 $content .= Display::url(
-                    Display::return_icon('help.png', get_lang('Help'), null, ICON_SIZE_LARGE),
+                    Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Help')),
                     api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',
@@ -998,12 +999,7 @@ class Template
     {
         //@todo move this in the template
         $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('Report a bug'),
-            [],
-            ICON_SIZE_LARGE
-        );
+        $iconBug = Display::getMdiIcon(ToolIcon::BUG_REPORT, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Report a bug'));
         if ('true' === api_get_setting('show_link_bug_notification') && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
@@ -1017,12 +1013,7 @@ class Template
         ) {
             // by default is project_id = 1
             $defaultProjectId = 1;
-            $iconTicket = Display::return_icon(
-                'help.png',
-                get_lang('Ticket'),
-                [],
-                ICON_SIZE_LARGE
-            );
+            $iconTicket = Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Ticket'));
             $courseInfo = api_get_course_info();
             $courseParams = '';
             if (!empty($courseInfo)) {

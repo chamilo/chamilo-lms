@@ -5,6 +5,9 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Function library for the links tool.
@@ -881,12 +884,7 @@ class Link extends Model
             $user = api_get_user_entity();
             $i = 1;
             $linksAdded = [];
-            $iconLink = Display::return_icon(
-                'url.png',
-                get_lang('Link'),
-                null,
-                ICON_SIZE_SMALL
-            );
+            $iconLink = Display::getMdiIcon(ActionIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Link'));
             foreach ($links as $link) {
                 $linkId = $link->getIid();
                 $resourceLink = $link->getFirstResourceLink();
@@ -1079,57 +1077,63 @@ class Link extends Model
         $categoryId = $category->getIid();
         $token = null;
         $tools = '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=editcategory&id='.$categoryId.'&category_id='.$categoryId.'" title='.get_lang('Edit').'">'.
-            Display:: return_icon(
-                'edit.png',
-                get_lang('Edit'),
-                [],
-                ICON_SIZE_SMALL
+            Display::getMdiIcon(
+                ActionIcon::EDIT,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Edit')
             ).'</a>';
 
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
         if (0 != $currentCategory) {
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=up&up='.$categoryId.'&category_id='.$categoryId.'" title="'.get_lang('Up').'">'.
-                Display:: return_icon(
-                    'up.png',
-                    get_lang('Up'),
-                    [],
-                    ICON_SIZE_SMALL
+                Display::getMdiIcon(
+                    ActionIcon::UP,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Up')
                 ).'</a>';
         } else {
-            $tools .= Display:: return_icon(
-                'up_na.png',
-                get_lang('Up'),
-                [],
-                ICON_SIZE_SMALL
+            $tools .= Display::getMdiIcon(
+                ActionIcon::UP,
+                'ch-tool-icon-disabled',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Up')
             ).'</a>';
         }
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
         if ($currentCategory < $countCategories - 1) {
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=down&down='.$categoryId.'&category_id='.$categoryId.'">'.
-                Display:: return_icon(
-                    'down.png',
-                    get_lang('down'),
-                    [],
-                    ICON_SIZE_SMALL
+                Display::getMdiIcon(
+                    ActionIcon::DOWN,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('down')
                 ).'</a>';
         } else {
-            $tools .= Display:: return_icon(
-                'down_na.png',
-                get_lang('down'),
-                [],
-                ICON_SIZE_SMALL
-            ).'</a>';
+            $tools .= Display::getMdiIcon(
+                ActionIcon::DOWN,
+                'ch-tool-icon-disabled',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('down')
+                ).'</a>';
         }
 
         $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId\"
             onclick=\"javascript: if(!confirm('".get_lang('When deleting a category, all links of this category are also deleted.
 Do you really want to delete this category and its links ?')."')) return false;\">".
-            Display:: return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                [],
-                ICON_SIZE_SMALL
+            Display::getMdiIcon(
+                ActionIcon::DELETE,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Delete')
             ).'</a>';
 
         return $tools;
@@ -1365,31 +1369,21 @@ Do you really want to delete this category and its links ?')."')) return false;\
             if (api_is_allowed_to_edit(null, true)) {
                 $actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq().'&action=addlink&category_id='.$categoryId.'">'.
-                    Display::return_icon('new_link.png', get_lang('Add a link'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a link')).'</a>';
                 $actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq().'&action=addcategory&category_id='.$categoryId.'">'.
-                    Display::return_icon('new_folder.png', get_lang('Add a category'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::getMdiIcon(ActionIcon::CREATE_CATEGORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a category')).'</a>';
             }
 
             if (!empty($countCategories)) {
                 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-                $actions .= Display::return_icon(
-                        'forum_listview.png',
-                        get_lang('List View'),
-                        '',
-                        ICON_SIZE_MEDIUM
-                    ).' </a>';
+                $actions .= Display::getMdiIcon(StateIcon::LIST_VIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List View')).' </a>';
 
                 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-                $actions .= Display::return_icon(
-                        'forum_nestedview.png',
-                        get_lang('Nested View'),
-                        '',
-                        ICON_SIZE_MEDIUM
-                    ).'</a>';
+                $actions .= Display::getMdiIcon(StateIcon::NESTED_VIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Nested View')).'</a>';
             }
             $actions .= Display::url(
-                Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                 api_get_self().'?'.api_get_cidreq().'&action=export'
             );
             $toolbar = Display::toolbarAction('toolbar', [$actions]);
@@ -1430,25 +1424,25 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 $strVisibility = '<a
                     href="link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=invisible&id='.$categoryItemId.'&scope='.TOOL_LINK_CATEGORY.'"
                     title="'.get_lang('Hide').'">'.
-                    Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide')).'</a>';
             } elseif (!$isVisible) {
                 $visibilityClass = 'text-muted';
                 $strVisibility = ' <a
                     href="link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=visible&id='.$categoryItemId.'&scope='.TOOL_LINK_CATEGORY.'"
                     title="'.get_lang('Show').'">'.
-                    Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Show')).'</a>';
             }
 
             $header = '';
             if ($showChildren) {
                 $header .= '<a
                     class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
-                $header .= Display::return_icon('forum_nestedview.png');
+                $header .= Display::getMdiIcon(StateIcon::NESTED_VIEW, 'ch-tool-icon', null, ICON_SIZE_SMALL);
             } else {
                 $header .= '<a
                     class="'.$visibilityClass.'"
                     href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
-                $header .= Display::return_icon('forum_listview.png');
+                $header .= Display::getMdiIcon(StateIcon::LIST_VIEW, 'ch-tool-icon', null, ICON_SIZE_SMALL);
             }
             $header .= Security::remove_XSS($category->getCategoryTitle()).'</a>';
 
@@ -1481,7 +1475,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
         if (empty($content) && api_is_allowed_to_edit()) {
             $content .= Display::noDataView(
                 get_lang('Links'),
-                Display::return_icon('links.png', '', [], 64),
+                Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_BIG),
                 get_lang('Add links'),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'addlink'])
             );

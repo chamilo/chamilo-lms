@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This class provides some functions for statistics.
@@ -1345,7 +1346,7 @@ class Statistics
 
             if (!empty($result)) {
                 $actions = Display::url(
-                    Display::return_icon('excel.png', get_lang('ExportToXls'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToXls')),
                     api_get_self().'?'.http_build_query(
                         [
                             'report' => 'logins_by_date',

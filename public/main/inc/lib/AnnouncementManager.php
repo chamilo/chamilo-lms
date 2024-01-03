@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -11,6 +10,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Include file with functions for the announcements module.
@@ -496,25 +498,25 @@ class AnnouncementManager
             (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $modify_icons = "<a href=\"".$url."&action=modify&id=".$id."\">".
-                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>";
 
-            $image_visibility = 'invisible';
+            $image_visibility = StateIcon::INACTIVE;
             $alt_visibility = get_lang('Visible');
             $setNewStatus = 'visible';
             if ($isVisible) {
-                $image_visibility = 'visible';
+                $image_visibility = StateIcon::ACTIVE;
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
             $modify_icons .= "<a
                 href=\"".$url."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
-                Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
+                Display::getMdiIcon($image_visibility, 'ch-tool-icon', null, ICON_SIZE_SMALL, $alt_visibility)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
                 $modify_icons .= "<a
                     href=\"".$url."&action=delete&id=".$id."&sec_token=".$stok."\"
                     onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     "</a>";
             }
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
@@ -563,18 +565,13 @@ class AnnouncementManager
                 $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
                 $html .= '<tr><td>';
                 $html .= '<br/>';
-                $html .= Display::getMdiIcon('paperclip');
+                $html .= Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
                 $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {
                     $url = $deleteUrl."&id_attach=".$attachmentId."&sec_token=".$stok;
                     $html .= Display::url(
-                        Display::return_icon(
-                            'delete.png',
-                            get_lang('Delete'),
-                            '',
-                            16
-                        ),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')),
                         $url
                     );
                 }
@@ -1407,8 +1404,8 @@ class AnnouncementManager
         $displayed = [];
 
         $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
-        $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('Announcement sent by e-mail').'"></i>';
-        $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
+        $emailIcon = Display::getMdiIcon(StateIcon::MAIL_NOTIFICATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Announcement sent by e-mail'));
+        $attachmentIcon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Attachment'));
 
         $editIcon = Display::getMdiIcon(
             ActionIcon::EDIT,
@@ -1620,7 +1617,7 @@ class AnnouncementManager
                     $iterator++;
                 } else {
                     $modify_icons = Display::url(
-                        Display::return_icon('default.png'),
+                        Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL),
                         $actionUrl.'&action=view&id='.$announcementId
                     );
                 }

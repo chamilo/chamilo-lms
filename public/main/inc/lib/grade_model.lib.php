@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Class GradeModel.
  */
@@ -50,9 +52,9 @@ class GradeModel extends Model
         // action links
         echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="grade_models.php">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
         echo '<a href="'.api_get_self().'?action=add">'.
-                Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         echo '</div>';
         echo Display::grid_html('grade_model');
     }

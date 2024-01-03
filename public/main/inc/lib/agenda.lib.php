@@ -10,6 +10,9 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 
 /**
  * Class Agenda.
@@ -1649,7 +1652,10 @@ class Agenda
             $event['attachment'] = '';
             if (!empty($attachmentList)) {
                 $icon = Display::getMdiIcon(
-                    'paperclip'
+                    ObjectIcon::ATTACHMENT,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL
                 );
                 /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {
@@ -2546,11 +2552,11 @@ class Agenda
 
         $actionsLeft = '';
         $actionsLeft .= Display::url(
-            Display::return_icon('calendar.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Calendar')),
             $codePath."calendar/agenda_js.php?type={$this->type}&$cidReq"
         );
         $actionsLeft .= Display::url(
-            Display::return_icon('week.png', get_lang('Agenda list'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::AGENDA_WEEK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Agenda list')),
             $codePath."calendar/agenda_list.php?type={$this->type}&$cidReq"
         );
 
@@ -2564,12 +2570,12 @@ class Agenda
             )
         ) {
             $actionsLeft .= Display::url(
-                Display::return_icon('new_event.png', get_lang('Add event'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ObjectIcon::AGENDA_EVENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add event')),
                 $codePath."calendar/agenda.php?action=add&type={$this->type}&$cidReq"
             );
 
             $actionsLeft .= Display::url(
-                Display::return_icon('import_calendar.png', get_lang('Outlook import'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Outlook import')),
                 $codePath."calendar/agenda.php?action=importical&type={$this->type}&$cidReq"
             );
 
@@ -2596,13 +2602,13 @@ class Agenda
 
         if ('personal' === $this->type && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
-                Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ObjectIcon::AGENDA_PLAN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions plan calendar')),
                 $codePath."calendar/planification.php"
             );
 
             if (api_is_student_boss() || api_is_platform_admin()) {
                 $actionsLeft .= Display::url(
-                    Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ObjectIcon::AGENDA_USER_EVENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStudentsSchedule')),
                     $codePath.'my_space/calendar_plan.php'
                 );
             }
@@ -3321,7 +3327,7 @@ class Agenda
                 if (($curday > 0) && ($curday <= $numberofdays[$month])) {
                     $bgcolor = $class = 'class="days_week"';
                     $dayheader = Display::div(
-                        $curday,
+                        strval($curday),
                         ['class' => 'agenda_day']
                     );
                     if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
@@ -3359,48 +3365,40 @@ class Agenda
                             switch ($value['calendar_type']) {
                                 case 'personal':
                                     $bg_color = '#D0E7F4';
-                                    $icon = Display::return_icon(
-                                        'user.png',
-                                        get_lang('Personal agenda'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    $icon = Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Personal agenda'));
                                     break;
                                 case 'global':
                                     $bg_color = '#FFBC89';
-                                    $icon = Display::return_icon(
-                                        'view_remove.png',
-                                        get_lang('Platform event'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    $icon = Display::getMdiIcon(ObjectIcon::AGENDA_PLATFORM_EVENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Platform event'));
                                     break;
                                 case 'course':
                                     $bg_color = '#CAFFAA';
-                                    $icon_name = 'course.png';
+                                    $icon_name = ObjectIcon::COURSE;
                                     if (!empty($value['session_id'])) {
-                                        $icon_name = 'session.png';
+                                        $icon_name = ObjectIcon::SESSION;
                                     }
                                     if ($show_content) {
                                         $icon = Display::url(
-                                            Display::return_icon(
+                                            Display::getMdiIcon(
                                                 $icon_name,
+                                                'ch-tool-icon',
+                                                null,
+                                                ICON_SIZE_SMALL,
                                                 $value['course_name'].' '.get_lang(
                                                     'Course'
-                                                ),
-                                                [],
-                                                ICON_SIZE_SMALL
+                                                )
                                             ),
                                             $value['url']
                                         );
                                     } else {
-                                        $icon = Display::return_icon(
+                                        $icon = Display::getMdiIcon(
                                             $icon_name,
+                                            'ch-tool-icon',
+                                            null,
+                                            ICON_SIZE_SMALL,
                                             $value['course_name'].' '.get_lang(
                                                 'Course'
-                                            ),
-                                            [],
-                                            ICON_SIZE_SMALL
+                                            )
                                         );
                                     }
                                     break;

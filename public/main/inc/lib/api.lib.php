@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
@@ -2188,14 +2190,11 @@ function api_format_course_array(Course $course = null)
     $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
 
-    $image = Display::return_icon(
-        'course.png',
+    $image = Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
         null,
-        null,
-        ICON_SIZE_BIG,
-        null,
-        true,
-        false
+        ICON_SIZE_BIG
     );
 
     $illustration = Container::getIllustrationRepository()->getIllustrationUrl($course);
@@ -2529,11 +2528,12 @@ function api_get_session_image($sessionId, User $user)
     if (!$user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
-            $image = '&nbsp;&nbsp;'.Display::return_icon(
-                'star.png',
-                get_lang('Session-specific resource'),
-                ['align' => 'absmiddle'],
-                ICON_SIZE_SMALL
+            $image = '&nbsp;&nbsp;'.Display::getMdiIcon(
+                ObjectIcon::STAR,
+                'ch-tool-icon',
+                'align:absmiddle;',
+                ICON_SIZE_SMALL,
+                get_lang('Session-specific resource')
             );
         }
     }
@@ -3811,10 +3811,12 @@ function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinu
     if (-1 == $seconds) {
         return
             get_lang('Unknown').
-            Display::return_icon(
-                'info2.gif',
-                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.')
             );
     }
 

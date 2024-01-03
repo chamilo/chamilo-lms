@@ -16,6 +16,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class CourseManager.
@@ -2091,7 +2093,7 @@ class CourseManager
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher) {
                         $html .= '<li>';
-                        $html .= Display::return_icon('teacher.png', '', null, ICON_SIZE_TINY);
+                        $html .= Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY);
                         $html .= ' '.$teacher;
                         $html .= '</li>';
                     }
@@ -2198,11 +2200,12 @@ class CourseManager
                 foreach ($course_coachs as $coachs) {
                     $html .= Display::tag(
                         'li',
-                        Display::return_icon(
-                            'teacher.png',
-                            get_lang('Coach'),
+                        Display::getMdiIcon(
+                            ObjectIcon::TEACHER,
+                            'ch-tool-icon',
                             null,
-                            ICON_SIZE_TINY
+                            ICON_SIZE_TINY,
+                            get_lang('Coach')
                         ).' '.$coachs
                     );
                 }
@@ -3168,19 +3171,22 @@ class CourseManager
                                 ENT_QUOTES,
                         $charset
                     )).'\')) return false;">';
-                    $data .= Display::return_icon(
-                        'delete.gif',
-                        get_lang('Delete'),
-                        ['style' => 'vertical-align:middle;float:right;']
+                    $data .= Display::getMdiIcon(
+                        ActionIcon::DELETE,
+                        'ch-tool-icon',
+                        'vertical-align:middle;float:right;',
+                        ICON_SIZE_SMALL,
+                        get_lang('Delete')
                     );
                     $data .= '</a> ';
                     //edit
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->id.'">';
-                    $data .= Display::return_icon(
-                        'edit.png',
-                        get_lang('Edit'),
-                        ['style' => 'vertical-align:middle;float:right; padding-right:4px;'],
-                        ICON_SIZE_SMALL
+                    $data .= Display::getMdiIcon(
+                        ActionIcon::EDIT,
+                        'ch-tool-icon',
+                        'vertical-align:middle;float:right; padding-right:4px;',
+                        ICON_SIZE_SMALL,
+                        get_lang('Edit')
                     );
                     $data .= '</a> ';
                 }
@@ -3547,12 +3553,11 @@ class CourseManager
                 $params['status'] = $course_info['status'];
                 $params['category'] = $course_info['categoryName'];
                 $params['category_code'] = $course_info['categoryCode'];
-                $params['icon'] = Display::return_icon(
-                    'drawing-pin.png',
+                $params['icon'] = Display::getMdiIcon(
+                    ObjectIcon::PIN,
+                    'ch-tool-icon',
                     null,
-                    null,
-                    ICON_SIZE_LARGE,
-                    null
+                    ICON_SIZE_LARGE
                 );
 
                 if ('true' == api_get_setting('display_coursecode_in_courselist')) {
@@ -3873,13 +3878,11 @@ class CourseManager
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
         $params = [];
-        $params['icon'] = Display::return_icon(
-            'session.png',
+        $params['icon'] = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
-            [],
-            ICON_SIZE_LARGE,
-            null,
-            true
+            ICON_SIZE_LARGE
         );
         $params['real_id'] = $course_info['real_id'];
         $params['visibility'] = $course_info['visibility'];
@@ -3942,10 +3945,10 @@ class CourseManager
         if (!empty($thumbnails)) {
             $params['html_image'] = Display::img($thumbnails, $course_info['name'], ['class' => 'img-responsive']);
         } else {
-            $params['html_image'] = Display::return_icon(
-                'session.png',
-                $course_info['name'],
-                ['class' => 'img-responsive'],
+            $params['html_image'] = Display::getMdiIcon(
+                ObjectIcon::SESSION,
+                'ch-tool-icon img-responsive',
+                null,
                 ICON_SIZE_LARGE,
                 $course_info['name']
             );
@@ -6123,11 +6126,12 @@ class CourseManager
         $course_info['status'] = $course['status'];
 
         // New code displaying the user's status in respect to this course.
-        $status_icon = Display::return_icon(
-            'blackboard.png',
-            $course_info['title'],
-            [],
-            ICON_SIZE_LARGE
+        $status_icon = Display::getMdiIcon(
+            'account-key',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_LARGE,
+            $course_info['title']
         );
 
         $params = [];
@@ -6135,9 +6139,9 @@ class CourseManager
 
         if (api_is_platform_admin()) {
             if ($loadDirs) {
-                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
                 $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
-                    Display::return_icon('edit.png', get_lang('Edit'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>';
                 $params['right_actions'] .= Display::div(
                     '',
@@ -6155,7 +6159,7 @@ class CourseManager
             if (Course::CLOSED != $course_info['visibility']) {
                 if ($loadDirs) {
                     $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.
-                        Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
                     $params['right_actions'] .= Display::div(
                         '',
                         [

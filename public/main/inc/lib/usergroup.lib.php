@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class UserGroup.
@@ -331,24 +332,25 @@ class UserGroupModel extends Model
         $actions = '';
         if (api_is_platform_admin()) {
             $actions .= '<a href="../admin/index.php">'.
-                Display::return_icon(
-                    'back.png',
-                    get_lang('Back to').' '.get_lang('Administration'),
-                    '',
-                    ICON_SIZE_MEDIUM
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
                 ).
                 '</a>';
         }
 
         $actions .= '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon('new_class.png', get_lang('Add classes'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
             '</a>';
         $actions .= Display::url(
-            Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')),
             'usergroup_import.php'
         );
         $actions .= Display::url(
-            Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')),
             'usergroup_export.php'
         );
         $html .= Display::toolbarAction('toolbar', [$actions]);
@@ -367,11 +369,23 @@ class UserGroupModel extends Model
         $courseInfo = api_get_course_info();
         if (empty($courseInfo)) {
             echo '<a href="../admin/usergroups.php">'.
-                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32').
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
+                ).
                 '</a>';
         } else {
             echo Display::url(
-                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32'),
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
+                ),
                 api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq()
             );
         }
@@ -2547,7 +2561,7 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('I am an admin');
                 $links .= '<li class="'.('group_edit' == $show ? 'active' : '').'"><a href="group_edit.php?id='.$group_id.'">'.
-                            Display::return_icon('group_edit.png', get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
                 $links .= '<li class="'.('member_list' == $show ? 'active' : '').'"><a href="group_waiting_list.php?id='.$group_id.'">'.
                             Display::return_icon('waiting_list.png', get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.

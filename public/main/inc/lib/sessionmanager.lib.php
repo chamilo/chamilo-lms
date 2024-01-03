@@ -17,6 +17,9 @@ use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This is the session library for Chamilo
@@ -697,18 +700,8 @@ class SessionManager
                 return $sessions[0]['total_rows'];
             }
 
-            $activeIcon = Display::return_icon(
-                'accept.png',
-                get_lang('Active'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            $inactiveIcon = Display::return_icon(
-                'error.png',
-                get_lang('Inactive'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
+            $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Inactive'));
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
@@ -735,7 +728,7 @@ class SessionManager
                     // ofaj
                     $session['teachers'] = '';
                     if (!empty($teachers)) {
-                        $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
+                        $session['teachers'] = Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes($teachers));
                     }
                 }
                 $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
@@ -896,8 +889,8 @@ class SessionManager
             }
         }
 
-        $activeIcon = Display::return_icon('accept.png', get_lang('active'));
-        $inactiveIcon = Display::return_icon('error.png', get_lang('inactive'));
+        $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('active'));
+        $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('inactive'));
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
@@ -9122,19 +9115,9 @@ class SessionManager
 
         $result = Database::query($query);
 
-        $acceptIcon = Display::return_icon(
-            'accept.png',
-            get_lang('Active'),
-            [],
-            ICON_SIZE_SMALL
-        );
+        $acceptIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
 
-        $errorIcon = Display::return_icon(
-            'error.png',
-            get_lang('Inactive'),
-            [],
-            ICON_SIZE_SMALL
-        );
+        $errorIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Inactive'));
 
         $formatted_sessions = [];
         if (Database::num_rows($result)) {

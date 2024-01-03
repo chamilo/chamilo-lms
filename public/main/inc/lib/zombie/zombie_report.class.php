@@ -1,5 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  * Description of zombie_report.
  *
@@ -267,16 +271,14 @@ class ZombieReport implements Countable
     {
         $active = '1' == $active;
         if ($active) {
-            $image = 'accept';
+            $image = StateIcon::COMPLETE;
             $text = get_lang('Yes');
         } else {
-            $image = 'error';
+            $image = StateIcon::INCOMPLETE;
             $text = get_lang('No');
         }
 
-        $result = Display::return_icon($image.'.png', $text);
-
-        return $result;
+        return Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, $text);
     }
 
     public function format_status($status)

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Portfolio;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
@@ -58,7 +59,7 @@ $interbreadcrumb[] = [
 ];
 
 $actions[] = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     $baseUrl
 );
 $content = $form->returnForm();

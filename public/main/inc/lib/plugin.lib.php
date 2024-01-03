@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class AppPlugin.
@@ -708,11 +709,12 @@ class AppPlugin
                         ICON_SIZE_SMALL
                     );
                 } else {
-                    $icon = Display::return_icon(
-                        'plugins.png',
-                        Security::remove_XSS($pluginTitle),
-                        '',
-                        ICON_SIZE_SMALL
+                    $icon = Display::getMdiIcon(
+                        ToolIcon::PLUGIN,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        Security::remove_XSS($pluginTitle)
                     );
                 }
 

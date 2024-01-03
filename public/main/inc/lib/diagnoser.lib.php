@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 /**
  * Class Diagnoser
  * Class that is responsible for generating diagnostic information about the system.
@@ -843,8 +846,8 @@ class Diagnoser
         $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
         $systemPath = api_get_path(SYS_COURSE_PATH);
         $webPath = api_get_path(WEB_COURSE_PATH);
-        $courseHomeIcon = Display::return_icon('home.png', get_lang('CourseHome'));
-        $courseEditIcon = Display::return_icon('edit.png', get_lang('Edit'));
+        $courseHomeIcon = Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CourseHome'));
+        $courseEditIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
         $windows = api_is_windows_os();
         $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';
         while ($row = $res->fetch()) {

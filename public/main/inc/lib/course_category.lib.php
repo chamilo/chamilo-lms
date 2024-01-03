@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 class CourseCategory
 {
@@ -15,7 +17,7 @@ class CourseCategory
      *
      * @return array
      */
-    public static function getCategory(string $categoryCode = null)
+    public static function getCategory(string $categoryCode = null): array
     {
         if (!empty($categoryCode)) {
             $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -381,25 +383,10 @@ class CourseCategory
             $row++;
             $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categoryCode;
 
-            $editIcon = Display::return_icon(
-                'edit.png',
-                get_lang('Edit'),
-                null,
-                ICON_SIZE_SMALL
-            );
-            $exportIcon = Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '');
-            $deleteIcon = Display::return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                null,
-                ICON_SIZE_SMALL
-            );
-            $moveIcon = Display::return_icon(
-                'up.png',
-                get_lang('Up in same level'),
-                null,
-                ICON_SIZE_SMALL
-            );
+            $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportAsCSV'), '');
+            $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
+            $moveIcon = Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Up in same level'));
 
             $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
@@ -435,11 +422,12 @@ class CourseCategory
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId;
                 $title = Display::url(
-                    Display::return_icon(
-                        'folder_document.gif',
-                        get_lang('Open this category'),
+                    Display::getMdiIcon(
+                        ObjectIcon::FOLDER,
+                        'ch-tool-icon',
                         null,
-                        ICON_SIZE_SMALL
+                        ICON_SIZE_SMALL,
+                        get_lang('Open this category')
                     ).' '.$category->getName().' ('.$code.')',
                     $url
                 );

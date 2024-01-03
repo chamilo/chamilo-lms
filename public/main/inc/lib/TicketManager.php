@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class TicketManager.
@@ -958,26 +959,28 @@ class TicketManager
 
             switch ($row['source']) {
                 case self::SOURCE_PRESENTIAL:
-                    $img_source = 'icons/32/user.png';
+                    $img_source = ObjectIcon::USER;
                     break;
                 case self::SOURCE_EMAIL:
-                    $img_source = 'icons/32/mail.png';
+                    $img_source = ObjectIcon::EMAIL;
                     break;
                 case self::SOURCE_PHONE:
-                    $img_source = 'icons/32/event.png';
+                    $img_source = ObjectIcon::PHONE;
                     break;
                 default:
-                    $img_source = 'icons/32/ticket.png';
+                    $img_source = ObjectIcon::TICKET;
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon(
+            $icon = Display::getMdiIcon(
                 $img_source,
+                'ch-tool-icon',
+                'margin-right: 10px; float: left;',
+                ICON_SIZE_SMALL,
                 get_lang('Information'),
-                ['style' => 'margin-right: 10px; float: left;']
             );
 
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
@@ -1281,7 +1284,7 @@ class TicketManager
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
             $ticket['messages'] = [];
-            $attach_icon = Display::return_icon('attachment.gif', '');
+            $attach_icon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;

@@ -46,4 +46,10 @@ enum StateIcon: string
     case CHECKBOX_INTERMEDIATE2 = 'checkbox-intermediate-variant';
     // Checkbox intermediate 3
     case CHECKBOX_INTERMEDIATE3 = 'checkbox-blank-off-outline';
+    // List view (as opposed to detailed_view)
+    case LIST_VIEW = 'format-list-bulleted';
+    // Detailed view (as opposed to list_view)
+    case DETAILED_VIEW = 'format-list-text';
+    // Nested view
+    case NESTED_VIEW = 'filter-variant';
 }

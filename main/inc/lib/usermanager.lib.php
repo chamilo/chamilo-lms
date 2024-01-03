@@ -577,7 +577,9 @@ class UserManager
                     false,
                     false,
                     false
-                );
+		);
+		// the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+		$tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                 $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(

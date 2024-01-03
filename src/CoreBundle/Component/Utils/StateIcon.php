@@ -52,4 +52,8 @@ enum StateIcon: string
     case DETAILED_VIEW = 'format-list-text';
     // Nested view
     case NESTED_VIEW = 'filter-variant';
+    // Online (for a user)
+    case ONLINE = 'account-check';
+    // Offline (for a user)
+    case OFFLINE = 'account-off';
 }

@@ -187,7 +187,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
      */
     public function getQuestions(): ArrayCollection
     {
-        return $this->questions;
+        return $this->questions instanceof ArrayCollection ?
+            $this->questions :
+            new ArrayCollection($this->questions->toArray());
     }
 
     public function setTitle(string $title): self
@@ -618,7 +620,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
      */
     public function getQuestionsCategories(): ArrayCollection
     {
-        return $this->questionsCategories;
+        return $this->questionsCategories instanceof ArrayCollection ?
+            $this->questionsCategories :
+            new ArrayCollection($this->questionsCategories->toArray());
     }
 
     public function getResourceIdentifier(): int|Uuid

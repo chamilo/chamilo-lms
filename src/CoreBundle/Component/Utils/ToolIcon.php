@@ -78,4 +78,8 @@ enum ToolIcon: string
     case PROMOTION = 'school-outline';
     // Translation
     case TRANSLATION = 'translate';
+    // Help
+    case HELP = 'face-agent';
+    // Bug report
+    case BUG_REPORT = 'bug-check';
 }

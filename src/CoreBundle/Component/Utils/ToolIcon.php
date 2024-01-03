@@ -84,4 +84,6 @@ enum ToolIcon: string
     case BUG_REPORT = 'bug-check';
     // Messages
     case MESSAGE = 'inbox';
+    // Shared profile
+    case SHARED_PROFILE = 'account-box-outline';
 }

@@ -146,4 +146,8 @@ enum ActionIcon: string
     case SEARCH = 'magnify';
     // Comment
     case COMMENT = 'comment-arrow-right-outline';
+    // Sort alphabetically
+    case SORT_ALPHA = 'sort-alphabetical-ascending';
+    // Sort by date
+    case SORT_DATE = 'sort-calendar-descending';
 }

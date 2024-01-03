@@ -2524,3 +2524,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Block session about page access for all users
 // $_configuration['session_about_block_all_access'] = false;
+
+// Block course about page access for all users
+// $_configuration['course_about_block_all_access'] = false;

@@ -18,7 +18,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) {
+if ((api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) || api_get_configuration_value('course_about_block_all_access') == 'true') {
     api_not_allowed(true);
 }
 

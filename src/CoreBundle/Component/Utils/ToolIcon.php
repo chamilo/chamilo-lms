@@ -82,4 +82,6 @@ enum ToolIcon: string
     case HELP = 'face-agent';
     // Bug report
     case BUG_REPORT = 'bug-check';
+    // Messages
+    case MESSAGE = 'inbox';
 }

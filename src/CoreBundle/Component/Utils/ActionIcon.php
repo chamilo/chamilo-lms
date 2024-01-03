@@ -150,4 +150,8 @@ enum ActionIcon: string
     case SORT_ALPHA = 'sort-alphabetical-ascending';
     // Sort by date
     case SORT_DATE = 'sort-calendar-descending';
+    // View more (by opposition to view less)
+    case VIEW_MORE = 'unfold-more-horizontal';
+    // View less (by opposition to view more)
+    case VIEW_LESS = 'unfold-less-horizontal';
 }

@@ -63,9 +63,9 @@ import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useNotification } from "../../composables/notification"
-import { useI18n } from 'vue-i18n';
+import { useI18n } from "vue-i18n"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -90,7 +90,7 @@ const btnTicketsOnClick = () => {
 const btnInboxOnClick = async () => await router.push({ name: "MessageList" })
 
 const elUserSubmenu = ref(null)
-const userSubmenuItems = [
+const userSubmenuItems = computed(() => [
   {
     label: props.currentUser.fullName,
     items: [
@@ -116,7 +116,7 @@ const userSubmenuItems = [
       },
     ],
   },
-]
+])
 
 function toogleUserMenu(event) {
   elUserSubmenu.value.toggle(event)

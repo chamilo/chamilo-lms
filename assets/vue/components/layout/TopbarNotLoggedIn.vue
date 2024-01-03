@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import {computed, ref} from "vue"
 import Menubar from "primevue/menubar"
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useI18n } from "vue-i18n"
@@ -45,7 +45,7 @@ const languageItems = window.languages.map((language) => ({
 
 const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
 
-const menuItems = ref([
+const menuItems = computed(() => [
   {
     label: t("Home"),
     to: { name: "Index" },

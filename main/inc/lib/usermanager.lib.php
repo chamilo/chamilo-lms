@@ -1744,7 +1744,18 @@ class UserManager
             $tplContent->assign('status_type', $status);
             $creatorInfo = api_get_user_info($creator_id);
             $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+            $tplSubject = new Template(
+                null,
+                false,
+                false,
+                false,
+                false,
+                false
+            );
+            // the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+            $tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+            $layoutSubject = $tplSubject->get_template('mail/subject_user_edit.tpl');
+            $emailSubject = $tplSubject->fetch($layoutSubject);
 
             if (!is_null($password) && api_get_configuration_value('send_two_inscription_confirmation_mail')) {
                 // The user has a new password *and* we need to tell him so,
@@ -1767,7 +1778,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,
@@ -1795,7 +1806,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,
@@ -1823,7 +1834,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,

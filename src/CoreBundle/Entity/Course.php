@@ -151,7 +151,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection<int, CTool>
      */
-    #[Groups(['course:read'])]
     #[ORM\OneToMany(
         mappedBy: 'course',
         targetEntity: CTool::class,

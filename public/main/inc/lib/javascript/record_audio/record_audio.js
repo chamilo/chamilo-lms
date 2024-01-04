@@ -1,12 +1,12 @@
 /* For licensing terms, see /license.txt */
 window.RecordAudio = (function () {
 
-    function startTimer() {
-        $("#timer").show();
+    function startTimer(parentWrap) {
+        parentWrap.find("#timer").show();
         var timerData = {
-            hour: parseInt($("#hour").text()),
-            minute: parseInt($("#minute").text()),
-            second: parseInt($("#second").text())
+            hour: parseInt(parentWrap.find("#hour").text()),
+            minute: parseInt(parentWrap.find("#minute").text()),
+            second: parseInt(parentWrap.find("#second").text())
         };
 
         clearInterval(window.timerInterval);
@@ -24,17 +24,17 @@ window.RecordAudio = (function () {
                 timerData.hour++;
             }
 
-            $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
-            $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
-            $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+          parentWrap.find("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+          parentWrap.find("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+          parentWrap.find("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
         }, 1000);
     }
 
-    function stopTimer() {
-        $("#hour").text('00');
-        $("#minute").text('00');
-        $("#second").text('00');
-        $("#timer").hide();
+    function stopTimer(parentWrap) {
+      parentWrap.find("#hour").text('00');
+      parentWrap.find("#minute").text('00');
+      parentWrap.find("#second").text('00');
+      parentWrap.find("#timer").hide();
     }
 
     function pauseTimer() {
@@ -101,9 +101,10 @@ window.RecordAudio = (function () {
         }
 
         btnStart.on('click', function () {
+            var parentWrap = $(this).parent();
             function successCallback(stream) {
-                stopTimer();
-                startTimer();
+                stopTimer(parentWrap);
+                startTimer(parentWrap);
                 recordRTC = RecordRTC(stream, {
                     recorderType: RecordRTC.StereoAudioRecorder,
                     type: 'audio',
@@ -122,7 +123,7 @@ window.RecordAudio = (function () {
             }
 
             function errorCallback(error) {
-                stopTimer();
+                stopTimer(parentWrap);
                 alert(error);
             }
 
@@ -157,7 +158,8 @@ window.RecordAudio = (function () {
             btnPause.prop('disabled', false).removeClass('hidden');
             btnStop.prop('disabled', false).removeClass('hidden');
             recordRTC.resumeRecording();
-            startTimer();
+            var parentWrap = $(this).parent();
+            startTimer(parentWrap);
         });
 
         btnStop.on('click', function () {
@@ -165,7 +167,8 @@ window.RecordAudio = (function () {
                 return;
             }
 
-            stopTimer();
+            var parentWrap = $(this).parent();
+            stopTimer(parentWrap);
             recordRTC.stopRecording(function (audioURL) {
                 btnStart.prop('disabled', false).removeClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');

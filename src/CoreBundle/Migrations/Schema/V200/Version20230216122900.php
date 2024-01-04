@@ -1275,7 +1275,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $oldConfigPath = $rootPath.'/config/configuration.php';
+        $oldConfigPath = $rootPath.'/app/config/configuration.php';
         $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
         if (!$configFileLoaded) {
             include_once $oldConfigPath;

@@ -76,7 +76,7 @@ class ResourceNode implements Stringable
 
     public const PATH_SEPARATOR = '/';
 
-    #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read'])]
+    #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read', 'course:read'])]
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]

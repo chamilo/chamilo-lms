@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showContent"
+    v-if="showContent && course"
     id="course-home"
     class="hide-content"
   >
@@ -94,7 +94,7 @@
             :label="t('Edit introduction')"
             icon="edit"
             type="black"
-            @click="createInSession ? addIntro(course, intro) : updateIntro(course, intro)"
+            @click="createInSession ? addIntro(intro) : updateIntro(intro)"
           />
         </div>
 
@@ -137,7 +137,7 @@
               class="mt-4"
               icon="plus"
               type="primary"
-              @click="addIntro(course, intro)"
+              @click="addIntro(intro)"
             />
           </EmptyState>
         </div>
@@ -250,6 +250,7 @@ import StudentViewButton from "../../components/StudentViewButton.vue"
 import Sortable from "sortablejs"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
+import {storeToRefs} from "pinia";
 
 const route = useRoute()
 const store = useStore()
@@ -257,15 +258,14 @@ const router = useRouter()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 
-const course = ref(null)
-const session = ref(null)
+const { course, session } = storeToRefs(cidReqStore)
+
 const tools = ref({})
 const shortcuts = ref([])
 const intro = ref(null)
 const introTool = ref(null)
 const createInSession = ref(false)
 
-let courseId = route.params.id
 let sessionId = route.query.sid ?? 0
 
 const isCourseLoading = ref(true)
@@ -292,14 +292,8 @@ const courseItems = ref([])
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 
 axios
-  .get(ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`)
+  .get(ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`)
   .then(({ data }) => {
-    course.value = data.course
-    session.value = data.session
-
-    cidReqStore.course.resourceNode = data.course.resourceNode
-    cidReqStore.session = data.session
-
     tools.value = data.tools.map((element) => {
       if (routerTools.includes(element.ctool.name)) {
         element.to = element.url
@@ -333,9 +327,9 @@ const toggleCourseTMenu = (event) => {
 
 async function getIntro() {
   axios
-    .get("/course/" + courseId + "/getToolIntro", {
+    .get("/course/" + course.value.id + "/getToolIntro", {
       params: {
-        cid: courseId,
+        cid: course.value.id,
         sid: sessionId,
       },
     })
@@ -355,7 +349,7 @@ async function getIntro() {
     })
 }
 
-function addIntro(course, intro) {
+function addIntro(intro) {
   let params = {};
   if (intro && intro.c_tool.iid) {
     params = { courseTool: intro.c_tool.iid };
@@ -364,37 +358,37 @@ function addIntro(course, intro) {
     name: "ToolIntroCreate",
     params: params,
     query: {
-      cid: courseId,
+      cid: course.value.id,
       sid: sessionId,
-      parentResourceNodeId: course.resourceNode.id,
+      parentResourceNodeId: course.value.resourceNode.id,
       ctoolIntroId: intro.iid,
     },
   })
 }
 
-function updateIntro(course, intro) {
+function updateIntro(intro) {
   return router.push({
     name: "ToolIntroUpdate",
     params: { id: "/api/c_tool_intros/" + intro.iid },
     query: {
-      cid: courseId,
+      cid: course.value.id,
       sid: sessionId,
       ctoolintroIid: intro.iid,
       ctoolId: intro.c_tool.iid,
-      parentResourceNodeId: course.resourceNode.id,
+      parentResourceNodeId: course.value.resourceNode.id,
       id: "/api/c_tool_intros/" + intro.iid,
     },
   })
 }
 
 function goToSettingCourseTool(course, tool) {
-  return "/course/" + courseId + "/settings/" + tool.tool.name + "?sid=" + sessionId
+  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + sessionId
 }
 
 function goToShortCut(shortcut) {
   const url = new URLSearchParams("?")
 
-  url.append("cid", courseId)
+  url.append("cid", course.value.id)
   url.append("sid", sessionId)
 
   return shortcut.url + "?" + url
@@ -413,7 +407,7 @@ function changeVisibility(course, tool) {
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${sessionId}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -422,7 +416,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${courseId}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${sessionId}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })
@@ -464,7 +458,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   console.log(toolItem, newIndex)
 
   // Send the updated values to the server
-  const url = ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`
+  const url = ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`
   const data = {
     index: newIndex,
     toolItem: toolItem,
@@ -484,7 +478,7 @@ const isAllowedToEdit = ref(false)
 
 onBeforeMount(async () => {
   try {
-    const response = await axios.get(ENTRYPOINT + `../course/${courseId}/checkLegal.json`)
+    const response = await axios.get(ENTRYPOINT + `../course/${course.value.id}/checkLegal.json`)
 
     if (response.data.redirect) {
       window.location.href = response.data.url

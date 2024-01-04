@@ -160,7 +160,7 @@ class CourseController extends ToolBaseController
             $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
         }
 
-        $session = $request->getSession();
+        $sessionHandler = $request->getSession();
 
         $userId = 0;
 
@@ -171,7 +171,6 @@ class CourseController extends ToolBaseController
         }
 
         $courseCode = $course->getCode();
-        $courseId = $course->getId();
 
         if ($user && $user->hasRole('ROLE_INVITEE')) {
             $isInASession = $sessionId > 0;
@@ -187,14 +186,12 @@ class CourseController extends ToolBaseController
             }
         }
 
-        $courseSession = $this->getCourseSession();
-
-        $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
+        $isSpecialCourse = CourseManager::isSpecialCourse($course->getId());
 
         if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])
-            && CourseManager::subscribeUser($userId, $courseId, STUDENT)
+            && CourseManager::subscribeUser($userId, $course->getId(), STUDENT)
         ) {
-            $session->set('is_allowed_in_course', true);
+            $sessionHandler->set('is_allowed_in_course', true);
         }
 
         $logInfo = [
@@ -231,10 +228,10 @@ class CourseController extends ToolBaseController
         }
 
         // Deleting the objects
-        $session->remove('toolgroup');
-        $session->remove('_gid');
-        $session->remove('oLP');
-        $session->remove('lpobject');
+        $sessionHandler->remove('toolgroup');
+        $sessionHandler->remove('_gid');
+        $sessionHandler->remove('oLP');
+        $sessionHandler->remove('lpobject');
 
         api_remove_in_gradebook();
         Exercise::cleanSessionVariables();
@@ -245,12 +242,6 @@ class CourseController extends ToolBaseController
             $shortcuts = $shortcutQuery->getQuery()->getResult();
         }
         $responseData = [
-            'course' => [
-                'id' => $course->getId(),
-                'title' => $course->getTitle(),
-                'resourceNode' => $course->getResourceNode(),
-            ],
-            'session' => $courseSession,
             'shortcuts' => $shortcuts,
             'diagram' => '',
             'tools' => $tools,

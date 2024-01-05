@@ -97,7 +97,7 @@ enum ObjectIcon: string
     // Categories (of anything)
     case CATEGORY = 'file-tree-outline';
     // Resource (in the large sense)
-    case RESOURCE = 'package-variant-closed';
+    case RESOURCE = 'cube-scan';
     // Audio file
     case AUDIO = 'music-note';
     // Attachment

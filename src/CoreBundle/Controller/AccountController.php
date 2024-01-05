@@ -53,6 +53,8 @@ class AccountController extends BaseController
             $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_account_home');
 
+            $request->getSession()->set('_locale_user', $user->getLocale());
+
             return new RedirectResponse($url);
         }
 

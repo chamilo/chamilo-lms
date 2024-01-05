@@ -113,7 +113,7 @@ class Container
         self::$container = $container;
     }
 
-    public static function getParameter(string $parameter): UnitEnum|float|array|bool|int|string|null
+    public static function getParameter(string $parameter): null|array|bool|float|int|string|UnitEnum
     {
         if (self::$container->hasParameter($parameter)) {
             return self::$container->getParameter($parameter);

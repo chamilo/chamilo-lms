@@ -251,6 +251,7 @@ import Sortable from "sortablejs"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import {storeToRefs} from "pinia";
+import courseService from "../../services/courseService";
 
 const route = useRoute()
 const store = useStore()
@@ -260,7 +261,7 @@ const cidReqStore = useCidReqStore()
 
 const { course, session } = storeToRefs(cidReqStore)
 
-const tools = ref({})
+const tools = ref([])
 const shortcuts = ref([])
 const intro = ref(null)
 const introTool = ref(null)
@@ -291,9 +292,8 @@ const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 
-axios
-  .get(ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`)
-  .then(({ data }) => {
+courseService.loadTools(course.value.id, session.value?.id)
+  .then((data) => {
     tools.value = data.tools.map((element) => {
       if (routerTools.includes(element.ctool.name)) {
         element.to = element.url
@@ -458,20 +458,12 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   console.log(toolItem, newIndex)
 
   // Send the updated values to the server
-  const url = ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`
-  const data = {
-    index: newIndex,
-    toolItem: toolItem,
-    // Add any other necessary data that you need to send to the server
-  }
-
-  try {
-    console.log(url, data)
-    const response = await axios.post(url, data)
-    console.log(response.data) // Server response
-  } catch (error) {
-    console.log(error)
-  }
+  await courseService.updateToolOrder(
+    toolItem,
+    newIndex,
+    course.value.id,
+    session.value?.id
+  )
 }
 
 const isAllowedToEdit = ref(false)

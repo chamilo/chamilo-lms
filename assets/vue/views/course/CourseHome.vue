@@ -237,8 +237,6 @@ const shortcuts = ref([])
 
 const courseIntroEl = ref(null);
 
-let sessionId = route.query.sid ?? 0
-
 const isCourseLoading = ref(true)
 const showContent = ref(false)
 
@@ -286,14 +284,14 @@ const toggleCourseTMenu = (event) => {
 }
 
 function goToSettingCourseTool(course, tool) {
-  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + sessionId
+  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + session.value?.id
 }
 
 function goToShortCut(shortcut) {
   const url = new URLSearchParams("?")
 
   url.append("cid", course.value.id)
-  url.append("sid", sessionId)
+  url.append("sid", session.value?.id)
 
   return shortcut.url + "?" + url
 }
@@ -311,7 +309,7 @@ function changeVisibility(course, tool) {
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -320,7 +318,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })

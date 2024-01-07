@@ -58,6 +58,7 @@ use UserManager;
 class CourseController extends ToolBaseController
 {
     public function __construct(
+        private readonly EntityManagerInterface $em,
         private readonly SerializerInterface $serializer
     ) {}
 
@@ -537,25 +538,12 @@ class CourseController extends ToolBaseController
         ]);
     }
 
-    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    private function findIntroOfCourse(Course $course)
     {
-        $sessionId = (int) $request->get('sid');
+        $qb = $this->em->createQueryBuilder();
 
-        // $session = $this->getSession();
-        $responseData = [];
-        $ctoolRepo = $em->getRepository(CTool::class);
-        $sessionRepo = $em->getRepository(Session::class);
-        $createInSession = false;
-
-        $session = null;
-        if (!empty($sessionId)) {
-            $session = $sessionRepo->find($sessionId);
-        }
-
-        $qb = $em->createQueryBuilder();
         $query = $qb->select('ct')
-            ->from('Chamilo\CourseBundle\Entity\CTool', 'ct')
+            ->from(CTool::class, 'ct')
             ->where('ct.course = :c_id')
             ->andWhere('ct.name = :name')
             ->andWhere(
@@ -572,14 +560,34 @@ class CourseController extends ToolBaseController
             ->getQuery()
         ;
 
-        $ctool = $query->getOneOrNullResult();
+        return $query->getOneOrNullResult();
+    }
+
+    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
+    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
+    {
+        $sessionId = (int) $request->get('sid');
+
+        // $session = $this->getSession();
+        $responseData = [];
+        $ctoolRepo = $em->getRepository(CTool::class);
+        $sessionRepo = $em->getRepository(Session::class);
+        $createInSession = false;
+
+        $session = null;
+
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $ctool = $this->findIntroOfCourse($course);
 
         if ($session) {
             $ctoolSession = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
+
             if (!$ctoolSession) {
                 $createInSession = true;
             } else {
-                $createInSession = false;
                 $ctool = $ctoolSession;
             }
         }
@@ -590,12 +598,10 @@ class CourseController extends ToolBaseController
             /** @var CToolIntro $ctoolintro */
             $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
             if ($ctoolintro) {
-                $introText = $ctoolintro->getIntroText();
                 $responseData = [
                     'iid' => $ctoolintro->getIid(),
-                    'introText' => $introText,
+                    'introText' => $ctoolintro->getIntroText(),
                     'createInSession' => $createInSession,
-                    'cToolId' => $ctool->getIid(),
                 ];
             }
             $responseData['c_tool'] = [

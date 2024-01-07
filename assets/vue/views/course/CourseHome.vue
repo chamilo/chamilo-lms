@@ -88,15 +88,14 @@
           />
         </div>
 
-        <div class="grow-0">
-          <BaseButton
-            v-if="showUpdateIntroductionButton"
-            :label="t('Edit introduction')"
-            icon="edit"
-            type="black"
-            @click="createInSession ? addIntro(intro) : updateIntro(intro)"
-          />
-        </div>
+        <BaseButton
+          v-if="isCurrentTeacher && courseIntroEl?.introduction?.iid"
+          :label="t('Edit introduction')"
+          class="grow-0"
+          icon="edit"
+          type="black"
+          @click="courseIntroEl.goToCreateOrUpdate()"
+        />
 
         <div class="grow-0">
           <BaseButton
@@ -118,34 +117,9 @@
 
       <hr class="mt-1 mb-1" />
 
-      <div
+      <CourseIntroduction
         v-if="isAllowedToEdit"
-        class="mb-4"
-      >
-        <div
-          v-if="intro && !intro.introText"
-          class="flex flex-col gap-4"
-        >
-          <EmptyState
-            if="!intro.introText && introTool"
-            :detail="t('Add a course introduction to display to your students.')"
-            :summary="t('You don\'t have any course content yet.')"
-            icon="courses"
-          >
-            <BaseButton
-              :label="t('Course introduction')"
-              class="mt-4"
-              icon="plus"
-              type="primary"
-              @click="addIntro(intro)"
-            />
-          </EmptyState>
-        </div>
-      </div>
-      <div
-        v-if="intro && intro.introText"
-        class="mb-4"
-        v-html="intro.introText"
+        ref="courseIntroEl"
       />
 
       <div
@@ -234,14 +208,12 @@
 <script setup>
 import { computed, onBeforeMount, onMounted, provide, ref, watch } from "vue"
 import { useStore } from "vuex"
-import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import translateHtml from "../../../js/translatehtml.js"
-import EmptyState from "../../components/EmptyState"
 import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
@@ -252,10 +224,9 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import {storeToRefs} from "pinia";
 import courseService from "../../services/courseService";
+import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
 
-const route = useRoute()
 const store = useStore()
-const router = useRouter()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 
@@ -263,23 +234,14 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const tools = ref([])
 const shortcuts = ref([])
-const intro = ref(null)
-const introTool = ref(null)
-const createInSession = ref(false)
+
+const courseIntroEl = ref(null);
 
 let sessionId = route.query.sid ?? 0
 
 const isCourseLoading = ref(true)
 const showContent = ref(false)
 
-const showUpdateIntroductionButton = computed(() => {
-  if (course.value && isCurrentTeacher.value && intro.value && intro.value.introText) {
-
-    return true;
-  }
-
-  return false;
-});
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const isSorting = ref(false)
@@ -313,8 +275,6 @@ courseService.loadTools(course.value.id, session.value?.id)
       }))
     }
 
-    getIntro()
-
     isCourseLoading.value = false
   })
   .catch((error) => console.log(error))
@@ -323,62 +283,6 @@ const courseTMenu = ref(null)
 
 const toggleCourseTMenu = (event) => {
   courseTMenu.value.toggle(event)
-}
-
-async function getIntro() {
-  axios
-    .get("/course/" + course.value.id + "/getToolIntro", {
-      params: {
-        cid: course.value.id,
-        sid: sessionId,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        intro.value = response.data
-        if (response.data.introText) {
-          introTool.value = response.data.c_tool
-        }
-        if (response.data.createInSession) {
-          createInSession.value = response.data.createInSession
-        }
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
-
-function addIntro(intro) {
-  let params = {};
-  if (intro && intro.c_tool.iid) {
-    params = { courseTool: intro.c_tool.iid };
-  }
-  return router.push({
-    name: "ToolIntroCreate",
-    params: params,
-    query: {
-      cid: course.value.id,
-      sid: sessionId,
-      parentResourceNodeId: course.value.resourceNode.id,
-      ctoolIntroId: intro.iid,
-    },
-  })
-}
-
-function updateIntro(intro) {
-  return router.push({
-    name: "ToolIntroUpdate",
-    params: { id: "/api/c_tool_intros/" + intro.iid },
-    query: {
-      cid: course.value.id,
-      sid: sessionId,
-      ctoolintroIid: intro.iid,
-      ctoolId: intro.c_tool.iid,
-      parentResourceNodeId: course.value.resourceNode.id,
-      id: "/api/c_tool_intros/" + intro.iid,
-    },
-  })
 }
 
 function goToSettingCourseTool(course, tool) {

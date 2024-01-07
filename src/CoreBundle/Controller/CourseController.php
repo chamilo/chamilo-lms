@@ -619,7 +619,7 @@ class CourseController extends ToolBaseController
         $data = $request->getContent();
         $data = json_decode($data);
         $ctoolintroId = $data->iid;
-        $sessionId = $data->sid;
+        $sessionId = $data->sid ?? 0;
 
         $sessionRepo = $em->getRepository(Session::class);
         $session = null;

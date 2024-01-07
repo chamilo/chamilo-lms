@@ -2527,3 +2527,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Block course about page access for all users
 // $_configuration['course_about_block_all_access'] = false;
+
+// Add the user first connexion column to the page main/admin/user_list.php
+// $_configuration['admin_user_list_add_first_connexion_column'] = false;

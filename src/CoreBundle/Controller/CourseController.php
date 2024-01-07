@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -105,8 +106,9 @@ class CourseController extends ToolBaseController
                     ->getSetting('course.allow_public_course_with_no_terms_conditions')
                 ;
 
-                if (true === $allow
-                    && Course::OPEN_WORLD === $course->getVisibility()
+                if (true === $allow &&
+                    null !== $course->getVisibility() &&
+                    Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }
@@ -130,7 +132,8 @@ class CourseController extends ToolBaseController
         CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        SettingsManager $settingsManager
     ): Response {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
@@ -151,6 +154,7 @@ class CourseController extends ToolBaseController
 
         $course = $this->getCourse();
         $sessionId = $this->getSessionId();
+        $isInASession = $sessionId > 0;
 
         if (null === $course) {
             throw $this->createAccessDeniedException();
@@ -171,9 +175,9 @@ class CourseController extends ToolBaseController
         }
 
         $courseCode = $course->getCode();
+        $courseId = $course->getId();
 
         if ($user && $user->hasRole('ROLE_INVITEE')) {
-            $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
                 $courseCode,
@@ -188,8 +192,10 @@ class CourseController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($course->getId());
 
-        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])
-            && CourseManager::subscribeUser($userId, $course->getId(), STUDENT)
+        $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
+
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
+            CourseManager::subscribeUser($userId, $courseId, STUDENT)
         ) {
             $sessionHandler->set('is_allowed_in_course', true);
         }
@@ -199,7 +205,7 @@ class CourseController extends ToolBaseController
         ];
         Event::registerLog($logInfo);
 
-        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
+        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession(), null, null, false);
 
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
@@ -209,22 +215,56 @@ class CourseController extends ToolBaseController
 
         $result = $qb->getQuery()->getResult();
         $tools = [];
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $toolsToDisplay = [];
+        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $currentSessionId = (int) $sessionId;
+        $allowEditToolVisibilityInSession = ('true' === $settingsManager->getSetting('course.allow_edit_tool_visibility_in_session'));
 
         /** @var CTool $item */
         foreach ($result as $item) {
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
-            if (!$isCourseTeacher && 'admin' === $toolModel->getCategory()) {
+            if (!($isCourseTeacher || $isAdmin) && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
 
-            $tools[] = [
-                'ctool' => $item,
-                'tool' => $toolModel,
-                'url' => $this->generateToolUrl($toolModel),
-                'category' => $toolModel->getCategory(),
-            ];
+            $resourceNodeId = $item->getResourceNode()->getId();
+            $selectedLink = null;
+            $linkSessionId = null;
+            foreach ($item->getResourceNode()->getResourceLinks() as $link) {
+                $linkSessionId = $link->getSession() ? $link->getSession()->getId() : null;
+
+                if ($linkSessionId === $currentSessionId) {
+                    $selectedLink = $link;
+                    break;
+                } elseif ($linkSessionId === null && !$selectedLink) {
+                    $selectedLink = $link;
+                }
+            }
+
+            if ($isInASession &&  (null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility())) {
+                continue;
+            }
+
+            if ($selectedLink) {
+                if (!($isCourseTeacher || $isAdmin) && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()) {
+                    continue;
+                }
+                $item->getResourceNode()->getResourceLinks()->first()->setVisibility($selectedLink->getVisibility());
+                $toolsToDisplay[$resourceNodeId] = [
+                    'ctool' => $item,
+                    'tool' => $toolModel,
+                    'url' => $this->generateToolUrl($toolModel),
+                    'category' => $toolModel->getCategory(),
+                    'allowEditToolVisibilityInSession' => $allowEditToolVisibilityInSession,
+                    'isInASession' => $isInASession,
+                ];
+            }
+        }
+
+        foreach ($toolsToDisplay as $toolData) {
+            $tools[] = $toolData;
         }
 
         // Deleting the objects

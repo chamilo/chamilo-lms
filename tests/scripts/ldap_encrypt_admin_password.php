@@ -24,8 +24,8 @@ if (!empty($argv[1])) {
     exit();
 }
 
-if (!empty(api_get_configuration_value('ldap_encrypt_admin_password'))) {
-    echo "The encrypted password is : " . encrypt(api_get_configuration_value('ldap_encrypt_admin_password'), $password) .PHP_EOL;
+if (!empty(api_get_configuration_value('ldap_admin_password_salt'))) {
+    echo "The encrypted password is : " . encrypt(api_get_configuration_value('ldap_admin_password_salt'), $password) .PHP_EOL;
 } else {
     echo "There is no salt defined in app/config/configuration.php for variable 'ldap_admin_password_salt'".PHP_EOL.PHP_EOL;
 }

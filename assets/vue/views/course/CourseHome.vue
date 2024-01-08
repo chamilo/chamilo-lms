@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showContent && course"
+    v-if="course"
     id="course-home"
     class="hide-content"
   >
@@ -206,7 +206,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onMounted, provide, ref, watch } from "vue"
+import { computed, onMounted, provide, ref, watch } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
@@ -238,7 +238,6 @@ const shortcuts = ref([])
 const courseIntroEl = ref(null);
 
 const isCourseLoading = ref(true)
-const showContent = ref(false)
 
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
@@ -369,21 +368,6 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 }
 
 const isAllowedToEdit = ref(false)
-
-onBeforeMount(async () => {
-  try {
-    const response = await axios.get(ENTRYPOINT + `../course/${course.value.id}/checkLegal.json`)
-
-    if (response.data.redirect) {
-      window.location.href = response.data.url
-    } else {
-      showContent.value = true
-    }
-  } catch (error) {
-    console.error("Error checking terms and conditions:", error)
-    showContent.value = true
-  }
-})
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()

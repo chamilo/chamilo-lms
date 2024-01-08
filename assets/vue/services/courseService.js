@@ -49,6 +49,16 @@ const courseService = {
 
     return data
   },
+
+  /**
+   * @param {number} courseId
+   * @returns {Promise<Object>}
+   */
+  checkLegal: async (courseId) => {
+    const { data } = await axios.get(ENTRYPOINT + `../course/${courseId}/checkLegal.json`)
+
+    return data
+  },
 }
 
 export default courseService

@@ -82,6 +82,14 @@ enum ObjectIcon: string
     case USER = 'account';
     // Teacher
     case TEACHER = 'human-male-board';
+    // Admin
+    case ADMIN_USER = 'account-cog';
+    // Session admin
+    case SESSION_ADMIN_USER = 'account-star';
+    // Session coach/tutor
+    case SESSION_COACH_USER = 'account-music';
+    // Human Resources Manager / Parent
+    case HRM_USER = 'account-supervisor';
     // Survey
     case SURVEY = 'form-dropdown';
     // Doodle-type survey

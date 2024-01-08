@@ -90,6 +90,8 @@ enum ObjectIcon: string
     case SESSION_COACH_USER = 'account-music';
     // Human Resources Manager / Parent
     case HRM_USER = 'account-supervisor';
+    // Moderator (social, etc)
+    case MODERATOR_USER = 'account-voice';
     // Survey
     case SURVEY = 'form-dropdown';
     // Doodle-type survey

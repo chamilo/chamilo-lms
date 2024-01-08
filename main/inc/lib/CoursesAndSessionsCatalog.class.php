@@ -1780,6 +1780,7 @@ class CoursesAndSessionsCatalog
             $plugin = \BuyCoursesPlugin::create();
             $isThisSessionOnSale = $plugin->getBuyCoursePluginPrice($session);
 
+            $userIdHash = UserManager::generateUserHash($coachId);
             $sessionsBlock = [
                 'id' => $session->getId(),
                 'name' => $session->getName(),
@@ -1788,7 +1789,7 @@ class CoursesAndSessionsCatalog
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_id' => $coachId,
                 'coach_url' => $generalCoach
-                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
+                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash
                     : '',
                 'coach_name' => $coachName,
                 'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),

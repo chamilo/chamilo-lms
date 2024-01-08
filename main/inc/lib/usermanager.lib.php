@@ -8201,4 +8201,42 @@ SQL;
 
         return $url;
     }
+
+   /**
+    * return user hash based on user_id and loggedin user's salt
+    *
+    * @param int user_id id of the user for whom we need the hash
+    *
+    * @return string containing the hash
+    */ 
+    public static function generateUserHash(int $user_id): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return rawurlencode(api_encrypt_hash($user_id, $user->getSalt()));
+    }
+
+   /**
+    * return decrypted hash or false
+    *
+    * @param string hash    hash that is to be decrypted
+    *
+    * @return string
+    */ 
+    public static function decryptUserHash(string $hash): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return api_decrypt_hash(rawurldecode($hash), $user->getSalt());
+    }
 }

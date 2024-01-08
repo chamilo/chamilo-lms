@@ -38,6 +38,7 @@ import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
 
 import { useCidReqStore } from "../store/cidReq"
+import courseService from "../services/courseService";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -90,6 +91,15 @@ const router = createRouter({
       path: "/course/:id/home",
       name: "CourseHome",
       component: CourseHome,
+      beforeEnter: async (to) => {
+        const check = await courseService.checkLegal(to.params.id)
+
+        if (check.redirect) {
+          window.location.href = check.url
+
+          return false
+        }
+      },
     },
     {
       path: "/courses",

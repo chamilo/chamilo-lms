@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showContent && course"
+    v-if="course"
     id="course-home"
     class="hide-content"
   >
@@ -88,15 +88,14 @@
           />
         </div>
 
-        <div class="grow-0">
-          <BaseButton
-            v-if="showUpdateIntroductionButton"
-            :label="t('Edit introduction')"
-            icon="edit"
-            type="black"
-            @click="createInSession ? addIntro(intro) : updateIntro(intro)"
-          />
-        </div>
+        <BaseButton
+          v-if="isCurrentTeacher && courseIntroEl?.introduction?.iid"
+          :label="t('Edit introduction')"
+          class="grow-0"
+          icon="edit"
+          type="black"
+          @click="courseIntroEl.goToCreateOrUpdate()"
+        />
 
         <div class="grow-0">
           <BaseButton
@@ -118,34 +117,9 @@
 
       <hr class="mt-1 mb-1" />
 
-      <div
+      <CourseIntroduction
         v-if="isAllowedToEdit"
-        class="mb-4"
-      >
-        <div
-          v-if="intro && !intro.introText"
-          class="flex flex-col gap-4"
-        >
-          <EmptyState
-            if="!intro.introText && introTool"
-            :detail="t('Add a course introduction to display to your students.')"
-            :summary="t('You don\'t have any course content yet.')"
-            icon="courses"
-          >
-            <BaseButton
-              :label="t('Course introduction')"
-              class="mt-4"
-              icon="plus"
-              type="primary"
-              @click="addIntro(intro)"
-            />
-          </EmptyState>
-        </div>
-      </div>
-      <div
-        v-if="intro && intro.introText"
-        class="mb-4"
-        v-html="intro.introText"
+        ref="courseIntroEl"
       />
 
       <div
@@ -232,16 +206,14 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount, onMounted, provide, ref, watch } from "vue"
+import { computed, onMounted, provide, ref, watch } from "vue"
 import { useStore } from "vuex"
-import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import translateHtml from "../../../js/translatehtml.js"
-import EmptyState from "../../components/EmptyState"
 import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
@@ -251,34 +223,22 @@ import Sortable from "sortablejs"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import {storeToRefs} from "pinia";
+import courseService from "../../services/courseService";
+import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
 
-const route = useRoute()
 const store = useStore()
-const router = useRouter()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 
 const { course, session } = storeToRefs(cidReqStore)
 
-const tools = ref({})
+const tools = ref([])
 const shortcuts = ref([])
-const intro = ref(null)
-const introTool = ref(null)
-const createInSession = ref(false)
 
-let sessionId = route.query.sid ?? 0
+const courseIntroEl = ref(null);
 
 const isCourseLoading = ref(true)
-const showContent = ref(false)
 
-const showUpdateIntroductionButton = computed(() => {
-  if (course.value && isCurrentTeacher.value && intro.value && intro.value.introText) {
-
-    return true;
-  }
-
-  return false;
-});
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const isSorting = ref(false)
@@ -291,9 +251,8 @@ const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 
-axios
-  .get(ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`)
-  .then(({ data }) => {
+courseService.loadTools(course.value.id, session.value?.id)
+  .then((data) => {
     tools.value = data.tools.map((element) => {
       if (routerTools.includes(element.ctool.name)) {
         element.to = element.url
@@ -313,8 +272,6 @@ axios
       }))
     }
 
-    getIntro()
-
     isCourseLoading.value = false
   })
   .catch((error) => console.log(error))
@@ -325,71 +282,15 @@ const toggleCourseTMenu = (event) => {
   courseTMenu.value.toggle(event)
 }
 
-async function getIntro() {
-  axios
-    .get("/course/" + course.value.id + "/getToolIntro", {
-      params: {
-        cid: course.value.id,
-        sid: sessionId,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        intro.value = response.data
-        if (response.data.introText) {
-          introTool.value = response.data.c_tool
-        }
-        if (response.data.createInSession) {
-          createInSession.value = response.data.createInSession
-        }
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
-
-function addIntro(intro) {
-  let params = {};
-  if (intro && intro.c_tool.iid) {
-    params = { courseTool: intro.c_tool.iid };
-  }
-  return router.push({
-    name: "ToolIntroCreate",
-    params: params,
-    query: {
-      cid: course.value.id,
-      sid: sessionId,
-      parentResourceNodeId: course.value.resourceNode.id,
-      ctoolIntroId: intro.iid,
-    },
-  })
-}
-
-function updateIntro(intro) {
-  return router.push({
-    name: "ToolIntroUpdate",
-    params: { id: "/api/c_tool_intros/" + intro.iid },
-    query: {
-      cid: course.value.id,
-      sid: sessionId,
-      ctoolintroIid: intro.iid,
-      ctoolId: intro.c_tool.iid,
-      parentResourceNodeId: course.value.resourceNode.id,
-      id: "/api/c_tool_intros/" + intro.iid,
-    },
-  })
-}
-
 function goToSettingCourseTool(course, tool) {
-  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + sessionId
+  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + session.value?.id
 }
 
 function goToShortCut(shortcut) {
   const url = new URLSearchParams("?")
 
   url.append("cid", course.value.id)
-  url.append("sid", sessionId)
+  url.append("sid", session.value?.id)
 
   return shortcut.url + "?" + url
 }
@@ -407,7 +308,7 @@ function changeVisibility(course, tool) {
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -416,7 +317,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })
@@ -458,38 +359,15 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   console.log(toolItem, newIndex)
 
   // Send the updated values to the server
-  const url = ENTRYPOINT + `../course/${course.value.id}/home.json?sid=${sessionId}`
-  const data = {
-    index: newIndex,
-    toolItem: toolItem,
-    // Add any other necessary data that you need to send to the server
-  }
-
-  try {
-    console.log(url, data)
-    const response = await axios.post(url, data)
-    console.log(response.data) // Server response
-  } catch (error) {
-    console.log(error)
-  }
+  await courseService.updateToolOrder(
+    toolItem,
+    newIndex,
+    course.value.id,
+    session.value?.id
+  )
 }
 
 const isAllowedToEdit = ref(false)
-
-onBeforeMount(async () => {
-  try {
-    const response = await axios.get(ENTRYPOINT + `../course/${course.value.id}/checkLegal.json`)
-
-    if (response.data.redirect) {
-      window.location.href = response.data.url
-    } else {
-      showContent.value = true
-    }
-  } catch (error) {
-    console.error("Error checking terms and conditions:", error)
-    showContent.value = true
-  }
-})
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()

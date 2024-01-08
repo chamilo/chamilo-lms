@@ -348,7 +348,7 @@ if (!empty($return)) {
 }
 
 $actions = '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), [], ICON_SIZE_MEDIUM).'</a>';
 echo Display::toolbarAction('session', [$actions]);
 $form->display();
 

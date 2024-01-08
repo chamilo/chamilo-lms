@@ -136,4 +136,8 @@ enum ObjectIcon: string
     case EMAIL = 'email';
     // Phone (as a source of info)
     case PHONE = 'cellphone';
+    // Invitations
+    case INVITATION = 'email-open-heart-outline';
+    // Pending invitation
+    case PENDING_INVITATION = 'email-heart-outline';
 }

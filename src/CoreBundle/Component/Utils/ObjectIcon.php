@@ -140,4 +140,6 @@ enum ObjectIcon: string
     case INVITATION = 'email-open-heart-outline';
     // Pending invitation
     case PENDING_INVITATION = 'email-heart-outline';
+    // Project (from tickets tool)
+    case PROJECT = 'package';
 }

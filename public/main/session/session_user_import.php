@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -65,7 +66,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo '<a href="resume_session.php?id_session='.$session_id.'">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
     '</a>';
 echo '</div>';
 

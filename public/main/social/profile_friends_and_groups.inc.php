@@ -9,6 +9,7 @@
  */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -78,16 +79,20 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $icon = '';
                 $name = cut($result['name'], 20, true);
                 if (GROUP_USER_PERMISSION_ADMIN == $result['relation_type']) {
-                    $icon = Display::return_icon(
-                        'social_group_admin.png',
-                        get_lang('Admin'),
-                        ['style' => 'vertical-align:middle;width:16px;height:16px;']
+                    $icon = Display::getMdiIcon(
+                        ObjectIcon::ADMIN_USER,
+                        'ch-tool-icon',
+                        'vertical-align:middle;',
+                        ICON_SIZE_TINY,
+                        get_lang('Admin')
                     );
                 } elseif (GROUP_USER_PERMISSION_MODERATOR == $result['relation_type']) {
-                    $icon = Display::return_icon(
-                        'social_group_moderator.png',
-                        get_lang('Moderator'),
-                        ['style' => 'vertical-align:middle;width:16px;height:16px;']
+                    $icon = Display::getMdiIcon(
+                        ObjectIcon::MODERATOR_USER,
+                        'ch-tool-icon',
+                        'vertical-align:middle;',
+                        ICON_SIZE_TINY,
+                        get_lang('Moderator')
                     );
                 }
                 $count_users_group = count(

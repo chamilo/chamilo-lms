@@ -5,6 +5,9 @@
 /**
  * List sessions in an efficient and usable way.
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -118,15 +121,15 @@ $hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_l
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.
-    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
     '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
-    Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('SubscribeUsersToSession')).'</a>'.
     '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
-    Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('SubscribeCoursesToSession')).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
-    Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
-    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
     '\';
 }';
 
@@ -313,12 +316,12 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 <?php
 
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-    Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddSession')).'</a>';
 if (api_is_platform_admin()) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::CREATE_CATEGORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddSessionsInCategories')).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ObjectIcon::CATEGORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ListSessionCategory')).'</a>';
 }
 
 echo $actions;

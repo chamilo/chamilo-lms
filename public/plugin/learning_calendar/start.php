@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $allow = api_is_platform_admin() || api_is_teacher();
@@ -149,22 +151,12 @@ $template = new Template();
 
 if (in_array($action, ['add', 'edit'])) {
     $actionLeft = Display::url(
-        Display::return_icon(
-            'back.png',
-            get_lang('Back'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
         api_get_self().'?'.api_get_cidreq()
     );
 } else {
     $actionLeft = Display::url(
-        Display::return_icon(
-            'add.png',
-            get_lang('Add'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
         api_get_self().'?'.api_get_cidreq().'&action=add'
     );
 

@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UserManager;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class CourseController.
@@ -428,7 +429,7 @@ class CourseController extends ToolBaseController
 
             if (!empty($categories)) {
                 $actions .= Display::url(
-                    Display::return_icon('gradebook.png', get_lang('Add to gradebook'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ToolIcon::GRADEBOOK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add to gradebook')),
                     $this->generateUrl(
                         'chamilo_lti_grade',
                         [

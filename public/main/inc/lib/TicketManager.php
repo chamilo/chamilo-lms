@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class TicketManager.
@@ -2288,17 +2289,17 @@ class TicketManager
     public static function getSettingsMenuItems($exclude = null)
     {
         $project = [
-            'icon' => 'project.png',
+            'icon' => ObjectIcon::PROJECT,
             'url' => 'projects.php',
             'content' => get_lang('Projects'),
         ];
         $status = [
-            'icon' => 'check-circle.png',
+            'icon' => StateIcon::COMPLETE,
             'url' => 'status.php',
             'content' => get_lang('Status'),
         ];
         $priority = [
-            'icon' => 'tickets_urgent.png',
+            'icon' => StateIcon::EXPIRED,
             'url' => 'priorities.php',
             'content' => get_lang('Priority'),
         ];

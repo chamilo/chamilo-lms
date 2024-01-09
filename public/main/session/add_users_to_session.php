@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 // resetting the course id
 $cidReset = true;
 
@@ -75,17 +77,17 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 
 $link_add_group = Display::url(
-    Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes'),
+    Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enrolment by classes')).get_lang('Enrolment by classes'),
     api_get_path(WEB_CODE_PATH).'admin/usergroups.php'
 );
 
 $newLinks = Display::url(
-    Display::return_icon('teacher.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+    Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
     get_lang('Enroll trainers from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId
 );
 $newLinks .= Display::url(
-    Display::return_icon('user.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
     get_lang('Enroll students from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId
 );

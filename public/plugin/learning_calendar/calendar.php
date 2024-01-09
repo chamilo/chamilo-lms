@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -28,12 +30,7 @@ $formToString = '';
 
 $template = new Template();
 $actionLeft = Display::url(
-    Display::return_icon(
-        'back.png',
-        get_lang('Add'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
     api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
 );
 

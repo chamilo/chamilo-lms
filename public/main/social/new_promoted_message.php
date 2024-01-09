@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -224,7 +226,7 @@ $social_right_content .= '<div class="row">';
 $social_right_content .= '<div class="col-md-12">';
 $social_right_content .= '<div class="actions">';
 $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-    Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
 $social_right_content .= '</div>';
 $social_right_content .= '</div>';
 $social_right_content .= '<div class="col-md-12">';

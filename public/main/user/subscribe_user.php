@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This script allows teachers to subscribe existing users
@@ -768,22 +769,24 @@ function active_filter($active, $url_params, $row)
     $_user = api_get_user_info();
     if ('1' == $active) {
         $action = 'Accountactive';
-        $image = 'accept';
+        $image = StateIcon::COMPLETE;
     }
 
     if ('0' == $active) {
         $action = 'AccountInactive';
-        $image = 'error';
+        $image = StateIcon::INCOMPLETE;
     }
     $result = '';
     if ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the accounts
         // including your own => everybody is locked out and nobody can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang(ucfirst($action)),
-            [],
-            ICON_SIZE_TINY
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
+            get_lang(ucfirst($action))
+
         );
     }
 

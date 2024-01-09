@@ -2,6 +2,9 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 require_once __DIR__.'/config.php';
 
 // Course legal
@@ -58,12 +61,12 @@ if (!empty($userList)) {
         $mailDate = !empty($user['mail_agreement_date']) ? api_get_local_time($user['mail_agreement_date']) : '-';
         $url = $pluginPath.'user_list.php?action=resend&user_id='.$user['user_id'].'&'.api_get_cidreq();
         $link = Display::url(
-            Display::return_icon('inbox.png', $legal->get_lang('ReSendMailAgreementLink')),
+            Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, $legal->get_lang('ReSendMailAgreementLink')),
             $url
         );
 
         $deleteLink = Display::url(
-            Display::return_icon('delete.png', $legal->get_lang('Delete')),
+            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, $legal->get_lang('Delete')),
             $pluginPath.'user_list.php?action=delete&user_id='.$user['user_id'].'&'.api_get_cidreq()
         );
 

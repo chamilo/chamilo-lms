@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -151,7 +153,7 @@ function get_users($from, $number_of_items, $column, $direction)
 
         $row[] = $status;
         /*$detailsLink = Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$studentData['username']),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details').' '.$studentData['username']),
             $urlDetails,
             ['id' => 'details_'.$studentData['username']]
         );

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -147,7 +148,7 @@ if ($is_allowed_to_edit) {
         $form->addLabel(
             get_lang('Download'),
             '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                Display::return_icon('save.png', get_lang('Save'), [], ICON_SIZE_MEDIUM).'
+                Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Save')).'
             </a>'
         );
     }

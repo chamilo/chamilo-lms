@@ -23,6 +23,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class ZoomPlugin. Integrates Zoom meetings in courses.
@@ -134,10 +136,7 @@ class ZoomPlugin extends Plugin
         foreach ($elements as $title => $link) {
             $items[] = [
                 'class' => 'video-conference',
-                'icon' => Display::return_icon(
-                    'bbb.png',
-                    get_lang('VideoConference')
-                ),
+                'icon' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('VideoConference')),
                 'link' => $link,
                 'title' => $title,
             ];
@@ -1110,20 +1109,20 @@ class ZoomPlugin extends Plugin
         if (empty($courseId)) {
             $actionsLeft .=
                 Display::url(
-                    Display::return_icon('bbb.png', $this->get_lang('Meetings'), null, ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $this->get_lang('Meetings')),
                     api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php'
                 );
         } else {
             $actionsLeft .=
                 Display::url(
-                    Display::return_icon('bbb.png', $this->get_lang('Meetings'), null, ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $this->get_lang('Meetings')),
                     api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq()
                 );
         }
 
         if (!empty($returnUrl)) {
             $back = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                 $returnUrl
             );
         }
@@ -1131,7 +1130,7 @@ class ZoomPlugin extends Plugin
         if (api_is_platform_admin()) {
             $actionsLeft .=
                 Display::url(
-                    Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Settings')),
                     api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
                 ).$back;
         }

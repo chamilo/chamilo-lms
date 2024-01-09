@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $useDefault = false;
 $isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
 
@@ -231,12 +234,12 @@ if (empty($infoCertificate)) {
 // Display the header
 Display::display_header($nameTools);
 $actionsLeft = Display::url(
-    Display::return_icon('certificate.png', get_lang('Certificate'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Certificate')),
     'print_certificate.php'.$urlParams
 );
 if (!empty($courseId) && !$useDefault) {
     $actionsLeft .= Display::url(
-        Display::return_icon('delete.png', $plugin->get_lang('DeleteCertificate'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $plugin->get_lang('DeleteCertificate')),
         'delete_certificate.php'.$urlParams,
         ['id' => 'delete_certificate']
     );

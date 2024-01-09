@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -105,7 +107,7 @@ switch ($action) {
         } else {
             $content = '<div class="actions">';
             $content .= Display::url(
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                 api_get_self().'?session_id='.$sessionId
             );
             $content .= '</div>';
@@ -197,8 +199,8 @@ $columnModel = [
 ];
 
 $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?action=edit&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?action=edit&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
     '\';
 }';
 

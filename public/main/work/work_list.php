@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -64,7 +65,7 @@ $interbreadcrumb[] = [
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
 
 $actionsRight = '';
 $onlyOnePublication = ('true' === api_get_setting('work.allow_only_one_student_publication_per_user'));

@@ -29,6 +29,7 @@ use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class learnpath
@@ -6602,7 +6603,7 @@ class learnpath
 
         <ul class="mt-2 bg-white list-group lp_resource">
             <li class="list-group-item lp_resource_element disable_drag ">
-                '.Display::return_icon('linksnew.gif').'
+                '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
                 title="'.get_lang('Add a link').'">'.

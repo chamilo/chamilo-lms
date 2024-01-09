@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class Diagnoser
@@ -928,21 +929,21 @@ class Diagnoser
     ) {
         switch ($status) {
             case self::STATUS_OK:
-                $img = 'bullet_green.png';
+                $img = StateIcon::COMPLETE;
                 break;
             case self::STATUS_WARNING:
-                $img = 'bullet_orange.png';
+                $img = StateIcon::WARNING;
                 break;
             case self::STATUS_ERROR:
-                $img = 'bullet_red.png';
+                $img = StateIcon::ERROR;
                 break;
             case self::STATUS_INFORMATION:
             default:
-                $img = 'bullet_blue.png';
+                $img = ActionIcon::INFORMATION;
                 break;
         }
 
-        $image = Display::return_icon($img, $status);
+        $image = Display::getMdiIcon($img, 'ch-tool-icon', null, ICON_SIZE_SMALL, $title);
         $url = $this->get_link($title, $url);
 
         $formatted_current_value = $current_value;

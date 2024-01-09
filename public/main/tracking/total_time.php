@@ -235,9 +235,9 @@ if (api_is_platform_admin(true) ||
 
     if (!empty($sessionList)) {
         $html .= Display::page_subheader2(get_lang('Session list'));
-        $icon = Display::return_icon(
-            'session.png',
-            null,
+        $icon = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
             ICON_SIZE_TINY
         );

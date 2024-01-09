@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -348,7 +349,7 @@ if (!empty($return)) {
 }
 
 $actions = '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), [], ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
 echo Display::toolbarAction('session', [$actions]);
 $form->display();
 

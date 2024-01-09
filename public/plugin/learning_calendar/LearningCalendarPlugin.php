@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Class LearningCalendarPlugin.
  */
@@ -222,17 +224,17 @@ class LearningCalendarPlugin extends Plugin
                 api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?id='.$id
             );
             $actions = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                 $link.'?action=edit&id='.$id
             );
 
             $actions .= Display::url(
-                Display::return_icon('copy.png', get_lang('Copy')),
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')),
                 $link.'?action=copy&id='.$id
             );
 
             $actions .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $link.'?action=delete&id='.$id
             );
             $row['actions'] = $actions;

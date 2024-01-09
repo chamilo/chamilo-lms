@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 class ExerciseShowFunctions
 {
@@ -376,12 +377,33 @@ class ExerciseShowFunctions
                 break;
         }
 
-        $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
-        $icon .= $studentChoice ? '_on' : '_off';
-        $icon .= '.png';
-        $iconAnswer = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
-        $iconAnswer .= $answerCorrect ? '_on' : '_off';
-        $iconAnswer .= '.png';
+        if (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION])) {
+            if ($studentChoice) {
+                $icon = StateIcon::RADIOBOX_MARKED;
+            } else {
+                $icon = StateIcon::RADIOBOX_BLANK;
+            }
+        } else {
+            if ($studentChoice) {
+                $icon = StateIcon::CHECKBOX_MARKED;
+            } else {
+                $icon = StateIcon::CHECKBOX_BLANK;
+            }
+        }
+        if (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION])) {
+            if ($answerCorrect) {
+                $iconAnswer = StateIcon::RADIOBOX_MARKED;
+            } else {
+                $iconAnswer = StateIcon::RADIOBOX_BLANK;
+            }
+        } else {
+            if ($answerCorrect) {
+                $iconAnswer = StateIcon::CHECKBOX_MARKED;
+            } else {
+                $iconAnswer = StateIcon::CHECKBOX_BLANK;
+            }
+
+        }
 
         $studentChoiceClass = '';
         if (in_array(
@@ -399,22 +421,22 @@ class ExerciseShowFunctions
 
         echo '<tr class="'.$studentChoiceClass.'">';
 
-        echo '<td width="5%">';
-        echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
+        echo '<td style="width:5%">';
+        echo Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_TINY);
         echo '</td>';
         if ($exercise->showExpectedChoiceColumn()) {
             if (false === $hide_expected_answer) {
-                echo '<td width="5%">';
-                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
+                echo '<td style="width:5%">';
+                echo Display::getMdiIcon($iconAnswer, 'ch-tool-icon', null, ICON_SIZE_TINY);
                 echo '</td>';
             } else {
-                echo '<td width="5%">';
+                echo '<td style="width:5%">';
                 echo '-';
                 echo '</td>';
             }
         }
 
-        echo '<td width="40%">';
+        echo '<td style="width:40%">';
         echo $answer;
         echo '</td>';
 
@@ -438,7 +460,7 @@ class ExerciseShowFunctions
 
         if (false === $exercise->hideComment) {
             if ($showComment) {
-                echo '<td width="20%">';
+                echo '<td style="width:20%">';
                 $color = 'black';
                 if ($answerCorrect) {
                     $color = 'green';
@@ -463,14 +485,17 @@ class ExerciseShowFunctions
      * Display the answers to a multiple choice question.
      *
      * @param Exercise $exercise
-     * @param int Answer type
-     * @param int Student choice
-     * @param string  Textual answer
-     * @param string  Comment on answer
-     * @param string  Correct answer comment
-     * @param int Exercise ID
-     * @param int Question ID
-     * @param bool Whether to show the answer comment or not
+     * @param int $feedbackType Feedback type
+     * @param int $answerType Answer type
+     * @param int $studentChoice Student choice
+     * @param string  $answer Textual answer
+     * @param string  $answerComment Comment on answer
+     * @param string  $answerCorrect Correct answer comment
+     * @param int $id Exercise ID
+     * @param int $questionId Question ID
+     * @param bool $ans Whether to show the answer comment or not
+     * @param int $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
      */
     public static function display_multiple_answer_true_false(
         $exercise,

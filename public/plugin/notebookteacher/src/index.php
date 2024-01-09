@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $course_plugin = 'notebookteacher';
 require_once __DIR__.'/../config.php';
@@ -100,7 +101,7 @@ switch ($action) {
 
             echo '<div class="actions">';
             echo '<a href="index.php">'.
-                Display::return_icon('back.png', get_lang('Back to the notes list'), '', ICON_SIZE_MEDIUM).
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to the notes list')).
                 '</a>';
             echo '</div>';
             $token = Security::get_token();
@@ -160,7 +161,7 @@ switch ($action) {
             Display::display_introduction_section($noteBookTeacher);
             echo '<div class="actions">';
             echo '<a href="index.php">'.
-                Display::return_icon('back.png', get_lang('Back to the notes list'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to the notes list')).'</a>';
             echo '</div>';
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');

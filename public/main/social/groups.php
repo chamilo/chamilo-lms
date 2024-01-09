@@ -5,6 +5,8 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -64,16 +66,20 @@ if (is_array($results) && count($results) > 0) {
         $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
 
         if (GROUP_USER_PERMISSION_ADMIN == $result['relation_type']) {
-            $name .= ' '.Display::return_icon(
-                'social_group_admin.png',
-                get_lang('Admin'),
-                ['style' => 'vertical-align:middle']
+            $name .= ' '.Display::getMdiIcon(
+                ObjectIcon::ADMIN_USER,
+                'ch-tool-icon',
+                'vertical-align:middle;',
+                ICON_SIZE_SMALL,
+                get_lang('Admin')
             );
         } elseif (GROUP_USER_PERMISSION_MODERATOR == $result['relation_type']) {
-            $name .= ' '.Display::return_icon(
-                'social_group_moderator.png',
-                get_lang('Moderator'),
-                ['style' => 'vertical-align:middle']
+            $name .= ' '.Display::getMdiIcon(
+                ObjectIcon::MODERATOR_USER,
+                'ch-tool-icon',
+                'vertical-align:middle;',
+                ICON_SIZE_SMALL,
+                get_lang('Moderator')
             );
         }
         $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';

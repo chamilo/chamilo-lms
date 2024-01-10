@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations;
 
 use Doctrine\Migrations\AbstractMigration;
-use Doctrine\Migrations\Version\MigrationFactory;
+use Doctrine\Migrations\Version\MigrationFactory as DoctrineMigrationFactory;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class MigrationFactory implements MigrationFactory
+class MigrationFactory implements DoctrineMigrationFactory
 {
-    private \Doctrine\Migrations\Version\MigrationFactory $migrationFactory;
+    private DoctrineMigrationFactory $migrationFactory;
     private ContainerInterface $container;
 
     /**
      * @psalm-suppress ContainerDependency
      */
-    public function __construct(self $migrationFactory, ContainerInterface $container)
+    public function __construct(DoctrineMigrationFactory $migrationFactory, ContainerInterface $container)
     {
         $this->migrationFactory = $migrationFactory;
         $this->container = $container;

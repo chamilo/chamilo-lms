@@ -49,7 +49,7 @@ class IndexControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('lang="en"', $client->getResponse()->getContent());
+        $this->assertStringContainsString('lang="en_US"', $client->getResponse()->getContent());
     }
 
     public function testLoginChangeLanguage(): void

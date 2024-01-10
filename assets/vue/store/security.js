@@ -50,17 +50,6 @@ export default {
 
             return getters.hasRole('ROLE_CURRENT_COURSE_TEACHER');
         },
-        isCurrentCourseSessionTeacher(state, getters) {
-          if (!getters.isAuthenticated) {
-            return false;
-          }
-
-          if (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN')) {
-            return true
-          }
-
-          return getters.hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-        },
         isBoss(state, getters) {
             return getters.hasRole('ROLE_STUDENT_BOSS');
         },

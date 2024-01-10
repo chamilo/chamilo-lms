@@ -121,7 +121,8 @@ switch ($action) {
 
         $courseId = (int) $request->get('course_id');
         $sessionId = (int) $request->get('session_id');
-        $userId = (int) $request->get('user_id');
+        $hash = (string) $request->get('hash');
+        $userId = (int) UserManager::decryptUserHash($hash);
 
         $user_info = api_get_user_info($userId);
 

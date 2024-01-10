@@ -60,12 +60,14 @@ if (isset($_REQUEST['load_ajax'])) {
                         echo 'User added to the session';
                     }
                     // Registering user to the new session
-                    SessionManager::subscribeUsersToSession(
-                        $new_session_id,
-                        [$user_id],
-                        false,
-                        false
-                    );
+                    if ($update_database) {
+                        SessionManager::subscribeUsersToSession(
+                            $new_session_id,
+                            [$user_id],
+                            false,
+                            false
+                        );
+                    }
                 }
 
                 $course_info = api_get_course_info($origin_course_code);
@@ -247,8 +249,8 @@ if (!empty($user_list)) {
             echo '<tr>';
             foreach ($course_list as $course) {
                 echo '<td>';
-                if (isset($course['id_session']) && !empty($course['id_session'])) {
-                    echo '<b>'.get_lang('SessionName').'</b> '.$my_session_list[$course['id_session']].'<br />';
+                if (isset($course['session_id']) && !empty($course['session_id'])) {
+                    echo '<b>'.get_lang('SessionName').'</b> '.$my_session_list[$course['session_id']].'<br />';
                 }
                 echo $course['name'];
                 echo ' ('.$course['code'].') ';
@@ -262,10 +264,10 @@ if (!empty($user_list)) {
 
             foreach ($course_list as $course) {
                 $course_code = $course['code'];
-                if (empty($course['id_session'])) {
+                if (empty($course['session_id'])) {
                     $session_id = 0;
                 } else {
-                    $session_id = $course['id_session'];
+                    $session_id = $course['session_id'];
                 }
                 echo '<td>';
                 echo get_lang('MoveTo');

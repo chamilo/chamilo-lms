@@ -2033,8 +2033,9 @@ class IndexManager
                                 $params['category_id'] = $session_box['category_id'];
                                 $params['title'] = $session_box['title'];
                                 $params['id_coach'] = $coachId;
+                                $userIdHash = UserManager::generateUserHash($coachId);
                                 $params['coach_url'] = api_get_path(WEB_AJAX_PATH).
-                                    'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
+                                    'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash;
                                 $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
                                 $params['coach_avatar'] = UserManager::getUserPicture(
                                     $coachId,

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
@@ -179,6 +180,11 @@ class ToolChain
                 continue;
             }
 
+            $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+            if (in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
+                $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
+            }
+
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             if ($toolEntity) {
@@ -191,7 +197,7 @@ class ToolChain
                     ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
-                    ->addCourseLink($course)
+                    ->addCourseLink($course, null, null, $linkVisibility)
                 ;
                 $course->addTool($courseTool);
             }

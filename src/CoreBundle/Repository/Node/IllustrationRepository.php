@@ -130,7 +130,13 @@ final class IllustrationRepository extends ResourceRepository
         string $filter = '',
         int $size = 32
     ): string {
-        $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
+        $node = $resource->getResourceNode();
+
+        if (null === $node) {
+            return $resource->getDefaultIllustration($size);
+        }
+
+        $illustration = $this->getIllustrationUrlFromNode($node, $filter);
 
         if (empty($illustration)) {
             $illustration = $resource->getDefaultIllustration($size);

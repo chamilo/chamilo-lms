@@ -47,7 +47,7 @@
 
     <div class="course-tool__options">
       <button
-        v-if="isCurrentTeacher && !isSorting && !isCustomizing"
+        v-if="(isCurrentTeacher || isSessionAdmin) && !isSorting && !isCustomizing && (props.tool.isInASession ? props.tool.allowEditToolVisibilityInSession : true)"
         @click="changeVisibility(course, tool)"
       >
         <BaseIcon
@@ -125,6 +125,7 @@ const props = defineProps({
 })
 
 const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isSessionAdmin = computed(() => store.getters["security/isCurrentCourseSessionTeacher"])
 const cardCustomClass = computed(() => {
   if (!isVisible.value) {
     return "bg-primary-bgdisabled hover:bg-gray-50/25 border-primary-borderdisabled shadow-none "

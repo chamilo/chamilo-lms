@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_select_s_c_u', columns: ['session_id', 'course_id', 'user_id'])]
 #[ORM\Index(name: 'idx_select_sk_u', columns: ['skill_id', 'user_id'])]
 #[ORM\Entity]
-#[ORM\EntityListeners([\Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener::class])]
+#[ORM\EntityListeners([SkillRelUserListener::class])]
 class SkillRelUser
 {
     use UserTrait;
@@ -29,29 +30,29 @@ class SkillRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'achievedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'achievedSkills', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Skill $skill = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var Collection<int, SkillRelUserComment>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelUserComment::class, mappedBy: 'skillRelUser', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SkillRelUserComment::class, mappedBy: 'skillRelUser', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Level::class)]
+    #[ORM\ManyToOne(targetEntity: Level::class)]
     #[ORM\JoinColumn(name: 'acquired_level', referencedColumnName: 'id')]
     protected ?Level $acquiredLevel = null;
 

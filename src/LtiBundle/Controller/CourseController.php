@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Controller;
 
 use Category;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -30,7 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UserManager;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class CourseController.

@@ -32,11 +32,11 @@ class GradebookCategory
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookCategories')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCategories')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookCategories')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
@@ -50,35 +50,35 @@ class GradebookCategory
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     protected Collection $subCategories;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var SkillRelGradebook[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelGradebook::class, mappedBy: 'gradeBookCategory')]
+    #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'gradeBookCategory')]
     protected Collection $skills;
 
     /**
      * @var Collection|GradebookEvaluation[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookEvaluation::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: GradebookEvaluation::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $evaluations;
 
     /**
      * @var Collection|GradebookLink[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookLink::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: GradebookLink::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     protected Collection $links;
 
     /**
      * @var Collection|GradebookComment[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\GradebookComment::class, mappedBy: 'gradeBook')]
+    #[ORM\OneToMany(targetEntity: GradebookComment::class, mappedBy: 'gradeBook')]
     protected Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradeModel::class)]
+    #[ORM\ManyToOne(targetEntity: GradeModel::class)]
     #[ORM\JoinColumn(name: 'grade_model_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?GradeModel $gradeModel = null;
 

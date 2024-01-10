@@ -107,9 +107,9 @@ class CourseController extends ToolBaseController
                     ->getSetting('course.allow_public_course_with_no_terms_conditions')
                 ;
 
-                if (true === $allow &&
-                    null !== $course->getVisibility() &&
-                    Course::OPEN_WORLD === $course->getVisibility()
+                if (true === $allow
+                    && null !== $course->getVisibility()
+                    && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }
@@ -193,8 +193,8 @@ class CourseController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
-            CourseManager::subscribeUser($userId, $courseId, STUDENT)
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg'])
+            && CourseManager::subscribeUser($userId, $courseId, STUDENT)
         ) {
             $sessionHandler->set('is_allowed_in_course', true);
         }
@@ -238,18 +238,21 @@ class CourseController extends ToolBaseController
                 if ($isInASession && null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $link->getVisibility()) {
                     $hasNullSessionIdDraftLink = true;
                     $selectedLink = $link;
+
                     break;
                 }
 
                 if ($linkSessionId === $currentSessionId) {
                     $selectedLink = $link;
+
                     break;
-                } elseif ($linkSessionId === null && !$selectedLink) {
+                }
+                if (null === $linkSessionId && !$selectedLink) {
                     $selectedLink = $link;
                 }
             }
 
-            if ($hasNullSessionIdDraftLink || ($isInASession &&  (null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()))) {
+            if ($hasNullSessionIdDraftLink || ($isInASession && (null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()))) {
                 continue;
             }
 

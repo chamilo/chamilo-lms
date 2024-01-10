@@ -30,14 +30,14 @@ class PortfolioCategory implements Stringable
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\Column(name: 'is_visible', type: 'boolean', options: ['default' => true])]
     protected bool $isVisible = true;
 
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Portfolio::class, mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Portfolio::class, mappedBy: 'category')]
     protected ArrayCollection $items;
 
     public function __construct()

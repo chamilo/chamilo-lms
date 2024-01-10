@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(normalizationContext: ['groups' => ['illustration:read']])]
 #[ORM\Table(name: 'illustration')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\IllustrationRepository::class)]
+#[ORM\Entity(repositoryClass: IllustrationRepository::class)]
 class Illustration extends AbstractResource implements ResourceInterface, Stringable
 {
     use PersonalResourceTrait;

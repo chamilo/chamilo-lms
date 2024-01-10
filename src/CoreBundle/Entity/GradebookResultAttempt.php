@@ -26,7 +26,7 @@ class GradebookResultAttempt
     #[ORM\Column(name: 'score', type: 'float', nullable: true)]
     protected ?float $score = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookResult::class)]
+    #[ORM\ManyToOne(targetEntity: GradebookResult::class)]
     #[ORM\JoinColumn(name: 'result_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookResult $result;
 

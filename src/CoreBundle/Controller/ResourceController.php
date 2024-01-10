@@ -283,6 +283,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         foreach ($resourceNode->getResourceLinks() as $resourceLink) {
             if ($resourceLink->getSession() === $session) {
                 $link = $resourceLink;
+
                 break;
             }
         }
@@ -292,7 +293,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $link->setResourceNode($resourceNode)
                 ->setSession($session)
                 ->setCourse($course)
-                ->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+                ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+            ;
             $entityManager->persist($link);
         } else {
             if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
@@ -367,11 +369,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             $resourceNode = $item->getResourceNode();
+
             /** @var ResourceLink $link */
             $link = null;
             foreach ($resourceNode->getResourceLinks() as $resourceLink) {
                 if ($resourceLink->getSession() === $session) {
                     $link = $resourceLink;
+
                     break;
                 }
             }
@@ -381,7 +385,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $link->setResourceNode($resourceNode)
                     ->setSession($session)
                     ->setCourse($course)
-                    ->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+                    ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+                ;
                 $entityManager->persist($link);
             }
 

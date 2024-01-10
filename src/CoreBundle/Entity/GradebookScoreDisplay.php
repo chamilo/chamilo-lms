@@ -27,7 +27,7 @@ class GradebookScoreDisplay
     #[ORM\Column(name: 'display', type: 'string', length: 40, nullable: false)]
     protected ?string $display = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class)]
+    #[ORM\ManyToOne(targetEntity: GradebookCategory::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $category;
 

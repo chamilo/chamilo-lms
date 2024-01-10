@@ -33,20 +33,20 @@ class Promotion
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Career::class, inversedBy: 'promotions')]
+    #[ORM\ManyToOne(targetEntity: Career::class, inversedBy: 'promotions')]
     #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id')]
     protected Career $career;
 
     /**
      * @var Collection|Session[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\Session::class, mappedBy: 'promotion', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'promotion', cascade: ['persist'])]
     protected Collection $sessions;
 
     /**
      * @var Collection|SysAnnouncement[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\SysAnnouncement::class, mappedBy: 'promotion', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: SysAnnouncement::class, mappedBy: 'promotion', cascade: ['persist'])]
     protected Collection $announcements;
 
     #[ORM\Column(name: 'status', type: 'integer', nullable: false)]

@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CChatConversationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 
@@ -15,7 +16,7 @@ use Stringable;
  * CChatConversation.
  */
 #[ORM\Table(name: 'c_chat_conversation')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CChatConversationRepository::class)]
+#[ORM\Entity(repositoryClass: CChatConversationRepository::class)]
 class CChatConversation extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]

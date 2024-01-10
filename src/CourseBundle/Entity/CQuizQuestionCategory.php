@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_quiz_question_category')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository::class)]
+#[ORM\Entity(repositoryClass: CQuizQuestionCategoryRepository::class)]
 class CQuizQuestionCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -35,7 +36,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @var Collection|CQuizQuestion[]
      */
-    #[ORM\ManyToMany(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: CQuizQuestion::class, mappedBy: 'categories')]
     protected Collection $questions;
 
     public function __construct()

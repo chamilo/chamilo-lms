@@ -268,7 +268,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function addVisibilityQueryBuilder(QueryBuilder $qb = null, bool $checkStudentView = false): QueryBuilder
+    public function addVisibilityQueryBuilder(QueryBuilder $qb = null, bool $checkStudentView = false, bool $displayOnlyPublished = true): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -285,13 +285,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
         ;
 
-        if (!$isAdminOrTeacher
-            || ($checkStudentView && 'studentview' === $sessionStudentView)
-        ) {
-            $qb
-                ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
-            ;
+        if ($displayOnlyPublished) {
+            if (!$isAdminOrTeacher
+                || ($checkStudentView && 'studentview' === $sessionStudentView)
+            ) {
+                $qb
+                    ->andWhere('links.visibility = :visibility')
+                    ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER);
+            }
         }
 
         // @todo Add start/end visibility restrictions.
@@ -385,10 +386,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null, bool $displayOnlyPublished = true): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
-        $this->addVisibilityQueryBuilder($qb, true);
+        $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         return $qb;
@@ -544,14 +545,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
-    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
+    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
 
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         return $this->getResourceNodeRepository()->getResourceFileUrl(
             $resource->getResourceNode(),

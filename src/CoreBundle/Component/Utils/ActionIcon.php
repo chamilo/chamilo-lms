@@ -154,4 +154,6 @@ enum ActionIcon: string
     case VIEW_MORE = 'unfold-more-horizontal';
     // View less (by opposition to view more)
     case VIEW_LESS = 'unfold-less-horizontal';
+    // Exit/Leave (a group, a course, etc)
+    case EXIT = 'exit-run';
 }

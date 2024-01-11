@@ -701,23 +701,13 @@ class AppPlugin
             $pluginName = $obj->get_name();
             $pluginTitle = $obj->get_title();
             if (!empty($obj->course_settings)) {
-                if (is_file(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_SMALL.'/'.$pluginName.'.png')) {
-                    $icon = Display::return_icon(
-                        $pluginName.'.png',
-                        Security::remove_XSS($pluginTitle),
-                        '',
-                        ICON_SIZE_SMALL
-                    );
-                } else {
-                    $icon = Display::getMdiIcon(
-                        ToolIcon::PLUGIN,
-                        'ch-tool-icon',
-                        null,
-                        ICON_SIZE_SMALL,
-                        Security::remove_XSS($pluginTitle)
-                    );
-                }
-
+                $icon = Display::getMdiIcon(
+                    ToolIcon::PLUGIN,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    Security::remove_XSS($pluginTitle)
+                );
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$pluginName.'-settings">

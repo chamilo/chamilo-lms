@@ -134,7 +134,6 @@ class CourseController extends ToolBaseController
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
         EntityManagerInterface $em,
-        SettingsManager $settingsManager
     ): Response {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
@@ -218,7 +217,6 @@ class CourseController extends ToolBaseController
         $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
         $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
         $currentSessionId = (int) $sessionId;
-        $allowEditToolVisibilityInSession = ('true' === $settingsManager->getSetting('course.allow_edit_tool_visibility_in_session'));
 
         /** @var CTool $item */
         foreach ($result as $item) {
@@ -266,7 +264,6 @@ class CourseController extends ToolBaseController
                     'tool' => $toolModel,
                     'url' => $this->generateToolUrl($toolModel),
                     'category' => $toolModel->getCategory(),
-                    'allowEditToolVisibilityInSession' => $allowEditToolVisibilityInSession,
                     'isInASession' => $isInASession,
                 ];
             }

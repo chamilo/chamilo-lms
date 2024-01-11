@@ -225,12 +225,15 @@ import { useCidReqStore } from "../../store/cidReq"
 import {storeToRefs} from "pinia";
 import courseService from "../../services/courseService";
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
+const platformConfigStore = usePlatformConfig()
 
 const { course, session } = storeToRefs(cidReqStore)
+const { getSetting } = storeToRefs(platformConfigStore)
 
 const tools = ref([])
 const shortcuts = ref([])
@@ -387,6 +390,6 @@ const allowEditToolVisibilityInSession = computed(() => {
     return true;
   }
 
-  return tools.value.some(tool => tool.isInASession && tool.allowEditToolVisibilityInSession);
+  return tools.value.some(tool => tool.isInASession && getSetting.value('course.allow_edit_tool_visibility_in_session'));
 });
 </script>

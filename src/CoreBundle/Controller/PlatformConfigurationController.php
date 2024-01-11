@@ -69,6 +69,7 @@ class PlatformConfigurationController extends AbstractController
 
                 'course.course_validation',
                 'course.student_view_enabled',
+                'course.allow_edit_tool_visibility_in_session',
 
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',

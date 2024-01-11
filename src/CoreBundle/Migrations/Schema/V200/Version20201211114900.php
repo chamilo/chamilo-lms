@@ -74,7 +74,7 @@ final class Version20201211114900 extends AbstractMigrationChamilo
             $table = $schema->getTable('c_attendance_sheet');
             if (!$table->hasColumn('signature')) {
                 $this->addSql(
-                    'ALTER TABLE c_attendance_sheet ADD signature VARCHAR(255) DEFAULT NULL'
+                    'ALTER TABLE c_attendance_sheet ADD signature LONGTEXT DEFAULT NULL'
                 );
             }
         }

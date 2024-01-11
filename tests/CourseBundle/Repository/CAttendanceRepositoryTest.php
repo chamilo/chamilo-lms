@@ -86,6 +86,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
             ->setAttendance($attendance)
             ->setDateTime(new DateTime())
             ->setDoneAttendance(true)
+            ->setBlocked(false)
         ;
         $em->persist($calendar);
 

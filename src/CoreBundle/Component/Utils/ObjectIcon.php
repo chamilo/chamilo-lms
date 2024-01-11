@@ -146,4 +146,6 @@ enum ObjectIcon: string
     case WAITING_LIST = 'clipboard-list-outline';
     // Gallery
     case GALLERY = 'view-gallery-outline';
+    // Results (exercises or other)
+    case RESULTS = 'clipboard-check-outline';
 }

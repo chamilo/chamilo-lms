@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic')]
 #[ORM\Index(columns: ['active'], name: 'active')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CThematicRepository::class)]
+#[ORM\Entity(repositoryClass: CThematicRepository::class)]
 class CThematic extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -41,14 +42,14 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     /**
      * @var Collection<int, CThematicPlan>
      */
-    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: \Chamilo\CourseBundle\Entity\CThematicPlan::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: CThematicPlan::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $plans;
 
     /**
      * @var Collection<int, CThematicAdvance>
      */
     #[ORM\OrderBy(['startDate' => 'ASC'])]
-    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: CThematicAdvance::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $advances;
 
     public function __construct()

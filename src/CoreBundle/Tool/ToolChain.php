@@ -181,7 +181,7 @@ class ToolChain
             }
 
             $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-            if (in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
+            if (\in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
                 $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
             }
 

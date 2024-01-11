@@ -31,7 +31,7 @@ class Group implements Stringable
     /**
      * @var User[]|Collection
      */
-    #[ORM\ManyToMany(targetEntity: \Chamilo\CoreBundle\Entity\User::class, mappedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'groups')]
     protected Collection $users;
 
     public function __construct(

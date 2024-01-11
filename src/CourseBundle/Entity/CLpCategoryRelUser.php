@@ -25,11 +25,11 @@ class CLpCategoryRelUser implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategory::class, inversedBy: 'users')]
+    #[ORM\ManyToOne(targetEntity: CLpCategory::class, inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
     protected CLpCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 

@@ -21,7 +21,7 @@ class SkillRelItem
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Skill::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Skill $skill;
 

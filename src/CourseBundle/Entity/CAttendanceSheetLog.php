@@ -20,11 +20,11 @@ class CAttendanceSheetLog
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendance::class, inversedBy: 'logs')]
+    #[ORM\ManyToOne(targetEntity: CAttendance::class, inversedBy: 'logs')]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'lastedit_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

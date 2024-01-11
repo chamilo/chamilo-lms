@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Learning paths categories.
  */
 #[ORM\Table(name: 'c_lp_category')]
-#[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
+#[ORM\Entity(repositoryClass: SortableRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -46,7 +47,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     /**
      * @var Collection<int, CLp>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, cascade: ['detach'])]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach'])]
     protected Collection $lps;
 
     public function __construct()

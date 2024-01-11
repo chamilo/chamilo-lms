@@ -291,7 +291,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ) {
                 $qb
                     ->andWhere('links.visibility = :visibility')
-                    ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER);
+                    ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
+                ;
             }
         }
 
@@ -545,14 +546,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
-    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
 
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
     {
         return $this->getResourceNodeRepository()->getResourceFileUrl(
             $resource->getResourceNode(),

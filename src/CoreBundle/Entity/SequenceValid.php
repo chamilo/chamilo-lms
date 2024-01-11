@@ -17,11 +17,11 @@ class SequenceValid
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceVariable::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceVariable::class)]
     #[ORM\JoinColumn(name: 'sequence_variable_id', referencedColumnName: 'id')]
     protected ?SequenceVariable $variable = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceCondition::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceCondition::class)]
     #[ORM\JoinColumn(name: 'sequence_condition_id', referencedColumnName: 'id')]
     protected ?SequenceCondition $condition = null;
 

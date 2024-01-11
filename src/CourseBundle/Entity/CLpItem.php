@@ -84,7 +84,7 @@ class CLpItem implements Stringable
     #[ORM\Column(name: 'prerequisite_max_score', type: 'float', precision: 10, scale: 0, nullable: true)]
     protected ?float $prerequisiteMaxScore = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, inversedBy: 'items', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: CLp::class, inversedBy: 'items', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLp $lp;
 

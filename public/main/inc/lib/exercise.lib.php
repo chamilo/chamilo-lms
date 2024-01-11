@@ -634,7 +634,7 @@ class ExerciseLib
                             if (!empty($quizQuestionOptions)) {
                                 $j = 1;
                                 foreach ($quizQuestionOptions as $id => $item) {
-                                    if (isset($myChoice[$numAnswer]) && $j == $myChoice[$numAnswer]) {
+                                    if (isset($myChoice[$numAnswer]) && $item['iid'] == $myChoice[$numAnswer]) {
                                         $attributes = [
                                             'checked' => 1,
                                             'selected' => 1,
@@ -654,7 +654,7 @@ class ExerciseLib
                                         Display::input(
                                             'radio',
                                             'choice['.$questionId.']['.$numAnswer.']',
-                                            $j,
+                                            $item['iid'],
                                             $attributes
                                         ),
                                         ['style' => '']

@@ -121,7 +121,7 @@ class MultipleAnswerTrueFalse extends Question
                         if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $j == $_POST['correct'][$i]) {
                             $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
                         }  else {
-                            $rdoCorrect->setValue($j);
+                            $rdoCorrect->setValue($data['iid']);
                         }
                         $j++;
                         if (3 == $j) {

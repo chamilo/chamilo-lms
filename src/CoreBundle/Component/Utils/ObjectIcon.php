@@ -144,4 +144,6 @@ enum ObjectIcon: string
     case PROJECT = 'package';
     // Waiting list
     case WAITING_LIST = 'clipboard-list-outline';
+    // Gallery
+    case GALLERY = 'view-gallery-outline';
 }

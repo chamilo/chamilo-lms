@@ -154,7 +154,7 @@ class ToolChain
             'chat',
             'student_publication',
             'survey',
-            // 'wiki',
+            'wiki',
             'notebook',
             // 'blog',
             'course_tool',

@@ -346,6 +346,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testUploadFile(): void
     {
+        global $_SERVER;
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
+
         $course = $this->createCourse('Test');
 
         $courseId = $course->getId();

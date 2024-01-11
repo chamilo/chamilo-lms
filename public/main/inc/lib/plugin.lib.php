@@ -748,7 +748,7 @@ class AppPlugin
                         );
                         $courseSetting = api_get_course_setting($setting['name']);
                         if (-1 === $courseSetting) {
-                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            $defaultValue = api_get_plugin_setting($pluginName, $setting['name']);
                             if (!empty($defaultValue)) {
                                 if ('true' === $defaultValue) {
                                     $element->setChecked(true);

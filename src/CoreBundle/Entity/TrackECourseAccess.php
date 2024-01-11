@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'login_course_date', columns: ['login_course_date'])]
 #[ORM\Index(name: 'session_id', columns: ['session_id'])]
 #[ORM\Index(name: 'user_course_session_date', columns: ['user_id', 'c_id', 'session_id', 'login_course_date'])]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\TrackECourseAccessRepository::class)]
+#[ORM\Entity(repositoryClass: TrackECourseAccessRepository::class)]
 class TrackECourseAccess
 {
     use UserTrait;
@@ -32,7 +33,7 @@ class TrackECourseAccess
     #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'trackECourseAccess')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trackECourseAccess')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

@@ -26,19 +26,19 @@ class CLpView
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class)]
+    #[ORM\ManyToOne(targetEntity: CLp::class)]
     #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CLp $lp;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Session::class)]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Session $session = null;
 

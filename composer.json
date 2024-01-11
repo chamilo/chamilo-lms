@@ -221,6 +221,7 @@
         "pre-update-cmd": [
         ],
         "phpcs": "@php vendor/bin/ecs check --no-interaction",
+        "phpcs-fix": "@php vendor/bin/ecs check --no-interaction --fix",
         "psalm": "@php vendor/bin/psalm --show-info=false",
         "phpstan": "@php vendor/bin/phpstan analyse --no-interaction"
     }

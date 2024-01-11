@@ -3,9 +3,11 @@ import { computed, onMounted } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
+import { useRouter } from "vue-router"
 
 export function useSidebarMenu() {
   const { t } = useI18n()
+  const router = useRouter()
   const securityStore = useSecurityStore()
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
@@ -18,7 +20,7 @@ export function useSidebarMenu() {
       items.push({
         icon: "mdi mdi-home",
         label: t("Home"),
-        to: { name: "Home" },
+        command: () => router.push({ name: "Home" }),
       })
     }
 
@@ -28,14 +30,14 @@ export function useSidebarMenu() {
       if (enrolledStore.isEnrolledInCourses) {
         courseItems.push({
           label: t("My courses"),
-          to: { name: "MyCourses" },
+          command: () => router.push({ name: "MyCourses" }),
         })
       }
 
       if (enrolledStore.isEnrolledInSessions) {
         courseItems.push({
           label: t("My sessions"),
-          to: { name: "MySessions" },
+          command: () => router.push({ name: "MySessions" }),
         })
       }
 
@@ -44,7 +46,7 @@ export function useSidebarMenu() {
           icon: "mdi mdi-book-open-page-variant",
           label: courseItems.length > 1 ? t("Course") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
-          to: 1 === courseItems.length ? courseItems[0].to : undefined,
+          command: 1 === courseItems.length ? courseItems[0].command : undefined,
         })
       }
 
@@ -52,7 +54,7 @@ export function useSidebarMenu() {
         items.push({
           icon: "mdi mdi-calendar-text",
           label: t("Events"),
-          to: { name: "CCalendarEventList" },
+          command: () => router.push({ name: "CCalendarEventList" }),
         })
       }
 
@@ -87,7 +89,7 @@ export function useSidebarMenu() {
         items.push({
           icon: "mdi mdi-sitemap-outline",
           label: t("Social network"),
-          to: { name: "SocialWall" },
+          command: () => router.push({ name: "SocialWall" }),
         })
       }
 
@@ -122,7 +124,7 @@ export function useSidebarMenu() {
       const adminItems = [
         {
           label: t("Administration"),
-          to: { name: "AdminIndex" },
+          command: () => router.push({ name: "AdminIndex" }),
         },
       ]
 

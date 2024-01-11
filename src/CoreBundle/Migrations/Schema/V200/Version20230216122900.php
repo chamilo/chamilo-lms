@@ -112,6 +112,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'course_creation_form_set_extra_fields_mandatory',
                 'course_configuration_tool_extra_fields_to_show_and_edit',
                 'course_creation_user_course_extra_field_relation_to_prefill',
+                'allow_edit_tool_visibility_in_session',
             ],
             'Language' => [
                 'show_language_selector_in_menu',
@@ -1052,6 +1053,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'show_language_selector_in_menu',
             ],
             'Course' => [
+                'allow_edit_tool_visibility_in_session',
                 'course_creation_user_course_extra_field_relation_to_prefill',
                 'course_configuration_tool_extra_fields_to_show_and_edit',
                 'course_creation_form_set_extra_fields_mandatory',

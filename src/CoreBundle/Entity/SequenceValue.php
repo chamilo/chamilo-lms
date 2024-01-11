@@ -21,11 +21,11 @@ class SequenceValue
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sequenceValues')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sequenceValues')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceRowEntity::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceRowEntity::class)]
     #[ORM\JoinColumn(name: 'sequence_row_entity_id', referencedColumnName: 'id')]
     protected ?SequenceRowEntity $entity = null;
 

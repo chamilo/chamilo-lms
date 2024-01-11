@@ -18,15 +18,15 @@ class ExtraFieldOptionRelFieldOption
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraFieldOptions::class)]
+    #[ORM\ManyToOne(targetEntity: ExtraFieldOptions::class)]
     #[ORM\JoinColumn(name: 'field_option_id', referencedColumnName: 'id')]
     protected ExtraFieldOptions $extraFieldOption;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraFieldOptions::class)]
+    #[ORM\ManyToOne(targetEntity: ExtraFieldOptions::class)]
     #[ORM\JoinColumn(name: 'related_field_option_id', referencedColumnName: 'id')]
     protected ExtraFieldOptions $relatedFieldOption;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraField::class)]
+    #[ORM\ManyToOne(targetEntity: ExtraField::class)]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id')]
     protected ExtraField $field;
 

@@ -130,7 +130,7 @@
 
         <div class="ml-auto">
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing"
+            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
@@ -142,7 +142,7 @@
             @click="onClickShowAll"
           />
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing"
+            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Hide all')"
             :on-label="t('Hide all')"
@@ -225,12 +225,15 @@ import { useCidReqStore } from "../../store/cidReq"
 import {storeToRefs} from "pinia";
 import courseService from "../../services/courseService";
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
+const platformConfigStore = usePlatformConfig()
 
 const { course, session } = storeToRefs(cidReqStore)
+const { getSetting } = storeToRefs(platformConfigStore)
 
 const tools = ref([])
 const shortcuts = ref([])
@@ -282,7 +285,7 @@ const toggleCourseTMenu = (event) => {
   courseTMenu.value.toggle(event)
 }
 
-function goToSettingCourseTool(course, tool) {
+function goToSettingCourseTool(tool) {
   return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + session.value?.id
 }
 
@@ -299,9 +302,9 @@ const setToolVisibility = (tool, visibility) => {
   tool.ctool.resourceNode.resourceLinks[0].visibility = visibility
 }
 
-function changeVisibility(course, tool) {
+function changeVisibility(tool) {
   axios
-    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility")
+    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility?cid=" + course.value.id + "&sid=" + session.value?.id)
     .then((response) => setToolVisibility(tool, response.data.visibility))
     .catch((error) => console.log(error))
 }
@@ -379,4 +382,12 @@ onMounted(async () => {
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
 }
+
+const allowEditToolVisibilityInSession = computed(() => {
+  const isInASession = session.value?.id
+
+  return isInASession
+    ? "true" === getSetting.value("course.allow_edit_tool_visibility_in_session")
+    : true
+})
 </script>

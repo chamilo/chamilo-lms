@@ -47,8 +47,8 @@
 
     <div class="course-tool__options">
       <button
-        v-if="isCurrentTeacher && !isSorting && !isCustomizing"
-        @click="changeVisibility(course, tool)"
+        v-if="(securityStore.isCourseAdmin) && !isSorting && !isCustomizing && (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)"
+        @click="changeVisibility(tool)"
       >
         <BaseIcon
           v-if="isVisible"
@@ -62,7 +62,7 @@
       </button>
 
       <a
-        v-if="isCurrentTeacher && isCustomizing"
+        v-if="securityStore.isCurrentTeacher && isCustomizing"
         href="#"
       >
         <BaseIcon
@@ -72,8 +72,8 @@
       </a>
 
       <!-- a
-        v-if="isCurrentTeacher"
-        :href="goToSettingCourseTool(course, tool)"
+        v-if="securityStore.isCurrentTeacher"
+        :href="goToSettingCourseTool(tool)"
       >
         <BaseIcon
           icon="cog"
@@ -85,11 +85,19 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import { computed, inject } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import {useSecurityStore} from "../../store/securityStore";
+import { usePlatformConfig } from "../../store/platformConfig"
+import { storeToRefs } from "pinia"
+import { useCidReqStore } from "../../store/cidReq"
 
-const store = useStore()
+const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
+const cidReqStore = useCidReqStore()
+
+const { session } = storeToRefs(cidReqStore)
+const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
@@ -124,7 +132,6 @@ const props = defineProps({
   },
 })
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 const cardCustomClass = computed(() => {
   if (!isVisible.value) {
     return "bg-primary-bgdisabled hover:bg-gray-50/25 border-primary-borderdisabled shadow-none "

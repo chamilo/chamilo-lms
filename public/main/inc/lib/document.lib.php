@@ -2849,7 +2849,7 @@ class DocumentManager
                     0
                 );
 
-                if ($documentData) {
+                if (isset($documentData['absolute_path'])) {
                     $fileContent = file_get_contents($documentData['absolute_path']);
                 }
             }

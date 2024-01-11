@@ -66,7 +66,7 @@ class SocialPostAttachment extends AbstractResource implements ResourceInterface
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SocialPost::class, inversedBy: 'attachments')]
+    #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'social_post_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected SocialPost $socialPost;
 

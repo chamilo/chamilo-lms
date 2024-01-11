@@ -20,7 +20,7 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn +3.x - https://yarnpkg.com/getting-started/install
+- yarn +4.x - https://yarnpkg.com/getting-started/install
 - Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.1+
@@ -66,7 +66,7 @@ composer install
 # when asked whether you want to execute the recipes or install plugins for some of the components,
 # you can safely type 'n' (for 'no').
 
-yarn set version 3.4.1
+yarn set version stable
 # delete yarn.lock as it might contain restrictive packages from a different context
 yarn up
 yarn install

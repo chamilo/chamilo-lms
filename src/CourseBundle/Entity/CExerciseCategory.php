@@ -11,12 +11,13 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_exercise_category')]
-#[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
+#[ORM\Entity(repositoryClass: SortableRepository::class)]
 class CExerciseCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     use TimestampableEntity;
@@ -27,7 +28,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, S
     protected ?int $id = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 

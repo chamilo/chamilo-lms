@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -127,7 +128,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['category_title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['iid', 'resourceNode.title', 'resourceNode.createdAt', 'resourceNode.updatedAt'])]
 #[ORM\Table(name: 'c_link_category')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CLinkCategoryRepository::class)]
+#[ORM\Entity(repositoryClass: CLinkCategoryRepository::class)]
 class CLinkCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ApiProperty(identifier: true)]

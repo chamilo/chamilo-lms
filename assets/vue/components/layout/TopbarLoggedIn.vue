@@ -124,7 +124,9 @@ function toogleUserMenu(event) {
 
 const headerLogo = headerLogoPath
 
-const btnInboxBadge = computed(() => (messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread))
+const btnInboxBadge = computed(() =>
+  messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread.toString(),
+)
 
 messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
 </script>

@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(name: 'active', columns: ['active'])]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CAttendanceRepository::class)]
+#[ORM\Entity(repositoryClass: CAttendanceRepository::class)]
 class CAttendance extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -53,19 +54,19 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     /**
      * @var Collection|CAttendanceCalendar[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceCalendar::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: CAttendanceCalendar::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $calendars;
 
     /**
      * @var Collection|CAttendanceResult[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceResult::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: CAttendanceResult::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $results;
 
     /**
      * @var Collection|CAttendanceSheetLog[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceSheetLog::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: CAttendanceSheetLog::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
     protected Collection $logs;
 
     public function __construct()

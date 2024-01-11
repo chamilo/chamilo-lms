@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_survey')]
 #[ORM\Index(name: 'idx_survey_code', columns: ['code'])]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CSurveyRepository::class)]
+#[ORM\Entity(repositoryClass: CSurveyRepository::class)]
 class CSurvey extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -109,13 +110,13 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     /**
      * @var Collection|CSurveyQuestion[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestion::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyQuestion::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $questions;
 
     /**
      * @var Collection|CSurveyInvitation[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyInvitation::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyInvitation::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $invitations;
 
     #[Gedmo\TreeParent]
@@ -133,7 +134,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
      * @var Collection|CSurveyQuestionOption[]
      */
     #[ORM\OrderBy(['sort' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestionOption::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(targetEntity: CSurveyQuestionOption::class, mappedBy: 'survey', cascade: ['remove'])]
     protected Collection $options;
 
     #[ORM\Column(name: 'survey_type', type: 'integer', nullable: false)]

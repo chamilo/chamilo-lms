@@ -34,7 +34,7 @@ class Tool implements Stringable
     /**
      * @var Collection<int, ResourceType>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
     protected Collection $resourceTypes;
 
     public function __construct()

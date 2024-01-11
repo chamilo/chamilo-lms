@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'tag')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\TagRepository::class)]
+#[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -24,20 +25,20 @@ class Tag
     #[ORM\Column(name: 'tag', type: 'string', length: 255, nullable: false)]
     protected string $tag;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraField::class, inversedBy: 'tags')]
+    #[ORM\ManyToOne(targetEntity: ExtraField::class, inversedBy: 'tags')]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ExtraField $field;
 
     /**
      * @var Collection<int, UserRelTag>|UserRelTag[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UserRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: UserRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
     protected Collection $userRelTags;
 
     /**
      * @var Collection<int, ExtraFieldRelTag>|ExtraFieldRelTag[]
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ExtraFieldRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: ExtraFieldRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
     protected Collection $extraFieldRelTags;
 
     #[ORM\Column(name: 'count', type: 'integer', nullable: false)]

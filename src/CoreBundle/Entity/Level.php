@@ -33,7 +33,7 @@ class Level implements Stringable
     protected string $shortName;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Profile::class, inversedBy: 'levels')]
+    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'levels')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 

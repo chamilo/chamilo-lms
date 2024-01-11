@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Legal.
  */
 #[ORM\Table(name: 'legal')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\LegalRepository::class)]
+#[ORM\Entity(repositoryClass: LegalRepository::class)]
 class Legal
 {
     #[ORM\Column(name: 'id', type: 'integer')]

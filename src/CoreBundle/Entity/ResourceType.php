@@ -31,14 +31,14 @@ class ResourceType implements Stringable
     #[Groups(['resource_node:read'])]
     protected string $name;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Tool::class, inversedBy: 'resourceTypes')]
+    #[ORM\ManyToOne(targetEntity: Tool::class, inversedBy: 'resourceTypes')]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected Tool $tool;
 
     /**
      * @var ResourceNode[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, mappedBy: 'resourceType', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceType', cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     public function __construct()

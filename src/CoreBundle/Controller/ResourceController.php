@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -32,6 +34,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -251,14 +254,24 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function changeVisibility(
         Request $request,
         EntityManagerInterface $entityManager,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Security $security,
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
-        if (!$isCourseTeacher) {
+        if (!($isCourseTeacher || $isAdmin)) {
             throw new AccessDeniedHttpException();
         }
 
+        $session = null;
+        if ($this->getSession()) {
+            $sessionId = $this->getSession()->getId();
+            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        }
+        $courseId = $this->getCourse()->getId();
+        $course = $entityManager->getRepository(Course::class)->find($courseId);
         $id = $request->attributes->getInt('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
 
@@ -266,13 +279,29 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException($this->trans('Resource not found'));
         }
 
-        /** @var ResourceLink $link */
-        $link = $resourceNode->getResourceLinks()->first();
+        $link = null;
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getSession() === $session) {
+                $link = $resourceLink;
 
-        if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+                break;
+            }
+        }
+
+        if (null === $link) {
+            $link = new ResourceLink();
+            $link->setResourceNode($resourceNode)
+                ->setSession($session)
+                ->setCourse($course)
+                ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+            ;
+            $entityManager->persist($link);
         } else {
-            $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+            } else {
+                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            }
         }
 
         $entityManager->flush();
@@ -298,18 +327,26 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Security $security
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
-        if (!$isCourseTeacher) {
+        if (!($isCourseTeacher || $isAdmin)) {
             throw new AccessDeniedHttpException();
         }
 
         $visibility = $request->attributes->get('visibility');
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $session = null;
+        if ($this->getSession()) {
+            $sessionId = $this->getSession()->getId();
+            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        }
+        $courseId = $this->getCourse()->getId();
+        $course = $entityManager->getRepository(Course::class)->find($courseId);
 
         $result = $toolRepository->getResourcesByCourse($course, $session)
             ->addSelect('tool')
@@ -331,8 +368,27 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 continue;
             }
 
+            $resourceNode = $item->getResourceNode();
+
             /** @var ResourceLink $link */
-            $link = $item->getResourceNode()->getResourceLinks()->first();
+            $link = null;
+            foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+                if ($resourceLink->getSession() === $session) {
+                    $link = $resourceLink;
+
+                    break;
+                }
+            }
+
+            if (null === $link) {
+                $link = new ResourceLink();
+                $link->setResourceNode($resourceNode)
+                    ->setSession($session)
+                    ->setCourse($course)
+                    ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+                ;
+                $entityManager->persist($link);
+            }
 
             if ('show' === $visibility) {
                 $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);

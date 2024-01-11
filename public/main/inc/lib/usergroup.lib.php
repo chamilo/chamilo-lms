@@ -2606,7 +2606,7 @@ class UserGroupModel extends Model
                 $links .= '<li><a href="group_members.php?id='.$group_id.'">'.
                             Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('delete_data.gif', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                            Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 break;
             default:
                 //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('Join group'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Join group').'</a></span></li>';

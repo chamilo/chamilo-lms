@@ -156,4 +156,6 @@ enum ActionIcon: string
     case VIEW_LESS = 'unfold-less-horizontal';
     // Exit/Leave (a group, a course, etc)
     case EXIT = 'exit-run';
+    // Edit badges/skills
+    case EDIT_BADGE = 'shield-edit-outline';
 }

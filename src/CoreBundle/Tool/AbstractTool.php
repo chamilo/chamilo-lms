@@ -26,6 +26,16 @@ abstract class AbstractTool
     protected ?SchemaInterface $settings = null;
     protected array $resourceTypes = [];
 
+    /**
+     * Tool scope.
+     *
+     * Values can be the following.
+     *
+     * - 00 disabled tool
+     * - 01 course tool
+     * - 10 global tool
+     * - 11 global or course or both
+     */
     protected string $scope;
 
     abstract public function getCategory(): string;

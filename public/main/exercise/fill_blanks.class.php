@@ -71,11 +71,34 @@ class FillBlanks extends Question
             var blankSeparatorEndRegexp = getBlankSeparatorRegexp(blankSeparatorEnd);
             var blanksRegexp = "/"+blankSeparatorStartRegexp+"[^"+blankSeparatorStartRegexp+"]*"+blankSeparatorEndRegexp+"/g";
 
-            document.addEventListener("DOMContentLoaded", function() {
+            function attachEventsToEditor() {
                 var editor = tinymce.get("answer");
                 if (editor) {
-                    editor.on("change", updateBlanks);
+                    console.log("Editor found, attaching events.");
+
+                    editor.on("keyup", function() {
+                        updateBlanks();
+                    });
+
+                    editor.on("SetContent", function() {
+                        updateBlanks();
+                    });
+
+                    editor.on("ExecCommand", function() {
+                        updateBlanks();
+                    });
+
+                    editor.on("Paste", function() {
+                        updateBlanks();
+                    });
+                } else {
+                    console.log("Editor not yet available, retrying...");
+                    setTimeout(attachEventsToEditor, 100); // Retry after 100 ms
                 }
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                attachEventsToEditor();
             });
 
             function updateBlanks()
@@ -216,20 +239,30 @@ class FillBlanks extends Question
 
             function changeInputSize(coef, inIdNum)
             {
+                var sampleSizeSelector = "#samplesize\\\[" + inIdNum + "\\\]";
+                var sizeOfInputSelector = "#sizeofinput\\\[" + inIdNum + "\\\]";
+
+                var currentWidth = $(sampleSizeSelector).outerWidth();
+
+                if (currentWidth === undefined) {
+                    return;
+                }
+
+                var newWidth = currentWidth + coef * 20;
+                newWidth = Math.max(20, newWidth);
+                newWidth = Math.min(newWidth, 600);
+
+                $(sampleSizeSelector).outerWidth(newWidth);
+                $(sizeOfInputSelector).attr("value", newWidth);
+
+                var answer;
                 if (firstTime) {
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = getContentFromEditor("answer");
+                    answer = tinymce.get("answer").getContent();
                 }
-
                 var blanks = answer.match(eval(blanksRegexp));
-                var currentWidth = $("#samplesize\\\["+inIdNum+"\\\]").width();
-                var newWidth = currentWidth + coef * 20;
-                newWidth = Math.max(20, newWidth);
-                newWidth = Math.min(newWidth, 600);
-                $("#samplesize\\\["+inIdNum+"\\\]").outerWidth(newWidth);
-                $("#sizeofinput\\\["+inIdNum+"\\\]").attr("value", newWidth);
 
                 updateOrder(blanks);
             }

@@ -1340,7 +1340,7 @@ if ($allowBlockCategory &&
         '.$questionTimeCondition.'
             //This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = "'.$saveIcon.'";
+            saveImage.src = "'.htmlspecialchars($saveIcon).'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {

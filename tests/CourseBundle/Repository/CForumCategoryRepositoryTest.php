@@ -12,6 +12,10 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
+use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 
 class CForumCategoryRepositoryTest extends AbstractApiTest
 {
@@ -22,7 +26,18 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $categoryRepo = self::getContainer()->get(CForumCategoryRepository::class);
+        // Mock studentview session key.
+        $session = new SymfonySession(new MockFileSessionStorage);
+        $session->set('studentview', 1);
+        $request = new Request();
+        $request->setSession($session);
+        $request_stack = $this->createMock(RequestStack::class);
+        $request_stack
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+        ;
         $forumRepo = self::getContainer()->get(CForumRepository::class);
+        $categoryRepo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');

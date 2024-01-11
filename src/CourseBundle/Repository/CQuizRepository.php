@@ -106,13 +106,13 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     /**
      * Adds resource.active filter.
      *
-     * @param int|null $active
-     *   One of the following values.
-     *   - null = no filter
-     *   - -1 = deleted exercises
-     *   - 0 = inactive exercises
-     *   - 1 = active exercises
-     *   - 2 = all exercises (active and inactive)
+     * The active parameter can be one of the following values.
+     *
+     * - null = no filter
+     * - -1 = deleted exercises
+     * - 0 = inactive exercises
+     * - 1 = active exercises
+     * - 2 = all exercises (active and inactive)
      */
     private function addActiveQueryBuilder(int $active = null, QueryBuilder $qb = null): QueryBuilder
     {

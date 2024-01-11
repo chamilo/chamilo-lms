@@ -124,11 +124,11 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $this->assertSame($course->getResourceIdentifier(), $course->getId());
         $extraFieldValue = $repo->updateItemData($field, $course, 'julio');
 
-        $this->assertSame('julio', $extraFieldValue->getValue());
+        $this->assertSame('julio', $extraFieldValue->getFieldValue());
 
         $extraFieldValue = $repo->updateItemData($field, $course, 'casa');
 
-        $this->assertSame('casa', $extraFieldValue->getValue());
+        $this->assertSame('casa', $extraFieldValue->getFieldValue());
 
         $items = $repo->getExtraFieldValuesFromItem($course, ExtraField::COURSE_FIELD_TYPE);
         $this->assertNotNull($extraFieldValue);

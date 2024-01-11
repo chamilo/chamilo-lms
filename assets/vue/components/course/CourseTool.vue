@@ -48,7 +48,7 @@
     <div class="course-tool__options">
       <button
         v-if="(securityStore.isCourseAdmin) && !isSorting && !isCustomizing && (props.tool.isInASession ? props.tool.allowEditToolVisibilityInSession : true)"
-        @click="changeVisibility(course, tool)"
+        @click="changeVisibility(tool)"
       >
         <BaseIcon
           v-if="isVisible"
@@ -73,7 +73,7 @@
 
       <!-- a
         v-if="securityStore.isCurrentTeacher"
-        :href="goToSettingCourseTool(course, tool)"
+        :href="goToSettingCourseTool(tool)"
       >
         <BaseIcon
           icon="cog"

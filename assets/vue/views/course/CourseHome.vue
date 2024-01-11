@@ -208,7 +208,6 @@
 <script setup>
 import { computed, onMounted, provide, ref, watch } from "vue"
 import { useStore } from "vuex"
-import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
@@ -227,7 +226,6 @@ import {storeToRefs} from "pinia";
 import courseService from "../../services/courseService";
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
 
-const route = useRoute()
 const store = useStore()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -238,8 +236,6 @@ const tools = ref([])
 const shortcuts = ref([])
 
 const courseIntroEl = ref(null);
-let courseId = route.params.id
-let sessionId = route.query.sid ?? 0
 
 const isCourseLoading = ref(true)
 
@@ -286,7 +282,7 @@ const toggleCourseTMenu = (event) => {
   courseTMenu.value.toggle(event)
 }
 
-function goToSettingCourseTool(course, tool) {
+function goToSettingCourseTool(tool) {
   return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + session.value?.id
 }
 
@@ -303,16 +299,16 @@ const setToolVisibility = (tool, visibility) => {
   tool.ctool.resourceNode.resourceLinks[0].visibility = visibility
 }
 
-function changeVisibility(course, tool) {
+function changeVisibility(tool) {
   axios
-    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility?cid=" + courseId + "&sid=" + sessionId)
+    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility?cid=" + course.value.id + "&sid=" + session.value?.id)
     .then((response) => setToolVisibility(tool, response.data.visibility))
     .catch((error) => console.log(error))
 }
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -321,7 +317,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${sessionId}`)
+    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })

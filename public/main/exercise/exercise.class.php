@@ -3712,8 +3712,8 @@ class Exercise
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ("Don't know" == $quiz_question_options[$studentChoice]['name'] ||
-                                'DoubtScore' == $quiz_question_options[$studentChoice]['name']
+                            if (isset($quiz_question_options[$studentChoice])
+                                && in_array($quiz_question_options[$studentChoice]['name'], ["Don't know", 'DoubtScore'])
                             ) {
                                 $questionScore += $doubt_score;
                             } else {

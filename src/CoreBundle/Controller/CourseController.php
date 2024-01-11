@@ -264,7 +264,6 @@ class CourseController extends ToolBaseController
                     'tool' => $toolModel,
                     'url' => $this->generateToolUrl($toolModel),
                     'category' => $toolModel->getCategory(),
-                    'isInASession' => $isInASession,
                 ];
             }
         }

@@ -384,12 +384,10 @@ const onStudentViewChanged = async () => {
 }
 
 const allowEditToolVisibilityInSession = computed(() => {
-  const isInASession = tools.value.some(tool => tool.isInASession);
+  const isInASession = session.value?.id
 
-  if (!isInASession) {
-    return true;
-  }
-
-  return tools.value.some(tool => tool.isInASession && getSetting.value('course.allow_edit_tool_visibility_in_session'));
-});
+  return isInASession
+    ? "true" === getSetting.value("course.allow_edit_tool_visibility_in_session")
+    : true
+})
 </script>

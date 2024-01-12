@@ -27,7 +27,7 @@ We assume you already have:
 
 ### Software stack install (Ubuntu)
 
-You will need PHP8+ and NodeJS v14+ to run Chamilo 2.
+You will need PHP8+ and NodeJS v18+ to run Chamilo 2.
 On a fresh Ubuntu 22.04, you can prepare your server by issuing an apt command like the following with sudo (or as root, but not recommended for security reasons):
 
 ~~~~
@@ -37,14 +37,26 @@ sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install apache2 libapache2-mod-php8.1 mariadb-client mariadb-server php-pear php8.1-{dev,gd,curl,intl,mysql,mbstring,zip,xml,cli,apcu,bcmath,soap} git unzip
+~~~~
+If you already have nodejs installed, check the version with `node -v`
+Otherwise, install node 18 or above:
+* following the instructions here: https://deb.nodesource.com/node_20.x/.
+  The following lines use a static version of those instructions, so probably not very sustainable over time
+~~~~
 cd ~
-# If you already have nodejs 20+ installed, check the version with `node -v`
-# Otherwise, install node 20 or above following the instructions here: https://deb.nodesource.com/node_20.x/.
-# The following lines use a static version of those instructions, so probably not very sustainable over time
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 NODE_MAJOR=20
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 apt update && apt -y install nodejs
+~~~~
+* Other option to install nodejs is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
+  Then, you can install the node version required. Preferably, the LTS version.
+~~~~
+sudo nvm install --lts
+sudo nvm use --lts
+~~~~
+With NodeJS installed, you must enable corepack and then continue with the requirements
+~~~~
 sudo corepack enable
 cd ~
 # follow the instructions at https://getcomposer.org/download/

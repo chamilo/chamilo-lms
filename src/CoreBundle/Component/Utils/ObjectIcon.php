@@ -148,4 +148,8 @@ enum ObjectIcon: string
     case GALLERY = 'view-gallery-outline';
     // Results (exercises or other)
     case RESULTS = 'clipboard-check-outline';
+    // Sequence of objects/steps
+    case SEQUENCE = 'arrow-decision';
+    // Map marker/geolocalization
+    case MAP_MARKER = 'map-marker';
 }

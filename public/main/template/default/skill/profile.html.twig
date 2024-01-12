@@ -70,7 +70,7 @@
                                     {% if skill_list[skill_data.skill_id].icon %}
                                         <img src="{{ _p.web_upload ~ skill_list[skill_data.skill_id].icon_small }}" width="22" height="22" alt="{{ skill_list[skill_data.skill_id].name }}">
                                     {% else %}
-                                        <img src="{{ 'badges.png'|icon(22) }}" width="22" height="22" alt="{{ skill_list[skill_data.skill_id].name }}">
+                                        {{ 'ObjectIcon::BADGE'|mdi_icon(22, 'ch-tool-icon', skill_list[skill_data.skill_id].name) }}">
                                     {% endif %}
 
                                     {% if skill_data.found %}

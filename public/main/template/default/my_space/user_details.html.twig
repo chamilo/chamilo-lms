@@ -2,7 +2,7 @@
 
 {% autoescape false %}
 {% if title is defined %}
-    <h2 class="details-title">{{ 'book-open-page-variant'|mdi_icon(32) }} {{ title }}</h2>
+    <h2 class="details-title">{{ 'ObjectIcon::COURSE'|mdi_icon(32) }} {{ title }}</h2>
 {% endif %}
 
 <div class="page-header">
@@ -105,10 +105,10 @@
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
-                                            {{ 'pencil' | mdi_icon }}
+                                            {{ 'ActionIcon::EDIT' | mdi_icon }}
                                             {{ user_extra.tools.tasks }}
                                             <div class="box-name">
-                                                {{ 'Assignments'|trans }}
+                                                {{ 'ObjectIcon::ASSIGNMENT'|trans }}
                                             </div>
                                         </div>
                                     </div>

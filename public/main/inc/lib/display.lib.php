@@ -2222,6 +2222,64 @@ class Display
         return $html;
     }
 
+    /**
+     * Shortcut method to getMdiIcon, to be used from Twig (see ChamiloExtension.php)
+     * using acceptable default values
+     * @param string $name The icon name or a string representing the icon in our *Icon Enums
+     * @param int|null $size The icon size
+     * @param string|null $additionalClass Additional CSS class to add to the icon
+     * @param string|null $title A title for the icon
+     * @return string
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    public static function getMdiIconSimple(
+        string $name,
+        ?int $size = ICON_SIZE_SMALL,
+        ?string $additionalClass = 'ch-tool-icon',
+        ?string $title = null
+    ): string
+    {
+        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Component/Utils/
+        $matches = [];
+        if (preg_match('/(\w*)::(\w*)/', $name, $matches)) {
+            if (count($matches) != 3) {
+                throw new InvalidArgumentException('Invalid enum case string format. Expected format is "EnumClass::CASE".');
+            }
+            $enum = $matches[1];
+            $case = $matches[2];
+            if (!class_exists('Chamilo\CoreBundle\Component\Utils\\'.$enum)) {
+                throw new InvalidArgumentException("Class {$enum} does not exist.");
+            }
+            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Component\Utils\\'.$enum);
+            // Check if the case exists in the Enum class
+            if (!$reflection->hasCase($case)) {
+                throw new InvalidArgumentException("Case {$case} does not exist in enum class {$enum}.");
+            }
+            // Get the Enum case
+            /* @var ReflectionEnumUnitCase $enumUnitCaseObject */
+            $enumUnitCaseObject = $reflection->getCase($case);
+            $enumValue = $enumUnitCaseObject->getValue();
+            $name = $enumValue->value;
+
+        }
+        if (!empty($title)) {
+            $title = get_lang($title);
+        }
+
+        return self::getMdiIcon($name, $additionalClass, null, $size, $title);
+    }
+
+    /**
+     * Get a full HTML <i> tag for an icon from the Material Design Icons set
+     * @param string|ActionIcon|ToolIcon|ObjectIcon|StateIcon $name
+     * @param string|null                                     $additionalClass
+     * @param string|null                                     $style
+     * @param int|null                                        $pixelSize
+     * @param string|null                                     $title
+     * @param array|null                                      $additionalAttributes
+     * @return string
+     */
     public static function getMdiIcon(string|ActionIcon|ToolIcon|ObjectIcon|StateIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';

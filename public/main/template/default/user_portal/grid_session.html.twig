@@ -117,7 +117,7 @@
 
 {% import _self as blocks %}
 
-{% set session_image = 'window_list.png'|icon(32, row.title) %}
+{% set session_image = 'ObjectIcon::SESSION'|mdi_icon(32, 'ch-tool-icon', row.title) %}
 
 {% for row in session %}
     {% set collapsable = '' %}
@@ -154,8 +154,7 @@
                 {% if row.show_actions %}
                     <div class="pull-right">
                         <a href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
-                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
-                                 title="{{ "Edit"|get_lang }}">
+                            {{ 'ActionIcon::EDIT'|mdi_icon(22, 'ch-tool-icon', 'Edit') }}
                         </a>
                     </div>
                 {% endif %}

@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use TicketManager;
 use Twig\Environment;
 
+/**
+ * Twig-related event listener. For filters, look into ChamiloExtension.php
+ */
 class TwigListener
 {
     private SerializerInterface $serializer;

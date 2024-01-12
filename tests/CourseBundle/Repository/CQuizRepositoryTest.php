@@ -100,6 +100,10 @@ class CQuizRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $repo = self::getContainer()->get(CQuizRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');

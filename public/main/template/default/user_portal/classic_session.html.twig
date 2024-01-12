@@ -1,4 +1,4 @@
-{% set session_image = 'window_list.png'|icon(32, '') %}
+{% set session_image = 'ObjectIcon::SESSION'|mdi_icon(32) %}
 {% autoescape false %}
 {% for row in session %}
     <div class="panel panel-default">
@@ -42,8 +42,7 @@
                         <div class="pull-right">
 
                             <a href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
-                                <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
-                                     title="{{ "Edit"|get_lang }}">
+                                {{ 'ActionIcon::EDIT'|mdi_icon(22, 'ch-tool-icon', 'Edit') }}
                             </a>
                         </div>
                     {% endif %}
@@ -100,7 +99,7 @@
                                         <h4>{{ item.title }}</h4>
                                         <div class="list-teachers">
                                             {% if item.coaches|length > 0 %}
-                                                <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
+                                                {{ 'ObjectIcon::TEACHER'|mdi_icon(16) }}
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}
                                                     url('legacy_main', { 'name' : 'session/resume_session.php', 'sid' : row.id })

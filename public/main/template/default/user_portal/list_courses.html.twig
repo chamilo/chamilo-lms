@@ -16,7 +16,7 @@
                     <img src="{{ item.image }}" title="{{ item.title }}"
                          alt="{{ item.title }}" class="img-fluid"/>
                 {% else %}
-                    {{ 'blackboard.png' | img(48, item.title ) }}
+                    {{ 'ToolIcon::COURSE'|mdi_icon(48, 'ch-tool-icon', item.title) }}
                 {% endif %}
             {% else %}
                 <a href="{{ item.link }}">
@@ -24,7 +24,7 @@
                         <img src="{{ item.image }}" title="{{ item.title }}"
                              alt="{{ item.title }}" class="img-fluid"/>
                     {% else %}
-                        {{ 'blackboard.png' | img(48, item.title ) }}
+                        {{ 'ToolIcon::COURSE'|mdi_icon(48, 'ch-tool-icon', item.title) }}
                     {% endif %}
                 </a>
             {% endif %}
@@ -36,12 +36,12 @@
                 <div class="float-right">
                     {% if item.document == '' %}
                         <a class="btn btn-outline-primary btn-sm" href="{{ item.edit_actions }}">
-                            {{ 'pencil' | mdi_icon }}
+                            {{ 'ActionIcon::EDIT' | mdi_icon }}
                         </a>
                     {% else %}
                         <div class="btn-group" role="group">
                             <a class="btn btn-outline-primary btn-sm" href="{{ item.edit_actions }}">
-                                {{ 'pencil' | mdi_icon }}
+                                {{ 'ActionIcon::EDIT' | mdi_icon }}
                             </a>
                             {{ item.document }}
                         </div>
@@ -58,7 +58,7 @@
                     </a>
                     {{ item.notifications }}
                     {% if item.is_special_course %}
-                        {{ 'klipper.png' | img(22, 'CourseAutoRegister'|get_lang ) }}
+                        {{ 'ObjectIcon::PIN'|mdi_icon(22, 'ch-tool-icon', 'CourseAutoRegister') }}
                     {% endif %}
                 {% endif %}
             </h5>

@@ -13,7 +13,7 @@
 <div class="grid grid-cols-4 gap-8 view-global-followed mt-4">
     <div class="content">
         <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-                {{ 'school'|mdi_icon(64) }}&nbsp;{{ students }}
+                {{ 'ToolIcon::GROUP'|mdi_icon(64) }}&nbsp;{{ students }}
         </div>
         <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/student.php'}) }}">
@@ -23,7 +23,7 @@
     </div>
     <div class="content">
         <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'book-account'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
+            {{ 'ObjectIcon::HRM_USER'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
         </div>
         <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ studentboss }}">
@@ -33,7 +33,7 @@
     </div>
     <div class="content">
         <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'text-box'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
+            {{ 'ObjectIcon::TEACHER'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
         </div>
         <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/teachers.php'}) }}">
@@ -43,7 +43,7 @@
     </div>
     <div class="content">
         <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'account'|mdi_icon(64) }}&nbsp;{{ humanresources }}
+            {{ 'ObjectIcon::USER'|mdi_icon(64) }}&nbsp;{{ humanresources }}
         </div>
         <div class="card-title text-center p-2 text-xl">
             <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ drh }}">
@@ -60,14 +60,14 @@
             </div>
             <div class="">
                 <a class="hover:cursor-pointer underline" href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}">
-                   {{ 'account'|mdi_icon(16) }} {{ 'Followed users' | trans }}
+                   {{ 'ObjectIcon::USER'|mdi_icon(16) }} {{ 'Followed users' | trans }}
                 </a>
                 {% if app.user.status == 1 %}
                     <a
                             href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
                             class="hover:cursor-pointer"
                     >
-                        {{ 'plus-circle-outline'|mdi_icon(16) }}
+                        {{ 'ActionIcon::ADD'|mdi_icon(16) }}
                     </a>
                 {% endif %}
             </div>
@@ -82,7 +82,7 @@
                 <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
                 >
-                {{ 'book-open-page-variant'|mdi_icon(16) }} {{ 'Assigned courses' | trans }}
+                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Assigned courses' | trans }}
                 </a>
             </div>
         </div>
@@ -96,7 +96,7 @@
                 <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
                 >
-                {{ 'book-open-page-variant'|mdi_icon(16) }} {{ 'Followed courses' | trans }}
+                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Followed courses' | trans }}
                 </a>
             </div>
         </div>
@@ -110,13 +110,13 @@
                 <a class="hover:cursor-pointer underline"
                    href="{{ url('legacy_main', {'name' : 'my_space/session.php'}) }}"
                 >
-                    {{ 'google-classroom'|mdi_icon(16) }} {{ 'Followed sessions' | trans }}
+                    {{ 'ObjectIcon::SESSION'|mdi_icon(16) }} {{ 'Followed sessions' | trans }}
                 </a>
                 {% if app.user.status == 1 %}
                     <a
                             href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
                             class="hover:cursor-pointer">
-                        {{ 'plus-circle-outline'|mdi_icon(16) }}
+                        {{ 'ActionIcon::ADD'|mdi_icon(16) }}
                     </a>
                 {% endif %}
             </div>

@@ -26,7 +26,7 @@ class CLpIvObjective
     protected int $cId;
 
     #[ORM\Column(name: 'lp_iv_id', type: 'bigint', nullable: false)]
-    protected int $lpIvId;
+    protected string $lpIvId;
 
     #[ORM\Column(name: 'order_id', type: 'integer', nullable: false)]
     protected int $orderId;
@@ -51,7 +51,7 @@ class CLpIvObjective
      *
      * @return CLpIvObjective
      */
-    public function setLpIvId(int $lpIvId)
+    public function setLpIvId(string $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -61,9 +61,9 @@ class CLpIvObjective
     /**
      * Get lpIvId.
      *
-     * @return int
+     * @return string
      */
-    public function getLpIvId()
+    public function getLpIvId(): string
     {
         return $this->lpIvId;
     }

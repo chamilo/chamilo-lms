@@ -25,7 +25,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, S
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Course::class)]
@@ -55,9 +55,9 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface, S
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }

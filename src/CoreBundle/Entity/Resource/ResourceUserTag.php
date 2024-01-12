@@ -19,7 +19,7 @@ class ResourceUserTag
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]

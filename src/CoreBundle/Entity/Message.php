@@ -82,7 +82,7 @@ class Message
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['message:read'])]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
@@ -337,7 +337,7 @@ class Message
         return $this;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

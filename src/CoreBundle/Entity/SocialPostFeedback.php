@@ -22,7 +22,7 @@ class SocialPostFeedback
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'feedbacks')]
     #[ORM\JoinColumn(name: 'social_post_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -48,7 +48,7 @@ class SocialPostFeedback
         $this->disliked = false;
     }
 
-    public function getId(): int
+    public function getId(): ?string
     {
         return $this->id;
     }

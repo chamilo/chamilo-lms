@@ -80,7 +80,7 @@ class SocialPost
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id', type: 'bigint')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Groups(['social_post:read', 'social_post:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentSocialPosts')]
@@ -168,12 +168,12 @@ class SocialPost
         $this->attachments = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(?string $id): self
     {
         $this->id = $id;
 

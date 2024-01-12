@@ -21,7 +21,7 @@ class GradebookCertificate
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: GradebookCategory::class)]
     #[ORM\JoinColumn(name: 'cat_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -98,9 +98,9 @@ class GradebookCertificate
     /**
      * Get id.
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }

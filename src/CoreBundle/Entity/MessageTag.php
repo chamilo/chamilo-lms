@@ -60,7 +60,7 @@ class MessageTag
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
@@ -95,7 +95,7 @@ class MessageTag
         $this->messageRelUsers = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

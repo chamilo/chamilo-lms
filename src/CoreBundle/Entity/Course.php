@@ -292,7 +292,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected bool $sticky;
 
     #[ORM\Column(name: 'disk_quota', type: 'bigint', unique: false, nullable: true)]
-    protected ?int $diskQuota = null;
+    protected ?string $diskQuota = null;
 
     #[ORM\Column(name: 'last_visit', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $lastVisit;
@@ -747,12 +747,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function getDiskQuota(): ?int
+    public function getDiskQuota(): ?string
     {
         return $this->diskQuota;
     }
 
-    public function setDiskQuota(int $diskQuota): self
+    public function setDiskQuota(?string $diskQuota): self
     {
         $this->diskQuota = $diskQuota;
 

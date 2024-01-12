@@ -32,7 +32,7 @@ class ResourceLink implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -96,7 +96,7 @@ class ResourceLink implements Stringable
         return (string) $this->getId();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

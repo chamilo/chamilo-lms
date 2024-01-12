@@ -29,7 +29,7 @@ class CLpIvInteraction
     protected int $orderId;
 
     #[ORM\Column(name: 'lp_iv_id', type: 'bigint', nullable: false)]
-    protected int $lpIvId;
+    protected string $lpIvId;
 
     #[ORM\Column(name: 'interaction_id', type: 'string', length: 255, nullable: false)]
     protected string $interactionId;
@@ -82,7 +82,7 @@ class CLpIvInteraction
      *
      * @return CLpIvInteraction
      */
-    public function setLpIvId(int $lpIvId)
+    public function setLpIvId(string $lpIvId)
     {
         $this->lpIvId = $lpIvId;
 
@@ -92,9 +92,9 @@ class CLpIvInteraction
     /**
      * Get lpIvId.
      *
-     * @return int
+     * @return string
      */
-    public function getLpIvId()
+    public function getLpIvId(): string
     {
         return $this->lpIvId;
     }

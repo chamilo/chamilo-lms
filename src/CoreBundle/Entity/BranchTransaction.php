@@ -19,14 +19,14 @@ class BranchTransaction
     #[ORM\Column(name: 'id', type: 'bigint', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: BranchTransactionStatus::class)]
     #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected Room $branchTransactionStatus;
 
     #[ORM\Column(name: 'transaction_id', type: 'bigint')]
-    protected int $externalTransactionId;
+    protected string $externalTransactionId;
 
     #[ORM\Column(name: 'action', type: 'string', length: 20, nullable: true, unique: false)]
     protected ?string $action = null;
@@ -59,9 +59,9 @@ class BranchTransaction
     /**
      * Get id.
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -262,9 +262,9 @@ class BranchTransaction
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getExternalTransactionId()
+    public function getExternalTransactionId(): string
     {
         return $this->externalTransactionId;
     }
@@ -272,7 +272,7 @@ class BranchTransaction
     /**
      * @return BranchTransaction
      */
-    public function setExternalTransactionId(int $externalTransactionId)
+    public function setExternalTransactionId(string $externalTransactionId)
     {
         $this->externalTransactionId = $externalTransactionId;
 

@@ -86,7 +86,7 @@ class UserRelUser
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
@@ -146,7 +146,7 @@ class UserRelUser
         return $this->relationType;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

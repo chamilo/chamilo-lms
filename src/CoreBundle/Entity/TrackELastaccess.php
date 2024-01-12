@@ -37,7 +37,7 @@ class TrackELastaccess
     #[ORM\Column(name: 'access_id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected int $accessId;
+    protected string $accessId;
 
     /**
      * Set accessUserId.
@@ -152,9 +152,9 @@ class TrackELastaccess
     /**
      * Get accessId.
      *
-     * @return int
+     * @return string
      */
-    public function getAccessId()
+    public function getAccessId(): string
     {
         return $this->accessId;
     }

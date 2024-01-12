@@ -85,7 +85,7 @@ class ResourceFile implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
     #[Assert\NotBlank]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'string', length: 255)]
@@ -238,7 +238,7 @@ class ResourceFile implements Stringable
 
             return $this;
         }*/
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

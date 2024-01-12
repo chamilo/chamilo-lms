@@ -67,7 +67,7 @@ class BranchSync
     protected ?string $adminPhone = null;
 
     #[ORM\Column(name: 'last_sync_trans_id', type: 'bigint', nullable: true, unique: false)]
-    protected ?int $lastSyncTransId = null;
+    protected ?string $lastSyncTransId = null;
 
     #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]
     protected ?DateTime $lastSyncTransDate = null;
@@ -329,7 +329,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setLastSyncTransId(int $lastSyncTransId)
+    public function setLastSyncTransId(?string $lastSyncTransId)
     {
         $this->lastSyncTransId = $lastSyncTransId;
 
@@ -339,9 +339,9 @@ class BranchSync
     /**
      * Get lastSyncTransId.
      *
-     * @return int
+     * @return string
      */
-    public function getLastSyncTransId()
+    public function getLastSyncTransId(): ?string
     {
         return $this->lastSyncTransId;
     }

@@ -43,7 +43,7 @@ class PageCategory
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
     #[Assert\NotBlank]
     #[Groups(['page_category:read', 'page_category:write', 'page:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255)]
@@ -66,7 +66,7 @@ class PageCategory
     {
         $this->pages = new ArrayCollection();
     }
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -43,7 +43,7 @@ class MessageRelUser
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'], inversedBy: 'receivers')]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
@@ -84,7 +84,7 @@ class MessageRelUser
         $this->receiverType = self::TYPE_TO;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

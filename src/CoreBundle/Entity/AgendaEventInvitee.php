@@ -24,7 +24,7 @@ class AgendaEventInvitee
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue]
-    private int $id;
+    private string $id;
 
     #[ORM\ManyToOne(targetEntity: AgendaEventInvitation::class, inversedBy: 'invitees')]
     #[ORM\JoinColumn(name: 'invitation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -34,7 +34,7 @@ class AgendaEventInvitee
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?User $user;
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

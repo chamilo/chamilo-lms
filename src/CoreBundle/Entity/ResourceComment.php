@@ -38,7 +38,7 @@ class ResourceComment
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[Groups(['comment:read'])]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -83,7 +83,7 @@ class ResourceComment
         $this->children = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?string
     {
         return $this->id;
     }

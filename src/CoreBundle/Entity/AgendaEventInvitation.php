@@ -26,7 +26,7 @@ class AgendaEventInvitation
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\OneToMany(
         mappedBy: 'invitation',
@@ -45,7 +45,7 @@ class AgendaEventInvitation
         $this->invitees = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -18,7 +18,7 @@ class CQuizRelQuestionCategory
     #[ORM\Column(name: 'iid', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $iid = null;
+    protected ?string $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CQuizQuestionCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -31,7 +31,7 @@ class CQuizRelQuestionCategory
     #[ORM\Column(name: 'count_questions', type: 'integer', nullable: false)]
     protected int $countQuestions;
 
-    public function getIid(): ?int
+    public function getIid(): ?string
     {
         return $this->iid;
     }

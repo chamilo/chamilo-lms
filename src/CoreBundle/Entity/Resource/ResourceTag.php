@@ -19,7 +19,7 @@ class ResourceTag
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', nullable: false)]
     protected string $name;

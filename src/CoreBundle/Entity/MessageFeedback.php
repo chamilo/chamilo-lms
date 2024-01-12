@@ -21,7 +21,7 @@ class MessageFeedback
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id()]
     #[ORM\GeneratedValue()]
-    private int $id;
+    private string $id;
 
     #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Message', inversedBy: 'likes')]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -40,12 +40,12 @@ class MessageFeedback
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     private DateTime $updatedAt;
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 

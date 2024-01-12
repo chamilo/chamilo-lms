@@ -80,7 +80,7 @@ class ResourceNode implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
@@ -519,7 +519,7 @@ class ResourceNode implements Stringable
     /**
      * Returns the resource id.
      */
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

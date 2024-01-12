@@ -16,7 +16,7 @@ class ResourceRight implements Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: ResourceLink::class, inversedBy: 'resourceRights')]
     #[ORM\JoinColumn(name: 'resource_link_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -34,9 +34,9 @@ class ResourceRight implements Stringable
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }

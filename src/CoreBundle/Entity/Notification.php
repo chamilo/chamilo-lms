@@ -19,7 +19,7 @@ class Notification
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\Column(name: 'dest_user_id', type: 'integer', nullable: false)]
     protected int $destUserId;
@@ -200,9 +200,9 @@ class Notification
     /**
      * Get id.
      *
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->id;
     }

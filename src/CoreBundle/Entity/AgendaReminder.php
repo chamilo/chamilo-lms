@@ -19,7 +19,7 @@ class AgendaReminder
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = null;
+    protected ?string $id = null;
 
     #[ORM\Column(name: 'type', type: 'string')]
     protected string $type;
@@ -38,7 +38,7 @@ class AgendaReminder
         $this->sent = false;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

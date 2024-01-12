@@ -164,7 +164,7 @@ $form->addButtonCreate(get_lang('Create a course'));
 
 // Set some default values.
 $values['course_language'] = api_get_setting('platformLanguage');
-$values['disk_quota'] = round(api_get_setting('default_document_quotum') / 1024 / 1024, 1);
+$values['disk_quota'] = round(api_get_setting('default_document_quotum'), 1);
 
 $default_course_visibility = api_get_setting('courses_default_creation_visibility');
 
@@ -184,7 +184,6 @@ if ($form->validate()) {
     $course = $form->exportValues();
 
     $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : null;
-    $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
     $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
     $course['teachers'] = $course_teachers;
     $course['wanted_code'] = $course['visual_code'];

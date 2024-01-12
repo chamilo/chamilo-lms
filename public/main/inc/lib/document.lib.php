@@ -23,7 +23,7 @@ class DocumentManager
     /**
      * @param string $course_code
      *
-     * @return int the document folder quota for the current course in bytes
+     * @return int the document folder quota for the current course in megabytes
      *             or the default quota
      */
     public static function get_course_quota($course_code = null)

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class BranchTransaction
 {
-    #[ORM\Column(name: 'id', type: 'bigint', nullable: false)]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
@@ -25,7 +25,7 @@ class BranchTransaction
     #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id')]
     protected Room $branchTransactionStatus;
 
-    #[ORM\Column(name: 'transaction_id', type: 'bigint')]
+    #[ORM\Column(name: 'transaction_id', type: 'integer')]
     protected int $externalTransactionId;
 
     #[ORM\Column(name: 'action', type: 'string', length: 20, nullable: true, unique: false)]

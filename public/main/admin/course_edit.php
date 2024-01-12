@@ -285,7 +285,7 @@ $(function() {
 $form->addButtonUpdate(get_lang('Edit course information'));
 
 // Set some default values
-$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
+$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']), 1);
 $courseInfo['real_code'] = $courseInfo['code'];
 $courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
@@ -357,7 +357,7 @@ if ($form->validate()) {
         ->setVisualCode($visual_code)
         ->setDepartmentName($course['department_name'])
         ->setDepartmentUrl($department_url)
-        ->setDiskQuota($course['disk_quota'] * 1024 * 1024)
+        ->setDiskQuota($course['disk_quota'])
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)

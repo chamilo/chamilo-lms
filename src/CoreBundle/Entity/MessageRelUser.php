@@ -40,7 +40,7 @@ class MessageRelUser
     public const TYPE_TO = 1;
     public const TYPE_CC = 2;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;

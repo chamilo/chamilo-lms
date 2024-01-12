@@ -29,31 +29,6 @@ $_SESSION['this_section'] = $this_section;
 // Access restrictions.
 api_protect_admin_script();
 
- // Submit stylesheets.
-if (isset($_POST['save']) && isset($_GET['category']) && 'Stylesheets' === $_GET['category']) {
-    storeStylesheets();
-    Display::addFlash(Display::return_message(get_lang('Saved.')));
-}
-
-// Settings to avoid
-$settings_to_avoid = [
-    'use_session_mode' => 'true',
-    'gradebook_enable' => 'false',
-    // ON by default - now we have this option when  we create a course
-    'example_material_course_creation' => 'true',
-];
-
-$convert_byte_to_mega_list = [
-    'dropbox_max_filesize',
-    'message_max_upload_filesize',
-    'default_document_quotum',
-    'default_group_quotum',
-];
-
-if (isset($_POST['style'])) {
-    Display::$preview_style = $_POST['style'];
-}
-
 // Database table definitions.
 $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
@@ -162,13 +137,6 @@ if (!empty($_GET['category']) &&
             unset($update_values['pdf_export_watermark_path']);
         }
 
-        // Set true for allow_message_tool variable if social tool is actived
-        foreach ($convert_byte_to_mega_list as $item) {
-            if (isset($values[$item])) {
-                $values[$item] = round($values[$item] * 1024 * 1024);
-            }
-        }
-
         if (isset($values['allow_social_tool']) && 'true' == $values['allow_social_tool']) {
             $values['allow_message_tool'] = 'true';
         }
@@ -177,9 +145,6 @@ if (!empty($_GET['category']) &&
             $key = $item['variable'];
             if ('prevent_multiple_simultaneous_login' === $key) {
                 Session::write('first_user_login', 1);
-            }
-            if (in_array($key, $settings_to_avoid)) {
-                continue;
             }
             if ('search_field' == $key || 'submit_fixed_in_bottom' == $key) {
                 continue;
@@ -199,9 +164,6 @@ if (!empty($_GET['category']) &&
 
         foreach ($values as $key => $value) {
             if (0 === strcmp($key, 'MAX_FILE_SIZE')) {
-                continue;
-            }
-            if (in_array($key, $settings_to_avoid)) {
                 continue;
             }
             // Avoid form elements which have nothing to do with settings
@@ -287,9 +249,6 @@ if (!empty($_GET['category']) &&
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
-                if (in_array($key, $settings_to_avoid)) {
-                    continue;
-                }
                 Event::addEvent(
                     LOG_CONFIGURATION_SETTINGS_CHANGE,
                     LOG_CONFIGURATION_SETTINGS_VARIABLE,
@@ -336,75 +295,6 @@ $htmlHeadXtra[] = '<script>
         });
     });
 </script>';
-
-// The action images.
-$action_images['platform'] = 'platform.png';
-$action_images['course'] = 'course.png';
-$action_images['session'] = 'session.png';
-$action_images['tools'] = 'tools.png';
-$action_images['user'] = 'user.png';
-$action_images['gradebook'] = 'gradebook.png';
-$action_images['ldap'] = 'ldap.png';
-$action_images['cas'] = 'cas.png';
-$action_images['security'] = 'security.png';
-$action_images['languages'] = 'languages.png';
-$action_images['tuning'] = 'tuning.png';
-$action_images['templates'] = 'template.png';
-$action_images['search'] = 'search.png';
-$action_images['editor'] = 'html_editor.png';
-$action_images['timezones'] = 'timezone.png';
-$action_images['extra'] = 'wizard.png';
-$action_images['tracking'] = 'statistics.png';
-$action_images['gradebook'] = 'gradebook.png';
-$action_images['search'] = 'search.png';
-$action_images['stylesheets'] = 'stylesheets.png';
-$action_images['templates'] = 'template.png';
-$action_images['plugins'] = 'plugins.png';
-$action_images['shibboleth'] = 'shibboleth.png';
-$action_images['facebook'] = 'facebook.png';
-$action_images['crons'] = 'crons.png';
-$action_images['webservices'] = 'webservices.png';
-
-$action_array = [];
-$resultcategories = [];
-
-$resultcategories[] = ['category' => 'Platform'];
-$resultcategories[] = ['category' => 'Course'];
-$resultcategories[] = ['category' => 'Session'];
-$resultcategories[] = ['category' => 'Languages'];
-$resultcategories[] = ['category' => 'User'];
-$resultcategories[] = ['category' => 'Tools'];
-$resultcategories[] = ['category' => 'Editor'];
-$resultcategories[] = ['category' => 'Security'];
-$resultcategories[] = ['category' => 'Tuning'];
-$resultcategories[] = ['category' => 'Gradebook'];
-$resultcategories[] = ['category' => 'Timezones'];
-$resultcategories[] = ['category' => 'Tracking'];
-$resultcategories[] = ['category' => 'Search'];
-$resultcategories[] = ['category' => 'Stylesheets'];
-$resultcategories[] = ['category' => 'Templates'];
-$resultcategories[] = ['category' => 'Plugins'];
-$resultcategories[] = ['category' => 'LDAP'];
-$resultcategories[] = ['category' => 'CAS'];
-$resultcategories[] = ['category' => 'Shibboleth'];
-$resultcategories[] = ['category' => 'Facebook'];
-$resultcategories[] = ['category' => 'Crons'];
-$resultcategories[] = ['category' => 'WebServices'];
-
-foreach ($resultcategories as $row) {
-    $url = [];
-    $url['url'] = api_get_self()."?category=".$row['category'];
-    $url['content'] = Display::return_icon(
-        $action_images[strtolower($row['category'])],
-        api_ucfirst(get_lang($row['category'])),
-        [],
-        ICON_SIZE_MEDIUM
-    );
-    if (strtolower($row['category']) == strtolower($_GET['category'])) {
-        $url['active'] = true;
-    }
-    $action_array[] = $url;
-}
 
 ob_start();
 if (!empty($_GET['category'])) {
@@ -455,10 +345,6 @@ if (!empty($_GET['category'])) {
             echo '</div>';
             echo '</div>';
             echo '</div>';
-            break;
-        case 'Stylesheets':
-            // Displaying the extensions: Stylesheets.
-            handleStylesheets();
             break;
         case 'Search':
             handleSearch();

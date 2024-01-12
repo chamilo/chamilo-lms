@@ -142,4 +142,10 @@ enum ObjectIcon: string
     case PENDING_INVITATION = 'email-heart-outline';
     // Project (from tickets tool)
     case PROJECT = 'package';
+    // Waiting list
+    case WAITING_LIST = 'clipboard-list-outline';
+    // Gallery
+    case GALLERY = 'view-gallery-outline';
+    // Results (exercises or other)
+    case RESULTS = 'clipboard-check-outline';
 }

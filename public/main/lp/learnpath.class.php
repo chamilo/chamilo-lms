@@ -4675,18 +4675,14 @@ class learnpath
                 $iconName = str_replace(' ', '', $type);
                 $icon = '';
                 switch ($iconName) {
+                    case 'category':
                     case 'chapter':
                     case 'folder':
                     case 'dir':
-                        $icon = Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon', '', 16);
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                     default:
-                        $icon = Display::return_icon(
-                            'lp_'.$iconName.'.png',
-                            '',
-                            [],
-                            ICON_SIZE_TINY
-                        );
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                 }
 
@@ -6130,12 +6126,17 @@ class learnpath
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
                 $iconName = str_replace(' ', '', $type);
-                $icon = Display::return_icon(
-                    'lp_'.$iconName.'.png',
-                    '',
-                    [],
-                    ICON_SIZE_TINY
-                );
+                switch ($iconName) {
+                    case 'category':
+                    case 'chapter':
+                    case 'folder':
+                    case 'dir':
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                    default:
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                }
 
                 if ($itemId == $currentItemId) {
                     return '';

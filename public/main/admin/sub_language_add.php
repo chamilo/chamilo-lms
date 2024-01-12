@@ -7,6 +7,9 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', 300);
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 

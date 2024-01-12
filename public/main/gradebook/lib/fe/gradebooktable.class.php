@@ -610,7 +610,7 @@ class GradebookTable extends SortableTable
                             }
 
                             // Type
-                            $row[] = $this->build_type_column($item, ['style' => 'padding-left:5px']);
+                            $row[] = $this->build_type_column($item, 'padding-left:5px');
                             // Name.
                             $row[] = $invisibility_span_open.'&nbsp;&nbsp;&nbsp; '.
                                 $this->build_name_link($item, $type, 4).$invisibility_span_close;
@@ -1192,13 +1192,13 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
-     * @param array $attributes
+     * @param string $style
      *
      * @return string
      */
-    private function build_type_column($item, $attributes = [])
+    private function build_type_column($item, $style = null)
     {
-        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $attributes);
+        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $style);
     }
 
     /**

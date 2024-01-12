@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
@@ -146,12 +148,12 @@ class GradebookUtils
     /**
      * Builds an img tag for a gradebook item.
      */
-    public static function build_type_icon_tag($kind, $attributes = [])
+    public static function build_type_icon_tag($kind, $style = null)
     {
-        return Display::return_icon(
+        return Display::getMdiIcon(
             self::get_icon_file_name($kind),
-            ' ',
-            $attributes,
+            'ch-tool-icon',
+            $style,
             ICON_SIZE_SMALL
         );
     }
@@ -167,47 +169,47 @@ class GradebookUtils
     {
         switch ($type) {
             case 'cat':
-                $icon = 'gradebook.png';
+                $icon = ToolIcon::GRADEBOOK;
                 break;
             case 'evalempty':
-                $icon = 'empty_evaluation.png';
+                $icon = 'table';
                 break;
             case 'evalnotempty':
-                $icon = 'no_empty_evaluation.png';
+                $icon = 'table-check';
                 break;
             case 'exercise':
             case LINK_EXERCISE:
-                $icon = 'quiz.png';
+                $icon = ObjectIcon::TEST;
                 break;
             case 'learnpath':
             case LINK_LEARNPATH:
-                $icon = 'learnpath.png';
+                $icon = ObjectIcon::LP;
                 break;
             case 'studentpublication':
             case LINK_STUDENTPUBLICATION:
-                $icon = 'works.gif';
+                $icon = ObjectIcon::ASSIGNMENT;
                 break;
             case 'link':
-                $icon = 'link.gif';
+                $icon = ObjectIcon::LINK;
                 break;
             case 'forum':
             case LINK_FORUM_THREAD:
-                $icon = 'forum.gif';
+                $icon = ObjectIcon::FORUM_THREAD;
                 break;
             case 'attendance':
             case LINK_ATTENDANCE:
-                $icon = 'attendance.gif';
+                $icon = ObjectIcon::ATTENDANCE;
                 break;
             case 'survey':
             case LINK_SURVEY:
-                $icon = 'survey.gif';
+                $icon = ObjectIcon::SURVEY;
                 break;
             case 'dropbox':
             case LINK_DROPBOX:
-                $icon = 'dropbox.gif';
+                $icon = ToolIcon::DROPBOX;
                 break;
             default:
-                $icon = 'link.gif';
+                $icon = ObjectIcon::LINK;
                 break;
         }
 

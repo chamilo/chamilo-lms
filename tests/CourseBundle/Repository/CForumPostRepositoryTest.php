@@ -17,10 +17,6 @@ use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
-use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 
 class CForumPostRepositoryTest extends AbstractApiTest
 {
@@ -35,17 +31,9 @@ class CForumPostRepositoryTest extends AbstractApiTest
         $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
         $postRepo = self::getContainer()->get(CForumPostRepository::class);
         $attachmentRepo = self::getContainer()->get(CForumAttachmentRepository::class);
-
-        // Mock studentview session key.
-        $session = new SymfonySession(new MockFileSessionStorage);
-        $session->set('studentview', 1);
-        $request = new Request();
-        $request->setSession($session);
-        $request_stack = $this->createMock(RequestStack::class);
-        $request_stack
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-        ;
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
         $postRepo->setRequestStack($request_stack);
 
         $forum = (new CForum())

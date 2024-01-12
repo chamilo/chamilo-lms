@@ -18,9 +18,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
-use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 
 class CDocumentRepositoryTest extends AbstractApiTest
 {
@@ -836,16 +833,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
-        // Mock studentview session key.
-        $session = new SymfonySession(new MockFileSessionStorage);
-        $session->set('studentview', 1);
-        $request = new Request();
-        $request->setSession($session);
-        $request_stack = $this->createMock(RequestStack::class);
-        $request_stack
-            ->method('getCurrentRequest')
-            ->willReturn($request);
-        ;
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
         $documentRepo->setRequestStack($request_stack);
 
         $admin = $this->getUser('admin');

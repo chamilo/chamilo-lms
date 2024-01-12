@@ -182,8 +182,9 @@ class SubLanguageManager
         // Check if the translations directory is writable
         if (!is_writable($translationsDir)) {
             // Attempt to set writable permissions
-            if (!@chmod($translationsDir, 0775)) { // You might adjust the permission level as needed
-                return false;  // Failed to set writable permissions
+            if (!@chmod($translationsDir, 0775)) {
+                error_log("Failed to set writable permissions for $translationsDir");
+                return false;
             }
         }
 
@@ -191,7 +192,8 @@ class SubLanguageManager
         if (!file_exists($poFilePath)) {
             $initialContent = "# Translation file for $subLanguageIsoCode\nmsgid \"\"\nmsgstr \"\"\n";
             if (false === file_put_contents($poFilePath, $initialContent)) {
-                return false;  // Failed to write the file
+                error_log("Failed to write the initial content to $poFilePath");
+                return false;
             }
         }
 
@@ -603,21 +605,36 @@ class SubLanguageManager
      */
     private static function getTranslationForVariable(string $variable, string $filename, $checkSubLanguagePath = false): string
     {
+        $poFilePath = self::getPoFilePath($filename, $checkSubLanguagePath);
+        if (!file_exists($poFilePath)) {
+            $shortLanguageCode = self::getShortLanguageCode($filename);
+            $poFilePath = self::getPoFilePath($shortLanguageCode . '.po', $checkSubLanguagePath);
 
-        $poFilePath = api_get_path(SYS_PATH) . self::LANGUAGE_TRANS_PATH .  $filename;
-        if ($checkSubLanguagePath) {
-            $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  $filename;
-        }
-
-        if (file_exists($poFilePath)) {
-            $content = file_get_contents($poFilePath);
-            $pattern = '/msgid "' . preg_quote($variable, '/') . '"\nmsgstr "(.*?)"/';
-            if (preg_match($pattern, $content, $match)) {
-                return $match[1];
+            if (!file_exists($poFilePath)) {
+                return '';
             }
         }
 
+        $content = file_get_contents($poFilePath);
+        $pattern = '/msgid "' . preg_quote($variable, '/') . '"\nmsgstr "(.*?)"/';
+        if (preg_match($pattern, $content, $match)) {
+            return $match[1];
+        }
+
         return '';
+    }
+
+    private static function getPoFilePath(string $filename, bool $checkSubLanguagePath): string
+    {
+        $path = $checkSubLanguagePath ? self::SUBLANGUAGE_TRANS_PATH : self::LANGUAGE_TRANS_PATH;
+        return api_get_path(SYS_PATH) . $path . $filename;
+    }
+
+    private static function getShortLanguageCode(string $filename): string
+    {
+        $parts = explode('.', $filename);
+        $languageCodeParts = explode('_', $parts[1]);
+        return $parts[0].'.'.$languageCodeParts[0];
     }
 
     /**

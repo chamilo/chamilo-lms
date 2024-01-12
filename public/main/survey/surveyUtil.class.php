@@ -120,7 +120,7 @@ class SurveyUtil
             ->setQuestion($question)
             ->setOptionId($optionId)
             ->setValue((int) $optionValue)
-            ->setSessionId($sessionId)
+            ->setSessionId($sessionId ?: null)
         ;
 
         $em = Database::getManager();

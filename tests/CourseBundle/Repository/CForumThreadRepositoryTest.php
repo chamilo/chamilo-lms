@@ -29,6 +29,10 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $forumRepo = self::getContainer()->get(CForumRepository::class);
         $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
         $qualifyRepo = $em->getRepository(CForumThreadQualify::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $threadRepo->setRequestStack($request_stack);
 
         $forum = (new CForum())
             ->setTitle('forum')

@@ -28,7 +28,7 @@ class CLpIvInteraction
     #[ORM\Column(name: 'order_id', type: 'integer', nullable: false)]
     protected int $orderId;
 
-    #[ORM\Column(name: 'lp_iv_id', type: 'bigint', nullable: false)]
+    #[ORM\Column(name: 'lp_iv_id', type: 'integer', nullable: false)]
     protected int $lpIvId;
 
     #[ORM\Column(name: 'interaction_id', type: 'string', length: 255, nullable: false)]

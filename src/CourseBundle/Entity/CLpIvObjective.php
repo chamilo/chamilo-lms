@@ -25,7 +25,7 @@ class CLpIvObjective
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    #[ORM\Column(name: 'lp_iv_id', type: 'bigint', nullable: false)]
+    #[ORM\Column(name: 'lp_iv_id', type: 'integer', nullable: false)]
     protected int $lpIvId;
 
     #[ORM\Column(name: 'order_id', type: 'integer', nullable: false)]

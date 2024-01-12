@@ -187,6 +187,10 @@ class CGroupRepositoryTest extends AbstractApiTest
     public function testFindAllByCourse(): void
     {
         $repo = self::getContainer()->get(CGroupRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');

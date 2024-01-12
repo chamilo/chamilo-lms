@@ -32,9 +32,11 @@ Display::display_header('List icons');
 echo '<table style="border: 1px solid grey">';
 echo '<tr style="border: 1px solid grey"><td>Icon</td><td>CONSTANT NAME</td><td>Icon name in MDI</td></tr>'.PHP_EOL;
 foreach ($classes as $class) {
-    echo '<tr><td colspan="3">'.$class.'</td></tr>'.PHP_EOL;
+    $lastSlashPos = strrpos($class, '\\');
+    $shortClass = substr($class, $lastSlashPos + 1);
+    echo '<tr><td colspan="3"><u>'.$shortClass.'</u>('.$class.')</td></tr>'.PHP_EOL;
     foreach ($class::cases() as $icon) {
-        echo '<tr style="border: 1px solid grey"><td style="align:left;">'.Display::getMdiIcon($icon->value, 'ch-tool-icon', 'padding-top: 2px;', ICON_SIZE_MEDIUM).'</td><td>'.$icon->name.'</td><td>'.$icon->value.'</td></tr>'.PHP_EOL;
+        echo '<tr style="border: 1px solid grey"><td style="align:left;">'.Display::getMdiIcon($icon->value, 'ch-tool-icon', 'padding-top: 2px;', ICON_SIZE_MEDIUM).'</td><td>'.$shortClass.'::'.$icon->name.'</td><td>'.$icon->value.'</td></tr>'.PHP_EOL;
     }
 }
 echo '</table>';

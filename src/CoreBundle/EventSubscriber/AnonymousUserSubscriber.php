@@ -153,7 +153,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         return $anonymousUser->getId();
     }
 
-    private function handleRelatedEntities(User $user)
+    private function handleRelatedEntities(User $user): void
     {
         $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
 
@@ -168,7 +168,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $this->entityManager->flush();
     }
 
-    private function handleAttemptRecordings(TrackEExercise $exercise)
+    private function handleAttemptRecordings(TrackEExercise $exercise): void
     {
         $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptRecording::class);
 
@@ -178,5 +178,4 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             $this->entityManager->remove($attemptRecording);
         }
     }
-
 }

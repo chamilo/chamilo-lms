@@ -472,21 +472,24 @@ if (is_array($forumCategories)) {
                             if ($forum->getForumOfGroup() !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                     $forumInfo['alert'] = ' '.
-                                Display::return_icon(
-                                    'alert.png',
-                                    get_lang('Forum'),
-                                    null,
-                                    ICON_SIZE_SMALL
-                                );
+                                    Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Forum')
+                                    );
                                 }
                             } else {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                    $forumInfo['alert'] = ' '.Display::return_icon(
-                                    'alert.png',
-                                    get_lang('Forum'),
-                                    null,
-                                    ICON_SIZE_SMALL
-                                );
+                                    $forumInfo['alert'] = ' '.
+                                    Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Forum')
+                                    );
                                 }
                             }*/
                         }

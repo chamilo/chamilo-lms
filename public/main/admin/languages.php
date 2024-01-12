@@ -81,70 +81,30 @@ $htmlHeadXtra[] = '<script>
         return false;
     });
 
- 	//$(window).load(function () {
-      $(".make_visible_and_invisible").attr("href","javascript:void(0)");
-	//});
+    $(".make_visible_and_invisible").click(function(e) {
+        e.preventDefault();
 
- 	$("td .make_visible_and_invisible").click(function () {
-		make_visible="visible.png";
-		make_invisible="invisible.png";
-		id_link_tool=$(this).attr("id");
-		id_img_link_tool="img"+id_link_tool;
-		path_name_of_imglinktool=$("#"+id_img_link_tool).attr("src");
-		link_info_id=id_link_tool.split("linktool_");
-		link_id=link_info_id[1];
+        var id_link_tool = $(this).attr("id");
+        var link_id = id_link_tool.split("linktool_")[1];
+        var currentIcon = $("#imglinktool_" + link_id);
 
-		link_tool_info=path_name_of_imglinktool.split("/");
-		my_image_tool=link_tool_info[link_tool_info.length-1];
+        $.ajax({
+            type: "POST",
+            url: "../admin/languages.php",
+            data: { id: link_id, visibility: currentIcon.hasClass("mdi-toggle-switch") ? 0 : 1, sent_http_request: 1 },
+            beforeSend: function() {
+                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em>'.get_lang('Loading'). '...</div>");
+            },
+            success: function(response) {
+                if (response === "set_visible" || response === "set_hidden") {
+                    var newIconClass = (response === "set_visible") ? "mdi-toggle-switch" : "mdi-toggle-switch-off";
+                    var oldIconClass = (response === "set_visible") ? "mdi-toggle-switch-off" : "mdi-toggle-switch";
 
-
-		if (my_image_tool=="visible.png") {
-			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_visible,make_invisible);
-			my_visibility=0;
-		} else {
-			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_invisible,make_visible);
-			my_visibility=1;
-		}
-
-		$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(myObject) {
-				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
-			},
-			type: "POST",
-			url: "../admin/languages.php",
-			data: "id="+link_id+"&visibility="+my_visibility+"&sent_http_request=1",
-			success: function(datos) {
-
-                if (datos=="set_visible" || datos=="set_hidden") {
-                    $("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
-
-                    if (my_image_tool=="visible.png") {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make available').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make available').'");
-                    } else {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make unavailable').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make unavailable').'");
-                    }
-
-                    if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowVisible').'</div>");
-                    }
-
-                    if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.').'</div>");
-                    }
+                    currentIcon.removeClass(oldIconClass).addClass(newIconClass);
                 }
-
-                var action = datos.split(":")[0];
-                if (action && action == "confirm") {
-                    var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('There are users using this language. Do you want to disable this language and set all this users with the default portal language?').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn--plain\"><em class=\"fa fa-eye\"></em> '.get_lang('Make unavailable').'</a></div>";
-                    $("#id_content_message").html(sure);
-                    $("html, body").animate({ scrollTop: 0 }, 200);
-				}
-		} });
-	});
+            }
+        });
+    });
 
  });
 </script>';
@@ -343,13 +303,14 @@ while ($row = Database::fetch_array($result_select)) {
             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
                      &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
-        if (1 == $row['available']) {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".
-                Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make unavailable'), ['id' => 'imglinktool_'.$row['id']])."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
-        } else {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".
-                Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make available'), ['id' => 'imglinktool_'.$row['id']])."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
-        }
+        $action = ($row['available'] == 1) ? 'makeunavailable' : 'makeavailable';
+        $icon = ($row['available'] == 1) ? StateIcon::ACTIVE : StateIcon::INACTIVE;
+        $tooltip = ($row['available'] == 1) ? get_lang('Make unavailable') : get_lang('Make available');
+
+        $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=$action&id=".$row['id']."'>".
+            Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $tooltip, ['id' => 'imglinktool_'.$row['id']])."</a>
+            <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
+            &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     }
     $language_data[] = $row_td;
 }

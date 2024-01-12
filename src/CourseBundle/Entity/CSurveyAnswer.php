@@ -34,8 +34,8 @@ class CSurveyAnswer
     #[ORM\Column(name: 'user', type: 'string', length: 250, nullable: false)]
     protected string $user;
 
-    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
-    protected int $sessionId;
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
+    protected ?int $sessionId;
 
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
     protected int $lpItemId;
@@ -120,24 +120,12 @@ class CSurveyAnswer
         return $this;
     }
 
-    /**
-     * Get session Id.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): ?int
     {
         return $this->sessionId;
     }
 
-    /**
-     * Set session Id.
-     *
-     * @param int $sessionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setSessionId($sessionId)
+    public function setSessionId(?int $sessionId = null): static
     {
         $this->sessionId = $sessionId;
 

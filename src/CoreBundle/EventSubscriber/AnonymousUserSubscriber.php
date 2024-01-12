@@ -42,7 +42,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $userIp = $request->getClientIp();
+        $userIp = $request->getClientIp() ?: '127.0.0.1';
 
         $anonymousUserId = $this->getOrCreateAnonymousUserId($userIp);
         if (null !== $anonymousUserId) {

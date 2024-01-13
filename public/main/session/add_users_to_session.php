@@ -82,12 +82,12 @@ $link_add_group = Display::url(
 );
 
 $newLinks = Display::url(
-    Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
+    Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enroll trainers from existing sessions')).
     get_lang('Enroll trainers from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId
 );
 $newLinks .= Display::url(
-    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
+    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enroll trainers from existing sessions')).
     get_lang('Enroll students from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId
 );

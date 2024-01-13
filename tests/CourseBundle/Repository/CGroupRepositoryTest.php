@@ -113,7 +113,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         // FIXME Bring back once behavior is fixed on the source.
         // Similar to category-forum a delete is triggering associated values
         // removal, it is pending to fix code and re-enable these assertions.
-        //$this->assertSame(1, $categoryRepo->count([]));
+        // $this->assertSame(1, $categoryRepo->count([]));
     }
 
     public function testCreateAddUsers(): void

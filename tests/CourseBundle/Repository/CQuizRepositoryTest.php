@@ -208,7 +208,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $this->assertCount(3, $items);
 
         // FIXME Re-add: Why the course exercise is visible?
-        //$this->assertFalse($exercise->isVisible($course));
+        // $this->assertFalse($exercise->isVisible($course));
         $this->assertTrue($exercise->isVisible($course, $session));
     }
 }

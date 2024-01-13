@@ -75,6 +75,6 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         // data on removal.
         // CForum::forumCategory property's ORM\JoinColumn's "onDelete: SET
         // NULL" may be the problem.
-        //$this->assertSame(1, $forumRepo->count([]));
+        // $this->assertSame(1, $forumRepo->count([]));
     }
 }

@@ -132,15 +132,15 @@ class CForumPostRepositoryTest extends AbstractApiTest
         // FIXME Bring back once behavior is fixed on the source.
         // Similar to category-forum a delete is triggering associated values
         // removal, it is pending to fix code and re-enable these assertions..
-        //$this->assertSame(1, $threadRepo->count([]));
-        //$this->assertSame(1, $forumRepo->count([]));
+        // $this->assertSame(1, $threadRepo->count([]));
+        // $this->assertSame(1, $forumRepo->count([]));
 
         $this->getEntityManager()->clear();
 
         /** @var CForum $forum */
         $forum = $forumRepo->find($forum->getIid());
         // FIXME Bring back once behavior is fixed on the source.
-        //$forumRepo->delete($forum);
+        // $forumRepo->delete($forum);
 
         $this->assertSame(0, $threadRepo->count([]));
         $this->assertSame(0, $forumRepo->count([]));

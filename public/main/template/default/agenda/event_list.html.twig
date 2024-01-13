@@ -11,13 +11,13 @@
                         {% if event.visibility == 1 %}
                             <a class="btn btn--plain btn-xs"
                                href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}&type={{ event.type }}">
-                                {{ 'StateIcon::ACTIVE'|mdi_icon(22, 'ch-tool-icon', 'Visible') }}
+                                {{ 'StateIcon::ACTIVE'|mdi_icon_t(22, 'ch-tool-icon', 'Visible') }}
                             </a>
                         {% else %}
                             {% if event.type == 'course' or event.type == 'session' %}
                                 <a class="btn btn--plain btn-xs"
                                    href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}&type={{ event.type }}">
-                                    {{ 'StateIcon::INACTIVE'|mdi_icon(22, 'ch-tool-icon', 'Invisible') }}
+                                    {{ 'StateIcon::INACTIVE'|mdi_icon_t(22, 'ch-tool-icon', 'Invisible') }}
                                 </a>
                             {% endif %}
                         {% endif %}

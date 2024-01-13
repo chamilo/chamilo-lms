@@ -52,7 +52,7 @@
                                 </a>
                                 {{ item.notifications }}
                                 {% if item.is_special_course is defined and item.is_special_course %}
-                                    {{ 'ObjectIcon::PIN' | mdi_icon(22, 'ch-tool-icon', 'CourseAutoRegister' ) }}
+                                    {{ 'ObjectIcon::PIN' | mdi_icon_t(22, 'ch-tool-icon', 'CourseAutoRegister' ) }}
                                 {% endif %}
                             {% endif %}
                         </h4>
@@ -60,7 +60,7 @@
                             <div class="list-teachers">
                                 {% set counter = 0 %}
                                 {% if item.teachers|length > 0 %}
-                                    {{ 'ObjectIcon::TEACHER'|mdi_icon(16, 'ch-tool-icon', 'Teacher') }}
+                                    {{ 'ObjectIcon::TEACHER'|mdi_icon_t(16, 'ch-tool-icon', 'Teacher') }}
                                     {% for teacher in item.teachers %}
                                         {% set counter = counter + 1 %}
                                         {% if counter > 1 %} | {% endif %}

@@ -41,6 +41,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('var_dump', 'var_dump'),
             new TwigFilter('icon', 'Display::get_icon_path'),
             new TwigFilter('mdi_icon', 'Display::getMdiIconSimple'),
+            new TwigFilter('mdi_icon_t', 'Display::getMdiIconTranslate'),
             new TwigFilter('get_lang', 'get_lang'),
             new TwigFilter('get_plugin_lang', 'get_plugin_lang'),
             new TwigFilter('api_get_local_time', 'api_get_local_time'),

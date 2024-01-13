@@ -1388,7 +1388,7 @@ class AnnouncementManager
         $group = api_get_group_entity(api_get_group_id());
 
         if (api_is_allowed_to_edit(false, true)) {
-            $qb = $repo->getResourcesByCourse($course, $session, $group);
+            $qb = $repo->getResourcesByCourse($course, $session, $group, null, true, true);
         } else {
             $user = api_get_user_entity();
             if (null === $user) {
@@ -1586,19 +1586,22 @@ class AnnouncementManager
                         href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">"
                         .$iconVisibility."</a>";
 
-                    // DISPLAY MOVE UP COMMAND only if it is not the top announcement
-                    if (1 != $iterator) {
-                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&up=".$announcementId."&sec_token=".$stok."\">"
-                            .$iconUp.'</a>';
+                    // Move up action
+                    if ($iterator == 1) {
+                        $move1 = $iconUpDisabled;
                     } else {
-                        $modify_icons .= $iconUpDisabled;
+                        $move1 = "<a href=\"".$actionUrl."&action=move&up=".$announcementId."&sec_token=".$stok."\">".$iconUp."</a>";
                     }
-                    if ($iterator < $bottomAnnouncement) {
-                        $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$announcementId."&sec_token=".$stok."\">"
-                            .$iconDown.'</a>';
+                    $modify_icons .= $move1;
+
+                    // Move down action
+                    if ($iterator == 4) {
+                        $move2 = $iconDownDisabled;
                     } else {
-                        $modify_icons .= $iconDownDisabled;
+                        $move2 = "<a href=\"".$actionUrl."&action=move&down=".$announcementId."&sec_token=".$stok."\">".$iconDown."</a>";;
                     }
+                    $modify_icons .= $move2;
+
                     if (api_is_allowed_to_edit(false, true)) {
                         if (true === $disableEdit) {
                             $modify_icons .= $deleteIconDisable;

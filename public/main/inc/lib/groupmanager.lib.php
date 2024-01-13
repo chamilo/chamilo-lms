@@ -723,25 +723,11 @@ class GroupManager
         }
 
         $session = api_get_session_entity(api_get_session_id());
-        //$group = api_get_group_entity(api_get_group_id());
         $group = null;
 
-        $qb = $repo->getResourcesByCourse($course, $session, $group);
+        $qb = $repo->getResourcesByCourse($course, $session, $group, null, true, true);
 
         return $qb->getQuery()->getArrayResult();
-        /*$course_info = api_get_course_info($course_code);
-        $courseId = $course_info['real_id'];
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId
-                ORDER BY display_order";
-        $res = Database::query($sql);
-        $cats = [];
-        while ($cat = Database::fetch_array($res)) {
-            $cats[] = $cat;
-        }
-
-        return $cats;*/
     }
 
     /**
@@ -919,14 +905,6 @@ class GroupManager
         if (empty($title)) {
             return false;
         }
-        /*$sql = "SELECT MAX(display_order)+1 as new_order
-                FROM $table
-                WHERE c_id = $course_id ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-        if (!isset($obj->new_order)) {
-            $obj->new_order = 1;
-        }*/
 
         $course = api_get_course_entity(api_get_course_int_id());
         $session = api_get_session_entity(api_get_session_id());
@@ -1087,24 +1065,25 @@ class GroupManager
      */
     public static function swap_category_order($id1, $id2)
     {
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $id1 = intval($id1);
-        $id2 = intval($id2);
-        $course_id = api_get_course_int_id();
+        $em = Database::getManager();
 
-        $sql = "SELECT iid, display_order FROM $table
-                WHERE iid IN ($id1,$id2) AND c_id = $course_id ";
-        $res = Database::query($sql);
-        $cat1 = Database::fetch_object($res);
-        $cat2 = Database::fetch_object($res);
+        $groupCategoryRepo = $em->getRepository(CGroupCategory::class);
+        $cat1 = $groupCategoryRepo->find($id1);
+        $cat2 = $groupCategoryRepo->find($id2);
+
         if ($cat1 && $cat2) {
-            $sql = "UPDATE $table SET display_order=$cat2->display_order
-                    WHERE iid = $cat1->id AND c_id = $course_id ";
-            Database::query($sql);
+            $node1 = $cat1->getResourceNode();
+            $node2 = $cat2->getResourceNode();
 
-            $sql = "UPDATE $table SET display_order=$cat1->display_order
-                    WHERE iid = $cat2->id AND c_id = $course_id ";
-            Database::query($sql);
+            if ($node1 && $node2) {
+                $order1 = $node1->getDisplayOrder();
+                $order2 = $node2->getDisplayOrder();
+
+                $node1->setDisplayOrder($order2);
+                $node2->setDisplayOrder($order1);
+
+                $em->flush();
+            }
         }
     }
 

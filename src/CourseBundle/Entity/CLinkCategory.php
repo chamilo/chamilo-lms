@@ -147,10 +147,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    #[Groups(['link_category:read', 'link_category:write'])]
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    protected int $displayOrder;
-
     #[Groups(['link_category:read', 'link_category:browse'])]
     protected bool $linkCategoryVisible = true;
 
@@ -163,7 +159,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
     public function __construct()
     {
         $this->description = '';
-        $this->displayOrder = 0;
         $this->links = new ArrayCollection();
     }
 
@@ -199,18 +194,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    public function getDisplayOrder(): int
-    {
-        return $this->displayOrder;
     }
 
     public function toggleVisibility(): void

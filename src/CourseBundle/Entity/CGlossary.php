@@ -197,10 +197,6 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    #[Groups(['glossary:read', 'glossary:write'])]
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: true)]
-    protected ?int $displayOrder = null;
-
     public function __toString(): string
     {
         return $this->getName();
@@ -231,21 +227,6 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     */
-    public function getDisplayOrder(): ?int
-    {
-        return $this->displayOrder;
     }
 
     public function getIid(): ?int

@@ -117,8 +117,8 @@ const submitGlossaryForm = async () => {
   }
 
   try {
-    if (props.linkId) {
-      await glossaryService.updateGlossaryTerm(props.linkId, postData)
+    if (props.termId) {
+      await glossaryService.updateGlossaryTerm(props.termId, postData)
     } else {
       await glossaryService.createGlossaryTerm(postData)
     }

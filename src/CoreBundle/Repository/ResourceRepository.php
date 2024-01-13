@@ -387,11 +387,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null, bool $displayOnlyPublished = true): QueryBuilder
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        if ($displayOrder) {
+            $qb->orderBy('node.displayOrder', 'ASC');
+        }
 
         return $qb;
     }

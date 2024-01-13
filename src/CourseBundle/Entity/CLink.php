@@ -68,7 +68,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'description' => ['type' => 'string'],
                                     'category_id' => ['type' => 'int'],
-                                    'displayOrder' => ['type' => 'integer'],
                                     'target' => ['type' => 'string'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [
@@ -135,7 +134,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
-#[ApiFilter(OrderFilter::class, properties: ['resourceNode.displayOrder'])]
 #[ORM\Table(name: 'c_link')]
 #[ORM\Entity(repositoryClass: CLinkRepository::class)]
 class CLink extends AbstractResource implements ResourceInterface, Stringable
@@ -164,12 +162,7 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[ORM\ManyToOne(targetEntity: CLinkCategory::class, inversedBy: 'links')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
-    #[Gedmo\SortableGroup]
     protected ?CLinkCategory $category = null;
-
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    #[Gedmo\SortablePosition]
-    protected int $displayOrder;
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[ORM\Column(name: 'target', type: 'string', length: 10, nullable: true)]
@@ -180,7 +173,6 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
 
     public function __construct()
     {
-        $this->displayOrder = 0;
         $this->description = '';
     }
 
@@ -223,23 +215,6 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
     }
 
     public function setTarget(string $target): self

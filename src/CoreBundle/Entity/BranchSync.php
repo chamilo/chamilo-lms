@@ -66,7 +66,7 @@ class BranchSync
     #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
-    #[ORM\Column(name: 'last_sync_trans_id', type: 'bigint', nullable: true, unique: false)]
+    #[ORM\Column(name: 'last_sync_trans_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastSyncTransId = null;
 
     #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]

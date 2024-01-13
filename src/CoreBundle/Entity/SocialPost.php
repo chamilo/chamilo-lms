@@ -79,7 +79,7 @@ class SocialPost
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected ?int $id = null;
 
     #[Groups(['social_post:read', 'social_post:write'])]

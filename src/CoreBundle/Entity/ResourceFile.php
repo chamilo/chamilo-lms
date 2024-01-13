@@ -83,7 +83,7 @@ class ResourceFile implements Stringable
     use TimestampableEntity;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
     #[Assert\NotBlank]

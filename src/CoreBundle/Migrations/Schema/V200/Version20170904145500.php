@@ -20,9 +20,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
     {
         if (false === $schema->hasTable('c_exercise_category')) {
             $this->addSql(
-                'CREATE TABLE c_exercise_category (id BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, position INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
+                'CREATE TABLE c_exercise_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, position INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
             );
-            $this->addSql('ALTER TABLE c_exercise_category ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_exercise_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
@@ -40,14 +40,14 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_quiz CHANGE active active INT NOT NULL');
 
         if ($table->hasColumn('exercise_category_id')) {
-            $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id INT DEFAULT NULL;');
             if (false === $table->hasForeignKey('FK_B7A1C35FB48D66')) {
                 $this->addSql(
                     'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id) ON DELETE SET NULL'
                 );
             }
         } else {
-            $this->addSql('ALTER TABLE c_quiz ADD COLUMN exercise_category_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_quiz ADD COLUMN exercise_category_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id) ON DELETE SET NULL'
             );
@@ -111,7 +111,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_quiz CHANGE type type INT NOT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_quiz ADD COLUMN resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_quiz ADD COLUMN resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C31BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -147,7 +147,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         // c_quiz_question.
         $table = $schema->getTable('c_quiz_question');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_quiz_question ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -270,7 +270,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_quiz_question_category');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_quiz_question_category ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_quiz_question_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );

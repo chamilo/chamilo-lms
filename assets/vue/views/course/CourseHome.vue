@@ -2,7 +2,7 @@
   <div
     v-if="course"
     id="course-home"
-    class="hide-content"
+    class="course-home"
   >
     <div
       v-if="isCourseLoading"
@@ -61,7 +61,7 @@
 
       <hr class="mt-0 mb-4" />
 
-      <div class="grid-cols-course-tools">
+      <div class="course-home__tools">
         <Skeleton
           v-for="v in 30"
           :key="v"
@@ -178,7 +178,7 @@
 
       <div
         id="course-tools"
-        class="grid-cols-course-tools"
+        class="course-home__tools"
       >
         <CourseTool
           v-for="(tool, index) in tools"

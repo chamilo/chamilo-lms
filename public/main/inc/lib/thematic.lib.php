@@ -335,51 +335,23 @@ class Thematic
     /**
      * Delete logically (set active field to 0) a thematic.
      *
-     * @param int|array One or many thematic ids
+     * @param int|array $thematicId One or many thematic ids
      *
-     * @return int Affected rows
+     * @return void
      */
-    public function delete($thematic_id)
+    public function delete(int|array $thematicId): void
     {
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $affected_rows = 0;
-        if (is_array($thematic_id)) {
-            foreach ($thematic_id as $id) {
-                $id = (int) $id;
-                $sql = "UPDATE $tbl_thematic SET active = 0
-                        WHERE iid = $id";
-                $result = Database::query($sql);
-                $affected_rows += Database::affected_rows($result);
-                if (!empty($affected_rows)) {
-                    // update row item property table
-                    /*api_item_property_update(
-                        $_course,
-                        'thematic',
-                        $id,
-                        'ThematicDeleted',
-                        $user_id
-                    );*/
-                }
+        $repo = Container::getThematicRepository();
+
+        if (is_array($thematicId)) {
+            foreach ($thematicId as $id) {
+                $resource = $repo->find($id);
+                $repo->delete($resource);
             }
         } else {
-            $thematic_id = (int) $thematic_id;
-            $sql = "UPDATE $tbl_thematic SET active = 0
-                    WHERE iid = $thematic_id";
-            $result = Database::query($sql);
-            $affected_rows = Database::affected_rows($result);
-            if (!empty($affected_rows)) {
-                // update row item property table
-                /*api_item_property_update(
-                    $_course,
-                    'thematic',
-                    $thematic_id,
-                    'ThematicDeleted',
-                    $user_id
-                );*/
-            }
-        }
-
-        return $affected_rows;
+            $resource = $repo->find($thematicId);
+            $repo->delete($resource);
+        };
     }
 
     /**

@@ -18,7 +18,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
- * Extend Twig with specifics from Chamilo. For globals, look into TwigListener.php
+ * Extend Twig with specifics from Chamilo. For globals, look into TwigListener.php.
  */
 class ChamiloExtension extends AbstractExtension
 {

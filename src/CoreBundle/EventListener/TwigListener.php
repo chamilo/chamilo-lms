@@ -16,7 +16,7 @@ use TicketManager;
 use Twig\Environment;
 
 /**
- * Twig-related event listener. For filters, look into ChamiloExtension.php
+ * Twig-related event listener. For filters, look into ChamiloExtension.php.
  */
 class TwigListener
 {

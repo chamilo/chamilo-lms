@@ -13,6 +13,20 @@ const courseService = {
     return data
   },
 
+  loadCTools: async (courseId, sessionId = 0) => {
+    const { data } = await axios.get(ENTRYPOINT + 'c_tools', {
+      params: {
+        cid: courseId,
+        sid: sessionId,
+        order: {
+          position: 'asc'
+        }
+      },
+    })
+
+    return data["hydra:member"]
+  },
+
   /**
    * @param {Object} tool
    * @param {number} newIndex

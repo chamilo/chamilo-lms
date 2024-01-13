@@ -184,13 +184,10 @@
           v-for="(tool, index) in tools"
           :key="'tool-' + index.toString()"
           :change-visibility="changeVisibility"
-          :course="course"
           :data-index="index"
-          :data-tool="tool.ctool.name"
+          :data-tool="tool.name"
           :go-to-setting-course-tool="goToSettingCourseTool"
-          :to="tool.to"
           :tool="tool"
-          :url="tool.url"
         />
 
         <ShortCutList
@@ -222,9 +219,9 @@ import StudentViewButton from "../../components/StudentViewButton.vue"
 import Sortable from "sortablejs"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
-import {storeToRefs} from "pinia";
-import courseService from "../../services/courseService";
-import CourseIntroduction from "../../components/course/CourseIntroduction.vue";
+import { storeToRefs } from "pinia"
+import courseService from "../../services/courseService"
+import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
@@ -238,7 +235,7 @@ const { getSetting } = storeToRefs(platformConfigStore)
 const tools = ref([])
 const shortcuts = ref([])
 
-const courseIntroEl = ref(null);
+const courseIntroEl = ref(null)
 
 const isCourseLoading = ref(true)
 
@@ -254,28 +251,42 @@ const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 
-courseService.loadTools(course.value.id, session.value?.id)
-  .then((data) => {
-    tools.value = data.tools.map((element) => {
-      if (routerTools.includes(element.ctool.name)) {
+courseService.loadCTools(course.value.id, session.value?.id)
+  .then((cTools) => {
+    tools.value = cTools.map(element => {
+      if (routerTools.includes(element.name)) {
         element.to = element.url
       }
 
       return element
     })
 
-    shortcuts.value = data.shortcuts
+    const noAdminToolsIndex = []
 
-    let adminTool = tools.value.filter((element) => element.category === "admin")
+    courseItems.value = tools.value
+    .filter((element, index) => {
+      if ("admin" === element.tool.category) {
+        noAdminToolsIndex.push(index)
 
-    if (Array.isArray(adminTool)) {
-      courseItems.value = adminTool.map((tool) => ({
-        label: tool.tool.nameToShow,
-        url: tool.url,
-      }))
-    }
+        return true
+      }
+
+      return false
+    })
+    .map(adminTool => ({
+      label: adminTool.tool.nameToShow,
+      url: adminTool.url,
+    }))
+
+    noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
 
     isCourseLoading.value = false
+  })
+
+courseService
+  .loadTools(course.value.id, session.value?.id)
+  .then((data) => {
+    shortcuts.value = data.shortcuts
   })
   .catch((error) => console.log(error))
 
@@ -299,12 +310,12 @@ function goToShortCut(shortcut) {
 }
 
 const setToolVisibility = (tool, visibility) => {
-  tool.ctool.resourceNode.resourceLinks[0].visibility = visibility
+  tool.resourceNode.resourceLinks[0].visibility = visibility
 }
 
 function changeVisibility(tool) {
   axios
-    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.ctool.resourceNode.id + "/change_visibility?cid=" + course.value.id + "&sid=" + session.value?.id)
+    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.resourceNode.id + "/change_visibility?cid=" + course.value.id + "&sid=" + session.value?.id)
     .then((response) => setToolVisibility(tool, response.data.visibility))
     .catch((error) => console.log(error))
 }
@@ -353,7 +364,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 
   if (typeof tools !== "undefined" && Array.isArray(tools.value)) {
     const toolList = tools.value
-    toolItem = toolList.find((element) => element.tool.name === tool)
+    toolItem = toolList.find((element) => element.name === tool)
   } else {
     console.error("Error: tools.value is undefined")
     return

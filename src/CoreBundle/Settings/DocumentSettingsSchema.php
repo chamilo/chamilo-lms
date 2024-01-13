@@ -20,8 +20,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'default_document_quotum' => '1048576000',
-                    'default_group_quotum' => '262144000',
+                    'default_document_quotum' => '1000',
+                    'default_group_quotum' => '250',
                     'permanently_remove_deleted_files' => 'false',
                     'upload_extensions_list_type' => 'blacklist',
                     'upload_extensions_blacklist' => '',

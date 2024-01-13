@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -140,7 +139,7 @@ class CourseController extends ToolBaseController
         if (!empty($requestData) && isset($requestData['toolItem'])) {
             $index = $requestData['index'];
             $toolItem = $requestData['toolItem'];
-            $toolId = (int) $toolItem['ctool']['iid'];
+            $toolId = (int) $toolItem['iid'];
 
             /** @var CTool $cTool */
             $cTool = $em->find(CTool::class, $toolId);
@@ -203,75 +202,6 @@ class CourseController extends ToolBaseController
         ];
         Event::registerLog($logInfo);
 
-        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession(), null, null, false);
-
-        $qb->addSelect('tool');
-        $qb->innerJoin('resource.tool', 'tool');
-        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki', 'course_homepage'];
-        $qb->andWhere($qb->expr()->notIn('resource.name', $skipTools));
-        $qb->addOrderBy('resource.position', 'ASC');
-
-        $result = $qb->getQuery()->getResult();
-        $tools = [];
-        $toolsToDisplay = [];
-        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
-        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
-        $currentSessionId = (int) $sessionId;
-
-        /** @var CTool $item */
-        foreach ($result as $item) {
-            $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
-
-            if (!($isCourseTeacher || $isAdmin) && 'admin' === $toolModel->getCategory()) {
-                continue;
-            }
-
-            $resourceNodeId = $item->getResourceNode()->getId();
-            $selectedLink = null;
-            $linkSessionId = null;
-            $hasNullSessionIdDraftLink = false;
-            foreach ($item->getResourceNode()->getResourceLinks() as $link) {
-                $linkSessionId = $link->getSession() ? $link->getSession()->getId() : null;
-
-                if ($isInASession && null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $link->getVisibility()) {
-                    $hasNullSessionIdDraftLink = true;
-                    $selectedLink = $link;
-
-                    break;
-                }
-
-                if ($linkSessionId === $currentSessionId) {
-                    $selectedLink = $link;
-
-                    break;
-                }
-                if (null === $linkSessionId && !$selectedLink) {
-                    $selectedLink = $link;
-                }
-            }
-
-            if ($hasNullSessionIdDraftLink || ($isInASession && (null === $linkSessionId && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()))) {
-                continue;
-            }
-
-            if ($selectedLink) {
-                if (!($isCourseTeacher || $isAdmin) && ResourceLink::VISIBILITY_DRAFT === $selectedLink->getVisibility()) {
-                    continue;
-                }
-                $item->getResourceNode()->getResourceLinks()->first()->setVisibility($selectedLink->getVisibility());
-                $toolsToDisplay[$resourceNodeId] = [
-                    'ctool' => $item,
-                    'tool' => $toolModel,
-                    'url' => $this->generateToolUrl($toolModel),
-                    'category' => $toolModel->getCategory(),
-                ];
-            }
-        }
-
-        foreach ($toolsToDisplay as $toolData) {
-            $tools[] = $toolData;
-        }
-
         // Deleting the objects
         $sessionHandler->remove('toolgroup');
         $sessionHandler->remove('_gid');
@@ -289,7 +219,6 @@ class CourseController extends ToolBaseController
         $responseData = [
             'shortcuts' => $shortcuts,
             'diagram' => '',
-            'tools' => $tools,
         ];
 
         $json = $this->serializer->serialize(

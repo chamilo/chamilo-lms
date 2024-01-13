@@ -291,7 +291,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\Column(name: 'sticky', type: 'boolean')]
     protected bool $sticky;
 
-    #[ORM\Column(name: 'disk_quota', type: 'bigint', unique: false, nullable: true)]
+    #[ORM\Column(name: 'disk_quota', type: 'integer', unique: false, nullable: true)]
     protected ?int $diskQuota = null;
 
     #[ORM\Column(name: 'last_visit', type: 'datetime', unique: false, nullable: true)]

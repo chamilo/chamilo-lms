@@ -18,7 +18,7 @@ class GradebookCertificate
 {
     use UserTrait;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;

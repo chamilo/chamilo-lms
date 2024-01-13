@@ -22,7 +22,7 @@ class AgendaEventInvitee
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     private int $id;
 

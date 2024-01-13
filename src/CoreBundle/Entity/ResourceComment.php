@@ -35,7 +35,7 @@ class ResourceComment
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[Groups(['comment:read'])]
     protected ?int $id = null;

@@ -74,7 +74,7 @@
                             {% if user.email %}
                                 <li class="item">
                                     <a href="{{ url('index') }}main/messages/new_message.php">
-                                        {{ 'ObjectIcon::EMAIL'|mdi_icon(22, 'ch-tool-icon', 'Email') }}
+                                        {{ 'ObjectIcon::EMAIL'|mdi_icon_t(22, 'ch-tool-icon', 'Email') }}
                                         <div class="email-overflow">{{ user.email }}</div>
                                     </a>
                                 </li>
@@ -83,7 +83,7 @@
                             {% if vcard_user_link %}
                                 <li class="item">
                                     <a href="{{ vcard_user_link }}">
-                                        {{ 'ObjectIcon::VCARD'|mdi_icon(22, 'ch-tool-icon', 'BusinessCard') }}
+                                        {{ 'ObjectIcon::VCARD'|mdi_icon_t(22, 'ch-tool-icon', 'BusinessCard') }}
                                         {{ "BusinessCard" | get_lang }}
                                     </a>
                                 </li>

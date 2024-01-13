@@ -15,7 +15,7 @@
                 {% if session_category.show_actions %}
                     <div class="pull-right">
                         <a href="{{ url('legacy_main', { 'name' : 'session/session_category_edit.php', 'id' : session_category.id }) }}">
-                            {{ 'ActionIcon::EDIT'|mdi_icon(22, 'ch-tool-icon', 'Edit') }}
+                            {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') }}
                         </a>
                     </div>
                 {% endif %}

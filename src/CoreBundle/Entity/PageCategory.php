@@ -40,7 +40,7 @@ class PageCategory
 {
     use TimestampableTypedEntity;
     #[Groups(['page_category:read', 'page_category:write'])]
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;

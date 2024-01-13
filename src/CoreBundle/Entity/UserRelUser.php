@@ -83,7 +83,7 @@ class UserRelUser
     public const USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;

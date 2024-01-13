@@ -30,7 +30,7 @@ class ResourceLink implements Stringable
     public const VISIBILITY_DELETED = 3;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 

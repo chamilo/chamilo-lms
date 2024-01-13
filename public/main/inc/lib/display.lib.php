@@ -2223,6 +2223,31 @@ class Display
     }
 
     /**
+     * The auto-translated title version of getMdiIconSimple()
+     * Shortcut method to getMdiIcon, to be used from Twig (see ChamiloExtension.php)
+     * using acceptable default values
+     * @param string $name The icon name or a string representing the icon in our *Icon Enums
+     * @param int|null $size The icon size
+     * @param string|null $additionalClass Additional CSS class to add to the icon
+     * @param string|null $title A title for the icon
+     * @return string
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    public static function getMdiIconTranslate(
+        string $name,
+        ?int $size = ICON_SIZE_SMALL,
+        ?string $additionalClass = 'ch-tool-icon',
+        ?string $title = null
+    ): string
+    {
+        if (!empty($title)) {
+            $title = get_lang($title);
+        }
+
+        return self::getMdiIconSimple($name, $size, $additionalClass, $title);
+    }
+    /**
      * Shortcut method to getMdiIcon, to be used from Twig (see ChamiloExtension.php)
      * using acceptable default values
      * @param string $name The icon name or a string representing the icon in our *Icon Enums
@@ -2262,9 +2287,6 @@ class Display
             $enumValue = $enumUnitCaseObject->getValue();
             $name = $enumValue->value;
 
-        }
-        if (!empty($title)) {
-            $title = get_lang($title);
         }
 
         return self::getMdiIcon($name, $additionalClass, null, $size, $title);

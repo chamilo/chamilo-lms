@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class CQuizRelQuestionCategory
 {
-    #[ORM\Column(name: 'iid', type: 'bigint')]
+    #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;

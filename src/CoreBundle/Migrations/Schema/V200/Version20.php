@@ -342,7 +342,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE usergroup ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
         }
 
         // sequence_resource.

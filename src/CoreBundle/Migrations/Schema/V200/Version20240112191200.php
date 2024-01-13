@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
@@ -34,11 +35,13 @@ final class Version20240112191200 extends AbstractMigrationChamilo
         $linkRepo = $container->get(CLinkRepository::class);
         $groupCategoryRepo = $container->get(CGroupCategoryRepository::class);
         $glossaryRepo = $container->get(CGlossaryRepository::class);
+        $announcementRepo = $container->get(CAnnouncementRepository::class);
 
         $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em);
         $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em);
         $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $em);
         $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $em);
+        $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $em);
 
     }
 
@@ -68,7 +71,6 @@ final class Version20240112191200 extends AbstractMigrationChamilo
                     $resourceNode = $resource->getResourceNode();
                     if ($resourceNode) {
                         $resourceNode->setDisplayOrder($resourcePosition);
-                        $em->persist($resourceNode);
                     }
                 }
             }

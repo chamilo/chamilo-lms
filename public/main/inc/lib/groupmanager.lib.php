@@ -1082,8 +1082,6 @@ class GroupManager
                 $node1->setDisplayOrder($order2);
                 $node2->setDisplayOrder($order1);
 
-                $em->persist($node1);
-                $em->persist($node2);
                 $em->flush();
             }
         }

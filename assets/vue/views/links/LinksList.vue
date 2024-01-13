@@ -94,7 +94,7 @@
               />
               <h5>{{ category.info.name }}</h5>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
               <BaseButton
                 :label="t('Edit')"
                 icon="edit"
@@ -156,7 +156,9 @@
     >
       <div v-if="categoryToDelete">
         <p class="mb-2 font-semibold">{{ categoryToDelete.info.name }}</p>
-        <p>{{ t("With links") }}: {{ categoryToDelete.links.map((l) => l.title).join(", ") }}</p>
+        <p>
+          {{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}
+        </p>
       </div>
     </BaseDialogDelete>
   </div>

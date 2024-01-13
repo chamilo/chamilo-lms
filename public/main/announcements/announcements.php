@@ -95,66 +95,41 @@ $thisAnnouncementId = null;
 
 switch ($action) {
     case 'move':
-        throw new Exception('@todo move');
+
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
 
+        $em = Database::getManager();
+        $repo = Container::getAnnouncementRepository();
+
         /* Move announcement up/down */
+        $thisAnnouncementId = null;
+        $sortDirection = null;
+
         if (!empty($_GET['down'])) {
-            $thisAnnouncementId = (int) ($_GET['down']);
-            $sortDirection = 'DESC';
-        }
-        /*
-        if (!empty($_GET['up'])) {
-            $thisAnnouncementId = (int) ($_GET['up']);
-            $sortDirection = 'ASC';
+            $thisAnnouncementId = (int) $_GET['down'];
+            $sortDirection = 'down';
+        } elseif (!empty($_GET['up'])) {
+            $thisAnnouncementId = (int) $_GET['up'];
+            $sortDirection = 'up';
         }
 
-        if (!empty($sortDirection)) {
-            if (!in_array(trim(strtoupper($sortDirection)), ['ASC', 'DESC'])) {
-                $sortDirection = 'ASC';
-            }
+        $currentAnnouncement = $repo->find($thisAnnouncementId);
+        if ($currentAnnouncement) {
+            $resourceNode = $currentAnnouncement->getResourceNode();
+            $currentDisplayOrder = $resourceNode->getDisplayOrder();
 
-            $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement
-                    INNER JOIN $tbl_item_property itemproperty
-                    ON (announcement.c_id = itemproperty.c_id)
-                    WHERE
-                        announcement.c_id = $courseId AND
-                        itemproperty.c_id = $courseId AND
-                        itemproperty.ref = announcement.id AND
-                        itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
-                        itemproperty.visibility <> 2
-                    ORDER BY display_order $sortDirection";
-            $result = Database::query($sql);
-            $thisAnnouncementOrderFound = false;
-            $thisAnnouncementOrder = null;
+            $newPosition = $currentDisplayOrder + ($sortDirection === 'down' ? 1 : -1);
+            $newPosition = max(0, $newPosition);
 
-            while (list($announcementId, $announcementOrder) = Database::fetch_row($result)) {
-                if ($thisAnnouncementOrderFound) {
-                    $nextAnnouncementId = $announcementId;
-                    $nextAnnouncementOrder = $announcementOrder;
-                    $sql = "UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'
-                            WHERE c_id = $courseId AND id = $thisAnnouncementId";
-                    Database::query($sql);
-                    $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
-                            WHERE c_id = $courseId AND id =  $nextAnnouncementId";
-                    Database::query($sql);
-                    break;
-                }
-                // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-                if ($announcementId == $thisAnnouncementId) {
-                    $thisAnnouncementOrder = $announcementOrder;
-                    $thisAnnouncementOrderFound = true;
-                }
-            }
-            Display::addFlash(Display::return_message(get_lang('The announcement has been moved')));
-            header('Location: '.$homeUrl);
-            exit;
-        }*/
+            $resourceNode->setDisplayOrder($newPosition);
+            $em->flush();
+        }
 
-        break;
+        header('Location: '.$homeUrl);
+        exit;
+
     case 'view':
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),

@@ -59,6 +59,10 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F246DB301BAD783F ON c_survey (resource_node_id);');
         }
 
+        if (!$survey->hasColumn('display_question_number')) {
+            $this->addSql('ALTER TABLE c_survey ADD display_question_number TINYINT(1) DEFAULT 1 NOT NULL');
+        }
+
         $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
         $this->addSql('ALTER TABLE c_survey CHANGE avail_till avail_till DATETIME DEFAULT NULL;');
 

@@ -260,7 +260,7 @@ $question_counter = 1;
 $result = Database::query($sql);
 $groups = [];
 while ($row = Database::fetch_array($result)) {
-    $groups[$row['id']] = $row['name'];
+    $groups[$row['iid']] = $row['name'];
 }*/
 $sql = "SELECT survey_question.*, count(survey_question_option.iid) as number_of_options
         FROM $table_survey_question survey_question

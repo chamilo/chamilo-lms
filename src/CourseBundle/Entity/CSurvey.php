@@ -152,6 +152,13 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="display_question_number", type="boolean", nullable=true)
+     */
+    protected $displayQuestionNumber;
+
     public function __construct()
     {
         $this->creationDate = new DateTime();
@@ -735,5 +742,17 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     public function setResourceName(string $name): self
     {
         return $this->setCode($name);
+    }
+
+    /**
+     * @param bool $displayQuestionNumber
+     *
+     * @return CSurvey
+     */
+    public function setDisplayQuestionNumber($displayQuestionNumber)
+    {
+        $this->displayQuestionNumber = $displayQuestionNumber;
+
+        return $this;
     }
 }

@@ -21,7 +21,12 @@ class UpdatePositionLink extends AbstractController
         $requestData = json_decode($request->getContent(), true);
         $newPosition = (int) $requestData['position'];
 
-        $link->setDisplayOrder($newPosition);
+        $resourceNode = $link->getResourceNode();
+        if ($resourceNode) {
+            $resourceNode->setDisplayOrder($newPosition);
+            $em->persist($resourceNode);
+            $em->flush();
+        }
 
         return $link;
     }

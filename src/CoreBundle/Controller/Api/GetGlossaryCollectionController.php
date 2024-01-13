@@ -32,7 +32,7 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
             $session = $em->getRepository(Session::class)->find($sid);
         }
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         if ($q) {
             $qb->andWhere($qb->expr()->like('resource.name', ':name'))
                 ->setParameter('name', '%'.$q.'%')

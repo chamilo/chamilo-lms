@@ -58,10 +58,11 @@ final class Version20230615213500 extends AbstractMigrationChamilo
                     if ($item) {
                         $item->setDisplayOrder($position);
                         $em->persist($item);
-                        $em->flush();
                     }
                 }
             }
         }
+
+        $em->flush();
     }
 }

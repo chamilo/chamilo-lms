@@ -35,7 +35,6 @@ class Link extends Model
         'title',
         'description',
         'category_id',
-        'display_order',
         'on_homepage',
         'target',
         'session_id',

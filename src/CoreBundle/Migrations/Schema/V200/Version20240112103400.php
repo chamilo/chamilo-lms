@@ -36,7 +36,7 @@ final class Version20240112103400 extends AbstractMigrationChamilo
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $diskQuotaInBytes = $course->getDiskQuota();
-            if ($diskQuotaInBytes !== null) {
+            if (null !== $diskQuotaInBytes) {
                 $diskQuotaInMegabytes = $diskQuotaInBytes / (1024 * 1024);
                 $course->setDiskQuota($diskQuotaInMegabytes);
                 $em->persist($course);
@@ -56,6 +56,5 @@ final class Version20240112103400 extends AbstractMigrationChamilo
             $setting->setSelectedValue((string) $selectedValueInBytes);
         }
         $em->flush();
-
     }
 }

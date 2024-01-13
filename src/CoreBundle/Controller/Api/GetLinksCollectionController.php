@@ -36,7 +36,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
             $session = $em->getRepository(Session::class)->find($sid);
         }
 
-        $qb = $repo->getResourcesByCourse($course, $session, null, null, true , true);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         $qb->andWhere('resource.category = 0 OR resource.category is null');
         $links = $qb->getQuery()->getResult();
 

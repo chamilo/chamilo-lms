@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
 
 final class Version20240112191200 extends AbstractMigrationChamilo
 {
@@ -42,18 +43,17 @@ final class Version20240112191200 extends AbstractMigrationChamilo
         $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $em);
         $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $em);
         $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $em);
-
     }
 
-    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, $em) {
-
+    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, $em): void
+    {
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
         try {
             $testResult = $connection->executeQuery("SELECT display_order FROM $tableName LIMIT 1");
             $columnExists = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $columnExists = false;
         }
 

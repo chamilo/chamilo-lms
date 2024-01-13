@@ -19,6 +19,8 @@ abstract class AbstractTool
 
     #[Groups(['ctool:read'])]
     protected string $icon = '';
+
+    #[Groups(['ctool:read'])]
     protected string $category = '';
     protected string $link;
     protected string $image;

@@ -27,8 +27,6 @@ trait CourseControllerTrait
 
     /**
      * Gets the current Chamilo course based in the "_real_cid" session variable.
-     *
-     * @return Course
      */
     /*public function getCourse()
     {
@@ -60,10 +58,8 @@ trait CourseControllerTrait
 
     /**
      * Gets the current Chamilo session based in the "sid" $_SESSION variable.
-     *
-     * @return Session|null
      */
-    public function getCourseSession()
+    public function getCourseSession(): ?Session
     {
         $request = $this->getRequest();
 

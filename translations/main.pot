@@ -24142,3 +24142,6 @@ msgstr "By checking this box, I confirm that I accept the data processing by the
 
 msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
 msgstr "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+
+msgid "Back to tests list"
+msgstr "Back to tests list"

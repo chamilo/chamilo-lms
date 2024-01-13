@@ -152,12 +152,8 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="display_question_number", type="boolean", nullable=true)
-     */
-    protected $displayQuestionNumber;
+    #[ORM\Column(name: "display_question_number", type: "boolean", options: ['default' => true])]
+    protected bool $displayQuestionNumber;
 
     public function __construct()
     {
@@ -180,6 +176,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         $this->children = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->options = new ArrayCollection();
+        $this->displayQuestionNumber = true;
     }
 
     public function __toString(): string
@@ -744,15 +741,15 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this->setCode($name);
     }
 
-    /**
-     * @param bool $displayQuestionNumber
-     *
-     * @return CSurvey
-     */
-    public function setDisplayQuestionNumber($displayQuestionNumber)
+    public function setDisplayQuestionNumber($displayQuestionNumber): static
     {
         $this->displayQuestionNumber = $displayQuestionNumber;
 
         return $this;
+    }
+
+    public function isDisplayQuestionNumber(): bool
+    {
+        return $this->displayQuestionNumber;
     }
 }

@@ -209,7 +209,7 @@ class SurveyManager
         $courseCode = api_get_course_id();
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
-        $display_question_number = isset($values['display_question_number']) ? (int) $values['display_question_number'] : null;
+        $displayQuestionNumber = isset($values['display_question_number']);
         $repo = Container::getSurveyRepository();
 
         if (!isset($values['survey_id'])) {
@@ -334,7 +334,7 @@ class SurveyManager
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
-                ->setDisplayQuestionNumber($display_question_number)
+                ->setDisplayQuestionNumber($displayQuestionNumber)
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
                 ->setSurveyType((int) ($values['survey_type'] ?? 1))
@@ -443,7 +443,7 @@ class SurveyManager
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
-                ->setDisplayQuestionNumber($display_question_number)
+                ->setDisplayQuestionNumber($displayQuestionNumber)
             ;
 
             $repo->update($survey);

@@ -411,18 +411,11 @@ class Thematic
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function get_number_of_thematic_advances(array $params)
+    public static function get_number_of_thematic_advances(array $params): int
     {
-        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $thematic_id = (int) $params['thematic_id'];
-
-        $sql = "SELECT COUNT(iid) AS total_number_of_items
-                FROM $table
-                WHERE thematic_id = $thematic_id ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->total_number_of_items;
+        $repo = Container::getThematicAdvanceRepository();
+        return $repo->count(['thematic' => $thematic_id]);
     }
 
     /**

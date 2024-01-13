@@ -75,8 +75,8 @@
       v-else
       class="flex flex-col gap-4"
     >
-      <div class="flex gap-4 items-center">
-        <h2 class="mr-auto">
+      <div class="section-header section-header--h2">
+        <h2 class="">
           {{ course.title }}
           <small v-if="session"> ({{ session.name }}) </small>
         </h2>
@@ -115,8 +115,6 @@
         </div>
       </div>
 
-      <hr class="mt-1 mb-1" />
-
       <CourseIntroduction
         v-if="isAllowedToEdit"
         ref="courseIntroEl"
@@ -124,7 +122,7 @@
 
       <div
         v-if="isAllowedToEdit"
-        class="flex items-center gap-6"
+        class="section-header section-header--h6"
       >
         <h6 v-t="'Tools'" />
 
@@ -174,7 +172,6 @@
           />
         </div>
       </div>
-      <hr class="mt-0 mb-4" />
 
       <div
         id="course-tools"

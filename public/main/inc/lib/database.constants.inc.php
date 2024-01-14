@@ -114,7 +114,7 @@ define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
 define('TABLE_STATISTIC_TRACK_E_EXERCISES', 'track_e_exercises');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');
-define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
+define('TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY', 'track_e_attempt_qualify');
 define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS', 'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 'track_e_hotspot');

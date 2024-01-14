@@ -49,7 +49,7 @@ class ExerciseResult
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
@@ -195,7 +195,7 @@ class ExerciseResult
                 } else {
                     //revised or not
                     $sql_exe = "SELECT exe_id
-                                FROM $TBL_TRACK_ATTEMPT_RECORDING
+                                FROM $tblTrackAttemptQualify
                                 WHERE
                                     author != '' AND
                                     exe_id = ".(int) ($result['exid']).'

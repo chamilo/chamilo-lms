@@ -48,11 +48,11 @@ const currentLanguage = window.languages.find((language) => document.querySelect
 const menuItems = computed(() => [
   {
     label: t("Home"),
-    to: { name: "Index" },
+    command: async () => await router.push({ name: "Index" }),
   },
   {
     label: t("FAQ"),
-    to: { name: "Faq" },
+    command: async () => await router.push({ name: "Faq" }),
   },
   {
     label: t("Registration"),
@@ -60,7 +60,7 @@ const menuItems = computed(() => [
   },
   {
     label: t("Demo"),
-    to: { name: "Demo" },
+    command: async () => await router.push({ name: "Demo" }),
   },
   {
     label: t("Contact"),

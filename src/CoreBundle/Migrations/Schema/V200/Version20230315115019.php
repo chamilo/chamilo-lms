@@ -35,7 +35,6 @@ final class Version20230315115019 extends AbstractMigrationChamilo
         if ($table->hasColumn('image')) {
             foreach ($all as $systemTemplate) {
                 if (!empty($systemTemplate['image'])) {
-
                     /** @var SystemTemplate $template */
                     $template = $em->find('ChamiloCoreBundle:SystemTemplate', $systemTemplate['id']);
                     if ($template->hasImage()) {
@@ -64,8 +63,5 @@ final class Version20230315115019 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-
-    }
+    public function down(Schema $schema): void {}
 }

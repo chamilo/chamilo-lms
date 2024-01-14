@@ -100,9 +100,10 @@
         sort-by="sendDate"
         @page="onPage($event)"
         @row-click="onRowClick"
+        @sort="sortingChanged($event)"
       >
         <Column selection-mode="multiple" />
-        <Column :header="t('From')">
+        <Column :header="t('From')" :sortable="true" field="sender">
           <template #body="slotProps">
             <div
               v-if="slotProps.data.sender"
@@ -118,7 +119,7 @@
             />
           </template>
         </Column>
-        <Column :header="t('Title')">
+        <Column :header="t('Title')" :sortable="true" field="title">
           <template #body="slotProps">
             <div class="flex gap-2 pb-2">
               {{ slotProps.data.title }}
@@ -132,7 +133,7 @@
             />
           </template>
         </Column>
-        <Column :header="t('Send date')">
+        <Column :header="t('Send date')" :sortable="true" field="sendDate">
           <template #body="slotProps">
             {{ relativeDatetime(slotProps.data.sendDate) }}
           </template>
@@ -271,7 +272,6 @@ const rowClass = (data) => {
 }
 
 let fetchPayload = {
-  "order[sendDate]": "desc",
   itemsPerPage: initialRowsPerPage,
   page: 1,
 }
@@ -353,6 +353,8 @@ function refreshMessages() {
 function onPage(event) {
   fetchPayload.page = event.page + 1
   fetchPayload.itemsPerPage = event.rows
+  fetchPayload.sortBy = event.sortField
+  fetchPayload.sortDesc = event.sortOrder === -1
 
   loadMessages(false)
 }
@@ -364,6 +366,14 @@ function onRowClick({ data }) {
       id: data["@id"],
     },
   })
+}
+
+function sortingChanged(event) {
+  fetchPayload.sortBy = event.sortField
+  fetchPayload.sortDesc = event.sortOrder === -1
+  fetchPayload["order[sendDate]"] = event.sortOrder === -1 ? "desc" : "asc"
+
+  loadMessages(true)
 }
 
 function findMyReceiver(message) {
